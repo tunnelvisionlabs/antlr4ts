@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,7 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.v4.runtime.misc;
+// ConvertTo-TS run at 2016-10-03T02:09:41.6394284-07:00
 
 /**
  * This abstract base class is provided so performance-critical applications can
@@ -35,6 +35,6 @@ package org.antlr.v4.runtime.misc;
  *
  * @author Sam Harwell
  */
-public abstract class AbstractEqualityComparator<T> implements EqualityComparator<T> {
+export abstract class AbstractEqualityComparator<T> implements EqualityComparator<T> {
 
 }

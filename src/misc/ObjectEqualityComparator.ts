@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,7 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.v4.runtime.misc;
+// ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -35,8 +35,8 @@ package org.antlr.v4.runtime.misc;
  *
  * @author Sam Harwell
  */
-public final class ObjectEqualityComparator extends AbstractEqualityComparator<Object> {
-	public static final ObjectEqualityComparator INSTANCE = new ObjectEqualityComparator();
+export class ObjectEqualityComparator extends AbstractEqualityComparator<Object> {
+	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
@@ -45,7 +45,7 @@ public final class ObjectEqualityComparator extends AbstractEqualityComparator<O
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	public int hashCode(Object obj) {
+	hashCode(obj: any): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -63,7 +63,7 @@ public final class ObjectEqualityComparator extends AbstractEqualityComparator<O
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	public boolean equals(Object a, Object b) {
+	equals(a: any, b: any): boolean {
 		if (a == null) {
 			return b == null;
 		}

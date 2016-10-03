@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,7 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.antlr.v4.runtime.misc;
+// ConvertTo-TS run at 2016-10-03T02:09:42.0574481-07:00
 
 /**
  * This interface provides an abstract concept of object equality independent of
@@ -37,7 +37,7 @@ package org.antlr.v4.runtime.misc;
  *
  * @author Sam Harwell
  */
-public interface EqualityComparator<T> {
+export interface EqualityComparator<T> {
 
 	/**
 	 * This method returns a hash code for the specified object.
@@ -45,7 +45,7 @@ public interface EqualityComparator<T> {
 	 * @param obj The object.
 	 * @return The hash code for {@code obj}.
 	 */
-	int hashCode(T obj);
+	hashCode(obj: T): number;
 
 	/**
 	 * This method tests if two objects are equal.
@@ -54,6 +54,6 @@ public interface EqualityComparator<T> {
 	 * @param b The second object to compare.
 	 * @return {@code true} if {@code a} equals {@code b}, otherwise {@code false}.
 	 */
-	boolean equals(T a, T b);
+	equals(a: T, b: T): boolean;
 
 }

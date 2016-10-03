@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,22 +28,22 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.misc;
+// ConvertTo-TS run at 2016-10-03T02:09:42.1239660-07:00
 
 /**
  *
  * @author Sam Harwell
  */
-public final class MurmurHash {
+export class MurmurHash {
 
-	private static final int DEFAULT_SEED = 0;
+	private static DEFAULT_SEED: number =  0;
 
 	/**
 	 * Initialize the hash using the default seed value.
 	 *
 	 * @return the intermediate hash value
 	 */
-	public static int initialize() {
+	static initialize(): number {
 		return initialize(DEFAULT_SEED);
 	}
 
@@ -53,7 +53,7 @@ public final class MurmurHash {
 	 * @param seed the seed
 	 * @return the intermediate hash value
 	 */
-	public static int initialize(int seed) {
+	static initialize(seed: number): number {
 		return seed;
 	}
 
@@ -64,15 +64,15 @@ public final class MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	public static int update(int hash, int value) {
-		final int c1 = 0xCC9E2D51;
-		final int c2 = 0x1B873593;
-		final int r1 = 15;
-		final int r2 = 13;
-		final int m = 5;
-		final int n = 0xE6546B64;
+	static update(hash: number, value: number): number {
+		c1: number =  0xCC9E2D51;
+		c2: number =  0x1B873593;
+		r1: number =  15;
+		r2: number =  13;
+		m: number =  5;
+		n: number =  0xE6546B64;
 
-		int k = value;
+		let k: number =  value;
 		k = k * c1;
 		k = (k << r1) | (k >>> (32 - r1));
 		k = k * c2;
@@ -91,7 +91,7 @@ public final class MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	public static int update(int hash, Object value) {
+	static update(hash: number, value: any): number {
 		return update(hash, value != null ? value.hashCode() : 0);
 	}
 
@@ -103,7 +103,7 @@ public final class MurmurHash {
 	 * @param numberOfWords the number of integer values added to the hash
 	 * @return the final hash result
 	 */
-	public static int finish(int hash, int numberOfWords) {
+	static finish(hash: number, numberOfWords: number): number {
 		hash = hash ^ (numberOfWords * 4);
 		hash = hash ^ (hash >>> 16);
 		hash = hash * 0x85EBCA6B;
@@ -122,9 +122,9 @@ public final class MurmurHash {
 	 * @param seed the seed for the MurmurHash algorithm
 	 * @return the hash code of the data
 	 */
-	public static <T> int hashCode(T[] data, int seed) {
-		int hash = initialize(seed);
-		for (T value : data) {
+	static hashCode<T>(data: T[], seed: number): number {
+		let hash: number =  initialize(seed);
+		for (let value of data) {
 			hash = update(hash, value);
 		}
 
@@ -132,6 +132,6 @@ public final class MurmurHash {
 		return hash;
 	}
 
-	private MurmurHash() {
+	 constructor()  {
 	}
 }
