@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
+import {AbstractEqualityComparator} from './AbstractEqualityComparator';
+import {Override, HashedValueType} from './Stubs';
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -35,7 +37,7 @@
  *
  * @author Sam Harwell
  */
-export class ObjectEqualityComparator extends AbstractEqualityComparator<Object> {
+export class ObjectEqualityComparator extends AbstractEqualityComparator<HashedValueType> {
 	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**

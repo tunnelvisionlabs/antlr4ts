@@ -14,7 +14,7 @@
     "ANTLR4",
     "typescript"
   ],
-  "author": "Sam Harwell and Burt Harris",
+  "author": "Terence Parr, Sam Harwell and Burt Harris",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/sharwell/antlr4ts/issues"

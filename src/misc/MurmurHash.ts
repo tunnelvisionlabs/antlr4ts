@@ -29,31 +29,26 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.1239660-07:00
+import {HashedValueType} from './Stubs';
 
 /**
  *
  * @author Sam Harwell
  */
-export class MurmurHash {
 
-	private static DEFAULT_SEED: number =  0;
+// Namespace works better than class for this...
 
-	/**
-	 * Initialize the hash using the default seed value.
-	 *
-	 * @return the intermediate hash value
-	 */
-	static initialize(): number {
-		return initialize(DEFAULT_SEED);
-	}
+export namespace MurmurHash {
+
+	const DEFAULT_SEED: number =  0;
 
 	/**
 	 * Initialize the hash using the specified {@code seed}.
 	 *
-	 * @param seed the seed
+	 * @param seed the seed (optional)
 	 * @return the intermediate hash value
 	 */
-	static initialize(seed: number): number {
+	export function initialize(seed: number = 0): number {
 		return seed;
 	}
 
@@ -64,15 +59,18 @@ export class MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	static update(hash: number, value: number): number {
-		c1: number =  0xCC9E2D51;
-		c2: number =  0x1B873593;
-		r1: number =  15;
-		r2: number =  13;
-		m: number =  5;
-		n: number =  0xE6546B64;
+	export function update(hash: number, value: number | HashedValueType ): number {
+		const c1: number =  0xCC9E2D51;
+		const c2: number =  0x1B873593;
+		const r1: number =  15;
+		const r2: number =  13;
+		const m: number =  5;
+		const n: number =  0xE6546B64;
 
-		let k: number =  value;
+		if (value === null) value = 0;
+		else if (typeof value === 'object') value = (value as HashedValueType).hashCode();
+
+		let k: number = value as number;
 		k = k * c1;
 		k = (k << r1) | (k >>> (32 - r1));
 		k = k * c2;
@@ -84,16 +82,6 @@ export class MurmurHash {
 		return hash;
 	}
 
-	/**
-	 * Update the intermediate hash value for the next input {@code value}.
-	 *
-	 * @param hash the intermediate hash value
-	 * @param value the value to add to the current hash
-	 * @return the updated intermediate hash value
-	 */
-	static update(hash: number, value: any): number {
-		return update(hash, value != null ? value.hashCode() : 0);
-	}
 
 	/**
 	 * Apply the final computation steps to the intermediate value {@code hash}
@@ -103,7 +91,7 @@ export class MurmurHash {
 	 * @param numberOfWords the number of integer values added to the hash
 	 * @return the final hash result
 	 */
-	static finish(hash: number, numberOfWords: number): number {
+	export function finish(hash: number, numberOfWords: number): number {
 		hash = hash ^ (numberOfWords * 4);
 		hash = hash ^ (hash >>> 16);
 		hash = hash * 0x85EBCA6B;
@@ -122,7 +110,7 @@ export class MurmurHash {
 	 * @param seed the seed for the MurmurHash algorithm
 	 * @return the hash code of the data
 	 */
-	static hashCode<T>(data: T[], seed: number): number {
+	export function hashCode<T extends HashedValueType>(data: T[], seed: number): number {
 		let hash: number =  initialize(seed);
 		for (let value of data) {
 			hash = update(hash, value);
@@ -130,8 +118,5 @@ export class MurmurHash {
 
 		hash = finish(hash, data.length);
 		return hash;
-	}
-
-	 constructor()  {
 	}
 }

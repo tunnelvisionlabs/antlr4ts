@@ -28,7 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // ConvertTo-TS run at 2016-10-03T02:09:41.6394284-07:00
-
+import {EqualityComparator} from './EqualityComparator';
 /**
  * This abstract base class is provided so performance-critical applications can
  * use virtual- instead of interface-dispatch when calling comparator methods.
@@ -36,5 +36,20 @@
  * @author Sam Harwell
  */
 export abstract class AbstractEqualityComparator<T> implements EqualityComparator<T> {
+	/**
+	 * This method returns a hash code for the specified object.
+	 *
+	 * @param obj The object.
+	 * @return The hash code for {@code obj}.
+	 */
+	abstract hashCode(obj: T): number;
 
+	/**
+	 * This method tests if two objects are equal.
+	 *
+	 * @param a The first object to compare.
+	 * @param b The second object to compare.
+	 * @return {@code true} if {@code a} equals {@code b}, otherwise {@code false}.
+	 */
+	abstract equals(a: T, b: T): boolean;
 }
