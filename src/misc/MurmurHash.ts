@@ -29,7 +29,7 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.1239660-07:00
-import {HashedValueType} from './Stubs';
+import {Equatable} from './Stubs';
 
 /**
  *
@@ -57,7 +57,7 @@ export namespace MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	export function update(hash: number, value: number | HashedValueType ): number {
+	export function update(hash: number, value: number | Equatable ): number {
 		const c1: number =  0xCC9E2D51;
 		const c2: number =  0x1B873593;
 		const r1: number =  15;
@@ -66,7 +66,7 @@ export namespace MurmurHash {
 		const n: number =  0xE6546B64;
 
 		if (value === null) value = 0;
-		else if (typeof value === 'object') value = (value as HashedValueType).hashCode();
+		else if (typeof value === 'object') value = (value as Equatable).hashCode();
 
 		let k: number = value as number;
 		k = k * c1;
@@ -108,7 +108,7 @@ export namespace MurmurHash {
 	 * @param seed the seed for the MurmurHash algorithm
 	 * @return the hash code of the data
 	 */
-	export function hashCode<T extends HashedValueType>(data: T[], seed: number): number {
+	export function hashCode<T extends Equatable>(data: T[], seed: number): number {
 		let hash: number =  initialize(seed);
 		for (let value of data) {
 			hash = update(hash, value);

@@ -31,7 +31,7 @@
 /**
  * JavaScript's Object class lacks these (compared to Java...)
  */
-export interface HashedValueType {
+export interface Equatable {
 	equals(other: any): boolean;
 	hashCode(): number;
 }

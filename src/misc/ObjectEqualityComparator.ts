@@ -29,7 +29,7 @@
  */
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
 import {AbstractEqualityComparator} from './AbstractEqualityComparator';
-import {Override, HashedValueType} from './Stubs';
+import {Override, Equatable} from './Stubs';
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -37,7 +37,7 @@ import {Override, HashedValueType} from './Stubs';
  *
  * @author Sam Harwell
  */
-export class ObjectEqualityComparator extends AbstractEqualityComparator<HashedValueType> {
+export class ObjectEqualityComparator extends AbstractEqualityComparator<Equatable> {
 	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**
