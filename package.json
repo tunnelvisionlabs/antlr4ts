@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/sharwell/antlr4ts#readme",
   "devDependencies": {
+    "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
     "mocha": "^3.1.0",
     "typescript": "^2.0.3"
