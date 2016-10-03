@@ -366,7 +366,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 					break;
 				}
 
-				if (!c.contains(bucket[i])) {  // Something seems wrong here!!!
+				if (!c.contains(bucket[i])) {  /* :-) */
 					// removed
 					continue;
 				}
@@ -394,9 +394,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	removeAll(c: Iterable<T>): boolean {
+	removeAll(c: Collection<T>): boolean {
 		let changed = false;
-		for (let o of c) {
+		for (let o of asIterable(c)) {
 			changed = changed || this.removeFast(this.asElementType(o));
 		}
 
