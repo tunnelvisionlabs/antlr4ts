@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,7 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
+// ConvertTo-TS run at 2016-10-02T18:54:42.7458518-07:00
 
-public interface ErrorNode extends TerminalNode {
+export interface ErrorNode extends TerminalNode {
 }

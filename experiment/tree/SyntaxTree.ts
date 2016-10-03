@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,17 +28,13 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.TokenStream;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.NotNull;
+// ConvertTo-TS run at 2016-10-02T18:54:43.3398516-07:00
 
 /** A tree that knows about an interval in a token stream
  *  is some kind of syntax tree. Subinterfaces distinguish
  *  between parse trees and other kinds of syntax trees we might want to create.
  */
-public interface SyntaxTree extends Tree {
+export interface SyntaxTree extends Tree {
 	/**
 	 * Return an {@link Interval} indicating the index in the
 	 * {@link TokenStream} of the first and last token associated with this
@@ -55,6 +51,6 @@ public interface SyntaxTree extends Tree {
 	 * <p>As a weird special case, the source interval for rules matched after
 	 * EOF is unspecified.</p>
 	 */
-	@NotNull
-	Interval getSourceInterval();
+	/*@NotNull*/
+	getSourceInterval(): Interval;
 }

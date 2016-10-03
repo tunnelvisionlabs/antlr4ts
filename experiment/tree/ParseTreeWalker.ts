@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,15 +28,12 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
+// ConvertTo-TS run at 2016-10-02T18:54:43.1778879-07:00
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
+export class ParseTreeWalker {
+    static DEFAULT: ParseTreeWalker =  new ParseTreeWalker();
 
-public class ParseTreeWalker {
-    public static final ParseTreeWalker DEFAULT = new ParseTreeWalker();
-
-    public void walk(ParseTreeListener listener, ParseTree t) {
+    walk(listener: ParseTreeListener, t: ParseTree): void {
 		if ( t instanceof ErrorNode ) {
 			listener.visitErrorNode((ErrorNode)t);
 			return;
@@ -46,10 +43,10 @@ public class ParseTreeWalker {
 			return;
 		}
 
-		RuleNode r = (RuleNode)t;
+		let r: RuleNode =  (RuleNode)t;
         enterRule(listener, r);
-        int n = r.getChildCount();
-        for (int i = 0; i<n; i++) {
+        let n: number =  r.getChildCount();
+        for (let i = 0; i<n; i++) {
             walk(listener, r.getChild(i));
         }
 		exitRule(listener, r);
@@ -61,14 +58,14 @@ public class ParseTreeWalker {
 	 * {@link RuleContext}-specific event. First we trigger the generic and then
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
-    protected void enterRule(ParseTreeListener listener, RuleNode r) {
-		ParserRuleContext ctx = (ParserRuleContext)r.getRuleContext();
+    protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
+		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
 		listener.enterEveryRule(ctx);
 		ctx.enterRule(listener);
     }
 
-    protected void exitRule(ParseTreeListener listener, RuleNode r) {
-		ParserRuleContext ctx = (ParserRuleContext)r.getRuleContext();
+    protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
+		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
 		ctx.exitRule(listener);
 		listener.exitEveryRule(ctx);
     }

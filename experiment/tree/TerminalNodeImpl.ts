@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,52 +28,46 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
+// ConvertTo-TS run at 2016-10-02T18:54:43.4738511-07:00
 
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
+export class TerminalNodeImpl implements TerminalNode {
+	symbol: Token; 
+	parent: RuleNode; 
 
-import java.util.List;
+	 constructor(symbol: Token)  {	this.symbol = symbol;	}
 
-public class TerminalNodeImpl implements TerminalNode {
-	public Token symbol;
-	public RuleNode parent;
+	/*@Override*/
+	getChild(i: number): ParseTree {return null;}
 
-	public TerminalNodeImpl(Token symbol) {	this.symbol = symbol;	}
+	/*@Override*/
+	getSymbol(): Token {return symbol;}
 
-	@Override
-	public ParseTree getChild(int i) {return null;}
+	/*@Override*/
+	getParent(): RuleNode { return parent; }
 
-	@Override
-	public Token getSymbol() {return symbol;}
+	/*@Override*/
+	getPayload(): Token { return symbol; }
 
-	@Override
-	public RuleNode getParent() { return parent; }
-
-	@Override
-	public Token getPayload() { return symbol; }
-
-	@Override
-	public Interval getSourceInterval() {
+	/*@Override*/
+	getSourceInterval(): Interval {
 		if (symbol != null) {
-			int tokenIndex = symbol.getTokenIndex();
+			let tokenIndex: number =  symbol.getTokenIndex();
 			return new Interval(tokenIndex, tokenIndex);
 		}
 
 		return Interval.INVALID;
 	}
 
-	@Override
-	public int getChildCount() { return 0; }
+	/*@Override*/
+	getChildCount(): number { return 0; }
 
-	@Override
-	public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+	/*@Override*/
+	accept<T>(visitor: ParseTreeVisitor<? extends T>): T {
 		return visitor.visitTerminal(this);
 	}
 
-	@Override
-	public String getText() {
+	/*@Override*/
+	getText(): string {
 		if (symbol != null) {
 			return symbol.getText();
 		}
@@ -81,13 +75,13 @@ public class TerminalNodeImpl implements TerminalNode {
 		return null;
 	}
 
-	@Override
-	public String toStringTree(Parser parser) {
+	/*@Override*/
+	toStringTree(parser: Parser): string {
 		return toString();
 	}
 
-	@Override
-	public String toString() {
+	/*@Override*/
+	toString(): string {
 		if (symbol != null) {
 			if ( symbol.getType() == Token.EOF ) {
 				return "<EOF>";
@@ -100,8 +94,8 @@ public class TerminalNodeImpl implements TerminalNode {
 		}
 	}
 
-	@Override
-	public String toStringTree() {
+	/*@Override*/
+	toStringTree(): string {
 		return toString();
 	}
 }

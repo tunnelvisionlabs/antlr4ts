@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,10 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.misc.NotNull;
+// ConvertTo-TS run at 2016-10-02T18:54:42.9738510-07:00
 
 /** This interface describes the minimal core of methods triggered
  *  by {@link ParseTreeWalker}. E.g.,
@@ -44,9 +41,9 @@ import org.antlr.v4.runtime.misc.NotNull;
  *
  * 		https://github.com/antlr/antlr4/issues/841
  */
-public interface ParseTreeListener {
-	void visitTerminal(@NotNull TerminalNode node);
-	void visitErrorNode(@NotNull ErrorNode node);
-    void enterEveryRule(@NotNull ParserRuleContext ctx);
-    void exitEveryRule(@NotNull ParserRuleContext ctx);
+export interface ParseTreeListener {
+	visitTerminal(/*@NotNull*/ node: TerminalNode): void;
+	visitErrorNode(/*@NotNull*/ node: ErrorNode): void;
+    enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
+    exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
 }

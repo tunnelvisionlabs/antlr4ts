@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,19 +28,17 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
+// ConvertTo-TS run at 2016-10-02T18:54:42.6538504-07:00
 
-import org.antlr.v4.runtime.misc.NotNull;
-
-public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
+export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation calls {@link ParseTree#accept} on the
 	 * specified tree.</p>
 	 */
-	@Override
-	public Result visit(@NotNull ParseTree tree) {
+	/*@Override*/
+	visit(/*@NotNull*/ tree: ParseTree): Result {
 		return tree.accept(this);
 	}
 
@@ -59,17 +57,17 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * the tree structure. Visitors that modify the tree should override this
 	 * method to behave properly in respect to the specific algorithm in use.</p>
 	 */
-	@Override
-	public Result visitChildren(@NotNull RuleNode node) {
-		Result result = defaultResult();
-		int n = node.getChildCount();
-		for (int i=0; i<n; i++) {
+	/*@Override*/
+	visitChildren(/*@NotNull*/ node: RuleNode): Result {
+		let result: Result =  defaultResult();
+		let n: number =  node.getChildCount();
+		for (let i=0; i<n; i++) {
 			if (!shouldVisitNextChild(node, result)) {
 				break;
 			}
 
-			ParseTree c = node.getChild(i);
-			Result childResult = c.accept(this);
+			let c: ParseTree =  node.getChild(i);
+			let childResult: Result =  c.accept(this);
 			result = aggregateResult(result, childResult);
 		}
 
@@ -82,8 +80,8 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * <p>The default implementation returns the result of
 	 * {@link #defaultResult defaultResult}.</p>
 	 */
-	@Override
-	public Result visitTerminal(@NotNull TerminalNode node) {
+	/*@Override*/
+	visitTerminal(/*@NotNull*/ node: TerminalNode): Result {
 		return defaultResult();
 	}
 
@@ -93,8 +91,8 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * <p>The default implementation returns the result of
 	 * {@link #defaultResult defaultResult}.</p>
 	 */
-	@Override
-	public Result visitErrorNode(@NotNull ErrorNode node) {
+	/*@Override*/
+	visitErrorNode(/*@NotNull*/ node: ErrorNode): Result {
 		return defaultResult();
 	}
 
@@ -109,7 +107,7 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 *
 	 * @return The default value returned by visitor methods.
 	 */
-	protected Result defaultResult() {
+	protected defaultResult(): Result {
 		return null;
 	}
 
@@ -132,7 +130,7 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 *
 	 * @return The updated aggregate result.
 	 */
-	protected Result aggregateResult(Result aggregate, Result nextResult) {
+	protected aggregateResult(aggregate: Result, nextResult: Result): Result {
 		return nextResult;
 	}
 
@@ -160,7 +158,7 @@ public abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * {@code false} to stop visiting children and immediately return the
 	 * current aggregate result from {@link #visitChildren}.
 	 */
-	protected boolean shouldVisitNextChild(@NotNull RuleNode node, Result currentResult) {
+	protected shouldVisitNextChild(/*@NotNull*/ node: RuleNode, currentResult: Result): boolean {
 		return true;
 	}
 

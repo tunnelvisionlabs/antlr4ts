@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,9 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.Token;
+// ConvertTo-TS run at 2016-10-02T18:54:42.8098507-07:00
 
 /** Represents a token that was consumed during resynchronization
  *  rather than during a valid match operation. For example,
@@ -38,14 +36,14 @@ import org.antlr.v4.runtime.Token;
  *  and deletion as well as during "consume until error recovery set"
  *  upon no viable alternative exceptions.
  */
-public class ErrorNodeImpl extends TerminalNodeImpl implements ErrorNode
+export class ErrorNodeImpl extends TerminalNodeImpl implements ErrorNode
 {
-	public ErrorNodeImpl(Token token) {
+	 constructor(token: Token)  {
 		super(token);
 	}
 
-	@Override
-	public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+	/*@Override*/
+	accept<T>(visitor: ParseTreeVisitor<? extends T>): T {
 		return visitor.visitErrorNode(this);
 	}
 }

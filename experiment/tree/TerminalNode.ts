@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,13 +28,11 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
+// ConvertTo-TS run at 2016-10-02T18:54:43.4178517-07:00
 
-import org.antlr.v4.runtime.Token;
+export interface TerminalNode extends ParseTree {
+	getSymbol(): Token;
 
-public interface TerminalNode extends ParseTree {
-	Token getSymbol();
-
-	@Override
-	RuleNode getParent();
+	/*@Override*/
+	getParent(): RuleNode;
 }

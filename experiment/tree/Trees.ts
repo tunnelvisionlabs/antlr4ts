@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,33 +28,15 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.antlr.v4.runtime.misc.Nullable;
-import org.antlr.v4.runtime.misc.Predicate;
-import org.antlr.v4.runtime.misc.Utils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+// ConvertTo-TS run at 2016-10-02T18:54:43.5678287-07:00
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
-public class Trees {
+export class Trees {
 	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
 	 *  node payloads to get the text for the nodes.  Detect
 	 *  parse trees and extract data appropriately.
 	 */
-	public static String toStringTree(@NotNull Tree t) {
+	static toStringTree(/*@NotNull*/ t: Tree): string {
 		return toStringTree(t, (List<String>)null);
 	}
 
@@ -62,24 +44,24 @@ public class Trees {
 	 *  node payloads to get the text for the nodes.  Detect
 	 *  parse trees and extract data appropriately.
 	 */
-	public static String toStringTree(@NotNull Tree t, @Nullable Parser recog) {
-		String[] ruleNames = recog != null ? recog.getRuleNames() : null;
-		List<String> ruleNamesList = ruleNames != null ? Arrays.asList(ruleNames) : null;
+	static toStringTree(/*@NotNull*/ t: Tree, /*@Nullable*/ recog: Parser): string {
+		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
 		return toStringTree(t, ruleNamesList);
 	}
 
 	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
 	 *  node payloads to get the text for the nodes.
 	 */
-	public static String toStringTree(@NotNull final Tree t, @Nullable final List<String> ruleNames) {
-		String s = Utils.escapeWhitespace(getNodeText(t, ruleNames), false);
+	static toStringTree(/*@NotNull*/ final Tree t,  /*@Nullable*/ final List<String> ruleNames): string {
+		let s: string =  Utils.escapeWhitespace(getNodeText(t, ruleNames), false);
 		if ( t.getChildCount()==0 ) return s;
-		StringBuilder buf = new StringBuilder();
+		let buf: StringBuilder =  new StringBuilder();
 		buf.append("(");
 		s = Utils.escapeWhitespace(getNodeText(t, ruleNames), false);
 		buf.append(s);
 		buf.append(' ');
-		for (int i = 0; i<t.getChildCount(); i++) {
+		for (let i = 0; i<t.getChildCount(); i++) {
 			if ( i>0 ) buf.append(' ');
 			buf.append(toStringTree(t.getChild(i), ruleNames));
 		}
@@ -87,19 +69,19 @@ public class Trees {
 		return buf.toString();
 	}
 
-	public static String getNodeText(@NotNull Tree t, @Nullable Parser recog) {
-		String[] ruleNames = recog != null ? recog.getRuleNames() : null;
-		List<String> ruleNamesList = ruleNames != null ? Arrays.asList(ruleNames) : null;
+	static getNodeText(/*@NotNull*/ t: Tree, /*@Nullable*/ recog: Parser): string {
+		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
 		return getNodeText(t, ruleNamesList);
 	}
 
-	public static String getNodeText(@NotNull Tree t, @Nullable List<String> ruleNames) {
+	static getNodeText(/*@NotNull*/ t: Tree, /*@Nullable*/ ruleNames: List<string>): string {
 		if ( ruleNames!=null ) {
 			if ( t instanceof RuleNode ) {
-				RuleContext ruleContext = ((RuleNode)t).getRuleContext();
-				int ruleIndex = ruleContext.getRuleIndex();
-				String ruleName = ruleNames.get(ruleIndex);
-				int altNumber = ruleContext.getAltNumber();
+				let ruleContext: RuleContext =  ((RuleNode)t).getRuleContext();
+				let ruleIndex: number =  ruleContext.getRuleIndex();
+				let ruleName: string =  ruleNames.get(ruleIndex);
+				let altNumber: number =  ruleContext.getAltNumber();
 				if ( altNumber!=ATN.INVALID_ALT_NUMBER ) {
 					return ruleName+":"+altNumber;
 				}
@@ -109,15 +91,15 @@ public class Trees {
 				return t.toString();
 			}
 			else if ( t instanceof TerminalNode) {
-				Token symbol = ((TerminalNode)t).getSymbol();
+				let symbol: Token =  ((TerminalNode)t).getSymbol();
 				if (symbol != null) {
-					String s = symbol.getText();
+					let s: string =  symbol.getText();
 					return s;
 				}
 			}
 		}
 		// no recog for rule names
-		Object payload = t.getPayload();
+		let payload: any =  t.getPayload();
 		if ( payload instanceof Token ) {
 			return ((Token)payload).getText();
 		}
@@ -125,9 +107,9 @@ public class Trees {
 	}
 
 	/** Return ordered list of all children of this node */
-	public static List<Tree> getChildren(Tree t) {
-		List<Tree> kids = new ArrayList<Tree>();
-		for (int i=0; i<t.getChildCount(); i++) {
+	static getChildren(t: Tree): List<Tree> {
+		let kids: List<Tree> =  new ArrayList<Tree>();
+		for (let i=0; i<t.getChildCount(); i++) {
 			kids.add(t.getChild(i));
 		}
 		return kids;
@@ -138,10 +120,10 @@ public class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-	@NotNull
-	public static List<? extends Tree> getAncestors(@NotNull Tree t) {
+	/*@NotNull*/
+	static getAncestors(/*@NotNull*/ t: Tree): List<? extends Tree> {
 		if ( t.getParent()==null ) return Collections.emptyList();
-		List<Tree> ancestors = new ArrayList<Tree>();
+		let ancestors: List<Tree> =  new ArrayList<Tree>();
 		t = t.getParent();
 		while ( t!=null ) {
 			ancestors.add(0, t); // insert at start
@@ -155,9 +137,9 @@ public class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-	public static boolean isAncestorOf(Tree t, Tree u) {
+	static isAncestorOf(t: Tree, u: Tree): boolean {
 		if ( t==null || u==null || t.getParent()==null ) return false;
-		Tree p = u.getParent();
+		let p: Tree =  u.getParent();
 		while ( p!=null ) {
 			if ( t==p ) return true;
 			p = p.getParent();
@@ -165,16 +147,16 @@ public class Trees {
 		return false;
 	}
 
-	public static Collection<ParseTree> findAllTokenNodes(ParseTree t, int ttype) {
+	static findAllTokenNodes(t: ParseTree, ttype: number): Collection<ParseTree> {
 		return findAllNodes(t, ttype, true);
 	}
 
-	public static Collection<ParseTree> findAllRuleNodes(ParseTree t, int ruleIndex) {
+	static findAllRuleNodes(t: ParseTree, ruleIndex: number): Collection<ParseTree> {
 		return findAllNodes(t, ruleIndex, false);
 	}
 
-	public static List<ParseTree> findAllNodes(ParseTree t, int index, boolean findTokens) {
-		List<ParseTree> nodes = new ArrayList<ParseTree>();
+	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): List<ParseTree> {
+		let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
 		_findAllNodes(t, index, findTokens, nodes);
 		return nodes;
 	}
@@ -184,15 +166,15 @@ public class Trees {
 	{
 		// check this node (the root) first
 		if ( findTokens && t instanceof TerminalNode ) {
-			TerminalNode tnode = (TerminalNode)t;
+			let tnode: TerminalNode =  (TerminalNode)t;
 			if ( tnode.getSymbol().getType()==index ) nodes.add(t);
 		}
 		else if ( !findTokens && t instanceof ParserRuleContext ) {
-			ParserRuleContext ctx = (ParserRuleContext)t;
+			let ctx: ParserRuleContext =  (ParserRuleContext)t;
 			if ( ctx.getRuleIndex() == index ) nodes.add(t);
 		}
 		// check children
-		for (int i = 0; i < t.getChildCount(); i++){
+		for (let i = 0; i < t.getChildCount(); i++){
 			_findAllNodes(t.getChild(i), index, findTokens, nodes);
 		}
 	}
@@ -201,20 +183,20 @@ public class Trees {
 	 *
 	 * @since 4.5.1
  	 */
-	public static List<ParseTree> getDescendants(ParseTree t) {
-		List<ParseTree> nodes = new ArrayList<ParseTree>();
+	static getDescendants(t: ParseTree): List<ParseTree> {
+		let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
 		nodes.add(t);
 
-		int n = t.getChildCount();
-		for (int i = 0 ; i < n ; i++){
+		let n: number =  t.getChildCount();
+		for (let i = 0 ; i < n ; i++){
 			nodes.addAll(getDescendants(t.getChild(i)));
 		}
 		return nodes;
 	}
 
 	/** @deprecated */
-	@Deprecated
-	public static List<ParseTree> descendants(ParseTree t) {
+	/*@Deprecated*/
+	static descendants(t: ParseTree): List<ParseTree> {
 		return getDescendants(t);
 	}
 
@@ -223,19 +205,19 @@ public class Trees {
 	 *
 	 *  @since 4.5
 	 */
-	@Nullable
-	public static ParserRuleContext getRootOfSubtreeEnclosingRegion(@NotNull ParseTree t,
+	/*@Nullable*/
+	static getRootOfSubtreeEnclosingRegion(/*@NotNull*/ t: ParseTree, 
 																	int startTokenIndex, // inclusive
-																	int stopTokenIndex)  // inclusive
+																	stopTokenIndex: number): ParserRuleContext  // inclusive
 	{
-		int n = t.getChildCount();
-		for (int i = 0; i<n; i++) {
-			ParseTree child = t.getChild(i);
-			ParserRuleContext r = getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
+		let n: number =  t.getChildCount();
+		for (let i = 0; i<n; i++) {
+			let child: ParseTree =  t.getChild(i);
+			let r: ParserRuleContext =  getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
 			if ( r!=null ) return r;
 		}
 		if ( t instanceof ParserRuleContext ) {
-			ParserRuleContext r = (ParserRuleContext) t;
+			let r: ParserRuleContext =  (ParserRuleContext) t;
 			if ( startTokenIndex>=r.getStart().getTokenIndex() && // is range fully contained in t?
 				 (r.getStop()==null || stopTokenIndex<=r.getStop().getTokenIndex()) )
 			{
@@ -254,18 +236,18 @@ public class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-	public static void stripChildrenOutOfRange(ParserRuleContext t,
-											   ParserRuleContext root,
-											   int startIndex,
-											   int stopIndex)
+	static stripChildrenOutOfRange(t: ParserRuleContext, 
+											   root: ParserRuleContext,
+											   startIndex: number,
+											   stopIndex: number): void
 	{
 		if ( t==null ) return;
-		for (int i = 0; i < t.getChildCount(); i++) {
-			ParseTree child = t.getChild(i);
-			Interval range = child.getSourceInterval();
+		for (let i = 0; i < t.getChildCount(); i++) {
+			let child: ParseTree =  t.getChild(i);
+			let range: Interval =  child.getSourceInterval();
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
 				if ( isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
-					CommonToken abbrev = new CommonToken(Token.INVALID_TYPE, "...");
+					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
 					t.children.set(i, new TerminalNodeImpl(abbrev));
 				}
 			}
@@ -276,17 +258,17 @@ public class Trees {
 	 *
  	 *  @since 4.5.1
 	 */
-	public static Tree findNodeSuchThat(Tree t, Predicate<Tree> pred) {
+	static findNodeSuchThat(t: Tree, pred: Predicate<Tree>): Tree {
 		if ( pred.eval(t) ) return t;
 
-		int n = t.getChildCount();
-		for (int i = 0 ; i < n ; i++){
-			Tree u = findNodeSuchThat(t.getChild(i), pred);
+		let n: number =  t.getChildCount();
+		for (let i = 0 ; i < n ; i++){
+			let u: Tree =  findNodeSuchThat(t.getChild(i), pred);
 			if ( u!=null ) return u;
 		}
 		return null;
 	}
 
-	private Trees() {
+	 constructor()  {
 	}
 }

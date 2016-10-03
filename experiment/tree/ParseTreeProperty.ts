@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,10 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import java.util.IdentityHashMap;
-import java.util.Map;
+// ConvertTo-TS run at 2016-10-02T18:54:43.0398511-07:00
 
 /**
  * Associate a property with a parse tree node. Useful with parse tree listeners
@@ -49,10 +46,10 @@ import java.util.Map;
  * You would make one decl (values here) in the listener and use lots of times
  * in your event methods.
  */
-public class ParseTreeProperty<V> {
-	protected Map<ParseTree, V> annotations = new IdentityHashMap<ParseTree, V>();
+export class ParseTreeProperty<V> {
+	protected annotations: Map<ParseTree, V> =  new IdentityHashMap<ParseTree, V>();
 
-	public V get(ParseTree node) { return annotations.get(node); }
-	public void put(ParseTree node, V value) { annotations.put(node, value); }
-	public V removeFrom(ParseTree node) { return annotations.remove(node); }
+	get(ParseTree node) { return annotations.get(node): V; }
+	put(node: ParseTree,  V value) { annotations.put(node,  value): void; }
+	removeFrom(ParseTree node) { return annotations.remove(node): V; }
 }

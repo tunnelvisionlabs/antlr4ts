@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,9 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.misc.NotNull;
+// ConvertTo-TS run at 2016-10-02T18:54:43.1098503-07:00
 
 /**
  * This interface defines the basic notion of a parse tree visitor. Generated
@@ -41,7 +39,7 @@ import org.antlr.v4.runtime.misc.NotNull;
  * @param <Result> The return type of the visit operation. Use {@link Void} for
  * operations with no return type.
  */
-public interface ParseTreeVisitor<Result> {
+export interface ParseTreeVisitor<Result> {
 
 	/**
 	 * Visit a parse tree, and return a user-defined result of the operation.
@@ -49,7 +47,7 @@ public interface ParseTreeVisitor<Result> {
 	 * @param tree The {@link ParseTree} to visit.
 	 * @return The result of visiting the parse tree.
 	 */
-	Result visit(@NotNull ParseTree tree);
+	visit(/*@NotNull*/ tree: ParseTree): Result;
 
 	/**
 	 * Visit the children of a node, and return a user-defined result
@@ -58,7 +56,7 @@ public interface ParseTreeVisitor<Result> {
 	 * @param node The {@link RuleNode} whose children should be visited.
 	 * @return The result of visiting the children of the node.
 	 */
-	Result visitChildren(@NotNull RuleNode node);
+	visitChildren(/*@NotNull*/ node: RuleNode): Result;
 
 	/**
 	 * Visit a terminal node, and return a user-defined result of the operation.
@@ -66,7 +64,7 @@ public interface ParseTreeVisitor<Result> {
 	 * @param node The {@link TerminalNode} to visit.
 	 * @return The result of visiting the node.
 	 */
-	Result visitTerminal(@NotNull TerminalNode node);
+	visitTerminal(/*@NotNull*/ node: TerminalNode): Result;
 
 	/**
 	 * Visit an error node, and return a user-defined result of the operation.
@@ -74,6 +72,6 @@ public interface ParseTreeVisitor<Result> {
 	 * @param node The {@link ErrorNode} to visit.
 	 * @return The result of visiting the node.
 	 */
-	Result visitErrorNode(@NotNull ErrorNode node);
+	visitErrorNode(/*@NotNull*/ node: ErrorNode): Result;
 
 }

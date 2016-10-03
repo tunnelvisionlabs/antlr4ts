@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,11 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
+// ConvertTo-TS run at 2016-10-02T18:54:42.9018502-07:00
 
 /** An interface to access the tree of {@link RuleContext} objects created
  *  during a parse that makes the data structure look like a simple parse tree.
@@ -41,24 +37,24 @@ import org.antlr.v4.runtime.Token;
  *
  *  <p>The payload is either a {@link Token} or a {@link RuleContext} object.</p>
  */
-public interface ParseTree extends SyntaxTree {
+export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods
-	@Override
-	ParseTree getParent();
-	@Override
-	ParseTree getChild(int i);
+	/*@Override*/
+	getParent(): ParseTree;
+	/*@Override*/
+	getChild(i: number): ParseTree;
 
 	/** The {@link ParseTreeVisitor} needs a double dispatch method. */
-	<T> T accept(ParseTreeVisitor<? extends T> visitor);
+	accept<T>(visitor: ParseTreeVisitor<? extends T>): T;
 
 	/** Return the combined text of all leaf nodes. Does not get any
 	 *  off-channel tokens (if any) so won't return whitespace and
 	 *  comments if they are sent to parser on hidden channel.
 	 */
-	String getText();
+	getText(): string;
 
 	/** Specialize toStringTree so that it can print out more information
 	 * 	based upon the parser.
 	 */
-	String toStringTree(Parser parser);
+	toStringTree(parser: Parser): string;
 }
