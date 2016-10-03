@@ -36,7 +36,5 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# JavaScript & Maps are build products
-*.js
-*.js.map
-*.jscoverage
+# Exclude build products
+target
