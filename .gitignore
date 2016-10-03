@@ -27,14 +27,14 @@ coverage
 build/Release
 
 # Dependency directories
-node_modules
-jspm_packages
+node_modules/
+jspm_packages/
 
 # Optional npm cache directory
-.npm
+.npm/
 
 # Optional REPL history
 .node_repl_history
 
 # Build products
-target
+target/
