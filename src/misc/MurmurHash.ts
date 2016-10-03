@@ -46,7 +46,7 @@ export namespace MurmurHash {
 	 * @param seed the seed (optional)
 	 * @return the intermediate hash value
 	 */
-	export function initialize(seed: number = 0): number {
+	export function initialize(seed: number = DEFAULT_SEED): number {
 		return seed;
 	}
 
