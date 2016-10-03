@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,22 +28,16 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.antlr.v4.runtime.tree;
-
-import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
-
-import java.util.Collection;
-import java.util.List;
+// ConvertTo-TS run at 2016-10-02T21:58:18.5966470-07:00
 
 /** The basic notion of a tree has a parent, a payload, and a list of children.
  *  It is the most abstract interface for all the trees used by ANTLR.
  */
-public interface Tree {
+export interface Tree {
 	/** The parent of this node. If the return value is null, then this
 	 *  node is the root of the tree.
 	 */
-	Tree getParent();
+	getParent(): Tree;
 
 	/**
 	 * This method returns whatever object represents the data at this note. For
@@ -52,18 +46,18 @@ public interface Tree {
 	 * invocation. For abstract syntax trees (ASTs), this is a {@link Token}
 	 * object.
 	 */
-	Object getPayload();
+	getPayload(): any;
 
 	/** If there are children, get the {@code i}th value indexed from 0. */
-	Tree getChild(int i);
+	getChild(i: number): Tree;
 
 	/** How many children are there? If there is none, then this
 	 *  node represents a leaf node.
 	 */
-	int getChildCount();
+	getChildCount(): number;
 
 	/** Print out a whole tree, not just a node, in LISP format
 	 *  {@code (root child1 .. childN)}. Print just a node if this is a leaf.
 	 */
-	String toStringTree();
+	toStringTree(): string;
 }
