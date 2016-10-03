@@ -47,9 +47,9 @@ import {MurmurHash} from './MurmurHash';
 //        For this reason I've commented tweaked the implements clause
 
 export class Array2DHashSet<T> implements JavaSet<T> {
-	static INITAL_CAPACITY: number =  16; // must be power of 2
-	static INITAL_BUCKET_CAPACITY: number =  8;
-	static LOAD_FACTOR: number =  0.75;
+	private static readonly INITAL_CAPACITY: number =  16; // must be power of 2
+	private static INITAL_BUCKET_CAPACITY: number =  8;
+	private static LOAD_FACTOR: number =  0.75;
 
 	@NotNull
 	protected comparator: AbstractEqualityComparator<T>; 
