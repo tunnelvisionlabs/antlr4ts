@@ -36,8 +36,6 @@ import {HashedValueType} from './Stubs';
  * @author Sam Harwell
  */
 
-// Namespace works better than class for this...
-
 export namespace MurmurHash {
 
 	const DEFAULT_SEED: number =  0;
