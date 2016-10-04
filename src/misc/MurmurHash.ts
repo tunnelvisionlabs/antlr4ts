@@ -113,7 +113,7 @@ export namespace MurmurHash {
 	 * @param seed the seed for the MurmurHash algorithm
 	 * @return the hash code of the data
 	 */
-	export function hashCode<T extends Equatable>(data: T[], seed: number): number {
+	export function hashCode<T extends number | string | Equatable>(data: T[], seed: number): number {
 		let hash: number =  initialize(seed);
 		for (let value of data) {
 			hash = update(hash, value);
