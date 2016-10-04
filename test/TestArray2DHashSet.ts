@@ -57,7 +57,7 @@ describe('EquatableTest', function() {
 describe('Array2DHashSet', function() {
     let set: Array2DHashSet<EquatableTest>;
     
-    before(function() { set = new Array2DHashSet<EquatableTest>()});
+    beforeEach(function() { set = new Array2DHashSet<EquatableTest>()});
 
     it('shoud count entities', function() {
         assert( set.isEmpty() );
@@ -72,8 +72,8 @@ describe('Array2DHashSet', function() {
     it('should check entries by value', function() {
         assert(set.isEmpty());
         set.add(alpha);
-        assert(set.contains(alpha));
-        assert(set.contains(alpha_again));
-        assert(!set.contains(beta));
+        assert(set.contains(alpha), "identity match failed");
+        assert(set.contains(alpha_again), "value match failed");
+        assert(!set.contains(beta) "value difference ignored");
     });
 });
