@@ -40,7 +40,7 @@ import {Override} from '../misc/Stubs';
 export class PlusLoopbackState extends DecisionState {
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.PLUS_LOOP_BACK;
 	}
 }

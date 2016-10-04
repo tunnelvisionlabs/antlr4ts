@@ -41,7 +41,7 @@ import {Override} from '../misc/Stubs';
 export class BasicState extends ATNState {
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.BASIC;
 	}
 

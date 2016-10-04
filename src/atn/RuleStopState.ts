@@ -47,7 +47,7 @@ export class RuleStopState extends ATNState {
 	}
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.RULE_STOP;
 	}
 

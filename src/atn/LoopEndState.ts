@@ -39,7 +39,7 @@ export class LoopEndState extends ATNState {
 	loopBackState: ATNState; 
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.LOOP_END;
 	}
 }

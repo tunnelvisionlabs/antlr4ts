@@ -41,7 +41,7 @@ export class RuleStartState extends ATNState {
 	leftFactored: boolean; 
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.RULE_START;
 	}
 }

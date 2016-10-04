@@ -41,7 +41,7 @@ export class StarLoopbackState extends ATNState {
 	}
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.STAR_LOOP_BACK;
 	}
 }

@@ -31,6 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
 import {ATN} from './ATN';
+import {ATNStateType} from './ATNStateType';
 import {IntervalSet} from '../misc';
 import {Override} from '../misc/Stubs';
 import {Transition} from './Transition';
@@ -206,7 +207,7 @@ export abstract class ATNState {
 		return this.transitions.splice(index, 1)[0];
 	}
 
-	abstract getStateType(): number;
+	abstract getStateType(): ATNStateType;
 
 	onlyHasEpsilonTransitions(): boolean {
 		return this.epsilonOnlyTransitions;

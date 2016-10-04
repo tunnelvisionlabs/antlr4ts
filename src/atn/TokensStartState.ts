@@ -38,7 +38,7 @@ import {Override} from '../misc/Stubs';
 export class TokensStartState extends DecisionState {
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.TOKEN_START;
 	}
 }

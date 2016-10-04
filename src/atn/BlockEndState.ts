@@ -40,7 +40,7 @@ export class BlockEndState extends ATNState {
 	startState: BlockStartState; 
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.BLOCK_END;
 	}
 }

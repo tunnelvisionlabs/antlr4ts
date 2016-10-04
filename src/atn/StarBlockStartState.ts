@@ -39,7 +39,7 @@ import {Override} from '../misc/Stubs';
 export class StarBlockStartState extends BlockStartState {
 
 	@Override
-	getStateType(): number {
+	getStateType(): ATNStateType {
 		return ATNStateType.STAR_BLOCK_START;
 	}
 }
