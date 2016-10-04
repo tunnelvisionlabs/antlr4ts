@@ -1,6 +1,6 @@
 /// <reference path="../node_modules/@types/mocha/index.d.ts" />
 /// <reference path="../node_modules/@types/node/index.d.ts" />
-
+require('source-map-support').install();
 import {Equatable} from '../src/misc/Stubs';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
 import {MurmurHash} from '../src/misc/MurmurHash'
