@@ -28,27 +28,31 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.8483617-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:37.9456839-07:00
 
-export class NotSetTransition extends SetTransition {
-	 constructor(@NotNull target: ATNState, @Nullable set: IntervalSet)  {
-		super(target, set);
+import {ATNState} from '.';
+import {Override, NotNull} from '../misc/Stubs';
+import {Transition} from '.';
+import {TransitionType} from '.';
+
+export class WildcardTransition extends Transition {
+	constructor(@NotNull target: ATNState) {
+		super(target);
 	}
 
 	@Override
-	getSerializationType(): number {
-		return NOT_SET;
+	getSerializationType(): TransitionType {
+		return TransitionType.WILDCARD;
 	}
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return symbol >= minVocabSymbol
-			&& symbol <= maxVocabSymbol
-			&& !super.matches(symbol, minVocabSymbol, maxVocabSymbol);
+		return symbol >= minVocabSymbol && symbol <= maxVocabSymbol;
 	}
 
 	@Override
+	@NotNull
 	toString(): string {
-		return '~'+super.toString();
+		return ".";
 	}
 }

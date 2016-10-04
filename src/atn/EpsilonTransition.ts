@@ -28,37 +28,52 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.3060135-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:28.6283213-07:00
 
-/** A transition containing a set of values. */
-export class SetTransition extends Transition {
-	@NotNull
-	set: IntervalSet; 
+import {ATNState} from '.';
+import {Override, NotNull} from '../misc/Stubs';
+import {Transition} from '.';
+import {TransitionType} from '.';
 
-	// TODO (sam): should we really allow null here?
-	 constructor(@NotNull target: ATNState, @Nullable set: IntervalSet)  {
+export class EpsilonTransition extends Transition {
+
+	private _outermostPrecedenceReturn: number;
+
+	constructor(@NotNull target: ATNState, outermostPrecedenceReturn: number = -1) {
 		super(target);
-		if ( set == null ) set = IntervalSet.of(Token.INVALID_TYPE);
-		this.set = set;
+		this._outermostPrecedenceReturn = outermostPrecedenceReturn;
+	}
+
+	/**
+	 * @return the rule index of a precedence rule for which this transition is
+	 * returning from, where the precedence value is 0; otherwise, -1.
+	 *
+	 * @see ATNConfig#isPrecedenceFilterSuppressed()
+	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache) 
+	 * @since 4.4.1
+	 */
+	outermostPrecedenceReturn(): number {
+		return this._outermostPrecedenceReturn;
 	}
 
 	@Override
-	getSerializationType(): number {
-		return SET;
+	getSerializationType(): TransitionType {
+		return TransitionType.EPSILON;
 	}
 
 	@Override
-	@NotNull
-	label(): IntervalSet { return set; }
+	isEpsilon(): boolean {
+		return true;
+	}
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return set.contains(symbol);
+		return false;
 	}
 
 	@Override
 	@NotNull
 	toString(): string {
-		return set.toString();
+		return "epsilon";
 	}
 }

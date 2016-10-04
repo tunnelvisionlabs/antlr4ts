@@ -28,24 +28,47 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.9456839-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:36.8294453-07:00
 
-export class WildcardTransition extends Transition {
-	 constructor(@NotNull ATNState target) { super(target) ; }
+import {ATNState} from '.';
+import {Override, NotNull} from '../misc/Stubs';
+import {RuleStartState} from '.';
+import {Transition} from '.';
+import {TransitionType} from '.';
+
+/** */
+export class RuleTransition extends Transition {
+	/** Ptr to the rule definition object for this rule ref */
+	ruleIndex: number;      // no Rule object at runtime
+
+	precedence: number;
+
+	/** What node to begin computations following ref to rule */
+	@NotNull
+	followState: ATNState;
+
+	tailCall: boolean;
+	optimizedTailCall: boolean;
+
+	constructor(@NotNull ruleStart: RuleStartState, ruleIndex: number, precedence: number, @NotNull followState: ATNState) {
+		super(ruleStart);
+		this.ruleIndex = ruleIndex;
+		this.precedence = precedence;
+		this.followState = followState;
+	}
 
 	@Override
-	getSerializationType(): number {
-		return WILDCARD;
+	getSerializationType(): TransitionType {
+		return TransitionType.RULE;
+	}
+
+	@Override
+	isEpsilon(): boolean {
+		return true;
 	}
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return symbol >= minVocabSymbol && symbol <= maxVocabSymbol;
-	}
-
-	@Override
-	@NotNull
-	toString(): string {
-		return ".";
+		return false;
 	}
 }

@@ -28,49 +28,34 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:28.6283213-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:30.8483617-07:00
 
-export class EpsilonTransition extends Transition {
+import {ATNState} from '.';
+import {IntervalSet} from '../misc';
+import {Override, NotNull, Nullable} from '../misc/Stubs';
+import {SetTransition} from '.';
+import {Transition} from '.';
+import {TransitionType} from '.';
 
-	private outermostPrecedenceReturn: number; 
-
-	 constructor(@NotNull target: ATNState)  {
-		this(target, -1);
-	}
-
-	 constructor1(@NotNull target: ATNState, outermostPrecedenceReturn: number)  {
-		super(target);
-		this.outermostPrecedenceReturn = outermostPrecedenceReturn;
-	}
-
-	/**
-	 * @return the rule index of a precedence rule for which this transition is
-	 * returning from, where the precedence value is 0; otherwise, -1.
-	 *
-	 * @see ATNConfig#isPrecedenceFilterSuppressed()
-	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache) 
-	 * @since 4.4.1
-	 */
-	outermostPrecedenceReturn(): number {
-		return outermostPrecedenceReturn;
+export class NotSetTransition extends SetTransition {
+	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
+		super(target, set);
 	}
 
 	@Override
-	getSerializationType(): number {
-		return EPSILON;
+	getSerializationType(): TransitionType {
+		return TransitionType.NOT_SET;
 	}
-
-	@Override
-	isEpsilon(): boolean { return true; }
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return false;
+		return symbol >= minVocabSymbol
+			&& symbol <= maxVocabSymbol
+			&& !super.matches(symbol, minVocabSymbol, maxVocabSymbol);
 	}
 
 	@Override
-	@NotNull
 	toString(): string {
-		return "epsilon";
+		return '~' + super.toString();
 	}
 }

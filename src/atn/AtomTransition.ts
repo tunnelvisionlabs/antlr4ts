@@ -28,35 +28,43 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:36.5959980-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.6769122-07:00
 
-export class RangeTransition extends Transition {
-	from: number; 
-	to: number; 
+import {ATNState} from '.';
+import {IntervalSet} from '../misc';
+import {Override, NotNull} from '../misc/Stubs';
+import {Transition} from '.';
+import {TransitionType} from '.';
 
-	 constructor(@NotNull target: ATNState, from: number, to: number)  {
+/** TODO: make all transitions sets? no, should remove set edges */
+export class AtomTransition extends Transition {
+	/** The token type or character value; or, signifies special label. */
+	_label: number;
+
+	 constructor(@NotNull target: ATNState, label: number)  {
 		super(target);
-		this.from = from;
-		this.to = to;
+		this._label = label;
 	}
 
 	@Override
-	getSerializationType(): number {
-		return RANGE;
+	getSerializationType(): TransitionType {
+		return TransitionType.ATOM;
 	}
 
 	@Override
 	@NotNull
-	label() { return IntervalSet.of(from,  to): IntervalSet; }
+	label(): IntervalSet {
+		return IntervalSet.of(this._label);
+	}
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return symbol >= from && symbol <= to;
+		return this._label === symbol;
 	}
 
 	@Override
 	@NotNull
 	toString(): string {
-		return "'"+(char)from+"'..'"+(char)to+"'";
+		return String(this.label);
 	}
 }

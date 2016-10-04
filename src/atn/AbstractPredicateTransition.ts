@@ -28,55 +28,19 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:36.8294453-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:24.6596177-07:00
 
-/** */
-export class RuleTransition extends Transition {
-	/** Ptr to the rule definition object for this rule ref */
-	ruleIndex: number;      // no Rule object at runtime
+import {ATNState} from '.';
+import {Transition} from '.';
 
-	precedence: number; 
+/**
+ *
+ * @author Sam Harwell
+ */
+export abstract class AbstractPredicateTransition extends Transition {
 
-	/** What node to begin computations following ref to rule */
-	@NotNull
-	followState: ATNState; 
-
-	tailCall: boolean; 
-	optimizedTailCall: boolean; 
-
-	/**
-	 * @deprecated Use
-	 * {@link #RuleTransition(RuleStartState, int, int, ATNState)} instead.
-	 */
-	@Deprecated
-	 constructor(@NotNull ruleStart: RuleStartState, 
-						  ruleIndex: number,
-						  @NotNull followState: ATNState) 
-	{
-		this(ruleStart, ruleIndex, 0, followState);
+	 constructor(target: ATNState)  {
+		super(target);
 	}
 
-	 constructor1(@NotNull ruleStart: RuleStartState, 
-						  ruleIndex: number,
-						  precedence: number,
-						  @NotNull followState: ATNState) 
-	{
-		super(ruleStart);
-		this.ruleIndex = ruleIndex;
-		this.precedence = precedence;
-		this.followState = followState;
-	}
-
-	@Override
-	getSerializationType(): number {
-		return RULE;
-	}
-
-	@Override
-	isEpsilon(): boolean { return true; }
-
-	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return false;
-	}
 }

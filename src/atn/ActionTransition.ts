@@ -30,16 +30,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.7363448-07:00
 
+import {ATNState} from '.';
+import {Override, NotNull} from '../misc/Stubs';
+import {Transition} from '.';
+import {TransitionType} from '.';
+
 export class ActionTransition extends Transition {
-	ruleIndex: number; 
-	actionIndex: number; 
+	ruleIndex: number;
+	actionIndex: number;
 	isCtxDependent: boolean;  // e.g., $i ref in action
 
-	 constructor(@NotNull target: ATNState, ruleIndex: number)  {
-		this(target, ruleIndex, -1, false);
-	}
-
-	 constructor1(@NotNull target: ATNState, ruleIndex: number, actionIndex: number, isCtxDependent: boolean)  {
+	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex: number = -1, isCtxDependent: boolean = false) {
 		super(target);
 		this.ruleIndex = ruleIndex;
 		this.actionIndex = actionIndex;
@@ -47,8 +48,8 @@ export class ActionTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): number {
-		return ACTION;
+	getSerializationType(): TransitionType {
+		return TransitionType.ACTION;
 	}
 
 	@Override
@@ -63,6 +64,6 @@ export class ActionTransition extends Transition {
 
 	@Override
 	toString(): string {
-		return "action_"+ruleIndex+":"+actionIndex;
+		return "action_" + this.ruleIndex + ":" + this.actionIndex;
 	}
 }

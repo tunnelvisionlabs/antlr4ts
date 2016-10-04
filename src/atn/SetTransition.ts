@@ -28,35 +28,49 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:27.6769122-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:37.3060135-07:00
 
-/** TODO: make all transitions sets? no, should remove set edges */
-export class AtomTransition extends Transition {
-	/** The token type or character value; or, signifies special label. */
-	label: number; 
+import {ATNState} from '.';
+import {IntervalSet} from '../misc';
+import {Override, NotNull, Nullable} from '../misc/Stubs';
+import {Token} from '..';
+import {Transition} from '.';
+import {TransitionType} from '.';
 
-	 constructor(@NotNull target: ATNState, label: number)  {
+/** A transition containing a set of values. */
+export class SetTransition extends Transition {
+	@NotNull
+	set: IntervalSet;
+
+	// TODO (sam): should we really allow null here?
+	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
 		super(target);
-		this.label = label;
+		if (set == null) {
+			set = IntervalSet.of(Token.INVALID_TYPE);
+		}
+
+		this.set = set;
 	}
 
 	@Override
-	getSerializationType(): number {
-		return ATOM;
+	getSerializationType(): TransitionType {
+		return TransitionType.SET;
 	}
 
 	@Override
 	@NotNull
-	label() { return IntervalSet.of(label): IntervalSet; }
+	label(): IntervalSet {
+		return this.set;
+	}
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return label == symbol;
+		return this.set.contains(symbol);
 	}
 
 	@Override
 	@NotNull
 	toString(): string {
-		return String.valueOf(label);
+		return this.set.toString();
 	}
 }
