@@ -30,13 +30,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.6368726-07:00
 
+import {ATNState} from './ATNState';
+import {ATNStateType} from './ATNStateType';
+import {Override} from '../misc/Stubs';
+import {StarLoopEntryState} from './StarLoopEntryState';
+
 export class StarLoopbackState extends ATNState {
 	getLoopEntryState(): StarLoopEntryState {
-		return (StarLoopEntryState)transition(0).target;
+		return <StarLoopEntryState>this.transition(0).target;
 	}
 
 	@Override
 	getStateType(): number {
-		return STAR_LOOP_BACK;
+		return ATNStateType.STAR_LOOP_BACK;
 	}
 }

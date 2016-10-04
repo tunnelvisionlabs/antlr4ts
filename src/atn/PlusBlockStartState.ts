@@ -28,17 +28,23 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:27.7669801-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:34.9572142-07:00
 
-/**
- *
- * @author Sam Harwell
+import {ATNStateType} from './ATNStateType';
+import {BlockStartState} from './BlockStartState';
+import {Override} from '../misc/Stubs';
+import {PlusLoopbackState} from './PlusLoopbackState';
+
+/** Start of {@code (A|B|...)+} loop. Technically a decision state, but
+ *  we don't use for code generation; somebody might need it, so I'm defining
+ *  it for completeness. In reality, the {@link PlusLoopbackState} node is the
+ *  real decision-making note for {@code A+}.
  */
-export class BasicBlockStartState extends BlockStartState {
+export class PlusBlockStartState extends BlockStartState {
+	loopBackState: PlusLoopbackState; 
 
 	@Override
 	getStateType(): number {
-		return BLOCK_START;
+		return ATNStateType.PLUS_BLOCK_START;
 	}
-
 }

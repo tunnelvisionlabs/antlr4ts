@@ -28,23 +28,20 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:36.7513856-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-/** The last node in the ATN for a rule, unless that rule is the start symbol.
- *  In that case, there is one transition to EOF. Later, we might encode
- *  references to all calls to this rule to compute FOLLOW sets for
- *  error handling.
- */
-export class RuleStopState extends ATNState {
-
-	@Override
-	getNonStopStateNumber(): number {
-		return -1;
-	}
-
-	@Override
-	getStateType(): number {
-		return RULE_STOP;
-	}
-
+export enum ATNStateType {
+	INVALID_TYPE =  0,
+	 BASIC =  1,
+	 RULE_START =  2,
+	 BLOCK_START =  3,
+	 PLUS_BLOCK_START =  4,
+	 STAR_BLOCK_START =  5,
+	 TOKEN_START =  6,
+	 RULE_STOP =  7,
+	 BLOCK_END =  8,
+	 STAR_LOOP_BACK =  9,
+	 STAR_LOOP_ENTRY =  10,
+	 PLUS_LOOP_BACK =  11,
+	 LOOP_END =  12,
 }

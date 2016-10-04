@@ -28,14 +28,20 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:27.9125304-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:36.6806851-07:00
 
-/** Terminal node of a simple {@code (a|b|c)} block. */
-export class BlockEndState extends ATNState {
-	startState: BlockStartState; 
+import {ATNState} from './ATNState';
+import {ATNStateType} from './ATNStateType';
+import {Override} from '../misc/Stubs';
+import {RuleStopState} from './RuleStopState';
+
+export class RuleStartState extends ATNState {
+	stopState: RuleStopState; 
+	isPrecedenceRule: boolean; 
+	leftFactored: boolean; 
 
 	@Override
 	getStateType(): number {
-		return BLOCK_END;
+		return ATNStateType.RULE_START;
 	}
 }

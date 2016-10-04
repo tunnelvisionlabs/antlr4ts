@@ -28,17 +28,18 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:27.8389930-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:37.5657409-07:00
 
-/**
- *
- * @author Sam Harwell
- */
-export class BasicState extends ATNState {
+import {ATNState} from './ATNState';
+import {ATNStateType} from './ATNStateType';
+import {BlockStartState} from './BlockStartState';
+import {Override} from '../misc/Stubs';
+
+/** The block that begins a closure loop. */
+export class StarBlockStartState extends BlockStartState {
 
 	@Override
 	getStateType(): number {
-		return BASIC;
+		return ATNStateType.STAR_BLOCK_START;
 	}
-
 }

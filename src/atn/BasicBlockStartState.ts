@@ -28,14 +28,21 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.7737978-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.7669801-07:00
 
-/** Mark the end of a * or + loop. */
-export class LoopEndState extends ATNState {
-	loopBackState: ATNState; 
+import {ATNStateType} from './ATNStateType';
+import {BlockStartState} from './BlockStartState';
+import {Override} from '../misc/Stubs';
+
+/**
+ *
+ * @author Sam Harwell
+ */
+export class BasicBlockStartState extends BlockStartState {
 
 	@Override
 	getStateType(): number {
-		return LOOP_END;
+		return ATNStateType.BLOCK_START;
 	}
+
 }

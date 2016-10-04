@@ -28,15 +28,13 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:36.6806851-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.9930394-07:00
 
-export class RuleStartState extends ATNState {
-	stopState: RuleStopState; 
-	isPrecedenceRule: boolean; 
-	leftFactored: boolean; 
+import {BlockEndState} from './BlockEndState';
+import {DecisionState} from './DecisionState';
+import {Override} from '../misc/Stubs';
 
-	@Override
-	getStateType(): number {
-		return RULE_START;
-	}
+/**  The start of a regular {@code (...)} block. */
+export abstract class BlockStartState extends DecisionState {
+	endState: BlockEndState; 
 }

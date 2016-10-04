@@ -28,18 +28,17 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:34.9572142-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:37.7814046-07:00
 
-/** Start of {@code (A|B|...)+} loop. Technically a decision state, but
- *  we don't use for code generation; somebody might need it, so I'm defining
- *  it for completeness. In reality, the {@link PlusLoopbackState} node is the
- *  real decision-making note for {@code A+}.
- */
-export class PlusBlockStartState extends BlockStartState {
-	loopBackState: PlusLoopbackState; 
+import {ATNStateType} from './ATNStateType';
+import {DecisionState} from './DecisionState';
+import {Override} from '../misc/Stubs';
+
+/** The Tokens rule start state linking to each lexer rule start state */
+export class TokensStartState extends DecisionState {
 
 	@Override
 	getStateType(): number {
-		return PLUS_BLOCK_START;
+		return ATNStateType.TOKEN_START;
 	}
 }

@@ -28,9 +28,19 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:27.9930394-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.9125304-07:00
 
-/**  The start of a regular {@code (...)} block. */
-export abstract class BlockStartState extends DecisionState {
-	endState: BlockEndState; 
+import {ATNState} from './ATNState';
+import {ATNStateType} from './ATNStateType';
+import {BlockStartState} from './BlockStartState';
+import {Override} from '../misc/Stubs';
+
+/** Terminal node of a simple {@code (a|b|c)} block. */
+export class BlockEndState extends ATNState {
+	startState: BlockStartState; 
+
+	@Override
+	getStateType(): number {
+		return ATNStateType.BLOCK_END;
+	}
 }

@@ -28,13 +28,12 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.7814046-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:28.4381103-07:00
 
-/** The Tokens rule start state linking to each lexer rule start state */
-export class TokensStartState extends DecisionState {
+import {ATNState} from './ATNState';
 
-	@Override
-	getStateType(): number {
-		return TOKEN_START;
-	}
+export abstract class DecisionState extends ATNState {
+	decision: number =  -1;
+	nonGreedy: boolean; 
+	sll: boolean; 
 }

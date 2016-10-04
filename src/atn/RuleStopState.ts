@@ -28,25 +28,27 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.7099201-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:36.7513856-07:00
 
-export class StarLoopEntryState extends DecisionState {
-	loopBackState: StarLoopbackState; 
+import {ATNState} from './ATNState';
+import {ATNStateType} from './ATNStateType';
+import {Override} from '../misc/Stubs';
 
-	/**
-	 * Indicates whether this state can benefit from a precedence DFA during SLL
-	 * decision making.
-	 *
-	 * <p>This is a computed property that is calculated during ATN deserialization
-	 * and stored for use in {@link ParserATNSimulator} and
-	 * {@link ParserInterpreter}.</p>
-	 *
-	 * @see DFA#isPrecedenceDfa()
-	 */
-	precedenceRuleDecision: boolean; 
+/** The last node in the ATN for a rule, unless that rule is the start symbol.
+ *  In that case, there is one transition to EOF. Later, we might encode
+ *  references to all calls to this rule to compute FOLLOW sets for
+ *  error handling.
+ */
+export class RuleStopState extends ATNState {
+
+	@Override
+	getNonStopStateNumber(): number {
+		return -1;
+	}
 
 	@Override
 	getStateType(): number {
-		return STAR_LOOP_ENTRY;
+		return ATNStateType.RULE_STOP;
 	}
+
 }

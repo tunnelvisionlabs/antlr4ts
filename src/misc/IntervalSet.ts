@@ -27,14 +27,19 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.5657409-07:00
-
-/** The block that begins a closure loop. */
-export class StarBlockStartState extends BlockStartState {
-
-	@Override
-	getStateType(): number {
-		return STAR_BLOCK_START;
-	}
+/**
+ * This class implements the {@link IntSet} backed by a sorted array of
+ * non-overlapping intervals. It is particularly efficient for representing
+ * large collections of numbers, where the majority of elements appear as part
+ * of a sequential range of numbers that are all part of the set. For example,
+ * the set { 1, 2, 3, 4, 7, 8 } may be represented as { [1, 4], [7, 8] }.
+ *
+ * <p>
+ * This class is able to represent sets containing any combination of values in
+ * the range {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}
+ * (inclusive).</p>
+ */
+export class IntervalSet {
 }

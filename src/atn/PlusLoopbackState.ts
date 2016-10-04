@@ -30,6 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.0257730-07:00
 
+import {ATNStateType} from './ATNStateType';
+import {DecisionState} from './DecisionState';
+import {Override} from '../misc/Stubs';
+
 /** Decision state for {@code A+} and {@code (A|B)+}.  It has two transitions:
  *  one to the loop back to start of the block and one to exit.
  */
@@ -37,6 +41,6 @@ export class PlusLoopbackState extends DecisionState {
 
 	@Override
 	getStateType(): number {
-		return PLUS_LOOP_BACK;
+		return ATNStateType.PLUS_LOOP_BACK;
 	}
 }

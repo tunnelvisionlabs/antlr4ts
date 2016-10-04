@@ -30,6 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.8530496-07:00
 
+import {ATNState} from './ATNState';
+import {IntervalSet} from '../misc';
+import {NotNull, Nullable} from '../misc/Stubs';
+
 /** An ATN transition between any two ATN states.  Subclasses define
  *  atom, set, epsilon, action, predicate, rule transitions.
  *
@@ -43,55 +47,42 @@
  *  ATN transitions.</p>
  */
 export abstract class Transition {
-	// constants for serialization
-	static EPSILON: number =  1;
-	static RANGE: number =  2;
-	static RULE: number =  3;
-	static PREDICATE: number =  4; // e.g., {isType(input.LT(1))}?
-	static ATOM: number =  5;
-	static ACTION: number =  6;
-	static SET: number =  7; // ~(A|B) or ~atom, wildcard, which convert to next 2
-	static NOT_SET: number =  8;
-	static WILDCARD: number =  9;
-	static PRECEDENCE: number =  10;
+	static serializationNames: string[] = [
+		"INVALID",
+		"EPSILON",
+		"RANGE",
+		"RULE",
+		"PREDICATE",
+		"ATOM",
+		"ACTION",
+		"SET",
+		"NOT_SET",
+		"WILDCARD",
+		"PRECEDENCE"
+	];
 
-	static serializationNames: List<string> = 
-		Collections.unmodifiableList(Arrays.asList(
-			"INVALID",
-			"EPSILON",
-			"RANGE",
-			"RULE",
-			"PREDICATE",
-			"ATOM",
-			"ACTION",
-			"SET",
-			"NOT_SET",
-			"WILDCARD",
-			"PRECEDENCE"
-		));
-
-	@SuppressWarnings("serial")
-	static serializationTypes: Map<Class<? extends Transition>, number> = 
-		Collections.unmodifiableMap(new HashMap<Class<? extends Transition>, Integer>() {{
-			put(EpsilonTransition.class, EPSILON);
-			put(RangeTransition.class, RANGE);
-			put(RuleTransition.class, RULE);
-			put(PredicateTransition.class, PREDICATE);
-			put(AtomTransition.class, ATOM);
-			put(ActionTransition.class, ACTION);
-			put(SetTransition.class, SET);
-			put(NotSetTransition.class, NOT_SET);
-			put(WildcardTransition.class, WILDCARD);
-			put(PrecedencePredicateTransition.class, PRECEDENCE);
-		}});
+	// @SuppressWarnings("serial")
+	// static serializationTypes: Map<Class<? extends Transition>, number> = 
+	// 	Collections.unmodifiableMap(new HashMap<Class<? extends Transition>, Integer>() {{
+	// 		put(EpsilonTransition.class, EPSILON);
+	// 		put(RangeTransition.class, RANGE);
+	// 		put(RuleTransition.class, RULE);
+	// 		put(PredicateTransition.class, PREDICATE);
+	// 		put(AtomTransition.class, ATOM);
+	// 		put(ActionTransition.class, ACTION);
+	// 		put(SetTransition.class, SET);
+	// 		put(NotSetTransition.class, NOT_SET);
+	// 		put(WildcardTransition.class, WILDCARD);
+	// 		put(PrecedencePredicateTransition.class, PRECEDENCE);
+	// 	}});
 
 	/** The target of this transition. */
 	@NotNull
-	target: ATNState; 
+	target: ATNState;
 
-	 constructor(@NotNull target: ATNState)  {
+	constructor(@NotNull target: ATNState) {
 		if (target == null) {
-			throw new NullPointerException("target cannot be null.");
+			throw "target cannot be null.";
 		}
 
 		this.target = target;
@@ -113,7 +104,9 @@ export abstract class Transition {
 	}
 
 	@Nullable
-	label(): IntervalSet { return null; }
+	label(): IntervalSet {
+		return null;
+	}
 
 	abstract matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean;
 }

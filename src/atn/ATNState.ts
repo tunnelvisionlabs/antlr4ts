@@ -30,6 +30,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
+import {ATN} from './ATN';
+import {IntervalSet} from '../misc';
+import {Override} from '../misc/Stubs';
+import {Transition} from './Transition';
+
+const INITIAL_NUM_TRANSITIONS: number = 4;
+
 /**
  * The following images show the relation of states and
  * {@link ATNState#transitions} for various grammar constructs.
@@ -91,59 +98,38 @@
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */
 export abstract class ATNState {
-	static INITIAL_NUM_TRANSITIONS: number =  4;
+	private static serializationNames: string[] = [
+		"INVALID",
+		"BASIC",
+		"RULE_START",
+		"BLOCK_START",
+		"PLUS_BLOCK_START",
+		"STAR_BLOCK_START",
+		"TOKEN_START",
+		"RULE_STOP",
+		"BLOCK_END",
+		"STAR_LOOP_BACK",
+		"STAR_LOOP_ENTRY",
+		"PLUS_LOOP_BACK",
+		"LOOP_END"
+	];
 
-	// constants for serialization
-	static INVALID_TYPE: number =  0;
-	static BASIC: number =  1;
-	static RULE_START: number =  2;
-	static BLOCK_START: number =  3;
-	static PLUS_BLOCK_START: number =  4;
-	static STAR_BLOCK_START: number =  5;
-	static TOKEN_START: number =  6;
-	static RULE_STOP: number =  7;
-	static BLOCK_END: number =  8;
-	static STAR_LOOP_BACK: number =  9;
-	static STAR_LOOP_ENTRY: number =  10;
-	static PLUS_LOOP_BACK: number =  11;
-	static LOOP_END: number =  12;
+	/** Which ATN are we in? */
+	atn: ATN = null;
 
-	static serializationNames: List<string> = 
-		Collections.unmodifiableList(Arrays.asList(
-			"INVALID",
-			"BASIC",
-			"RULE_START",
-			"BLOCK_START",
-			"PLUS_BLOCK_START",
-			"STAR_BLOCK_START",
-			"TOKEN_START",
-			"RULE_STOP",
-			"BLOCK_END",
-			"STAR_LOOP_BACK",
-			"STAR_LOOP_ENTRY",
-			"PLUS_LOOP_BACK",
-			"LOOP_END"
-		));
-
-	static INVALID_STATE_NUMBER: number =  -1;
-
-    /** Which ATN are we in? */
-   	atn: ATN =  null;
-
-	stateNumber: number =  INVALID_STATE_NUMBER;
+	stateNumber: number = ATNState.INVALID_STATE_NUMBER;
 
 	ruleIndex: number;  // at runtime, we don't have Rule objects
 
-	epsilonOnlyTransitions: boolean =  false;
+	epsilonOnlyTransitions: boolean = false;
 
 	/** Track the transitions emanating from this ATN state. */
-	protected transitions: List<Transition> = 
-		new ArrayList<Transition>(INITIAL_NUM_TRANSITIONS);
+	protected transitions: Transition[] = new Transition[INITIAL_NUM_TRANSITIONS];
 
-	protected optimizedTransitions: List<Transition> =  transitions;
+	protected optimizedTransitions: Transition[] = this.transitions;
 
 	/** Used to cache lookahead during parsing, not used during construction */
-    nextTokenWithinRule: IntervalSet; 
+	nextTokenWithinRule: IntervalSet;
 
 	/**
 	 * Gets the state number.
@@ -151,7 +137,7 @@ export abstract class ATNState {
 	 * @return the state number
 	 */
 	getStateNumber(): number {
-		return stateNumber;
+		return this.stateNumber;
 	}
 
 	/**
@@ -161,16 +147,21 @@ export abstract class ATNState {
 	 * @return -1 for {@link RuleStopState}, otherwise the state number
 	 */
 	getNonStopStateNumber(): number {
-		return getStateNumber();
+		return this.getStateNumber();
 	}
 
 	@Override
-	hashCode(): number { return stateNumber; }
+	hashCode(): number {
+		return this.stateNumber;
+	}
 
 	@Override
 	equals(o: any): boolean {
 		// are these states same object?
-		if ( o instanceof ATNState ) return stateNumber==((ATNState)o).stateNumber;
+		if (o instanceof ATNState) {
+			return this.stateNumber === o.stateNumber;
+		}
+
 		return false;
 	}
 
@@ -180,87 +171,88 @@ export abstract class ATNState {
 
 	@Override
 	toString(): string {
-		return String.valueOf(stateNumber);
+		return String(this.stateNumber);
 	}
 
 	getTransitions(): Transition[] {
-		return transitions.toArray(new Transition[transitions.size()]);
+		return this.transitions.splice(0);
 	}
 
 	getNumberOfTransitions(): number {
-		return transitions.size();
+		return this.transitions.length;
 	}
 
-	addTransition(e: Transition): void {
-		addTransition(transitions.size(), e);
-	}
-
-	addTransition(index: number, e: Transition): void {
-		if (transitions.isEmpty()) {
-			epsilonOnlyTransitions = e.isEpsilon();
+	addTransition(e: Transition, index?: number): void {
+		if (this.transitions.length === 0) {
+			this.epsilonOnlyTransitions = e.isEpsilon();
 		}
-		else if (epsilonOnlyTransitions != e.isEpsilon()) {
-			System.err.format(Locale.getDefault(), "ATN state %d has both epsilon and non-epsilon transitions.\n", stateNumber);
-			epsilonOnlyTransitions = false;
+		else if (this.epsilonOnlyTransitions !== e.isEpsilon()) {
+			//System.err.format(Locale.getDefault(), "ATN state %d has both epsilon and non-epsilon transitions.\n", stateNumber);
+			this.epsilonOnlyTransitions = false;
 		}
 
-		transitions.add(index, e);
+		this.transitions.splice(index || this.transitions.length, 0, e);
 	}
 
 	transition(i: number): Transition {
-		return transitions.get(i);
+		return this.transitions[i];
 	}
 
 	setTransition(i: number, e: Transition): void {
-		transitions.set(i, e);
+		this.transitions[i] = e;
 	}
 
 	removeTransition(index: number): Transition {
-		return transitions.remove(index);
+		return this.transitions.splice(index, 1)[0];
 	}
 
 	abstract getStateType(): number;
 
 	onlyHasEpsilonTransitions(): boolean {
-		return epsilonOnlyTransitions;
+		return this.epsilonOnlyTransitions;
 	}
 
-	setRuleIndex(ruleIndex: number): void { this.ruleIndex = ruleIndex; }
+	setRuleIndex(ruleIndex: number): void {
+		this.ruleIndex = ruleIndex;
+	}
 
 	isOptimized(): boolean {
-		return optimizedTransitions != transitions;
+		return this.optimizedTransitions !== this.transitions;
 	}
 
 	getNumberOfOptimizedTransitions(): number {
-		return optimizedTransitions.size();
+		return this.optimizedTransitions.length;
 	}
 
 	getOptimizedTransition(i: number): Transition {
-		return optimizedTransitions.get(i);
+		return this.optimizedTransitions[i];
 	}
 
 	addOptimizedTransition(e: Transition): void {
-		if (!isOptimized()) {
-			optimizedTransitions = new ArrayList<Transition>();
+		if (!this.isOptimized()) {
+			this.optimizedTransitions = new Array<Transition>();
 		}
 
-		optimizedTransitions.add(e);
+		this.optimizedTransitions.push(e);
 	}
 
 	setOptimizedTransition(i: number, e: Transition): void {
-		if (!isOptimized()) {
-			throw new IllegalStateException();
+		if (!this.isOptimized()) {
+			throw "This ATNState is not optimized.";
 		}
 
-		optimizedTransitions.set(i, e);
+		this.optimizedTransitions[i] = e;
 	}
 
 	removeOptimizedTransition(i: number): void {
-		if (!isOptimized()) {
-			throw new IllegalStateException();
+		if (!this.isOptimized()) {
+			throw "This ATNState is not optimized.";
 		}
 
-		optimizedTransitions.remove(i);
+		this.optimizedTransitions.splice(i, 1);
 	}
+}
 
+export namespace ATNState {
+	export const INVALID_STATE_NUMBER: number = -1;
 }
