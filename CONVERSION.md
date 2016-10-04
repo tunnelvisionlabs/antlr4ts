@@ -136,11 +136,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] dfa\LexerDFASerializer.java
 * [ ] dfa\SingletonEdgeMap.java
 * [ ] dfa\SparseEdgeMap.java
-* [ ] misc\AbstractEqualityComparator.java
+* [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Args.java
-* [ ] misc\Array2DHashSet.java
+* [x] misc\Array2DHashSet.java
 * [ ] misc\DoubleKeyMap.java
-* [ ] misc\EqualityComparator.java
+* [x] misc\EqualityComparator.java
 * [ ] misc\FlexibleHashMap.java
 * [ ] misc\Func0.java
 * [ ] misc\Func1.java
@@ -151,11 +151,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java
-* [ ] misc\MurmurHash.java
-* [ ] misc\NotNull.java
-* [ ] misc\Nullable.java
+* [x] misc\MurmurHash.java
+* [x] misc\NotNull.java
+* [x] misc\Nullable.java
 * [ ] misc\NullUsageProcessor.java
-* [ ] misc\ObjectEqualityComparator.java
+* [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
 * [ ] misc\ParseCancellationException.java
 * [ ] misc\Predicate.java
@@ -178,7 +178,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] tree\SyntaxTree.java
 * [ ] tree\TerminalNode.java
 * [ ] tree\TerminalNodeImpl.java
-* [ ] tree\Tree.java
+* [x] tree\Tree.java
 * [ ] tree\Trees.java
 * [ ] tree\pattern\Chunk.java
 * [ ] tree\pattern\ParseTreeMatch.java
