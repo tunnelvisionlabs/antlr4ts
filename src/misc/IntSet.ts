@@ -27,6 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:41.7132712-07:00
 
 /**
@@ -54,8 +55,8 @@ export interface IntSet {
 	 *
 	 * @exception IllegalStateException if the current set is read-only
 	 */
-	@NotNull
-	addAll(@Nullable set: IntSet): IntSet;
+	//@NotNull
+	addAll(/*@Nullable*/ set: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
@@ -67,8 +68,8 @@ export interface IntSet {
 	 * current set and {@code a}. The value {@code null} may be returned in
 	 * place of an empty result set.
 	 */
-	@Nullable
-	and(@Nullable a: IntSet): IntSet;
+	//@Nullable
+	and(/*@Nullable*/ a: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
@@ -87,8 +88,8 @@ export interface IntSet {
 	 * {@code elements} but not present in the current set. The value
 	 * {@code null} may be returned in place of an empty result set.
 	 */
-	@Nullable
-	complement(@Nullable elements: IntSet): IntSet;
+	//@Nullable
+	complement(/*@Nullable*/ elements: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
@@ -104,8 +105,8 @@ export interface IntSet {
 	 * set and {@code a}. The value {@code null} may be returned in place of an
 	 * empty result set.
 	 */
-	@Nullable
-	or(@Nullable a: IntSet): IntSet;
+	//@Nullable
+	or(/*@Nullable*/ a: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
@@ -124,8 +125,8 @@ export interface IntSet {
 	 * {@code elements} but not present in the current set. The value
 	 * {@code null} may be returned in place of an empty result set.
 	 */
-	@Nullable
-	subtract(@Nullable a: IntSet): IntSet;
+	//@Nullable
+	subtract(/*@Nullable*/ a: IntSet): IntSet;
 
 	/**
 	 * Return the total number of elements represented by the current set.
@@ -146,7 +147,7 @@ export interface IntSet {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
+	//@Override
 	equals(obj: any): boolean;
 
 	/**
@@ -183,12 +184,12 @@ export interface IntSet {
 	 * @return A list containing all element present in the current set, sorted
 	 * in ascending numerical order.
 	 */
-	@NotNull
-	toList(): List<number>;
+	//@NotNull
+	toList(): number[];
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
+	//@Override
 	toString(): string;
 }

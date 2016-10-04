@@ -24,9 +24,9 @@
 // export * from './EmptyPredictionContext';
 // export * from './EpsilonTransition';
 // export * from './ErrorInfo';
-// export * from './LexerAction';
+export * from './LexerAction';
 // export * from './LexerActionExecutor';
-// export * from './LexerActionType';
+export * from './LexerActionType';
 // export * from './LexerATNSimulator';
 // export * from './LexerChannelAction';
 // export * from './LexerCustomAction';

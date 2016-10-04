@@ -17,7 +17,7 @@ export * from './CharStream';
 // export * from './InputMismatchException';
 // export * from './InterpreterRuleContext';
 export * from './IntStream';
-// export * from './Lexer';
+export * from './Lexer';
 // export * from './LexerInterpreter';
 // export * from './LexerNoViableAltException';
 // export * from './ListTokenSource';

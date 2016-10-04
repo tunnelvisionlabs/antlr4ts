@@ -10,7 +10,7 @@ export * from './EqualityComparator';
 // export * from './IntegerStack';
 export * from './Interval';
 // export * from './IntervalSet';
-// export * from './IntSet';
+export * from './IntSet';
 // export * from './LogManager';
 // export * from './MultiMap';
 export * from './MurmurHash';

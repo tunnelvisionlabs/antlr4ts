@@ -82,9 +82,9 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\EmptyPredictionContext.java
 * [ ] atn\EpsilonTransition.java
 * [ ] atn\ErrorInfo.java
-* [ ] atn\LexerAction.java
+* [x] atn\LexerAction.java
 * [ ] atn\LexerActionExecutor.java
-* [ ] atn\LexerActionType.java
+* [x] atn\LexerActionType.java
 * [ ] atn\LexerATNSimulator.java
 * [ ] atn\LexerChannelAction.java
 * [ ] atn\LexerCustomAction.java
@@ -148,7 +148,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\IntegerStack.java
 * [x] misc\Interval.java
 * [ ] misc\IntervalSet.java
-* [ ] misc\IntSet.java
+* [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java
 * [x] misc\MurmurHash.java
