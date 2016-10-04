@@ -34,7 +34,7 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
 
 import assert=require('assert');
-import {AbstractEqualityComparator} from './AbstractEqualityComparator';
+import {EqualityComparator} from './EqualityComparator';
 import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
 import {ObjectEqualityComparator} from './ObjectEqualityComparator';
@@ -46,29 +46,29 @@ import {MurmurHash} from './MurmurHash';
 // 		  e.g. the return type of add() differs!
 //        For this reason I've commented tweaked the implements clause
 
-export class Array2DHashSet<T> implements JavaSet<T> {
-	private static INITAL_CAPACITY: number =  16; // must be power of 2
-	private static INITAL_BUCKET_CAPACITY: number =  8;
-	private static LOAD_FACTOR: number =  0.75;
+const INITAL_CAPACITY: number =  16; // must be power of 2
+const INITAL_BUCKET_CAPACITY: number =  8;
+const LOAD_FACTOR: number =  0.75;
 
+export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
-	protected comparator: AbstractEqualityComparator<T>; 
+	protected comparator: EqualityComparator<T>; 
 
 	protected buckets: T[][]; 
 
 	/** How many elements in set */
 	protected n: number =  0;
 
-	protected threshold: number =  Math.floor(Array2DHashSet.INITAL_CAPACITY * Array2DHashSet.LOAD_FACTOR); // when to expand
+	protected threshold: number =  Math.floor(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
 
 	protected currentPrime: number =  1; // jump by 4 primes each expand or whatever
-	protected initialBucketCapacity: number =  Array2DHashSet.INITAL_BUCKET_CAPACITY;
+	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
 
 	constructor(
 		 @Nullable 
-		 comparator: AbstractEqualityComparator<T> = null, 
-		 initialCapacity: number = Array2DHashSet.INITAL_CAPACITY,
-		 initialBucketCapacity: number = Array2DHashSet.INITAL_BUCKET_CAPACITY)  {
+		 comparator: EqualityComparator<T> = null, 
+		 initialCapacity: number = INITAL_CAPACITY,
+		 initialBucketCapacity: number = INITAL_BUCKET_CAPACITY)  {
 
 		this.comparator = comparator || ObjectEqualityComparator.INSTANCE;
 		this.buckets = this.createBuckets(initialCapacity);
@@ -166,7 +166,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		let newTable: T[][] =  this.createBuckets(newCapacity);
 		let newBucketLengths: number[] =  new Array<number>(newTable.length);
 		this.buckets = newTable;
-		this.threshold = Math.floor(newCapacity * Array2DHashSet.LOAD_FACTOR);
+		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
 		let oldSize: number =  this.size();
@@ -385,7 +385,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	clear(): void {
-		this.buckets = this.createBuckets(Array2DHashSet.INITAL_CAPACITY);
+		this.buckets = this.createBuckets(INITAL_CAPACITY);
 		this.n = 0;
 	}
 
