@@ -1,0 +1,242 @@
+﻿/*
+ [The "BSD license"]
+ Copyright (c) 2012 Terence Parr
+ Copyright (c) 2012 Sam Harwell
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+// ConvertTo-TS run at 2016-10-04T11:26:42.7242153-07:00
+
+/**
+ *
+ * @author Sam Harwell
+ */
+export class RuleDependencyChecker {
+	private static LOGGER: Logger =  Logger.getLogger(RuleDependencyChecker.class.getName());
+
+	private static checkedTypes: Set<Class<?>> =  new HashSet<Class<?>>();
+
+	static checkDependencies(dependentClass: Class<any>): void {
+		if (isChecked(dependentClass)) {
+			return;
+		}
+
+		let typesToCheck: List<Class<?>> =  new ArrayList<Class<?>>();
+		typesToCheck.add(dependentClass);
+		Collections.addAll(typesToCheck, dependentClass.getDeclaredClasses());
+		for (final Class<?> clazz : typesToCheck) {
+			if (isChecked(clazz)) {
+				continue;
+			}
+
+			let dependencies: List<Tuple2<RuleDependency, AnnotatedElement>> =  getDependencies(clazz);
+			if (dependencies.isEmpty()) {
+				continue;
+			}
+
+			checkDependencies(dependencies, dependencies.get(0).getItem1().recognizer());
+		}
+	}
+
+	private static isChecked(clazz: Class<any>): boolean {
+		synchronized (checkedTypes) {
+			return checkedTypes.contains(clazz);
+		}
+	}
+
+	private static markChecked(clazz: Class<any>): void {
+		synchronized (checkedTypes) {
+			checkedTypes.add(clazz);
+		}
+	}
+
+	private static checkDependencies(dependencies: List<Tuple2<RuleDependency,AnnotatedElement>>, recognizerClass: Class<? extends Recognizer<any,any>>): void {
+		let ruleNames: string[] =  getRuleNames(recognizerClass);
+		let ruleVersions: number[] =  getRuleVersions(recognizerClass, ruleNames);
+
+		let incompatible: StringBuilder =  new StringBuilder();
+		for (let dependency of dependencies) {
+			if (!recognizerClass.isAssignableFrom(dependency.getItem1().recognizer())) {
+				continue;
+			}
+
+			if (dependency.getItem1().rule() < 0 || dependency.getItem1().rule() >= ruleVersions.length) {
+				incompatible.append(String.format("Element %s dependent on unknown rule %d@%d in %s\n",
+												  dependency.getItem2().toString(),
+												  dependency.getItem1().rule(),
+												  dependency.getItem1().version(),
+												  dependency.getItem1().recognizer().getSimpleName()));
+			}
+			else if (ruleVersions[dependency.getItem1().rule()] != dependency.getItem1().version()) {
+				incompatible.append(String.format("Element %s dependent on rule %s@%d (found @%d) in %s\n",
+												  dependency.getItem2().toString(),
+												  ruleNames[dependency.getItem1().rule()],
+												  dependency.getItem1().version(),
+												  ruleVersions[dependency.getItem1().rule()],
+												  dependency.getItem1().recognizer().getSimpleName()));
+			}
+		}
+
+		if (incompatible.length() != 0) {
+			throw new IllegalStateException(incompatible.toString());
+		}
+
+		markChecked(recognizerClass);
+	}
+
+	private static getRuleVersions(recognizerClass: Class<? extends Recognizer<any,any>>, ruleNames: string[]): number[] {
+		let versions: number[] =  new int[ruleNames.length];
+
+		let fields: Field[] =  recognizerClass.getFields();
+		for (let field of fields) {
+			let isStatic: boolean =  (field.getModifiers() & Modifier.STATIC) != 0;
+			let isInteger: boolean =  field.getType() == Integer.TYPE;
+			if (isStatic && isInteger && field.getName().startsWith("RULE_")) {
+				try {
+					let name: string =  field.getName().substring("RULE_".length());
+					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+						continue;
+					}
+
+					let index: number =  field.getInt(null);
+					if (index < 0 || index >= versions.length) {
+						let params: any[] =  { index, field.getName(), recognizerClass.getSimpleName() };
+						LOGGER.log(Level.WARNING, "Rule index {0} for rule ''{1}'' out of bounds for recognizer {2}.", params);
+						continue;
+					}
+
+					let ruleMethod: Method =  getRuleMethod(recognizerClass, name);
+					if (ruleMethod == null) {
+						let params: any[] =  { name, recognizerClass.getSimpleName() };
+						LOGGER.log(Level.WARNING, "Could not find rule method for rule ''{0}'' in recognizer {1}.", params);
+						continue;
+					}
+
+					let ruleVersion: RuleVersion =  ruleMethod.getAnnotation(RuleVersion.class);
+					let version: number =  ruleVersion != null ? ruleVersion.value() : 0;
+					versions[index] = version;
+				} catch (IllegalArgumentException ex) {
+					LOGGER.log(Level.WARNING, null, ex);
+				} catch (IllegalAccessException ex) {
+					LOGGER.log(Level.WARNING, null, ex);
+				}
+			}
+		}
+
+		return versions;
+	}
+
+	private static getRuleMethod(recognizerClass: Class<? extends Recognizer<any,any>>, name: string): Method {
+		let declaredMethods: Method[] =  recognizerClass.getMethods();
+		for (let method of declaredMethods) {
+			if (method.getName().equals(name) && method.isAnnotationPresent(RuleVersion.class)) {
+				return method;
+			}
+		}
+
+		return null;
+	}
+
+	private static getRuleNames(recognizerClass: Class<? extends Recognizer<any,any>>): string[] {
+		try {
+			let ruleNames: Field =  recognizerClass.getField("ruleNames");
+			return (String[])ruleNames.get(null);
+		} catch (NoSuchFieldException ex) {
+			LOGGER.log(Level.WARNING, null, ex);
+		} catch (SecurityException ex) {
+			LOGGER.log(Level.WARNING, null, ex);
+		} catch (IllegalArgumentException ex) {
+			LOGGER.log(Level.WARNING, null, ex);
+		} catch (IllegalAccessException ex) {
+			LOGGER.log(Level.WARNING, null, ex);
+		}
+
+		return new String[0];
+	}
+
+	static getDependencies(clazz: Class<any>): List<Tuple2<RuleDependency, AnnotatedElement>> {
+		let result: List<Tuple2<RuleDependency, AnnotatedElement>> =  new ArrayList<Tuple2<RuleDependency, AnnotatedElement>>();
+		let supportedTarget: List<ElementType> =  Arrays.asList(RuleDependency.class.getAnnotation(Target.class).value());
+		for (let target of supportedTarget) {
+			switch (target) {
+			case TYPE:
+				if (!clazz.isAnnotation()) {
+					getElementDependencies(clazz, result);
+				}
+				break;
+			case ANNOTATION_TYPE:
+				if (!clazz.isAnnotation()) {
+					getElementDependencies(clazz, result);
+				}
+				break;
+			case CONSTRUCTOR:
+				for (let ctor of clazz.getDeclaredConstructors()) {
+					getElementDependencies(ctor, result);
+				}
+				break;
+			case FIELD:
+				for (let field of clazz.getDeclaredFields()) {
+					getElementDependencies(field, result);
+				}
+				break;
+			case LOCAL_VARIABLE:
+				System.err.println("Runtime rule dependency checking is not supported for local variables.");
+				break;
+			case METHOD:
+				for (let method of clazz.getDeclaredMethods()) {
+					getElementDependencies(method, result);
+				}
+				break;
+			case PACKAGE:
+				// package is not a subset of class, so nothing to do here
+				break;
+			case PARAMETER:
+				System.err.println("Runtime rule dependency checking is not supported for parameters.");
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	private static getElementDependencies(annotatedElement: AnnotatedElement, result: List<Tuple2<RuleDependency,AnnotatedElement>>): void {
+		let dependency: RuleDependency =  annotatedElement.getAnnotation(RuleDependency.class);
+		if (dependency != null) {
+			result.add(Tuple.create(dependency, annotatedElement));
+		}
+
+		let dependencies: RuleDependencies =  annotatedElement.getAnnotation(RuleDependencies.class);
+		if (dependencies != null) {
+			for (let d of dependencies.value()) {
+				if (d != null) {
+					result.add(Tuple.create(d, annotatedElement));
+				}
+			}
+		}
+	}
+
+	 constructor()  {
+	}
+}

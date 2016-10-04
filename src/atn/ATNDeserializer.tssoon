@@ -1,0 +1,1129 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2013 Terence Parr
+ *  Copyright (c) 2013 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
+
+/**
+ *
+ * @author Sam Harwell
+ */
+export class ATNDeserializer {
+	static SERIALIZED_VERSION: number; 
+	static {
+		/* This value should never change. Updates following this version are
+		 * reflected as change in the unique ID SERIALIZED_UUID.
+		 */
+		SERIALIZED_VERSION = 3;
+	}
+
+	/**
+	 * This is the earliest supported serialized UUID.
+	 */
+	private static BASE_SERIALIZED_UUID: UUID; 
+	/**
+	 * This UUID indicates an extension of {@link #ADDED_PRECEDENCE_TRANSITIONS}
+	 * for the addition of lexer actions encoded as a sequence of
+	 * {@link LexerAction} instances.
+	 */
+	private static ADDED_LEXER_ACTIONS: UUID; 
+	/**
+	 * This list contains all of the currently supported UUIDs, ordered by when
+	 * the feature first appeared in this branch.
+	 */
+	private static SUPPORTED_UUIDS: List<UUID>; 
+
+	/**
+	 * This is the current serialized UUID.
+	 */
+	static SERIALIZED_UUID: UUID; 
+	static {
+		/* WARNING: DO NOT MERGE THESE LINES. If UUIDs differ during a merge,
+		 * resolve the conflict by generating a new ID!
+		 */
+		BASE_SERIALIZED_UUID = UUID.fromString("E4178468-DF95-44D0-AD87-F22A5D5FB6D3");
+		ADDED_LEXER_ACTIONS = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
+
+		SUPPORTED_UUIDS = new ArrayList<UUID>();
+		SUPPORTED_UUIDS.add(BASE_SERIALIZED_UUID);
+		SUPPORTED_UUIDS.add(ADDED_LEXER_ACTIONS);
+
+		SERIALIZED_UUID = ADDED_LEXER_ACTIONS;
+	}
+
+	@NotNull
+	private deserializationOptions: ATNDeserializationOptions; 
+
+	 constructor()  {
+		this(ATNDeserializationOptions.getDefaultOptions());
+	}
+
+	 constructor1(@Nullable deserializationOptions: ATNDeserializationOptions)  {
+		if (deserializationOptions == null) {
+			deserializationOptions = ATNDeserializationOptions.getDefaultOptions();
+		}
+
+		this.deserializationOptions = deserializationOptions;
+	}
+
+	/**
+	 * Determines if a particular serialized representation of an ATN supports
+	 * a particular feature, identified by the {@link UUID} used for serializing
+	 * the ATN at the time the feature was first introduced.
+	 *
+	 * @param feature The {@link UUID} marking the first time the feature was
+	 * supported in the serialized ATN.
+	 * @param actualUuid The {@link UUID} of the actual serialized ATN which is
+	 * currently being deserialized.
+	 * @return {@code true} if the {@code actualUuid} value represents a
+	 * serialized ATN at or after the feature identified by {@code feature} was
+	 * introduced; otherwise, {@code false}.
+	 */
+	protected isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
+		let featureIndex: number =  SUPPORTED_UUIDS.indexOf(feature);
+		if (featureIndex < 0) {
+			return false;
+		}
+
+		return SUPPORTED_UUIDS.indexOf(actualUuid) >= featureIndex;
+	}
+
+	@SuppressWarnings("deprecation")
+	deserialize(@NotNull data: char[]): ATN {
+		data = data.clone();
+		// don't adjust the first value since that's the version number
+		for (let i = 1; i < data.length; i++) {
+			data[i] = (char)(data[i] - 2);
+		}
+
+		let p: number =  0;
+		let version: number =  toInt(data[p++]);
+		if (version != SERIALIZED_VERSION) {
+			let reason: string =  String.format(Locale.getDefault(), "Could not deserialize ATN with version %d (expected %d).", version, SERIALIZED_VERSION);
+			throw new UnsupportedOperationException(new InvalidClassException(ATN.class.getName(), reason));
+		}
+
+		let uuid: UUID =  toUUID(data, p);
+		p += 8;
+		if (!SUPPORTED_UUIDS.contains(uuid)) {
+			let reason: string =  String.format(Locale.getDefault(), "Could not deserialize ATN with UUID %s (expected %s or a legacy UUID).", uuid, SERIALIZED_UUID);
+			throw new UnsupportedOperationException(new InvalidClassException(ATN.class.getName(), reason));
+		}
+
+		let supportsLexerActions: boolean =  isFeatureSupported(ADDED_LEXER_ACTIONS, uuid);
+
+		let grammarType: ATNType =  ATNType.values()[toInt(data[p++])];
+		let maxTokenType: number =  toInt(data[p++]);
+		let atn: ATN =  new ATN(grammarType, maxTokenType);
+
+		//
+		// STATES
+		//
+		let loopBackStateNumbers: List<Tuple2<LoopEndState, number>> =  new ArrayList<Tuple2<LoopEndState, Integer>>();
+		let endStateNumbers: List<Tuple2<BlockStartState, number>> =  new ArrayList<Tuple2<BlockStartState, Integer>>();
+		let nstates: number =  toInt(data[p++]);
+		for (let i=0; i<nstates; i++) {
+			let stype: number =  toInt(data[p++]);
+			// ignore bad type of states
+			if ( stype==ATNState.INVALID_TYPE ) {
+				atn.addState(null);
+				continue;
+			}
+
+			let ruleIndex: number =  toInt(data[p++]);
+			if (ruleIndex == Character.MAX_VALUE) {
+				ruleIndex = -1;
+			}
+
+			let s: ATNState =  stateFactory(stype, ruleIndex);
+			if ( stype == ATNState.LOOP_END ) { // special case
+				let loopBackStateNumber: number =  toInt(data[p++]);
+				loopBackStateNumbers.add(Tuple.create((LoopEndState)s, loopBackStateNumber));
+			}
+			else if (s instanceof BlockStartState) {
+				let endStateNumber: number =  toInt(data[p++]);
+				endStateNumbers.add(Tuple.create((BlockStartState)s, endStateNumber));
+			}
+			atn.addState(s);
+		}
+
+		// delay the assignment of loop back and end states until we know all the state instances have been initialized
+		for (let pair of loopBackStateNumbers) {
+			pair.getItem1().loopBackState = atn.states.get(pair.getItem2());
+		}
+
+		for (let pair of endStateNumbers) {
+			pair.getItem1().endState = (BlockEndState)atn.states.get(pair.getItem2());
+		}
+
+		let numNonGreedyStates: number =  toInt(data[p++]);
+		for (let i = 0; i < numNonGreedyStates; i++) {
+			let stateNumber: number =  toInt(data[p++]);
+			((DecisionState)atn.states.get(stateNumber)).nonGreedy = true;
+		}
+
+		let numSllDecisions: number =  toInt(data[p++]);
+		for (let i = 0; i < numSllDecisions; i++) {
+			let stateNumber: number =  toInt(data[p++]);
+			((DecisionState)atn.states.get(stateNumber)).sll = true;
+		}
+
+		let numPrecedenceStates: number =  toInt(data[p++]);
+		for (let i = 0; i < numPrecedenceStates; i++) {
+			let stateNumber: number =  toInt(data[p++]);
+			((RuleStartState)atn.states.get(stateNumber)).isPrecedenceRule = true;
+		}
+
+		//
+		// RULES
+		//
+		let nrules: number =  toInt(data[p++]);
+		if ( atn.grammarType == ATNType.LEXER ) {
+			atn.ruleToTokenType = new int[nrules];
+		}
+
+		atn.ruleToStartState = new RuleStartState[nrules];
+		for (let i=0; i<nrules; i++) {
+			let s: number =  toInt(data[p++]);
+			let startState: RuleStartState =  (RuleStartState)atn.states.get(s);
+			startState.leftFactored = toInt(data[p++]) != 0;
+			atn.ruleToStartState[i] = startState;
+			if ( atn.grammarType == ATNType.LEXER ) {
+				let tokenType: number =  toInt(data[p++]);
+				if (tokenType == 0xFFFF) {
+					tokenType = Token.EOF;
+				}
+
+				atn.ruleToTokenType[i] = tokenType;
+
+				if (!isFeatureSupported(ADDED_LEXER_ACTIONS, uuid)) {
+					// this piece of unused metadata was serialized prior to the
+					// addition of LexerAction
+					let actionIndexIgnored: number =  toInt(data[p++]);
+					if (actionIndexIgnored == 0xFFFF) {
+						actionIndexIgnored = -1;
+					}
+				}
+			}
+		}
+
+		atn.ruleToStopState = new RuleStopState[nrules];
+		for (let state of atn.states) {
+			if (!(state instanceof RuleStopState)) {
+				continue;
+			}
+
+			let stopState: RuleStopState =  (RuleStopState)state;
+			atn.ruleToStopState[state.ruleIndex] = stopState;
+			atn.ruleToStartState[state.ruleIndex].stopState = stopState;
+		}
+
+		//
+		// MODES
+		//
+		let nmodes: number =  toInt(data[p++]);
+		for (let i=0; i<nmodes; i++) {
+			let s: number =  toInt(data[p++]);
+			atn.modeToStartState.add((TokensStartState)atn.states.get(s));
+		}
+
+		atn.modeToDFA = new DFA[nmodes];
+		for (let i = 0; i < nmodes; i++) {
+			atn.modeToDFA[i] = new DFA(atn.modeToStartState.get(i));
+		}
+
+		//
+		// SETS
+		//
+		let sets: List<IntervalSet> =  new ArrayList<IntervalSet>();
+		let nsets: number =  toInt(data[p++]);
+		for (let i=0; i<nsets; i++) {
+			let nintervals: number =  toInt(data[p]);
+			p++;
+			let set: IntervalSet =  new IntervalSet();
+			sets.add(set);
+
+			let containsEof: boolean =  toInt(data[p++]) != 0;
+			if (containsEof) {
+				set.add(-1);
+			}
+
+			for (let j=0; j<nintervals; j++) {
+				set.add(toInt(data[p]), toInt(data[p + 1]));
+				p += 2;
+			}
+		}
+
+		//
+		// EDGES
+		//
+		let nedges: number =  toInt(data[p++]);
+		for (let i=0; i<nedges; i++) {
+			let src: number =  toInt(data[p]);
+			let trg: number =  toInt(data[p+1]);
+			let ttype: number =  toInt(data[p+2]);
+			let arg1: number =  toInt(data[p+3]);
+			let arg2: number =  toInt(data[p+4]);
+			let arg3: number =  toInt(data[p+5]);
+			let trans: Transition =  edgeFactory(atn, ttype, src, trg, arg1, arg2, arg3, sets);
+//			System.out.println("EDGE "+trans.getClass().getSimpleName()+" "+
+//							   src+"->"+trg+
+//					   " "+Transition.serializationNames[ttype]+
+//					   " "+arg1+","+arg2+","+arg3);
+			let srcState: ATNState =  atn.states.get(src);
+			srcState.addTransition(trans);
+			p += 6;
+		}
+
+		// edges for rule stop states can be derived, so they aren't serialized
+		for (let state of atn.states) {
+			let returningToLeftFactored: boolean =  state.ruleIndex >= 0 && atn.ruleToStartState[state.ruleIndex].leftFactored;
+			for (let i = 0; i < state.getNumberOfTransitions(); i++) {
+				let t: Transition =  state.transition(i);
+				if (!(t instanceof RuleTransition)) {
+					continue;
+				}
+
+				let ruleTransition: RuleTransition =  (RuleTransition)t;
+				let returningFromLeftFactored: boolean =  atn.ruleToStartState[ruleTransition.target.ruleIndex].leftFactored;
+				if (!returningFromLeftFactored && returningToLeftFactored) {
+					continue;
+				}
+
+				let outermostPrecedenceReturn: number =  -1;
+				if (atn.ruleToStartState[ruleTransition.target.ruleIndex].isPrecedenceRule) {
+					if (ruleTransition.precedence == 0) {
+						outermostPrecedenceReturn = ruleTransition.target.ruleIndex;
+					}
+				}
+
+				let returnTransition: EpsilonTransition =  new EpsilonTransition(ruleTransition.followState, outermostPrecedenceReturn);
+				atn.ruleToStopState[ruleTransition.target.ruleIndex].addTransition(returnTransition);
+			}
+		}
+
+		for (let state of atn.states) {
+			if (state instanceof BlockStartState) {
+				// we need to know the end state to set its start state
+				if (((BlockStartState)state).endState == null) {
+					throw new IllegalStateException();
+				}
+
+				// block end states can only be associated to a single block start state
+				if (((BlockStartState)state).endState.startState != null) {
+					throw new IllegalStateException();
+				}
+
+				((BlockStartState)state).endState.startState = (BlockStartState)state;
+			}
+
+			if (state instanceof PlusLoopbackState) {
+				let loopbackState: PlusLoopbackState =  (PlusLoopbackState)state;
+				for (let i = 0; i < loopbackState.getNumberOfTransitions(); i++) {
+					let target: ATNState =  loopbackState.transition(i).target;
+					if (target instanceof PlusBlockStartState) {
+						((PlusBlockStartState)target).loopBackState = loopbackState;
+					}
+				}
+			}
+			else if (state instanceof StarLoopbackState) {
+				let loopbackState: StarLoopbackState =  (StarLoopbackState)state;
+				for (let i = 0; i < loopbackState.getNumberOfTransitions(); i++) {
+					let target: ATNState =  loopbackState.transition(i).target;
+					if (target instanceof StarLoopEntryState) {
+						((StarLoopEntryState)target).loopBackState = loopbackState;
+					}
+				}
+			}
+		}
+
+		//
+		// DECISIONS
+		//
+		let ndecisions: number =  toInt(data[p++]);
+		for (let i=1; i<=ndecisions; i++) {
+			let s: number =  toInt(data[p++]);
+			let decState: DecisionState =  (DecisionState)atn.states.get(s);
+			atn.decisionToState.add(decState);
+			decState.decision = i-1;
+		}
+
+		//
+		// LEXER ACTIONS
+		//
+		if (atn.grammarType == ATNType.LEXER) {
+			if (supportsLexerActions) {
+				atn.lexerActions = new LexerAction[toInt(data[p++])];
+				for (let i = 0; i < atn.lexerActions.length; i++) {
+					let actionType: LexerActionType =  LexerActionType.values()[toInt(data[p++])];
+					let data1: number =  toInt(data[p++]);
+					if (data1 == 0xFFFF) {
+						data1 = -1;
+					}
+
+					let data2: number =  toInt(data[p++]);
+					if (data2 == 0xFFFF) {
+						data2 = -1;
+					}
+
+					let lexerAction: LexerAction =  lexerActionFactory(actionType, data1, data2);
+
+					atn.lexerActions[i] = lexerAction;
+				}
+			}
+			else {
+				// for compatibility with older serialized ATNs, convert the old
+				// serialized action index for action transitions to the new
+				// form, which is the index of a LexerCustomAction
+				let legacyLexerActions: List<LexerAction> =  new ArrayList<LexerAction>();
+				for (let state of atn.states) {
+					for (let i = 0; i < state.getNumberOfTransitions(); i++) {
+						let transition: Transition =  state.transition(i);
+						if (!(transition instanceof ActionTransition)) {
+							continue;
+						}
+
+						let ruleIndex: number =  ((ActionTransition)transition).ruleIndex;
+						let actionIndex: number =  ((ActionTransition)transition).actionIndex;
+						let lexerAction: LexerCustomAction =  new LexerCustomAction(ruleIndex, actionIndex);
+						state.setTransition(i, new ActionTransition(transition.target, ruleIndex, legacyLexerActions.size(), false));
+						legacyLexerActions.add(lexerAction);
+					}
+				}
+
+				atn.lexerActions = legacyLexerActions.toArray(new LexerAction[legacyLexerActions.size()]);
+			}
+		}
+
+		markPrecedenceDecisions(atn);
+
+		atn.decisionToDFA = new DFA[ndecisions];
+		for (let i = 0; i < ndecisions; i++) {
+			atn.decisionToDFA[i] = new DFA(atn.decisionToState.get(i), i);
+		}
+
+		if (deserializationOptions.isVerifyATN()) {
+			verifyATN(atn);
+		}
+
+		if (deserializationOptions.isGenerateRuleBypassTransitions() && atn.grammarType == ATNType.PARSER) {
+			atn.ruleToTokenType = new int[atn.ruleToStartState.length];
+			for (let i = 0; i < atn.ruleToStartState.length; i++) {
+				atn.ruleToTokenType[i] = atn.maxTokenType + i + 1;
+			}
+
+			for (let i = 0; i < atn.ruleToStartState.length; i++) {
+				let bypassStart: BasicBlockStartState =  new BasicBlockStartState();
+				bypassStart.ruleIndex = i;
+				atn.addState(bypassStart);
+
+				let bypassStop: BlockEndState =  new BlockEndState();
+				bypassStop.ruleIndex = i;
+				atn.addState(bypassStop);
+
+				bypassStart.endState = bypassStop;
+				atn.defineDecisionState(bypassStart);
+
+				bypassStop.startState = bypassStart;
+
+				let endState: ATNState; 
+				let excludeTransition: Transition =  null;
+				if (atn.ruleToStartState[i].isPrecedenceRule) {
+					// wrap from the beginning of the rule to the StarLoopEntryState
+					endState = null;
+					for (let state of atn.states) {
+						if (state.ruleIndex != i) {
+							continue;
+						}
+
+						if (!(state instanceof StarLoopEntryState)) {
+							continue;
+						}
+
+						let maybeLoopEndState: ATNState =  state.transition(state.getNumberOfTransitions() - 1).target;
+						if (!(maybeLoopEndState instanceof LoopEndState)) {
+							continue;
+						}
+
+						if (maybeLoopEndState.epsilonOnlyTransitions && maybeLoopEndState.transition(0).target instanceof RuleStopState) {
+							endState = state;
+							break;
+						}
+					}
+
+					if (endState == null) {
+						throw new UnsupportedOperationException("Couldn't identify final state of the precedence rule prefix section.");
+					}
+
+					excludeTransition = ((StarLoopEntryState)endState).loopBackState.transition(0);
+				}
+				else {
+					endState = atn.ruleToStopState[i];
+				}
+
+				// all non-excluded transitions that currently target end state need to target blockEnd instead
+				for (let state of atn.states) {
+					for (let transition of state.transitions) {
+						if (transition == excludeTransition) {
+							continue;
+						}
+
+						if (transition.target == endState) {
+							transition.target = bypassStop;
+						}
+					}
+				}
+
+				// all transitions leaving the rule start state need to leave blockStart instead
+				while (atn.ruleToStartState[i].getNumberOfTransitions() > 0) {
+					let transition: Transition =  atn.ruleToStartState[i].removeTransition(atn.ruleToStartState[i].getNumberOfTransitions() - 1);
+					bypassStart.addTransition(transition);
+				}
+
+				// link the new states
+				atn.ruleToStartState[i].addTransition(new EpsilonTransition(bypassStart));
+				bypassStop.addTransition(new EpsilonTransition(endState));
+
+				let matchState: ATNState =  new BasicState();
+				atn.addState(matchState);
+				matchState.addTransition(new AtomTransition(bypassStop, atn.ruleToTokenType[i]));
+				bypassStart.addTransition(new EpsilonTransition(matchState));
+			}
+
+			if (deserializationOptions.isVerifyATN()) {
+				// reverify after modification
+				verifyATN(atn);
+			}
+		}
+
+		if (deserializationOptions.isOptimize()) {
+			while (true) {
+				let optimizationCount: number =  0;
+				optimizationCount += inlineSetRules(atn);
+				optimizationCount += combineChainedEpsilons(atn);
+				let preserveOrder: boolean =  atn.grammarType == ATNType.LEXER;
+				optimizationCount += optimizeSets(atn, preserveOrder);
+				if (optimizationCount == 0) {
+					break;
+				}
+			}
+
+			if (deserializationOptions.isVerifyATN()) {
+				// reverify after modification
+				verifyATN(atn);
+			}
+		}
+
+		identifyTailCalls(atn);
+
+		return atn;
+	}
+
+	/**
+	 * Analyze the {@link StarLoopEntryState} states in the specified ATN to set
+	 * the {@link StarLoopEntryState#precedenceRuleDecision} field to the
+	 * correct value.
+	 *
+	 * @param atn The ATN.
+	 */
+	protected markPrecedenceDecisions(@NotNull atn: ATN): void {
+		for (let state of atn.states) {
+			if (!(state instanceof StarLoopEntryState)) {
+				continue;
+			}
+
+			/* We analyze the ATN to determine if this ATN decision state is the
+			 * decision for the closure block that determines whether a
+			 * precedence rule should continue or complete.
+			 */
+			if (atn.ruleToStartState[state.ruleIndex].isPrecedenceRule) {
+				let maybeLoopEndState: ATNState =  state.transition(state.getNumberOfTransitions() - 1).target;
+				if (maybeLoopEndState instanceof LoopEndState) {
+					if (maybeLoopEndState.epsilonOnlyTransitions && maybeLoopEndState.transition(0).target instanceof RuleStopState) {
+						((StarLoopEntryState)state).precedenceRuleDecision = true;
+					}
+				}
+			}
+		}
+	}
+
+	protected verifyATN(atn: ATN): void {
+		// verify assumptions
+		for (let state of atn.states) {
+			if (state == null) {
+				continue;
+			}
+
+			checkCondition(state.onlyHasEpsilonTransitions() || state.getNumberOfTransitions() <= 1);
+
+			if (state instanceof PlusBlockStartState) {
+				checkCondition(((PlusBlockStartState)state).loopBackState != null);
+			}
+
+			if (state instanceof StarLoopEntryState) {
+				let starLoopEntryState: StarLoopEntryState =  (StarLoopEntryState)state;
+				checkCondition(starLoopEntryState.loopBackState != null);
+				checkCondition(starLoopEntryState.getNumberOfTransitions() == 2);
+
+				if (starLoopEntryState.transition(0).target instanceof StarBlockStartState) {
+					checkCondition(starLoopEntryState.transition(1).target instanceof LoopEndState);
+					checkCondition(!starLoopEntryState.nonGreedy);
+				}
+				else if (starLoopEntryState.transition(0).target instanceof LoopEndState) {
+					checkCondition(starLoopEntryState.transition(1).target instanceof StarBlockStartState);
+					checkCondition(starLoopEntryState.nonGreedy);
+				}
+				else {
+					throw new IllegalStateException();
+				}
+			}
+
+			if (state instanceof StarLoopbackState) {
+				checkCondition(state.getNumberOfTransitions() == 1);
+				checkCondition(state.transition(0).target instanceof StarLoopEntryState);
+			}
+
+			if (state instanceof LoopEndState) {
+				checkCondition(((LoopEndState)state).loopBackState != null);
+			}
+
+			if (state instanceof RuleStartState) {
+				checkCondition(((RuleStartState)state).stopState != null);
+			}
+
+			if (state instanceof BlockStartState) {
+				checkCondition(((BlockStartState)state).endState != null);
+			}
+
+			if (state instanceof BlockEndState) {
+				checkCondition(((BlockEndState)state).startState != null);
+			}
+
+			if (state instanceof DecisionState) {
+				let decisionState: DecisionState =  (DecisionState)state;
+				checkCondition(decisionState.getNumberOfTransitions() <= 1 || decisionState.decision >= 0);
+			}
+			else {
+				checkCondition(state.getNumberOfTransitions() <= 1 || state instanceof RuleStopState);
+			}
+		}
+	}
+
+	protected checkCondition(condition: boolean): void {
+		checkCondition(condition, null);
+	}
+
+	protected checkCondition(condition: boolean, message: string): void {
+		if (!condition) {
+			throw new IllegalStateException(message);
+		}
+	}
+
+	private static inlineSetRules(atn: ATN): number {
+		let inlinedCalls: number =  0;
+
+		let ruleToInlineTransition: Transition[] =  new Transition[atn.ruleToStartState.length];
+		for (let i = 0; i < atn.ruleToStartState.length; i++) {
+			let startState: RuleStartState =  atn.ruleToStartState[i];
+			let middleState: ATNState =  startState;
+			while (middleState.onlyHasEpsilonTransitions()
+				&& middleState.getNumberOfOptimizedTransitions() == 1
+				&& middleState.getOptimizedTransition(0).getSerializationType() == Transition.EPSILON)
+			{
+				middleState = middleState.getOptimizedTransition(0).target;
+			}
+
+			if (middleState.getNumberOfOptimizedTransitions() != 1) {
+				continue;
+			}
+
+			let matchTransition: Transition =  middleState.getOptimizedTransition(0);
+			let matchTarget: ATNState =  matchTransition.target;
+			if (matchTransition.isEpsilon()
+				|| !matchTarget.onlyHasEpsilonTransitions()
+				|| matchTarget.getNumberOfOptimizedTransitions() != 1
+				|| !(matchTarget.getOptimizedTransition(0).target instanceof RuleStopState))
+			{
+				continue;
+			}
+
+			switch (matchTransition.getSerializationType()) {
+			case Transition.ATOM:
+			case Transition.RANGE:
+			case Transition.SET:
+				ruleToInlineTransition[i] = matchTransition;
+				break;
+
+			case Transition.NOT_SET:
+			case Transition.WILDCARD:
+				// not implemented yet
+				continue;
+
+			default:
+				continue;
+			}
+		}
+
+		for (let stateNumber = 0; stateNumber < atn.states.size(); stateNumber++) {
+			let state: ATNState =  atn.states.get(stateNumber);
+			if (state.ruleIndex < 0) {
+				continue;
+			}
+
+			let optimizedTransitions: List<Transition> =  null;
+			for (let i = 0; i < state.getNumberOfOptimizedTransitions(); i++) {
+				let transition: Transition =  state.getOptimizedTransition(i);
+				if (!(transition instanceof RuleTransition)) {
+					if (optimizedTransitions != null) {
+						optimizedTransitions.add(transition);
+					}
+
+					continue;
+				}
+
+				let ruleTransition: RuleTransition =  (RuleTransition)transition;
+				let effective: Transition =  ruleToInlineTransition[ruleTransition.target.ruleIndex];
+				if (effective == null) {
+					if (optimizedTransitions != null) {
+						optimizedTransitions.add(transition);
+					}
+
+					continue;
+				}
+
+				if (optimizedTransitions == null) {
+					optimizedTransitions = new ArrayList<Transition>();
+					for (let j = 0; j < i; j++) {
+						optimizedTransitions.add(state.getOptimizedTransition(i));
+					}
+				}
+
+				inlinedCalls++;
+				let target: ATNState =  ruleTransition.followState;
+				let intermediateState: ATNState =  new BasicState();
+				intermediateState.setRuleIndex(target.ruleIndex);
+				atn.addState(intermediateState);
+				optimizedTransitions.add(new EpsilonTransition(intermediateState));
+
+				switch (effective.getSerializationType()) {
+				case Transition.ATOM:
+					intermediateState.addTransition(new AtomTransition(target, ((AtomTransition)effective).label));
+					break;
+
+				case Transition.RANGE:
+					intermediateState.addTransition(new RangeTransition(target, ((RangeTransition)effective).from, ((RangeTransition)effective).to));
+					break;
+
+				case Transition.SET:
+					intermediateState.addTransition(new SetTransition(target, effective.label()));
+					break;
+
+				default:
+					throw new UnsupportedOperationException();
+				}
+			}
+
+			if (optimizedTransitions != null) {
+				if (state.isOptimized()) {
+					while (state.getNumberOfOptimizedTransitions() > 0) {
+						state.removeOptimizedTransition(state.getNumberOfOptimizedTransitions() - 1);
+					}
+				}
+
+				for (let transition of optimizedTransitions) {
+					state.addOptimizedTransition(transition);
+				}
+			}
+		}
+
+		if (ParserATNSimulator.debug) {
+			console.log("ATN runtime optimizer removed " + inlinedCalls + " rule invocations by inlining sets.");
+		}
+
+		return inlinedCalls;
+	}
+
+	private static combineChainedEpsilons(atn: ATN): number {
+		let removedEdges: number =  0;
+
+		nextState:
+		for (let state of atn.states) {
+			if (!state.onlyHasEpsilonTransitions() || state instanceof RuleStopState) {
+				continue;
+			}
+
+			let optimizedTransitions: List<Transition> =  null;
+			nextTransition:
+			for (let i = 0; i < state.getNumberOfOptimizedTransitions(); i++) {
+				let transition: Transition =  state.getOptimizedTransition(i);
+				let intermediate: ATNState =  transition.target;
+				if (transition.getSerializationType() != Transition.EPSILON
+					|| ((EpsilonTransition)transition).outermostPrecedenceReturn() != -1
+					|| intermediate.getStateType() != ATNState.BASIC
+					|| !intermediate.onlyHasEpsilonTransitions())
+				{
+					if (optimizedTransitions != null) {
+						optimizedTransitions.add(transition);
+					}
+
+					continue nextTransition;
+				}
+
+				for (let j = 0; j < intermediate.getNumberOfOptimizedTransitions(); j++) {
+					if (intermediate.getOptimizedTransition(j).getSerializationType() != Transition.EPSILON
+						|| ((EpsilonTransition)intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn() != -1)
+					{
+						if (optimizedTransitions != null) {
+							optimizedTransitions.add(transition);
+						}
+
+						continue nextTransition;
+					}
+				}
+
+				removedEdges++;
+				if (optimizedTransitions == null) {
+					optimizedTransitions = new ArrayList<Transition>();
+					for (let j = 0; j < i; j++) {
+						optimizedTransitions.add(state.getOptimizedTransition(j));
+					}
+				}
+
+				for (let j = 0; j < intermediate.getNumberOfOptimizedTransitions(); j++) {
+					let target: ATNState =  intermediate.getOptimizedTransition(j).target;
+					optimizedTransitions.add(new EpsilonTransition(target));
+				}
+			}
+
+			if (optimizedTransitions != null) {
+				if (state.isOptimized()) {
+					while (state.getNumberOfOptimizedTransitions() > 0) {
+						state.removeOptimizedTransition(state.getNumberOfOptimizedTransitions() - 1);
+					}
+				}
+
+				for (let transition of optimizedTransitions) {
+					state.addOptimizedTransition(transition);
+				}
+			}
+		}
+
+		if (ParserATNSimulator.debug) {
+			console.log("ATN runtime optimizer removed " + removedEdges + " transitions by combining chained epsilon transitions.");
+		}
+
+		return removedEdges;
+	}
+
+	private static optimizeSets(atn: ATN, preserveOrder: boolean): number {
+		if (preserveOrder) {
+			// this optimization currently doesn't preserve edge order.
+			return 0;
+		}
+
+		let removedPaths: number =  0;
+		let decisions: List<DecisionState> =  atn.decisionToState;
+		for (let decision of decisions) {
+			let setTransitions: IntervalSet =  new IntervalSet();
+			for (let i = 0; i < decision.getNumberOfOptimizedTransitions(); i++) {
+				let epsTransition: Transition =  decision.getOptimizedTransition(i);
+				if (!(epsTransition instanceof EpsilonTransition)) {
+					continue;
+				}
+
+				if (epsTransition.target.getNumberOfOptimizedTransitions() != 1) {
+					continue;
+				}
+
+				let transition: Transition =  epsTransition.target.getOptimizedTransition(0);
+				if (!(transition.target instanceof BlockEndState)) {
+					continue;
+				}
+
+				if (transition instanceof NotSetTransition) {
+					// TODO: not yet implemented
+					continue;
+				}
+
+				if (transition instanceof AtomTransition
+					|| transition instanceof RangeTransition
+					|| transition instanceof SetTransition)
+				{
+					setTransitions.add(i);
+				}
+			}
+
+			if (setTransitions.size() <= 1) {
+				continue;
+			}
+
+			let optimizedTransitions: List<Transition> =  new ArrayList<Transition>();
+			for (let i = 0; i < decision.getNumberOfOptimizedTransitions(); i++) {
+				if (!setTransitions.contains(i)) {
+					optimizedTransitions.add(decision.getOptimizedTransition(i));
+				}
+			}
+
+			let blockEndState: ATNState =  decision.getOptimizedTransition(setTransitions.getMinElement()).target.getOptimizedTransition(0).target;
+			let matchSet: IntervalSet =  new IntervalSet();
+			for (let i = 0; i < setTransitions.getIntervals().size(); i++) {
+				let interval: Interval =  setTransitions.getIntervals().get(i);
+				for (let j = interval.a; j <= interval.b; j++) {
+					let matchTransition: Transition =  decision.getOptimizedTransition(j).target.getOptimizedTransition(0);
+					if (matchTransition instanceof NotSetTransition) {
+						throw new UnsupportedOperationException("Not yet implemented.");
+					} else {
+						matchSet.addAll(matchTransition.label());
+					}
+				}
+			}
+
+			let newTransition: Transition; 
+			if (matchSet.getIntervals().size() == 1) {
+				if (matchSet.size() == 1) {
+					newTransition = new AtomTransition(blockEndState, matchSet.getMinElement());
+				} else {
+					let matchInterval: Interval =  matchSet.getIntervals().get(0);
+					newTransition = new RangeTransition(blockEndState, matchInterval.a, matchInterval.b);
+				}
+			} else {
+				newTransition = new SetTransition(blockEndState, matchSet);
+			}
+
+			let setOptimizedState: ATNState =  new BasicState();
+			setOptimizedState.setRuleIndex(decision.ruleIndex);
+			atn.addState(setOptimizedState);
+
+			setOptimizedState.addTransition(newTransition);
+			optimizedTransitions.add(new EpsilonTransition(setOptimizedState));
+
+			removedPaths += decision.getNumberOfOptimizedTransitions() - optimizedTransitions.size();
+
+			if (decision.isOptimized()) {
+				while (decision.getNumberOfOptimizedTransitions() > 0) {
+					decision.removeOptimizedTransition(decision.getNumberOfOptimizedTransitions() - 1);
+				}
+			}
+
+			for (let transition of optimizedTransitions) {
+				decision.addOptimizedTransition(transition);
+			}
+		}
+
+		if (ParserATNSimulator.debug) {
+			console.log("ATN runtime optimizer removed " + removedPaths + " paths by collapsing sets.");
+		}
+
+		return removedPaths;
+	}
+
+	private static identifyTailCalls(atn: ATN): void {
+		for (let state of atn.states) {
+			for (let transition of state.transitions) {
+				if (!(transition instanceof RuleTransition)) {
+					continue;
+				}
+
+				let ruleTransition: RuleTransition =  (RuleTransition)transition;
+				ruleTransition.tailCall = testTailCall(atn, ruleTransition, false);
+				ruleTransition.optimizedTailCall = testTailCall(atn, ruleTransition, true);
+			}
+
+			if (!state.isOptimized()) {
+				continue;
+			}
+
+			for (let transition of state.optimizedTransitions) {
+				if (!(transition instanceof RuleTransition)) {
+					continue;
+				}
+
+				let ruleTransition: RuleTransition =  (RuleTransition)transition;
+				ruleTransition.tailCall = testTailCall(atn, ruleTransition, false);
+				ruleTransition.optimizedTailCall = testTailCall(atn, ruleTransition, true);
+			}
+		}
+	}
+
+	private static testTailCall(atn: ATN, transition: RuleTransition, optimizedPath: boolean): boolean {
+		if (!optimizedPath && transition.tailCall) {
+			return true;
+		}
+		if (optimizedPath && transition.optimizedTailCall) {
+			return true;
+		}
+
+		let reachable: BitSet =  new BitSet(atn.states.size());
+		let worklist: Deque<ATNState> =  new ArrayDeque<ATNState>();
+		worklist.add(transition.followState);
+		while (!worklist.isEmpty()) {
+			let state: ATNState =  worklist.pop();
+			if (reachable.get(state.stateNumber)) {
+				continue;
+			}
+
+			if (state instanceof RuleStopState) {
+				continue;
+			}
+
+			if (!state.onlyHasEpsilonTransitions()) {
+				return false;
+			}
+
+			let transitions: List<Transition> =  optimizedPath ? state.optimizedTransitions : state.transitions;
+			for (let t of transitions) {
+				if (t.getSerializationType() != Transition.EPSILON) {
+					return false;
+				}
+
+				worklist.add(t.target);
+			}
+		}
+
+		return true;
+	}
+
+	protected static toInt(c: char): number {
+		return c;
+	}
+
+	protected static toInt32(data: char[], offset: number): number {
+		return (int)data[offset] | ((int)data[offset + 1] << 16);
+	}
+
+	protected static toLong(data: char[], offset: number): number {
+		let lowOrder: number =  toInt32(data, offset) & 0x00000000FFFFFFFFL;
+		return lowOrder | ((long)toInt32(data, offset + 2) << 32);
+	}
+
+	protected static toUUID(data: char[], offset: number): UUID {
+		let leastSigBits: number =  toLong(data, offset);
+		let mostSigBits: number =  toLong(data, offset + 4);
+		return new UUID(mostSigBits, leastSigBits);
+	}
+
+	@NotNull
+	protected edgeFactory(@NotNull atn: ATN, 
+										 type: number, src: number, trg: number,
+										 arg1: number, arg2: number, arg3: number,
+										 sets: List<IntervalSet>): Transition
+	{
+		let target: ATNState =  atn.states.get(trg);
+		switch (type) {
+			case Transition.EPSILON : return new EpsilonTransition(target);
+			case Transition.RANGE :
+				if (arg3 != 0) {
+					return new RangeTransition(target, Token.EOF, arg2);
+				}
+				else {
+					return new RangeTransition(target, arg1, arg2);
+				}
+			case Transition.RULE :
+				let rt: RuleTransition =  new RuleTransition((RuleStartState)atn.states.get(arg1), arg2, arg3, target);
+				return rt;
+			case Transition.PREDICATE :
+				let pt: PredicateTransition =  new PredicateTransition(target, arg1, arg2, arg3 != 0);
+				return pt;
+			case Transition.PRECEDENCE:
+				return new PrecedencePredicateTransition(target, arg1);
+			case Transition.ATOM :
+				if (arg3 != 0) {
+					return new AtomTransition(target, Token.EOF);
+				}
+				else {
+					return new AtomTransition(target, arg1);
+				}
+			case Transition.ACTION :
+				let a: ActionTransition =  new ActionTransition(target, arg1, arg2, arg3 != 0);
+				return a;
+			case Transition.SET : return new SetTransition(target, sets.get(arg1));
+			case Transition.NOT_SET : return new NotSetTransition(target, sets.get(arg1));
+			case Transition.WILDCARD : return new WildcardTransition(target);
+		}
+
+		throw new IllegalArgumentException("The specified transition type is not valid.");
+	}
+
+	protected stateFactory(type: number, ruleIndex: number): ATNState {
+		let s: ATNState; 
+		switch (type) {
+			case ATNState.INVALID_TYPE: return null;
+			case ATNState.BASIC : s = new BasicState(); break;
+			case ATNState.RULE_START : s = new RuleStartState(); break;
+			case ATNState.BLOCK_START : s = new BasicBlockStartState(); break;
+			case ATNState.PLUS_BLOCK_START : s = new PlusBlockStartState(); break;
+			case ATNState.STAR_BLOCK_START : s = new StarBlockStartState(); break;
+			case ATNState.TOKEN_START : s = new TokensStartState(); break;
+			case ATNState.RULE_STOP : s = new RuleStopState(); break;
+			case ATNState.BLOCK_END : s = new BlockEndState(); break;
+			case ATNState.STAR_LOOP_BACK : s = new StarLoopbackState(); break;
+			case ATNState.STAR_LOOP_ENTRY : s = new StarLoopEntryState(); break;
+			case ATNState.PLUS_LOOP_BACK : s = new PlusLoopbackState(); break;
+			case ATNState.LOOP_END : s = new LoopEndState(); break;
+			default :
+				let message: string =  String.format(Locale.getDefault(), "The specified state type %d is not valid.", type);
+				throw new IllegalArgumentException(message);
+		}
+
+		s.ruleIndex = ruleIndex;
+		return s;
+	}
+
+	protected lexerActionFactory(type: LexerActionType, data1: number, data2: number): LexerAction {
+		switch (type) {
+		case CHANNEL:
+			return new LexerChannelAction(data1);
+
+		case CUSTOM:
+			return new LexerCustomAction(data1, data2);
+
+		case MODE:
+			return new LexerModeAction(data1);
+
+		case MORE:
+			return LexerMoreAction.INSTANCE;
+
+		case POP_MODE:
+			return LexerPopModeAction.INSTANCE;
+
+		case PUSH_MODE:
+			return new LexerPushModeAction(data1);
+
+		case SKIP:
+			return LexerSkipAction.INSTANCE;
+
+		case TYPE:
+			return new LexerTypeAction(data1);
+
+		default:
+			let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %d is not valid.", type);
+			throw new IllegalArgumentException(message);
+		}
+	}
+}

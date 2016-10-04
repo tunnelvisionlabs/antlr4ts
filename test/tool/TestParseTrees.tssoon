@@ -1,0 +1,154 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:27:15.4269111-07:00
+
+// import org.junit.Test;
+
+// import static org.junit.Assert.*;
+
+export class TestParseTrees extends BaseTest {
+	@Test testTokenAndRuleContextString(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  :r=a ;\n" +
+			"a : 'x' {System.out.println(getRuleInvocationStack());} ;\n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "x", false);
+		let expecting: string =  "[a, s]\n(a x)\n";
+		assertEquals(expecting, result);
+	}
+
+	@Test testToken2(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  :r=a ;\n" +
+			"a : 'x' 'y'\n" +
+			"  ;\n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "xy", false);
+		let expecting: string =  "(a x y)\n";
+		assertEquals(expecting, result);
+	}
+
+	@Test test2Alts(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  :r=a ;\n" +
+			"a : 'x' | 'y'\n" +
+			"  ;\n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "y", false);
+		let expecting: string =  "(a y)\n";
+		assertEquals(expecting, result);
+	}
+
+	@Test test2AltLoop(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  :r=a ;\n" +
+			"a : ('x' | 'y')* 'z'\n" +
+			"  ;\n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "xyyxyxz", false);
+		let expecting: string =  "(a x y y x y x z)\n";
+		assertEquals(expecting, result);
+	}
+
+	@Test testRuleRef(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  : r=a ;\n" +
+			"a : b 'x'\n" +
+			"  ;\n" +
+			"b : 'y' ;\n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "yx", false);
+		let expecting: string =  "(a (b y) x)\n";
+		assertEquals(expecting, result);
+	}
+
+	// ERRORS
+
+	@Test testExtraToken(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  : r=a ;\n" +
+			"a : 'x' 'y'\n" +
+			"  ;\n" +
+			"Z : 'z'; \n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "xzy", false);
+		let expecting: string =  "(a x z y)\n"; // ERRORs not shown. z is colored red in tree view
+		assertEquals(expecting, result);
+	}
+
+	@Test testNoViableAlt(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  : r=a ;\n" +
+			"a : 'x' | 'y'\n" +
+			"  ;\n" +
+			"Z : 'z'; \n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "z", false);
+		let expecting: string =  "(a z)\n";
+		assertEquals(expecting, result);
+	}
+
+	@Test testSync(): void {
+		let grammar: string = 
+			"grammar T;\n" +
+			"s\n" +
+			"@init {setBuildParseTree(true);}\n" +
+			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
+			"  : r=a ;\n" +
+			"a : 'x' 'y'* '!'\n" +
+			"  ;\n" +
+			"Z : 'z'; \n";
+		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "s", "xzyy!", false);
+		let expecting: string =  "(a x z y y !)\n";
+		assertEquals(expecting, result);
+	}
+}
