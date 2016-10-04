@@ -136,7 +136,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] dfa\LexerDFASerializer.java
 * [ ] dfa\SingletonEdgeMap.java
 * [ ] dfa\SparseEdgeMap.java
-* [ ] misc\AbstractEqualityComparator.java
+* [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Args.java
 * [ ] misc\Array2DHashSet.java
 * [ ] misc\DoubleKeyMap.java

@@ -34,7 +34,7 @@
 /// <reference path="../../node_modules/@types/node/index.d.ts" />
 
 import assert=require('assert');
-import {AbstractEqualityComparator} from './AbstractEqualityComparator';
+import {EqualityComparator} from './EqualityComparator';
 import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
 import {ObjectEqualityComparator} from './ObjectEqualityComparator';
@@ -52,7 +52,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	private static LOAD_FACTOR: number =  0.75;
 
 	@NotNull
-	protected comparator: AbstractEqualityComparator<T>; 
+	protected comparator: EqualityComparator<T>; 
 
 	protected buckets: T[][]; 
 
@@ -66,7 +66,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	constructor(
 		 @Nullable 
-		 comparator: AbstractEqualityComparator<T> = null, 
+		 comparator: EqualityComparator<T> = null, 
 		 initialCapacity: number = Array2DHashSet.INITAL_CAPACITY,
 		 initialBucketCapacity: number = Array2DHashSet.INITAL_BUCKET_CAPACITY)  {
 
