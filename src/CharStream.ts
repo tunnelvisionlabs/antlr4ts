@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// ConvertTo-TS run at 2016-10-04T11:26:50.0659297-07:00
+
 import {Interval} from './misc';
 import {IntStream} from './IntStream';
 

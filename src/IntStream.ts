@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// ConvertTo-TS run at 2016-10-04T11:26:51.6934376-07:00
+
 export namespace IntStream {
 	/**
 	 * The value returned by {@link #LA LA()} when the end of the stream is
@@ -179,7 +181,7 @@ export interface IntStream {
 	 * @param marker A marker returned by a call to {@code mark()}.
 	 * @see #mark
 	 */
-	release(marker: number);
+	release(marker: number): void;
 
 	/**
 	 * Return the index into the stream of the input symbol referred to by

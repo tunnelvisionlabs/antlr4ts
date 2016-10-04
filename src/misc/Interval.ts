@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// ConvertTo-TS run at 2016-10-04T11:26:40.7402214-07:00
+
 import {Equatable, Override} from './Stubs';
 
 const INTERVAL_POOL_MAX_VALUE: number = 1000;
@@ -54,7 +56,7 @@ export class Interval implements Equatable {
 	 *  Interval object with a..a in it.  On Java.g4, 218623 IntervalSets
 	 *  have a..a (set with 1 element).
 	 */
-	public static of(a: number, b: number): Interval {
+	static of(a: number, b: number): Interval {
 		// cache just a..a
 		if (a !== b || a < 0 || a > INTERVAL_POOL_MAX_VALUE) {
 			return new Interval(a, b);
@@ -70,7 +72,7 @@ export class Interval implements Equatable {
 	/** return number of elements between a and b inclusively. x..x is length 1.
 	 *  if b &lt; a, then length is 0.  9..10 has length 2.
 	 */
-	public length(): number {
+	length(): number {
 		if (this.b < this.a) {
 			return 0;
 		}
@@ -79,7 +81,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	public equals(o: any): boolean {
+	equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		}
@@ -92,7 +94,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	public hashCode(): number {
+	hashCode(): number {
 		let hash: number = 23;
 		hash = hash * 31 + this.a;
 		hash = hash * 31 + this.b;
@@ -100,51 +102,51 @@ export class Interval implements Equatable {
 	}
 
 	/** Does this start completely before other? Disjoint */
-	public startsBeforeDisjoint(other: Interval): boolean {
+	startsBeforeDisjoint(other: Interval): boolean {
 		return this.a < other.a && this.b < other.a;
 	}
 
 	/** Does this start at or before other? Nondisjoint */
-	public startsBeforeNonDisjoint(other: Interval): boolean {
+	startsBeforeNonDisjoint(other: Interval): boolean {
 		return this.a <= other.a && this.b >= other.a;
 	}
 
 	/** Does this.a start after other.b? May or may not be disjoint */
-	public startsAfter(other: Interval): boolean {
+	startsAfter(other: Interval): boolean {
 		return this.a > other.a;
 	}
 
 	/** Does this start completely after other? Disjoint */
-	public startsAfterDisjoint(other: Interval): boolean {
+	startsAfterDisjoint(other: Interval): boolean {
 		return this.a > other.b;
 	}
 
 	/** Does this start after other? NonDisjoint */
-	public startsAfterNonDisjoint(other: Interval): boolean {
+	startsAfterNonDisjoint(other: Interval): boolean {
 		return this.a > other.a && this.a <= other.b; // this.b>=other.b implied
 	}
 
 	/** Are both ranges disjoint? I.e., no overlap? */
-	public disjoint(other: Interval): boolean {
+	disjoint(other: Interval): boolean {
 		return this.startsBeforeDisjoint(other) || this.startsAfterDisjoint(other);
 	}
 
 	/** Are two intervals adjacent such as 0..41 and 42..42? */
-	public adjacent(other: Interval): boolean {
+	adjacent(other: Interval): boolean {
 		return this.a === other.b + 1 || this.b === other.a - 1;
 	}
 
-	public properlyContains(other: Interval): boolean {
+	properlyContains(other: Interval): boolean {
 		return other.a >= this.a && other.b <= this.b;
 	}
 
 	/** Return the interval computed from combining this and other */
-	public union(other: Interval): Interval {
+	union(other: Interval): Interval {
 		return Interval.of(Math.min(this.a, other.a), Math.max(this.b, other.b));
 	}
 
 	/** Return the interval in common between this and o */
-	public intersection(other: Interval): Interval {
+	intersection(other: Interval): Interval {
 		return Interval.of(Math.max(this.a, other.a), Math.min(this.b, other.b));
 	}
 
@@ -153,7 +155,7 @@ export class Interval implements Equatable {
 	 *  within {@code this}, which would result in two disjoint intervals
 	 *  instead of the single one returned by this method.
 	 */
-	public differenceNotProperlyContained(other: Interval): Interval {
+	differenceNotProperlyContained(other: Interval): Interval {
 		let diff: Interval = null;
 		if (other.startsBeforeNonDisjoint(this)) {
 			// other.a to left of this.a (or same)
@@ -167,7 +169,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	public toString(): string {
+	toString(): string {
 		return this.a + ".." + this.b;
 	}
 }
