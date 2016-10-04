@@ -1,0 +1,26 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:26:47.0705704-07:00
+
+export class XPathTokenElement extends XPathElement {
+	protected tokenType: number; 
+	 constructor(tokenName: string, tokenType: number)  {
+		super(tokenName);
+		this.tokenType = tokenType;
+	}
+
+	@Override
+	evaluate(t: ParseTree): Collection<ParseTree> {
+		// return all children of t that match nodeName
+		let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
+		for (let c of Trees.getChildren(t)) {
+			if ( c instanceof TerminalNode ) {
+				let tnode: TerminalNode =  (TerminalNode)c;
+				if ( (tnode.getSymbol().getType() == tokenType && !invert) ||
+					 (tnode.getSymbol().getType() != tokenType && invert) )
+				{
+					nodes.add(tnode);
+				}
+			}
+		}
+		return nodes;
+	}
+}

@@ -1,0 +1,601 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:26:26.8146750-07:00
+
+export class ATNSerializer {
+	atn: ATN; 
+	private ruleNames: List<string>; 
+	private tokenNames: List<string>; 
+
+	 constructor(atn: ATN, ruleNames: List<string>)  {
+		assert(atn.grammarType != null);
+		this.atn = atn;
+		this.ruleNames = ruleNames;
+	}
+
+	 constructor1(atn: ATN, tokenNames: List<string> ruleNames,List<string>)  {
+		assert(atn.grammarType != null);
+		this.atn = atn;
+		this.ruleNames = ruleNames;
+		this.tokenNames = tokenNames;
+	}
+
+	/** Serialize state descriptors, edge descriptors, and decision&rarr;state map
+	 *  into list of ints:
+	 *
+	 * 		grammar-type, (ANTLRParser.LEXER, ...)
+	 *  	max token type,
+	 *  	num states,
+	 *  	state-0-type ruleIndex, state-1-type ruleIndex, ... state-i-type ruleIndex optional-arg ...
+	 *  	num rules,
+	 *  	rule-1-start-state rule-1-args, rule-2-start-state  rule-2-args, ...
+	 *  	(args are token type,actionIndex in lexer else 0,0)
+	 *      num modes,
+	 *      mode-0-start-state, mode-1-start-state, ... (parser has 0 modes)
+	 *      num sets
+	 *      set-0-interval-count intervals, set-1-interval-count intervals, ...
+	 *  	num total edges,
+	 *      src, trg, edge-type, edge arg1, optional edge arg2 (present always), ...
+	 *      num decisions,
+	 *      decision-0-start-state, decision-1-start-state, ...
+	 *
+	 *  Convenient to pack into unsigned shorts to make as Java string.
+	 */
+	serialize(): IntegerList {
+		let data: IntegerList =  new IntegerList();
+		data.add(ATNDeserializer.SERIALIZED_VERSION);
+		serializeUUID(data, ATNDeserializer.SERIALIZED_UUID);
+
+		// convert grammar type to ATN const to avoid dependence on ANTLRParser
+		data.add(atn.grammarType.ordinal());
+		data.add(atn.maxTokenType);
+		let nedges: number =  0;
+
+		let setIndices: Map<IntervalSet, number> =  new HashMap<IntervalSet, Integer>();
+		let sets: List<IntervalSet> =  new ArrayList<IntervalSet>();
+
+		// dump states, count edges and collect sets while doing so
+		let nonGreedyStates: IntegerList =  new IntegerList();
+		let sllStates: IntegerList =  new IntegerList();
+		let precedenceStates: IntegerList =  new IntegerList();
+		data.add(atn.states.size());
+		for (let s of atn.states) {
+			if ( s==null ) { // might be optimized away
+				data.add(ATNState.INVALID_TYPE);
+				continue;
+			}
+
+			let stateType: number =  s.getStateType();
+			if (s instanceof DecisionState) {
+				let decisionState: DecisionState =  (DecisionState)s;
+				if (decisionState.nonGreedy) {
+					nonGreedyStates.add(s.stateNumber);
+				}
+
+				if (decisionState.sll) {
+					sllStates.add(s.stateNumber);
+				}
+			}
+
+			if (s instanceof RuleStartState && ((RuleStartState)s).isPrecedenceRule) {
+				precedenceStates.add(s.stateNumber);
+			}
+
+			data.add(stateType);
+
+			if (s.ruleIndex == -1) {
+				data.add(Character.MAX_VALUE);
+			}
+			else {
+				data.add(s.ruleIndex);
+			}
+
+			if ( s.getStateType() == ATNState.LOOP_END ) {
+				data.add(((LoopEndState)s).loopBackState.stateNumber);
+			}
+			else if ( s instanceof BlockStartState ) {
+				data.add(((BlockStartState)s).endState.stateNumber);
+			}
+
+			if (s.getStateType() != ATNState.RULE_STOP) {
+				// the deserializer can trivially derive these edges, so there's no need to serialize them
+				nedges += s.getNumberOfTransitions();
+			}
+
+			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+				let t: Transition =  s.transition(i);
+				let edgeType: number =  Transition.serializationTypes.get(t.getClass());
+				if ( edgeType == Transition.SET || edgeType == Transition.NOT_SET ) {
+					let st: SetTransition =  (SetTransition)t;
+					if (!setIndices.containsKey(st.set)) {
+						sets.add(st.set);
+						setIndices.put(st.set, sets.size() - 1);
+					}
+				}
+			}
+		}
+
+		// non-greedy states
+		data.add(nonGreedyStates.size());
+		for (let i = 0; i < nonGreedyStates.size(); i++) {
+			data.add(nonGreedyStates.get(i));
+		}
+
+		// SLL decisions
+		data.add(sllStates.size());
+		for (let i = 0; i < sllStates.size(); i++) {
+			data.add(sllStates.get(i));
+		}
+
+		// precedence states
+		data.add(precedenceStates.size());
+		for (let i = 0; i < precedenceStates.size(); i++) {
+			data.add(precedenceStates.get(i));
+		}
+
+		let nrules: number =  atn.ruleToStartState.length;
+		data.add(nrules);
+		for (let r=0; r<nrules; r++) {
+			let ruleStartState: ATNState =  atn.ruleToStartState[r];
+			data.add(ruleStartState.stateNumber);
+			let leftFactored: boolean =  ruleNames.get(ruleStartState.ruleIndex).indexOf(ATNSimulator.RULE_VARIANT_DELIMITER) >= 0;
+			data.add(leftFactored ? 1 : 0);
+			if (atn.grammarType == ATNType.LEXER) {
+				if (atn.ruleToTokenType[r] == Token.EOF) {
+					data.add(Character.MAX_VALUE);
+				}
+				else {
+					data.add(atn.ruleToTokenType[r]);
+				}
+			}
+		}
+
+		let nmodes: number =  atn.modeToStartState.size();
+		data.add(nmodes);
+		if ( nmodes>0 ) {
+			for (let modeStartState of atn.modeToStartState) {
+				data.add(modeStartState.stateNumber);
+			}
+		}
+
+		let nsets: number =  sets.size();
+		data.add(nsets);
+		for (let set of sets) {
+			let containsEof: boolean =  set.contains(Token.EOF);
+			if (containsEof && set.getIntervals().get(0).b == Token.EOF) {
+				data.add(set.getIntervals().size() - 1);
+			}
+			else {
+				data.add(set.getIntervals().size());
+			}
+
+			data.add(containsEof ? 1 : 0);
+			for (let I of set.getIntervals()) {
+				if (I.a == Token.EOF) {
+					if (I.b == Token.EOF) {
+						continue;
+					}
+					else {
+						data.add(0);
+					}
+				}
+				else {
+					data.add(I.a);
+				}
+
+				data.add(I.b);
+			}
+		}
+
+		data.add(nedges);
+		for (let s of atn.states) {
+			if ( s==null ) {
+				// might be optimized away
+				continue;
+			}
+
+			if (s.getStateType() == ATNState.RULE_STOP) {
+				continue;
+			}
+
+			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+				let t: Transition =  s.transition(i);
+
+				if (atn.states.get(t.target.stateNumber) == null) {
+					throw new IllegalStateException("Cannot serialize a transition to a removed state.");
+				}
+
+				let src: number =  s.stateNumber;
+				let trg: number =  t.target.stateNumber;
+				let edgeType: number =  Transition.serializationTypes.get(t.getClass());
+				let arg1: number =  0;
+				let arg2: number =  0;
+				let arg3: number =  0;
+				switch ( edgeType ) {
+					case Transition.RULE :
+						trg = ((RuleTransition)t).followState.stateNumber;
+						arg1 = ((RuleTransition)t).target.stateNumber;
+						arg2 = ((RuleTransition)t).ruleIndex;
+						arg3 = ((RuleTransition)t).precedence;
+						break;
+					case Transition.PRECEDENCE:
+						let ppt: PrecedencePredicateTransition =  (PrecedencePredicateTransition)t;
+						arg1 = ppt.precedence;
+						break;
+					case Transition.PREDICATE :
+						let pt: PredicateTransition =  (PredicateTransition)t;
+						arg1 = pt.ruleIndex;
+						arg2 = pt.predIndex;
+						arg3 = pt.isCtxDependent ? 1 : 0 ;
+						break;
+					case Transition.RANGE :
+						arg1 = ((RangeTransition)t).from;
+						arg2 = ((RangeTransition)t).to;
+						if (arg1 == Token.EOF) {
+							arg1 = 0;
+							arg3 = 1;
+						}
+
+						break;
+					case Transition.ATOM :
+						arg1 = ((AtomTransition)t).label;
+						if (arg1 == Token.EOF) {
+							arg1 = 0;
+							arg3 = 1;
+						}
+
+						break;
+					case Transition.ACTION :
+						let at: ActionTransition =  (ActionTransition)t;
+						arg1 = at.ruleIndex;
+						arg2 = at.actionIndex;
+						if (arg2 == -1) {
+							arg2 = 0xFFFF;
+						}
+
+						arg3 = at.isCtxDependent ? 1 : 0 ;
+						break;
+					case Transition.SET :
+						arg1 = setIndices.get(((SetTransition)t).set);
+						break;
+					case Transition.NOT_SET :
+						arg1 = setIndices.get(((SetTransition)t).set);
+						break;
+					case Transition.WILDCARD :
+						break;
+				}
+
+				data.add(src);
+				data.add(trg);
+				data.add(edgeType);
+				data.add(arg1);
+				data.add(arg2);
+				data.add(arg3);
+			}
+		}
+
+		let ndecisions: number =  atn.decisionToState.size();
+		data.add(ndecisions);
+		for (let decStartState of atn.decisionToState) {
+			data.add(decStartState.stateNumber);
+		}
+
+		//
+		// LEXER ACTIONS
+		//
+		if (atn.grammarType == ATNType.LEXER) {
+			data.add(atn.lexerActions.length);
+			for (let action of atn.lexerActions) {
+				data.add(action.getActionType().ordinal());
+				switch (action.getActionType()) {
+				case CHANNEL:
+					let channel: number =  ((LexerChannelAction)action).getChannel();
+					data.add(channel != -1 ? channel : 0xFFFF);
+					data.add(0);
+					break;
+
+				case CUSTOM:
+					let ruleIndex: number =  ((LexerCustomAction)action).getRuleIndex();
+					let actionIndex: number =  ((LexerCustomAction)action).getActionIndex();
+					data.add(ruleIndex != -1 ? ruleIndex : 0xFFFF);
+					data.add(actionIndex != -1 ? actionIndex : 0xFFFF);
+					break;
+
+				case MODE:
+					let mode: number =  ((LexerModeAction)action).getMode();
+					data.add(mode != -1 ? mode : 0xFFFF);
+					data.add(0);
+					break;
+
+				case MORE:
+					data.add(0);
+					data.add(0);
+					break;
+
+				case POP_MODE:
+					data.add(0);
+					data.add(0);
+					break;
+
+				case PUSH_MODE:
+					mode = ((LexerPushModeAction)action).getMode();
+					data.add(mode != -1 ? mode : 0xFFFF);
+					data.add(0);
+					break;
+
+				case SKIP:
+					data.add(0);
+					data.add(0);
+					break;
+
+				case TYPE:
+					let type: number =  ((LexerTypeAction)action).getType();
+					data.add(type != -1 ? type : 0xFFFF);
+					data.add(0);
+					break;
+
+				default:
+					let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %s is not valid.", action.getActionType());
+					throw new IllegalArgumentException(message);
+				}
+			}
+		}
+
+		// don't adjust the first value since that's the version number
+		for (let i = 1; i < data.size(); i++) {
+			if (data.get(i) < Character.MIN_VALUE || data.get(i) > Character.MAX_VALUE) {
+				throw new UnsupportedOperationException("Serialized ATN data element out of range.");
+			}
+
+			let value: number =  (data.get(i) + 2) & 0xFFFF;
+			data.set(i, value);
+		}
+
+		return data;
+	}
+
+	decode(data: char[]): string {
+		data = data.clone();
+		// don't adjust the first value since that's the version number
+		for (let i = 1; i < data.length; i++) {
+			data[i] = (char)(data[i] - 2);
+		}
+
+		let buf: StringBuilder =  new StringBuilder();
+		let p: number =  0;
+		let version: number =  ATNDeserializer.toInt(data[p++]);
+		if (version != ATNDeserializer.SERIALIZED_VERSION) {
+			let reason: string =  String.format("Could not deserialize ATN with version %d (expected %d).", version, ATNDeserializer.SERIALIZED_VERSION);
+			throw new UnsupportedOperationException(new InvalidClassException(ATN.class.getName(), reason));
+		}
+
+		let uuid: UUID =  ATNDeserializer.toUUID(data, p);
+		p += 8;
+		if (!uuid.equals(ATNDeserializer.SERIALIZED_UUID)) {
+			let reason: string =  String.format(Locale.getDefault(), "Could not deserialize ATN with UUID %s (expected %s).", uuid, ATNDeserializer.SERIALIZED_UUID);
+			throw new UnsupportedOperationException(new InvalidClassException(ATN.class.getName(), reason));
+		}
+
+		p++; // skip grammarType
+		let maxType: number =  ATNDeserializer.toInt(data[p++]);
+		buf.append("max type ").append(maxType).append("\n");
+		let nstates: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<nstates; i++) {
+			let stype: number =  ATNDeserializer.toInt(data[p++]);
+            if ( stype==ATNState.INVALID_TYPE ) continue; // ignore bad type of states
+			let ruleIndex: number =  ATNDeserializer.toInt(data[p++]);
+			if (ruleIndex == Character.MAX_VALUE) {
+				ruleIndex = -1;
+			}
+
+			let arg: string =  "";
+			if ( stype == ATNState.LOOP_END ) {
+				let loopBackStateNumber: number =  ATNDeserializer.toInt(data[p++]);
+				arg = " "+loopBackStateNumber;
+			}
+			else if ( stype == ATNState.PLUS_BLOCK_START || stype == ATNState.STAR_BLOCK_START || stype == ATNState.BLOCK_START ) {
+				let endStateNumber: number =  ATNDeserializer.toInt(data[p++]);
+				arg = " "+endStateNumber;
+			}
+			buf.append(i).append(":")
+				.append(ATNState.serializationNames.get(stype)).append(" ")
+				.append(ruleIndex).append(arg).append("\n");
+		}
+
+		// this code is meant to model the form of ATNDeserializer.deserialize,
+		// since both need to be updated together whenever a change is made to
+		// the serialization format. The "dead" code is only used in debugging
+		// and testing scenarios, so the form you see here was kept for
+		// improved maintainability.
+		// start
+		let numNonGreedyStates: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i = 0; i < numNonGreedyStates; i++) {
+			let stateNumber: number =  ATNDeserializer.toInt(data[p++]);
+		}
+
+		let numSllStates: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i = 0; i < numSllStates; i++) {
+			let stateNumber: number =  ATNDeserializer.toInt(data[p++]);
+		}
+
+		let numPrecedenceStates: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i = 0; i < numPrecedenceStates; i++) {
+			let stateNumber: number =  ATNDeserializer.toInt(data[p++]);
+		}
+		// finish
+
+		let nrules: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<nrules; i++) {
+			let s: number =  ATNDeserializer.toInt(data[p++]);
+			@SuppressWarnings("unused")
+			let leftFactored: boolean =  ATNDeserializer.toInt(data[p++]) != 0;
+            if (atn.grammarType == ATNType.LEXER) {
+                let arg1: number =  ATNDeserializer.toInt(data[p++]);
+                buf.append("rule ").append(i).append(":").append(s).append(" ").append(arg1).append('\n');
+            }
+            else {
+                buf.append("rule ").append(i).append(":").append(s).append('\n');
+            }
+		}
+		let nmodes: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<nmodes; i++) {
+			let s: number =  ATNDeserializer.toInt(data[p++]);
+			buf.append("mode ").append(i).append(":").append(s).append('\n');
+		}
+		let nsets: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<nsets; i++) {
+			let nintervals: number =  ATNDeserializer.toInt(data[p++]);
+			buf.append(i).append(":");
+			let containsEof: boolean =  data[p++] != 0;
+			if (containsEof) {
+				buf.append(getTokenName(Token.EOF));
+			}
+
+			for (let j=0; j<nintervals; j++) {
+				if ( containsEof || j>0 ) {
+					buf.append(", ");
+				}
+
+				buf.append(getTokenName(ATNDeserializer.toInt(data[p]))).append("..").append(getTokenName(ATNDeserializer.toInt(data[p + 1])));
+				p += 2;
+			}
+			buf.append("\n");
+		}
+		let nedges: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<nedges; i++) {
+			let src: number =  ATNDeserializer.toInt(data[p]);
+			let trg: number =  ATNDeserializer.toInt(data[p + 1]);
+			let ttype: number =  ATNDeserializer.toInt(data[p + 2]);
+			let arg1: number =  ATNDeserializer.toInt(data[p + 3]);
+			let arg2: number =  ATNDeserializer.toInt(data[p + 4]);
+			let arg3: number =  ATNDeserializer.toInt(data[p + 5]);
+			buf.append(src).append("->").append(trg)
+				.append(" ").append(Transition.serializationNames.get(ttype))
+				.append(" ").append(arg1).append(",").append(arg2).append(",").append(arg3)
+				.append("\n");
+			p += 6;
+		}
+		let ndecisions: number =  ATNDeserializer.toInt(data[p++]);
+		for (let i=0; i<ndecisions; i++) {
+			let s: number =  ATNDeserializer.toInt(data[p++]);
+			buf.append(i).append(":").append(s).append("\n");
+		}
+		if (atn.grammarType == ATNType.LEXER) {
+			// this code is meant to model the form of ATNDeserializer.deserialize,
+			// since both need to be updated together whenever a change is made to
+			// the serialization format. The "dead" code is only used in debugging
+			// and testing scenarios, so the form you see here was kept for
+			// improved maintainability.
+			let lexerActionCount: number =  ATNDeserializer.toInt(data[p++]);
+			for (let i = 0; i < lexerActionCount; i++) {
+				let actionType: LexerActionType =  LexerActionType.values()[ATNDeserializer.toInt(data[p++])];
+				let data1: number =  ATNDeserializer.toInt(data[p++]);
+				let data2: number =  ATNDeserializer.toInt(data[p++]);
+			}
+		}
+		return buf.toString();
+	}
+
+	getTokenName(t: number): string {
+		if ( t==-1 ) return "EOF";
+
+		if ( atn.grammarType == ATNType.LEXER &&
+			 t >= Character.MIN_VALUE && t <= Character.MAX_VALUE )
+		{
+			switch (t) {
+			case '\n':
+				return "'\\n'";
+			case '\r':
+				return "'\\r'";
+			case '\t':
+				return "'\\t'";
+			case '\b':
+				return "'\\b'";
+			case '\f':
+				return "'\\f'";
+			case '\\':
+				return "'\\\\'";
+			case '\'':
+				return "'\\''";
+			default:
+				if ( Character.UnicodeBlock.of((char)t)==Character.UnicodeBlock.BASIC_LATIN &&
+					 !Character.isISOControl((char)t) ) {
+					return '\''+Character.toString((char)t)+'\'';
+				}
+				// turn on the bit above max "\uFFFF" value so that we pad with zeros
+				// then only take last 4 digits
+				let hex: string =  Integer.toHexString(t|0x10000).toUpperCase().substring(1,5);
+				let unicodeStr: string =  "'\\u"+hex+"'";
+				return unicodeStr;
+			}
+		}
+
+		if (tokenNames != null && t >= 0 && t < tokenNames.size()) {
+			return tokenNames.get(t);
+		}
+
+		return String.valueOf(t);
+	}
+
+	/** Used by Java target to encode short/int array as chars in string. */
+	static getSerializedAsString(atn: ATN, ruleNames: List<string>): string {
+		return new String(getSerializedAsChars(atn, ruleNames));
+	}
+
+	static getSerialized(atn: ATN, ruleNames: List<string>): IntegerList {
+		return new ATNSerializer(atn, ruleNames).serialize();
+	}
+
+	static getSerializedAsChars(atn: ATN, ruleNames: List<string>): char[] {
+		return Utils.toCharArray(getSerialized(atn, ruleNames));
+	}
+
+	static getDecoded(atn: ATN, tokenNames: List<string> ruleNames,List<string>): string {
+		let serialized: IntegerList =  getSerialized(atn, ruleNames);
+		let data: char[] =  Utils.toCharArray(serialized);
+		return new ATNSerializer(atn, ruleNames, tokenNames).decode(data);
+	}
+
+	private serializeUUID(data: IntegerList, uuid: UUID): void {
+		serializeLong(data, uuid.getLeastSignificantBits());
+		serializeLong(data, uuid.getMostSignificantBits());
+	}
+
+	private serializeLong(data: IntegerList, value: number): void {
+		serializeInt(data, (int)value);
+		serializeInt(data, (int)(value >> 32));
+	}
+
+	private serializeInt(data: IntegerList, value: number): void {
+		data.add((char)value);
+		data.add((char)(value >> 16));
+	}
+}

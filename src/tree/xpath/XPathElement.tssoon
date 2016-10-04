@@ -1,0 +1,25 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:26:46.7044796-07:00
+
+export abstract class XPathElement {
+	protected nodeName: string; 
+	protected invert: boolean; 
+
+	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
+	 *  op is null if just node
+	 */
+	 constructor(nodeName: string)  {
+		this.nodeName = nodeName;
+	}
+
+	/**
+	 * Given tree rooted at {@code t} return all nodes matched by this path
+	 * element.
+	 */
+	abstract evaluate(t: ParseTree): Collection<ParseTree>;
+
+	@Override
+	toString(): string {
+		let inv: string =  invert ? "!" : "";
+		return getClass().getSimpleName()+"["+inv+nodeName+"]";
+	}
+}

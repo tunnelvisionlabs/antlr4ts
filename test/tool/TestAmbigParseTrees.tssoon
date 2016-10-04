@@ -1,0 +1,258 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:27:02.9794897-07:00
+
+// import static org.junit.Assert.assertEquals;
+// import org.junit.Ignore;
+// import org.junit.Test;
+
+export class TestAmbigParseTrees {
+	@Test testParseDecisionWithinAmbiguousStartRule(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"A : 'a' ;\n" +
+			"B : 'b' ;\n" +
+			"C : 'c' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : A x C" +
+			"  | A B C" +
+			"  ;" +
+			"x : B ; \n",
+			lg);
+
+		testInterpAtSpecificAlt(lg, g, "s", 1, "abc", "(s:1 a (x:1 b) c)");
+		testInterpAtSpecificAlt(lg, g, "s", 2, "abc", "(s:2 a b c)");
+	}
+
+	@Test testAmbigAltsAtRoot(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"A : 'a' ;\n" +
+			"B : 'b' ;\n" +
+			"C : 'c' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : A x C" +
+			"  | A B C" +
+			"  ;" +
+			"x : B ; \n",
+			lg);
+
+		let startRule: string =  "s";
+		let input: string =  "abc";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  0;
+		let expectedOverallTree: string =  "(s:1 a (x:1 b) c)";
+		let expectedParseTrees: string[] =  {"(s:1 a (x:1 b) c)",
+									   "(s:2 a b c)"};
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	@Test testAmbigAltsNotAtRoot(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"A : 'a' ;\n" +
+			"B : 'b' ;\n" +
+			"C : 'c' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : x ;" +
+			"x : y ;" +
+			"y : A z C" +
+			"  | A B C" +
+			"  ;" +
+			"z : B ; \n",
+			lg);
+
+		let startRule: string =  "s";
+		let input: string =  "abc";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  0;
+		let expectedOverallTree: string =  "(s:1 (x:1 (y:1 a (z:1 b) c)))";
+		let expectedParseTrees: string[] =  {"(y:1 a (z:1 b) c)",
+									   "(y:2 a b c)"};
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	@Test testAmbigAltDipsIntoOuterContextToRoot(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"SELF : 'self' ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"DOT : '.' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"e : p (DOT ID)* ;\n"+
+			"p : SELF" +
+			"  | SELF DOT ID" +
+			"  ;",
+			lg);
+
+		let startRule: string =  "e";
+		let input: string =  "self.x";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  1; // decision in p
+		let expectedOverallTree: string =  "(e:1 (p:1 self) . x)";
+		let expectedParseTrees: string[] =  {"(e:1 (p:1 self) . x)",
+									   "(p:2 self . x)"};
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	@Test testAmbigAltDipsIntoOuterContextBelowRoot(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"SELF : 'self' ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"DOT : '.' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : e ;\n"+
+			"e : p (DOT ID)* ;\n"+
+			"p : SELF" +
+			"  | SELF DOT ID" +
+			"  ;",
+			lg);
+
+		let startRule: string =  "s";
+		let input: string =  "self.x";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  1; // decision in p
+		let expectedOverallTree: string =  "(s:1 (e:1 (p:1 self) . x))";
+		let expectedParseTrees: string[] =  {"(e:1 (p:1 self) . x)", // shouldn't include s
+									   "(p:2 self . x)"};      // shouldn't include e
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	@Test
+	@Ignore("Cannot currently determine outer alternatives for left-factored non-precedence rules")
+	testAmbigAltInLeftRecursiveBelowStartRule(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"SELF : 'self' ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"DOT : '.' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : e ;\n" +
+			"e : p | e DOT ID ;\n"+
+			"p : SELF" +
+			"  | SELF DOT ID" +
+			"  ;",
+			lg);
+
+		let startRule: string =  "s";
+		let input: string =  "self.x";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  1; // decision in p
+		let expectedOverallTree: string =  "(s:1 (e:2 (e:1 (p:1 self)) . x))";
+		let expectedParseTrees: string[] =  {"(e:2 (e:1 (p:1 self)) . x)",
+									   "(p:2 self . x)"};
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	@Test
+	@Ignore("Cannot currently determine outer alternatives for left-factored non-precedence rules")
+	testAmbigAltInLeftRecursiveStartRule(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n" +
+			"SELF : 'self' ;\n" +
+			"ID : [a-z]+ ;\n" +
+			"DOT : '.' ;\n");
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"e : p | e DOT ID ;\n"+
+			"p : SELF" +
+			"  | SELF DOT ID" +
+			"  ;",
+			lg);
+
+		let startRule: string =  "e";
+		let input: string =  "self.x";
+		let expectedAmbigAlts: string =  "{1, 2}";
+		let decision: number =  1; // decision in p
+		let expectedOverallTree: string =  "(e:2 (e:1 (p:1 self)) . x)";
+		let expectedParseTrees: string[] =  {"(e:2 (e:1 (p:1 self)) . x)",
+									   "(p:2 self . x)"}; // shows just enough for self.x
+
+		testAmbiguousTrees(lg, g, startRule, input, decision,
+						   expectedAmbigAlts,
+						   expectedOverallTree, expectedParseTrees);
+	}
+
+	testAmbiguousTrees(lg: LexerGrammar, g: Grammar, 
+								   startRule: string, input: string, decision: number,
+								   expectedAmbigAlts: string,
+								   overallTree: string,
+								   expectedParseTrees: string[]): void
+	{
+		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.getRuleNames());
+
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
+		parser.setProfile(true);
+		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+
+		// PARSE
+		let ruleIndex: number =  g.rules.get(startRule).index;
+		let parseTree: ParserRuleContext =  parser.parse(ruleIndex);
+		assertEquals(overallTree, Trees.toStringTree(parseTree, nodeTextProvider));
+		console.log();
+
+		let decisionInfo: DecisionInfo[] =  parser.getParseInfo().getDecisionInfo();
+		let ambiguities: List<AmbiguityInfo> =  decisionInfo[decision].ambiguities;
+		assertEquals(1, ambiguities.size());
+		let ambiguityInfo: AmbiguityInfo =  ambiguities.get(0);
+
+		let ambiguousParseTrees: List<ParserRuleContext> = 
+			GrammarParserInterpreter.getAllPossibleParseTrees(g,
+															  parser,
+															  tokens,
+															  decision,
+															  ambiguityInfo.getAmbiguousAlternatives(),
+															  ambiguityInfo.startIndex,
+															  ambiguityInfo.stopIndex,
+															  ruleIndex);
+		assertEquals(expectedAmbigAlts, ambiguityInfo.getAmbiguousAlternatives().toString());
+		assertEquals(ambiguityInfo.getAmbiguousAlternatives().cardinality(), ambiguousParseTrees.size());
+
+		for (let i = 0; i<ambiguousParseTrees.size(); i++) {
+			let t: ParserRuleContext =  ambiguousParseTrees.get(i);
+			assertEquals(expectedParseTrees[i], Trees.toStringTree(t, nodeTextProvider));
+		}
+	}
+
+	testInterpAtSpecificAlt(lg: LexerGrammar, g: Grammar, 
+								 startRule: string, startAlt: number,
+								 input: string,
+								 expectedParseTree: string): void
+	{
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		let parser: ParserInterpreter =  g.createGrammarParserInterpreter(tokens);
+		let ruleStartState: RuleStartState =  g.atn.ruleToStartState[g.getRule(startRule).index];
+		let tr: Transition =  ruleStartState.transition(0);
+		let t2: ATNState =  tr.target;
+		if ( !(t2 instanceof BasicBlockStartState) ) {
+			throw new IllegalArgumentException("rule has no decision: "+startRule);
+		}
+		parser.addDecisionOverride(((DecisionState)t2).decision, 0, startAlt);
+		let t: ParseTree =  parser.parse(g.rules.get(startRule).index);
+		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.getRuleNames());
+		assertEquals(expectedParseTree, Trees.toStringTree(t, nodeTextProvider));
+	}
+}

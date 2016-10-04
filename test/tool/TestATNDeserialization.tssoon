@@ -1,0 +1,183 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:27:04.5549873-07:00
+
+// import org.junit.Test;
+
+// import static org.junit.Assert.*;
+
+export class TestATNDeserialization extends BaseTest {
+	@Test testSimpleNoBlock(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : A B ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testEOF(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : EOF ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testEOFInSet(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : (EOF|A) ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testNot(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"tokens {A, B, C}\n" +
+			"a : ~A ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testWildcard(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"tokens {A, B, C}\n" +
+			"a : . ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testPEGAchillesHeel(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : A | A B ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test test3Alts(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : A | A B | A B C ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testSimpleLoop(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : A+ B ;");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testRuleRef(): void {
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n"+
+			"a : e ;\n" +
+			"e : E ;\n");
+		checkDeserializationIsStable(g);
+	}
+
+	@Test testLexerTwoRules(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"A : 'a' ;\n" +
+			"B : 'b' ;\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerEOF(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"A : 'a' EOF ;\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerEOFInSet(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"A : 'a' (EOF|'\\n') ;\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerRange(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"INT : '0'..'9' ;\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerLoops(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"INT : '0'..'9'+ ;\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerNotSet(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b')\n ;");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerNotSetWithRange(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b'|'e'|'p'..'t')\n ;");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test testLexerNotSetWithRange2(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b') ~('e'|'p'..'t')\n ;");
+		checkDeserializationIsStable(lg);
+	}
+
+	@Test test2ModesInLexer(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"A : 'a'\n ;\n" +
+			"mode M;\n" +
+			"B : 'b';\n" +
+			"mode M2;\n" +
+			"C : 'c';\n");
+		checkDeserializationIsStable(lg);
+	}
+
+	protected checkDeserializationIsStable(g: Grammar): void {
+		let atn: ATN =  createATN(g, false);
+		let data: char[] =  Utils.toCharArray(ATNSerializer.getSerialized(atn, Arrays.asList(g.getRuleNames())));
+		let atnData: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let options: ATNDeserializationOptions =  new ATNDeserializationOptions();
+		options.setOptimize(false);
+		let atn2: ATN =  new ATNDeserializer(options).deserialize(data);
+		let atn2Data: string =  ATNSerializer.getDecoded(atn2, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+
+		assertEquals(atnData, atn2Data);
+	}
+}
