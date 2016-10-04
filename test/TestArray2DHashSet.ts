@@ -19,7 +19,8 @@ class EquatableTest implements Equatable {
     }
 
     hashCode() {
-        return 3;   // Till MurmerHash deals with strings...
+        // this currently generates a Typescript error because strings aren't Equatable
+        return MurmurHash.hashCode([this.a, this.b], 5280);
     }
 }
 
