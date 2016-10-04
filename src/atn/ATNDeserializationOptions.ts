@@ -30,77 +30,80 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.8187912-07:00
 
+import {NotNull} from '../misc/Stubs';
+
 /**
  *
  * @author Sam Harwell
  */
 export class ATNDeserializationOptions {
 	private static defaultOptions: ATNDeserializationOptions; 
-	static {
-		defaultOptions = new ATNDeserializationOptions();
-		defaultOptions.makeReadOnly();
-	}
 
 	private readOnly: boolean; 
 	private verifyATN: boolean; 
 	private generateRuleBypassTransitions: boolean; 
 	private optimize: boolean; 
 
-	 constructor()  {
-		this.verifyATN = true;
-		this.generateRuleBypassTransitions = false;
-		this.optimize = true;
-	}
-
-	 constructor1(options: ATNDeserializationOptions)  {
-		this.verifyATN = options.verifyATN;
-		this.generateRuleBypassTransitions = options.generateRuleBypassTransitions;
-		this.optimize = options.optimize;
+	constructor(options?: ATNDeserializationOptions) {
+		if (options) {
+			this.verifyATN = options.verifyATN;
+			this.generateRuleBypassTransitions = options.generateRuleBypassTransitions;
+			this.optimize = options.optimize;
+		} else {
+			this.verifyATN = true;
+			this.generateRuleBypassTransitions = false;
+			this.optimize = true;
+		}
 	}
 
 	@NotNull
 	static getDefaultOptions(): ATNDeserializationOptions {
-		return defaultOptions;
+		if (ATNDeserializationOptions.defaultOptions == null) {
+			ATNDeserializationOptions.defaultOptions = new ATNDeserializationOptions();
+			ATNDeserializationOptions.defaultOptions.makeReadOnly();
+		}
+
+		return ATNDeserializationOptions.defaultOptions;
 	}
 
 	isReadOnly(): boolean {
-		return readOnly;
+		return this.readOnly;
 	}
 
 	makeReadOnly(): void {
-		readOnly = true;
+		this.readOnly = true;
 	}
 
 	isVerifyATN(): boolean {
-		return verifyATN;
+		return this.verifyATN;
 	}
 
 	setVerifyATN(verifyATN: boolean): void {
-		throwIfReadOnly();
+		this.throwIfReadOnly();
 		this.verifyATN = verifyATN;
 	}
 
 	isGenerateRuleBypassTransitions(): boolean {
-		return generateRuleBypassTransitions;
+		return this.generateRuleBypassTransitions;
 	}
 
 	setGenerateRuleBypassTransitions(generateRuleBypassTransitions: boolean): void {
-		throwIfReadOnly();
+		this.throwIfReadOnly();
 		this.generateRuleBypassTransitions = generateRuleBypassTransitions;
 	}
 
 	isOptimize(): boolean {
-		return optimize;
+		return this.optimize;
 	}
 
 	setOptimize(optimize: boolean): void {
-		throwIfReadOnly();
+		this.throwIfReadOnly();
 		this.optimize = optimize;
 	}
 
 	protected throwIfReadOnly(): void {
-		if (isReadOnly()) {
-			throw new IllegalStateException("The object is read only.");
+		if (this.isReadOnly()) {
+			throw "The object is read only.";
 		}
 	}
 }
