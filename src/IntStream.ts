@@ -28,7 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-export namespace IntStreamConstants {
+export namespace IntStream {
 	/**
 	 * The value returned by {@link #LA LA()} when the end of the stream is
 	 * reached.

@@ -29,11 +29,11 @@
  */
 
 import {CharStream} from './CharStream';
-import {IntStreamConstants} from './IntStream';
+import {IntStream} from './IntStream';
 import {TokenSource} from './TokenSource';
 import {TokenStream} from './TokenStream';
 
-export namespace TokenConstants {
+export namespace Token {
 	export const INVALID_TYPE: number = 0;
 
 	/** During lookahead operations, this "token" signifies we hit rule end ATN state
@@ -43,7 +43,7 @@ export namespace TokenConstants {
 
 	export const MIN_USER_TOKEN_TYPE: number = 1;
 
-	export const EOF: number = IntStreamConstants.EOF;
+	export const EOF: number = IntStream.EOF;
 
 	/** All tokens go to the parser (unless skip() is called in that rule)
 	 *  on a particular "channel".  The parser tunes to a particular channel
