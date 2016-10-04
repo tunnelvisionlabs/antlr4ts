@@ -65,10 +65,10 @@ export namespace MurmurHash {
 		const m: number =  5;
 		const n: number =  0xE6546B64;
 
-		if (value === null) {
+		if (value == null) {
 			value = 0;
 		} else if (typeof value === 'string') {
-			value = hashString(value as string);
+			value = hashString(value);
 		} else if (typeof value === 'object') {
 			value = (value as Equatable).hashCode();
 		}
