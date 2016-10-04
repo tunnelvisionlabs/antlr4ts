@@ -74,6 +74,6 @@ describe('Array2DHashSet', function() {
         set.add(alpha);
         assert(set.contains(alpha), "identity match failed");
         assert(set.contains(alpha_again), "value match failed");
-        assert(!set.contains(beta) "value difference ignored");
+        assert(!set.contains(beta), "value difference ignored");
     });
 });
