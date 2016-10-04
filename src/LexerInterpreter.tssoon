@@ -1,0 +1,103 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:26:51.9954566-07:00
+
+export class LexerInterpreter extends Lexer {
+	protected grammarFileName: string; 
+	protected atn: ATN; 
+
+	@Deprecated
+	protected tokenNames: string[]; 
+	protected ruleNames: string[]; 
+	protected modeNames: string[]; 
+	@NotNull
+	private vocabulary: Vocabulary; 
+
+	@Deprecated
+	 constructor(grammarFileName: string, ruleNames: Collection<string> tokenNames,Collection<string>, modeNames: Collection<string>, atn: ATN, input: CharStream)  {
+		this(grammarFileName, VocabularyImpl.fromTokenNames(tokenNames.toArray(new String[tokenNames.size()])), ruleNames, modeNames, atn, input);
+	}
+
+	 constructor1(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: Collection<string> ruleNames,Collection<string>, atn: ATN, input: CharStream)  {
+		super(input);
+
+		if (atn.grammarType != ATNType.LEXER) {
+			throw new IllegalArgumentException("The ATN must be a lexer ATN.");
+		}
+
+		this.grammarFileName = grammarFileName;
+		this.atn = atn;
+		this.tokenNames = new String[atn.maxTokenType];
+		for (let i = 0; i < tokenNames.length; i++) {
+			tokenNames[i] = vocabulary.getDisplayName(i);
+		}
+
+		this.ruleNames = ruleNames.toArray(new String[ruleNames.size()]);
+		this.modeNames = modeNames.toArray(new String[modeNames.size()]);
+		this.vocabulary = vocabulary;
+		this._interp = new LexerATNSimulator(this,atn);
+	}
+
+	@Override
+	getATN(): ATN {
+		return atn;
+	}
+
+	@Override
+	getGrammarFileName(): string {
+		return grammarFileName;
+	}
+
+	@Override
+	@Deprecated
+	getTokenNames(): string[] {
+		return tokenNames;
+	}
+
+	@Override
+	getRuleNames(): string[] {
+		return ruleNames;
+	}
+
+	@Override
+	getModeNames(): string[] {
+		return modeNames;
+	}
+
+	@Override
+	getVocabulary(): Vocabulary {
+		if (vocabulary != null) {
+			return vocabulary;
+		}
+
+		return super.getVocabulary();
+	}
+}

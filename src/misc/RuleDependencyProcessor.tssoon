@@ -1,0 +1,707 @@
+﻿/*
+ [The "BSD license"]
+ Copyright (c) 2012 Terence Parr
+ Copyright (c) 2012 Sam Harwell
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+// ConvertTo-TS run at 2016-10-04T11:26:43.2593577-07:00
+
+/**
+ * A compile-time validator for rule dependencies.
+ *
+ * @see RuleDependency
+ * @see RuleDependencies
+ * @author Sam Harwell
+ */
+@SupportedAnnotationTypes({RuleDependencyProcessor.RuleDependencyClassName, RuleDependencyProcessor.RuleDependenciesClassName, RuleDependencyProcessor.RuleVersionClassName})
+export class RuleDependencyProcessor extends AbstractProcessor {
+	static RuleDependencyClassName: string =  "org.antlr.v4.runtime.RuleDependency";
+	static RuleDependenciesClassName: string =  "org.antlr.v4.runtime.RuleDependencies";
+	static RuleVersionClassName: string =  "org.antlr.v4.runtime.RuleVersion";
+
+	 constructor()  {
+	}
+
+	@Override
+	getSupportedSourceVersion(): SourceVersion {
+		let latestSupported: SourceVersion =  SourceVersion.latestSupported();
+
+		if (latestSupported.ordinal() <= 6) {
+			return SourceVersion.RELEASE_6;
+		}
+		else if (latestSupported.ordinal() <= 8) {
+			return latestSupported;
+		}
+		else {
+			// this annotation processor is tested through Java 8
+			return SourceVersion.values()[8];
+		}
+	}
+
+	@Override
+	process(annotations: Set<? extends TypeElement>, roundEnv: RoundEnvironment): boolean {
+		if (!checkClassNameConstants()) {
+			return true;
+		}
+
+		let dependencies: List<Tuple2<RuleDependency, Element>> =  getDependencies(roundEnv);
+		Map<TypeMirror, List<Tuple2<RuleDependency, Element>>> recognizerDependencies
+			= new HashMap<TypeMirror, List<Tuple2<RuleDependency, Element>>>();
+		for (let dependency of dependencies) {
+			let recognizerType: TypeMirror =  getRecognizerType(dependency.getItem1());
+			let list: List<Tuple2<RuleDependency, Element>> =  recognizerDependencies.get(recognizerType);
+			if (list == null) {
+				list = new ArrayList<Tuple2<RuleDependency, Element>>();
+				recognizerDependencies.put(recognizerType, list);
+			}
+
+			list.add(dependency);
+		}
+
+		for (Map.Entry<TypeMirror, List<Tuple2<RuleDependency, Element>>> entry : recognizerDependencies.entrySet()) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("ANTLR 4: Validating %d dependencies on rules in %s.", entry.getValue().size(), entry.getKey().toString()));
+			checkDependencies(entry.getValue(), entry.getKey());
+		}
+
+		return true;
+	}
+
+	private checkClassNameConstants(): boolean {
+		let success: boolean =  checkClassNameConstant(RuleDependencyClassName, RuleDependency.class);
+		success &= checkClassNameConstant(RuleDependenciesClassName, RuleDependencies.class);
+		success &= checkClassNameConstant(RuleVersionClassName, RuleVersion.class);
+		return success;
+	}
+
+	private checkClassNameConstant(className: string, clazz: Class<any>): boolean {
+		Args.notNull("className", className);
+		Args.notNull("clazz", clazz);
+		if (!className.equals(clazz.getCanonicalName())) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, String.format("Unable to process rule dependencies due to class name mismatch: %s != %s", className, clazz.getCanonicalName()));
+			return false;
+		}
+
+		return true;
+	}
+
+	private static getRecognizerType(dependency: RuleDependency): TypeMirror {
+		try {
+			dependency.recognizer();
+			let message: string =  String.format("Expected %s to get the %s.", MirroredTypeException.class.getSimpleName(), TypeMirror.class.getSimpleName());
+			throw new UnsupportedOperationException(message);
+		}
+		catch (MirroredTypeException ex) {
+			return ex.getTypeMirror();
+		}
+	}
+
+	private checkDependencies(dependencies: List<Tuple2<RuleDependency,Element>>, recognizerType: TypeMirror): void {
+		let ruleNames: string[] =  getRuleNames(recognizerType);
+		let ruleVersions: number[] =  getRuleVersions(recognizerType, ruleNames);
+		let relations: RuleRelations =  extractRuleRelations(recognizerType);
+
+		for (let dependency of dependencies) {
+			try {
+				if (!processingEnv.getTypeUtils().isAssignable(getRecognizerType(dependency.getItem1()), recognizerType)) {
+					continue;
+				}
+
+				// this is the rule in the dependency set with the highest version number
+				let effectiveRule: number =  dependency.getItem1().rule();
+				if (effectiveRule < 0 || effectiveRule >= ruleVersions.length) {
+					let ruleReferenceElement: Tuple2<AnnotationMirror, AnnotationValue> =  findRuleDependencyProperty(dependency, RuleDependencyProperty.RULE);
+					let message: string =  String.format("Rule dependency on unknown rule %d@%d in %s",
+												   dependency.getItem1().rule(),
+												   dependency.getItem1().version(),
+												   getRecognizerType(dependency.getItem1()).toString());
+
+					if (ruleReferenceElement != null) {
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+													  dependency.getItem2(), ruleReferenceElement.getItem1(), ruleReferenceElement.getItem2());
+					}
+					else {
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+													  dependency.getItem2());
+					}
+
+					continue;
+				}
+
+				let dependents: EnumSet<Dependents> =  EnumSet.of(Dependents.SELF, dependency.getItem1().dependents());
+				reportUnimplementedDependents(dependency, dependents);
+
+				let checked: BitSet =  new BitSet();
+
+				let highestRequiredDependency: number =  checkDependencyVersion(dependency, ruleNames, ruleVersions, effectiveRule, null);
+
+				if (dependents.contains(Dependents.PARENTS)) {
+					let parents: BitSet =  relations.parents[dependency.getItem1().rule()];
+					for (let parent = parents.nextSetBit(0); parent >= 0; parent = parents.nextSetBit(parent + 1)) {
+						if (parent < 0 || parent >= ruleVersions.length || checked.get(parent)) {
+							continue;
+						}
+
+						checked.set(parent);
+						let required: number =  checkDependencyVersion(dependency, ruleNames, ruleVersions, parent, "parent");
+						highestRequiredDependency = Math.max(highestRequiredDependency, required);
+					}
+				}
+
+				if (dependents.contains(Dependents.CHILDREN)) {
+					let children: BitSet =  relations.children[dependency.getItem1().rule()];
+					for (let child = children.nextSetBit(0); child >= 0; child = children.nextSetBit(child + 1)) {
+						if (child < 0 || child >= ruleVersions.length || checked.get(child)) {
+							continue;
+						}
+
+						checked.set(child);
+						let required: number =  checkDependencyVersion(dependency, ruleNames, ruleVersions, child, "child");
+						highestRequiredDependency = Math.max(highestRequiredDependency, required);
+					}
+				}
+
+				if (dependents.contains(Dependents.ANCESTORS)) {
+					let ancestors: BitSet =  relations.getAncestors(dependency.getItem1().rule());
+					for (let ancestor = ancestors.nextSetBit(0); ancestor >= 0; ancestor = ancestors.nextSetBit(ancestor + 1)) {
+						if (ancestor < 0 || ancestor >= ruleVersions.length || checked.get(ancestor)) {
+							continue;
+						}
+
+						checked.set(ancestor);
+						let required: number =  checkDependencyVersion(dependency, ruleNames, ruleVersions, ancestor, "ancestor");
+						highestRequiredDependency = Math.max(highestRequiredDependency, required);
+					}
+				}
+
+				if (dependents.contains(Dependents.DESCENDANTS)) {
+					let descendants: BitSet =  relations.getDescendants(dependency.getItem1().rule());
+					for (let descendant = descendants.nextSetBit(0); descendant >= 0; descendant = descendants.nextSetBit(descendant + 1)) {
+						if (descendant < 0 || descendant >= ruleVersions.length || checked.get(descendant)) {
+							continue;
+						}
+
+						checked.set(descendant);
+						let required: number =  checkDependencyVersion(dependency, ruleNames, ruleVersions, descendant, "descendant");
+						highestRequiredDependency = Math.max(highestRequiredDependency, required);
+					}
+				}
+
+				let declaredVersion: number =  dependency.getItem1().version();
+				if (declaredVersion > highestRequiredDependency) {
+					let versionElement: Tuple2<AnnotationMirror, AnnotationValue> =  findRuleDependencyProperty(dependency, RuleDependencyProperty.VERSION);
+					let message: string =  String.format("Rule dependency version mismatch: %s has maximum dependency version %d (expected %d) in %s",
+												   ruleNames[dependency.getItem1().rule()],
+												   highestRequiredDependency,
+												   declaredVersion,
+												   getRecognizerType(dependency.getItem1()).toString());
+
+					if (versionElement != null) {
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+														  dependency.getItem2(), versionElement.getItem1(), versionElement.getItem2());
+					}
+					else {
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+														  dependency.getItem2());
+					}
+				}
+			}
+			catch (AnnotationTypeMismatchException ex) {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, String.format("Could not validate rule dependencies for element %s", dependency.getItem2().toString()),
+														 dependency.getItem2());
+			}
+		}
+	}
+
+	private static IMPLEMENTED_DEPENDENTS: Set<Dependents> =  EnumSet.of(Dependents.SELF, Dependents.PARENTS, Dependents.CHILDREN, Dependents.ANCESTORS, Dependents.DESCENDANTS);
+
+	private reportUnimplementedDependents(dependency: Tuple2<RuleDependency,Element>, dependents: EnumSet<Dependents>): void {
+		let unimplemented: EnumSet<Dependents> =  dependents.clone();
+		unimplemented.removeAll(IMPLEMENTED_DEPENDENTS);
+		if (!unimplemented.isEmpty()) {
+			let dependentsElement: Tuple2<AnnotationMirror, AnnotationValue> =  findRuleDependencyProperty(dependency, RuleDependencyProperty.DEPENDENTS);
+			if (dependentsElement == null) {
+				dependentsElement = findRuleDependencyProperty(dependency, RuleDependencyProperty.RULE);
+			}
+
+			let message: string =  String.format("Cannot validate the following dependents of rule %d: %s",
+										   dependency.getItem1().rule(),
+										   unimplemented);
+
+			if (dependentsElement != null) {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, message,
+											  dependency.getItem2(), dependentsElement.getItem1(), dependentsElement.getItem2());
+			}
+			else {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, message,
+											  dependency.getItem2());
+			}
+		}
+	}
+
+	private checkDependencyVersion(dependency: Tuple2<RuleDependency,Element>, ruleNames: string[], ruleVersions: number[], relatedRule: number, relation: string): number {
+		let ruleName: string =  ruleNames[dependency.getItem1().rule()];
+		let path: string; 
+		if (relation == null) {
+			path = ruleName;
+		}
+		else {
+			let mismatchedRuleName: string =  ruleNames[relatedRule];
+			path = String.format("rule %s (%s of %s)", mismatchedRuleName, relation, ruleName);
+		}
+
+		let declaredVersion: number =  dependency.getItem1().version();
+		let actualVersion: number =  ruleVersions[relatedRule];
+		if (actualVersion > declaredVersion) {
+			let versionElement: Tuple2<AnnotationMirror, AnnotationValue> =  findRuleDependencyProperty(dependency, RuleDependencyProperty.VERSION);
+			let message: string =  String.format("Rule dependency version mismatch: %s has version %d (expected <= %d) in %s",
+										   path,
+										   actualVersion,
+										   declaredVersion,
+										   getRecognizerType(dependency.getItem1()).toString());
+
+			if (versionElement != null) {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+												  dependency.getItem2(), versionElement.getItem1(), versionElement.getItem2());
+			}
+			else {
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message,
+												  dependency.getItem2());
+			}
+		}
+
+		return actualVersion;
+	}
+
+	private getRuleVersions(recognizerClass: TypeMirror, ruleNames: string[]): number[] {
+		let versions: number[] =  new int[ruleNames.length];
+
+		let elements: List<? extends Element> =  processingEnv.getElementUtils().getAllMembers((TypeElement)processingEnv.getTypeUtils().asElement(recognizerClass));
+		for (let element of elements) {
+			if (element.getKind() != ElementKind.FIELD) {
+				continue;
+			}
+
+			let field: VariableElement =  (VariableElement)element;
+			let isStatic: boolean =  element.getModifiers().contains(Modifier.STATIC);
+			let constantValue: any =  field.getConstantValue();
+			let isInteger: boolean =  constantValue instanceof Integer;
+			let name: string =  field.getSimpleName().toString();
+			if (isStatic && isInteger && name.startsWith("RULE_")) {
+				try {
+					name = name.substring("RULE_".length());
+					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+						continue;
+					}
+
+					let index: number =  (Integer)constantValue;
+					if (index < 0 || index >= versions.length) {
+						let message: string =  String.format("Rule index %d for rule '%s' out of bounds for recognizer %s.", index, name, recognizerClass.toString());
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message, element);
+						continue;
+					}
+
+					if (name.indexOf(ATNSimulator.RULE_VARIANT_DELIMITER) >= 0) {
+						// ignore left-factored pseudo-rules
+						continue;
+					}
+
+					let ruleMethod: ExecutableElement =  getRuleMethod(recognizerClass, name);
+					if (ruleMethod == null) {
+						let message: string =  String.format("Could not find rule method for rule '%s' in recognizer %s.", name, recognizerClass.toString());
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message, element);
+						continue;
+					}
+
+					let ruleVersion: RuleVersion =  ruleMethod.getAnnotation(RuleVersion.class);
+					let version: number =  ruleVersion != null ? ruleVersion.value() : 0;
+					versions[index] = version;
+				} catch (IllegalArgumentException ex) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Exception occurred while validating rule dependencies.", element);
+				}
+			}
+		}
+
+		return versions;
+	}
+
+	private getRuleMethod(recognizerClass: TypeMirror, name: string): ExecutableElement {
+		let elements: List<? extends Element> =  processingEnv.getElementUtils().getAllMembers((TypeElement)processingEnv.getTypeUtils().asElement(recognizerClass));
+		for (let element of elements) {
+			if (element.getKind() != ElementKind.METHOD) {
+				continue;
+			}
+
+			let method: ExecutableElement =  (ExecutableElement)element;
+			if (method.getSimpleName().contentEquals(name) && hasRuleVersionAnnotation(method)) {
+				return method;
+			}
+		}
+
+		return null;
+	}
+
+	private hasRuleVersionAnnotation(method: ExecutableElement): boolean {
+		let ruleVersionAnnotationElement: TypeElement =  processingEnv.getElementUtils().getTypeElement(RuleVersionClassName);
+		if (ruleVersionAnnotationElement == null) {
+			return false;
+		}
+
+		for (let annotation of method.getAnnotationMirrors()) {
+			if (processingEnv.getTypeUtils().isSameType(annotation.getAnnotationType(), ruleVersionAnnotationElement.asType())) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private getRuleNames(recognizerClass: TypeMirror): string[] {
+		let result: List<string> =  new ArrayList<String>();
+
+		let elements: List<? extends Element> =  processingEnv.getElementUtils().getAllMembers((TypeElement)processingEnv.getTypeUtils().asElement(recognizerClass));
+		for (let element of elements) {
+			if (element.getKind() != ElementKind.FIELD) {
+				continue;
+			}
+
+			let field: VariableElement =  (VariableElement)element;
+			let isStatic: boolean =  element.getModifiers().contains(Modifier.STATIC);
+			let constantValue: any =  field.getConstantValue();
+			let isInteger: boolean =  constantValue instanceof Integer;
+			let name: string =  field.getSimpleName().toString();
+			if (isStatic && isInteger && name.startsWith("RULE_")) {
+				try {
+					name = name.substring("RULE_".length());
+					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+						continue;
+					}
+
+					let index: number =  (Integer)constantValue;
+					if (index < 0) {
+						continue;
+					}
+
+					while (result.size() <= index) {
+						result.add("");
+					}
+
+					result.set(index, name);
+				} catch (IllegalArgumentException ex) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Exception occurred while validating rule dependencies.", element);
+				}
+			}
+		}
+
+		return result.toArray(new String[result.size()]);
+	}
+
+	static getDependencies(roundEnv: RoundEnvironment): List<Tuple2<RuleDependency, Element>> {
+		let result: List<Tuple2<RuleDependency, Element>> =  new ArrayList<Tuple2<RuleDependency, Element>>();
+		let elements: Set<? extends Element> =  roundEnv.getElementsAnnotatedWith(RuleDependency.class);
+		for (let element of elements) {
+			let dependency: RuleDependency =  element.getAnnotation(RuleDependency.class);
+			if (dependency == null) {
+				continue;
+			}
+
+			result.add(Tuple.create(dependency, element));
+		}
+
+		elements = roundEnv.getElementsAnnotatedWith(RuleDependencies.class);
+		for (let element of elements) {
+			let dependencies: RuleDependencies =  element.getAnnotation(RuleDependencies.class);
+			if (dependencies == null || dependencies.value() == null) {
+				continue;
+			}
+
+			for (let dependency of dependencies.value()) {
+				result.add(Tuple.create(dependency, element));
+			}
+		}
+
+		return result;
+	}
+
+	public enum RuleDependencyProperty {
+		RECOGNIZER,
+		RULE,
+		VERSION,
+		DEPENDENTS,
+	}
+
+	@Nullable
+	private findRuleDependencyProperty(@NotNull dependency: Tuple2<RuleDependency,Element>, @NotNull property: RuleDependencyProperty): Tuple2<AnnotationMirror, AnnotationValue> {
+		let ruleDependencyTypeElement: TypeElement =  processingEnv.getElementUtils().getTypeElement(RuleDependencyClassName);
+		let ruleDependenciesTypeElement: TypeElement =  processingEnv.getElementUtils().getTypeElement(RuleDependenciesClassName);
+		let mirrors: List<? extends AnnotationMirror> =  dependency.getItem2().getAnnotationMirrors();
+		for (let annotationMirror of mirrors) {
+			if (processingEnv.getTypeUtils().isSameType(ruleDependencyTypeElement.asType(), annotationMirror.getAnnotationType())) {
+				let element: AnnotationValue =  findRuleDependencyProperty(dependency, annotationMirror, property);
+				if (element != null) {
+					return Tuple.create(annotationMirror, element);
+				}
+			}
+			else if (processingEnv.getTypeUtils().isSameType(ruleDependenciesTypeElement.asType(), annotationMirror.getAnnotationType())) {
+				let values: Map<? extends ExecutableElement, ? extends AnnotationValue> =  annotationMirror.getElementValues();
+				for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> value : values.entrySet()) {
+					if ("value()".equals(value.getKey().toString())) {
+						let annotationValue: AnnotationValue =  value.getValue();
+						if (!(annotationValue.getValue() instanceof List)) {
+							processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Expected array of RuleDependency annotations for annotation property 'value()'.", dependency.getItem2(), annotationMirror, annotationValue);
+							break;
+						}
+
+						let annotationValueList: List<?> =  (List<?>)annotationValue.getValue();
+						for (let obj of annotationValueList) {
+							if (!(obj instanceof AnnotationMirror)) {
+								processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Expected RuleDependency annotation mirror for element of property 'value()'.", dependency.getItem2(), annotationMirror, annotationValue);
+								break;
+							}
+
+							let element: AnnotationValue =  findRuleDependencyProperty(dependency, (AnnotationMirror)obj, property);
+							if (element != null) {
+								return Tuple.create((AnnotationMirror)obj, element);
+							}
+						}
+					}
+					else {
+						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, String.format("Unexpected annotation property %s.", value.getKey().toString()), dependency.getItem2(), annotationMirror, value.getValue());
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	private findRuleDependencyProperty(@NotNull dependency: Tuple2<RuleDependency,Element>, @NotNull annotationMirror: AnnotationMirror, @NotNull property: RuleDependencyProperty): AnnotationValue {
+		let recognizerValue: AnnotationValue =  null;
+		let ruleValue: AnnotationValue =  null;
+		let versionValue: AnnotationValue =  null;
+		let dependentsValue: AnnotationValue =  null;
+
+		let values: Map<? extends ExecutableElement, ? extends AnnotationValue> =  annotationMirror.getElementValues();
+		for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> value : values.entrySet()) {
+			let annotationValue: AnnotationValue =  value.getValue();
+			if ("rule()".equals(value.getKey().toString())) {
+				ruleValue = annotationValue;
+				if (!(annotationValue.getValue() instanceof Integer)) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Expected int constant for annotation property 'rule()'.", dependency.getItem2(), annotationMirror, annotationValue);
+					return null;
+				}
+
+				if ((Integer)annotationValue.getValue() != dependency.getItem1().rule()) {
+					// this is a valid dependency annotation, but not the one we're looking for
+					return null;
+				}
+			}
+			else if ("recognizer()".equals(value.getKey().toString())) {
+				recognizerValue = annotationValue;
+				if (!(annotationValue.getValue() instanceof TypeMirror)) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Expected Class constant for annotation property 'recognizer()'.", dependency.getItem2(), annotationMirror, annotationValue);
+					return null;
+				}
+
+				let annotationRecognizer: TypeMirror =  (TypeMirror)annotationValue.getValue();
+				let expectedRecognizer: TypeMirror =  getRecognizerType(dependency.getItem1());
+				if (!processingEnv.getTypeUtils().isSameType(expectedRecognizer, annotationRecognizer)) {
+					// this is a valid dependency annotation, but not the one we're looking for
+					return null;
+				}
+			}
+			else if ("version()".equals(value.getKey().toString())) {
+				versionValue = annotationValue;
+				if (!(annotationValue.getValue() instanceof Integer)) {
+					processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Expected int constant for annotation property 'version()'.", dependency.getItem2(), annotationMirror, annotationValue);
+					return null;
+				}
+
+				if ((Integer)annotationValue.getValue() != dependency.getItem1().version()) {
+					// this is a valid dependency annotation, but not the one we're looking for
+					return null;
+				}
+			}
+		}
+
+		if (recognizerValue != null) {
+			if (property == RuleDependencyProperty.RECOGNIZER) {
+				return recognizerValue;
+			}
+			else if (ruleValue != null) {
+				if (property == RuleDependencyProperty.RULE) {
+					return ruleValue;
+				}
+				else if (versionValue != null) {
+					if (property == RuleDependencyProperty.VERSION) {
+						return versionValue;
+					}
+					else if (property == RuleDependencyProperty.DEPENDENTS) {
+						return dependentsValue;
+					}
+				}
+			}
+		}
+
+		if (recognizerValue == null) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Could not find 'recognizer()' element in annotation.", dependency.getItem2(), annotationMirror);
+		}
+
+		if (property == RuleDependencyProperty.RECOGNIZER) {
+			return null;
+		}
+
+		if (ruleValue == null) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Could not find 'rule()' element in annotation.", dependency.getItem2(), annotationMirror);
+		}
+
+		if (property == RuleDependencyProperty.RULE) {
+			return null;
+		}
+
+		if (versionValue == null) {
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "Could not find 'version()' element in annotation.", dependency.getItem2(), annotationMirror);
+		}
+
+		return null;
+	}
+
+	private extractRuleRelations(recognizer: TypeMirror): RuleRelations {
+		let serializedATN: string =  getSerializedATN(recognizer);
+		if (serializedATN == null) {
+			return null;
+		}
+
+		let atn: ATN =  new ATNDeserializer().deserialize(serializedATN.toCharArray());
+		let relations: RuleRelations =  new RuleRelations(atn.ruleToStartState.length);
+		for (let state of atn.states) {
+			if (!state.epsilonOnlyTransitions) {
+				continue;
+			}
+
+			for (let transition of state.getTransitions()) {
+				if (transition.getSerializationType() != Transition.RULE) {
+					continue;
+				}
+
+				let ruleTransition: RuleTransition =  (RuleTransition)transition;
+				relations.addRuleInvocation(state.ruleIndex, ruleTransition.target.ruleIndex);
+			}
+		}
+
+		return relations;
+	}
+
+	private getSerializedATN(recognizerClass: TypeMirror): string {
+		let elements: List<? extends Element> =  processingEnv.getElementUtils().getAllMembers((TypeElement)processingEnv.getTypeUtils().asElement(recognizerClass));
+		for (let element of elements) {
+			if (element.getKind() != ElementKind.FIELD) {
+				continue;
+			}
+
+			let field: VariableElement =  (VariableElement)element;
+			let isStatic: boolean =  element.getModifiers().contains(Modifier.STATIC);
+			let constantValue: any =  field.getConstantValue();
+			let isString: boolean =  constantValue instanceof String;
+			let name: string =  field.getSimpleName().toString();
+			if (isStatic && isString && name.equals("_serializedATN")) {
+				return (String)constantValue;
+			}
+		}
+
+		processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Could not retrieve serialized ATN from grammar.");
+		return null;
+	}
+
+	private static final class RuleRelations {
+		private parents: BitSet[]; 
+		private children: BitSet[]; 
+
+		public RuleRelations(int ruleCount) {
+			parents = new BitSet[ruleCount];
+			for (let i = 0; i < ruleCount; i++) {
+				parents[i] = new BitSet();
+			}
+
+			children = new BitSet[ruleCount];
+			for (let i = 0; i < ruleCount; i++) {
+				children[i] = new BitSet();
+			}
+		}
+
+		addRuleInvocation(caller: number, callee: number): boolean {
+			if (caller < 0) {
+				// tokens rule
+				return false;
+			}
+
+			if (children[caller].get(callee)) {
+				// already added
+				return false;
+			}
+
+			children[caller].set(callee);
+			parents[callee].set(caller);
+			return true;
+		}
+
+		getAncestors(rule: number): BitSet {
+			let ancestors: BitSet =  new BitSet();
+			ancestors.or(parents[rule]);
+			while (true) {
+				let cardinality: number =  ancestors.cardinality();
+				for (let i = ancestors.nextSetBit(0); i >= 0; i = ancestors.nextSetBit(i + 1)) {
+					ancestors.or(parents[i]);
+				}
+
+				if (ancestors.cardinality() == cardinality) {
+					// nothing changed
+					break;
+				}
+			}
+
+			return ancestors;
+		}
+
+		getDescendants(rule: number): BitSet {
+			let descendants: BitSet =  new BitSet();
+			descendants.or(children[rule]);
+			while (true) {
+				let cardinality: number =  descendants.cardinality();
+				for (let i = descendants.nextSetBit(0); i >= 0; i = descendants.nextSetBit(i + 1)) {
+					descendants.or(children[i]);
+				}
+
+				if (descendants.cardinality() == cardinality) {
+					// nothing changed
+					break;
+				}
+			}
+
+			return descendants;
+		}
+	}
+}

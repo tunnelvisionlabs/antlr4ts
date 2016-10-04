@@ -1,0 +1,26 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:26:46.9220097-07:00
+
+export class XPathRuleElement extends XPathElement {
+	protected ruleIndex: number; 
+	 constructor(ruleName: string, ruleIndex: number)  {
+		super(ruleName);
+		this.ruleIndex = ruleIndex;
+	}
+
+	@Override
+	evaluate(t: ParseTree): Collection<ParseTree> {
+				// return all children of t that match nodeName
+		let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
+		for (let c of Trees.getChildren(t)) {
+			if ( c instanceof ParserRuleContext ) {
+				let ctx: ParserRuleContext =  (ParserRuleContext)c;
+				if ( (ctx.getRuleIndex() == ruleIndex && !invert) ||
+					 (ctx.getRuleIndex() != ruleIndex && invert) )
+				{
+					nodes.add(ctx);
+				}
+			}
+		}
+		return nodes;
+	}
+}

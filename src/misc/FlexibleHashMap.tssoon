@@ -1,0 +1,287 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// ConvertTo-TS run at 2016-10-04T11:26:40.1812880-07:00
+
+/** A limited map (many unsupported operations) that lets me use
+ *  varying hashCode/equals.
+ */
+export class FlexibleHashMap<K,V> implements Map<K, V> {
+	static INITAL_CAPACITY: number =  16; // must be power of 2
+	static INITAL_BUCKET_CAPACITY: number =  8;
+	static LOAD_FACTOR: number =  0.75;
+
+	public static class Entry<K, V> {
+		key: K; 
+		value: V; 
+
+		public Entry(K key, V value) { this.key = key; this.value = value; }
+
+		@Override
+		toString(): string {
+			return key.toString()+":"+value.toString();
+		}
+	}
+
+	@NotNull
+	protected comparator: AbstractEqualityComparator<? super K>; 
+
+	protected buckets: LinkedList<Entry<K, V>>[]; 
+
+	/** How many elements in set */
+	protected n: number =  0;
+
+	protected threshold: number =  (int)(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
+
+	protected currentPrime: number =  1; // jump by 4 primes each expand or whatever
+	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
+
+	 constructor()  {
+		this(null, INITAL_CAPACITY, INITAL_BUCKET_CAPACITY);
+	}
+
+	 constructor1(@Nullable comparator: AbstractEqualityComparator<? super K>)  {
+		this(comparator, INITAL_CAPACITY, INITAL_BUCKET_CAPACITY);
+	}
+
+	 constructor2(@Nullable comparator: AbstractEqualityComparator<? super K>, initialCapacity: number, initialBucketCapacity: number)  {
+		if (comparator == null) {
+			comparator = ObjectEqualityComparator.INSTANCE;
+		}
+
+		this.comparator = comparator;
+		this.buckets = createEntryListArray(initialBucketCapacity);
+		this.initialBucketCapacity = initialBucketCapacity;
+	}
+
+	private static createEntryListArray<K, V>(length: number): LinkedList<Entry<K, V>>[] {
+		@SuppressWarnings("unchecked")
+		let result: LinkedList<Entry<K, V>>[] =  (LinkedList<Entry<K, V>>[])new LinkedList<?>[length];
+		return result;
+	}
+
+	protected getBucket(key: K): number {
+		let hash: number =  comparator.hashCode(key);
+		let b: number =  hash & (buckets.length-1); // assumes len is power of 2
+		return b;
+	}
+
+	@Override
+	get(key: any): V {
+		@SuppressWarnings("unchecked")
+		let typedKey: K =  (K)key;
+		if ( key==null ) return null;
+		let b: number =  getBucket(typedKey);
+		let bucket: LinkedList<Entry<K, V>> =  buckets[b];
+		if ( bucket==null ) return null; // no bucket
+		for (let e of bucket) {
+			if ( comparator.equals(e.key, typedKey) ) {
+				return e.value;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	put(key: K, value: V): V {
+		if ( key==null ) return null;
+		if ( n > threshold ) expand();
+		let b: number =  getBucket(key);
+		let bucket: LinkedList<Entry<K, V>> =  buckets[b];
+		if ( bucket==null ) {
+			bucket = buckets[b] = new LinkedList<Entry<K, V>>();
+		}
+		for (let e of bucket) {
+			if ( comparator.equals(e.key, key) ) {
+				let prev: V =  e.value;
+				e.value = value;
+				n++;
+				return prev;
+			}
+		}
+		// not there
+		bucket.add(new Entry<K, V>(key, value));
+		n++;
+		return null;
+	}
+
+	@Override
+	remove(key: any): V {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	putAll(m: Map<? extends K,? extends V>): void {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	keySet(): Set<K> {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	values(): Collection<V> {
+		let a: List<V> =  new ArrayList<V>(size());
+		for (let bucket of buckets) {
+			if ( bucket==null ) continue;
+			for (let e of bucket) {
+				a.add(e.value);
+			}
+		}
+		return a;
+	}
+
+	@Override
+	entrySet(): Set<Map.Entry<K, V>> {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	containsKey(key: any): boolean {
+		return get(key)!=null;
+	}
+
+	@Override
+	containsValue(value: any): boolean {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	hashCode(): number {
+		let hash: number =  MurmurHash.initialize();
+		for (let bucket of buckets) {
+			if ( bucket==null ) continue;
+			for (let e of bucket) {
+				if ( e==null ) break;
+				hash = MurmurHash.update(hash, comparator.hashCode(e.key));
+			}
+		}
+
+		hash = MurmurHash.finish(hash, size());
+		return hash;
+	}
+
+	@Override
+	equals(o: any): boolean {
+		throw new UnsupportedOperationException();
+	}
+
+	protected expand(): void {
+		let old: LinkedList<Entry<K, V>>[] =  buckets;
+		currentPrime += 4;
+		let newCapacity: number =  buckets.length * 2;
+		let newTable: LinkedList<Entry<K, V>>[] =  createEntryListArray(newCapacity);
+		buckets = newTable;
+		threshold = (int)(newCapacity * LOAD_FACTOR);
+//		System.out.println("new size="+newCapacity+", thres="+threshold);
+		// rehash all existing entries
+		let oldSize: number =  size();
+		for (let bucket of old) {
+			if ( bucket==null ) continue;
+			for (let e of bucket) {
+				if ( e==null ) break;
+				put(e.key, e.value);
+			}
+		}
+		n = oldSize;
+	}
+
+	@Override
+	size(): number {
+		return n;
+	}
+
+	@Override
+	isEmpty(): boolean {
+		return n==0;
+	}
+
+	@Override
+	clear(): void {
+		buckets = createEntryListArray(INITAL_CAPACITY);
+		n = 0;
+	}
+
+	@Override
+	toString(): string {
+		if ( size()==0 ) return "{}";
+
+		let buf: StringBuilder =  new StringBuilder();
+		buf.append('{');
+		let first: boolean =  true;
+		for (let bucket of buckets) {
+			if ( bucket==null ) continue;
+			for (let e of bucket) {
+				if ( e==null ) break;
+				if ( first ) first=false;
+				else buf.append(", ");
+				buf.append(e.toString());
+			}
+		}
+		buf.append('}');
+		return buf.toString();
+	}
+
+	toTableString(): string {
+		let buf: StringBuilder =  new StringBuilder();
+		for (let bucket of buckets) {
+			if ( bucket==null ) {
+				buf.append("null\n");
+				continue;
+			}
+			buf.append('[');
+			let first: boolean =  true;
+			for (let e of bucket) {
+				if ( first ) first=false;
+				else buf.append(" ");
+				if ( e==null ) buf.append("_");
+				else buf.append(e.toString());
+			}
+			buf.append("]\n");
+		}
+		return buf.toString();
+	}
+
+	static main(args: string[]): void {
+		let map: FlexibleHashMap<string,number> =  new FlexibleHashMap<String,Integer>();
+		map.put("hi", 1);
+		map.put("mom", 2);
+		map.put("foo", 3);
+		map.put("ach", 4);
+		map.put("cbba", 5);
+		map.put("d", 6);
+		map.put("edf", 7);
+		map.put("mom", 8);
+		map.put("hi", 9);
+		console.log(map);
+		console.log(map.toTableString());
+	}
+}

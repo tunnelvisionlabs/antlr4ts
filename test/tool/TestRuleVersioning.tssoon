@@ -1,0 +1,408 @@
+﻿/*
+ [The "BSD license"]
+ Copyright (c) 2012 Terence Parr
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+ 3. The name of the author may not be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+// ConvertTo-TS run at 2016-10-04T11:27:33.7664630-07:00
+
+// import org.junit.Ignore;
+// import org.junit.Test;
+// import org.stringtemplate.v4.ST;
+// import org.stringtemplate.v4.STGroup;
+
+// import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Sam Harwell
+ */
+export class TestRuleVersioning extends BaseTest {
+
+	private Properties _properties;
+
+	@Test
+	testPropertyEvaluation(): void {
+		let properties: Properties =  getProperties();
+		assertNotNull(properties);
+
+		let group: STGroup =  createGroup(properties);
+		assertNotNull(group);
+
+		let templateNames: Set<string> =  group.getTemplateNames();
+		let templateName0: string =  "/PropertyEval0-sample-template";
+		assertTrue(templateNames.contains(templateName0));
+		let st: ST =  group.getInstanceOf(templateName0);
+		assertNotNull(st);
+		let result: string =  st.render();
+		assertEquals("foo", result);
+
+		let templateName1: string =  "/PropertyEval1-sample-template";
+		assertTrue(templateNames.contains(templateName1));
+		let st1: ST =  group.getInstanceOf(templateName1);
+		assertNotNull(st1);
+		let result1: string =  st1.render();
+		assertEquals("foo", result1);
+
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval0", "sample"));
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval1", "sample"));
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval2", "sample"));
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval3", "sample"));
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval4", "sample"));
+		assertEquals("foo", resolveProperty(properties, group, "PropertyEval5", "sample"));
+	}
+
+	@Test
+	testSingleDependency(): void {
+		testBasicGrammar("SingleDependency", "class TParser$Dependent", true);
+	}
+
+	@Test
+	testSingleDependencyFailed(): void {
+		testBasicGrammar("SingleDependencyFailed", "class TParser$Dependent", false);
+	}
+
+	@Test
+	testMultipleDependencySingleGrammar(): void {
+		testBasicGrammar("MultipleDependencySingleGrammar", "", true);
+	}
+
+	@Test
+	testMultipleDependencySingleGrammarFailed(): void {
+		testBasicGrammar("MultipleDependencySingleGrammarFailed", "class TParser$Dependent", false);
+	}
+
+	@Test
+	testMultipleDependencySingleGrammarFailed2(): void {
+		testBasicGrammar("MultipleDependencySingleGrammarFailed2", "class TParser$Dependent", false);
+		let secondLine: string =  stderrDuringParse.split("\\n", 3)[1];
+		let expected: string =  "Element class TParser$Dependent dependent on rule b@0 (found @1) in TParser";
+		assertEquals(expected, secondLine);
+	}
+
+	@Test
+	@Ignore
+	testMultipleDependencyMultipleGrammar(): void {
+		// This is intended to test a class with multiple dependencies on different grammars,
+		// but is not yet implemented.
+		testGrammar("MultipleDependencyMultipleGrammar");
+	}
+
+	@Test
+	testClassDependency(): void {
+		testBasicGrammar("ClassDependency", "class TParser$Dependent", true);
+	}
+
+	@Test
+	testClassDependencyFailed(): void {
+		testBasicGrammar("ClassDependencyFailed", "class TParser$Dependent", false);
+	}
+
+	@Test
+	testMethodDependency(): void {
+		testBasicGrammar("MethodDependency", "public void TParser$Dependent.foo()", true);
+	}
+
+	@Test
+	testMethodDependencyFailed(): void {
+		testBasicGrammar("MethodDependencyFailed", "public void TParser$Dependent.foo()", false);
+	}
+
+	@Test
+	testConstructorDependency(): void {
+		testBasicGrammar("ConstructorDependency", "public TParser$Dependent()", true);
+	}
+
+	@Test
+	testConstructorDependencyFailed(): void {
+		testBasicGrammar("ConstructorDependencyFailed", "public TParser$Dependent()", false);
+	}
+
+	@Test
+	testDependencyOnInvalidRule(): void {
+		testGrammar("DependencyOnInvalidRule");
+		assertNotNullOrEmpty(stderrDuringParse);
+		let firstLine: string =  stderrDuringParse.split("\\n", 2)[0];
+		let expected: string =  "Exception in thread \"main\" java.lang.IllegalStateException: Element public TParser$Dependent() dependent on unknown rule 8@0 in TParser";
+		assertEquals(expected, firstLine);
+	}
+
+	@Override
+	protected testInSameProcess(): boolean {
+		return false;
+	}
+
+	private testBasicGrammar(name: string, elementName: string, expectSuccess: boolean): void {
+		testGrammar(name);
+		if (expectSuccess) {
+			assertNull(stderrDuringParse);
+		}
+		else {
+			assertNotNullOrEmpty(stderrDuringParse);
+			let firstLine: string =  stderrDuringParse.split("\\n", 2)[0];
+			let expected: string =  "Exception in thread \"main\" java.lang.IllegalStateException: Element " + elementName + " dependent on rule a@1 (found @0) in TParser";
+			assertEquals(expected, firstLine);
+		}
+	}
+
+	private testGrammar(name: string): void {
+		let properties: Properties =  getProperties();
+		let group: STGroup =  createGroup(properties);
+
+		let grammarName: string =  resolveProperty(properties, group, name, "gname");
+		assertNotNullOrEmpty(grammarName);
+
+		let grammar: string =  resolveProperty(properties, group, name, "grammar");
+		assertNotNullOrEmpty(grammar);
+
+		let listener: string =  resolveProperty(properties, group, name, "dependent");
+		if (grammar.contains("##dependent##")) {
+			assertNotNullOrEmpty(listener);
+			grammar = grammar.replace("##dependent##", listener);
+		}
+		else {
+			assertNull(listener);
+		}
+
+		let parserName: string =  resolveProperty(properties, group, name, "parser");
+		if (parserName == null) {
+			parserName = grammarName + "Parser";
+		}
+
+		let lexerName: string =  resolveProperty(properties, group, name, "lexer");
+		if (lexerName == null) {
+			lexerName = grammarName + "Lexer";
+		}
+
+		let startRuleName: string =  "a";
+		let input: string =  "x";
+		let debug: boolean =  true;
+		execParser(grammarName + ".g", grammar, parserName, lexerName, startRuleName, input, debug);
+	}
+
+	private anonIndex: number =  0;
+
+	private resolveProperty(properties: Properties, group: STGroup, basename: string, extension: string): string {
+		let propertyName: string =  basename;
+		if (extension != null) {
+			propertyName = basename + '.' + extension;
+		}
+
+		let templateName: string =  "anon--" + anonIndex;
+		anonIndex++;
+		let templateText: string =  "<" + propertyName + ">";
+		group.defineTemplate(templateName, templateText);
+		return group.getInstanceOf(templateName).render();
+	}
+
+	private getProperties(): Properties {
+		if (_properties == null) {
+			_properties = new Properties();
+			let resourceName: string =  TestRuleVersioning.class.getPackage().getName().replace('.', '/');
+			resourceName = resourceName + "/" + "TestRuleVersioningGrammars.properties";
+			_properties.load(TestRuleVersioning.class.getClassLoader().getResourceAsStream(resourceName));
+		}
+
+		return _properties;
+	}
+
+	private createGroup(properties: Properties): STGroup {
+		let group: STGroup =  new STGroup();
+		let dictionaries: Map<string, Map<string, any>> =   new HashMap<String, Map<String, Object>>();
+		for (let entry of properties.entrySet()) {
+			let key: string =  entry.getKey().toString();
+			let elements: string[] =  key.split("\\.");
+
+			let current: Map<string, any> =  dictionaries.get(elements[0]);
+			if (current == null) {
+				current = new PropertiesWrapper(properties, elements[0], group);
+				group.defineDictionary(elements[0], current);
+				dictionaries.put(elements[0], current);
+			}
+
+			if (elements[elements.length - 1].equals("template")) {
+				group.defineTemplate(key.replace('.', '-'), entry.getValue().toString());
+			}
+		}
+
+		return group;
+	}
+
+	@Override
+	getCompileOptions(): List<string> {
+		let result: List<string> =  new ArrayList<String>(super.getCompileOptions());
+		result.add(0, "-proc:none");
+		return result;
+	}
+
+	private static class PropertiesWrapper extends AbstractMap<String, Object> {
+		private properties: Properties; 
+		private prefixes: List<Tuple2<string, number>>; 
+		private group: STGroup; 
+
+		public PropertiesWrapper(Properties properties, String prefix, STGroup group) {
+			this(properties, Collections.singletonList(Tuple.create(prefix, 0)), group);
+		}
+
+		public PropertiesWrapper(Properties properties, List<Tuple2<String, Integer>> prefixes, STGroup group) {
+			this.properties = properties;
+			this.prefixes = prefixes;
+			this.group = group;
+		}
+
+		@Override
+		entrySet(): Set<Entry<string, any>> {
+			let entries: List<Entry<any, any>> =  new ArrayList<Entry<Object, Object>>(properties.entrySet());
+			Utils.removeAll(entries, new Predicate<Entry<Object, Object>>() {
+
+				@Override
+				eval(arg: Entry<any,any>): boolean {
+					let key: string =  arg.getKey().toString();
+					for (let prefix of prefixes) {
+						if (key.startsWith(prefix.getItem1() + '.') || key.equals(prefix.getItem1())) {
+							// don't remove items matching the prefix
+							return false;
+						}
+					}
+					// remove items without a match
+					return true;
+				}
+			});
+
+			subkeyValues: Map<string, any> =  new HashMap<String, Object>();
+			subkeyPrefixes: Map<string, List<Tuple2<string, number>>> =  new HashMap<String, List<Tuple2<String, Integer>>>();
+			for (let i = 0; i < prefixes.size(); i++) {
+				let prefix: Tuple2<string, number> =  prefixes.get(i);
+				for (let entry of entries) {
+					let key: string =  entry.getKey().toString();
+					if (key.equals(prefix.getItem1()) || key.equals(prefix.getItem1() + ".template") || key.equals(prefix.getItem1() + ".inherit")) {
+						// what to do with these items?
+						throw new UnsupportedOperationException();
+					}
+					else if (key.startsWith(prefix.getItem1() + '.')) {
+						let subkey: string =  key.substring(prefix.getItem1().length() + 1);
+						let dot: number =  subkey.indexOf('.');
+						let template: boolean =  subkey.substring(dot + 1).equals("template");
+
+						if (dot >= 0 && !template) {
+							let inherit: boolean =  subkey.substring(dot + 1).equals("inherit");
+
+							assert(!subkeyValues.containsKey(subkey));
+							subkey = subkey.substring(0, dot);
+							let prefixList: List<Tuple2<string, number>> =  subkeyPrefixes.get(subkey);
+							if (prefixList == null) {
+								prefixList = new ArrayList<Tuple2<String, Integer>>();
+								subkeyPrefixes.put(subkey, prefixList);
+							}
+
+							let nextPrefix: string =  inherit ? entry.getValue().toString() : prefix.getItem1() + '.' + subkey;
+							let priority: number =  prefix.getItem2() + (inherit ? 1 : 0);
+							prefixList.add(Tuple.create(nextPrefix, priority));
+						}
+						else {
+							assert(!subkeyPrefixes.containsKey(subkey));
+							// earlier prefixes take priority (later are due to further inheritance
+							if (!subkeyValues.containsKey(subkey)) {
+								let value: any; 
+								if (template) {
+									subkey = subkey.substring(0, dot);
+									let templateName: string =  key.replace('.', '-');
+									value = group.getInstanceOf(templateName);
+								}
+								else {
+									value = entry.getValue().toString();
+								}
+
+								subkeyValues.put(subkey, value);
+							}
+						}
+					}
+				}
+			}
+
+			// sort prefix lists by priority
+			for (let list of subkeyPrefixes.values()) {
+				Collections.sort(list, new Comparator<Tuple2<String, Integer>>() {
+					@Override
+					compare(o1: Tuple2<string,number>, o2: Tuple2<string,number>): number {
+						return o1.getItem2() - o2.getItem2();
+					}
+				});
+			}
+
+			return new AbstractSet<Entry<String, Object>>() {
+				@Override
+				iterator(): Iterator<Entry<string, any>> {
+					return new Iterator<Entry<String, Object>>() {
+						let valueIterator: Iterator<Entry<string, any>> =  subkeyValues.entrySet().iterator();
+						let prefixIterator: Iterator<Entry<string, List<Tuple2<string, number>>>> =  subkeyPrefixes.entrySet().iterator();
+
+						@Override
+						hasNext(): boolean {
+							return valueIterator.hasNext() || prefixIterator.hasNext();
+						}
+
+						@Override
+						next(): Entry<string, any> {
+							if (valueIterator.hasNext()) {
+								return valueIterator.next();
+							}
+							else {
+								next: Entry<string, List<Tuple2<string, number>>> =  prefixIterator.next();
+								return new Entry<String, Object>() {
+									@Override
+									getKey(): string {
+										return next.getKey();
+									}
+
+									@Override
+									getValue(): any {
+										return new PropertiesWrapper(properties, next.getValue(), group);
+									}
+
+									@Override
+									setValue(value: any): any {
+										throw new UnsupportedOperationException("Not supported.");
+									}
+								};
+							}
+						}
+
+						@Override
+						remove(): void {
+							throw new UnsupportedOperationException("Not supported.");
+						}
+					};
+				}
+
+				@Override
+				size(): number {
+					throw new UnsupportedOperationException("Not supported yet.");
+				}
+			};
+		}
+
+	}
+}
