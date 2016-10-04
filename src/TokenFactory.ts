@@ -28,9 +28,31 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import {CharStream} from './CharStream';
+import {Token} from './Token';
+import {TokenSource} from './TokenSource';
+
 /** The default mechanism for creating tokens. It's used by default in Lexer and
  *  the error handling strategy (to create missing tokens).  Notifying the parser
  *  of a new factory means that it notifies it's token source and error strategy.
  */
 export interface TokenFactory {
+	/** This is the method used to create tokens in the lexer and in the
+	 *  error handling strategy. If text!=null, than the start and stop positions
+	 *  are wiped to -1 in the text override is set in the CommonToken.
+	 */
+	//@NotNull
+	create(
+		/*@NotNull*/ source: [TokenSource, CharStream],
+		type: number,
+		text: string,
+		channel: number,
+		start: number,
+		stop: number,
+		line: number,
+		charPositionInLine: number): Token;
+
+	/** Generically useful */
+	//@NotNull
+	create(type: number, text: string): Token;
 }
