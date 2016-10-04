@@ -47,7 +47,7 @@ import {MurmurHash} from './MurmurHash';
 //        For this reason I've commented tweaked the implements clause
 
 export class Array2DHashSet<T> implements JavaSet<T> {
-	private static readonly INITAL_CAPACITY: number =  16; // must be power of 2
+	private static INITAL_CAPACITY: number =  16; // must be power of 2
 	private static INITAL_BUCKET_CAPACITY: number =  8;
 	private static LOAD_FACTOR: number =  0.75;
 
@@ -59,7 +59,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	/** How many elements in set */
 	protected n: number =  0;
 
-	protected threshold: number =  (Array2DHashSet.INITAL_CAPACITY * Array2DHashSet.LOAD_FACTOR); // when to expand
+	protected threshold: number =  Math.floor(Array2DHashSet.INITAL_CAPACITY * Array2DHashSet.LOAD_FACTOR); // when to expand
 
 	protected currentPrime: number =  1; // jump by 4 primes each expand or whatever
 	protected initialBucketCapacity: number =  Array2DHashSet.INITAL_BUCKET_CAPACITY;
@@ -69,11 +69,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		 comparator: AbstractEqualityComparator<T> = null, 
 		 initialCapacity: number = Array2DHashSet.INITAL_CAPACITY,
 		 initialBucketCapacity: number = Array2DHashSet.INITAL_BUCKET_CAPACITY)  {
-		if (comparator == null) {
-			comparator = ObjectEqualityComparator.INSTANCE;
-		}
 
-		this.comparator = comparator;
+		this.comparator = comparator || ObjectEqualityComparator.INSTANCE;
 		this.buckets = this.createBuckets(initialCapacity);
 		this.initialBucketCapacity = initialBucketCapacity;
 	}
@@ -155,9 +152,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	equals(o: any): boolean {
-		if (o == this) return true;
+		if (o === this) return true;
 		if ( !(o instanceof Array2DHashSet) ) return false;
-		if ( o.size() != this.size() ) return false;
+		if ( o.size() !== this.size() ) return false;
 		let same: boolean =  this.containsAll(o);
 		return same;
 	}
@@ -167,7 +164,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		this.currentPrime += 4;
 		let newCapacity: number =  this.buckets.length * 2;
 		let newTable: T[][] =  this.createBuckets(newCapacity);
-		let newBucketLengths: number[] =  Array<number>(newTable.length);
+		let newBucketLengths: number[] =  new Array<number>(newTable.length);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * Array2DHashSet.LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
@@ -186,14 +183,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				let b: number =  this.getBucket(o);
 				let bucketLength: number =  newBucketLengths[b];
 				let newBucket: T[]; 
-				if (bucketLength == 0) {
+				if (bucketLength === 0) {
 					// new bucket
 					newBucket = this.createBucket(this.initialBucketCapacity);
 					newTable[b] = newBucket;
 				}
 				else {
 					newBucket = newTable[b];
-					if (bucketLength == newBucket.length) {
+					if (bucketLength === newBucket.length) {
 						// expand
 						newBucket.length *= 2; 
 					}
@@ -204,13 +201,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 		}
 
-		assert(this.n == oldSize);
+		assert(this.n === oldSize);
 	}
 
 	@Override
 	add(t: T): boolean {
 		let existing: T =  this.getOrAdd(t);
-		return existing==t;
+		return existing===t;
 	}
 
 	@Override
@@ -220,7 +217,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	isEmpty(): boolean {
-		return this.n==0;
+		return this.n===0;
 	}
 
 	@Override
@@ -243,38 +240,21 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	toArray(a?: any[]): T[] {
-		// Check if the argument was provided
-		if (a === undefined) {
-			let a: T[] =  this.createBucket(this.size());
-			let i: number =  0;
-			for (let bucket of this.buckets) {
-				if ( bucket==null ) {
-					continue;
-				}
 
-				for (let o of bucket) {
-					if ( o==null ) {
-						break;
-					}
-					a[i++] = o;
-				}
-			}
-			return a;
+		// Check if the array argument was provided
+		if (!a || a.length < this.size()) {
+			a = new Array<T>(this.size());
 		}
 
-		if (a.length < this.size()) {
-			// NOTE: PLEASE CONFIRM then intent is to resize a!
-			a.length = this.size();
-		}
-
-		let i: number =  0;
+		// Copy elements from the nested arrays into the destination array
+		let i: number =  0; // Position within destination array
 		for (let bucket of this.buckets) {
 			if ( bucket==null ) {
 				continue;
 			}
 
 			for (let o of bucket) {
-				if ( o===null ) {
+				if ( o==null ) {
 					break;
 				}
 				a[i++] = o;
@@ -310,7 +290,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			if ( this.comparator.equals(e, obj) ) {          // found it
 				// shift all elements to the right down one
 				bucket.copyWithin(i, i+1)				
-				bucket[bucket.length - 1] = null;
+				bucket[bucket.length - 1] = undefined;
 				this.n--;
 				return true;
 			}
@@ -342,11 +322,11 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	addAll(c: Collection<T>): boolean {
-		let changed: boolean =  false;
+		let changed: boolean = false;
 
 		for (let o of asIterable(c)) {
 			let existing: T =  this.getOrAdd(o);
-			if ( existing!=o ) changed=true;
+			if ( existing !== o ) changed = true;
 		}
 		return changed;
 	}
@@ -366,13 +346,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 					break;
 				}
 
-				if (!c.contains(bucket[i])) {  /* :-) */
+				if (!c.contains(bucket[i])) {
 					// removed
 					continue;
 				}
 
 				// keep
-				if (i != j) {
+				if (i !== j) {
 					bucket[j] = bucket[i];
 				}
 
@@ -383,7 +363,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			newsize += j;
 
 			while (j < i) {
-				bucket[j] = null;
+				bucket[j] = undefined;
 				j++;
 			}
 		}
@@ -397,7 +377,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	removeAll(c: Collection<T>): boolean {
 		let changed = false;
 		for (let o of asIterable(c)) {
-			changed = changed || this.removeFast(this.asElementType(o));
+			if (this.removeFast(this.asElementType(o))) changed = true;
 		}
 
 		return changed;
