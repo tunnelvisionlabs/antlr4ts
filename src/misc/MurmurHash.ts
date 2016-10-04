@@ -57,7 +57,7 @@ export namespace MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	export function update(hash: number, value: number | Equatable ): number {
+	export function update(hash: number, value: number | string | Equatable ): number {
 		const c1: number =  0xCC9E2D51;
 		const c2: number =  0x1B873593;
 		const r1: number =  15;
@@ -65,8 +65,13 @@ export namespace MurmurHash {
 		const m: number =  5;
 		const n: number =  0xE6546B64;
 
-		if (value === null) value = 0;
-		else if (typeof value === 'object') value = (value as Equatable).hashCode();
+		if (value == null) {
+			value = 0;
+		} else if (typeof value === 'string') {
+			value = hashString(value);
+		} else if (typeof value === 'object') {
+			value = (value as Equatable).hashCode();
+		}
 
 		let k: number = value as number;
 		k = k * c1;
@@ -108,13 +113,33 @@ export namespace MurmurHash {
 	 * @param seed the seed for the MurmurHash algorithm
 	 * @return the hash code of the data
 	 */
-	export function hashCode<T extends Equatable>(data: T[], seed: number): number {
+	export function hashCode<T extends number | string | Equatable>(data: T[], seed: number): number {
 		let hash: number =  initialize(seed);
 		for (let value of data) {
 			hash = update(hash, value);
 		}
 
 		hash = finish(hash, data.length);
+		return hash;
+	}
+
+	/**
+	 * Function to hash a string. Based on the implementation found here:
+	 * http://stackoverflow.com/a/7616484
+	 */
+	function hashString(str: string): number {
+		let len = str.length;
+		if (len === 0) {
+			return 0;
+		}
+
+		let hash = 0;
+		for (let i = 0; i < len; i++) {
+			let c = str.charCodeAt(i);
+			hash = ((hash << 5) - hash) + c;
+			hash |= 0;
+		}
+
 		return hash;
 	}
 }
