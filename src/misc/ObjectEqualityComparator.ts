@@ -28,7 +28,7 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
-import {AbstractEqualityComparator} from './AbstractEqualityComparator';
+import {EqualityComparator} from './EqualityComparator';
 import {Override, Equatable} from './Stubs';
 
 /**
@@ -37,7 +37,7 @@ import {Override, Equatable} from './Stubs';
  *
  * @author Sam Harwell
  */
-export class ObjectEqualityComparator extends AbstractEqualityComparator<Equatable> {
+export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**
