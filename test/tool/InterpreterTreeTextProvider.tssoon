@@ -1,0 +1,16 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:27:01.8665704-07:00
+
+export class InterpreterTreeTextProvider implements TreeTextProvider {
+	ruleNames: List<string>; 
+	 constructor(String[] ruleNames) {this.ruleNames = Arrays.asList(ruleNames) ;}
+
+	@Override
+	getText(node: Tree): string {
+		if ( node==null ) return "null";
+		let nodeText: string =  Trees.getNodeText(node, ruleNames);
+		if ( node instanceof ErrorNode) {
+			return "<error "+nodeText+">";
+		}
+		return nodeText;
+	}
+}

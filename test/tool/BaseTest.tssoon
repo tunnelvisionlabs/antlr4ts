@@ -1,0 +1,1402 @@
+﻿/*
+ * [The "BSD license"]
+ *  Copyright (c) 2012 Terence Parr
+ *  Copyright (c) 2012 Sam Harwell
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *  3. The name of the author may not be used to endorse or promote products
+ *     derived from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+// ConvertTo-TS run at 2016-10-04T11:26:59.8152524-07:00
+
+// import org.junit.Before;
+// import org.junit.rules.TestRule;
+// import org.junit.rules.TestWatcher;
+// import org.junit.runner.Description;
+// import org.stringtemplate.v4.ST;
+// import org.stringtemplate.v4.STGroup;
+// import org.stringtemplate.v4.STGroupString;
+
+// import static org.junit.Assert.assertArrayEquals;
+// import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertFalse;
+// import static org.junit.Assert.assertNotNull;
+// import static org.junit.Assert.assertTrue;
+
+export abstract class BaseTest {
+	// -J-Dorg.antlr.v4.test.BaseTest.level=FINE
+	private static LOGGER: Logger =  Logger.getLogger(BaseTest.class.getName());
+
+	static newline: string =  System.getProperty("line.separator");
+	static pathSep: string =  System.getProperty("path.separator");
+
+	/**
+	 * When the {@code antlr.testinprocess} runtime property is set to
+	 * {@code true}, the test suite will attempt to load generated classes into
+	 * the test process for direct execution rather than invoking the JVM in a
+	 * new process for testing.
+	 *
+	 * <p>
+	 * In-process testing results in a substantial performance improvement, but
+	 * some test environments created by IDEs do not support the mechanisms
+	 * currently used by the tests to dynamically load compiled code. Therefore,
+	 * the default behavior (used in all other cases) favors reliable
+	 * cross-system test execution by executing generated test code in a
+	 * separate process.</p>
+	 */
+	static TEST_IN_SAME_PROCESS: boolean =  Boolean.parseBoolean(System.getProperty("antlr.testinprocess"));
+	static STRICT_COMPILE_CHECKS: boolean =  Boolean.parseBoolean(System.getProperty("antlr.strictcompile"));
+
+	/**
+	 * When the {@code antlr.preserve-test-dir} runtime property is set to
+	 * {@code true}, the temporary directories created by the test run will not
+	 * be removed at the end of the test run, even for tests that completed
+	 * successfully.
+	 *
+	 * <p>
+	 * The default behavior (used in all other cases) is removing the temporary
+	 * directories for all tests which completed successfully, and preserving
+	 * the directories for tests which failed.</p>
+	 */
+	static PRESERVE_TEST_DIR: boolean =  Boolean.parseBoolean(System.getProperty("antlr.preserve-test-dir"));
+
+	/**
+	 * The base test directory is the directory where generated files get placed
+	 * during unit test execution.
+	 *
+	 * <p>
+	 * The default value for this property is the {@code java.io.tmpdir} system
+	 * property, and can be overridden by setting the
+	 * {@code antlr.java-test-dir} property to a custom location. Note that the
+	 * {@code antlr.java-test-dir} property directly affects the
+	 * {@link #CREATE_PER_TEST_DIRECTORIES} value as well.</p>
+	 */
+	static BASE_TEST_DIR: string; 
+
+	/**
+	 * When {@code true}, a temporary directory will be created for each test
+	 * executed during the test run.
+	 *
+	 * <p>
+	 * This value is {@code true} when the {@code antlr.java-test-dir} system
+	 * property is set, and otherwise {@code false}.</p>
+	 */
+	static CREATE_PER_TEST_DIRECTORIES: boolean; 
+
+	static {
+		let baseTestDir: string =  System.getProperty("antlr.java-test-dir");
+		let perTestDirectories: boolean =  false;
+		if (baseTestDir == null || baseTestDir.isEmpty()) {
+			baseTestDir = System.getProperty("java.io.tmpdir");
+			perTestDirectories = true;
+		}
+
+		if (!new File(baseTestDir).isDirectory()) {
+			throw new UnsupportedOperationException("The specified base test directory does not exist: " + baseTestDir);
+		}
+
+		BASE_TEST_DIR = baseTestDir;
+		CREATE_PER_TEST_DIRECTORIES = perTestDirectories;
+	}
+
+    /**
+     * Build up the full classpath we need, including the surefire path (if present)
+     */
+    static CLASSPATH: string =  System.getProperty("java.class.path");
+
+	tmpdir: string =  null;
+
+	/** If error during parser execution, store stderr here; can't return
+     *  stdout and stderr.  This doesn't trap errors from running antlr.
+     */
+	protected stderrDuringParse: string; 
+
+	@org.junit.Rule
+	testWatcher: TestRule =  new TestWatcher() {
+
+		@Override
+		protected succeeded(description: Description): void {
+			// remove tmpdir if no error.
+			if (!PRESERVE_TEST_DIR) {
+				eraseTempDir();
+			}
+		}
+
+	};
+
+    @Before
+	setUp(): void {
+		if (CREATE_PER_TEST_DIRECTORIES) {
+			// new output dir for each test
+			let testDirectory: string =  getClass().getSimpleName() + "-" + System.currentTimeMillis();
+			tmpdir = new File(BASE_TEST_DIR, testDirectory).getAbsolutePath();
+		}
+		else {
+			tmpdir = new File(BASE_TEST_DIR).getAbsolutePath();
+			if (!PRESERVE_TEST_DIR && new File(tmpdir).exists()) {
+				eraseFiles();
+			}
+		}
+    }
+
+	protected testInSameProcess(): boolean {
+		return TEST_IN_SAME_PROCESS;
+	}
+
+    protected org.antlr.v4.Tool newTool(String[] args) {
+		let tool: Tool =  new Tool(args);
+		return tool;
+	}
+
+	protected newTool(): Tool {
+		org.antlr.v4.Tool tool = new Tool(new String[] {"-o", tmpdir});
+		return tool;
+	}
+
+	protected createATN(g: Grammar, useSerializer: boolean): ATN {
+		if ( g.atn==null ) {
+			semanticProcess(g);
+			assertEquals(0, g.tool.getNumErrors());
+
+			let f: ParserATNFactory; 
+			if ( g.isLexer() ) {
+				f = new LexerATNFactory((LexerGrammar)g);
+			}
+			else {
+				f = new ParserATNFactory(g);
+			}
+
+			g.atn = f.createATN();
+			assertEquals(0, g.tool.getNumErrors());
+		}
+
+		let atn: ATN =  g.atn;
+		if (useSerializer) {
+			let serialized: char[] =  ATNSerializer.getSerializedAsChars(atn, Arrays.asList(g.getRuleNames()));
+			return new ATNDeserializer().deserialize(serialized);
+		}
+
+		return atn;
+	}
+
+	protected semanticProcess(g: Grammar): void {
+		if ( g.ast!=null && !g.ast.hasErrors ) {
+			console.log(g.ast.toStringTree());
+			let antlr: Tool =  new Tool();
+			let sem: SemanticPipeline =  new SemanticPipeline(g);
+			sem.process();
+			if ( g.getImportedGrammars()!=null ) { // process imported grammars (if any)
+				for (let imp of g.getImportedGrammars()) {
+					antlr.processNonCombinedGrammar(imp, false);
+				}
+			}
+		}
+	}
+
+	createDFA(g: Grammar, s: DecisionState): DFA {
+//		PredictionDFAFactory conv = new PredictionDFAFactory(g, s);
+//		DFA dfa = conv.createDFA();
+//		conv.issueAmbiguityWarnings();
+//		System.out.print("DFA="+dfa);
+//		return dfa;
+		return null;
+	}
+
+//	public void minimizeDFA(DFA dfa) {
+//		DFAMinimizer dmin = new DFAMinimizer(dfa);
+//		dfa.minimized = dmin.minimize();
+//	}
+
+	getTypesFromString(g: Grammar, expecting: string): IntegerList {
+		let expectingTokenTypes: IntegerList =  new IntegerList();
+		if ( expecting!=null && !expecting.trim().isEmpty() ) {
+			for (let tname of expecting.replace(" ", "").split(",")) {
+				let ttype: number =  g.getTokenType(tname);
+				expectingTokenTypes.add(ttype);
+			}
+		}
+		return expectingTokenTypes;
+	}
+
+	getTokenTypesViaATN(input: string, lexerATN: LexerATNSimulator): IntegerList {
+		let in: ANTLRInputStream =  new ANTLRInputStream(input);
+		let tokenTypes: IntegerList =  new IntegerList();
+		let ttype: number; 
+		do {
+			ttype = lexerATN.match(in, Lexer.DEFAULT_MODE);
+			tokenTypes.add(ttype);
+		} while ( ttype!= Token.EOF );
+		return tokenTypes;
+	}
+
+	getTokenTypes(lg: LexerGrammar, 
+									  atn: ATN,
+									  input: CharStream): List<string>
+	{
+		let interp: LexerATNSimulator =  new LexerATNSimulator(atn);
+		let tokenTypes: List<string> =  new ArrayList<String>();
+		let ttype: number; 
+		let hitEOF: boolean =  false;
+		do {
+			if ( hitEOF ) {
+				tokenTypes.add("EOF");
+				break;
+			}
+			let t: number =  input.LA(1);
+			ttype = interp.match(input, Lexer.DEFAULT_MODE);
+			if ( ttype == Token.EOF ) {
+				tokenTypes.add("EOF");
+			}
+			else {
+				tokenTypes.add(lg.typeToTokenList.get(ttype));
+			}
+
+			if ( t==IntStream.EOF ) {
+				hitEOF = true;
+			}
+		} while ( ttype!=Token.EOF );
+		return tokenTypes;
+	}
+
+	checkRuleDFA(gtext: string, ruleName: string, expecting: string): List<ANTLRMessage>
+
+	{
+		let equeue: ErrorQueue =  new ErrorQueue();
+		let g: Grammar =  new Grammar(gtext, equeue);
+		let atn: ATN =  createATN(g, false);
+		let s: ATNState =  atn.ruleToStartState[g.getRule(ruleName).index];
+		if ( s==null ) {
+			System.err.println("no such rule: "+ruleName);
+			return null;
+		}
+		let t: ATNState =  s.transition(0).target;
+		if ( !(t instanceof DecisionState) ) {
+			console.log(ruleName+" has no decision");
+			return null;
+		}
+		let blk: DecisionState =  (DecisionState)t;
+		checkRuleDFA(g, blk, expecting);
+		return equeue.all;
+	}
+
+	checkRuleDFA(gtext: string, decision: number, expecting: string): List<ANTLRMessage>
+
+	{
+		let equeue: ErrorQueue =  new ErrorQueue();
+		let g: Grammar =  new Grammar(gtext, equeue);
+		let atn: ATN =  createATN(g, false);
+		let blk: DecisionState =  atn.decisionToState.get(decision);
+		checkRuleDFA(g, blk, expecting);
+		return equeue.all;
+	}
+
+	checkRuleDFA(g: Grammar, blk: DecisionState, expecting: string): void
+
+	{
+		let dfa: DFA =  createDFA(g, blk);
+		let result: string =  null;
+		if ( dfa!=null ) result = dfa.toString();
+		assertEquals(expecting, result);
+	}
+
+	checkLexerDFA(gtext: string, expecting: string): List<ANTLRMessage>
+
+	{
+		return checkLexerDFA(gtext, LexerGrammar.DEFAULT_MODE_NAME, expecting);
+	}
+
+	checkLexerDFA(gtext: string, modeName: string, expecting: string): List<ANTLRMessage>
+
+	{
+		let equeue: ErrorQueue =  new ErrorQueue();
+		let g: LexerGrammar =  new LexerGrammar(gtext, equeue);
+		g.atn = createATN(g, false);
+//		LexerATNToDFAConverter conv = new LexerATNToDFAConverter(g);
+//		DFA dfa = conv.createDFA(modeName);
+//		g.setLookaheadDFA(0, dfa); // only one decision to worry about
+//
+//		String result = null;
+//		if ( dfa!=null ) result = dfa.toString();
+//		assertEquals(expecting, result);
+//
+//		return equeue.all;
+		return null;
+	}
+
+	protected load(fileName: string, @Nullable encoding: string): string
+
+	{
+		if ( fileName==null ) {
+			return null;
+		}
+
+		let fullFileName: string =  getClass().getPackage().getName().replace('.', '/') + '/' + fileName;
+		let size: number =  65000;
+		let isr: InputStreamReader; 
+		let fis: InputStream =  getClass().getClassLoader().getResourceAsStream(fullFileName);
+		if ( encoding!=null ) {
+			isr = new InputStreamReader(fis, encoding);
+		}
+		else {
+			isr = new InputStreamReader(fis);
+		}
+		try {
+			let data: char[] =  new char[size];
+			let n: number =  isr.read(data);
+			return new String(data, 0, n);
+		}
+		finally {
+			isr.close();
+		}
+	}
+
+	/** Wow! much faster than compiling outside of VM. Finicky though.
+	 *  Had rules called r and modulo. Wouldn't compile til I changed to 'a'.
+	 */
+	protected compile(String... fileNames): boolean {
+		let files: List<File> =  new ArrayList<File>();
+		for (let fileName of fileNames) {
+			let f: File =  new File(tmpdir, fileName);
+			files.add(f);
+		}
+
+		let compiler: JavaCompiler =  ToolProvider.getSystemJavaCompiler();
+//		DiagnosticCollector<JavaFileObject> diagnostics =
+//			new DiagnosticCollector<JavaFileObject>();
+
+		let fileManager: StandardJavaFileManager = 
+			compiler.getStandardFileManager(null, null, null);
+
+		let compilationUnits: Iterable<? extends JavaFileany> = 
+			fileManager.getJavaFileObjectsFromFiles(files);
+
+		let compileOptions: List<string> =  getCompileOptions();
+		JavaCompiler.CompilationTask task =
+			compiler.getTask(null, fileManager, null, compileOptions, null,
+							 compilationUnits);
+		let ok: boolean =  task.call();
+
+		try {
+			fileManager.close();
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace(System.err);
+		}
+
+//		List<String> errors = new ArrayList<String>();
+//		for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
+//			errors.add(
+//				String.valueOf(diagnostic.getLineNumber())+
+//				": " + diagnostic.getMessage(null));
+//		}
+//		if ( errors.size()>0 ) {
+//			System.err.println("compile stderr from: "+cmdLine);
+//			System.err.println(errors);
+//			return false;
+//		}
+		return ok;
+
+		/*
+		let outputDir: File =  new File(tmpdir);
+		try {
+			let process: Process = 
+				Runtime.getRuntime().exec(args, null, outputDir);
+			let stdout: StreamVacuum =  new StreamVacuum(process.getInputStream());
+			let stderr: StreamVacuum =  new StreamVacuum(process.getErrorStream());
+			stdout.start();
+			stderr.start();
+			process.waitFor();
+            stdout.join();
+            stderr.join();
+			if ( stdout.toString().length()>0 ) {
+				System.err.println("compile stdout from: "+cmdLine);
+				System.err.println(stdout);
+			}
+			if ( stderr.toString().length()>0 ) {
+				System.err.println("compile stderr from: "+cmdLine);
+				System.err.println(stderr);
+			}
+			let ret: number =  process.exitValue();
+			return ret==0;
+		}
+		catch (Exception e) {
+			System.err.println("can't exec compilation");
+			e.printStackTrace(System.err);
+			return false;
+		}
+		*/
+	}
+
+	getCompileOptions(): List<string> {
+		let compileOptions: List<string> =  new ArrayList<String>();
+		compileOptions.add("-g");
+		compileOptions.add("-source");
+		compileOptions.add("1.6");
+		compileOptions.add("-target");
+		compileOptions.add("1.6");
+		compileOptions.add("-implicit:class");
+		compileOptions.add("-Xlint:-options");
+
+		let bootclasspath: string =  getBootClassPath();
+		if (bootclasspath != null) {
+			compileOptions.add("-bootclasspath");
+			compileOptions.add(bootclasspath);
+		}
+
+		if (STRICT_COMPILE_CHECKS) {
+			compileOptions.add("-Xlint");
+			compileOptions.add("-Xlint:-serial");
+			compileOptions.add("-Werror");
+		}
+
+		compileOptions.addAll(Arrays.asList("-d", tmpdir, "-cp", tmpdir+pathSep+CLASSPATH));
+		return compileOptions;
+	}
+
+	getBootClassPath(): string {
+		let path: string =  System.getProperty("bootclasspath.java6");
+		if (path != null) {
+			return path;
+		}
+
+		path = System.getProperty("java6.home");
+		if (path == null) {
+			path = System.getenv("JAVA6_HOME");
+		}
+
+		if (path != null) {
+			return path + File.separatorChar + "lib" + File.separatorChar + "rt.jar";
+		}
+
+		return null;
+	}
+
+	protected antlr(grammarFileName: string, defaultListener: boolean,  String... extraOptions): ErrorQueue {
+		options: List<string> =  new ArrayList<String>();
+		Collections.addAll(options, extraOptions);
+		if ( !options.contains("-o") ) {
+			options.add("-o");
+			options.add(tmpdir);
+		}
+		if ( !options.contains("-lib") ) {
+			options.add("-lib");
+			options.add(tmpdir);
+		}
+		if ( !options.contains("-encoding") ) {
+			options.add("-encoding");
+			options.add("UTF-8");
+		}
+		options.add(new File(tmpdir,grammarFileName).toString());
+
+		optionsA: string[] =  new String[options.size()];
+		options.toArray(optionsA);
+		let antlr: Tool =  newTool(optionsA);
+		let equeue: ErrorQueue =  new ErrorQueue(antlr);
+		antlr.addListener(equeue);
+		if (defaultListener) {
+			antlr.addListener(new DefaultToolListener(antlr));
+		}
+		antlr.processGrammarsOnCommandLine();
+
+		if ( !defaultListener && !equeue.errors.isEmpty() ) {
+			System.err.println("antlr reports errors from "+options);
+			for (let i = 0; i < equeue.errors.size(); i++) {
+				let msg: ANTLRMessage =  equeue.errors.get(i);
+				System.err.println(msg);
+			}
+			console.log("!!!\ngrammar:");
+			try {
+				console.log(new String(Utils.readFile(tmpdir+"/"+grammarFileName)));
+			}
+			catch (IOException ioe) {
+				System.err.println(ioe.toString());
+			}
+			console.log("###");
+		}
+		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+			System.err.println("antlr reports warnings from "+options);
+			for (let i = 0; i < equeue.warnings.size(); i++) {
+				let msg: ANTLRMessage =  equeue.warnings.get(i);
+				System.err.println(msg);
+			}
+		}
+
+		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+			System.err.println("antlr reports warnings from "+options);
+			for (let i = 0; i < equeue.warnings.size(); i++) {
+				let msg: ANTLRMessage =  equeue.warnings.get(i);
+				System.err.println(msg);
+			}
+		}
+
+		return equeue;
+	}
+
+	protected antlr(grammarFileName: string, grammarStr: string, defaultListener: boolean,  String... extraOptions): ErrorQueue {
+		console.log("dir "+tmpdir);
+		mkdir(tmpdir);
+		writeFile(tmpdir, grammarFileName, grammarStr);
+		return antlr(grammarFileName, defaultListener, extraOptions);
+	}
+
+	protected execLexer(grammarFileName: string, 
+							   grammarStr: string,
+							   lexerName: string,
+							   input: string): string
+	{
+		return execLexer(grammarFileName, grammarStr, lexerName, input, false);
+	}
+
+	protected execLexer(grammarFileName: string, 
+							   grammarStr: string,
+							   lexerName: string,
+							   input: string,
+							   showDFA: boolean): string
+	{
+		let success: boolean =  rawGenerateAndBuildRecognizer(grammarFileName,
+									  grammarStr,
+									  null,
+									  lexerName);
+		assertTrue(success);
+		writeFile(tmpdir, "input", input);
+		writeLexerTestFile(lexerName, showDFA);
+		compile("Test.java");
+		let output: string =  execClass("Test");
+		if ( stderrDuringParse!=null && stderrDuringParse.length()>0 ) {
+			System.err.println(stderrDuringParse);
+		}
+		return output;
+	}
+
+	execParser(startRuleName: string, input: string, 
+								parserName: string, lexerName: string): ParseTree
+
+	{
+		let pl: Tuple2<Parser, Lexer> =  getParserAndLexer(input, parserName, lexerName);
+		let parser: Parser =  pl.getItem1();
+		return execStartRule(startRuleName, parser);
+	}
+
+	execStartRule(startRuleName: string, parser: Parser): ParseTree
+, InvocationTargetException,
+			   NoSuchMethodException
+	{
+		let startRule: Method =  null;
+		let args: any[] =  null;
+		try {
+			startRule = parser.getClass().getMethod(startRuleName);
+		}
+		catch (NoSuchMethodException nsme) {
+			// try with int _p arg for recursive func
+			startRule = parser.getClass().getMethod(startRuleName, int.class);
+			args = new Integer[] {0};
+		}
+		let result: ParseTree =  (ParseTree)startRule.invoke(parser, args);
+//		System.out.println("parse tree = "+result.toStringTree(parser));
+		return result;
+	}
+
+	getParserAndLexer(input: string, 
+												 parserName: string, lexerName: string): Tuple2<Parser, Lexer>
+
+	{
+		lexerClass: Class<? extends Lexer> =  loadLexerClassFromTempDir(lexerName);
+		parserClass: Class<? extends Parser> =  loadParserClassFromTempDir(parserName);
+
+		let in: ANTLRInputStream =  new ANTLRInputStream(new StringReader(input));
+
+		let c: Class<? extends Lexer> =  lexerClass.asSubclass(Lexer.class);
+		let ctor: Constructor<? extends Lexer> =  c.getConstructor(CharStream.class);
+		let lexer: Lexer =  ctor.newInstance(in);
+
+		let pc: Class<? extends Parser> =  parserClass.asSubclass(Parser.class);
+		let pctor: Constructor<? extends Parser> =  pc.getConstructor(TokenStream.class);
+		let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
+		let parser: Parser =  pctor.newInstance(tokens);
+		return Tuple.create(parser, lexer);
+	}
+
+	loadClassFromTempDir(name: string): Class<?> {
+		let loader: ClassLoader = 
+			URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL(): new },
+							   ClassLoader.getSystemClassLoader());
+		return loader.loadClass(name);
+	}
+
+	loadLexerClassFromTempDir(name: string): Class<? extends Lexer> {
+		return loadClassFromTempDir(name).asSubclass(Lexer.class);
+	}
+
+	loadParserClassFromTempDir(name: string): Class<? extends Parser> {
+		return loadClassFromTempDir(name).asSubclass(Parser.class);
+	}
+
+	protected execParser(grammarFileName: string, 
+								grammarStr: string,
+								parserName: string,
+								lexerName: string,
+								startRuleName: string,
+								input: string, debug: boolean): string
+	{
+		return execParser(grammarFileName, grammarStr, parserName,
+				   lexerName, startRuleName, input, debug, false);
+	}
+
+	protected execParser(grammarFileName: string, 
+								grammarStr: string,
+								parserName: string,
+								lexerName: string,
+								startRuleName: string,
+								input: string, debug: boolean,
+								profile: boolean): string
+	{
+		let success: boolean =  rawGenerateAndBuildRecognizer(grammarFileName,
+														grammarStr,
+														parserName,
+														lexerName,
+														"-visitor");
+		assertTrue(success);
+		writeFile(tmpdir, "input", input);
+		return rawExecRecognizer(parserName,
+								 lexerName,
+								 startRuleName,
+								 debug,
+								 profile);
+	}
+
+	/** Return true if all is well */
+	protected rawGenerateAndBuildRecognizer(grammarFileName: string, 
+													grammarStr: string,
+													@Nullable parserName: string,
+													lexerName: string,
+													String... extraOptions): boolean
+	{
+		return rawGenerateAndBuildRecognizer(grammarFileName, grammarStr, parserName, lexerName, false, extraOptions);
+	}
+
+	/** Return true if all is well */
+	protected rawGenerateAndBuildRecognizer(grammarFileName: string, 
+													grammarStr: string,
+													@Nullable parserName: string,
+													lexerName: string,
+													defaultListener: boolean,
+													String... extraOptions): boolean
+	{
+		let equeue: ErrorQueue = 
+			antlr(grammarFileName, grammarStr, defaultListener, extraOptions);
+		if (!equeue.errors.isEmpty()) {
+			return false;
+		}
+
+		let files: List<string> =  new ArrayList<String>();
+		if ( lexerName!=null ) {
+			files.add(lexerName+".java");
+		}
+		if ( parserName!=null ) {
+			files.add(parserName+".java");
+			let optionsSet: Set<string> =  new HashSet<String>(Arrays.asList(extraOptions));
+			let grammarName: string =  grammarFileName.substring(0, grammarFileName.lastIndexOf('.'));
+			if (!optionsSet.contains("-no-listener")) {
+				files.add(grammarName+"Listener.java");
+				files.add(grammarName+"BaseListener.java");
+			}
+			if (optionsSet.contains("-visitor")) {
+				files.add(grammarName+"Visitor.java");
+				files.add(grammarName+"BaseVisitor.java");
+			}
+		}
+		let allIsWell: boolean =  compile(files.toArray(new String[files.size()]));
+		return allIsWell;
+	}
+
+	protected rawExecRecognizer(parserName: string, 
+									   lexerName: string,
+									   parserStartRuleName: string,
+									   debug: boolean,
+									   profile: boolean): string
+	{
+        this.stderrDuringParse = null;
+		if ( parserName==null ) {
+			writeLexerTestFile(lexerName, false);
+		}
+		else {
+			writeTestFile(parserName,
+						  lexerName,
+						  parserStartRuleName,
+						  debug,
+						  profile);
+		}
+
+		compile("Test.java");
+		return execClass("Test");
+	}
+
+	execRecognizer(): string {
+		return execClass("Test");
+	}
+
+	execClass(className: string): string {
+		if (testInSameProcess()) {
+			try {
+				let loader: ClassLoader =  new URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL() }, ClassLoader.getSystemClassLoader());
+                mainClass: Class<?> =  (Class<?>)loader.loadClass(className);
+				mainMethod: Method =  mainClass.getDeclaredMethod("main", String[].class);
+				let stdoutIn: PipedInputStream =  new PipedInputStream();
+				let stderrIn: PipedInputStream =  new PipedInputStream();
+				let stdoutOut: PipedOutputStream =  new PipedOutputStream(stdoutIn);
+				let stderrOut: PipedOutputStream =  new PipedOutputStream(stderrIn);
+				let stdoutVacuum: StreamVacuum =  new StreamVacuum(stdoutIn);
+				let stderrVacuum: StreamVacuum =  new StreamVacuum(stderrIn);
+
+				let originalOut: PrintStream =  System.out;
+				System.setOut(new PrintStream(stdoutOut));
+				try {
+					let originalErr: PrintStream =  System.err;
+					try {
+						System.setErr(new PrintStream(stderrOut));
+						stdoutVacuum.start();
+						stderrVacuum.start();
+						mainMethod.invoke(null, (Object)new String[] { new File(tmpdir, "input").getAbsolutePath() });
+					}
+					finally {
+						System.setErr(originalErr);
+					}
+				}
+				finally {
+					System.setOut(originalOut);
+				}
+
+				stdoutOut.close();
+				stderrOut.close();
+				stdoutVacuum.join();
+				stderrVacuum.join();
+				let output: string =  stdoutVacuum.toString();
+				if ( stderrVacuum.toString().length()>0 ) {
+					this.stderrDuringParse = stderrVacuum.toString();
+					System.err.println("exec stderrVacuum: "+ stderrVacuum);
+				}
+				return output;
+			} catch (MalformedURLException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (IOException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (InterruptedException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (IllegalAccessException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (IllegalArgumentException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (InvocationTargetException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (NoSuchMethodException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (SecurityException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			} catch (ClassNotFoundException ex) {
+				LOGGER.log(Level.SEVERE, null, ex);
+				throw new RuntimeException(ex);
+			}
+		}
+
+		try {
+			let args: string[] =  new String[] {
+				"java", "-classpath", tmpdir+pathSep+CLASSPATH,
+				className, new File(tmpdir, "input").getAbsolutePath()
+			};
+			//String cmdLine = "java -classpath "+CLASSPATH+pathSep+tmpdir+" Test " + new File(tmpdir, "input").getAbsolutePath();
+			//System.out.println("execParser: "+cmdLine);
+			let process: Process = 
+				Runtime.getRuntime().exec(args, null, new File(tmpdir));
+			let stdoutVacuum: StreamVacuum =  new StreamVacuum(process.getInputStream());
+			let stderrVacuum: StreamVacuum =  new StreamVacuum(process.getErrorStream());
+			stdoutVacuum.start();
+			stderrVacuum.start();
+			process.waitFor();
+			stdoutVacuum.join();
+			stderrVacuum.join();
+			let output: string =  stdoutVacuum.toString();
+			if ( stderrVacuum.toString().length()>0 ) {
+				this.stderrDuringParse = stderrVacuum.toString();
+				System.err.println("exec stderrVacuum: "+ stderrVacuum);
+			}
+			return output;
+		}
+		catch (Exception e) {
+			System.err.println("can't exec recognizer");
+			e.printStackTrace(System.err);
+		}
+		return null;
+	}
+
+	testErrors(pairs: string[], printTree: boolean): void {
+        for (let i = 0; i < pairs.length; i+=2) {
+            let input: string =  pairs[i];
+            let expect: string =  pairs[i+1];
+
+			let lines: string[] =  input.split("\n");
+			let fileName: string =  getFilenameFromFirstLineOfGrammar(lines[0]);
+			let equeue: ErrorQueue =  antlr(fileName, input, false);
+
+			let actual: string =  equeue.toString(true);
+			actual = actual.replace(tmpdir + File.separator, "");
+			System.err.println(actual);
+			let msg: string =  input;
+			msg = msg.replace("\n","\\n");
+			msg = msg.replace("\r","\\r");
+			msg = msg.replace("\t","\\t");
+
+            assertEquals("error in: "+msg,expect,actual);
+        }
+    }
+
+	getFilenameFromFirstLineOfGrammar(line: string): string {
+		let fileName: string =  "A" + Tool.GRAMMAR_EXTENSION;
+		let grIndex: number =  line.lastIndexOf("grammar");
+		let semi: number =  line.lastIndexOf(';');
+		if ( grIndex>=0 && semi>=0 ) {
+			let space: number =  line.indexOf(' ', grIndex);
+			fileName = line.substring(space+1, semi)+Tool.GRAMMAR_EXTENSION;
+		}
+		if ( fileName.length()==Tool.GRAMMAR_EXTENSION.length() ) fileName = "A" + Tool.GRAMMAR_EXTENSION;
+		return fileName;
+	}
+
+//	void ambig(List<Message> msgs, int[] expectedAmbigAlts, String expectedAmbigInput)
+//
+//	{
+//		ambig(msgs, 0, expectedAmbigAlts, expectedAmbigInput);
+//	}
+
+//	void ambig(List<Message> msgs, int i, int[] expectedAmbigAlts, String expectedAmbigInput)
+//
+//	{
+//		List<Message> amsgs = getMessagesOfType(msgs, AmbiguityMessage.class);
+//		AmbiguityMessage a = (AmbiguityMessage)amsgs.get(i);
+//		if ( a==null ) assertNull(expectedAmbigAlts);
+//		else {
+//			assertEquals(a.conflictingAlts.toString(), Arrays.toString(expectedAmbigAlts));
+//		}
+//		assertEquals(expectedAmbigInput, a.input);
+//	}
+
+//	void unreachable(List<Message> msgs, int[] expectedUnreachableAlts)
+//
+//	{
+//		unreachable(msgs, 0, expectedUnreachableAlts);
+//	}
+
+//	void unreachable(List<Message> msgs, int i, int[] expectedUnreachableAlts)
+//
+//	{
+//		List<Message> amsgs = getMessagesOfType(msgs, UnreachableAltsMessage.class);
+//		UnreachableAltsMessage u = (UnreachableAltsMessage)amsgs.get(i);
+//		if ( u==null ) assertNull(expectedUnreachableAlts);
+//		else {
+//			assertEquals(u.conflictingAlts.toString(), Arrays.toString(expectedUnreachableAlts));
+//		}
+//	}
+
+	getMessagesOfType(c: List<ANTLRMessage> msgs,Class<? extends ANTLRMessage>): List<ANTLRMessage> {
+		let filtered: List<ANTLRMessage> =  new ArrayList<ANTLRMessage>();
+		for (let m of msgs) {
+			if ( m.getClass() == c ) filtered.add(m);
+		}
+		return filtered;
+	}
+
+	checkRuleATN(g: Grammar, ruleName: string, expecting: string): void {
+		let dot: DOTGenerator =  new DOTGenerator(g);
+		console.log(dot.getDOT(g.atn.ruleToStartState[g.getRule(ruleName).index]));
+
+		let r: Rule =  g.getRule(ruleName);
+		let startState: ATNState =  g.atn.ruleToStartState[r.index];
+		let serializer: ATNPrinter =  new ATNPrinter(g, startState);
+		let result: string =  serializer.asString();
+
+		//System.out.print(result);
+		assertEquals(expecting, result);
+	}
+
+	testActions(templates: string, actionName: string, action: string, expected: string): void.antlr.runtime.RecognitionException {
+		let lp: number =  templates.indexOf('(');
+		let name: string =  templates.substring(0, lp);
+		let group: STGroup =  new STGroupString(templates);
+		let st: ST =  group.getInstanceOf(name);
+		st.add(actionName, action);
+		let grammar: string =  st.render();
+		let equeue: ErrorQueue =  new ErrorQueue();
+		let g: Grammar =  new Grammar(grammar, equeue);
+		if ( g.ast!=null && !g.ast.hasErrors ) {
+			let sem: SemanticPipeline =  new SemanticPipeline(g);
+			sem.process();
+
+			let factory: ATNFactory =  new ParserATNFactory(g);
+			if ( g.isLexer() ) factory = new LexerATNFactory((LexerGrammar)g);
+			g.atn = factory.createATN();
+
+			let gen: CodeGenerator =  new CodeGenerator(g);
+			let outputFileST: ST =  gen.generateParser();
+			let output: string =  outputFileST.render();
+			//System.out.println(output);
+			let b: string =  "#" + actionName + "#";
+			let start: number =  output.indexOf(b);
+			let e: string =  "#end-" + actionName + "#";
+			let end: number =  output.indexOf(e);
+			let snippet: string =  output.substring(start+b.length(),end);
+			assertEquals(expected, snippet);
+		}
+		if ( equeue.size()>0 ) {
+			System.err.println(equeue.toString());
+		}
+	}
+
+	public static class StreamVacuum implements Runnable {
+		let buf: StringBuilder =  new StringBuilder();
+		let in: BufferedReader; 
+		let sucker: Thread; 
+		public StreamVacuum(InputStream in) {
+			this.in = new BufferedReader( new InputStreamReader(in) );
+		}
+		start(): void {
+			sucker = new Thread(this);
+			sucker.start();
+		}
+		@Override
+		run(): void {
+			try {
+				let line: string =  in.readLine();
+				while (line!=null) {
+					buf.append(line);
+					buf.append('\n');
+					line = in.readLine();
+				}
+			}
+			catch (IOException ioe) {
+				System.err.println("can't read output from process");
+			}
+		}
+		/** wait for the thread to finish */
+		join(): void {
+			sucker.join();
+		}
+		@Override
+		toString(): string {
+			return buf.toString();
+		}
+	}
+
+	protected checkGrammarSemanticsError(equeue: ErrorQueue, 
+											  expectedMessage: GrammarSemanticsMessage): void
+
+	{
+		let foundMsg: ANTLRMessage =  null;
+		for (let i = 0; i < equeue.errors.size(); i++) {
+			let m: ANTLRMessage =  equeue.errors.get(i);
+			if (m.getErrorType()==expectedMessage.getErrorType() ) {
+				foundMsg = m;
+			}
+		}
+		assertNotNull("no error; "+expectedMessage.getErrorType()+" expected", foundMsg);
+		assertTrue("error is not a GrammarSemanticsMessage",
+				   foundMsg instanceof GrammarSemanticsMessage);
+		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
+		if ( equeue.size()!=1 ) {
+			System.err.println(equeue);
+		}
+	}
+
+	protected checkGrammarSemanticsWarning(equeue: ErrorQueue, 
+											    expectedMessage: GrammarSemanticsMessage): void
+
+	{
+		let foundMsg: ANTLRMessage =  null;
+		for (let i = 0; i < equeue.warnings.size(); i++) {
+			let m: ANTLRMessage =  equeue.warnings.get(i);
+			if (m.getErrorType()==expectedMessage.getErrorType() ) {
+				foundMsg = m;
+			}
+		}
+		assertNotNull("no error; "+expectedMessage.getErrorType()+" expected", foundMsg);
+		assertTrue("error is not a GrammarSemanticsMessage",
+				   foundMsg instanceof GrammarSemanticsMessage);
+		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
+		if ( equeue.size()!=1 ) {
+			System.err.println(equeue);
+		}
+	}
+
+	protected checkError(equeue: ErrorQueue, 
+							  expectedMessage: ANTLRMessage): void
+
+	{
+		//System.out.println("errors="+equeue);
+		let foundMsg: ANTLRMessage =  null;
+		for (let i = 0; i < equeue.errors.size(); i++) {
+			let m: ANTLRMessage =  equeue.errors.get(i);
+			if (m.getErrorType()==expectedMessage.getErrorType() ) {
+				foundMsg = m;
+			}
+		}
+		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty());
+		assertTrue("too many errors; "+equeue.errors, equeue.errors.size()<=1);
+		assertNotNull("couldn't find expected error: "+expectedMessage.getErrorType(), foundMsg);
+		/*
+		assertTrue("error is not a GrammarSemanticsMessage",
+				   foundMsg instanceof GrammarSemanticsMessage);
+		 */
+		assertArrayEquals(expectedMessage.getArgs(), foundMsg.getArgs());
+	}
+
+    public static class FilteringTokenStream extends CommonTokenStream {
+        public FilteringTokenStream(TokenSource src) { super(src); }
+        let hide: Set<number> =  new HashSet<Integer>();
+        @Override
+        protected sync(i: number): boolean {
+            if (!super.sync(i)) {
+				return false;
+			}
+
+			let t: Token =  get(i);
+			if ( hide.contains(t.getType()) ) {
+				((WritableToken)t).setChannel(Token.HIDDEN_CHANNEL);
+			}
+
+			return true;
+        }
+        setTokenTypeChannel(ttype: number, channel: number): void {
+            hide.add(ttype);
+        }
+    }
+
+	static writeFile(dir: string, fileName: string, content: string): void {
+		try {
+			Utils.writeFile(dir+"/"+fileName, content, "UTF-8");
+		}
+		catch (IOException ioe) {
+			System.err.println("can't write file");
+			ioe.printStackTrace(System.err);
+		}
+	}
+
+	protected mkdir(dir: string): void {
+		let f: File =  new File(dir);
+		f.mkdirs();
+	}
+
+	protected writeTestFile(parserName: string, 
+								 lexerName: string,
+								 parserStartRuleName: string,
+								 debug: boolean,
+								 profile: boolean): void
+	{
+		let outputFileST: ST =  new ST(
+			"import org.antlr.v4.runtime.*;\n" +
+			"import org.antlr.v4.runtime.tree.*;\n" +
+			"import org.antlr.v4.runtime.atn.*;\n" +
+			"import java.util.Arrays;\n"+
+			"\n" +
+			"public class Test {\n" +
+			"    public static void main(String[] args) {\n" +
+			"        CharStream input = new ANTLRFileStream(args[0]);\n" +
+			"        <lexerName> lex = new <lexerName>(input);\n" +
+			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
+			"        <createParser>\n"+
+			"		 parser.setBuildParseTree(true);\n" +
+			"		 parser.getInterpreter().reportAmbiguities = true;\n" +
+			"		 <profile>\n"+
+			"        ParserRuleContext tree = parser.<parserStartRuleName>();\n" +
+			"		 <if(profile)>System.out.println(Arrays.toString(profiler.getDecisionInfo()));<endif>\n" +
+			"        ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);\n" +
+			"    }\n" +
+			"\n" +
+			"	static class TreeShapeListener implements ParseTreeListener {\n" +
+			"		@Override public void visitTerminal(TerminalNode node) { }\n" +
+			"		@Override public void visitErrorNode(ErrorNode node) { }\n" +
+			"		@Override public void exitEveryRule(ParserRuleContext ctx) { }\n" +
+			"\n" +
+			"		@Override\n" +
+			"		public void enterEveryRule(ParserRuleContext ctx) {\n" +
+			"			for (int i = 0; i \\< ctx.getChildCount(); i++) {\n" +
+			"				ParseTree parent = ctx.getChild(i).getParent();\n" +
+			"				if (!(parent instanceof RuleNode) || ((RuleNode)parent).getRuleContext() != ctx) {\n" +
+			"					throw new IllegalStateException(\"Invalid parse tree shape detected.\");\n" +
+			"				}\n" +
+			"			}\n" +
+			"		}\n" +
+			"	}\n" +
+			"}"
+			);
+        let createParserST: ST =  new ST("        <parserName> parser = new <parserName>(tokens);\n");
+		if ( debug ) {
+			createParserST =
+				ST(
+				"        <parserName> parser = new <parserName>(tokens): new;\n" +
+                "        parser.addErrorListener(new DiagnosticErrorListener());\n");
+		}
+		if ( profile ) {
+			outputFileST.add("profile",
+							 "ProfilingATNSimulator profiler = new ProfilingATNSimulator(parser);\n" +
+							 "parser.setInterpreter(profiler);");
+		}
+		else {
+			outputFileST.add("profile", new ArrayList<Object>());
+		}
+		outputFileST.add("createParser", createParserST);
+		outputFileST.add("parserName", parserName);
+		outputFileST.add("lexerName", lexerName);
+		outputFileST.add("parserStartRuleName", parserStartRuleName);
+		writeFile(tmpdir, "Test.java", outputFileST.render());
+	}
+
+	protected writeLexerTestFile(lexerName: string, showDFA: boolean): void {
+		let outputFileST: ST =  new ST(
+			"import org.antlr.v4.runtime.*;\n" +
+			"\n" +
+			"public class Test {\n" +
+			"    public static void main(String[] args) {\n" +
+			"        CharStream input = new ANTLRFileStream(args[0]);\n" +
+			"        <lexerName> lex = new <lexerName>(input);\n" +
+			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
+			"        tokens.fill();\n" +
+			"        for (Object t : tokens.getTokens()) System.out.println(t);\n" +
+			(showDFA?"System.out.print(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")+
+			"    }\n" +
+			"}"
+			);
+
+		outputFileST.add("lexerName", lexerName);
+		writeFile(tmpdir, "Test.java", outputFileST.render());
+	}
+
+	writeRecognizerAndCompile(parserName: string, lexerName: string, 
+										  parserStartRuleName: string,
+										  debug: boolean,
+										  profile: boolean): void {
+		if ( parserName==null ) {
+			writeLexerTestFile(lexerName, debug);
+		}
+		else {
+			writeTestFile(parserName,
+						  lexerName,
+						  parserStartRuleName,
+						  debug,
+						  profile);
+		}
+
+		compile("Test.java");
+	}
+
+    protected eraseFiles(final String filesEndingWith): void {
+        let tmpdirF: File =  new File(tmpdir);
+        let files: string[] =  tmpdirF.list();
+        for(let i = 0; files!=null && i < files.length; i++) {
+            if ( files[i].endsWith(filesEndingWith) ) {
+                File(tmpdir+"/"+files[i]).delete(): new;
+            }
+        }
+    }
+
+    protected eraseFiles(): void {
+		if (tmpdir == null) {
+			return;
+		}
+
+        let tmpdirF: File =  new File(tmpdir);
+        let files: string[] =  tmpdirF.list();
+        for(let i = 0; files!=null && i < files.length; i++) {
+            File(tmpdir+"/"+files[i]).delete(): new;
+        }
+    }
+
+    protected eraseTempDir(): void {
+        let tmpdirF: File =  new File(tmpdir);
+        if ( tmpdirF.exists() ) {
+            eraseFiles();
+            tmpdirF.delete();
+        }
+    }
+
+	getFirstLineOfException(): string {
+		if ( this.stderrDuringParse ==null ) {
+			return null;
+		}
+		let lines: string[] =  this.stderrDuringParse.split("\n");
+		let prefix: string = "Exception in thread \"main\" ";
+		return lines[0].substring(prefix.length(),lines[0].length());
+	}
+
+    /**
+     * When looking at a result set that consists of a Map/HashTable
+     * we cannot rely on the output order, as the hashing algorithm or other aspects
+     * of the implementation may be different on differnt JDKs or platforms. Hence
+     * we take the Map, convert the keys to a List, sort them and Stringify the Map, which is a
+     * bit of a hack, but guarantees that we get the same order on all systems. We assume that
+     * the keys are strings.
+     *
+     * @param m The Map that contains keys we wish to return in sorted order
+     * @return A string that represents all the keys in sorted order.
+     */
+    sortMapToString<K, V>(m: Map<K,V>): string {
+        // Pass in crap, and get nothing back
+        //
+        if  (m == null) {
+            return null;
+        }
+
+        console.log("Map toString looks like: " + m.toString());
+
+        // Sort the keys in the Map
+        //
+        let nset: TreeMap<K, V> =  new TreeMap<K, V>(m);
+
+        console.log("Tree map looks like: " + nset.toString());
+        return nset.toString();
+    }
+
+	realElements(elements: List<string>): List<string> {
+		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size());
+	}
+
+	assertNotNullOrEmpty(message: string, text: string): void {
+		assertNotNull(message, text);
+		assertFalse(message, text.isEmpty());
+	}
+
+	assertNotNullOrEmpty(text: string): void {
+		assertNotNull(text);
+		assertFalse(text.isEmpty());
+	}
+
+	public static class IntTokenStream implements TokenStream {
+		let types: IntegerList; 
+		let p: number = 0;
+		public IntTokenStream(IntegerList types) { this.types = types; }
+
+		@Override
+		consume(): void { p++; }
+
+		@Override
+		LA(int i) { return LT(i).getType(): number; }
+
+		@Override
+		mark(): number {
+			return index();
+		}
+
+		@Override
+		index(): number { return p; }
+
+		@Override
+		release(marker: number): void {
+			seek(marker);
+		}
+
+		@Override
+		seek(index: number): void {
+			p = index;
+		}
+
+		@Override
+		size(): number {
+			return types.size();
+		}
+
+		@Override
+		getSourceName(): string {
+			return UNKNOWN_SOURCE_NAME;
+		}
+
+		@Override
+		LT(i: number): Token {
+			let t: CommonToken; 
+			let rawIndex: number =  p + i - 1;
+			if ( rawIndex>=types.size() ) t = new CommonToken(Token.EOF);
+			else t = new CommonToken(types.get(rawIndex));
+			else t = new CommonToken(types.get(rawIndex));
+			t.setTokenIndex(rawIndex);
+			return t;
+		}
+
+		@Override
+		get(i: number): Token {
+			return new org.antlr.v4.runtime.CommonToken(types.get(i));
+		}
+
+		@Override
+		getTokenSource(): TokenSource {
+			return null;
+		}
+
+		@NotNull
+		@Override
+		getText(): string {
+			throw new UnsupportedOperationException("can't give strings");
+		}
+
+		@NotNull
+		@Override
+		getText(interval: Interval): string {
+			throw new UnsupportedOperationException("can't give strings");
+		}
+
+		@NotNull
+		@Override
+		getText(ctx: RuleContext): string {
+			throw new UnsupportedOperationException("can't give strings");
+		}
+
+		@NotNull
+		@Override
+		getText(start: any, stop: any): string {
+			throw new UnsupportedOperationException("can't give strings");
+		}
+	}
+
+	/** Sort a list */
+	sort<T extends Comparable<? super T>>(data: List<T>): List<T> {
+		let dup: List<T> =  new ArrayList<T>();
+		dup.addAll(data);
+		Collections.sort(dup);
+		return dup;
+	}
+
+	/** Return map sorted by key */
+	sort<K extends Comparable<? super K>,V>(data: Map<K,V>): LinkedHashMap<K,V> {
+		let dup: LinkedHashMap<K,V> =  new LinkedHashMap<K, V>();
+		let keys: List<K> =  new ArrayList<K>();
+		keys.addAll(data.keySet());
+		Collections.sort(keys);
+		for (let k of keys) {
+			dup.put(k, data.get(k));
+		}
+		return dup;
+	}
+}

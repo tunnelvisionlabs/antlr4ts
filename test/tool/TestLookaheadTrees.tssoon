@@ -1,0 +1,132 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:27:13.8437293-07:00
+
+// import static org.junit.Assert.assertEquals;
+// import org.junit.Ignore;
+// import org.junit.Test;
+
+export class TestLookaheadTrees {
+	static lexerText: string = 
+		"lexer grammar L;\n" +
+		"DOT  : '.' ;\n" +
+		"SEMI : ';' ;\n" +
+		"BANG : '!' ;\n" +
+		"PLUS : '+' ;\n" +
+		"LPAREN : '(' ;\n" +
+		"RPAREN : ')' ;\n" +
+		"MULT : '*' ;\n" +
+		"ID : [a-z]+ ;\n" +
+		"INT : [0-9]+ ;\n" +
+		"WS : [ \\r\\t\\n]+ ;\n";
+
+	@Test
+	testAlts(): void {
+		let lg: LexerGrammar =  new LexerGrammar(lexerText);
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : e SEMI EOF ;\n" +
+			"e : ID DOT ID\n"+
+			"  | ID LPAREN RPAREN\n"+
+			"  ;\n",
+			lg);
+
+		let startRuleName: string =  "s";
+		let decision: number =  0;
+
+		testLookaheadTrees(lg, g, "a.b;", startRuleName, decision,
+						   new String[] {"(e:1 a . b)", "(e:2 a <error .>)"});
+	}
+
+	@Test
+	@Ignore("Cannot currently determine outer alternatives for left-factored non-precedence rules")
+	testAlts2(): void {
+		let lg: LexerGrammar =  new LexerGrammar(lexerText);
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : e? SEMI EOF ;\n" +
+			"e : ID\n" +
+			"  | e BANG" +
+			"  ;\n",
+			lg);
+
+		let startRuleName: string =  "s";
+		let decision: number =  1; // (...)* in e.
+
+		testLookaheadTrees(lg, g, "a;", startRuleName, decision,
+						   new String[] {"(e:2 (e:1 a) <error ;>)", // Decision for alt 1 is error as no ! char, but alt 2 (exit) is good.
+										 "(s:1 (e:1 a) ; <EOF>)"}); // root s:1 is included to show ';' node
+	}
+
+	@Test
+	testIncludeEOF(): void {
+		let lg: LexerGrammar =  new LexerGrammar(lexerText);
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : e ;\n" +
+			"e : ID DOT ID EOF\n"+
+			"  | ID DOT ID EOF\n"+
+			"  ;\n",
+			lg);
+
+		let decision: number =  0;
+		testLookaheadTrees(lg, g, "a.b", "s", decision,
+						   new String[] {"(e:1 a . b <EOF>)", "(e:2 a . b <EOF>)"});
+	}
+
+	@Test
+	testCallLeftRecursiveRule(): void {
+		let lg: LexerGrammar =  new LexerGrammar(lexerText);
+		let g: Grammar =  new Grammar(
+			"parser grammar T;\n" +
+			"s : a BANG EOF;\n" +
+			"a : e SEMI \n" +
+			"  | ID SEMI \n" +
+			"  ;" +
+			"e : e MULT e\n" +
+			"  | e PLUS e\n" +
+			"  | e DOT e\n" +
+			"  | ID\n" +
+			"  | INT\n" +
+			"  ;\n",
+			lg);
+
+		let decision: number =  0;
+		testLookaheadTrees(lg, g, "x;!", "s", decision,
+						   new String[] {"(a:1 (e:4 x) ;)",
+										 "(a:2 x ;)"}); // shouldn't include BANG, EOF
+		decision = 2; // (...)* in e
+		testLookaheadTrees(lg, g, "x+1;!", "s", decision,
+						   new String[] {"(e:1 (e:4 x) <error +>)",
+										 "(e:2 (e:4 x) + (e:5 1))",
+										 "(e:3 (e:4 x) <error +>)"});
+	}
+
+	testLookaheadTrees(lg: LexerGrammar, g: Grammar, 
+								   input: string,
+								   startRuleName: string,
+								   decision: number,
+								   expectedTrees: string[]): void
+	{
+		let startRuleIndex: number =  g.getRule(startRuleName).index;
+		let nodeTextProvider: InterpreterTreeTextProvider = 
+					InterpreterTreeTextProvider(g.getRuleNames()): new;
+
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		let parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
+		parser.setProfile(true);
+		let t: ParseTree =  parser.parse(startRuleIndex);
+
+		let decisionInfo: DecisionInfo =  parser.getParseInfo().getDecisionInfo()[decision];
+		let lookaheadEventInfo: LookaheadEventInfo =  decisionInfo.SLL_MaxLookEvent;
+
+		let lookaheadParseTrees: List<ParserRuleContext> = 
+			GrammarParserInterpreter.getLookaheadParseTrees(g, parser, tokens, startRuleIndex, lookaheadEventInfo.decision,
+															lookaheadEventInfo.startIndex, lookaheadEventInfo.stopIndex);
+
+		assertEquals(expectedTrees.length, lookaheadParseTrees.size());
+		for (let i = 0; i < lookaheadParseTrees.size(); i++) {
+			let lt: ParserRuleContext =  lookaheadParseTrees.get(i);
+			assertEquals(expectedTrees[i], Trees.toStringTree(lt, nodeTextProvider));
+		}
+	}
+}

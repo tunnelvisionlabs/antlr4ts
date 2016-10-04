@@ -1,0 +1,10 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:26:46.7759407-07:00
+
+export class XPathLexerErrorListener implements ANTLRErrorListener<Integer> {
+	@Override
+	syntaxError<T extends Integer>(recognizer: Recognizer<T,any>, offendingSymbol: T, 
+							line: number, charPositionInLine: number, msg: string,
+							e: RecognitionException): void
+	{
+	}
+}

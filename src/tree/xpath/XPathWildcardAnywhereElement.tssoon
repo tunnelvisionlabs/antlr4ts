@@ -1,0 +1,13 @@
+﻿// ConvertTo-TS run at 2016-10-04T11:26:47.1501520-07:00
+
+export class XPathWildcardAnywhereElement extends XPathElement {
+	 constructor()  {
+		super(XPath.WILDCARD);
+	}
+
+	@Override
+	evaluate(t: ParseTree): Collection<ParseTree> {
+		if ( invert ) return new ArrayList<ParseTree>(); // !* is weird but valid (empty)
+		return Trees.getDescendants(t);
+	}
+}
