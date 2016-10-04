@@ -16,7 +16,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [ ] BufferedTokenStream.java
-* [ ] CharStream.java
+* [x] CharStream.java
 * [ ] CommonToken.java
 * [ ] CommonTokenFactory.java
 * [ ] CommonTokenStream.java
@@ -27,7 +27,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] FailedPredicateException.java
 * [ ] InputMismatchException.java
 * [ ] InterpreterRuleContext.java
-* [ ] IntStream.java
+* [x] IntStream.java
 * [ ] Lexer.java
 * [ ] LexerInterpreter.java
 * [ ] LexerNoViableAltException.java
@@ -46,16 +46,16 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
 * [ ] RuleVersion.java
-* [ ] Token.java
-* [ ] TokenFactory.java
-* [ ] TokenSource.java
-* [ ] TokenStream.java
+* [x] Token.java
+* [x] TokenFactory.java
+* [x] TokenSource.java
+* [x] TokenStream.java
 * [ ] TokenStreamRewriter.java
 * [ ] UnbufferedCharStream.java
 * [ ] UnbufferedTokenStream.java
 * [ ] Vocabulary.java
 * [ ] VocabularyImpl.java
-* [ ] WritableToken.java
+* [x] WritableToken.java
 * [ ] atn\AbstractPredicateTransition.java
 * [ ] atn\ActionTransition.java
 * [ ] atn\AmbiguityInfo.java
@@ -146,7 +146,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\Func1.java
 * [ ] misc\IntegerList.java
 * [ ] misc\IntegerStack.java
-* [ ] misc\Interval.java
+* [x] misc\Interval.java
 * [ ] misc\IntervalSet.java
 * [ ] misc\IntSet.java
 * [ ] misc\LogManager.java
@@ -167,16 +167,16 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\Tuple3.java
 * [ ] misc\Utils.java
 * [ ] tree\AbstractParseTreeVisitor.java
-* [ ] tree\ErrorNode.java
+* [x] tree\ErrorNode.java
 * [ ] tree\ErrorNodeImpl.java
-* [ ] tree\ParseTree.java
+* [x] tree\ParseTree.java
 * [ ] tree\ParseTreeListener.java
 * [ ] tree\ParseTreeProperty.java
-* [ ] tree\ParseTreeVisitor.java
+* [x] tree\ParseTreeVisitor.java
 * [ ] tree\ParseTreeWalker.java
-* [ ] tree\RuleNode.java
-* [ ] tree\SyntaxTree.java
-* [ ] tree\TerminalNode.java
+* [x] tree\RuleNode.java
+* [x] tree\SyntaxTree.java
+* [x] tree\TerminalNode.java
 * [ ] tree\TerminalNodeImpl.java
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
