@@ -10,7 +10,7 @@ export * from './ATNDeserializationOptions';
 // export * from './ATNSerializer';
 // export * from './ATNSimulator';
 // export * from './ATNState';
-// export * from './ATNType';
+export * from './ATNType';
 // export * from './AtomTransition';
 // export * from './BasicBlockStartState';
 // export * from './BasicState';
