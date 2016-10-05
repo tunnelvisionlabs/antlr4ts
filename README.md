@@ -1,7 +1,12 @@
 # antlr4ts
 TypeScript/JavaScript target for ANTLR 4
 
-## Dev setup
+## Dev setup with Visual Studio
+
+Start by installing [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593) to get the latest integration with TypeScript 2.0 features.
+
+
+## Dev setup with NPM
 Of course, you'll need to install Node.js for your platform.   https://nodejs.org/en/
 After cloning the repository, you can install dependencies by changing into the cloned directory and typing:
 
@@ -15,3 +20,4 @@ you will need to do this again as we take on new dependencies or updates.
 npm Test
 ```
 How we integrate with runtime-testsuite is TBD.
+

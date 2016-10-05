@@ -38,3 +38,8 @@ jspm_packages/
 
 # Build products
 target/
+
+# Visual Studio
+obj/
+bin/
+*.suo
