@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{d6642ae4-3c11-4a8f-b700-f844afcbdd94}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -20,6 +20,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Content Include="package.json" />
+    <Content Include="src\.gitignore" />
+    <Content Include="test\mocha.opts" />
     <Content Include="tsconfig.json" />
     <Content Include="CONVERSION.md" />
     <Content Include="LICENSE.md" />
@@ -35,8 +37,12 @@
     <TypeScriptCompile Include="src\TokenSource.ts" />
     <TypeScriptCompile Include="src\TokenStream.ts" />
     <TypeScriptCompile Include="src\WritableToken.ts" />
-    <TypeScriptCompile Include="test\TestArray2DHashSet.ts" />
-    <TypeScriptCompile Include="test\TestMocha.ts" />
+    <TypeScriptCompile Include="test\TestArray2DHashSet.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="test\TestMocha.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\atn\index.ts" />
     <TypeScriptCompile Include="src\atn\LexerAction.ts" />
     <TypeScriptCompile Include="src\atn\LexerActionType.ts" />

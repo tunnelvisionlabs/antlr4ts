@@ -37,7 +37,8 @@ jspm_packages/
 .node_repl_history
 
 # Build products
-target/
+*.js
+*.js.map
 
 # Visual Studio
 obj/
