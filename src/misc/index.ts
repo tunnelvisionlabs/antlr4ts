@@ -1,4 +1,5 @@
 // export * from './AbstractEqualityComparator';
+export * from './ArrayEqualityComparator';
 // export * from './Args';
 export * from './Array2DHashSet';
 // export * from './DoubleKeyMap';
