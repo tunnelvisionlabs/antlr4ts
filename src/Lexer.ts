@@ -30,10 +30,23 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
 
+import {Token} from '.';
+
 /** A lexer is recognizer that draws input symbols from a character stream.
  *  lexer grammars result in a subclass of this object. A Lexer object
  *  uses simplified match() and error recovery mechanisms in the interest
  *  of speed.
  */
 export abstract class Lexer {
+}
+
+export namespace Lexer {
+	export const DEFAULT_MODE: number = 0;
+	export const MORE: number = -2;
+	export const SKIP: number = -3;
+
+	export const DEFAULT_TOKEN_CHANNEL: number = Token.DEFAULT_CHANNEL;
+	export const HIDDEN: number = Token.HIDDEN_CHANNEL;
+	export const MIN_CHAR_VALUE: number = 0x0000;
+	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
