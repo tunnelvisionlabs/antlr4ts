@@ -47,7 +47,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: any): number {
+	hashCode(obj: Equatable): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -65,7 +65,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: any, b: any): boolean {
+	equals(a: Equatable, b: Equatable): boolean {
 		if (a == null) {
 			return b == null;
 		}
