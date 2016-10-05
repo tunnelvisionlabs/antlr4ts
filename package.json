@@ -4,7 +4,8 @@
   "description": "Antlr4 runtime for JavaScript written in Typescript",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "prepublish": "tsc",
+    "test": "tsc && mocha"
   },
   "repository": {
     "type": "git",
