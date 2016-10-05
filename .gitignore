@@ -37,10 +37,9 @@ jspm_packages/
 .node_repl_history
 
 # Build products
-*.js
-*.js.map
+target/
 
-# Visual Studio
+# Visual Studio build output and per-user files
 obj/
 bin/
-*.suo
+.vs/
