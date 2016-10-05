@@ -18,9 +18,22 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <!-- Configure TypeScript properties here since the test discovery process ignores tsconfig.json -->
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir>$(MSBuildProjectDirectory)\target</TypeScriptOutDir>
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptMapRoot>$(MSBuildProjectDirectory)\target</TypeScriptMapRoot>
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="package.json" />
-    <Content Include="src\.gitignore" />
     <Content Include="test\mocha.opts" />
     <Content Include="tsconfig.json" />
     <Content Include="CONVERSION.md" />
@@ -65,14 +78,6 @@
     <TypeScriptCompile Include="src\tree\Tree.ts" />
     <TypeScriptCompile Include="src\tree\pattern\index.ts" />
     <TypeScriptCompile Include="src\tree\xpath\index.ts" />
-    <Compile Include="test\target\test\TestArray2DHashSet.js" />
-    <Compile Include="test\target\test\TestMocha.js" />
-    <Compile Include="test\target\test\UnitTest1.js" />
-    <Compile Include="test\target\src\misc\Array2DHashSet.js" />
-    <Compile Include="test\target\src\misc\EqualityComparator.js" />
-    <Compile Include="test\target\src\misc\MurmurHash.js" />
-    <Compile Include="test\target\src\misc\ObjectEqualityComparator.js" />
-    <Compile Include="test\target\src\misc\Stubs.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src" />
@@ -83,10 +88,6 @@
     <Folder Include="src\tree\pattern" />
     <Folder Include="src\tree\xpath" />
     <Folder Include="test" />
-    <Folder Include="test\target" />
-    <Folder Include="test\target\src" />
-    <Folder Include="test\target\src\misc" />
-    <Folder Include="test\target\test" />
     <Folder Include="test\tool" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
