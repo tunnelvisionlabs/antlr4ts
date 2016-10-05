@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "tsc",
-    "test": "tsc && mocha"
+    "test": "tsc & mocha"
   },
   "repository": {
     "type": "git",
