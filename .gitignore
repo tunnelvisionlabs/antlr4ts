@@ -38,3 +38,8 @@ jspm_packages/
 
 # Build products
 target/
+
+# Visual Studio build output and per-user files
+obj/
+bin/
+.vs/

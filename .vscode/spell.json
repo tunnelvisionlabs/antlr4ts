@@ -4,7 +4,8 @@
     "npm",
     "ANTLR",
     "antlr4ts",
-    "runtime-testsuite"
+    "runtime-testsuite",
+    "NPM"
   ],
   "mistakeTypeToStatus": {
     "Passive voice": "Hint",
