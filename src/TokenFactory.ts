@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,33 +28,31 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.5349010-07:00
+import {CharStream} from './CharStream';
+import {Token} from './Token';
+import {TokenSource} from './TokenSource';
 
-/** An interface to access the tree of {@link RuleContext} objects created
- *  during a parse that makes the data structure look like a simple parse tree.
- *  This node represents both internal nodes, rule invocations,
- *  and leaf nodes, token matches.
- *
- *  <p>The payload is either a {@link Token} or a {@link RuleContext} object.</p>
+/** The default mechanism for creating tokens. It's used by default in Lexer and
+ *  the error handling strategy (to create missing tokens).  Notifying the parser
+ *  of a new factory means that it notifies it's token source and error strategy.
  */
-export interface ParseTree extends SyntaxTree {
-	// the following methods narrow the return type; they are not additional methods
-	@Override
-	getParent(): ParseTree;
-	@Override
-	getChild(i: number): ParseTree;
-
-	/** The {@link ParseTreeVisitor} needs a double dispatch method. */
-	accept<T>(visitor: ParseTreeVisitor<? extends T>): T;
-
-	/** Return the combined text of all leaf nodes. Does not get any
-	 *  off-channel tokens (if any) so won't return whitespace and
-	 *  comments if they are sent to parser on hidden channel.
+export interface TokenFactory {
+	/** This is the method used to create tokens in the lexer and in the
+	 *  error handling strategy. If text!=null, than the start and stop positions
+	 *  are wiped to -1 in the text override is set in the CommonToken.
 	 */
-	getText(): string;
+	//@NotNull
+	create(
+		/*@NotNull*/ source: [TokenSource, CharStream],
+		type: number,
+		text: string,
+		channel: number,
+		start: number,
+		stop: number,
+		line: number,
+		charPositionInLine: number): Token;
 
-	/** Specialize toStringTree so that it can print out more information
-	 * 	based upon the parser.
-	 */
-	toStringTree(parser: Parser): string;
+	/** Generically useful */
+	//@NotNull
+	create(type: number, text: string): Token;
 }

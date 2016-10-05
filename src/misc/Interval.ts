@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,22 +27,28 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:40.7402214-07:00
 
+import {Equatable, Override} from './Stubs';
+
+const INTERVAL_POOL_MAX_VALUE: number = 1000;
+
 /** An immutable inclusive interval a..b */
-export class Interval {
-	static INTERVAL_POOL_MAX_VALUE: number =  1000;
+export class Interval implements Equatable {
+	private static _INVALID: Interval = new Interval(-1, -2);
+	static get INVALID(): Interval {
+		return Interval._INVALID;
+	}
 
-	static INVALID: Interval =  new Interval(-1,-2);
+	private static cache: Interval[] = new Interval[INTERVAL_POOL_MAX_VALUE + 1];
 
-	private static cache: Interval[] =  new Interval[INTERVAL_POOL_MAX_VALUE+1];
-
-	/** The start of the interval. */
-	a: number; 
-	/** The end of the interval (inclusive). */
-	b: number; 
-
-	 constructor(a: number, b: number)  { this.a=a; this.b=b; }
+	/**
+	 * @param a The start of the interval
+	 * @param b The end of the interval (inclusive)
+	 */
+	constructor(public a: number, public b: number) {
+	}
 
 	/** Interval objects are used readonly so share all with the
 	 *  same single value a==b up to some max size.  Use an array as a perfect hash.
@@ -52,75 +58,82 @@ export class Interval {
 	 */
 	static of(a: number, b: number): Interval {
 		// cache just a..a
-		if ( a!=b || a<0 || a>INTERVAL_POOL_MAX_VALUE ) {
-			return new Interval(a,b);
+		if (a !== b || a < 0 || a > INTERVAL_POOL_MAX_VALUE) {
+			return new Interval(a, b);
 		}
-		if ( cache[a]==null ) {
-			cache[a] = new Interval(a,a);
+
+		if (Interval.cache[a] == null) {
+			Interval.cache[a] = new Interval(a, a);
 		}
-		return cache[a];
+
+		return Interval.cache[a];
 	}
 
 	/** return number of elements between a and b inclusively. x..x is length 1.
 	 *  if b &lt; a, then length is 0.  9..10 has length 2.
 	 */
 	length(): number {
-		if ( b<a ) return 0;
-		return b-a+1;
+		if (this.b < this.a) {
+			return 0;
+		}
+
+		return this.b - this.a + 1;
 	}
 
 	@Override
 	equals(o: any): boolean {
-		if (o == this) {
+		if (o === this) {
 			return true;
 		}
 		else if (!(o instanceof Interval)) {
 			return false;
 		}
 
-		let other: Interval =  (Interval)o;
-		return this.a==other.a && this.b==other.b;
+		let other = o as Interval;
+		return this.a === other.a && this.b === other.b;
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  23;
-		hash = hash * 31 + a;
-		hash = hash * 31 + b;
+		let hash: number = 23;
+		hash = hash * 31 + this.a;
+		hash = hash * 31 + this.b;
 		return hash;
 	}
 
 	/** Does this start completely before other? Disjoint */
 	startsBeforeDisjoint(other: Interval): boolean {
-		return this.a<other.a && this.b<other.a;
+		return this.a < other.a && this.b < other.a;
 	}
 
 	/** Does this start at or before other? Nondisjoint */
 	startsBeforeNonDisjoint(other: Interval): boolean {
-		return this.a<=other.a && this.b>=other.a;
+		return this.a <= other.a && this.b >= other.a;
 	}
 
 	/** Does this.a start after other.b? May or may not be disjoint */
-	startsAfter(other: Interval): boolean { return this.a>other.a; }
+	startsAfter(other: Interval): boolean {
+		return this.a > other.a;
+	}
 
 	/** Does this start completely after other? Disjoint */
 	startsAfterDisjoint(other: Interval): boolean {
-		return this.a>other.b;
+		return this.a > other.b;
 	}
 
 	/** Does this start after other? NonDisjoint */
 	startsAfterNonDisjoint(other: Interval): boolean {
-		return this.a>other.a && this.a<=other.b; // this.b>=other.b implied
+		return this.a > other.a && this.a <= other.b; // this.b>=other.b implied
 	}
 
 	/** Are both ranges disjoint? I.e., no overlap? */
 	disjoint(other: Interval): boolean {
-		return startsBeforeDisjoint(other) || startsAfterDisjoint(other);
+		return this.startsBeforeDisjoint(other) || this.startsAfterDisjoint(other);
 	}
 
 	/** Are two intervals adjacent such as 0..41 and 42..42? */
 	adjacent(other: Interval): boolean {
-		return this.a == other.b+1 || this.b == other.a-1;
+		return this.a === other.b + 1 || this.b === other.a - 1;
 	}
 
 	properlyContains(other: Interval): boolean {
@@ -129,12 +142,12 @@ export class Interval {
 
 	/** Return the interval computed from combining this and other */
 	union(other: Interval): Interval {
-		return Interval.of(Math.min(a, other.a), Math.max(b, other.b));
+		return Interval.of(Math.min(this.a, other.a), Math.max(this.b, other.b));
 	}
 
 	/** Return the interval in common between this and o */
 	intersection(other: Interval): Interval {
-		return Interval.of(Math.max(a, other.a), Math.min(b, other.b));
+		return Interval.of(Math.max(this.a, other.a), Math.min(this.b, other.b));
 	}
 
 	/** Return the interval with elements from {@code this} not in {@code other};
@@ -143,22 +156,20 @@ export class Interval {
 	 *  instead of the single one returned by this method.
 	 */
 	differenceNotProperlyContained(other: Interval): Interval {
-		let diff: Interval =  null;
-		// other.a to left of this.a (or same)
-		if ( other.startsBeforeNonDisjoint(this) ) {
-			diff = Interval.of(Math.max(this.a, other.b + 1),
-							   this.b);
-		}
-
-		// other.a to right of this.a
-		else if ( other.startsAfterNonDisjoint(this) ) {
+		let diff: Interval = null;
+		if (other.startsBeforeNonDisjoint(this)) {
+			// other.a to left of this.a (or same)
+			diff = Interval.of(Math.max(this.a, other.b + 1), this.b);
+		} else if (other.startsAfterNonDisjoint(this)) {
+			// other.a to right of this.a
 			diff = Interval.of(this.a, other.a - 1);
 		}
+
 		return diff;
 	}
 
 	@Override
 	toString(): string {
-		return a+".."+b;
+		return this.a + ".." + this.b;
 	}
 }

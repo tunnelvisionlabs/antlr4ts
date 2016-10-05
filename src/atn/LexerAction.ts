@@ -30,6 +30,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.7973969-07:00
 
+import {Lexer} from '../Lexer';
+import {LexerActionType} from './LexerActionType';
+
 /**
  * Represents a single action which can be executed following the successful
  * match of a lexer rule. Lexer actions are used for both embedded action syntax
@@ -44,7 +47,7 @@ export interface LexerAction {
 	 *
 	 * @return The serialization type of the lexer action.
 	 */
-	@NotNull
+	//@NotNull
 	getActionType(): LexerActionType;
 
 	/**
@@ -71,5 +74,5 @@ export interface LexerAction {
 	 *
 	 * @param lexer The lexer instance.
 	 */
-	execute(@NotNull lexer: Lexer): void;
+	execute(/*@NotNull*/ lexer: Lexer): void;
 }

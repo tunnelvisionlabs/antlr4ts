@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -30,6 +30,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.7512217-07:00
 
+import {ErrorNode} from './ErrorNode';
+import {ParseTree} from './ParseTree';
+import {RuleNode} from './RuleNode';
+import {TerminalNode} from './TerminalNode';
+
 /**
  * This interface defines the basic notion of a parse tree visitor. Generated
  * visitors implement this interface and the {@code XVisitor} interface for
@@ -47,7 +52,7 @@ export interface ParseTreeVisitor<Result> {
 	 * @param tree The {@link ParseTree} to visit.
 	 * @return The result of visiting the parse tree.
 	 */
-	visit(@NotNull tree: ParseTree): Result;
+	visit(/*@NotNull*/ tree: ParseTree): Result;
 
 	/**
 	 * Visit the children of a node, and return a user-defined result
@@ -56,7 +61,7 @@ export interface ParseTreeVisitor<Result> {
 	 * @param node The {@link RuleNode} whose children should be visited.
 	 * @return The result of visiting the children of the node.
 	 */
-	visitChildren(@NotNull node: RuleNode): Result;
+	visitChildren(/*@NotNull*/ node: RuleNode): Result;
 
 	/**
 	 * Visit a terminal node, and return a user-defined result of the operation.
@@ -64,7 +69,7 @@ export interface ParseTreeVisitor<Result> {
 	 * @param node The {@link TerminalNode} to visit.
 	 * @return The result of visiting the node.
 	 */
-	visitTerminal(@NotNull node: TerminalNode): Result;
+	visitTerminal(/*@NotNull*/ node: TerminalNode): Result;
 
 	/**
 	 * Visit an error node, and return a user-defined result of the operation.
@@ -72,6 +77,6 @@ export interface ParseTreeVisitor<Result> {
 	 * @param node The {@link ErrorNode} to visit.
 	 * @return The result of visiting the node.
 	 */
-	visitErrorNode(@NotNull node: ErrorNode): Result;
+	visitErrorNode(/*@NotNull*/ node: ErrorNode): Result;
 
 }

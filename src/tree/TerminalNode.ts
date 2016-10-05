@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,26 +28,15 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:50.0659297-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:48.0703648-07:00
 
-/** A source of characters for an ANTLR lexer. */
-export interface CharStream extends IntStream {
-	/**
-	 * This method returns the text for a range of characters within this input
-	 * stream. This method is guaranteed to not throw an exception if the
-	 * specified {@code interval} lies entirely within a marked range. For more
-	 * information about marked ranges, see {@link IntStream#mark}.
-	 *
-	 * @param interval an interval within the stream
-	 * @return the text of the specified interval
-	 *
-	 * @ if {@code interval} is {@code null}
-	 * @ if {@code interval.a < 0}, or if
-	 * {@code interval.b < interval.a - 1}, or if {@code interval.b} lies at or
-	 * past the end of the stream
-	 * @ if the stream does not support
-	 * getting the text of the specified interval
-	 */
-	@NotNull
-	getText(@NotNull interval: Interval): string;
+import {ParseTree} from './ParseTree';
+import {RuleNode} from './RuleNode';
+import {Token} from '../Token';
+
+export interface TerminalNode extends ParseTree {
+	getSymbol(): Token;
+
+	//@Override
+	getParent(): RuleNode;
 }

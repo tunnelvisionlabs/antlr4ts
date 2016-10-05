@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -30,6 +30,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.6934376-07:00
 
+export namespace IntStream {
+	/**
+	 * The value returned by {@link #LA LA()} when the end of the stream is
+	 * reached.
+	 */
+	export const EOF: number = -1;
+
+	/**
+	 * The value returned by {@link #getSourceName} when the actual name of the
+	 * underlying source is not known.
+	 */
+	export const UNKNOWN_SOURCE_NAME: string = "<unknown>";
+}
+
 /**
  * A simple stream of symbols whose values are represented as integers. This
  * interface provides <em>marked ranges</em> with support for a minimum level
@@ -48,18 +62,6 @@
  */
 export interface IntStream {
 	/**
-	 * The value returned by {@link #LA LA()} when the end of the stream is
-	 * reached.
-	 */
-	static EOF: number =  -1;
-
-	/**
-	 * The value returned by {@link #getSourceName} when the actual name of the
-	 * underlying source is not known.
-	 */
-	static UNKNOWN_SOURCE_NAME: string =  "<unknown>";
-
-	/**
 	 * Consumes the current symbol in the stream. This method has the following
 	 * effects:
 	 *
@@ -77,7 +79,7 @@ export interface IntStream {
 	 * filtering streams (e.g. {@link CommonTokenStream} which distinguishes
 	 * between "on-channel" and "off-channel" tokens).
 	 *
-	 * @ if an attempt is made to consume the the
+	 * @throws IllegalStateException if an attempt is made to consume the the
 	 * end of the stream (i.e. if {@code LA(1)==}{@link #EOF EOF} before calling
 	 * {@code consume}).
 	 */
@@ -114,7 +116,7 @@ export interface IntStream {
 	 * calls to {@link #consume consume()} have occurred from the beginning of
 	 * the stream before calling this method.</p>
 	 *
-	 * @ if the stream does not support
+	 * @throws UnsupportedOperationException if the stream does not support
 	 * retrieving the value of the specified symbol
 	 */
 	LA(i: number): number;
@@ -215,8 +217,8 @@ export interface IntStream {
 	 *
 	 * @param index The absolute index to seek to.
 	 *
-	 * @ if {@code index} is less than 0
-	 * @ if the stream does not support
+	 * @throws IllegalArgumentException if {@code index} is less than 0
+	 * @throws UnsupportedOperationException if the stream does not support
 	 * seeking to the specified index
 	 */
 	seek(index: number): void;
@@ -225,7 +227,7 @@ export interface IntStream {
 	 * Returns the total number of symbols in the stream, including a single EOF
 	 * symbol.
 	 *
-	 * @ if the size of the stream is
+	 * @throws UnsupportedOperationException if the size of the stream is
 	 * unknown.
 	 */
 	size(): number;
@@ -235,6 +237,6 @@ export interface IntStream {
 	 * non-null, non-empty string. If such a name is not known, this method
 	 * returns {@link #UNKNOWN_SOURCE_NAME}.
 	 */
-	@NotNull
+	//@NotNull
 	getSourceName(): string;
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,11 +28,14 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:48.0703648-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
 
-export interface TerminalNode extends ParseTree {
-	getSymbol(): Token;
+import {ParseTree} from './ParseTree';
+import {RuleContext} from '../RuleContext';
 
-	@Override
+export interface RuleNode extends ParseTree {
+	getRuleContext(): RuleContext;
+
+	//@Override
 	getParent(): RuleNode;
 }

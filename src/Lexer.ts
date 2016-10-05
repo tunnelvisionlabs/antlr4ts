@@ -28,11 +28,12 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
 
-export interface RuleNode extends ParseTree {
-	getRuleContext(): RuleContext;
-
-	@Override
-	getParent(): RuleNode;
+/** A lexer is recognizer that draws input symbols from a character stream.
+ *  lexer grammars result in a subclass of this object. A Lexer object
+ *  uses simplified match() and error recovery mechanisms in the interest
+ *  of speed.
+ */
+export abstract class Lexer {
 }
