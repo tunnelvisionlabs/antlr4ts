@@ -30,13 +30,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.7099201-07:00
 
-import {ATNStateType} from './ATNStateType';
-import {DecisionState} from './DecisionState';
-import {Override} from '../misc/Stubs';
-import {StarLoopbackState} from './StarLoopbackState';
+import { ATNStateType } from './ATNStateType';
+import { DecisionState } from './DecisionState';
+import { Override } from '../misc/Stubs';
+import { StarLoopbackState } from './StarLoopbackState';
 
 export class StarLoopEntryState extends DecisionState {
-	loopBackState: StarLoopbackState; 
+	loopBackState: StarLoopbackState;
 
 	/**
 	 * Indicates whether this state can benefit from a precedence DFA during SLL
@@ -48,7 +48,7 @@ export class StarLoopEntryState extends DecisionState {
 	 *
 	 * @see DFA#isPrecedenceDfa()
 	 */
-	precedenceRuleDecision: boolean; 
+	precedenceRuleDecision: boolean;
 
 	@Override
 	getStateType(): ATNStateType {

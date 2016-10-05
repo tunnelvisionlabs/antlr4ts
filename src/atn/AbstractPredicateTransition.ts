@@ -30,8 +30,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.6596177-07:00
 
-import {ATNState} from '.';
-import {Transition} from '.';
+import { ATNState } from '.';
+import { Transition } from '.';
 
 /**
  *
@@ -39,7 +39,7 @@ import {Transition} from '.';
  */
 export abstract class AbstractPredicateTransition extends Transition {
 
-	 constructor(target: ATNState)  {
+	constructor(target: ATNState) {
 		super(target);
 	}
 

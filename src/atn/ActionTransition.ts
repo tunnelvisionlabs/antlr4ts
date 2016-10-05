@@ -30,10 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.7363448-07:00
 
-import {ATNState} from '.';
-import {Override, NotNull} from '../misc/Stubs';
-import {Transition} from '.';
-import {TransitionType} from '.';
+import { ATNState } from '.';
+import { Override, NotNull } from '../misc/Stubs';
+import { Transition } from '.';
+import { TransitionType } from '.';
 
 export class ActionTransition extends Transition {
 	ruleIndex: number;

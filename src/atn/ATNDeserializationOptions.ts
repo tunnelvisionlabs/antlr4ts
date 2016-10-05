@@ -30,19 +30,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.8187912-07:00
 
-import {NotNull} from '../misc/Stubs';
+import { NotNull } from '../misc/Stubs';
 
 /**
  *
  * @author Sam Harwell
  */
 export class ATNDeserializationOptions {
-	private static defaultOptions: ATNDeserializationOptions; 
+	private static defaultOptions: ATNDeserializationOptions;
 
-	private readOnly: boolean; 
-	private verifyATN: boolean; 
-	private generateRuleBypassTransitions: boolean; 
-	private optimize: boolean; 
+	private readOnly: boolean;
+	private verifyATN: boolean;
+	private generateRuleBypassTransitions: boolean;
+	private optimize: boolean;
 
 	constructor(options?: ATNDeserializationOptions) {
 		if (options) {

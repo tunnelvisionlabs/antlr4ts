@@ -30,11 +30,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.9930394-07:00
 
-import {BlockEndState} from './BlockEndState';
-import {DecisionState} from './DecisionState';
-import {Override} from '../misc/Stubs';
+import { BlockEndState } from './BlockEndState';
+import { DecisionState } from './DecisionState';
+import { Override } from '../misc/Stubs';
 
 /**  The start of a regular {@code (...)} block. */
 export abstract class BlockStartState extends DecisionState {
-	endState: BlockEndState; 
+	endState: BlockEndState;
 }

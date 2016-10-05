@@ -30,10 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.8530496-07:00
 
-import {ATNState} from '.';
-import {IntervalSet} from '../misc';
-import {NotNull, Nullable} from '../misc/Stubs';
-import {TransitionType} from '.';
+import { ATNState } from '.';
+import { IntervalSet } from '../misc';
+import { NotNull, Nullable } from '../misc/Stubs';
+import { TransitionType } from '.';
 
 /** An ATN transition between any two ATN states.  Subclasses define
  *  atom, set, epsilon, action, predicate, rule transitions.
