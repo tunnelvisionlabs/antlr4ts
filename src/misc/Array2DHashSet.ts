@@ -31,9 +31,7 @@
 
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
-/// <reference path="../../node_modules/@types/node/index.d.ts" />
-
-import assert=require('assert');
+import * as assert from "assert";
 import {EqualityComparator} from './EqualityComparator';
 import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';

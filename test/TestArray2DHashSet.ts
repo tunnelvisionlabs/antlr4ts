@@ -1,11 +1,9 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
 require('source-map-support').install();
 import {Equatable} from '../src/misc/Stubs';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
 import {MurmurHash} from '../src/misc/MurmurHash'
 import { suite, test } from 'mocha-typescript';
-import assert = require('assert');
+import * as assert from "assert";
 
 class EquatableTest implements Equatable {
 

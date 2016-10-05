@@ -1,8 +1,5 @@
 
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-
-
-var assert = require('assert');
+import * as assert from "assert";
 
 function echo(value?) { return value }
 var x = echo();
