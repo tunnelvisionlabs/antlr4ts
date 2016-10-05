@@ -26,10 +26,10 @@
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
     <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptOutFile />
-    <TypeScriptOutDir>J:\dev\antlr4ts\target</TypeScriptOutDir>
+    <TypeScriptOutDir>$(MSBuildProjectDirectory)\target</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
     <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
-    <TypeScriptMapRoot>J:\dev\antlr4ts\target</TypeScriptMapRoot>
+    <TypeScriptMapRoot>$(MSBuildProjectDirectory)\target</TypeScriptMapRoot>
     <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
