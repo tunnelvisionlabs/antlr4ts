@@ -27,7 +27,12 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:59.5829654-07:00
+
+import { NotNull, Nullable, Override } from './misc/Stubs';
+import { Token } from '.';
+import { Vocabulary } from '.';
 
 /**
  * This class provides a default implementation of the {@link Vocabulary}
@@ -36,8 +41,6 @@
  * @author Sam Harwell
  */
 export class VocabularyImpl implements Vocabulary {
-	private static EMPTY_NAMES: string[] =  new String[0];
-
 	/**
 	 * Gets an empty {@link Vocabulary} instance.
 	 *
@@ -47,32 +50,16 @@ export class VocabularyImpl implements Vocabulary {
 	 * except {@link Token#EOF}.</p>
 	 */
 	@NotNull
-	static EMPTY_VOCABULARY: VocabularyImpl =  new VocabularyImpl(EMPTY_NAMES, EMPTY_NAMES, EMPTY_NAMES);
+	static EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
-	private literalNames: string[]; 
+	private literalNames: string[];
 	@NotNull
-	private symbolicNames: string[]; 
+	private symbolicNames: string[];
 	@NotNull
-	private displayNames: string[]; 
+	private displayNames: string[];
 
-	private maxTokenType: number; 
-
-	/**
-	 * Constructs a new instance of {@link VocabularyImpl} from the specified
-	 * literal and symbolic token names.
-	 *
-	 * @param literalNames The literal names assigned to tokens, or {@code null}
-	 * if no literal names are assigned.
-	 * @param symbolicNames The symbolic names assigned to tokens, or
-	 * {@code null} if no symbolic names are assigned.
-	 *
-	 * @see #getLiteralName(int)
-	 * @see #getSymbolicName(int)
-	 */
-	 constructor(@Nullable literalNames: string[], @Nullable symbolicNames: string[])  {
-		this(literalNames, symbolicNames, null);
-	}
+	private maxTokenType: number;
 
 	/**
 	 * Constructs a new instance of {@link VocabularyImpl} from the specified
@@ -91,14 +78,14 @@ export class VocabularyImpl implements Vocabulary {
 	 * @see #getSymbolicName(int)
 	 * @see #getDisplayName(int)
 	 */
-	 constructor1(@Nullable literalNames: string[], @Nullable symbolicNames: string[], @Nullable displayNames: string[])  {
-		this.literalNames = literalNames != null ? literalNames : EMPTY_NAMES;
-		this.symbolicNames = symbolicNames != null ? symbolicNames : EMPTY_NAMES;
-		this.displayNames = displayNames != null ? displayNames : EMPTY_NAMES;
+	constructor(@Nullable literalNames: string[], @Nullable symbolicNames: string[], @Nullable displayNames: string[] = null) {
+		this.literalNames = literalNames || [];
+		this.symbolicNames = symbolicNames || [];
+		this.displayNames = displayNames || [];
 		// See note here on -1 part: https://github.com/antlr/antlr4/pull/1146
 		this.maxTokenType =
 			Math.max(this.displayNames.length,
-					 Math.max(this.literalNames.length, this.symbolicNames.length)) - 1;
+				Math.max(this.literalNames.length, this.symbolicNames.length)) - 1;
 	}
 
 	/**
@@ -116,25 +103,25 @@ export class VocabularyImpl implements Vocabulary {
 	 * the display names of tokens.
 	 */
 	static fromTokenNames(@Nullable tokenNames: string[]): Vocabulary {
-		if (tokenNames == null || tokenNames.length == 0) {
-			return EMPTY_VOCABULARY;
+		if (tokenNames == null || tokenNames.length === 0) {
+			return VocabularyImpl.EMPTY_VOCABULARY;
 		}
 
-		let literalNames: string[] =  Arrays.copyOf(tokenNames, tokenNames.length);
-		let symbolicNames: string[] =  Arrays.copyOf(tokenNames, tokenNames.length);
+		let literalNames: string[] = tokenNames.slice(0);
+		let symbolicNames: string[] = tokenNames.slice(0);
 		for (let i = 0; i < tokenNames.length; i++) {
-			let tokenName: string =  tokenNames[i];
+			let tokenName: string = tokenNames[i];
 			if (tokenName == null) {
 				continue;
 			}
 
-			if (!tokenName.isEmpty()) {
-				let firstChar: char =  tokenName.charAt(0);
+			if (tokenName.length > 0) {
+				let firstChar: string = tokenName.charAt(0);
 				if (firstChar == '\'') {
 					symbolicNames[i] = null;
 					continue;
 				}
-				else if (Character.isUpperCase(firstChar)) {
+				else if (firstChar == firstChar.toUpperCase()) {
 					literalNames[i] = null;
 					continue;
 				}
@@ -150,14 +137,14 @@ export class VocabularyImpl implements Vocabulary {
 
 	@Override
 	getMaxTokenType(): number {
-		return maxTokenType;
+		return this.maxTokenType;
 	}
 
 	@Override
 	@Nullable
 	getLiteralName(tokenType: number): string {
-		if (tokenType >= 0 && tokenType < literalNames.length) {
-			return literalNames[tokenType];
+		if (tokenType >= 0 && tokenType < this.literalNames.length) {
+			return this.literalNames[tokenType];
 		}
 
 		return null;
@@ -166,11 +153,11 @@ export class VocabularyImpl implements Vocabulary {
 	@Override
 	@Nullable
 	getSymbolicName(tokenType: number): string {
-		if (tokenType >= 0 && tokenType < symbolicNames.length) {
-			return symbolicNames[tokenType];
+		if (tokenType >= 0 && tokenType < this.symbolicNames.length) {
+			return this.symbolicNames[tokenType];
 		}
 
-		if (tokenType == Token.EOF) {
+		if (tokenType === Token.EOF) {
 			return "EOF";
 		}
 
@@ -180,23 +167,23 @@ export class VocabularyImpl implements Vocabulary {
 	@Override
 	@NotNull
 	getDisplayName(tokenType: number): string {
-		if (tokenType >= 0 && tokenType < displayNames.length) {
-			let displayName: string =  displayNames[tokenType];
+		if (tokenType >= 0 && tokenType < this.displayNames.length) {
+			let displayName: string = this.displayNames[tokenType];
 			if (displayName != null) {
 				return displayName;
 			}
 		}
 
-		let literalName: string =  getLiteralName(tokenType);
+		let literalName: string = this.getLiteralName(tokenType);
 		if (literalName != null) {
 			return literalName;
 		}
 
-		let symbolicName: string =  getSymbolicName(tokenType);
+		let symbolicName: string = this.getSymbolicName(tokenType);
 		if (symbolicName != null) {
 			return symbolicName;
 		}
 
-		return Integer.toString(tokenType);
+		return String(tokenType);
 	}
 }

@@ -27,6 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:59.4986610-07:00
 
 /**
@@ -81,7 +82,7 @@ export interface Vocabulary {
 	 * @return The string literal associated with the specified token type, or
 	 * {@code null} if no string literal is associated with the type.
 	 */
-	@Nullable
+	//@Nullable
 	getLiteralName(tokenType: number): string;
 
 	/**
@@ -127,7 +128,7 @@ export interface Vocabulary {
 	 * @return The symbolic name associated with the specified token type, or
 	 * {@code null} if no symbolic name is associated with the type.
 	 */
-	@Nullable
+	//@Nullable
 	getSymbolicName(tokenType: number): string;
 
 	/**
@@ -150,7 +151,7 @@ export interface Vocabulary {
 	 * @return The display name of the token type, for use in error reporting or
 	 * other user-visible messages which reference specific token types.
 	 */
-	@NotNull
+	//@NotNull
 	getDisplayName(tokenType: number): string;
 
 }
