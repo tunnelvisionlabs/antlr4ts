@@ -39,6 +39,7 @@ jspm_packages/
 # Build products
 *.js
 *.js.map
+*.d.ts
 
 # Visual Studio
 obj/

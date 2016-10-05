@@ -4,7 +4,9 @@
         "module": "commonjs",
         "target": "es2015",
         "noImplicitAny": false,
-        "experimentalDecorators": true
+      "experimentalDecorators": true,
+      "declaration": true,
+      "preserveConstEnums": true
     },
     "exclude": [
         "node_modules",
