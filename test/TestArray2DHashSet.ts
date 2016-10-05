@@ -81,9 +81,9 @@ describe('Array2DHashSet', function() {
 
 // 
 // This exercises the mocha-typescript package's ability to
-// use more object-oriented test structure using descriptors.
+// use more object-oriented test structure using decorators.
 //
-@suite class DescriptorDriven {
+@suite class DecoratorDriven {
     @test
     "Comparison by value"() {
         assert(alpha.equals(alpha_again));
