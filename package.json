@@ -24,8 +24,8 @@
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
     "mocha": "^3.1.0",
+    "source-map-support": "^0.4.3",
     "typescript": "^2.0.3"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

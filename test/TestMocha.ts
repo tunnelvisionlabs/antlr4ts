@@ -1,8 +1,10 @@
-// I haven't finalized the mechanics of typescript build yet, so for now this little test is written in JavaScript
+
+/// <reference path="../node_modules/@types/mocha/index.d.ts" />
+
 
 var assert = require('assert');
 
-function echo(value) { return value }
+function echo(value?) { return value }
 var x = echo();
 
 describe('Mocha', function() {
