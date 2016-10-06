@@ -1,2 +1,2 @@
-target/test
-target/test/tool
+--require ts-node/register
+test/*.ts

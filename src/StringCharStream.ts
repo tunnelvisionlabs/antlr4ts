@@ -2,6 +2,7 @@
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
+ *  Copyright (c) 2016 Burt Harris
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -54,6 +55,14 @@ export class StringCharStream implements CharStream {
     protected p: number = 0;
 
     /**
+     * 0..n-1 highest released point, for testing simulation of UnbufferedCharStream
+     */
+    protected m: number = 0;
+
+    protected markStack = new Array<number>();
+
+
+    /**
      * This is the {@code LA(-1)} character for the current position.
      */
     protected lastChar: number = -1;
@@ -92,12 +101,19 @@ export class StringCharStream implements CharStream {
 
     @Override
     mark(): number {
-        return 0; // Noop
+        // This logic is here just to enforce the same restrictions that
+        // other CharStream implementations might...
+        return -this.markStack.push(this.p);
     }
 
     @Override
     release(marker: number): void {
-        // Noop
+    // This logic is here just to enforce the same restrictions that
+        // other CharStream implementations might...
+        if (this.markStack.length !== -marker) {
+            throw new Error("mark/release error");
+        }
+        this.m = Math.max(this.m, this.markStack.pop());
     }
 
     @Override
@@ -107,12 +123,11 @@ export class StringCharStream implements CharStream {
 
     @Override
     seek(index: number): void {
-        if (index < 0) {
+        if (index < this.m) {
             throw new RangeError(`cannot seek to negative index ${index}`);
         }
-        else if (index >= this.n) {
-            throw new RangeError(`seek to index outside buffer: ${index}`);
-        }
+        this.p = Math.min(index, this.n);
+        this.lastChar = this.p == 0 ? -1 : this.data.charCodeAt(this.p - 1);
     }
 
     @Override
@@ -146,6 +161,6 @@ export class StringCharStream implements CharStream {
             throw new RangeError(
                 `Invalid Interval: ${interval.a}..${interval.b}`);
         }
-        return this.data.slice(interval.a, interval.b);
+        return this.data.slice(interval.a, interval.b+1);
     }
 }
