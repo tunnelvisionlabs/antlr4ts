@@ -73,7 +73,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	get(key: K): V {
-		let [k, v] = this.backingStore.get([key, null]);
+		let [k, v] = this.backingStore.get([key, null]) || [undefined, undefined];
 		return v;
 	}
 
@@ -86,7 +86,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	put(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
+		let element: [K, V] = this.backingStore.get([key, value]) || [undefined, undefined];
 		let result = element[1];
 		if (element[0] == null) {
 			this.backingStore.add([key, value]);
@@ -98,7 +98,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	putIfAbsent(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
+		let element: [K, V] = this.backingStore.get([key, value]) || [undefined, undefined];
 		if (element[0] == null) {
 			this.backingStore.add([key, value]);
 		}

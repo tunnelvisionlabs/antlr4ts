@@ -87,7 +87,7 @@ export class SingletonPredictionContext extends PredictionContext {
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		let parents: PredictionContext[] =  [ this.parent, PredictionContext.EMPTY_FULL ];
+		let parents: PredictionContext[] =  [ this.parent, PredictionContext.LOAD_FULL_CONTEXT() ];
 		let returnStates: number[] = [ this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY ];
 		return new ArrayPredictionContext(parents, returnStates);
 	}

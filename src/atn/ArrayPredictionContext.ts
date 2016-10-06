@@ -128,7 +128,7 @@ export class ArrayPredictionContext extends PredictionContext {
 
 		let parents2: PredictionContext[] = this.parents.slice(0);
 		let returnStates2: number[] = this.returnStates.slice(0);
-		parents2.push(PredictionContext.EMPTY_FULL);
+		parents2.push(PredictionContext.LOAD_FULL_CONTEXT());
 		returnStates2.push(PredictionContext.EMPTY_FULL_STATE_KEY);
 		return new ArrayPredictionContext(parents2, returnStates2);
 	}
@@ -157,7 +157,7 @@ export class ArrayPredictionContext extends PredictionContext {
 		if (suffix.isEmpty()) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
 				if (context.hasEmpty()) {
-					return PredictionContext.EMPTY_LOCAL;
+					return PredictionContext.LOAD_LOCAL_CONTEXT();
 				}
 
 				throw "what to do here?";

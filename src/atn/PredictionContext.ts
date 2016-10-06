@@ -31,31 +31,29 @@
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
 import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { ArrayPredictionContext } from './ArrayPredictionContext';
+import { ArrayPredictionContext as APC } from './ArrayPredictionContext';
 import { ATN } from './ATN';
 import { ATNState } from './ATNState';
-import { EmptyPredictionContext } from './EmptyPredictionContext';
+import { EmptyPredictionContext as EPC } from './EmptyPredictionContext';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { MurmurHash } from '../misc/MurmurHash';
 import { Equatable, NotNull, Override } from '../misc/Stubs';
 import { PredictionContextCache } from './PredictionContextCache';
 // import { Recognizer } from '..';
-import { SingletonPredictionContext } from './SingletonPredictionContext';
+import { SingletonPredictionContext as SPC } from './SingletonPredictionContext';
 import * as assert from 'assert';
 
 const INITIAL_HASH: number = 1;
 
 export abstract class PredictionContext implements Equatable {
 	@NotNull
-	private static _EMPTY_LOCAL: PredictionContext =  EmptyPredictionContext.LOCAL_CONTEXT;
 	static get EMPTY_LOCAL(): PredictionContext {
-		return PredictionContext._EMPTY_LOCAL;
+		return PredictionContext.LOAD_LOCAL_CONTEXT();
 	}
 
 	@NotNull
-	private static _EMPTY_FULL: PredictionContext =  EmptyPredictionContext.FULL_CONTEXT;
 	static get EMPTY_FULL(): PredictionContext {
-		return PredictionContext._EMPTY_FULL;
+		return PredictionContext.LOAD_FULL_CONTEXT();
 	}
 
 	/**
@@ -240,16 +238,26 @@ export abstract class PredictionContext implements Equatable {
 
 		if (parentsList.length === 0) {
 			// if one of them was EMPTY_LOCAL, it would be empty and handled at the beginning of the method
-			return PredictionContext.EMPTY_FULL;
+			return PredictionContext.LOAD_FULL_CONTEXT();
 		} else if (parentsList.length === 1) {
-			return new SingletonPredictionContext(parentsList[0], returnStatesList[0]);
+			return PredictionContext.createSingletonPredictionContext(parentsList[0], returnStatesList[0]);
 		} else {
-			return new ArrayPredictionContext(parentsList, returnStatesList);
+			return PredictionContext.createArrayPredictionContext(parentsList, returnStatesList);
 		}
 	}
 
+	private static createSingletonPredictionContext(parent: PredictionContext, returnState: number): PredictionContext {
+		let SingletonPredictionContext: typeof SPC = require('./SingletonPredictionContext');
+		return new SingletonPredictionContext.SingletonPredictionContext(parent, returnState);
+	}
+
+	private static createArrayPredictionContext(parents: PredictionContext[], returnStates: number[], hashCode?: number): PredictionContext {
+		let ArrayPredictionContext: typeof APC = require('./ArrayPredictionContext');
+		return new ArrayPredictionContext.ArrayPredictionContext(parents, returnStates, hashCode);
+	}
+
 	static isEmptyLocal(context: PredictionContext): boolean {
-		return context === PredictionContext.EMPTY_LOCAL;
+		return context === PredictionContext.LOAD_LOCAL_CONTEXT();
 	}
 
 	static getCachedContext(
@@ -298,10 +306,14 @@ export abstract class PredictionContext implements Equatable {
 		// We know parents.length>0 because context.isEmpty() is checked at the beginning of the method.
 		let updated: PredictionContext; 
 		if (parents.length === 1) {
-			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
+			updated = PredictionContext.createSingletonPredictionContext(parents[0], context.getReturnState(0));
 		} else {
-			let arrayPredictionContext: ArrayPredictionContext =  <ArrayPredictionContext>context;
-			updated = new ArrayPredictionContext(parents, arrayPredictionContext.returnStates, context.cachedHashCode);
+			let returnStates: number[] = new Array<number>(context.size());
+			for (let i = 0; i < context.size(); i++) {
+				returnStates[i] = context.getReturnState(i);
+			}
+
+			updated = PredictionContext.createArrayPredictionContext(parents, returnStates, context.hashCode());
 		}
 
 		existing = contextCache.putIfAbsent(updated, updated);
@@ -312,13 +324,13 @@ export abstract class PredictionContext implements Equatable {
 	}
 
 	appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
-		return this.appendContext(PredictionContext.EMPTY_FULL.getChild(returnContext), contextCache);
+		return this.appendContext(PredictionContext.LOAD_FULL_CONTEXT().getChild(returnContext), contextCache);
 	}
 
 	abstract appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext;
 
 	getChild(returnState: number): PredictionContext {
-		return new SingletonPredictionContext(this, returnState);
+		return PredictionContext.createSingletonPredictionContext(this, returnState);
 	}
 
 	abstract isEmpty(): boolean;
@@ -333,10 +345,10 @@ export abstract class PredictionContext implements Equatable {
 	// @Override
 	abstract equals(o: any): boolean;
 
-	//@Override
-	//public String toString() {
-	//	return toString(null, Integer.MAX_VALUE);
-	//}
+	// @Override
+	// toString(): string {
+	// 	return this.toStrings(null, PredictionContext.EMPTY_FULL_STATE_KEY);
+	// }
 
 	// toStrings(recognizer: Recognizer<any, any>, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
 	// 	let result: string[] = [];
@@ -403,10 +415,19 @@ export abstract class PredictionContext implements Equatable {
 
 	// 	return result;
 	// }
-
 }
 
 export namespace PredictionContext {
+	export function LOAD_LOCAL_CONTEXT(): PredictionContext {
+		let EmptyPredictionContext: typeof EPC = require('./EmptyPredictionContext');
+		return EmptyPredictionContext.EmptyPredictionContext.LOCAL_CONTEXT;
+	}
+
+	export function LOAD_FULL_CONTEXT(): PredictionContext {
+		let EmptyPredictionContext: typeof EPC = require('./EmptyPredictionContext');
+		return EmptyPredictionContext.EmptyPredictionContext.FULL_CONTEXT;
+	}
+
 	export const EMPTY_LOCAL_STATE_KEY: number =  -(1 << 31);
 	export const EMPTY_FULL_STATE_KEY: number =  (1 << 31) - 1;
 

@@ -35,8 +35,15 @@ import { PredictionContext } from './PredictionContext';
 import { PredictionContextCache } from './PredictionContextCache';
 
 export class EmptyPredictionContext extends PredictionContext {
-	static LOCAL_CONTEXT: EmptyPredictionContext =  new EmptyPredictionContext(false);
-	static FULL_CONTEXT: EmptyPredictionContext =  new EmptyPredictionContext(true);
+	private static _LOCAL_CONTEXT: EmptyPredictionContext = new EmptyPredictionContext(false);
+	static get LOCAL_CONTEXT(): PredictionContext {
+		return EmptyPredictionContext._LOCAL_CONTEXT;
+	}
+
+	private static _FULL_CONTEXT: EmptyPredictionContext = new EmptyPredictionContext(true);
+	static get FULL_CONTEXT(): PredictionContext {
+		return EmptyPredictionContext._FULL_CONTEXT;
+	}
 
 	private fullContext: boolean; 
 

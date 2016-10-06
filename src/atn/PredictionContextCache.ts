@@ -34,6 +34,7 @@ import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { JavaMap, Override } from '../misc/Stubs';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
+import * as assert from 'assert';
 
 /** Used to cache {@link PredictionContext} objects. Its used for the shared
  *  context cash associated with contexts in DFA states. This cache
@@ -142,6 +143,8 @@ export namespace PredictionContextCache {
         private y: PredictionContext; 
 
         constructor(x: PredictionContext, y: PredictionContext) {
+            assert(x != null);
+            assert(y != null);
             this.x = x;
             this.y = y;
         }
