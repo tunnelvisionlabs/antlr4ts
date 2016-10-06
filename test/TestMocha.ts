@@ -1,9 +1,4 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
-require('source-map-support').install();
-
-
-var assert = require('assert');
+import * as assert from "assert";
 
 function echo(value?) { return value }
 var x = echo();
