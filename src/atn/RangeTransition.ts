@@ -30,11 +30,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.5959980-07:00
 
-import { ATNState } from '.';
-import { IntervalSet } from '../misc'
+import { ATNState } from './ATNState';
+import { IntervalSet } from '../misc/IntervalSet'
 import { Override, NotNull } from '../misc/Stubs';
-import { Transition } from '.';
-import { TransitionType } from '.';
+import { Transition } from './Transition';
+import { TransitionType } from './TransitionType';
 
 export class RangeTransition extends Transition {
 	from: number;

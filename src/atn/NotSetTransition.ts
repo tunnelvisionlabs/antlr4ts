@@ -30,12 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.8483617-07:00
 
-import { ATNState } from '.';
-import { IntervalSet } from '../misc';
+import { ATNState } from './ATNState';
+import { IntervalSet } from '../misc/IntervalSet';
 import { Override, NotNull, Nullable } from '../misc/Stubs';
-import { SetTransition } from '.';
-import { Transition } from '.';
-import { TransitionType } from '.';
+import { SetTransition } from './SetTransition';
+import { Transition } from './Transition';
+import { TransitionType } from './TransitionType';
 
 export class NotSetTransition extends SetTransition {
 	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
