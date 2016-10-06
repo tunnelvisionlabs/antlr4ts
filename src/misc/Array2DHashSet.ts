@@ -35,7 +35,7 @@
 
 import assert=require('assert');
 import {EqualityComparator} from './EqualityComparator';
-import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
+import {NotNull, Nullable, Override,SuppressWarnings,Equatable} from './Stubs';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
 import {ObjectEqualityComparator} from './ObjectEqualityComparator';
 import {MurmurHash} from './MurmurHash';
@@ -50,7 +50,7 @@ const INITAL_CAPACITY: number =  16; // must be power of 2
 const INITAL_BUCKET_CAPACITY: number =  8;
 const LOAD_FACTOR: number =  0.75;
 
-export class Array2DHashSet<T> implements JavaSet<T> {
+export class Array2DHashSet<T extends Equatable> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>; 
 
@@ -470,7 +470,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 }
 
-class SetIterator<T> implements JavaIterator<T>  {
+class SetIterator<T extends Equatable> implements JavaIterator<T>  {
 	nextIndex: number =  0;
 	removed: boolean =  true;
 
