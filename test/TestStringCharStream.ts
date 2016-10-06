@@ -55,18 +55,11 @@ describe("hack attempt to get tests to run", function() {
 });
 
 function createStream(text: string, bufferSize?: number) {
-    return new TestingStringCharStream(text);
+    return new StringCharStream(text);
 }
 
 export class BaseTest {
     
-}
-
-class TestingStringCharStream extends StringCharStream {
-
-    public constructor(input: string, sourceName?: string) {
-        super(input, sourceName);
-    }
 }
 
 @suite
