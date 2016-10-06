@@ -30,6 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.5205842-07:00
 
+import { Override } from '../misc/Stubs';
+import { PredictionContext } from './PredictionContext';
+import { PredictionContextCache } from './PredictionContextCache';
+
 export class EmptyPredictionContext extends PredictionContext {
 	static LOCAL_CONTEXT: EmptyPredictionContext =  new EmptyPredictionContext(false);
 	static FULL_CONTEXT: EmptyPredictionContext =  new EmptyPredictionContext(true);
@@ -37,12 +41,12 @@ export class EmptyPredictionContext extends PredictionContext {
 	private fullContext: boolean; 
 
 	 constructor(fullContext: boolean)  {
-		super(calculateEmptyHashCode());
+		super(PredictionContext.calculateEmptyHashCode());
 		this.fullContext = fullContext;
 	}
 
 	isFullContext(): boolean {
-		return fullContext;
+		return this.fullContext;
 	}
 
 	@Override
@@ -52,17 +56,17 @@ export class EmptyPredictionContext extends PredictionContext {
 
 	@Override
 	protected removeEmptyContext(): PredictionContext {
-		throw new UnsupportedOperationException("Cannot remove the empty context from itself.");
+		throw "Cannot remove the empty context from itself.";
 	}
 
 	@Override
 	getParent(index: number): PredictionContext {
-		throw new IndexOutOfBoundsException();
+		throw "index out of bounds";
 	}
 
 	@Override
 	getReturnState(index: number): number {
-		throw new IndexOutOfBoundsException();
+		throw "index out of bounds";
 	}
 
 	@Override
@@ -76,7 +80,7 @@ export class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	appendContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
+	appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
 		return contextCache.getChild(this, returnContext);
 	}
 
@@ -97,17 +101,12 @@ export class EmptyPredictionContext extends PredictionContext {
 
 	@Override
 	equals(o: any): boolean {
-		return this == o;
+		return this === o;
 	}
 
 	@Override
-	toStrings(recognizer: Recognizer<any,any>, currentState: number): string[] {
-		return new String[] { "[]" };
-	}
-
-	@Override
-	toStrings(recognizer: Recognizer<any,any>, stop: PredictionContext, currentState: number): string[] {
-		return new String[] { "[]" };
+	toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
+		return [ "[]" ];
 	}
 
 }

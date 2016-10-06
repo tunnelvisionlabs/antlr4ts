@@ -30,34 +30,39 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.4697044-07:00
 
+import { ArrayPredictionContext } from './ArrayPredictionContext';
+import { NotNull, Override } from '../misc/Stubs';
+import { PredictionContext } from './PredictionContext';
+import { PredictionContextCache } from './PredictionContextCache';
+
 export class SingletonPredictionContext extends PredictionContext {
 
 	@NotNull
 	parent: PredictionContext; 
 	returnState: number; 
 
-	/*package*/ SingletonPredictionContext(@NotNull PredictionContext parent, int returnState) {
-		super(calculateHashCode(parent, returnState));
-		assert(returnState != EMPTY_FULL_STATE_KEY && returnState != EMPTY_LOCAL_STATE_KEY);
+	constructor(@NotNull parent: PredictionContext, returnState: number) {
+		super(PredictionContext.calculateSingleHashCode(parent, returnState));
+		// assert(returnState != PredictionContext.EMPTY_FULL_STATE_KEY && returnState != PredictionContext.EMPTY_LOCAL_STATE_KEY);
 		this.parent = parent;
 		this.returnState = returnState;
 	}
 
 	@Override
 	getParent(index: number): PredictionContext {
-		assert(index == 0);
-		return parent;
+		// assert(index == 0);
+		return this.parent;
 	}
 
 	@Override
 	getReturnState(index: number): number {
-		assert(index == 0);
-		return returnState;
+		// assert(index == 0);
+		return this.returnState;
 	}
 
 	@Override
 	findReturnState(returnState: number): number {
-		return this.returnState == returnState ? 0 : -1;
+		return this.returnState === returnState ? 0 : -1;
 	}
 
 	@Override
@@ -77,13 +82,13 @@ export class SingletonPredictionContext extends PredictionContext {
 
 	@Override
 	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
-		return contextCache.getChild(parent.appendContext(suffix, contextCache), returnState);
+		return contextCache.getChild(this.parent.appendContext(suffix, contextCache), this.returnState);
 	}
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		let parents: PredictionContext[] =  new PredictionContext[] { parent, EMPTY_FULL };
-		let returnStates: number[] =  new int[] { returnState, EMPTY_FULL_STATE_KEY };
+		let parents: PredictionContext[] =  [ this.parent, PredictionContext.EMPTY_FULL ];
+		let returnStates: number[] = [ this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY ];
 		return new ArrayPredictionContext(parents, returnStates);
 	}
 
@@ -94,20 +99,18 @@ export class SingletonPredictionContext extends PredictionContext {
 
 	@Override
 	equals(o: any): boolean {
-		if (o == this) {
+		if (o === this) {
 			return true;
-		}
-		else if (!(o instanceof SingletonPredictionContext)) {
+		} else if (!(o instanceof SingletonPredictionContext)) {
 			return false;
 		}
 
-		let other: SingletonPredictionContext =  (SingletonPredictionContext)o;
-		if (this.hashCode() != other.hashCode()) {
+		let other: SingletonPredictionContext =  o;
+		if (this.hashCode() !== other.hashCode()) {
 			return false;
 		}
 
-		return returnState == other.returnState
-			&& parent.equals(other.parent);
+		return this.returnState === other.returnState
+			&& this.parent.equals(other.parent);
 	}
-
 }
