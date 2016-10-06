@@ -30,37 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.1463816-07:00
 
-// import org.junit.Before;
-// import org.junit.Ignore;
-// import org.junit.Test;
-
-// import static org.junit.Assert.assertEquals;
 import * as assert from 'assert';
 import assertEquals = assert.equal;
 import { test as Test, suite } from 'mocha-typescript';
 
-// Stubbed out classes
-class PredictionContextCache{
-    join(emptyLocal, local): PredictionContext { throw new Error("Not implemented"); }
-}
-
-class PredictionContext{
-    static EMPTY_LOCAL = undefined;
-    static EMPTY_FULL = undefined;
-
-    getParent(number: number): PredictionContext { throw new Error("Not implemented"); }
-
-    size(): number { throw new Error("Not implemented"); }
-
-    isEmpty(): boolean { throw new Error("Not implemented"); }
-
-    static isEmptyLocal(predictionContext: PredictionContext): boolean { throw new Error("Not implemented"); }
-
-    getReturnState(number: number):number { throw new Error("Not implemented"); }
-
-    static EMPTY_FULL_STATE_KEY = 0;
-    static EMPTY_LOCAL_STATE_KEY = -1;
-}
+import { PredictionContext } from '../../src/atn/PredictionContext';
+import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
 
 /// Assuming that IdentityHashMap<K, V> == Map<K, V>;
 
