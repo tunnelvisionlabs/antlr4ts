@@ -1,6 +1,7 @@
 // export * from './AbstractEqualityComparator';
 // export * from './Args';
 export * from './Array2DHashSet';
+export * from './DefaultEqualityComparator';
 // export * from './DoubleKeyMap';
 export * from './EqualityComparator';
 // export * from './FlexibleHashMap';
