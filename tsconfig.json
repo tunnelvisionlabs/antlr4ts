@@ -5,7 +5,11 @@
         "module": "commonjs",
         "target": "es2015",
         "noImplicitAny": false,
-        "experimentalDecorators": true
+      "experimentalDecorators": true,
+      "declaration": true,
+      "preserveConstEnums": true,
+      "typeRoots": [ "./node_modules/@types" ],
+      "types":  [ "node", "mocha" ] 
     },
     "exclude": [
         "node_modules",
