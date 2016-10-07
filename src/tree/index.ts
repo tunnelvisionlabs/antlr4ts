@@ -1,4 +1,4 @@
-// export * from './AbstractParseTreeVisitor';
+export * from './AbstractParseTreeVisitor';
 export * from './ErrorNode';
 // export * from './ErrorNodeImpl';
 export * from './ParseTree';
