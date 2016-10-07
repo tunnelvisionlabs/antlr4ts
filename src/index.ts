@@ -35,6 +35,7 @@ export * from './RuleContext';
 // export * from './RuleDependencies';
 // export * from './RuleDependency';
 // export * from './RuleVersion';
+export * from './StringCharStream';
 export * from './Token';
 export * from './TokenFactory';
 export * from './TokenSource';

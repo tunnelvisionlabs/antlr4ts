@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="package.json" />
+    <Content Include="test\mocha.json" />
     <Content Include="test\mocha.opts" />
     <Content Include="tsconfig.json" />
     <Content Include="CONVERSION.md" />
@@ -45,6 +46,7 @@
     <TypeScriptCompile Include="src\Lexer.ts" />
     <TypeScriptCompile Include="src\Parser.ts" />
     <TypeScriptCompile Include="src\RuleContext.ts" />
+    <TypeScriptCompile Include="src\StringCharStream.ts" />
     <TypeScriptCompile Include="src\Token.ts" />
     <TypeScriptCompile Include="src\TokenFactory.ts" />
     <TypeScriptCompile Include="src\TokenSource.ts" />
@@ -78,6 +80,7 @@
     <TypeScriptCompile Include="src\tree\Tree.ts" />
     <TypeScriptCompile Include="src\tree\pattern\index.ts" />
     <TypeScriptCompile Include="src\tree\xpath\index.ts" />
+    <TypeScriptCompile Include="test\TestStringCharStream.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src" />

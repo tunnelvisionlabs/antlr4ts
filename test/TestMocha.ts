@@ -1,4 +1,3 @@
-
 import * as assert from "assert";
 
 function echo(value?) { return value }

@@ -1,1 +1,2 @@
-target/test
+--require ts-node/register
+test/*.ts
