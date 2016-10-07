@@ -1,4 +1,4 @@
-// export * from './AbstractEdgeMap';
+export * from './AbstractEdgeMap';
 // export * from './AcceptStateInfo';
 // export * from './ArrayEdgeMap';
 // export * from './DFA';

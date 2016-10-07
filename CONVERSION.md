@@ -125,7 +125,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\TokensStartState.java
 * [ ] atn\Transition.java
 * [ ] atn\WildcardTransition.java
-* [ ] dfa\AbstractEdgeMap.java
+* [x] dfa\AbstractEdgeMap.java
 * [ ] dfa\AcceptStateInfo.java
 * [ ] dfa\ArrayEdgeMap.java
 * [ ] dfa\DFA.java

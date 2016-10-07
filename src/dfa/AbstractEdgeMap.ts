@@ -25,65 +25,64 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:38.0251372-07:00
+
+import { EdgeMap } from './EdgeMap';
+import { Override } from '../misc/Stubs';
+import * as assert from 'assert';
 
 /**
  *
  * @author Sam Harwell
  */
 export abstract class AbstractEdgeMap<T> implements EdgeMap<T> {
+	protected minIndex: number;
+	protected maxIndex: number;
 
-	protected minIndex: number; 
-	protected maxIndex: number; 
-
-	 constructor(minIndex: number, maxIndex: number)  {
+	constructor(minIndex: number, maxIndex: number) {
 		// the allowed range (with minIndex and maxIndex inclusive) should be less than 2^32
 		assert(maxIndex - minIndex + 1 >= 0);
 		this.minIndex = minIndex;
 		this.maxIndex = maxIndex;
 	}
 
-	@Override
+	// @Override
+	abstract size(): number;
+
+	// @Override
+	abstract isEmpty(): boolean;
+
+	// @Override
+	abstract containsKey(key: number): boolean;
+
+	// @Nullable
+	// @Override
+	abstract get(key: number): T;
+
+	// @NotNull
+	// @Override
 	abstract put(key: number, value: T): AbstractEdgeMap<T>;
 
 	@Override
-	putAll(m: EdgeMap<? extends T>): AbstractEdgeMap<T> {
-		let result: AbstractEdgeMap<T> =  this;
-		for (Map.Entry<Integer, ? extends T> entry : m.entrySet()) {
-			result = result.put(entry.getKey(), entry.getValue());
+	putAll<U extends T>(m: EdgeMap<U>): AbstractEdgeMap<T> {
+		let result: AbstractEdgeMap<T> = this;
+		for (let entry of m.entrySet()) {
+			result = result.put(entry.key, entry.value);
 		}
 
 		return result;
 	}
 
-	@Override
+	// @Override
 	abstract clear(): AbstractEdgeMap<T>;
 
-	@Override
+	// @Override
 	abstract remove(key: number): AbstractEdgeMap<T>;
 
-	protected abstract class AbstractEntrySet extends AbstractSet<Map.Entry<Integer, T>> {
-		@Override
-		contains(o: any): boolean {
-			if (!(o instanceof Map.Entry)) {
-				return false;
-			}
+	// @NotNull
+	abstract toMap(): Map<number, T>;
 
-			Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-			if (entry.getKey() instanceof Integer) {
-				let key: number =  (Integer)entry.getKey();
-				let value: any =  entry.getValue();
-				let existing: T =  get(key);
-				return value == existing || (existing != null && existing.equals(value));
-			}
-
-			return false;
-		}
-
-		@Override
-		size(): number {
-			return AbstractEdgeMap.this.size();
-		}
-	}
-
+	// @NotNull
+	abstract entrySet(): Iterable<{ key: number, value: T }>;
 }
