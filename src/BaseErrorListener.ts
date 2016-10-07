@@ -48,10 +48,10 @@ import {
 
 // This class seems unused, but might clean up ParserProxyErrorListener a liettle bit if used consistantly.
 
-export class BaseErrorListener<T> implements ParserErrorListener<T> {
+export class BaseErrorListener implements ParserErrorListener {
     @Override
-    syntaxError(@NotNull recognizer: Recognizer<T, any>,
-        @Nullable offendingSymbol: T,
+    syntaxError(@NotNull recognizer: Recognizer<Token, any>,
+        @Nullable offendingSymbol: Token,
         line: number,
         charPositionInLine: number,
         @NotNull msg: string,
