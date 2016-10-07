@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="package.json" />
+    <Content Include="test\mocha.json" />
     <Content Include="test\mocha.opts" />
     <Content Include="tsconfig.json" />
     <Content Include="CONVERSION.md" />
