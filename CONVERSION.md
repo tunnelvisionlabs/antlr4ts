@@ -185,7 +185,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] tree\TerminalNodeImpl.java
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
-* [ ] tree\pattern\Chunk.java
+* [x] tree\pattern\Chunk.java
 * [ ] tree\pattern\ParseTreeMatch.java
 * [ ] tree\pattern\ParseTreePattern.java
 * [ ] tree\pattern\ParseTreePatternMatcher.java

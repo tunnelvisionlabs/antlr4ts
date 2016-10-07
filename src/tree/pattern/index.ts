@@ -1,4 +1,4 @@
-// export * from './Chunk';
+export * from './Chunk';
 // export * from './ParseTreeMatch';
 // export * from './ParseTreePattern';
 // export * from './ParseTreePatternMatcher';
