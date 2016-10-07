@@ -162,9 +162,9 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
 * [ ] misc\TestRig.java
-* [ ] misc\Tuple.java
-* [ ] misc\Tuple2.java
-* [ ] misc\Tuple3.java
+* [x] ~~misc\Tuple.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple2.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Utils.java
 * [ ] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
