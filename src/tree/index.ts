@@ -9,6 +9,6 @@ export * from './ParseTreeVisitor';
 export * from './RuleNode';
 export * from './SyntaxTree';
 export * from './TerminalNode';
-// export * from './TerminalNodeImpl';
+export * from './TerminalNodeImpl';
 export * from './Tree';
 // export * from './Trees';

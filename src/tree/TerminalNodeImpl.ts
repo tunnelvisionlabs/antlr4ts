@@ -30,28 +30,47 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
 
+import { Interval } from '../misc/Interval';
+import { Override } from '../misc/Stubs';
+import { Parser } from '../Parser';
+import { ParseTree } from './ParseTree';
+import { ParseTreeVisitor } from './ParseTreeVisitor';
+import { RuleNode } from './RuleNode';
+import { TerminalNode } from './TerminalNode';
+import { Token } from '../Token';
+
 export class TerminalNodeImpl implements TerminalNode {
-	symbol: Token; 
-	parent: RuleNode; 
+	symbol: Token;
+	parent: RuleNode;
 
-	 constructor(symbol: Token)  {	this.symbol = symbol;	}
-
-	@Override
-	getChild(i: number): ParseTree {return null;}
-
-	@Override
-	getSymbol(): Token {return symbol;}
+	constructor(symbol: Token) {
+		this.symbol = symbol;
+	}
 
 	@Override
-	getParent(): RuleNode { return parent; }
+	getChild(i: number): ParseTree {
+		return null;
+	}
 
 	@Override
-	getPayload(): Token { return symbol; }
+	getSymbol(): Token {
+		return this.symbol;
+	}
+
+	@Override
+	getParent(): RuleNode {
+		return this.parent;
+	}
+
+	@Override
+	getPayload(): Token {
+		return this.symbol;
+	}
 
 	@Override
 	getSourceInterval(): Interval {
-		if (symbol != null) {
-			let tokenIndex: number =  symbol.getTokenIndex();
+		if (this.symbol != null) {
+			let tokenIndex: number = this.symbol.getTokenIndex();
 			return new Interval(tokenIndex, tokenIndex);
 		}
 
@@ -59,43 +78,39 @@ export class TerminalNodeImpl implements TerminalNode {
 	}
 
 	@Override
-	getChildCount(): number { return 0; }
+	getChildCount(): number {
+		return 0;
+	}
 
 	@Override
-	accept<T>(visitor: ParseTreeVisitor<? extends T>): T {
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitTerminal(this);
 	}
 
 	@Override
 	getText(): string {
-		if (symbol != null) {
-			return symbol.getText();
+		if (this.symbol != null) {
+			return this.symbol.getText();
 		}
 
 		return null;
 	}
 
 	@Override
-	toStringTree(parser: Parser): string {
+	toStringTree(parser?: Parser): string {
 		return toString();
 	}
 
 	@Override
 	toString(): string {
-		if (symbol != null) {
-			if ( symbol.getType() == Token.EOF ) {
+		if (this.symbol != null) {
+			if (this.symbol.getType() === Token.EOF) {
 				return "<EOF>";
 			}
 
-			return symbol.getText();
-		}
-		else {
+			return this.symbol.getText();
+		} else {
 			return "<null>";
 		}
-	}
-
-	@Override
-	toStringTree(): string {
-		return toString();
 	}
 }
