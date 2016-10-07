@@ -9,11 +9,11 @@ will need a comment indicating the names of the two contributors who verified th
 semantics of the original code have been preserved. When the conversion is complete, this file and the sign-off comments
 in individual files can be removed and the antlr4 submodule commit will track the progress made on this code base.
 
-* [ ] ANTLRErrorListener.java
-* [ ] ANTLRErrorStrategy.java
+* [x] ANTLRErrorListener.java
+* [x] ANTLRErrorStrategy.java
 * [ ] ANTLRFileStream.java
 * [ ] ANTLRInputStream.java
-* [ ] BailErrorStrategy.java
+* [x] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [ ] BufferedTokenStream.java
 * [x] CharStream.java
@@ -21,7 +21,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] CommonTokenFactory.java
 * [ ] CommonTokenStream.java
 * [ ] ConsoleErrorListener.java
-* [ ] DefaultErrorStrategy.java
+* [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
 * [ ] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
@@ -41,7 +41,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] ProxyParserErrorListener.java
 * [x] RecognitionException.java
 * [ ] Recognizer.java
-* [ ] RuleContext.java
+* [x] RuleContext.java
 * [ ] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java

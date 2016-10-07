@@ -79,4 +79,6 @@
  *  @see ParserRuleContext
  */
 export class RuleContext {
+    invokingState:number;
+    parent: RuleContext;
 }
