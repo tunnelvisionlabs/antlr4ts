@@ -20,7 +20,7 @@ export * from './IntStream';
 export * from './Lexer';
 // export * from './LexerInterpreter';
 // export * from './LexerNoViableAltException';
-// export * from './ListTokenSource';
+export * from './ListTokenSource';
 // export * from './NoViableAltException';
 export * from './Parser';
 // export * from './ParserErrorListener';
