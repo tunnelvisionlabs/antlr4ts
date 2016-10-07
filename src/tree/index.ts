@@ -2,7 +2,7 @@ export * from './AbstractParseTreeVisitor';
 export * from './ErrorNode';
 // export * from './ErrorNodeImpl';
 export * from './ParseTree';
-// export * from './ParseTreeListener';
+export * from './ParseTreeListener';
 // export * from './ParseTreeProperty';
 export * from './ParseTreeVisitor';
 // export * from './ParseTreeWalker';

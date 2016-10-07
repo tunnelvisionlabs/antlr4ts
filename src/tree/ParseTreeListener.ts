@@ -30,6 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6109431-07:00
 
+import { ErrorNode } from './ErrorNode';
+import { ParserRuleContext } from '../ParserRuleContext';
+import { TerminalNode } from './TerminalNode';
+
 /** This interface describes the minimal core of methods triggered
  *  by {@link ParseTreeWalker}. E.g.,
  *
@@ -42,8 +46,8 @@
  * 		https://github.com/antlr/antlr4/issues/841
  */
 export interface ParseTreeListener {
-	visitTerminal(@NotNull node: TerminalNode): void;
-	visitErrorNode(@NotNull node: ErrorNode): void;
-    enterEveryRule(@NotNull ctx: ParserRuleContext): void;
-    exitEveryRule(@NotNull ctx: ParserRuleContext): void;
+	visitTerminal(/*@NotNull*/ node: TerminalNode): void;
+	visitErrorNode(/*@NotNull*/ node: ErrorNode): void;
+	enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
+	exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
 }

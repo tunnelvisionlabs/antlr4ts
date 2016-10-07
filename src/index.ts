@@ -25,7 +25,7 @@ export * from './Lexer';
 export * from './Parser';
 // export * from './ParserErrorListener';
 // export * from './ParserInterpreter';
-// export * from './ParserRuleContext';
+export * from './ParserRuleContext';
 // export * from './ProxyErrorListener';
 // export * from './ProxyParserErrorListener';
 // export * from './RecognitionException';
