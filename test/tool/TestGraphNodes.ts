@@ -34,9 +34,7 @@ import * as assert from 'assert';
 import assertEquals = assert.equal;
 import { test as Test, suite } from 'mocha-typescript';
 
-import { Array2DHashMap } from '../../src/misc/Array2DHashMap';
 import { EmptyPredictionContext } from '../../src/atn/EmptyPredictionContext';
-import { EqualityComparator } from '../../src/misc/EqualityComparator';
 import { PredictionContext } from '../../src/atn/PredictionContext';
 import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
 
@@ -826,24 +824,14 @@ array(...nodes: PredictionContext[]): PredictionContext {
 }
 }
 
-class IdentityComparator implements EqualityComparator<PredictionContext> {
-	hashCode(o: PredictionContext): number {
-		return o.hashCode();
-	}
-
-	equals(x: PredictionContext, y: PredictionContext): boolean {
-		return x === y;
-	}
-}
-
 function toDOTString(context: PredictionContext): string {
     let nodes = "";
     let edges = "";
-    let visited = new Array2DHashMap<PredictionContext, PredictionContext>(new IdentityComparator());
-    let contextIds = new Array2DHashMap<PredictionContext, number>(new IdentityComparator());
+    let visited = new Map<PredictionContext, PredictionContext>();
+    let contextIds = new Map<PredictionContext, number>();
     let workList = new Array<PredictionContext>();
-    visited.put(context, context);
-    contextIds.put(context, contextIds.size());
+    visited.set(context, context);
+    contextIds.set(context, contextIds.size);
     workList.push(context);
     while (workList.length > 0) {
         let current: PredictionContext = workList.pop();
@@ -883,8 +871,10 @@ function toDOTString(context: PredictionContext): string {
                 continue;
             }
 
-            if (visited.put(current.getParent(i), current.getParent(i)) == null) {
-                contextIds.put(current.getParent(i), contextIds.size());
+			let visitedSize = visited.size;
+			visited.set(current.getParent(i), current.getParent(i));
+            if (visited.size > visitedSize) {
+                contextIds.set(current.getParent(i), contextIds.size);
                 workList.push(current.getParent(i));
             }
 
