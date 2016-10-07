@@ -40,10 +40,16 @@
     <Content Include="LICENSE.md" />
     <Content Include="README.md" />
     <TypeScriptCompile Include="src\CharStream.ts" />
+    <TypeScriptCompile Include="src\FailedPredicateException.ts" />
     <TypeScriptCompile Include="src\index.ts" />
+    <TypeScriptCompile Include="src\InputMismatchException.ts" />
     <TypeScriptCompile Include="src\IntStream.ts" />
     <TypeScriptCompile Include="src\Lexer.ts" />
+    <TypeScriptCompile Include="src\LexerNoViableAltException.ts" />
+    <TypeScriptCompile Include="src\misc\Utils.ts" />
+    <TypeScriptCompile Include="src\NoViableAltException.ts" />
     <TypeScriptCompile Include="src\Parser.ts" />
+    <TypeScriptCompile Include="src\RecognitionException.ts" />
     <TypeScriptCompile Include="src\RuleContext.ts" />
     <TypeScriptCompile Include="src\Token.ts" />
     <TypeScriptCompile Include="src\TokenFactory.ts" />

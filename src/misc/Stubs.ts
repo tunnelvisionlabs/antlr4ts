@@ -31,6 +31,10 @@
 /**
  * JavaScript's Object class lacks these (compared to Java...)
  */
+import { RuleContext } from "../RuleContext";
+import { Token } from "../Token";
+import { IntStream } from "../IntStream";
+
 export interface Equatable {
 	equals(other: any): boolean;
 	hashCode(): number;
@@ -129,3 +133,42 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
         return {done: false, value: this._iterator.next()}
     }
 }
+
+// Delete these stubs when integrated...
+export class ATN {
+    getExpectedTokens(offendingState: number, ruleContext: RuleContext): IntervalSet { throw new Error("Not implemented"); }
+
+    states: ATNState[];
+}
+export class ATNConfigSet { }
+export class ATNInterpreter {
+    atn: ATN;
+}
+export class ATNState {
+    transition(number: number): PredicateTransition { throw new Error("Not implemented"); }
+}
+export abstract class Recognizer<T, T2>{
+    getATN(): ATN { throw new Error("Not implemented"); }
+}
+
+export class ParserATNSimulator{}
+export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
+    getInputStream(): IntStream { throw new Error("Not implemented"); }
+    getInterpreter(): ATNInterpreter { throw new Error("Not implemented"); }
+
+    getCurrentToken():Token { throw new Error("Not implemented"); }
+
+    _ctx: ParserRuleContext;
+
+    getState(): number { throw new Error("Not implemented"); }
+}
+export class ParserRuleContext { }
+export class IntervalSet { }
+
+export abstract class AbstractPredicateTransition {}
+export class PredicateTransition extends AbstractPredicateTransition {
+    ruleIndex: number;
+    predIndex: number;
+}
+
+
