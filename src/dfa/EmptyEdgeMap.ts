@@ -28,25 +28,28 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:39.0995965-07:00
 
+import { AbstractEdgeMap } from './AbstractEdgeMap';
+import { Override } from '../misc/Stubs';
+import { SingletonEdgeMap } from './SingletonEdgeMap';
+
 /**
  * This implementation of {@link AbstractEdgeMap} represents an empty edge map.
  *
  * @author Sam Harwell
  */
 export class EmptyEdgeMap<T> extends AbstractEdgeMap<T> {
-
-	 constructor(minIndex: number, maxIndex: number)  {
+	constructor(minIndex: number, maxIndex: number) {
 		super(minIndex, maxIndex);
 	}
 
 	@Override
 	put(key: number, value: T): AbstractEdgeMap<T> {
-		if (value == null || key < minIndex || key > maxIndex) {
+		if (value == null || key < this.minIndex || key > this.maxIndex) {
 			// remains empty
 			return this;
 		}
 
-		return new SingletonEdgeMap<T>(minIndex, maxIndex, key, value);
+		return new SingletonEdgeMap<T>(this.minIndex, this.maxIndex, key, value);
 	}
 
 	@Override
@@ -81,11 +84,11 @@ export class EmptyEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	toMap(): Map<number, T> {
-		return Collections.emptyMap();
+		return new Map<number, T>();
 	}
 
 	@Override
-	entrySet(): Set<Map.Entry<number, T>> {
-		return Collections.<Integer, T>emptyMap().entrySet();
+	entrySet(): Iterable<{ key: number, value: T }> {
+		return [];
 	}
 }
