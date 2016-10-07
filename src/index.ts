@@ -4,7 +4,7 @@
 // export * from './ANTLRInputStream';
 // export * from './BailErrorStrategy';
 // export * from './BaseErrorListener';
-// export * from './BufferedTokenStream';
+export * from './BufferedTokenStream';
 export * from './CharStream';
 export * from './CommonToken';
 export * from './CommonTokenFactory';
