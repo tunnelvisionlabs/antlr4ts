@@ -25,6 +25,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:39.0109129-07:00
 
 /**
@@ -39,25 +40,25 @@ export interface EdgeMap<T> {
 
 	containsKey(key: number): boolean;
 
-	@Nullable
+	// @Nullable
 	get(key: number): T;
 
-	@NotNull
-	put(key: number, @Nullable value: T): EdgeMap<T>;
+	// @NotNull
+	put(key: number, /*@Nullable*/ value: T): EdgeMap<T>;
 
-	@NotNull
+	// @NotNull
 	remove(key: number): EdgeMap<T>;
 
-	@NotNull
-	putAll(@NotNull m: EdgeMap<? extends T>): EdgeMap<T>;
+	// @NotNull
+	putAll<U extends T>(/*@NotNull*/ m: EdgeMap<U>): EdgeMap<T>;
 
-	@NotNull
+	// @NotNull
 	clear(): EdgeMap<T>;
 
-	@NotNull
+	// @NotNull
 	toMap(): Map<number, T>;
 
-	@NotNull
-	entrySet(): Set<Map.Entry<number, T>>;
+	// @NotNull
+	entrySet(): Iterable<{ key: number, value: T }>;
 
 }
