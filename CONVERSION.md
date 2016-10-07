@@ -161,7 +161,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ~~misc\Predicate.java~~ (Unnecessary in TypeScript)
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
-* [ ] misc\TestRig.java
+* [x] ~~misc\TestRig.java~~ (Deprecated prior to TypeScript port)
 * [x] ~~misc\Tuple.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Tuple2.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)

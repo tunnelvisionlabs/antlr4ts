@@ -18,5 +18,4 @@ export * from './ObjectEqualityComparator';
 // export * from './ParseCancellationException';
 // export * from './RuleDependencyChecker';
 // export * from './RuleDependencyProcessor';
-// export * from './TestRig';
 // export * from './Utils';
