@@ -33,43 +33,6 @@ import {IntStream} from './IntStream';
 import {TokenSource} from './TokenSource';
 import {TokenStream} from './TokenStream';
 
-export namespace Token {
-	export const INVALID_TYPE: number = 0;
-
-	/** During lookahead operations, this "token" signifies we hit rule end ATN state
-	 *  and did not follow it despite needing to.
-	 */
-	export const EPSILON: number = -2;
-
-	export const MIN_USER_TOKEN_TYPE: number = 1;
-
-	export const EOF: number = IntStream.EOF;
-
-	/** All tokens go to the parser (unless skip() is called in that rule)
-	 *  on a particular "channel".  The parser tunes to a particular channel
-	 *  so that whitespace etc... can go to the parser on a "hidden" channel.
-	 */
-	export const DEFAULT_CHANNEL: number = 0;
-
-	/** Anything on different channel than DEFAULT_CHANNEL is not parsed
-	 *  by parser.
-	 */
-	export const HIDDEN_CHANNEL: number = 1;
-
-	/**
-	 * This is the minimum constant value which can be assigned to a
-	 * user-defined token channel.
-	 *
-	 * <p>
-	 * The non-negative numbers less than {@link #MIN_USER_CHANNEL_VALUE} are
-	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
-	 * {@link #HIDDEN_CHANNEL}.</p>
-	 *
-	 * @see Token#getChannel()
-	 */
-	export const MIN_USER_CHANNEL_VALUE: number = 2;
-}
-
 /** A token has properties: text, type, line, character position in the line
  *  (so we can ignore tabs), token channel, index, and source from which
  *  we obtained this token.
@@ -126,4 +89,41 @@ export interface Token {
 	 * Gets the {@link CharStream} from which this token was derived.
 	 */
 	getInputStream(): CharStream;
+}
+
+export namespace Token {
+    export const INVALID_TYPE: number = 0;
+
+	/** During lookahead operations, this "token" signifies we hit rule end ATN state
+	 *  and did not follow it despite needing to.
+	 */
+    export const EPSILON: number = -2;
+
+    export const MIN_USER_TOKEN_TYPE: number = 1;
+
+    export const EOF: number = IntStream.EOF;
+
+	/** All tokens go to the parser (unless skip() is called in that rule)
+	 *  on a particular "channel".  The parser tunes to a particular channel
+	 *  so that whitespace etc... can go to the parser on a "hidden" channel.
+	 */
+    export const DEFAULT_CHANNEL: number = 0;
+
+	/** Anything on different channel than DEFAULT_CHANNEL is not parsed
+	 *  by parser.
+	 */
+    export const HIDDEN_CHANNEL: number = 1;
+
+	/**
+	 * This is the minimum constant value which can be assigned to a
+	 * user-defined token channel.
+	 *
+	 * <p>
+	 * The non-negative numbers less than {@link #MIN_USER_CHANNEL_VALUE} are
+	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
+	 * {@link #HIDDEN_CHANNEL}.</p>
+	 *
+	 * @see Token#getChannel()
+	 */
+    export const MIN_USER_CHANNEL_VALUE: number = 2;
 }
