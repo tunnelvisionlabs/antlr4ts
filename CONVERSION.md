@@ -189,7 +189,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] tree\pattern\ParseTreeMatch.java
 * [ ] tree\pattern\ParseTreePattern.java
 * [ ] tree\pattern\ParseTreePatternMatcher.java
-* [ ] tree\pattern\RuleTagToken.java
+* [x] tree\pattern\RuleTagToken.java
 * [ ] tree\pattern\TagChunk.java
 * [ ] tree\pattern\TextChunk.java
 * [ ] tree\pattern\TokenTagToken.java
