@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{d6642ae4-3c11-4a8f-b700-f844afcbdd94}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ProjectFiles</ProjectView>
+    <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -43,6 +43,7 @@
     <TypeScriptCompile Include="src\ANTLRErrorStrategy.ts" />
     <TypeScriptCompile Include="src\atn\ATNStateType.ts" />
     <TypeScriptCompile Include="src\BailErrorStrategy.ts" />
+    <TypeScriptCompile Include="src\BaseErrorListener.ts" />
     <TypeScriptCompile Include="src\CharStream.ts" />
     <TypeScriptCompile Include="src\DefaultErrorStrategy.ts" />
     <TypeScriptCompile Include="src\FailedPredicateException.ts" />
@@ -55,6 +56,7 @@
     <TypeScriptCompile Include="src\misc\Utils.ts" />
     <TypeScriptCompile Include="src\NoViableAltException.ts" />
     <TypeScriptCompile Include="src\Parser.ts" />
+    <TypeScriptCompile Include="src\ParserErrorListener.ts" />
     <TypeScriptCompile Include="src\RecognitionException.ts" />
     <TypeScriptCompile Include="src\RuleContext.ts" />
     <TypeScriptCompile Include="src\Token.ts" />

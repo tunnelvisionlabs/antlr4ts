@@ -241,5 +241,7 @@ export class PredicateTransition extends AbstractPredicateTransition {
     ruleIndex: number;
     predIndex: number;
 }
-
+export class DFA { }
+export class BitSet { }
+export class SimulatorState { }
 
