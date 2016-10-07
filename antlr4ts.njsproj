@@ -79,7 +79,7 @@
     <TypeScriptCompile Include="src\tree\Tree.ts" />
     <TypeScriptCompile Include="src\tree\pattern\index.ts" />
     <TypeScriptCompile Include="src\tree\xpath\index.ts" />
-    <TypeScriptCompile Include="test\tool\TestStringCharStream.ts" />
+    <TypeScriptCompile Include="test\TestStringCharStream.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src" />

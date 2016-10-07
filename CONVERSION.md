@@ -51,7 +51,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] TokenSource.java
 * [x] TokenStream.java
 * [ ] TokenStreamRewriter.java
-* [ ] UnbufferedCharStream.java
+* ~~[ ] UnbufferedCharStream.java~~ - for now use StringCharStream,ts,
 * [ ] UnbufferedTokenStream.java
 * [ ] Vocabulary.java
 * [ ] VocabularyImpl.java
