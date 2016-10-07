@@ -41,28 +41,23 @@ require('source-map-support').install();
 
 //import {BaseTest} from "./BaseTest";
 import {CharStream} from "../src/CharStream";
-import { IntStream } from "../src/IntStream";
+import {IntStream} from "../src/IntStream";
 import {StringCharStream} from "../src/StringCharStream";
-import { Interval } from "../src/misc/Interval";
-import { test as Test, skip as Skip, suite } from 'mocha-typescript';
+import {Interval} from "../src/misc/Interval";
+import {test as Test, skip as Skip, suite as Suite} from 'mocha-typescript';
 import * as assert from 'assert';
 import assertEquals = assert.equal;
-
-describe("hack attempt to get tests to run", function() {
-    it("should work", function() {
-        assert(true);
-    });
-});
 
 function createStream(text: string, bufferSize?: number) {
     return new StringCharStream(text);
 }
 
+// Temporary stub
 export class BaseTest {
-    
+       
 }
 
-@suite
+@Suite
 class TestStringCharStream extends BaseTest {
     constructor() {
          super();
@@ -70,7 +65,7 @@ class TestStringCharStream extends BaseTest {
     
     @Test
     "testNoChar"(): void {
-        let input: CharStream = createStream("");
+        const input: CharStream = createStream("");
         assertEquals(IntStream.EOF, input.LA(1));
         assertEquals(IntStream.EOF, input.LA(2));
     }
@@ -83,7 +78,7 @@ class TestStringCharStream extends BaseTest {
     @Test
     testConsumeEOF(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
+                const input: CharStream = createStream("");
                 assertEquals(IntStream.EOF, input.LA(1));
                 input.consume();
                 input.consume();
@@ -94,7 +89,7 @@ class TestStringCharStream extends BaseTest {
     @Test
     testNegativeSeek(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
+                const input: CharStream = createStream("");
                 input.seek(-1);
             },
             Error);
@@ -102,7 +97,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testSeekPastEOF(): void {
-        let input: CharStream = createStream("");
+        const input: CharStream = createStream("");
         assertEquals(0, input.index());
         input.seek(1);
         assertEquals(0, input.index());
@@ -117,9 +112,9 @@ class TestStringCharStream extends BaseTest {
     @Test
     testMarkReleaseOutOfOrder(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
-                let m1: number = input.mark();
-                let m2: number = input.mark();
+                const input: CharStream = createStream("");
+                const m1 = input.mark();
+                const m2 = input.mark();
                 input.release(m1);
             },
             Error);
@@ -133,12 +128,11 @@ class TestStringCharStream extends BaseTest {
     @Test
     testMarkReleasedTwice(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
-                let m1: number = input.mark();
+                const input: CharStream = createStream("");
+                const m1 = input.mark();
                 input.release(m1);
                 input.release(m1);
-            },
-            Error); 
+            }, Error); 
     }
 
     /**
@@ -149,13 +143,12 @@ class TestStringCharStream extends BaseTest {
     @Test
     testNestedMarkReleasedTwice(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
-                let m1: number = input.mark();
-                let m2: number = input.mark();
+                const input: CharStream = createStream("");
+                const m1 = input.mark();
+                const m2 = input.mark();
                 input.release(m2);
                 input.release(m2);
-            },
-            Error);
+            }, Error);
     }
 
     /**
@@ -166,8 +159,8 @@ class TestStringCharStream extends BaseTest {
     @Test
     testMarkPassedToSeek(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("");
-                let m1: number = input.mark();
+                const input: CharStream = createStream("");
+                const m1 = input.mark();
                 input.seek(m1);
             },
             Error);
@@ -176,9 +169,9 @@ class TestStringCharStream extends BaseTest {
     @Skip
     testSeekBeforeBufferStart(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("xyz");
+                const input: CharStream = createStream("xyz");
                 input.consume();
-                let m1: number = input.mark();
+                const m1 = input.mark();
                 assertEquals(1, input.index());
                 input.consume();
                 input.seek(0);
@@ -189,9 +182,9 @@ class TestStringCharStream extends BaseTest {
     @Skip
     testGetTextBeforeBufferStart(): void {
         assert.throws(() => {
-                let input: CharStream = createStream("xyz");
+                const input: CharStream = createStream("xyz");
                 input.consume();
-                let m1: number = input.mark();
+                const m1 = input.mark();
                 assertEquals(1, input.index());
                 input.getText(new Interval(0, 1));
             },
@@ -200,9 +193,9 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testGetTextInMarkedRange(): void {
-        let input: CharStream = createStream("xyz");
+        const input: CharStream = createStream("xyz");
         input.consume();
-        let m1: number = input.mark();
+        const m1 = input.mark();
         assertEquals(1, input.index());
         input.consume();
         input.consume();
@@ -211,12 +204,12 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testLastChar(): void {
-        let input: CharStream = createStream("abcdef");
+        const input: CharStream = createStream("abcdef");
 
         input.consume();
         assertEquals('a'.charCodeAt(0), input.LA(-1));
 
-        let m1: number = input.mark();
+        const m1 = input.mark();
         input.consume();
         input.consume();
         input.consume();
@@ -237,7 +230,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test1Char(): void {
-        let input = createStream("x");
+        const input = createStream("x");
         assertEquals('x'.charCodeAt(0), input.LA(1));
         input.consume();
         assertEquals(IntStream.EOF, input.LA(1));
@@ -245,7 +238,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test2Char(): void {
-        let input = createStream("xy");
+        const input = createStream("xy");
         assertEquals('x'.charCodeAt(0), input.LA(1));
         input.consume();
         assertEquals('y'.charCodeAt(0), input.LA(1));
@@ -255,7 +248,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test2CharAhead(): void {
-        let input: CharStream = createStream("xy");
+        const input: CharStream = createStream("xy");
         assertEquals('x'.charCodeAt(0), input.LA(1));
         assertEquals('y'.charCodeAt(0), input.LA(2));
         assertEquals(IntStream.EOF, input.LA(3));
@@ -263,7 +256,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testBufferExpand(): void {
-        let input = createStream("01234", 2);
+        const input = createStream("01234", 2);
         assertEquals('0'.charCodeAt(0), input.LA(1));
         assertEquals('1'.charCodeAt(0), input.LA(2));
         assertEquals('2'.charCodeAt(0), input.LA(3));
@@ -274,7 +267,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testBufferWrapSize1(): void {
-        let input: CharStream = createStream("01234", 1);
+        const input: CharStream = createStream("01234", 1);
         assertEquals('0'.charCodeAt(0), input.LA(1));
         input.consume();
         assertEquals('1'.charCodeAt(0), input.LA(1));
@@ -290,7 +283,7 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     testBufferWrapSize2(): void {
-        let input: CharStream = createStream("01234", 2);
+        const input: CharStream = createStream("01234", 2);
         assertEquals('0'.charCodeAt(0), input.LA(1));
         input.consume();
         assertEquals('1'.charCodeAt(0), input.LA(1));
@@ -306,8 +299,8 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test1Mark(): void {
-        let input = createStream("xyz");
-        let m: number = input.mark();
+        const input = createStream("xyz");
+        const m = input.mark();
         assertEquals('x'.charCodeAt(0), input.LA(1));
         assertEquals('y'.charCodeAt(0), input.LA(2));
         assertEquals('z'.charCodeAt(0), input.LA(3));
@@ -317,8 +310,8 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test1MarkWithConsumesInSequence(): void {
-        let input = createStream("xyz");
-        let m: number = input.mark();
+        const input = createStream("xyz");
+        const m = input.mark();
         input.consume(); // x, moves to y
         input.consume(); // y
         input.consume(); // z, moves to EOF
@@ -328,13 +321,13 @@ class TestStringCharStream extends BaseTest {
 
     @Test
     test2Mark(): void {
-        let input = createStream("xyz", 100);
+        const input = createStream("xyz", 100);
         assertEquals('x'.charCodeAt(0), input.LA(1));
         input.consume(); // reset buffer index (p) to 0
-        let m1: number = input.mark();
+        const m1 = input.mark();
         assertEquals('y'.charCodeAt(0), input.LA(1));
         input.consume();
-        let m2: number = input.mark();
+        const m2 = input.mark();
         input.release(m2); // drop to 1 marker
         input.consume();
         input.release(m1); // shifts remaining char to beginning
@@ -344,7 +337,7 @@ class TestStringCharStream extends BaseTest {
     /*
         
     @Test testAFewTokens(): void {
-        let g: LexerGrammar =  new LexerGrammar(
+        const g: LexerGrammar =  new LexerGrammar(
                 "lexer grammar t;\n"+
                 "ID : 'a'..'z'+;\n" +
                 "INT : '0'..'9'+;\n" +
@@ -355,13 +348,13 @@ class TestStringCharStream extends BaseTest {
                 "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: TestingStringCharStream =  createStream("x = 302 * 91 + 20234234 * 0;");
-        let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
+        const input = createStream("x = 302 * 91 + 20234234 * 0;");
+        const lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         // copy text into tokens from char stream
         lexEngine.setTokenFactory(new CommonTokenFactory(true));
-        let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
-        let result: string =  tokens.LT(1).getText();
-        let expecting: string =  "x";
+        const tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
+        const result: string =  tokens.LT(1).getText();
+        const expecting: string =  "x";
         assertEquals(expecting, result);
         tokens.fill();
         expecting =

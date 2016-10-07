@@ -32,9 +32,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:50.0659297-07:00
 
 import {NotNull, Override} from './misc/Stubs';
-import { Interval } from './misc';
-import {IntStream} from './IntStream';
-import {CharStream} from './CharStream';
+import {Interval} from './misc';
+import {IntStream, CharStream} from './index';
 
 /** A source of characters for an ANTLR lexer. */
 export class StringCharStream implements CharStream {
@@ -59,8 +58,8 @@ export class StringCharStream implements CharStream {
      */
     protected m: number = 0;
 
+    // Just here to pass tests related to marks.
     protected markStack = new Array<number>();
-
 
     /**
      * This is the {@code LA(-1)} character for the current position.
@@ -127,7 +126,7 @@ export class StringCharStream implements CharStream {
             throw new RangeError(`cannot seek to negative index ${index}`);
         }
         this.p = Math.min(index, this.n);
-        this.lastChar = this.p == 0 ? -1 : this.data.charCodeAt(this.p - 1);
+        this.lastChar = this.p === 0 ? -1 : this.data.charCodeAt(this.p - 1);
     }
 
     @Override
