@@ -157,7 +157,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\NullUsageProcessor.java
 * [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
-* [ ] misc\ParseCancellationException.java
+* [x] misc\ParseCancellationException.java
 * [ ] misc\Predicate.java
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
