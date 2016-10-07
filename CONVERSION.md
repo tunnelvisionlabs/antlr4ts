@@ -24,22 +24,22 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] DefaultErrorStrategy.java
 * [ ] Dependents.java
 * [ ] DiagnosticErrorListener.java
-* [ ] FailedPredicateException.java
-* [ ] InputMismatchException.java
+* [x] FailedPredicateException.java
+* [x] InputMismatchException.java
 * [ ] InterpreterRuleContext.java
 * [x] IntStream.java
 * [ ] Lexer.java
 * [ ] LexerInterpreter.java
-* [ ] LexerNoViableAltException.java
+* [x] LexerNoViableAltException.java
 * [ ] ListTokenSource.java
-* [ ] NoViableAltException.java
+* [x] NoViableAltException.java
 * [ ] Parser.java
 * [ ] ParserErrorListener.java
 * [ ] ParserInterpreter.java
 * [ ] ParserRuleContext.java
 * [ ] ProxyErrorListener.java
 * [ ] ProxyParserErrorListener.java
-* [ ] RecognitionException.java
+* [x] RecognitionException.java
 * [ ] Recognizer.java
 * [ ] RuleContext.java
 * [ ] RuleContextWithAltNum.java
