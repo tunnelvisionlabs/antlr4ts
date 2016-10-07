@@ -30,20 +30,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3010112-07:00
 
+import { CharStream } from './CharStream';
+import { CommonToken } from './CommonToken';
+import { Interval } from './misc/Interval';
+import { Override } from './misc/Stubs';
+import { TokenFactory } from './TokenFactory';
+import { TokenSource } from './TokenSource';
+
 /**
  * This default implementation of {@link TokenFactory} creates
  * {@link CommonToken} objects.
  */
 export class CommonTokenFactory implements TokenFactory {
-	/**
-	 * The default {@link CommonTokenFactory} instance.
-	 *
-	 * <p>
-	 * This token factory does not explicitly copy token text when constructing
-	 * tokens.</p>
-	 */
-	static DEFAULT: TokenFactory =  new CommonTokenFactory();
-
 	/**
 	 * Indicates whether {@link CommonToken#setText} should be called after
 	 * constructing tokens to explicitly set the text. This is useful for cases
@@ -59,7 +57,7 @@ export class CommonTokenFactory implements TokenFactory {
 	 * The default value is {@code false} to avoid the performance and memory
 	 * overhead of copying text for every token unless explicitly requested.</p>
 	 */
-	protected copyText: boolean; 
+	protected copyText: boolean;
 
 	/**
 	 * Constructs a {@link CommonTokenFactory} with the specified value for
@@ -71,38 +69,44 @@ export class CommonTokenFactory implements TokenFactory {
 	 *
 	 * @param copyText The value for {@link #copyText}.
 	 */
-	 constructor(copyText: boolean)  { this.copyText = copyText; }
-
-	/**
-	 * Constructs a {@link CommonTokenFactory} with {@link #copyText} set to
-	 * {@code false}.
-	 *
-	 * <p>
-	 * The {@link #DEFAULT} instance should be used instead of calling this
-	 * directly.</p>
-	 */
-	 constructor1() { this(false) ; }
+	constructor(copyText: boolean = false) {
+		this.copyText = copyText;
+	}
 
 	@Override
-	create(source: Tuple2<? extends TokenSource,CharStream>, type: number, text: string, 
-							  channel: number, start: number, stop: number,
-							  line: number, charPositionInLine: number): CommonToken
-	{
-		let t: CommonToken =  new CommonToken(source, type, channel, start, stop);
+	create(
+		source: [TokenSource, CharStream],
+		type: number,
+		text: string,
+		channel: number,
+		start: number,
+		stop: number,
+		line: number,
+		charPositionInLine: number): CommonToken {
+
+		let t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
 		t.setLine(line);
 		t.setCharPositionInLine(charPositionInLine);
-		if ( text!=null ) {
-			t.setText(text);
-		}
-		else if ( copyText && source.getItem2() != null ) {
-			t.setText(source.getItem2().getText(Interval.of(start,stop)));
+		if (text == null && this.copyText && source[1] != null) {
+			t.setText(source[1].getText(Interval.of(start, stop)));
 		}
 
 		return t;
 	}
 
 	@Override
-	create(type: number, text: string): CommonToken {
+	createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}
+}
+
+export namespace CommonTokenFactory {
+	/**
+	 * The default {@link CommonTokenFactory} instance.
+	 *
+	 * <p>
+	 * This token factory does not explicitly copy token text when constructing
+	 * tokens.</p>
+	 */
+	export const DEFAULT: TokenFactory = new CommonTokenFactory();
 }

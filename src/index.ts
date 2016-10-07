@@ -7,7 +7,7 @@
 // export * from './BufferedTokenStream';
 export * from './CharStream';
 export * from './CommonToken';
-// export * from './CommonTokenFactory';
+export * from './CommonTokenFactory';
 // export * from './CommonTokenStream';
 // export * from './ConsoleErrorListener';
 // export * from './DefaultErrorStrategy';

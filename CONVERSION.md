@@ -18,7 +18,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] BufferedTokenStream.java
 * [x] CharStream.java
 * [x] CommonToken.java
-* [ ] CommonTokenFactory.java
+* [x] CommonTokenFactory.java
 * [ ] CommonTokenStream.java
 * [ ] ConsoleErrorListener.java
 * [ ] DefaultErrorStrategy.java
