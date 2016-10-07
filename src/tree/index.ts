@@ -1,6 +1,6 @@
 export * from './AbstractParseTreeVisitor';
 export * from './ErrorNode';
-// export * from './ErrorNodeImpl';
+export * from './ErrorNodeImpl';
 export * from './ParseTree';
 export * from './ParseTreeListener';
 // export * from './ParseTreeProperty';

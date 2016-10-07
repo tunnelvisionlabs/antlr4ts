@@ -168,7 +168,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\Utils.java
 * [x] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
-* [ ] tree\ErrorNodeImpl.java
+* [x] tree\ErrorNodeImpl.java
 * [x] tree\ParseTree.java
 * [x] tree\ParseTreeListener.java
 * [ ] tree\ParseTreeProperty.java
