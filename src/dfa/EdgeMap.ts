@@ -25,65 +25,40 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// ConvertTo-TS run at 2016-10-04T11:26:38.0251372-07:00
+
+// ConvertTo-TS run at 2016-10-04T11:26:39.0109129-07:00
 
 /**
  *
  * @author Sam Harwell
  */
-export abstract class AbstractEdgeMap<T> implements EdgeMap<T> {
+export interface EdgeMap<T> {
 
-	protected minIndex: number; 
-	protected maxIndex: number; 
+	size(): number;
 
-	 constructor(minIndex: number, maxIndex: number)  {
-		// the allowed range (with minIndex and maxIndex inclusive) should be less than 2^32
-		assert(maxIndex - minIndex + 1 >= 0);
-		this.minIndex = minIndex;
-		this.maxIndex = maxIndex;
-	}
+	isEmpty(): boolean;
 
-	@Override
-	abstract put(key: number, value: T): AbstractEdgeMap<T>;
+	containsKey(key: number): boolean;
 
-	@Override
-	putAll(m: EdgeMap<? extends T>): AbstractEdgeMap<T> {
-		let result: AbstractEdgeMap<T> =  this;
-		for (Map.Entry<Integer, ? extends T> entry : m.entrySet()) {
-			result = result.put(entry.getKey(), entry.getValue());
-		}
+	// @Nullable
+	get(key: number): T;
 
-		return result;
-	}
+	// @NotNull
+	put(key: number, /*@Nullable*/ value: T): EdgeMap<T>;
 
-	@Override
-	abstract clear(): AbstractEdgeMap<T>;
+	// @NotNull
+	remove(key: number): EdgeMap<T>;
 
-	@Override
-	abstract remove(key: number): AbstractEdgeMap<T>;
+	// @NotNull
+	putAll<U extends T>(/*@NotNull*/ m: EdgeMap<U>): EdgeMap<T>;
 
-	protected abstract class AbstractEntrySet extends AbstractSet<Map.Entry<Integer, T>> {
-		@Override
-		contains(o: any): boolean {
-			if (!(o instanceof Map.Entry)) {
-				return false;
-			}
+	// @NotNull
+	clear(): EdgeMap<T>;
 
-			Map.Entry<?, ?> entry = (Map.Entry<?, ?>)o;
-			if (entry.getKey() instanceof Integer) {
-				let key: number =  (Integer)entry.getKey();
-				let value: any =  entry.getValue();
-				let existing: T =  get(key);
-				return value == existing || (existing != null && existing.equals(value));
-			}
+	// @NotNull
+	toMap(): Map<number, T>;
 
-			return false;
-		}
-
-		@Override
-		size(): number {
-			return AbstractEdgeMap.this.size();
-		}
-	}
+	// @NotNull
+	entrySet(): Iterable<{ key: number, value: T }>;
 
 }
