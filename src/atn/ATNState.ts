@@ -125,7 +125,7 @@ export abstract class ATNState {
 	epsilonOnlyTransitions: boolean = false;
 
 	/** Track the transitions emanating from this ATN state. */
-	protected transitions: Transition[] = new Transition[INITIAL_NUM_TRANSITIONS];
+	protected transitions: Transition[] = new Array<Transition>(INITIAL_NUM_TRANSITIONS);
 
 	protected optimizedTransitions: Transition[] = this.transitions;
 
