@@ -146,8 +146,7 @@ export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
 			if (element == null) {
 				continue;
 			}
-
-			result[i + this.minIndex] = element;
+			result.set(i + this.minIndex, element);
 		}
 
 		return result;

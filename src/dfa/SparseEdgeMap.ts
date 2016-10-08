@@ -182,7 +182,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 
 		let result: Map<number, T> = new Map<number, T>();
 		for (let i = 0; i < this.size(); i++) {
-			result[this.keys[i]] = this.values[i];
+			result.set(this.keys[i], this.values[i]);
 		}
 
 		return result;
