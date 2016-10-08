@@ -25,7 +25,13 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:39.2919508-07:00
+
+import { AbstractEdgeMap } from './AbstractEdgeMap';
+import { EmptyEdgeMap } from './EmptyEdgeMap';
+import { Override } from '../misc/Stubs';
+import { SparseEdgeMap } from './SparseEdgeMap';
 
 /**
  *
@@ -48,32 +54,32 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 	}
 
 	getKey(): number {
-		return key;
+		return this.key;
 	}
 
 	getValue(): T {
-		return value;
+		return this.value;
 	}
 
 	@Override
 	size(): number {
-		return value != null ? 1 : 0;
+		return this.value != null ? 1 : 0;
 	}
 
 	@Override
 	isEmpty(): boolean {
-		return value == null;
+		return this.value == null;
 	}
 
 	@Override
 	containsKey(key: number): boolean {
-		return key == this.key && value != null;
+		return key == this.key && this.value != null;
 	}
 
 	@Override
 	get(key: number): T {
-		if (key == this.key) {
-			return value;
+		if (key === this.key) {
+			return this.value;
 		}
 
 		return null;
@@ -81,14 +87,14 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	put(key: number, value: T): AbstractEdgeMap<T> {
-		if (key < minIndex || key > maxIndex) {
+		if (key < this.minIndex || key > this.maxIndex) {
 			return this;
 		}
 
-		if (key == this.key || this.value == null) {
-			return new SingletonEdgeMap<T>(minIndex, maxIndex, key, value);
+		if (key === this.key || this.value == null) {
+			return new SingletonEdgeMap<T>(this.minIndex, this.maxIndex, key, value);
 		} else if (value != null) {
-			let result: AbstractEdgeMap<T> =  new SparseEdgeMap<T>(minIndex, maxIndex);
+			let result: AbstractEdgeMap<T> =  new SparseEdgeMap<T>(this.minIndex, this.maxIndex);
 			result = result.put(this.key, this.value);
 			result = result.put(key, value);
 			return result;
@@ -99,8 +105,8 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	remove(key: number): AbstractEdgeMap<T> {
-		if (key == this.key && this.value != null) {
-			return new EmptyEdgeMap<T>(minIndex, maxIndex);
+		if (key === this.key && this.value != null) {
+			return new EmptyEdgeMap<T>(this.minIndex, this.maxIndex);
 		}
 
 		return this;
@@ -109,7 +115,7 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 	@Override
 	clear(): AbstractEdgeMap<T> {
 		if (this.value != null) {
-			return new EmptyEdgeMap<T>(minIndex, maxIndex);
+			return new EmptyEdgeMap<T>(this.minIndex, this.maxIndex);
 		}
 
 		return this;
@@ -117,64 +123,19 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	toMap(): Map<number, T> {
-		if (isEmpty()) {
-			return Collections.emptyMap();
+		if (this.isEmpty()) {
+			return new Map<number, T>();
 		}
 
-		return Collections.singletonMap(key, value);
+		return new Map<number, T>().set(this.key, this.value);
 	}
 
 	@Override
-	entrySet(): Set<Map.Entry<number, T>> {
-		return new EntrySet();
-	}
-
-	private class EntrySet extends AbstractEntrySet {
-		@Override
-		iterator(): Iterator<Map.Entry<number, T>> {
-			return new EntryIterator();
-		}
-	}
-
-	private class EntryIterator implements Iterator<Map.Entry<Integer, T>> {
-		private current: number; 
-
-		@Override
-		hasNext(): boolean {
-			return current < size();
-		}
-
-		@Override
-		public Map.Entry<Integer, T> next() {
-			if (current >= size()) {
-				throw new NoSuchElementException();
-			}
-
-			current++;
-			return new Map.Entry<Integer, T>() {
-				private key: number =  SingletonEdgeMap.this.key;
-				private value: T =  SingletonEdgeMap.this.value;
-
-				@Override
-				getKey(): number {
-					return key;
-				}
-
-				@Override
-				getValue(): T {
-					return value;
-				}
-
-				@Override
-				setValue(value: T): T {
-					throw new UnsupportedOperationException("Not supported yet.");
-				}
-			};
-		}
-
-		@Override
-		remove(): void {
-			throw new UnsupportedOperationException("Not supported yet.");
+	entrySet(): Iterable<{ key: number, value: T }> {
+		if (this.isEmpty()) {
+			return [];
+		} else {
+			return [{ key: this.key, value: this.value }];
 		}
 	}
 }

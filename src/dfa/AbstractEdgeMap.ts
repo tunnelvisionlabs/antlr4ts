@@ -1,6 +1,6 @@
 ﻿/*
  * [The "BSD license"]
- *  Copyright (c) 2014 Sam Harwell
+ *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -26,66 +26,63 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:39.0995965-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:38.0251372-07:00
+
+import { EdgeMap } from './EdgeMap';
+import { Override } from '../misc/Stubs';
+import * as assert from 'assert';
 
 /**
- * This implementation of {@link AbstractEdgeMap} represents an empty edge map.
  *
  * @author Sam Harwell
  */
-export class EmptyEdgeMap<T> extends AbstractEdgeMap<T> {
+export abstract class AbstractEdgeMap<T> implements EdgeMap<T> {
+	protected minIndex: number;
+	protected maxIndex: number;
 
-	 constructor(minIndex: number, maxIndex: number)  {
-		super(minIndex, maxIndex);
+	constructor(minIndex: number, maxIndex: number) {
+		// the allowed range (with minIndex and maxIndex inclusive) should be less than 2^32
+		assert(maxIndex - minIndex + 1 >= 0);
+		this.minIndex = minIndex;
+		this.maxIndex = maxIndex;
 	}
 
+	// @Override
+	abstract size(): number;
+
+	// @Override
+	abstract isEmpty(): boolean;
+
+	// @Override
+	abstract containsKey(key: number): boolean;
+
+	// @Nullable
+	// @Override
+	abstract get(key: number): T;
+
+	// @NotNull
+	// @Override
+	abstract put(key: number, value: T): AbstractEdgeMap<T>;
+
 	@Override
-	put(key: number, value: T): AbstractEdgeMap<T> {
-		if (value == null || key < minIndex || key > maxIndex) {
-			// remains empty
-			return this;
+	putAll<U extends T>(m: EdgeMap<U>): AbstractEdgeMap<T> {
+		let result: AbstractEdgeMap<T> = this;
+		for (let entry of m.entrySet()) {
+			result = result.put(entry.key, entry.value);
 		}
 
-		return new SingletonEdgeMap<T>(minIndex, maxIndex, key, value);
+		return result;
 	}
 
-	@Override
-	clear(): AbstractEdgeMap<T> {
-		return this;
-	}
+	// @Override
+	abstract clear(): AbstractEdgeMap<T>;
 
-	@Override
-	remove(key: number): AbstractEdgeMap<T> {
-		return this;
-	}
+	// @Override
+	abstract remove(key: number): AbstractEdgeMap<T>;
 
-	@Override
-	size(): number {
-		return 0;
-	}
+	// @NotNull
+	abstract toMap(): Map<number, T>;
 
-	@Override
-	isEmpty(): boolean {
-		return true;
-	}
-
-	@Override
-	containsKey(key: number): boolean {
-		return false;
-	}
-
-	@Override
-	get(key: number): T {
-		return null;
-	}
-
-	@Override
-	toMap(): Map<number, T> {
-		return Collections.emptyMap();
-	}
-
-	@Override
-	entrySet(): Set<Map.Entry<number, T>> {
-		return Collections.<Integer, T>emptyMap().entrySet();
-	}
+	// @NotNull
+	abstract entrySet(): Iterable<{ key: number, value: T }>;
 }
