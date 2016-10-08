@@ -73,8 +73,12 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	get(key: K): V {
-		let [k, v] = this.backingStore.get([key, null]) || [undefined, undefined];
-		return v;
+		let bucket: [K, V] = this.backingStore.get([key, null]);
+		if (!bucket) {
+			return undefined;
+		}
+
+		return bucket[1];
 	}
 
 	isEmpty(): boolean {
@@ -86,11 +90,13 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	put(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]) || [undefined, undefined];
-		let result = element[1];
-		if (element[0] == null) {
+		let element: [K, V] = this.backingStore.get([key, value]);
+		let result: V;
+		if (!element) {
+			result = undefined;
 			this.backingStore.add([key, value]);
 		} else {
+			result = element[1];
 			element[1] = value;
 		}
 
@@ -98,12 +104,16 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	putIfAbsent(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]) || [undefined, undefined];
-		if (element[0] == null) {
+		let element: [K, V] = this.backingStore.get([key, value]);
+		let result: V;
+		if (!element) {
+			result = undefined;
 			this.backingStore.add([key, value]);
+		} else {
+			result = element[1];
 		}
 
-		return element[1];
+		return result;
 	}
 
 	putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void {
