@@ -456,4 +456,11 @@ export class TestIntervalSet {
         assertEquals(expecting, result);
     }
 
+	@Test testEmptyIsNil(): void {
+		assertTrue(new IntervalSet().isNil());
+	}
+
+	@Test testNotEmptyIsNotNil(): void {
+		assertFalse(IntervalSet.of(1).isNil());
+	}
 }
