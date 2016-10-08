@@ -28,74 +28,31 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
 
-export class TerminalNodeImpl implements TerminalNode {
-	symbol: Token; 
-	parent: RuleNode; 
+import { RuleContext } from './RuleContext';
 
-	 constructor(symbol: Token)  {	this.symbol = symbol;	}
-
-	@Override
-	getChild(i: number): ParseTree {return null;}
-
-	@Override
-	getSymbol(): Token {return symbol;}
-
-	@Override
-	getParent(): RuleNode { return parent; }
-
-	@Override
-	getPayload(): Token { return symbol; }
-
-	@Override
-	getSourceInterval(): Interval {
-		if (symbol != null) {
-			let tokenIndex: number =  symbol.getTokenIndex();
-			return new Interval(tokenIndex, tokenIndex);
-		}
-
-		return Interval.INVALID;
-	}
-
-	@Override
-	getChildCount(): number { return 0; }
-
-	@Override
-	accept<T>(visitor: ParseTreeVisitor<? extends T>): T {
-		return visitor.visitTerminal(this);
-	}
-
-	@Override
-	getText(): string {
-		if (symbol != null) {
-			return symbol.getText();
-		}
-
-		return null;
-	}
-
-	@Override
-	toStringTree(parser: Parser): string {
-		return toString();
-	}
-
-	@Override
-	toString(): string {
-		if (symbol != null) {
-			if ( symbol.getType() == Token.EOF ) {
-				return "<EOF>";
-			}
-
-			return symbol.getText();
-		}
-		else {
-			return "<null>";
-		}
-	}
-
-	@Override
-	toStringTree(): string {
-		return toString();
-	}
+/** A rule invocation record for parsing.
+ *
+ *  Contains all of the information about the current rule not stored in the
+ *  RuleContext. It handles parse tree children list, Any ATN state
+ *  tracing, and the default values available for rule invocations:
+ *  start, stop, rule index, current alt number.
+ *
+ *  Subclasses made for each rule and grammar track the parameters,
+ *  return values, locals, and labels specific to that rule. These
+ *  are the objects that are returned from rules.
+ *
+ *  Note text is not an actual field of a rule return value; it is computed
+ *  from start and stop using the input stream's toString() method.  I
+ *  could add a ctor to this so that we can pass in and store the input
+ *  stream, but I'm not sure we want to do that.  It would seem to be undefined
+ *  to get the .text property anyway if the rule matches tokens from multiple
+ *  input streams.
+ *
+ *  I do not use getters for fields of objects that are used simply to
+ *  group values such as this aggregate.  The getters/setters are there to
+ *  satisfy the superclass interface.
+ */
+export class ParserRuleContext extends RuleContext {
 }

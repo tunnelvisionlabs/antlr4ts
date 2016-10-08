@@ -171,18 +171,18 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\Tuple2.java
 * [ ] misc\Tuple3.java
 * [ ] misc\Utils.java
-* [ ] tree\AbstractParseTreeVisitor.java
+* [x] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
-* [ ] tree\ErrorNodeImpl.java
+* [x] tree\ErrorNodeImpl.java
 * [x] tree\ParseTree.java
-* [ ] tree\ParseTreeListener.java
+* [x] tree\ParseTreeListener.java
 * [ ] tree\ParseTreeProperty.java
 * [x] tree\ParseTreeVisitor.java
 * [ ] tree\ParseTreeWalker.java
 * [x] tree\RuleNode.java
 * [x] tree\SyntaxTree.java
 * [x] tree\TerminalNode.java
-* [ ] tree\TerminalNodeImpl.java
+* [x] tree\TerminalNodeImpl.java
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
 * [ ] tree\pattern\Chunk.java

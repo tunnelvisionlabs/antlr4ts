@@ -28,22 +28,27 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.6109431-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:47.4646355-07:00
 
-/** This interface describes the minimal core of methods triggered
- *  by {@link ParseTreeWalker}. E.g.,
- *
- *  	ParseTreeWalker walker = new ParseTreeWalker();
- *		walker.walk(myParseTreeListener, myParseTree); <-- triggers events in your listener
- *
- *  If you want to trigger events in multiple listeners during a single
- *  tree walk, you can use the ParseTreeDispatcher object available at
- *
- * 		https://github.com/antlr/antlr4/issues/841
+import { ErrorNode } from './ErrorNode';
+import { Override } from '../misc/Stubs';
+import { ParseTreeVisitor } from './ParseTreeVisitor';
+import { TerminalNodeImpl } from './TerminalNodeImpl';
+import { Token } from '../Token';
+
+/** Represents a token that was consumed during resynchronization
+ *  rather than during a valid match operation. For example,
+ *  we will create this kind of a node during single token insertion
+ *  and deletion as well as during "consume until error recovery set"
+ *  upon no viable alternative exceptions.
  */
-export interface ParseTreeListener {
-	visitTerminal(@NotNull node: TerminalNode): void;
-	visitErrorNode(@NotNull node: ErrorNode): void;
-    enterEveryRule(@NotNull ctx: ParserRuleContext): void;
-    exitEveryRule(@NotNull ctx: ParserRuleContext): void;
+export class ErrorNodeImpl extends TerminalNodeImpl implements ErrorNode {
+	constructor(token: Token) {
+		super(token);
+	}
+
+	@Override
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
+		return visitor.visitErrorNode(this);
+	}
 }

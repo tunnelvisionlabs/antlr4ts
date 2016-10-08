@@ -30,6 +30,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.3092279-07:00
 
+import { ErrorNode } from './ErrorNode';
+import { NotNull, Override } from '../misc/Stubs';
+import { ParseTree } from './ParseTree';
+import { ParseTreeVisitor } from './ParseTreeVisitor';
+import { RuleNode } from './RuleNode';
+import { TerminalNode } from './TerminalNode';
+
 export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
 	/**
 	 * {@inheritDoc}
@@ -59,16 +66,16 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitChildren(@NotNull node: RuleNode): Result {
-		let result: Result =  defaultResult();
-		let n: number =  node.getChildCount();
-		for (let i=0; i<n; i++) {
-			if (!shouldVisitNextChild(node, result)) {
+		let result: Result = this.defaultResult();
+		let n: number = node.getChildCount();
+		for (let i = 0; i < n; i++) {
+			if (!this.shouldVisitNextChild(node, result)) {
 				break;
 			}
 
-			let c: ParseTree =  node.getChild(i);
-			let childResult: Result =  c.accept(this);
-			result = aggregateResult(result, childResult);
+			let c: ParseTree = node.getChild(i);
+			let childResult: Result = c.accept(this);
+			result = this.aggregateResult(result, childResult);
 		}
 
 		return result;
@@ -82,7 +89,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitTerminal(@NotNull node: TerminalNode): Result {
-		return defaultResult();
+		return this.defaultResult();
 	}
 
 	/**
@@ -93,7 +100,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitErrorNode(@NotNull node: ErrorNode): Result {
-		return defaultResult();
+		return this.defaultResult();
 	}
 
 	/**
@@ -161,5 +168,4 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	protected shouldVisitNextChild(@NotNull node: RuleNode, currentResult: Result): boolean {
 		return true;
 	}
-
 }
