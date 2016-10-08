@@ -30,6 +30,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.1670669-07:00
 
+import { Chunk } from './Chunk';
+import { NotNull, Nullable, Override } from '../../misc/Stubs';
+
 /**
  * Represents a placeholder tag in a tree pattern. A tag can have any of the
  * following forms.
@@ -44,29 +47,15 @@
  * This class does not perform any validation on the tag or label names aside
  * from ensuring that the tag is a non-null, non-empty string.
  */
-class TagChunk extends Chunk {
+export class TagChunk extends Chunk {
 	/**
 	 * This is the backing field for {@link #getTag}.
 	 */
-	private tag: string; 
+	private tag: string;
 	/**
 	 * This is the backing field for {@link #getLabel}.
 	 */
-	private label: string; 
-
-	/**
-	 * Construct a new instance of {@link TagChunk} using the specified tag and
-	 * no label.
-	 *
-	 * @param tag The tag, which should be the name of a parser rule or token
-	 * type.
-	 *
-	 * @exception IllegalArgumentException if {@code tag} is {@code null} or
-	 * empty.
-	 */
-	public TagChunk(String tag) {
-		this(null, tag);
-	}
+	private label: string;
 
 	/**
 	 * Construct a new instance of {@link TagChunk} using the specified label
@@ -80,13 +69,15 @@ class TagChunk extends Chunk {
 	 * @exception IllegalArgumentException if {@code tag} is {@code null} or
 	 * empty.
 	 */
-	public TagChunk(String label, String tag) {
-		if (tag == null || tag.isEmpty()) {
-			throw new IllegalArgumentException("tag cannot be null or empty");
+	constructor(tag: string, label: string = null) {
+		super();
+
+		if (tag == null || tag.length === 0) {
+			throw new Error("tag cannot be null or empty");
 		}
 
-		this.label = label;
 		this.tag = tag;
+		this.label = label;
 	}
 
 	/**
@@ -96,7 +87,7 @@ class TagChunk extends Chunk {
 	 */
 	@NotNull
 	getTag(): string {
-		return tag;
+		return this.tag;
 	}
 
 	/**
@@ -107,7 +98,7 @@ class TagChunk extends Chunk {
 	 */
 	@Nullable
 	getLabel(): string {
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -117,10 +108,10 @@ class TagChunk extends Chunk {
 	 */
 	@Override
 	toString(): string {
-		if (label != null) {
-			return label + ":" + tag;
+		if (this.label != null) {
+			return this.label + ":" + this.tag;
 		}
 
-		return tag;
+		return this.tag;
 	}
 }

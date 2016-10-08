@@ -185,14 +185,14 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] tree\TerminalNodeImpl.java
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
-* [ ] tree\pattern\Chunk.java
+* [x] tree\pattern\Chunk.java
 * [ ] tree\pattern\ParseTreeMatch.java
 * [ ] tree\pattern\ParseTreePattern.java
 * [ ] tree\pattern\ParseTreePatternMatcher.java
-* [ ] tree\pattern\RuleTagToken.java
-* [ ] tree\pattern\TagChunk.java
-* [ ] tree\pattern\TextChunk.java
-* [ ] tree\pattern\TokenTagToken.java
+* [x] tree\pattern\RuleTagToken.java
+* [x] tree\pattern\TagChunk.java
+* [x] tree\pattern\TextChunk.java
+* [x] tree\pattern\TokenTagToken.java
 * [ ] tree\xpath\XPath.java
 * [ ] tree\xpath\XPathElement.java
 * [ ] tree\xpath\XPathLexer.g4

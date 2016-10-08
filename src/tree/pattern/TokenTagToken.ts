@@ -30,6 +30,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.3281988-07:00
 
+import { CommonToken } from '../../CommonToken';
+import { NotNull, Nullable, Override } from '../../misc/Stubs';
+
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,
  * {@code <ID>}. These tokens are created for {@link TagChunk} chunks where the
@@ -40,23 +43,12 @@ export class TokenTagToken extends CommonToken {
 	 * This is the backing field for {@link #getTokenName}.
 	 */
 	@NotNull
-	private tokenName: string; 
+	private tokenName: string;
 	/**
 	 * This is the backing field for {@link #getLabel}.
 	 */
 	@Nullable
-	private label: string; 
-
-	/**
-	 * Constructs a new instance of {@link TokenTagToken} for an unlabeled tag
-	 * with the specified token name and type.
-	 *
-	 * @param tokenName The token name.
-	 * @param type The token type.
-	 */
-	 constructor(@NotNull tokenName: string, type: number)  {
-		this(tokenName, type, null);
-	}
+	private label: string;
 
 	/**
 	 * Constructs a new instance of {@link TokenTagToken} with the specified
@@ -67,7 +59,7 @@ export class TokenTagToken extends CommonToken {
 	 * @param label The label associated with the token tag, or {@code null} if
 	 * the token tag is unlabeled.
 	 */
-	 constructor1(@NotNull tokenName: string, type: number, @Nullable label: string)  {
+	constructor(@NotNull tokenName: string, type: number, @Nullable label: string = null) {
 		super(type);
 		this.tokenName = tokenName;
 		this.label = label;
@@ -79,7 +71,7 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@NotNull
 	getTokenName(): string {
-		return tokenName;
+		return this.tokenName;
 	}
 
 	/**
@@ -90,7 +82,7 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@Nullable
 	getLabel(): string {
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -101,11 +93,11 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@Override
 	getText(): string {
-		if (label != null) {
-			return "<" + label + ":" + tokenName + ">";
+		if (this.label != null) {
+			return "<" + this.label + ":" + this.tokenName + ">";
 		}
 
-		return "<" + tokenName + ">";
+		return "<" + this.tokenName + ">";
 	}
 
 	/**
@@ -116,6 +108,6 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@Override
 	toString(): string {
-		return tokenName + ":" + type;
+		return this.tokenName + ":" + this.type;
 	}
 }
