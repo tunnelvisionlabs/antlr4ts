@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.0659297-07:00
 
-import {Interval} from './misc';
+import {Interval} from './misc/Interval';
 import {IntStream} from './IntStream';
 
 /** A source of characters for an ANTLR lexer. */

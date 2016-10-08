@@ -31,8 +31,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:59.5829654-07:00
 
 import { NotNull, Nullable, Override } from './misc/Stubs';
-import { Token } from '.';
-import { Vocabulary } from '.';
+import { Token } from './Token';
+import { Vocabulary } from './Vocabulary';
 
 /**
  * This class provides a default implementation of the {@link Vocabulary}

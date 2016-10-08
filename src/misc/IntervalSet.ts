@@ -30,14 +30,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
-import { ArrayEqualityComparator } from '.';
-import { Interval } from '.';
-import { IntSet } from '.';
-import { Lexer } from '..';
-import { MurmurHash } from '.';
+import { ArrayEqualityComparator } from './ArrayEqualityComparator';
+import { Interval } from './Interval';
+import { IntSet } from './IntSet';
+import { Lexer } from '../Lexer';
+import { MurmurHash } from './MurmurHash';
 import { Override, NotNull, Nullable } from './Stubs';
-import { Token } from '..';
-import { Vocabulary } from '..';
+import { Token } from '../Token';
+import { Vocabulary } from '../Vocabulary';
 
 /**
  * This class implements the {@link IntSet} backed by a sorted array of
