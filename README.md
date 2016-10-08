@@ -22,3 +22,8 @@ npm Test
 ```
 How we integrate with runtime-testsuite is TBD.
 
+### Generating test code coverage report
+```
+npm run cover 
+```
+This executes a code-coverage test run, then generates an interactive HTML report in `coverage/lcov-report/index.html`.
