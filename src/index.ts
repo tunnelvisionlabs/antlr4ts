@@ -42,6 +42,6 @@ export * from './TokenStream';
 // export * from './TokenStreamRewriter';
 // export * from './UnbufferedCharStream';
 // export * from './UnbufferedTokenStream';
-// export * from './Vocabulary';
-// export * from './VocabularyImpl';
+export * from './Vocabulary';
+export * from './VocabularyImpl';
 export * from './WritableToken';

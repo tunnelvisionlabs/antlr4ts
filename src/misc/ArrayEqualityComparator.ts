@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,30 +28,64 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
+import { EqualityComparator } from './EqualityComparator';
+import { Override, Equatable } from './Stubs';
+import { MurmurHash } from '.';
+import { ObjectEqualityComparator } from '.';
 
-import { Token } from '.';
-
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/**
+ * This default implementation of {@link EqualityComparator} uses object equality
+ * for comparisons by calling {@link Object#hashCode} and {@link Object#equals}.
+ *
+ * @author Sam Harwell
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> {
+	static INSTANCE: ArrayEqualityComparator = new ArrayEqualityComparator();
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>This implementation returns
+	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
+	 */
+	@Override
+	hashCode(obj: Equatable[]): number {
+		if (obj == null) {
+			return 0;
+		}
+
+		return MurmurHash.hashCode(obj, 0);
 	}
 
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>This implementation relies on object equality. If both objects are
+	 * {@code null}, this method returns {@code true}. Otherwise if only
+	 * {@code a} is {@code null}, this method returns {@code false}. Otherwise,
+	 * this method returns the result of
+	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
+	 */
+	@Override
+	equals(a: Equatable[], b: Equatable[]): boolean {
+		if (a == null) {
+			return b == null;
+		} else if (b == null) {
+			return false;
+		}
+
+		if (a.length !== b.length) {
+			return false;
+		}
+
+		for (let i = 0; i < a.length; i++) {
+			if (!ObjectEqualityComparator.INSTANCE.equals(a[i], b[i])) {
+				return false;
+			}
+		}
+
+		return true;
 	}
-}
 
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }

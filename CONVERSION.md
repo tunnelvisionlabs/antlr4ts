@@ -53,34 +53,35 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] TokenStreamRewriter.java
 * [ ] UnbufferedCharStream.java
 * [ ] UnbufferedTokenStream.java
-* [ ] Vocabulary.java
-* [ ] VocabularyImpl.java
+* [x] Vocabulary.java
+* [x] VocabularyImpl.java
 * [x] WritableToken.java
-* [ ] atn\AbstractPredicateTransition.java
-* [ ] atn\ActionTransition.java
+* [x] atn\AbstractPredicateTransition.java
+* [x] atn\ActionTransition.java
 * [ ] atn\AmbiguityInfo.java
 * [ ] atn\ArrayPredictionContext.java
 * [ ] atn\ATN.java
 * [ ] atn\ATNConfig.java
 * [ ] atn\ATNConfigSet.java
-* [ ] atn\ATNDeserializationOptions.java
+* [x] atn\ATNDeserializationOptions.java
 * [ ] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
 * [ ] atn\ATNSimulator.java
-* [ ] atn\ATNState.java
-* [ ] atn\ATNType.java
-* [ ] atn\AtomTransition.java
-* [ ] atn\BasicBlockStartState.java
-* [ ] atn\BasicState.java
-* [ ] atn\BlockEndState.java
-* [ ] atn\BlockStartState.java
+* [x] atn\ATNState.java
+  * [x] atn\ATNStateType.ts
+* [x] atn\ATNType.java
+* [x] atn\AtomTransition.java
+* [x] atn\BasicBlockStartState.java
+* [x] atn\BasicState.java
+* [x] atn\BlockEndState.java
+* [x] atn\BlockStartState.java
 * [ ] atn\ConflictInfo.java
 * [ ] atn\ContextSensitivityInfo.java
 * [ ] atn\DecisionEventInfo.java
 * [ ] atn\DecisionInfo.java
-* [ ] atn\DecisionState.java
+* [x] atn\DecisionState.java
 * [ ] atn\EmptyPredictionContext.java
-* [ ] atn\EpsilonTransition.java
+* [x] atn\EpsilonTransition.java
 * [ ] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
 * [ ] atn\LexerActionExecutor.java
@@ -97,13 +98,13 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\LexerTypeAction.java
 * [ ] atn\LL1Analyzer.java
 * [ ] atn\LookaheadEventInfo.java
-* [ ] atn\LoopEndState.java
-* [ ] atn\NotSetTransition.java
+* [x] atn\LoopEndState.java
+* [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
 * [ ] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
-* [ ] atn\PlusBlockStartState.java
-* [ ] atn\PlusLoopbackState.java
+* [x] atn\PlusBlockStartState.java
+* [x] atn\PlusLoopbackState.java
 * [ ] atn\PrecedencePredicateTransition.java
 * [ ] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
@@ -111,20 +112,22 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\PredictionContextCache.java
 * [ ] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
-* [ ] atn\RangeTransition.java
-* [ ] atn\RuleStartState.java
-* [ ] atn\RuleStopState.java
-* [ ] atn\RuleTransition.java
+* [x] atn\RangeTransition.java
+* [x] atn\RuleStartState.java
+* [x] atn\RuleStopState.java
+* [x] atn\RuleTransition.java
 * [ ] atn\SemanticContext.java
-* [ ] atn\SetTransition.java
+* [x] atn\SetTransition.java
 * [ ] atn\SimulatorState.java
 * [ ] atn\SingletonPredictionContext.java
-* [ ] atn\StarBlockStartState.java
-* [ ] atn\StarLoopbackState.java
-* [ ] atn\StarLoopEntryState.java
-* [ ] atn\TokensStartState.java
-* [ ] atn\Transition.java
-* [ ] atn\WildcardTransition.java
+* [x] atn\StarBlockStartState.java
+* [x] atn\StarLoopbackState.java
+* [x] atn\StarLoopEntryState.java
+* [x] atn\TokensStartState.java
+* [x] atn\Transition.java
+  * [x] atn\TransitionType.ts
+  * [ ] Transition.serializationTypes?
+* [x] atn\WildcardTransition.java
 * [x] dfa\AbstractEdgeMap.java
 * [ ] dfa\AcceptStateInfo.java
 * [x] dfa\ArrayEdgeMap.java
@@ -147,7 +150,9 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\IntegerList.java
 * [ ] misc\IntegerStack.java
 * [x] misc\Interval.java
-* [ ] misc\IntervalSet.java
+* [x] misc\IntervalSet.java
+  * [ ] IntervalSet.toIntegerList
+  * [ ] IntervalSet.toSet
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java

@@ -28,30 +28,30 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:37.7099201-07:00
 
-import { Token } from '.';
+import { ATNStateType } from './ATNStateType';
+import { DecisionState } from './DecisionState';
+import { Override } from '../misc/Stubs';
+import { StarLoopbackState } from './StarLoopbackState';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
- */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class StarLoopEntryState extends DecisionState {
+	loopBackState: StarLoopbackState;
+
+	/**
+	 * Indicates whether this state can benefit from a precedence DFA during SLL
+	 * decision making.
+	 *
+	 * <p>This is a computed property that is calculated during ATN deserialization
+	 * and stored for use in {@link ParserATNSimulator} and
+	 * {@link ParserInterpreter}.</p>
+	 *
+	 * @see DFA#isPrecedenceDfa()
+	 */
+	precedenceRuleDecision: boolean;
+
+	@Override
+	getStateType(): ATNStateType {
+		return ATNStateType.STAR_LOOP_ENTRY;
 	}
-
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
-	}
-}
-
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
