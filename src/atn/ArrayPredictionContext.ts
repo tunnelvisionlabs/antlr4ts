@@ -193,8 +193,8 @@ export class ArrayPredictionContext extends PredictionContext {
 	private equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
 		let selfWorkList: PredictionContext[] = [];
 		let otherWorkList: PredictionContext[] = [];
-		selfWorkList.unshift(this);
-		otherWorkList.unshift(other);
+		selfWorkList.push(this);
+		otherWorkList.push(other);
 		while (selfWorkList.length > 0) {
 			let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(selfWorkList.pop(), otherWorkList.pop());
 			if (!visited.add(operands)) {
@@ -227,8 +227,8 @@ export class ArrayPredictionContext extends PredictionContext {
 				}
 
 				if (selfParent !== otherParent) {
-					selfWorkList.unshift(selfParent);
-					otherWorkList.unshift(otherParent);
+					selfWorkList.push(selfParent);
+					otherWorkList.push(otherParent);
 				}
 			}
 		}
