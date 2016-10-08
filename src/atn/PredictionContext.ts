@@ -77,7 +77,7 @@ export abstract class PredictionContext implements Equatable {
 	 *  }
 	 * </pre>
 	 */
-	private cachedHashCode: number; 
+	private readonly cachedHashCode: number; 
 
 	 constructor(cachedHashCode: number)  {
 		this.cachedHashCode = cachedHashCode;
