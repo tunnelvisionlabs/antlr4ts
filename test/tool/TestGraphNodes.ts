@@ -774,127 +774,127 @@ export class TestGraphNodes {
 	// ------------ SUPPORT -------------------------
 
 a(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 1);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 1);
 }
 
 b(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 2);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 2);
 }
 
 c(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 3);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 3);
 }
 
 d(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 4);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 4);
 }
 
 u(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 6);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 6);
 }
 
 v(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 7);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 7);
 }
 
 w(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 8);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 8);
 }
 
 x(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 9);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 9);
 }
 
 y(fullContext: boolean): PredictionContext {
-    return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 10);
+	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 10);
 }
 
 createSingleton(parent: PredictionContext, payload: number): PredictionContext {
-    let a: PredictionContext = this.contextCache.getChild(parent, payload);
-    return a;
+	let a: PredictionContext = this.contextCache.getChild(parent, payload);
+	return a;
 }
 
 array(...nodes: PredictionContext[]): PredictionContext {
-    let result: PredictionContext = nodes[0];
-    for (let i = 1; i < nodes.length; i++) {
-        result = this.contextCache.join(result, nodes[i]);
-    }
+	let result: PredictionContext = nodes[0];
+	for (let i = 1; i < nodes.length; i++) {
+		result = this.contextCache.join(result, nodes[i]);
+	}
 
-    return result;
+	return result;
 }
 }
 
 function toDOTString(context: PredictionContext): string {
-    let nodes = "";
-    let edges = "";
-    let visited = new Map<PredictionContext, PredictionContext>();
-    let contextIds = new Map<PredictionContext, number>();
-    let workList = new Array<PredictionContext>();
-    visited.set(context, context);
-    contextIds.set(context, contextIds.size);
-    workList.push(context);
-    while (workList.length > 0) {
-        let current: PredictionContext = workList.pop();
-        nodes += ("  s") + (contextIds.get(current)) + ('[');
+	let nodes = "";
+	let edges = "";
+	let visited = new Map<PredictionContext, PredictionContext>();
+	let contextIds = new Map<PredictionContext, number>();
+	let workList = new Array<PredictionContext>();
+	visited.set(context, context);
+	contextIds.set(context, contextIds.size);
+	workList.push(context);
+	while (workList.length > 0) {
+		let current: PredictionContext = workList.pop();
+		nodes += ("  s") + (contextIds.get(current)) + ('[');
 
-        if (current.size() > 1) {
-            nodes += ("shape=record, ");
-        }
+		if (current.size() > 1) {
+			nodes += ("shape=record, ");
+		}
 
-        nodes += ("label=\"");
+		nodes += ("label=\"");
 
-        if (current.isEmpty()) {
-            nodes += (PredictionContext.isEmptyLocal(current) ? '*' : '$');
-        } else if (current.size() > 1) {
-            for (let i = 0; i < current.size(); i++) {
-                if (i > 0) {
-                    nodes += ('|');
-                }
+		if (current.isEmpty()) {
+			nodes += (PredictionContext.isEmptyLocal(current) ? '*' : '$');
+		} else if (current.size() > 1) {
+			for (let i = 0; i < current.size(); i++) {
+				if (i > 0) {
+					nodes += ('|');
+				}
 
-                nodes += ("<p") + (i) + ('>');
-                if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY) {
-                    nodes += ('$');
-                }
-                else if (current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
-                    nodes += ('*');
-                }
-            }
-        } else {
-            nodes += (contextIds.get(current));
-        }
+				nodes += ("<p") + (i) + ('>');
+				if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY) {
+					nodes += ('$');
+				}
+				else if (current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
+					nodes += ('*');
+				}
+			}
+		} else {
+			nodes += (contextIds.get(current));
+		}
 
-        nodes += ("\"];\n");
+		nodes += ("\"];\n");
 
-        for (let i = 0; i < current.size(); i++) {
-            if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY
-                || current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
-                continue;
-            }
+		for (let i = 0; i < current.size(); i++) {
+			if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY
+				|| current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
+				continue;
+			}
 
 			let visitedSize = visited.size;
 			visited.set(current.getParent(i), current.getParent(i));
-            if (visited.size > visitedSize) {
-                contextIds.set(current.getParent(i), contextIds.size);
-                workList.push(current.getParent(i));
-            }
+			if (visited.size > visitedSize) {
+				contextIds.set(current.getParent(i), contextIds.size);
+				workList.push(current.getParent(i));
+			}
 
-            edges += ("  s") + (contextIds.get(current));
-            if (current.size() > 1) {
-                edges += (":p") + (i);
-            }
+			edges += ("  s") + (contextIds.get(current));
+			if (current.size() > 1) {
+				edges += (":p") + (i);
+			}
 
-            edges += ("->");
-            edges += ('s') + (contextIds.get(current.getParent(i)));
-            edges += ("[label=\"") + (current.getReturnState(i)) + ("\"]");
-            edges += (";\n");
-        }
-    }
+			edges += ("->");
+			edges += ('s') + (contextIds.get(current.getParent(i)));
+			edges += ("[label=\"") + (current.getReturnState(i)) + ("\"]");
+			edges += (";\n");
+		}
+	}
 
-    let builder = "";
-    builder += ("digraph G {\n");
-    builder += ("rankdir=LR;\n");
-    builder += (nodes);
-    builder += (edges);
-    builder += ("}\n");
-    return builder;
+	let builder = "";
+	builder += ("digraph G {\n");
+	builder += ("rankdir=LR;\n");
+	builder += (nodes);
+	builder += (edges);
+	builder += ("}\n");
+	return builder;
 }
