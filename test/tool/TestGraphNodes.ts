@@ -70,7 +70,7 @@ export class TestGraphNodes {
 	@Test test_$_$_fullctx(): void {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL,
 													  PredictionContext.EMPTY_FULL);
-		console.log(toDOTString(r));
+		// console.log(toDOTString(r));
 		let expecting: string = 
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
