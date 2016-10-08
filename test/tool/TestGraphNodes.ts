@@ -34,7 +34,6 @@ import * as assert from 'assert';
 import assertEquals = assert.equal;
 import { test as Test, suite } from 'mocha-typescript';
 
-import { EmptyPredictionContext } from '../../src/atn/EmptyPredictionContext';
 import { PredictionContext } from '../../src/atn/PredictionContext';
 import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
 
@@ -48,11 +47,11 @@ export class TestGraphNodes {
 	fullCtx(): boolean { return false; }
 
 	@Test test_properties(): void {
-		assert.notEqual(new EmptyPredictionContext(false), null);
-		assert(EmptyPredictionContext.LOCAL_CONTEXT != null);
-		assert.strictEqual(PredictionContext.LOAD_LOCAL_CONTEXT(), EmptyPredictionContext.LOCAL_CONTEXT);
-		assert.strictEqual(PredictionContext.LOAD_LOCAL_CONTEXT(), PredictionContext.LOAD_LOCAL_CONTEXT());
 		assert.notEqual(PredictionContext.EMPTY_LOCAL, null);
+		assert.notEqual(PredictionContext.EMPTY_FULL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
+		assert.notEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
+		assert(!PredictionContext.EMPTY_FULL.equals(PredictionContext.EMPTY_LOCAL), "by value equal");
 	}
 
 	@Test test_$_$(): void {
