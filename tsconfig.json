@@ -1,18 +1,23 @@
 {
-    "compilerOptions": {
-        "outDir": "target",
-        "sourceMap": true,
-        "module": "commonjs",
-        "target": "es2015",
-        "noImplicitAny": true,
-      "experimentalDecorators": true,
-      "declaration": true,
-      "preserveConstEnums": true,
-      "typeRoots": [ "./node_modules/@types" ],
-      "types":  [ "node", "mocha" ] 
-    },
-    "exclude": [
-        "node_modules",
-        "target"
+  "compilerOptions": {
+    "outDir": "target",
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "preserveConstEnums": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "mocha"
     ]
+  },
+  "exclude": [
+    "node_modules",
+    "target"
+  ]
 }

@@ -1,0 +1,2 @@
+# Ensure the .editorconfig for our project does not propagate to files brought in from other repositories
+root = true
