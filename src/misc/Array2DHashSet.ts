@@ -31,9 +31,8 @@
 
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
-/// <reference path="../../node_modules/@types/node/index.d.ts" />
-
-import assert=require('assert');
+import * as assert from "assert";
+import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import {EqualityComparator} from './EqualityComparator';
 import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
@@ -70,7 +69,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		 initialCapacity: number = INITAL_CAPACITY,
 		 initialBucketCapacity: number = INITAL_BUCKET_CAPACITY)  {
 
-		this.comparator = comparator || ObjectEqualityComparator.INSTANCE;
+		this.comparator = comparator || DefaultEqualityComparator.INSTANCE;
 		this.buckets = this.createBuckets(initialCapacity);
 		this.initialBucketCapacity = initialBucketCapacity;
 	}

@@ -128,17 +128,17 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [x] atn\TransitionType.ts
   * [ ] Transition.serializationTypes?
 * [x] atn\WildcardTransition.java
-* [ ] dfa\AbstractEdgeMap.java
+* [x] dfa\AbstractEdgeMap.java
 * [ ] dfa\AcceptStateInfo.java
-* [ ] dfa\ArrayEdgeMap.java
+* [x] dfa\ArrayEdgeMap.java
 * [ ] dfa\DFA.java
 * [ ] dfa\DFASerializer.java
 * [ ] dfa\DFAState.java
-* [ ] dfa\EdgeMap.java
-* [ ] dfa\EmptyEdgeMap.java
+* [x] dfa\EdgeMap.java
+* [x] dfa\EmptyEdgeMap.java
 * [ ] dfa\LexerDFASerializer.java
-* [ ] dfa\SingletonEdgeMap.java
-* [ ] dfa\SparseEdgeMap.java
+* [x] dfa\SingletonEdgeMap.java
+* [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Args.java
 * [x] misc\Array2DHashSet.java

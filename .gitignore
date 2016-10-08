@@ -43,3 +43,6 @@ target/
 obj/
 bin/
 .vs/
+
+# istanbul code coverage data & report
+coverage/

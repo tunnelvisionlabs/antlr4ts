@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,9 +27,11 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
-import {EqualityComparator} from './EqualityComparator';
-import {Override, Equatable} from './Stubs';
+
+import { EqualityComparator } from './EqualityComparator';
+import { Override, Equatable } from './Stubs';
+import { MurmurHash } from './MurmurHash';
+import { ObjectEqualityComparator } from './ObjectEqualityComparator';
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -37,8 +39,8 @@ import {Override, Equatable} from './Stubs';
  *
  * @author Sam Harwell
  */
-export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
-	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
+export class DefaultEqualityComparator implements EqualityComparator<any> {
+	static INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
@@ -47,12 +49,14 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: Equatable): number {
+	hashCode(obj: any): number {
 		if (obj == null) {
 			return 0;
+		} else if (typeof obj === 'string' || typeof obj === 'number') {
+			return MurmurHash.hashCode([obj]);
+		} else {
+			return ObjectEqualityComparator.INSTANCE.hashCode(<Equatable>obj);
 		}
-
-		return obj.hashCode();
 	}
 
 	/**
@@ -65,12 +69,13 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: Equatable, b: Equatable): boolean {
+	equals(a: any, b: any): boolean {
 		if (a == null) {
 			return b == null;
+		} else if (typeof a === 'string' || typeof a === 'number') {
+			return a === b;
+		} else {
+			return ObjectEqualityComparator.INSTANCE.equals(<Equatable>a, <Equatable>b);
 		}
-
-		return a.equals(b);
 	}
-
 }

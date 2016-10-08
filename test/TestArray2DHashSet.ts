@@ -1,10 +1,9 @@
-/// <reference path="../node_modules/@types/mocha/index.d.ts" />
-/// <reference path="../node_modules/@types/node/index.d.ts" />
 require('source-map-support').install();
 import {Equatable} from '../src/misc/Stubs';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
 import {MurmurHash} from '../src/misc/MurmurHash'
-import assert = require( 'assert' );
+import { suite, test } from 'mocha-typescript';
+import * as assert from "assert";
 
 class EquatableTest implements Equatable {
 
@@ -26,7 +25,7 @@ class EquatableTest implements Equatable {
 
 const alpha = new EquatableTest("alpha", "1");
 const alpha_again = new EquatableTest("alpha", "1");
-const beta = new EquatableTest("beta", "1")
+const beta = new EquatableTest("beta", "1");
 
 describe('EquatableTest', function() {
 
@@ -77,3 +76,14 @@ describe('Array2DHashSet', function() {
         assert(!set.contains(beta), "value difference ignored");
     });
 });
+
+// 
+// This exercises the mocha-typescript package's ability to
+// use more object-oriented test structure using decorators.
+//
+@suite class DecoratorDriven {
+    @test
+    "Comparison by value"() {
+        assert(alpha.equals(alpha_again));
+    }
+}
