@@ -145,8 +145,8 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\DoubleKeyMap.java
 * [x] misc\EqualityComparator.java
 * [ ] misc\FlexibleHashMap.java
-* [ ] misc\Func0.java
-* [ ] misc\Func1.java
+* [x] ~~misc\Func0.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Func1.java~~ (Unnecessary in TypeScript)
 * [ ] misc\IntegerList.java
 * [ ] misc\IntegerStack.java
 * [x] misc\Interval.java
@@ -163,13 +163,13 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
 * [ ] misc\ParseCancellationException.java
-* [ ] misc\Predicate.java
+* [x] ~~misc\Predicate.java~~ (Unnecessary in TypeScript)
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
-* [ ] misc\TestRig.java
-* [ ] misc\Tuple.java
-* [ ] misc\Tuple2.java
-* [ ] misc\Tuple3.java
+* [x] ~~misc\TestRig.java~~ (Deprecated prior to TypeScript port)
+* [x] ~~misc\Tuple.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple2.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Utils.java
 * [x] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
