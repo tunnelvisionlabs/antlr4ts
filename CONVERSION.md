@@ -59,7 +59,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\AbstractPredicateTransition.java
 * [x] atn\ActionTransition.java
 * [ ] atn\AmbiguityInfo.java
-* [ ] atn\ArrayPredictionContext.java
+* [x] atn\ArrayPredictionContext.java
 * [ ] atn\ATN.java
 * [ ] atn\ATNConfig.java
 * [ ] atn\ATNConfigSet.java
@@ -80,7 +80,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\DecisionEventInfo.java
 * [ ] atn\DecisionInfo.java
 * [x] atn\DecisionState.java
-* [ ] atn\EmptyPredictionContext.java
+* [x] atn\EmptyPredictionContext.java
 * [x] atn\EpsilonTransition.java
 * [ ] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
@@ -108,8 +108,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\PrecedencePredicateTransition.java
 * [ ] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
-* [ ] atn\PredictionContext.java
-* [ ] atn\PredictionContextCache.java
+* [x] atn\PredictionContext.java
+  * [ ] PredictionContext.fromRuleContext
+  * [ ] PredictionContext.toString
+  * [ ] PredictionContext.toStrings
+* [x] atn\PredictionContextCache.java
 * [ ] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
 * [x] atn\RangeTransition.java
@@ -119,7 +122,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\SemanticContext.java
 * [x] atn\SetTransition.java
 * [ ] atn\SimulatorState.java
-* [ ] atn\SingletonPredictionContext.java
+* [x] atn\SingletonPredictionContext.java
 * [x] atn\StarBlockStartState.java
 * [x] atn\StarLoopbackState.java
 * [x] atn\StarLoopEntryState.java

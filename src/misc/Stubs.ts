@@ -101,6 +101,29 @@ export interface JavaSet<E> extends JavaCollection<E> {
     // toArray(a: E[]): E[];                                 
 }
 
+export interface JavaMap<K, V> extends Equatable {
+    clear(): void;
+    containsKey(key: K): boolean;
+    containsValue(value: V): boolean;
+    entrySet(): JavaSet<JavaMap.Entry<K, V>>;
+    get(key: K): V;
+    isEmpty(): boolean;
+    keySet(): JavaSet<K>;
+    put(key: K, value: V): V;
+    putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void;
+    remove(key: K): V;
+    size(): number;
+    values(): JavaCollection<V>;
+}
+
+export namespace JavaMap {
+    export interface Entry<K, V> extends Equatable {
+        getKey(): K;
+        getValue(): V;
+        setValue(value: V): V;
+    }
+}
+
 /**
  * Collection is a hybrid type can accept either JavaCollection or JavaScript Iterable
  */  

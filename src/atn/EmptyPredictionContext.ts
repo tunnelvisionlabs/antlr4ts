@@ -28,86 +28,92 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:37.4697044-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:28.5205842-07:00
 
-export class SingletonPredictionContext extends PredictionContext {
+import { Override } from '../misc/Stubs';
+import { PredictionContext } from './PredictionContext';
+import { PredictionContextCache } from './PredictionContextCache';
 
-	@NotNull
-	parent: PredictionContext; 
-	returnState: number; 
-
-	/*package*/ SingletonPredictionContext(@NotNull PredictionContext parent, int returnState) {
-		super(calculateHashCode(parent, returnState));
-		assert(returnState != EMPTY_FULL_STATE_KEY && returnState != EMPTY_LOCAL_STATE_KEY);
-		this.parent = parent;
-		this.returnState = returnState;
+export class EmptyPredictionContext extends PredictionContext {
+	private static _LOCAL_CONTEXT: EmptyPredictionContext = new EmptyPredictionContext(false);
+	static get LOCAL_CONTEXT(): PredictionContext {
+		return EmptyPredictionContext._LOCAL_CONTEXT;
 	}
 
-	@Override
-	getParent(index: number): PredictionContext {
-		assert(index == 0);
-		return parent;
+	private static _FULL_CONTEXT: EmptyPredictionContext = new EmptyPredictionContext(true);
+	static get FULL_CONTEXT(): PredictionContext {
+		return EmptyPredictionContext._FULL_CONTEXT;
 	}
 
-	@Override
-	getReturnState(index: number): number {
-		assert(index == 0);
-		return returnState;
+	private fullContext: boolean; 
+
+	 constructor(fullContext: boolean)  {
+		super(PredictionContext.calculateEmptyHashCode());
+		this.fullContext = fullContext;
 	}
 
-	@Override
-	findReturnState(returnState: number): number {
-		return this.returnState == returnState ? 0 : -1;
-	}
-
-	@Override
-	size(): number {
-		return 1;
-	}
-
-	@Override
-	isEmpty(): boolean {
-		return false;
-	}
-
-	@Override
-	hasEmpty(): boolean {
-		return false;
-	}
-
-	@Override
-	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
-		return contextCache.getChild(parent.appendContext(suffix, contextCache), returnState);
+	isFullContext(): boolean {
+		return this.fullContext;
 	}
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		let parents: PredictionContext[] =  new PredictionContext[] { parent, EMPTY_FULL };
-		let returnStates: number[] =  new int[] { returnState, EMPTY_FULL_STATE_KEY };
-		return new ArrayPredictionContext(parents, returnStates);
-	}
-
-	@Override
-	protected removeEmptyContext(): PredictionContext {
 		return this;
 	}
 
 	@Override
+	protected removeEmptyContext(): PredictionContext {
+		throw "Cannot remove the empty context from itself.";
+	}
+
+	@Override
+	getParent(index: number): PredictionContext {
+		throw "index out of bounds";
+	}
+
+	@Override
+	getReturnState(index: number): number {
+		throw "index out of bounds";
+	}
+
+	@Override
+	findReturnState(returnState: number): number {
+		return -1;
+	}
+
+	@Override
+	size(): number {
+		return 0;
+	}
+
+	@Override
+	appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
+		return contextCache.getChild(this, returnContext);
+	}
+
+	@Override
+	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
+		return suffix;
+	}
+
+	@Override
+	isEmpty(): boolean {
+		return true;
+	}
+
+	@Override
+	hasEmpty(): boolean {
+		return true;
+	}
+
+	@Override
 	equals(o: any): boolean {
-		if (o == this) {
-			return true;
-		}
-		else if (!(o instanceof SingletonPredictionContext)) {
-			return false;
-		}
+		return this === o;
+	}
 
-		let other: SingletonPredictionContext =  (SingletonPredictionContext)o;
-		if (this.hashCode() != other.hashCode()) {
-			return false;
-		}
-
-		return returnState == other.returnState
-			&& parent.equals(other.parent);
+	@Override
+	toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
+		return [ "[]" ];
 	}
 
 }
