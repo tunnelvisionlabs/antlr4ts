@@ -30,18 +30,28 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.6934341-07:00
 
-// import org.junit.Test;
+require('source-map-support').install();
+import { IntervalSet } from '../../src/misc/IntervalSet';
+import { Lexer } from '../../src/Lexer';
+import { Token } from '../../src/Token';
 
-// import static org.junit.Assert.assertEquals;
-// import static org.junit.Assert.assertFalse;
-// import static org.junit.Assert.assertTrue;
+import { suite, test as Test } from 'mocha-typescript';
+import * as assert from "assert";
 
-export class TestIntervalSet extends BaseTest {
+function assertEquals<T>(expected: T, actual: T): void {
+	assert.equal(actual, expected);
+}
 
-    /** Public default constructor used by TestRig */
-     constructor()  {
-	}
+function assertFalse(value: boolean): void {
+	assert.strictEqual(value, false);
+}
 
+function assertTrue(value: boolean): void {
+	assert.strictEqual(value, true);
+}
+
+@suite
+export class TestIntervalSet {
 	@Test testSingleElement(): void {
 		let s: IntervalSet =  IntervalSet.of(99);
 		let expecting: string =  "99";
@@ -57,8 +67,8 @@ export class TestIntervalSet extends BaseTest {
 	@Test testIsolatedElements(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(1);
-		s.add('z');
-		s.add('\uFFF0');
+		s.add('z'.charCodeAt(0));
+		s.add('\uFFF0'.charCodeAt(0));
 		let expecting: string =  "{1, 122, 65520}";
         assertEquals(s.toString(), expecting);
     }
@@ -66,8 +76,8 @@ export class TestIntervalSet extends BaseTest {
     @Test testMixedRangesAndElements(): void {
         let s: IntervalSet =  new IntervalSet();
         s.add(1);
-        s.add('a','z');
-        s.add('0','9');
+        s.add('a'.charCodeAt(0),'z'.charCodeAt(0));
+        s.add('0'.charCodeAt(0),'9'.charCodeAt(0));
         let expecting: string =  "{1, 48..57, 97..122}";
         assertEquals(s.toString(), expecting);
     }
@@ -81,24 +91,24 @@ export class TestIntervalSet extends BaseTest {
     }
 
     @Test testRangeAndIsolatedElement(): void {
-        let s: IntervalSet =  IntervalSet.of('a','z');
-        let s2: IntervalSet =  IntervalSet.of('d');
+        let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
+        let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
         let expecting: string =  "100";
         let result: string =  (s.and(s2)).toString();
         assertEquals(expecting, result);
     }
 
 	@Test testEmptyIntersection(): void {
-		let s: IntervalSet =  IntervalSet.of('a','z');
-		let s2: IntervalSet =  IntervalSet.of('0','9');
+		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
+		let s2: IntervalSet =  IntervalSet.of('0'.charCodeAt(0),'9'.charCodeAt(0));
 		let expecting: string =  "{}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
 	}
 
 	@Test testEmptyIntersectionSingleElements(): void {
-		let s: IntervalSet =  IntervalSet.of('a');
-		let s2: IntervalSet =  IntervalSet.of('d');
+		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0));
+		let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
 		let expecting: string =  "{}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
@@ -234,7 +244,7 @@ export class TestIntervalSet extends BaseTest {
     @Test testSimpleEquals(): void {
         let s: IntervalSet =  IntervalSet.of(10,20);
         let s2: IntervalSet =  IntervalSet.of(10,20);
-        assertEquals(s, s2);
+        assertTrue(s.equals(s2));
 
         let s3: IntervalSet =  IntervalSet.of(15,55);
         assertFalse(s.equals(s3));
@@ -247,7 +257,7 @@ export class TestIntervalSet extends BaseTest {
         let s2: IntervalSet =  IntervalSet.of(10,20);
         s2.add(2);
         s2.add(499,501);
-        assertEquals(s, s2);
+        assertTrue(s.equals(s2));
 
         let s3: IntervalSet =  IntervalSet.of(10,20);
         s3.add(2);
@@ -317,7 +327,7 @@ export class TestIntervalSet extends BaseTest {
 		let s: IntervalSet =  IntervalSet.of(1,96);
 		s.add(99, Lexer.MAX_CHAR_VALUE);
 		let expecting: string =  "{97..98}";
-		let result: string =  (s.complement(1, Lexer.MAX_CHAR_VALUE)).toString();
+		let result: string =  (s.complementRange(1, Lexer.MAX_CHAR_VALUE)).toString();
 		assertEquals(expecting, result);
 	}
 
@@ -381,7 +391,7 @@ export class TestIntervalSet extends BaseTest {
 		s.add(50,55);
 		s.add(5,19);
 		let expecting: string =  "32";
-		let result: string =  String.valueOf(s.size());
+		let result: string =  String(s.size());
 		assertEquals(expecting, result);
 	}
 
@@ -389,8 +399,8 @@ export class TestIntervalSet extends BaseTest {
 		let s: IntervalSet =  IntervalSet.of(20,25);
 		s.add(50,55);
 		s.add(5,5);
-		let expecting: string =  "[5, 20, 21, 22, 23, 24, 25, 50, 51, 52, 53, 54, 55]";
-		let result: string =  String.valueOf(s.toList());
+		let expecting: string =  "5,20,21,22,23,24,25,50,51,52,53,54,55";
+		let result: string =  String(s.toList());
 		assertEquals(expecting, result);
 	}
 
@@ -401,10 +411,10 @@ export class TestIntervalSet extends BaseTest {
 	 	'u' is 117
 	*/
 	@Test testNotRIntersectionNotT(): void {
-		let s: IntervalSet =  IntervalSet.of(0,'s');
-		s.add('u',200);
-		let s2: IntervalSet =  IntervalSet.of(0,'q');
-		s2.add('s',200);
+		let s: IntervalSet =  IntervalSet.of(0,'s'.charCodeAt(0));
+		s.add('u'.charCodeAt(0),200);
+		let s2: IntervalSet =  IntervalSet.of(0,'q'.charCodeAt(0));
+		s2.add('s'.charCodeAt(0),200);
 		let expecting: string =  "{0..113, 115, 117..200}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
@@ -446,4 +456,11 @@ export class TestIntervalSet extends BaseTest {
         assertEquals(expecting, result);
     }
 
+	@Test testEmptyIsNil(): void {
+		assertTrue(new IntervalSet().isNil());
+	}
+
+	@Test testNotEmptyIsNotNil(): void {
+		assertFalse(IntervalSet.of(1).isNil());
+	}
 }
