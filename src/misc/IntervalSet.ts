@@ -39,9 +39,6 @@ import { Override, NotNull, Nullable } from './Stubs';
 import { Token } from '..';
 import { Vocabulary } from '..';
 
-let _COMPLETE_CHAR_SET: IntervalSet = IntervalSet.of(Lexer.MIN_CHAR_VALUE, Lexer.MAX_CHAR_VALUE);
-_COMPLETE_CHAR_SET.setReadonly(true);
-
 /**
  * This class implements the {@link IntSet} backed by a sorted array of
  * non-overlapping intervals. It is particularly efficient for representing
@@ -89,7 +86,7 @@ export class IntervalSet implements IntSet {
 	@NotNull
 	static of(a: number, b: number = a): IntervalSet {
 		let s: IntervalSet = new IntervalSet();
-		s.add(a, b || a);
+		s.add(a, b);
 		return s;
 	}
 
@@ -108,8 +105,8 @@ export class IntervalSet implements IntSet {
 	 *  If this is {1..5, 10..20}, adding 6..7 yields
 	 *  {1..5, 6..7, 10..20}.  Adding 4..8 yields {1..8, 10..20}.
 	 */
-	add(a: number, b?: number): void {
-		this.addRange(Interval.of(a, b || a));
+	add(a: number, b: number = a): void {
+		this.addRange(Interval.of(a, b));
 	}
 
 	// copy on write so we can cache a..a intervals and sets of that
@@ -437,7 +434,7 @@ export class IntervalSet implements IntSet {
 	/** {@inheritDoc} */
 	@Override
 	isNil(): boolean {
-		return !!this.intervals;
+		return this.intervals == null || this.intervals.length === 0;
 	}
 
 	/** {@inheritDoc} */
@@ -721,3 +718,6 @@ export class IntervalSet implements IntSet {
 		this.readonly = readonly;
 	}
 }
+
+let _COMPLETE_CHAR_SET: IntervalSet = IntervalSet.of(Lexer.MIN_CHAR_VALUE, Lexer.MAX_CHAR_VALUE);
+_COMPLETE_CHAR_SET.setReadonly(true);
