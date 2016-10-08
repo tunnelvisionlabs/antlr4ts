@@ -38,6 +38,13 @@ import { Token } from '.';
  *  of speed.
  */
 export abstract class Lexer {
+	static get DEFAULT_TOKEN_CHANNEL(): number {
+		return Token.DEFAULT_CHANNEL;
+	}
+
+	static get HIDDEN(): number {
+		return Token.HIDDEN_CHANNEL;
+	}
 }
 
 export namespace Lexer {
@@ -45,8 +52,6 @@ export namespace Lexer {
 	export const MORE: number = -2;
 	export const SKIP: number = -3;
 
-	export const DEFAULT_TOKEN_CHANNEL: number = Token.DEFAULT_CHANNEL;
-	export const HIDDEN: number = Token.HIDDEN_CHANNEL;
 	export const MIN_CHAR_VALUE: number = 0x0000;
 	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
