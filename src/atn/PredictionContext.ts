@@ -33,6 +33,7 @@
 
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
+import { Arrays } from '../misc/Arrays';
 import { ATN } from './ATN';
 import { ATNState } from './ATNState';
 import { EqualityComparator } from '../misc/EqualityComparator';
@@ -66,7 +67,7 @@ export abstract class PredictionContext implements Equatable {
 	 *  }
 	 * </pre>
 	 */
-	private cachedHashCode: number; 
+	private readonly cachedHashCode: number; 
 
 	 constructor(cachedHashCode: number)  {
 		this.cachedHashCode = cachedHashCode;
@@ -661,8 +662,8 @@ class ArrayPredictionContext extends PredictionContext {
 	private equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
 		let selfWorkList: PredictionContext[] = [];
 		let otherWorkList: PredictionContext[] = [];
-		selfWorkList.unshift(this);
-		otherWorkList.unshift(other);
+		selfWorkList.push(this);
+		otherWorkList.push(other);
 		while (selfWorkList.length > 0) {
 			let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(selfWorkList.pop(), otherWorkList.pop());
 			if (!visited.add(operands)) {
@@ -695,8 +696,8 @@ class ArrayPredictionContext extends PredictionContext {
 				}
 
 				if (selfParent !== otherParent) {
-					selfWorkList.unshift(selfParent);
-					otherWorkList.unshift(otherParent);
+					selfWorkList.push(selfParent);
+					otherWorkList.push(otherParent);
 				}
 			}
 		}

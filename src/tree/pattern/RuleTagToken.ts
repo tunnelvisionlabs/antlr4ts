@@ -30,6 +30,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.0343500-07:00
 
+import { CharStream } from '../../CharStream';
+import { NotNull, Nullable, Override } from '../../misc/Stubs';
+import { Token } from '../../Token';
+import { TokenSource } from '../../TokenSource';
+
 /**
  * A {@link Token} object representing an entire subtree matched by a parser
  * rule; e.g., {@code <expr>}. These tokens are created for {@link TagChunk}
@@ -39,30 +44,16 @@ export class RuleTagToken implements Token {
 	/**
 	 * This is the backing field for {@link #getRuleName}.
 	 */
-	private ruleName: string; 
+	private ruleName: string;
 	/**
 	 * The token type for the current token. This is the token type assigned to
 	 * the bypass alternative for the rule during ATN deserialization.
 	 */
-	private bypassTokenType: number; 
+	private bypassTokenType: number;
 	/**
 	 * This is the backing field for {@link #getLabel}.
 	 */
-	private label: string; 
-
-	/**
-	 * Constructs a new instance of {@link RuleTagToken} with the specified rule
-	 * name and bypass token type and no label.
-	 *
-	 * @param ruleName The name of the parser rule this rule tag matches.
-	 * @param bypassTokenType The bypass token type assigned to the parser rule.
-	 *
-	 * @exception IllegalArgumentException if {@code ruleName} is {@code null}
-	 * or empty.
-	 */
-	 constructor(@NotNull ruleName: string, bypassTokenType: number)  {
-		this(ruleName, bypassTokenType, null);
-	}
+	private label: string;
 
 	/**
 	 * Constructs a new instance of {@link RuleTagToken} with the specified rule
@@ -76,9 +67,9 @@ export class RuleTagToken implements Token {
 	 * @exception IllegalArgumentException if {@code ruleName} is {@code null}
 	 * or empty.
 	 */
-	 constructor1(@NotNull ruleName: string, bypassTokenType: number, @Nullable label: string)  {
-		if (ruleName == null || ruleName.isEmpty()) {
-			throw new IllegalArgumentException("ruleName cannot be null or empty.");
+	constructor(@NotNull ruleName: string, bypassTokenType: number, @Nullable label: string = null) {
+		if (ruleName == null || ruleName.length === 0) {
+			throw new Error("ruleName cannot be null or empty.");
 		}
 
 		this.ruleName = ruleName;
@@ -93,7 +84,7 @@ export class RuleTagToken implements Token {
 	 */
 	@NotNull
 	getRuleName(): string {
-		return ruleName;
+		return this.ruleName;
 	}
 
 	/**
@@ -104,7 +95,7 @@ export class RuleTagToken implements Token {
 	 */
 	@Nullable
 	getLabel(): string {
-		return label;
+		return this.label;
 	}
 
 	/**
@@ -114,7 +105,7 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	getChannel(): number {
-		return DEFAULT_CHANNEL;
+		return Token.DEFAULT_CHANNEL;
 	}
 
 	/**
@@ -125,11 +116,11 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	getText(): string {
-		if (label != null) {
-			return "<" + label + ":" + ruleName + ">";
+		if (this.label != null) {
+			return "<" + this.label + ":" + this.ruleName + ">";
 		}
 
-		return "<" + ruleName + ">";
+		return "<" + this.ruleName + ">";
 	}
 
 	/**
@@ -140,7 +131,7 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	getType(): number {
-		return bypassTokenType;
+		return this.bypassTokenType;
 	}
 
 	/**
@@ -221,6 +212,6 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	toString(): string {
-		return ruleName + ":" + bypassTokenType;
+		return this.ruleName + ":" + this.bypassTokenType;
 	}
 }

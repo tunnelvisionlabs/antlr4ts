@@ -30,12 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.3060135-07:00
 
-import { ATNState } from '.';
-import { IntervalSet } from '../misc';
+import { ATNState } from './ATNState';
+import { IntervalSet } from '../misc/IntervalSet';
 import { Override, NotNull, Nullable } from '../misc/Stubs';
-import { Token } from '..';
-import { Transition } from '.';
-import { TransitionType } from '.';
+import { Token } from '../Token';
+import { Transition } from './Transition';
+import { TransitionType } from './TransitionType';
 
 /** A transition containing a set of values. */
 export class SetTransition extends Transition {

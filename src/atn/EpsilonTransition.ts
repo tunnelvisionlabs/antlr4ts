@@ -30,10 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.6283213-07:00
 
-import { ATNState } from '.';
+import { ATNState } from './ATNState';
 import { Override, NotNull } from '../misc/Stubs';
-import { Transition } from '.';
-import { TransitionType } from '.';
+import { Transition } from './Transition';
+import { TransitionType } from './TransitionType';
 
 export class EpsilonTransition extends Transition {
 

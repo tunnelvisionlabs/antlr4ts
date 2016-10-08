@@ -32,7 +32,7 @@
 
 import { ATN } from './ATN';
 import { ATNStateType } from './ATNStateType';
-import { IntervalSet } from '../misc';
+import { IntervalSet } from '../misc/IntervalSet';
 import { Override } from '../misc/Stubs';
 import { Transition } from './Transition';
 

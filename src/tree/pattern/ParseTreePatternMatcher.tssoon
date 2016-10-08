@@ -478,7 +478,7 @@ export class ParseTreePatternMatcher {
 				label = tag.substring(0,colon);
 				ruleOrToken = tag.substring(colon+1, tag.length());
 			}
-			chunks.add(new TagChunk(label, ruleOrToken));
+			chunks.add(new TagChunk(ruleOrToken, label));
 			if ( i+1 < ntags ) {
 				// copy from end of <tag> to start of next
 				let text: string =  pattern.substring(stops.get(i) + stop.length(), starts.get(i + 1));

@@ -30,16 +30,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.2521448-07:00
 
+import { Chunk } from './Chunk';
+import { NotNull, Nullable, Override } from '../../misc/Stubs';
+
 /**
  * Represents a span of raw text (concrete syntax) between tags in a tree
  * pattern string.
  */
-class TextChunk extends Chunk {
+export class TextChunk extends Chunk {
 	/**
 	 * This is the backing field for {@link #getText}.
 	 */
 	@NotNull
-	private text: string; 
+	private text: string;
 
 	/**
 	 * Constructs a new instance of {@link TextChunk} with the specified text.
@@ -47,9 +50,11 @@ class TextChunk extends Chunk {
 	 * @param text The text of this chunk.
 	 * @exception IllegalArgumentException if {@code text} is {@code null}.
 	 */
-	public TextChunk(@NotNull String text) {
+	constructor(@NotNull text: string) {
+		super();
+
 		if (text == null) {
-			throw new IllegalArgumentException("text cannot be null");
+			throw new Error("text cannot be null");
 		}
 
 		this.text = text;
@@ -62,7 +67,7 @@ class TextChunk extends Chunk {
 	 */
 	@NotNull
 	getText(): string {
-		return text;
+		return this.text;
 	}
 
 	/**
@@ -73,6 +78,6 @@ class TextChunk extends Chunk {
 	 */
 	@Override
 	toString(): string {
-		return "'"+text+"'";
+		return "'" + this.text + "'";
 	}
 }
