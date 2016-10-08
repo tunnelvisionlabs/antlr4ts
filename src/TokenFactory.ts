@@ -54,5 +54,5 @@ export interface TokenFactory {
 
 	/** Generically useful */
 	//@NotNull
-	create(type: number, text: string): Token;
+	createSimple(type: number, text: string): Token;
 }

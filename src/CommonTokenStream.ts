@@ -30,6 +30,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3953157-07:00
 
+import { BufferedTokenStream } from './BufferedTokenStream';
+import { NotNull, Override } from './misc/Stubs';
+import { Token } from './Token';
+import { TokenSource } from './TokenSource';
+
 /**
  * This class extends {@link BufferedTokenStream} with functionality to filter
  * token streams to tokens on a particular channel (tokens where
@@ -62,17 +67,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 * The default value is {@link Token#DEFAULT_CHANNEL}, which matches the
 	 * default channel assigned to tokens created by the lexer.</p>
 	 */
-    protected channel: number =  Token.DEFAULT_CHANNEL;
-
-	/**
-	 * Constructs a new {@link CommonTokenStream} using the specified token
-	 * source and the default token channel ({@link Token#DEFAULT_CHANNEL}).
-	 *
-	 * @param tokenSource The token source.
-	 */
-     constructor(@NotNull tokenSource: TokenSource)  {
-        super(tokenSource);
-    }
+	protected channel: number;
 
 	/**
 	 * Constructs a new {@link CommonTokenStream} using the specified token
@@ -84,61 +79,80 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 * @param tokenSource The token source.
 	 * @param channel The channel to use for filtering tokens.
 	 */
-     constructor1(@NotNull tokenSource: TokenSource, channel: number)  {
-        this(tokenSource);
-        this.channel = channel;
-    }
+	constructor(@NotNull tokenSource: TokenSource, channel: number = Token.DEFAULT_CHANNEL) {
+		super(tokenSource);
+		this.channel = channel;
+	}
 
 	@Override
 	protected adjustSeekIndex(i: number): number {
-		return nextTokenOnChannel(i, channel);
+		return this.nextTokenOnChannel(i, this.channel);
 	}
 
-    @Override
-    protected LB(k: number): Token {
-        if ( k==0 || (p-k)<0 ) return null;
+	@Override
+	protected LB(k: number): Token {
+		if (k === 0 || (this.p - k) < 0) {
+			return null;
+		}
 
-        let i: number =  p;
-        let n: number =  1;
-        // find k good tokens looking backwards
-        while ( n<=k ) {
-            // skip off-channel tokens
-            i = previousTokenOnChannel(i - 1, channel);
-            n++;
-        }
-        if ( i<0 ) return null;
-        return tokens.get(i);
-    }
+		let i: number = this.p;
+		let n: number = 1;
+		// find k good tokens looking backwards
+		while (n <= k) {
+			// skip off-channel tokens
+			i = this.previousTokenOnChannel(i - 1, this.channel);
+			n++;
+		}
 
-    @Override
-    LT(k: number): Token {
-        //System.out.println("enter LT("+k+")");
-        lazyInit();
-        if ( k == 0 ) return null;
-        if ( k < 0 ) return LB(-k);
-        let i: number =  p;
-        let n: number =  1; // we know tokens[p] is a good one
-        // find k good tokens
-        while ( n<k ) {
-            // skip off-channel tokens, but make sure to not look past EOF
-			if (sync(i + 1)) {
-				i = nextTokenOnChannel(i + 1, channel);
+		if (i < 0) {
+			return null;
+		}
+
+		return this.tokens[i];
+	}
+
+	@Override
+	LT(k: number): Token {
+		//System.out.println("enter LT("+k+")");
+		this.lazyInit();
+		if (k === 0) {
+			return null;
+		}
+
+		if (k < 0) {
+			return this.LB(-k);
+		}
+
+		let i: number = this.p;
+		let n: number = 1; // we know tokens[p] is a good one
+		// find k good tokens
+		while (n < k) {
+			// skip off-channel tokens, but make sure to not look past EOF
+			if (this.sync(i + 1)) {
+				i = this.nextTokenOnChannel(i + 1, this.channel);
 			}
-            n++;
-        }
-//		if ( i>range ) range = i;
-        return tokens.get(i);
-    }
+			n++;
+		}
+
+		//		if ( i>range ) range = i;
+		return this.tokens[i];
+	}
 
 	/** Count EOF just once. */
 	getNumberOfOnChannelTokens(): number {
-		let n: number =  0;
-		fill();
-		for (let i = 0; i < tokens.size(); i++) {
-			let t: Token =  tokens.get(i);
-			if ( t.getChannel()==channel ) n++;
-			if ( t.getType()==Token.EOF ) break;
+		let n: number = 0;
+		this.fill();
+		for (let i = 0; i < this.tokens.length; i++) {
+			let t: Token = this.tokens[i];
+			if (t.getChannel() === this.channel) {
+				n++;
+			}
+
+			if (t.getType() === Token.EOF) {
+				break;
+			}
 		}
+
 		return n;
 	}
 }

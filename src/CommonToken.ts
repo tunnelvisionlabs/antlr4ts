@@ -27,36 +27,41 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:50.1614404-07:00
 
-export class CommonToken implements WritableToken, Serializable {
-	private static serialVersionUID: number =  -6708843461296520577L;
+import { CharStream } from './CharStream';
+import { Interval } from './misc/Interval';
+import { NotNull, Override } from './misc/Stubs';
+import { Token } from './Token';
+import { TokenSource } from './TokenSource';
+import { WritableToken } from './WritableToken';
 
+export class CommonToken implements WritableToken {
 	/**
 	 * An empty {@link Tuple2} which is used as the default value of
 	 * {@link #source} for tokens that do not have a source.
 	 */
-	protected static EMPTY_SOURCE: Tuple2<TokenSource, CharStream> = 
-		Tuple.<TokenSource, CharStream>create(null, null);
+	protected static EMPTY_SOURCE: [TokenSource, CharStream] = [null, null];
 
 	/**
 	 * This is the backing field for {@link #getType} and {@link #setType}.
 	 */
-	protected type: number; 
+	protected type: number;
 	/**
 	 * This is the backing field for {@link #getLine} and {@link #setLine}.
 	 */
-	protected line: number; 
+	protected line: number;
 	/**
 	 * This is the backing field for {@link #getCharPositionInLine} and
 	 * {@link #setCharPositionInLine}.
 	 */
-	protected charPositionInLine: number =  -1; // set to invalid position
+	protected charPositionInLine: number = -1; // set to invalid position
 	/**
 	 * This is the backing field for {@link #getChannel} and
 	 * {@link #setChannel}.
 	 */
-	protected channel: number = DEFAULT_CHANNEL;
+	protected channel: number = Token.DEFAULT_CHANNEL;
 	/**
 	 * This is the backing field for {@link #getTokenSource} and
 	 * {@link #getInputStream}.
@@ -68,7 +73,7 @@ export class CommonToken implements WritableToken, Serializable {
 	 * {@link Tuple2} containing these values.</p>
 	 */
 	@NotNull
-	protected source: Tuple2<? extends TokenSource, CharStream>; 
+	protected source: [TokenSource, CharStream];
 
 	/**
 	 * This is the backing field for {@link #getText} when the token text is
@@ -76,60 +81,37 @@ export class CommonToken implements WritableToken, Serializable {
 	 *
 	 * @see #getText()
 	 */
-	protected text: string; 
+	protected text: string;
 
 	/**
 	 * This is the backing field for {@link #getTokenIndex} and
 	 * {@link #setTokenIndex}.
 	 */
-	protected index: number =  -1;
+	protected index: number = -1;
 
 	/**
 	 * This is the backing field for {@link #getStartIndex} and
 	 * {@link #setStartIndex}.
 	 */
-	protected start: number; 
+	protected start: number;
 
 	/**
 	 * This is the backing field for {@link #getStopIndex} and
 	 * {@link #setStopIndex}.
 	 */
-	protected stop: number; 
+	protected stop: number;
 
-	/**
-	 * Constructs a new {@link CommonToken} with the specified token type.
-	 *
-	 * @param type The token type.
-	 */
-	 constructor(type: number)  {
+	constructor(type: number, text: string = null, @NotNull source: [TokenSource, CharStream] = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
+		this.text = text;
 		this.type = type;
-		this.source = EMPTY_SOURCE;
-	}
-
-	 constructor1(@NotNull source: Tuple2<? extends TokenSource,CharStream>, type: number, channel: number, start: number, stop: number)  {
 		this.source = source;
-		this.type = type;
 		this.channel = channel;
 		this.start = start;
 		this.stop = stop;
-		if (source.getItem1() != null) {
-			this.line = source.getItem1().getLine();
-			this.charPositionInLine = source.getItem1().getCharPositionInLine();
+		if (source[0] != null) {
+			this.line = source[0].getLine();
+			this.charPositionInLine = source[0].getCharPositionInLine();
 		}
-	}
-
-	/**
-	 * Constructs a new {@link CommonToken} with the specified token type and
-	 * text.
-	 *
-	 * @param type The token type.
-	 * @param text The text of the token.
-	 */
-	 constructor2(type: number, text: string)  {
-		this.type = type;
-		this.channel = DEFAULT_CHANNEL;
-		this.text = text;
-		this.source = EMPTY_SOURCE;
 	}
 
 	/**
@@ -145,28 +127,26 @@ export class CommonToken implements WritableToken, Serializable {
 	 *
 	 * @param oldToken The token to copy.
 	 */
-	 constructor3(@NotNull oldToken: Token)  {
-		type = oldToken.getType();
-		line = oldToken.getLine();
-		index = oldToken.getTokenIndex();
-		charPositionInLine = oldToken.getCharPositionInLine();
-		channel = oldToken.getChannel();
-		start = oldToken.getStartIndex();
-		stop = oldToken.getStopIndex();
+	static fromToken(@NotNull oldToken: Token): CommonToken {
+		let result: CommonToken = new CommonToken(oldToken.getType(), null, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
+		result.line = oldToken.getLine();
+		result.index = oldToken.getTokenIndex();
+		result.charPositionInLine = oldToken.getCharPositionInLine();
 
 		if (oldToken instanceof CommonToken) {
-			text = ((CommonToken)oldToken).text;
-			source = ((CommonToken)oldToken).source;
+			result.text = oldToken.text;
+			result.source = oldToken.source;
+		} else {
+			result.text = oldToken.getText();
+			result.source = [oldToken.getTokenSource(), oldToken.getInputStream()];
 		}
-		else {
-			text = oldToken.getText();
-			source = Tuple.create(oldToken.getTokenSource(), oldToken.getInputStream());
-		}
+
+		return result;
 	}
 
 	@Override
 	getType(): number {
-		return type;
+		return this.type;
 	}
 
 	@Override
@@ -176,17 +156,19 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getText(): string {
-		if ( text!=null ) {
-			return text;
+		if (this.text != null) {
+			return this.text;
 		}
 
-		let input: CharStream =  getInputStream();
-		if ( input==null ) return null;
-		let n: number =  input.size();
-		if ( start<n && stop<n) {
-			return input.getText(Interval.of(start,stop));
+		let input: CharStream = this.getInputStream();
+		if (input == null) {
+			return null;
 		}
-		else {
+
+		let n: number = input.size();
+		if (this.start < n && this.stop < n) {
+			return input.getText(Interval.of(this.start, this.stop));
+		} else {
 			return "<EOF>";
 		}
 	}
@@ -207,12 +189,12 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getLine(): number {
-		return line;
+		return this.line;
 	}
 
 	@Override
 	getCharPositionInLine(): number {
-		return charPositionInLine;
+		return this.charPositionInLine;
 	}
 
 	@Override
@@ -222,7 +204,7 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getChannel(): number {
-		return channel;
+		return this.channel;
 	}
 
 	@Override
@@ -237,7 +219,7 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getStartIndex(): number {
-		return start;
+		return this.start;
 	}
 
 	setStartIndex(start: number): void {
@@ -246,7 +228,7 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getStopIndex(): number {
-		return stop;
+		return this.stop;
 	}
 
 	setStopIndex(stop: number): void {
@@ -255,7 +237,7 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getTokenIndex(): number {
-		return index;
+		return this.index;
 	}
 
 	@Override
@@ -265,29 +247,30 @@ export class CommonToken implements WritableToken, Serializable {
 
 	@Override
 	getTokenSource(): TokenSource {
-		return source.getItem1();
+		return this.source[0];
 	}
 
 	@Override
 	getInputStream(): CharStream {
-		return source.getItem2();
+		return this.source[1];
 	}
 
 	@Override
 	toString(): string {
-		let channelStr: string =  "";
-		if ( channel>0 ) {
-			channelStr=",channel="+channel;
+		let channelStr: string = "";
+		if (this.channel > 0) {
+			channelStr = ",channel=" + this.channel;
 		}
-		let txt: string =  getText();
-		if ( txt!=null ) {
-			txt = txt.replace("\n","\\n");
-			txt = txt.replace("\r","\\r");
-			txt = txt.replace("\t","\\t");
-		}
-		else {
+
+		let txt: string = this.getText();
+		if (txt != null) {
+			txt = txt.replace("\n", "\\n");
+			txt = txt.replace("\r", "\\r");
+			txt = txt.replace("\t", "\\t");
+		} else {
 			txt = "<no text>";
 		}
-		return "[@"+getTokenIndex()+","+start+":"+stop+"='"+txt+"',<"+type+">"+channelStr+","+line+":"+getCharPositionInLine()+"]";
+
+		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this.line + ":" + this.getCharPositionInLine() + "]";
 	}
 }
