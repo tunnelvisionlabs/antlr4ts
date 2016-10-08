@@ -1,4 +1,5 @@
 // export * from './AbstractEqualityComparator';
+export * from './ArrayEqualityComparator';
 // export * from './Args';
 export * from './Array2DHashSet';
 export * from './Arrays';
@@ -11,7 +12,7 @@ export * from './EqualityComparator';
 // export * from './IntegerList';
 // export * from './IntegerStack';
 export * from './Interval';
-// export * from './IntervalSet';
+export * from './IntervalSet';
 export * from './IntSet';
 // export * from './LogManager';
 // export * from './MultiMap';

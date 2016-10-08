@@ -28,30 +28,20 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-import { Token } from '.';
-
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
- */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
-	}
-
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
-	}
-}
-
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
+export const enum ATNStateType {
+	INVALID_TYPE = 0,
+	BASIC = 1,
+	RULE_START = 2,
+	BLOCK_START = 3,
+	PLUS_BLOCK_START = 4,
+	STAR_BLOCK_START = 5,
+	TOKEN_START = 6,
+	RULE_STOP = 7,
+	BLOCK_END = 8,
+	STAR_LOOP_BACK = 9,
+	STAR_LOOP_ENTRY = 10,
+	PLUS_LOOP_BACK = 11,
+	LOOP_END = 12,
 }

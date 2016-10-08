@@ -67,8 +67,8 @@ export interface JavaCollection<E> extends JavaIterable<E> {
     add(e:E): boolean;
     addAll(collection: Collection<E>): boolean;
     clear(): void;
-    contains(o:any): boolean;                       // Shouldn't argument be restricted to E?
-    containsAll(collection: Collection<any>)        // Shouldn't argument be restricted to Collection<E>?
+    contains(o:any): boolean;                         // Shouldn't argument be restricted to E?
+    containsAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
     equals(o:any): boolean;
     hashCode(): number;
     isEmpty(): boolean;

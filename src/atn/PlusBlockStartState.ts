@@ -28,30 +28,23 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:34.9572142-07:00
 
-import { Token } from '.';
+import { ATNStateType } from './ATNStateType';
+import { BlockStartState } from './BlockStartState';
+import { Override } from '../misc/Stubs';
+import { PlusLoopbackState } from './PlusLoopbackState';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/** Start of {@code (A|B|...)+} loop. Technically a decision state, but
+ *  we don't use for code generation; somebody might need it, so I'm defining
+ *  it for completeness. In reality, the {@link PlusLoopbackState} node is the
+ *  real decision-making note for {@code A+}.
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class PlusBlockStartState extends BlockStartState {
+	loopBackState: PlusLoopbackState;
+
+	@Override
+	getStateType(): ATNStateType {
+		return ATNStateType.PLUS_BLOCK_START;
 	}
-
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
-	}
-}
-
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
