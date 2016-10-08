@@ -23,7 +23,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] ConsoleErrorListener.java
 * [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
-* [ ] DiagnosticErrorListener.java
+* [x] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
 * [x] InputMismatchException.java
 * [ ] InterpreterRuleContext.java
@@ -34,11 +34,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] ListTokenSource.java
 * [x] NoViableAltException.java
 * [ ] Parser.java
-* [ ] ParserErrorListener.java
+* [x] ParserErrorListener.java
 * [ ] ParserInterpreter.java
 * [ ] ParserRuleContext.java
-* [ ] ProxyErrorListener.java
-* [ ] ProxyParserErrorListener.java
+* [x] ProxyErrorListener.java
+* [x] ProxyParserErrorListener.java
 * [x] RecognitionException.java
 * [ ] Recognizer.java
 * [x] RuleContext.java

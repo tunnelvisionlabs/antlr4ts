@@ -34,8 +34,9 @@
 import { RuleContext } from "../RuleContext";
 import { Token } from "../Token";
 import { IntStream } from "../IntStream";
-import {TokenStream} from "../TokenStream";
-import {ATNStateType} from "../atn/ATNStateType";
+import { TokenStream } from "../TokenStream";
+import { ATNStateType } from "../atn/ATNStateType";
+import { Array2DHashSet } from "./Array2DHashSet";
 
 export interface Equatable {
 	equals(other: any): boolean;
@@ -154,7 +155,13 @@ export class ATN {
     nextTokens(atnState: ATNState, p1: void): IntervalSet;
     nextTokens(atnState: ATNState, p1?: void): IntervalSet { throw new Error("Not implemented"); }
 }
-export class ATNConfigSet { }
+
+export class ATNConfig{
+    getAlt(): number { throw new Error("Not implemented"); }
+}
+export class ATNConfigSet extends Array2DHashSet<ATNConfig> {
+}
+
 export class ATNInterpreter {
     atn: ATN;
 }
@@ -162,6 +169,8 @@ export class ATNState {
     transition(number: number): Transition { throw new Error("Not implemented"); }
 
     getStateType(): ATNStateType { throw new Error("Not implemented"); }
+
+    ruleIndex: number;
 }
 export abstract class Recognizer<T, T2>{
     getATN(): ATN { throw new Error("Not implemented"); }
@@ -185,7 +194,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
     getState(): number { throw new Error("Not implemented"); }
 
-    notifyErrorListeners(offendingToken, message: string, recognitionException) { throw new Error("Not implemented"); }
+    notifyErrorListeners(offendingToken, message: string, recognitionException);
+    notifyErrorListeners(offendingToken: string);
+    notifyErrorListeners(offendingToken: any, message?: string, recognitionException?) { throw new Error("Not implemented"); }
 
     consume() { throw new Error("Not implemented"); }
 
@@ -241,7 +252,12 @@ export class PredicateTransition extends AbstractPredicateTransition {
     ruleIndex: number;
     predIndex: number;
 }
-export class DFA { }
-export class BitSet { }
+export class DFA {
+    decision: number;
+    atnStartState: ATNState;
+}
+export class BitSet {
+    set(alt: number) { throw new Error("Not implemented"); }
+}
 export class SimulatorState { }
 
