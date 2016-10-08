@@ -1,20 +1,18 @@
 ﻿/*
  * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- *
  *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *      notice, this list of conditions and the following disclaimer.
  *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
  *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
+ *      derived from this software without specific prior written permission.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
@@ -28,30 +26,39 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:39.0109129-07:00
 
-import { Token } from '.';
-
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/**
+ *
+ * @author Sam Harwell
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
-	}
+export interface EdgeMap<T> {
 
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
-	}
-}
+	size(): number;
 
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
+	isEmpty(): boolean;
 
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
+	containsKey(key: number): boolean;
+
+	// @Nullable
+	get(key: number): T;
+
+	// @NotNull
+	put(key: number, /*@Nullable*/ value: T): EdgeMap<T>;
+
+	// @NotNull
+	remove(key: number): EdgeMap<T>;
+
+	// @NotNull
+	putAll<U extends T>(/*@NotNull*/ m: EdgeMap<U>): EdgeMap<T>;
+
+	// @NotNull
+	clear(): EdgeMap<T>;
+
+	// @NotNull
+	toMap(): Map<number, T>;
+
+	// @NotNull
+	entrySet(): Iterable<{ key: number, value: T }>;
+
 }

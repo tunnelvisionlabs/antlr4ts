@@ -28,30 +28,27 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:36.7513856-07:00
 
-import { Token } from '.';
+import { ATNState } from './ATNState';
+import { ATNStateType } from './ATNStateType';
+import { Override } from '../misc/Stubs';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/** The last node in the ATN for a rule, unless that rule is the start symbol.
+ *  In that case, there is one transition to EOF. Later, we might encode
+ *  references to all calls to this rule to compute FOLLOW sets for
+ *  error handling.
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class RuleStopState extends ATNState {
+
+	@Override
+	getNonStopStateNumber(): number {
+		return -1;
 	}
 
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
+	@Override
+	getStateType(): ATNStateType {
+		return ATNStateType.RULE_STOP;
 	}
-}
 
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }

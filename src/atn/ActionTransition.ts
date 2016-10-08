@@ -28,30 +28,42 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:24.7363448-07:00
 
-import { Token } from '.';
+import { ATNState } from '.';
+import { Override, NotNull } from '../misc/Stubs';
+import { Transition } from '.';
+import { TransitionType } from '.';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
- */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class ActionTransition extends Transition {
+	ruleIndex: number;
+	actionIndex: number;
+	isCtxDependent: boolean;  // e.g., $i ref in action
+
+	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex: number = -1, isCtxDependent: boolean = false) {
+		super(target);
+		this.ruleIndex = ruleIndex;
+		this.actionIndex = actionIndex;
+		this.isCtxDependent = isCtxDependent;
 	}
 
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
+	@Override
+	getSerializationType(): TransitionType {
+		return TransitionType.ACTION;
 	}
-}
 
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
+	@Override
+	isEpsilon(): boolean {
+		return true; // we are to be ignored by analysis 'cept for predicates
+	}
 
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
+	@Override
+	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+		return false;
+	}
+
+	@Override
+	toString(): string {
+		return "action_" + this.ruleIndex + ":" + this.actionIndex;
+	}
 }
