@@ -188,8 +188,8 @@ export abstract class ATNState {
 			this.epsilonOnlyTransitions = e.isEpsilon();
 		}
 		else if (this.epsilonOnlyTransitions !== e.isEpsilon()) {
-			//System.err.format(Locale.getDefault(), "ATN state %d has both epsilon and non-epsilon transitions.\n", stateNumber);
 			this.epsilonOnlyTransitions = false;
+			throw new Error("ATN state " + this.stateNumber + " has both epsilon and non-epsilon transitions.");
 		}
 
 		this.transitions.splice(index || this.transitions.length, 0, e);
@@ -239,7 +239,7 @@ export abstract class ATNState {
 
 	setOptimizedTransition(i: number, e: Transition): void {
 		if (!this.isOptimized()) {
-			throw "This ATNState is not optimized.";
+			throw new Error("This ATNState is not optimized.");
 		}
 
 		this.optimizedTransitions[i] = e;
@@ -247,7 +247,7 @@ export abstract class ATNState {
 
 	removeOptimizedTransition(i: number): void {
 		if (!this.isOptimized()) {
-			throw "This ATNState is not optimized.";
+			throw new Error("This ATNState is not optimized.");
 		}
 
 		this.optimizedTransitions.splice(i, 1);

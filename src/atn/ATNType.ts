@@ -35,7 +35,7 @@
  *
  * @author Sam Harwell
  */
-export enum ATNType {
+export const enum ATNType {
 
 	/**
 	 * A lexer grammar.

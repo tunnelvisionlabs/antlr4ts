@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.8530496-07:00
 
-export enum TransitionType {
+export const enum TransitionType {
 	// constants for serialization
 	EPSILON = 1,
 	RANGE = 2,
