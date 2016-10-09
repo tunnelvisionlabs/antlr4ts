@@ -93,7 +93,6 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		let element: [K, V] = this.backingStore.get([key, value]);
 		let result: V;
 		if (!element) {
-			result = undefined;
 			this.backingStore.add([key, value]);
 		} else {
 			result = element[1];
@@ -107,7 +106,6 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		let element: [K, V] = this.backingStore.get([key, value]);
 		let result: V;
 		if (!element) {
-			result = undefined;
 			this.backingStore.add([key, value]);
 		} else {
 			result = element[1];
