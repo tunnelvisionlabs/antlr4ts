@@ -138,8 +138,12 @@
     <TypeScriptCompile Include="src\tree\Tree.ts" />
     <TypeScriptCompile Include="src\tree\pattern\index.ts" />
     <TypeScriptCompile Include="src\tree\xpath\index.ts" />
-    <TypeScriptCompile Include="test\tool\TestGraphNodes.ts" />
-    <TypeScriptCompile Include="test\tool\TestIntervalSet.ts" />
+    <TypeScriptCompile Include="test\tool\TestGraphNodes.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="test\tool\TestIntervalSet.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src" />
