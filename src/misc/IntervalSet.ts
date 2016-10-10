@@ -209,8 +209,9 @@ export class IntervalSet implements IntSet {
 	/** {@inheritDoc} */
 	@Override
 	complement(vocabulary: IntSet): IntervalSet {
-		if (vocabulary == null || vocabulary.isNil()) {
-			return null; // nothing in common with null set
+		if (vocabulary.isNil()) {
+			// nothing in common with null set
+			return IntervalSet.EMPTY_SET;
 		}
 
 		let vocabularyIS: IntervalSet;

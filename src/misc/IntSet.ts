@@ -82,14 +82,11 @@ export interface IntSet {
 	 * <li>{@code y.subtract(x)}</li>
 	 * </ul>
 	 *
-	 * @param elements The set to compare with the current set. A {@code null}
-	 * argument is treated as though it were an empty set.
+	 * @param elements The set to compare with the current set.
 	 * @return A new {@link IntSet} instance containing the elements present in
-	 * {@code elements} but not present in the current set. The value
-	 * {@code null} may be returned in place of an empty result set.
+	 * {@code elements} but not present in the current set.
 	 */
-	//@Nullable
-	complement(/*@Nullable*/ elements: IntSet): IntSet;
+	complement(elements: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
