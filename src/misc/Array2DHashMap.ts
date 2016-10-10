@@ -33,24 +33,28 @@ import { Array2DHashSet } from './Array2DHashSet';
 import { EqualityComparator } from './EqualityComparator';
 import { Equatable, JavaCollection, JavaMap, JavaSet } from './Stubs';
 
-class MapKeyEqualityComparator<K, V> implements EqualityComparator<[K, V]> {
+// Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
+// key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.
+type Bucket<K, V> = { key: K, value?: V };
+
+class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>> {
 	private readonly keyComparator: EqualityComparator<K>;
 
 	constructor(keyComparator: EqualityComparator<K>) {
 		this.keyComparator = keyComparator;
 	}
 
-	hashCode(obj: [K, V]): number {
-		return this.keyComparator.hashCode(obj[0]);
+	hashCode(obj: Bucket<K, V>): number {
+		return this.keyComparator.hashCode(obj.key);
 	}
 
-	equals(a: [K, V], b: [K, V]): boolean {
-		return this.keyComparator.equals(a[0], b[0]);
+	equals(a: Bucket<K, V>, b:Bucket<K, V>): boolean {
+		return this.keyComparator.equals(a.key, b.key);
 	}
 }
 
 export class Array2DHashMap<K, V> implements JavaMap<K, V> {
-	private backingStore: Array2DHashSet<[K, V]>;
+	private backingStore: Array2DHashSet<Bucket<K, V>>;
 
 	constructor(keyComparer: EqualityComparator<K>) {
 		this.backingStore = new Array2DHashSet(new MapKeyEqualityComparator<K, V>(keyComparer));
@@ -61,7 +65,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	containsKey(key: K): boolean {
-		return this.backingStore.contains([key, null]);
+		return this.backingStore.contains({ key });
 	}
 
 	containsValue(value: V): boolean {
@@ -72,13 +76,13 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	get(key: K): V {
-		let bucket: [K, V] = this.backingStore.get([key, null]);
+	get(key: K): V | undefined {
+		let bucket = this.backingStore.get({ key });
 		if (!bucket) {
 			return undefined;
 		}
 
-		return bucket[1];
+		return bucket.value;
 	}
 
 	isEmpty(): boolean {
@@ -89,26 +93,26 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	put(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
-		let result: V;
+	put(key: K, value: V): V | undefined {
+		let element = this.backingStore.get({ key, value });
+		let result: V | undefined;
 		if (!element) {
-			this.backingStore.add([key, value]);
+			this.backingStore.add({ key, value });
 		} else {
-			result = element[1];
-			element[1] = value;
+			result = element.value;
+			element.value = value;
 		}
 
 		return result;
 	}
 
-	putIfAbsent(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
-		let result: V;
+	putIfAbsent(key: K, value: V): V | undefined {
+		let element = this.backingStore.get({ key, value });
+		let result: V | undefined;
 		if (!element) {
-			this.backingStore.add([key, value]);
+			this.backingStore.add({ key, value });
 		} else {
-			result = element[1];
+			result = element.value;
 		}
 
 		return result;
@@ -118,9 +122,9 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	remove(key: K): V {
+	remove(key: K): V | undefined {
 		let value = this.get(key);
-		this.backingStore.remove(key);
+		this.backingStore.remove({ key });
 		return value;
 	}
 

@@ -106,12 +106,12 @@ export interface JavaMap<K, V> extends Equatable {
     containsKey(key: K): boolean;
     containsValue(value: V): boolean;
     entrySet(): JavaSet<JavaMap.Entry<K, V>>;
-    get(key: K): V;
+    get(key: K): V | undefined;
     isEmpty(): boolean;
     keySet(): JavaSet<K>;
-    put(key: K, value: V): V;
+    put(key: K, value: V): V | undefined;
     putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void;
-    remove(key: K): V;
+    remove(key: K): V | undefined;
     size(): number;
     values(): JavaCollection<V>;
 }
