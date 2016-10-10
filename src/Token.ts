@@ -80,7 +80,7 @@ export interface Token {
 	/**
 	 * Get the text of the token.
 	 */
-	getText(): string;
+	getText(): string | undefined;
 
 	/** Get the token type of the token */
 	getType(): number;
@@ -122,10 +122,10 @@ export interface Token {
 
 	/** Gets the {@link TokenSource} which created this token.
 	 */
-	getTokenSource(): TokenSource;
+	getTokenSource(): TokenSource | undefined;
 
 	/**
 	 * Gets the {@link CharStream} from which this token was derived.
 	 */
-	getInputStream(): CharStream;
+	getInputStream(): CharStream | undefined;
 }

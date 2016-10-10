@@ -75,7 +75,7 @@ export class CommonTokenFactory implements TokenFactory {
 
 	@Override
 	create(
-		source: [TokenSource, CharStream],
+		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
 		text: string,
 		channel: number,
@@ -87,8 +87,8 @@ export class CommonTokenFactory implements TokenFactory {
 		let t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
 		t.setLine(line);
 		t.setCharPositionInLine(charPositionInLine);
-		if (text == null && this.copyText && source[1] != null) {
-			t.setText(source[1].getText(Interval.of(start, stop)));
+		if (text == null && this.copyText && source.stream != null) {
+			t.setText(source.stream.getText(Interval.of(start, stop)));
 		}
 
 		return t;
