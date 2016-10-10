@@ -88,17 +88,17 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	containsKey(key: number): boolean {
-		return this.get(key) != null;
+		return !!this.get(key);
 	}
 
 	@Override
-	get(key: number): T {
+	get(key: number): T | undefined {
 		// Special property of this collection: values are only even added to
 		// the end, else a new object is returned from put(). Therefore no lock
 		// is required in this method.
 		let index: number = Arrays.binarySearch(this.keys, 0, this.size(), key);
 		if (index < 0) {
-			return null;
+			return undefined;
 		}
 
 		return this.values[index];
@@ -221,7 +221,7 @@ class EntrySetIterator<T> implements Iterator<{ key: number, value: T }> {
 
 	next(value?: any): IteratorResult<{ key: number, value: T }> {
 		if (this.index >= this.values.length) {
-			return { done: true, value: undefined };
+			return { done: true, value: undefined } as any as IteratorResult<{ key: number, value: T }> ;
 		}
 
 		let currentIndex = this.index++;

@@ -40,11 +40,10 @@ export interface EdgeMap<T> {
 
 	containsKey(key: number): boolean;
 
-	// @Nullable
-	get(key: number): T;
+	get(key: number): T | undefined;
 
 	// @NotNull
-	put(key: number, /*@Nullable*/ value: T): EdgeMap<T>;
+	put(key: number, value: T): EdgeMap<T>;
 
 	// @NotNull
 	remove(key: number): EdgeMap<T>;

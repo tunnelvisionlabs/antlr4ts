@@ -78,8 +78,8 @@ export class EmptyEdgeMap<T> extends AbstractEdgeMap<T> {
 	}
 
 	@Override
-	get(key: number): T {
-		return null;
+	get(key: number): undefined {
+		return undefined;
 	}
 
 	@Override
