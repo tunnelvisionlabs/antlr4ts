@@ -49,7 +49,7 @@ export class TerminalNodeImpl implements TerminalNode {
 
 	@Override
 	getChild(i: number): ParseTree {
-		return null;
+		throw new RangeError("i must be greater than zero and less than getChildCount()");
 	}
 
 	@Override
@@ -69,12 +69,8 @@ export class TerminalNodeImpl implements TerminalNode {
 
 	@Override
 	getSourceInterval(): Interval {
-		if (this.symbol != null) {
-			let tokenIndex: number = this.symbol.getTokenIndex();
-			return new Interval(tokenIndex, tokenIndex);
-		}
-
-		return Interval.INVALID;
+		let tokenIndex: number = this.symbol.getTokenIndex();
+		return new Interval(tokenIndex, tokenIndex);
 	}
 
 	@Override
@@ -89,11 +85,7 @@ export class TerminalNodeImpl implements TerminalNode {
 
 	@Override
 	getText(): string {
-		if (this.symbol != null) {
-			return this.symbol.getText();
-		}
-
-		return null;
+		return this.symbol.getText() || "";
 	}
 
 	@Override
@@ -103,14 +95,10 @@ export class TerminalNodeImpl implements TerminalNode {
 
 	@Override
 	toString(): string {
-		if (this.symbol != null) {
-			if (this.symbol.getType() === Token.EOF) {
-				return "<EOF>";
-			}
-
-			return this.symbol.getText();
-		} else {
-			return "<null>";
+		if (this.symbol.getType() === Token.EOF) {
+			return "<EOF>";
 		}
+
+		return this.symbol.getText() || "";
 	}
 }

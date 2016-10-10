@@ -38,5 +38,5 @@ export interface TerminalNode extends ParseTree {
 	getSymbol(): Token;
 
 	//@Override
-	getParent(): RuleNode;
+	getParent(): RuleNode | undefined;
 }
