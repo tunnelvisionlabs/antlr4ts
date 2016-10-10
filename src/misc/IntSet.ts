@@ -62,14 +62,11 @@ export interface IntSet {
 	 * Return a new {@link IntSet} object containing all elements that are
 	 * present in both the current set and the specified set {@code a}.
 	 *
-	 * @param a The set to intersect with the current set. A {@code null}
-	 * argument is treated as though it were an empty set.
+	 * @param a The set to intersect with the current set.
 	 * @return A new {@link IntSet} instance containing the intersection of the
-	 * current set and {@code a}. The value {@code null} may be returned in
-	 * place of an empty result set.
+	 * current set and {@code a}.
 	 */
-	//@Nullable
-	and(/*@Nullable*/ a: IntSet): IntSet;
+	and(a: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
