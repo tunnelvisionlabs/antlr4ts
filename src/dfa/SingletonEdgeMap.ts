@@ -40,7 +40,7 @@ import { SparseEdgeMap } from './SparseEdgeMap';
 export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	private key: number; 
-	private value: T; 
+	private value: T | undefined;
 
 	 constructor(minIndex: number, maxIndex: number, key: number, value: T)  {
 		super(minIndex, maxIndex);
@@ -49,7 +49,7 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 			this.value = value;
 		} else {
 			this.key = 0;
-			this.value = null;
+			this.value = undefined;
 		}
 	}
 
@@ -57,7 +57,7 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 		return this.key;
 	}
 
-	getValue(): T {
+	getValue(): T | undefined {
 		return this.value;
 	}
 
@@ -77,12 +77,12 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 	}
 
 	@Override
-	get(key: number): T {
+	get(key: number): T | undefined {
 		if (key === this.key) {
 			return this.value;
 		}
 
-		return null;
+		return undefined;
 	}
 
 	@Override
@@ -132,10 +132,11 @@ export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	entrySet(): Iterable<{ key: number, value: T }> {
-		if (this.isEmpty()) {
+		let value: T | undefined = this.value;
+		if (!value) {
 			return [];
-		} else {
-			return [{ key: this.key, value: this.value }];
 		}
+
+		return [{ key: this.key, value: value }];
 	}
 }

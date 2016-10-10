@@ -41,7 +41,7 @@ import * as assert from 'assert';
  * @author Sam Harwell
  */
 export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
-	private arrayData: T[];
+	private arrayData: (T | undefined)[];
 	private _size: number;
 
 	constructor(minIndex: number, maxIndex: number) {
@@ -62,22 +62,22 @@ export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	containsKey(key: number): boolean {
-		return this.get(key) != null;
+		return !!this.get(key);
 	}
 
 	@Override
-	get(key: number): T {
+	get(key: number): T | undefined {
 		if (key < this.minIndex || key > this.maxIndex) {
-			return null;
+			return undefined;
 		}
 
 		return this.arrayData[key - this.minIndex];
 	}
 
 	@Override
-	put(key: number, value: T): ArrayEdgeMap<T> {
+	put(key: number, value: T | undefined): ArrayEdgeMap<T> {
 		if (key >= this.minIndex && key <= this.maxIndex) {
-			let existing: T = this.arrayData[key - this.minIndex];
+			let existing: T | undefined = this.arrayData[key - this.minIndex];
 			this.arrayData[key - this.minIndex] = value;
 			if (existing == null && value != null) {
 				this._size++;
@@ -91,7 +91,7 @@ export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	remove(key: number): ArrayEdgeMap<T> {
-		return this.put(key, null);
+		return this.put(key, undefined);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
 
 		let result: Map<number, T> = new Map<number, T>();
 		for (let i = 0; i < this.arrayData.length; i++) {
-			let element: T = this.arrayData[i];
+			let element: T | undefined = this.arrayData[i];
 			if (element == null) {
 				continue;
 			}
@@ -159,10 +159,10 @@ export class ArrayEdgeMap<T> extends AbstractEdgeMap<T> {
 }
 
 class EntrySet<T> implements Iterable<{ key: number, value: T }> {
-	private readonly arrayData: T[];
+	private readonly arrayData: (T | undefined)[];
 	private readonly minIndex: number;
 
-	constructor(arrayData: T[], minIndex: number) {
+	constructor(arrayData: (T | undefined)[], minIndex: number) {
 		this.arrayData = arrayData;
 		this.minIndex = minIndex;
 	}
@@ -173,11 +173,11 @@ class EntrySet<T> implements Iterable<{ key: number, value: T }> {
 }
 
 class EntrySetIterator<T> implements Iterator<{ key: number, value: T }> {
-	private readonly arrayData: T[];
+	private readonly arrayData: (T | undefined)[];
 	private readonly minIndex: number;
 	private index: number;
 
-	constructor(arrayData: T[], minIndex: number) {
+	constructor(arrayData: (T | undefined)[], minIndex: number) {
 		this.arrayData = arrayData;
 		this.minIndex = minIndex;
 		this.index = 0;
@@ -193,7 +193,7 @@ class EntrySetIterator<T> implements Iterator<{ key: number, value: T }> {
 		let reachedEnd = this.index >= this.arrayData.length;
 		let result = { done: reachedEnd, value: reachedEnd ? undefined : { key: this.index + this.minIndex, value: this.arrayData[this.index] } };
 		this.index++;
-		return result;
+		return result as any as IteratorResult<{ key: number, value: T }>;
 	}
 
 	return?(value?: any): IteratorResult<{ key: number, value: T }> {

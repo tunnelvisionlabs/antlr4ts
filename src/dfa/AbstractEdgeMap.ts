@@ -56,9 +56,8 @@ export abstract class AbstractEdgeMap<T> implements EdgeMap<T> {
 	// @Override
 	abstract containsKey(key: number): boolean;
 
-	// @Nullable
 	// @Override
-	abstract get(key: number): T;
+	abstract get(key: number): T | undefined;
 
 	// @NotNull
 	// @Override
