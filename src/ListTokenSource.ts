@@ -82,7 +82,7 @@ export class ListTokenSource implements TokenSource {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
-			let tokenText: string = lastToken.getText();
+			let tokenText: string | undefined = lastToken.getText();
 			if (tokenText != null) {
 				let lastNewLine: number = tokenText.lastIndexOf('\n');
 				if (lastNewLine >= 0) {
@@ -144,7 +144,7 @@ export class ListTokenSource implements TokenSource {
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
 			let line: number = lastToken.getLine();
 
-			let tokenText: string = lastToken.getText();
+			let tokenText: string | undefined = lastToken.getText();
 			if (tokenText != null) {
 				for (let i = 0; i < tokenText.length; i++) {
 					if (tokenText.charAt(i) == '\n') {

@@ -82,7 +82,7 @@ export class CommonToken implements WritableToken {
 	 *
 	 * @see #getText()
 	 */
-	protected text: string;
+	protected text: string | undefined;
 
 	/**
 	 * This is the backing field for {@link #getTokenIndex} and
@@ -102,7 +102,7 @@ export class CommonToken implements WritableToken {
 	 */
 	protected stop: number;
 
-	constructor(type: number, text: string = null, @NotNull source: { source: TokenSource | undefined, stream: CharStream | undefined } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
+	constructor(type: number, text?: string, @NotNull source: { source: TokenSource | undefined, stream: CharStream | undefined } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this.text = text;
 		this.type = type;
 		this.source = source;
@@ -129,7 +129,7 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.getType(), null, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
+		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
 		result.line = oldToken.getLine();
 		result.index = oldToken.getTokenIndex();
 		result.charPositionInLine = oldToken.getCharPositionInLine();
@@ -156,14 +156,14 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getText(): string {
+	getText(): string | undefined {
 		if (this.text != null) {
 			return this.text;
 		}
 
 		let input: CharStream | undefined = this.getInputStream();
 		if (input == null) {
-			return null;
+			return undefined;
 		}
 
 		let n: number = input.size();
@@ -263,7 +263,7 @@ export class CommonToken implements WritableToken {
 			channelStr = ",channel=" + this.channel;
 		}
 
-		let txt: string = this.getText();
+		let txt: string | undefined = this.getText();
 		if (txt != null) {
 			txt = txt.replace("\n", "\\n");
 			txt = txt.replace("\r", "\\r");
