@@ -33,51 +33,18 @@
     <TypeScriptSourceRoot />
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="src\**\*.ts" />
+    <TypeScriptCompile Include="test\**\*.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="package.json" />
     <Content Include="test\mocha.opts" />
     <Content Include="tsconfig.json" />
     <Content Include="CONVERSION.md" />
     <Content Include="LICENSE.md" />
     <Content Include="README.md" />
-    <TypeScriptCompile Include="src\CharStream.ts" />
-    <TypeScriptCompile Include="src\index.ts" />
-    <TypeScriptCompile Include="src\IntStream.ts" />
-    <TypeScriptCompile Include="src\Lexer.ts" />
-    <TypeScriptCompile Include="src\Parser.ts" />
-    <TypeScriptCompile Include="src\RuleContext.ts" />
-    <TypeScriptCompile Include="src\Token.ts" />
-    <TypeScriptCompile Include="src\TokenFactory.ts" />
-    <TypeScriptCompile Include="src\TokenSource.ts" />
-    <TypeScriptCompile Include="src\TokenStream.ts" />
-    <TypeScriptCompile Include="src\WritableToken.ts" />
-    <TypeScriptCompile Include="test\TestArray2DHashSet.ts">
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="test\TestMocha.ts">
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\atn\index.ts" />
-    <TypeScriptCompile Include="src\atn\LexerAction.ts" />
-    <TypeScriptCompile Include="src\atn\LexerActionType.ts" />
-    <TypeScriptCompile Include="src\dfa\index.ts" />
-    <TypeScriptCompile Include="src\misc\Array2DHashSet.ts" />
-    <TypeScriptCompile Include="src\misc\EqualityComparator.ts" />
-    <TypeScriptCompile Include="src\misc\index.ts" />
-    <TypeScriptCompile Include="src\misc\Interval.ts" />
-    <TypeScriptCompile Include="src\misc\IntSet.ts" />
-    <TypeScriptCompile Include="src\misc\MurmurHash.ts" />
-    <TypeScriptCompile Include="src\misc\ObjectEqualityComparator.ts" />
-    <TypeScriptCompile Include="src\misc\Stubs.ts" />
-    <TypeScriptCompile Include="src\tree\ErrorNode.ts" />
-    <TypeScriptCompile Include="src\tree\index.ts" />
-    <TypeScriptCompile Include="src\tree\ParseTree.ts" />
-    <TypeScriptCompile Include="src\tree\ParseTreeVisitor.ts" />
-    <TypeScriptCompile Include="src\tree\RuleNode.ts" />
-    <TypeScriptCompile Include="src\tree\SyntaxTree.ts" />
-    <TypeScriptCompile Include="src\tree\TerminalNode.ts" />
-    <TypeScriptCompile Include="src\tree\Tree.ts" />
-    <TypeScriptCompile Include="src\tree\pattern\index.ts" />
-    <TypeScriptCompile Include="src\tree\xpath\index.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src" />
