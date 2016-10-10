@@ -42,7 +42,7 @@ export class CommonToken implements WritableToken {
 	 * An empty {@link Tuple2} which is used as the default value of
 	 * {@link #source} for tokens that do not have a source.
 	 */
-	protected static EMPTY_SOURCE: { source: TokenSource | undefined, stream: CharStream | undefined } =
+	protected static EMPTY_SOURCE: { source?: TokenSource, stream?: CharStream } =
 		{ source: undefined, stream: undefined };
 
 	/**
@@ -74,7 +74,7 @@ export class CommonToken implements WritableToken {
 	 * {@link Tuple2} containing these values.</p>
 	 */
 	@NotNull
-	protected source: { source: TokenSource | undefined, stream: CharStream | undefined };
+	protected source: { source?: TokenSource, stream?: CharStream };
 
 	/**
 	 * This is the backing field for {@link #getText} when the token text is
@@ -82,7 +82,7 @@ export class CommonToken implements WritableToken {
 	 *
 	 * @see #getText()
 	 */
-	protected text: string | undefined;
+	protected text?: string;
 
 	/**
 	 * This is the backing field for {@link #getTokenIndex} and
@@ -102,7 +102,7 @@ export class CommonToken implements WritableToken {
 	 */
 	protected stop: number;
 
-	constructor(type: number, text?: string, @NotNull source: { source: TokenSource | undefined, stream: CharStream | undefined } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
+	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this.text = text;
 		this.type = type;
 		this.source = source;

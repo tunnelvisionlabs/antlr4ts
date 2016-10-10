@@ -75,7 +75,7 @@ export class CommonTokenFactory implements TokenFactory {
 
 	@Override
 	create(
-		source: { source: TokenSource | undefined, stream: CharStream | undefined },
+		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
 		text: string,
 		channel: number,
