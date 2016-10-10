@@ -50,7 +50,7 @@ class MapKeyEqualityComparator<K, V> implements EqualityComparator<[K, V]> {
 }
 
 export class Array2DHashMap<K, V> implements JavaMap<K, V> {
-	private backingStore: Array2DHashSet<[K, V]>;
+	private backingStore: Array2DHashSet<[K, V | undefined]>;
 
 	constructor(keyComparer: EqualityComparator<K>) {
 		this.backingStore = new Array2DHashSet(new MapKeyEqualityComparator<K, V>(keyComparer));
@@ -61,7 +61,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	containsKey(key: K): boolean {
-		return this.backingStore.contains([key, null]);
+		return this.backingStore.contains([key, undefined]);
 	}
 
 	containsValue(value: V): boolean {
@@ -72,8 +72,8 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	get(key: K): V {
-		let bucket: [K, V] = this.backingStore.get([key, null]);
+	get(key: K): V | undefined {
+		let bucket: [K, V | undefined] = this.backingStore.get([key, undefined]);
 		if (!bucket) {
 			return undefined;
 		}
@@ -89,9 +89,9 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	put(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
-		let result: V;
+	put(key: K, value: V): V | undefined {
+		let element: [K, V | undefined] = this.backingStore.get([key, value]);
+		let result: V | undefined;
 		if (!element) {
 			this.backingStore.add([key, value]);
 		} else {
@@ -102,9 +102,9 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return result;
 	}
 
-	putIfAbsent(key: K, value: V): V {
-		let element: [K, V] = this.backingStore.get([key, value]);
-		let result: V;
+	putIfAbsent(key: K, value: V): V | undefined {
+		let element: [K, V | undefined] = this.backingStore.get([key, value]);
+		let result: V | undefined;
 		if (!element) {
 			this.backingStore.add([key, value]);
 		} else {
@@ -118,7 +118,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		throw "not implemented";
 	}
 
-	remove(key: K): V {
+	remove(key: K): V | undefined {
 		let value = this.get(key);
 		this.backingStore.remove(key);
 		return value;

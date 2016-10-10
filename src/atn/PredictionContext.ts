@@ -248,7 +248,7 @@ export abstract class PredictionContext implements Equatable {
 			return context;
 		}
 
-		let existing: PredictionContext =  visited.get(context);
+		let existing: PredictionContext | undefined =  visited.get(context);
 		if (existing != null) {
 			return existing;
 		}
@@ -567,7 +567,7 @@ class ArrayPredictionContext extends PredictionContext {
 			throw "Appending a tree suffix is not yet supported.";
 		}
 
-		let result: PredictionContext = visited.get(context);
+		let result: PredictionContext | undefined = visited.get(context);
 		if (result == null) {
 			if (context.isEmpty()) {
 				result = suffix;
