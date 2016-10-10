@@ -627,8 +627,14 @@ class ArrayPredictionContext extends PredictionContext {
 		let otherWorkList: PredictionContext[] = [];
 		selfWorkList.push(this);
 		otherWorkList.push(other);
-		while (selfWorkList.length > 0) {
-			let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(selfWorkList.pop(), otherWorkList.pop());
+		while (true) {
+			let currentSelf = selfWorkList.pop();
+			let currentOther = otherWorkList.pop();
+			if (!currentSelf || !currentOther) {
+				break;
+			}
+
+			let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(currentSelf, currentOther);
 			if (!visited.add(operands)) {
 				continue;
 			}
