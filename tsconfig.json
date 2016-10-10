@@ -5,6 +5,7 @@
     "module": "commonjs",
     "target": "es2015",
     "noImplicitAny": true,
+    "strictNullChecks": true,
     "experimentalDecorators": true,
     "declaration": true,
     "preserveConstEnums": true,
