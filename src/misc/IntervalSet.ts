@@ -242,17 +242,16 @@ export class IntervalSet implements IntSet {
 
 	/**
 	 * Compute the set difference between two interval sets. The specific
-	 * operation is {@code left - right}. If either of the input sets is
-	 * {@code null}, it is treated as though it was an empty set.
+	 * operation is {@code left - right}.
 	 */
 	@NotNull
-	static subtract( @Nullable left: IntervalSet, @Nullable right: IntervalSet): IntervalSet {
-		if (left == null || left.isNil()) {
+	static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {
+		if (left.isNil()) {
 			return new IntervalSet();
 		}
 
 		let result: IntervalSet = new IntervalSet(left.intervals);
-		if (right == null || right.isNil()) {
+		if (right.isNil()) {
 			// right set has no elements; just return the copy of the current set
 			return result;
 		}
@@ -275,8 +274,8 @@ export class IntervalSet implements IntSet {
 				continue;
 			}
 
-			let beforeCurrent: Interval = null;
-			let afterCurrent: Interval = null;
+			let beforeCurrent: Interval | undefined;
+			let afterCurrent: Interval | undefined;
 			if (rightInterval.a > resultInterval.a) {
 				beforeCurrent = new Interval(resultInterval.a, rightInterval.a - 1);
 			}
@@ -285,8 +284,8 @@ export class IntervalSet implements IntSet {
 				afterCurrent = new Interval(rightInterval.b + 1, resultInterval.b);
 			}
 
-			if (beforeCurrent != null) {
-				if (afterCurrent != null) {
+			if (beforeCurrent) {
+				if (afterCurrent) {
 					// split the current interval into two
 					result.intervals[resultI] = beforeCurrent;
 					result.intervals.splice(resultI + 1, 0, afterCurrent);
@@ -302,7 +301,7 @@ export class IntervalSet implements IntSet {
 				}
 			}
 			else {
-				if (afterCurrent != null) {
+				if (afterCurrent) {
 					// replace the current interval
 					result.intervals[resultI] = afterCurrent;
 					rightI++;
