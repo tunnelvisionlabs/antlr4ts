@@ -90,9 +90,9 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	@Override
-	protected LB(k: number): Token {
+	protected LB(k: number): Token | undefined {
 		if (k === 0 || (this.p - k) < 0) {
-			return null;
+			return undefined;
 		}
 
 		let i: number = this.p;
@@ -105,18 +105,18 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		if (i < 0) {
-			return null;
+			return undefined;
 		}
 
 		return this.tokens[i];
 	}
 
 	@Override
-	LT(k: number): Token {
+	LT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();
 		if (k === 0) {
-			return null;
+			return undefined;
 		}
 
 		if (k < 0) {
