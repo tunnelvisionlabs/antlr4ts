@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.3281988-07:00
 
 import { CommonToken } from '../../CommonToken';
-import { NotNull, Nullable, Override } from '../../misc/Stubs';
+import { NotNull, Override } from '../../misc/Stubs';
 
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,
@@ -47,8 +47,7 @@ export class TokenTagToken extends CommonToken {
 	/**
 	 * This is the backing field for {@link #getLabel}.
 	 */
-	@Nullable
-	private label: string;
+	private label: string | undefined;
 
 	/**
 	 * Constructs a new instance of {@link TokenTagToken} with the specified
@@ -59,7 +58,7 @@ export class TokenTagToken extends CommonToken {
 	 * @param label The label associated with the token tag, or {@code null} if
 	 * the token tag is unlabeled.
 	 */
-	constructor(@NotNull tokenName: string, type: number, @Nullable label: string = null) {
+	constructor(@NotNull tokenName: string, type: number, label?: string) {
 		super(type);
 		this.tokenName = tokenName;
 		this.label = label;
@@ -80,8 +79,7 @@ export class TokenTagToken extends CommonToken {
 	 * @return The name of the label associated with the rule tag, or
 	 * {@code null} if this is an unlabeled rule tag.
 	 */
-	@Nullable
-	getLabel(): string {
+	getLabel(): string | undefined {
 		return this.label;
 	}
 
