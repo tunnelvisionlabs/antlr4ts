@@ -104,9 +104,8 @@ export abstract class Transition {
 		return false;
 	}
 
-	@Nullable
-	label(): IntervalSet {
-		return null;
+	label(): IntervalSet | undefined {
+		return undefined;
 	}
 
 	abstract matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean;
