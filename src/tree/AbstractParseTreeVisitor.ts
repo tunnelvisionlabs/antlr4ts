@@ -110,13 +110,9 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * The default implementation of {@link #visitChildren visitChildren}
 	 * initializes its aggregate result to this value.
 	 *
-	 * <p>The base implementation returns {@code null}.</p>
-	 *
 	 * @return The default value returned by visitor methods.
 	 */
-	protected defaultResult(): Result {
-		return null;
-	}
+	protected abstract defaultResult(): Result;
 
 	/**
 	 * Aggregates the results of visiting multiple children of a node. After
