@@ -63,8 +63,8 @@ export class PredictionContextCache {
             return context;
         }
 
-        let result: PredictionContext | undefined =  this.contexts.get(context);
-        if (result == null) {
+        let result =  this.contexts.get(context);
+        if (!result) {
             result = context;
             this.contexts.put(context, context);
         }
@@ -78,8 +78,8 @@ export class PredictionContextCache {
         }
 
         let operands: PredictionContextCache.PredictionContextAndInt =  new PredictionContextCache.PredictionContextAndInt(context, invokingState);
-        let result: PredictionContext | undefined =  this.childContexts.get(operands);
-        if (result == null) {
+        let result =  this.childContexts.get(operands);
+        if (!result) {
             result = context.getChild(invokingState);
             result = this.getAsCached(result);
             this.childContexts.put(operands, result);
@@ -94,8 +94,8 @@ export class PredictionContextCache {
         }
 
         let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands =  new PredictionContextCache.IdentityCommutativePredictionContextOperands(x, y);
-        let result: PredictionContext | undefined =  this.joinContexts.get(operands);
-        if (result != null) {
+        let result =  this.joinContexts.get(operands);
+        if (result) {
             return result;
         }
 
