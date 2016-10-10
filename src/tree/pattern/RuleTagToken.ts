@@ -190,8 +190,8 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getTokenSource(): TokenSource {
-		return null;
+	getTokenSource(): TokenSource | undefined {
+		return undefined;
 	}
 
 	/**
@@ -200,8 +200,8 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getInputStream(): CharStream {
-		return null;
+	getInputStream(): CharStream | undefined {
+		return undefined;
 	}
 
 	/**

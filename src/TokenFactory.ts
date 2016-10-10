@@ -45,7 +45,7 @@ export interface TokenFactory {
 	 */
 	//@NotNull
 	create(
-		/*@NotNull*/ source: [TokenSource, CharStream],
+		/*@NotNull*/ source: { source: TokenSource | undefined, stream: CharStream | undefined },
 		type: number,
 		text: string,
 		channel: number,

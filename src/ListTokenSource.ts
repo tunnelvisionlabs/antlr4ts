@@ -114,7 +114,7 @@ export class ListTokenSource implements TokenSource {
 				}
 
 				let stop: number = Math.max(-1, start - 1);
-				this.eofToken = this._factory.create([this, this.getInputStream()], Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.getLine(), this.getCharPositionInLine());
+				this.eofToken = this._factory.create({ source: this, stream: this.getInputStream() }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.getLine(), this.getCharPositionInLine());
 			}
 
 			return this.eofToken;
@@ -166,7 +166,7 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getInputStream(): CharStream {
+	getInputStream(): CharStream | undefined {
 		if (this.i < this.tokens.length) {
 			return this.tokens[this.i].getInputStream();
 		} else if (this.eofToken != null) {
@@ -176,7 +176,7 @@ export class ListTokenSource implements TokenSource {
 		}
 
 		// no input stream information is available
-		return null;
+		return undefined;
 	}
 
 	/**
@@ -188,7 +188,7 @@ export class ListTokenSource implements TokenSource {
 			return this.sourceName;
 		}
 
-		let inputStream: CharStream = this.getInputStream();
+		let inputStream: CharStream | undefined = this.getInputStream();
 		if (inputStream != null) {
 			return inputStream.getSourceName();
 		}

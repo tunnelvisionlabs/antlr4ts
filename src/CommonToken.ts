@@ -42,7 +42,8 @@ export class CommonToken implements WritableToken {
 	 * An empty {@link Tuple2} which is used as the default value of
 	 * {@link #source} for tokens that do not have a source.
 	 */
-	protected static EMPTY_SOURCE: [TokenSource, CharStream] = [null, null];
+	protected static EMPTY_SOURCE: { source: TokenSource | undefined, stream: CharStream | undefined } =
+		{ source: undefined, stream: undefined };
 
 	/**
 	 * This is the backing field for {@link #getType} and {@link #setType}.
@@ -73,7 +74,7 @@ export class CommonToken implements WritableToken {
 	 * {@link Tuple2} containing these values.</p>
 	 */
 	@NotNull
-	protected source: [TokenSource, CharStream];
+	protected source: { source: TokenSource | undefined, stream: CharStream | undefined };
 
 	/**
 	 * This is the backing field for {@link #getText} when the token text is
@@ -101,16 +102,16 @@ export class CommonToken implements WritableToken {
 	 */
 	protected stop: number;
 
-	constructor(type: number, text: string = null, @NotNull source: [TokenSource, CharStream] = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
+	constructor(type: number, text: string = null, @NotNull source: { source: TokenSource | undefined, stream: CharStream | undefined } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this.text = text;
 		this.type = type;
 		this.source = source;
 		this.channel = channel;
 		this.start = start;
 		this.stop = stop;
-		if (source[0] != null) {
-			this.line = source[0].getLine();
-			this.charPositionInLine = source[0].getCharPositionInLine();
+		if (source.source != null) {
+			this.line = source.source.getLine();
+			this.charPositionInLine = source.source.getCharPositionInLine();
 		}
 	}
 
@@ -138,7 +139,7 @@ export class CommonToken implements WritableToken {
 			result.source = oldToken.source;
 		} else {
 			result.text = oldToken.getText();
-			result.source = [oldToken.getTokenSource(), oldToken.getInputStream()];
+			result.source = { source: oldToken.getTokenSource(), stream: oldToken.getInputStream() };
 		}
 
 		return result;
@@ -160,7 +161,7 @@ export class CommonToken implements WritableToken {
 			return this.text;
 		}
 
-		let input: CharStream = this.getInputStream();
+		let input: CharStream | undefined = this.getInputStream();
 		if (input == null) {
 			return null;
 		}
@@ -246,13 +247,13 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getTokenSource(): TokenSource {
-		return this.source[0];
+	getTokenSource(): TokenSource | undefined {
+		return this.source.source;
 	}
 
 	@Override
-	getInputStream(): CharStream {
-		return this.source[1];
+	getInputStream(): CharStream | undefined {
+		return this.source.stream;
 	}
 
 	@Override

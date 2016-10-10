@@ -122,10 +122,10 @@ export interface Token {
 
 	/** Gets the {@link TokenSource} which created this token.
 	 */
-	getTokenSource(): TokenSource;
+	getTokenSource(): TokenSource | undefined;
 
 	/**
 	 * Gets the {@link CharStream} from which this token was derived.
 	 */
-	getInputStream(): CharStream;
+	getInputStream(): CharStream | undefined;
 }
