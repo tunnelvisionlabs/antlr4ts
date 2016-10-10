@@ -148,7 +148,11 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
     [Symbol.iterator]() { this._iterator = this.collection.iterator(); return this;}
 
     next(): IteratorResult<T> {
-        if (!this._iterator.hasNext()) return { done: true, value: undefined };
-        return {done: false, value: this._iterator.next()}
+        if (!this._iterator.hasNext()) {
+            // A bit of a hack needed here, tracking under https://github.com/Microsoft/TypeScript/issues/11375
+            return { done: true, value: undefined } as any as IteratorResult<T>;
+        }
+
+        return { done: false, value: this._iterator.next() }
     }
 }
