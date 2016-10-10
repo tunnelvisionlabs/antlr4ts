@@ -832,8 +832,7 @@ function toDOTString(context: PredictionContext): string {
 	visited.set(context, context);
 	contextIds.set(context, contextIds.size);
 	workList.push(context);
-	while (workList.length > 0) {
-		let current: PredictionContext = workList.pop();
+	for (let current = workList.pop(); !!current; current = workList.pop()) {
 		nodes += ("  s") + (contextIds.get(current)) + ('[');
 
 		if (current.size() > 1) {
