@@ -53,7 +53,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>; 
 
-	protected buckets: T[][]; 
+	protected buckets: (T | undefined)[][];
 
 	/** How many elements in set */
 	protected n: number =  0;
@@ -64,8 +64,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
 
 	constructor(
-		 @Nullable 
-		 comparator: EqualityComparator<T> = null, 
+		 comparator?: EqualityComparator<T>,
 		 initialCapacity: number = INITAL_CAPACITY,
 		 initialBucketCapacity: number = INITAL_BUCKET_CAPACITY)  {
 
@@ -86,10 +85,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	protected getOrAddImpl(o: T): T {
 		let b: number =  this.getBucket(o);
-		let bucket: T[] =  this.buckets[b];
+		let bucket =  this.buckets[b];
 
 		// NEW BUCKET
-		if ( bucket==null ) {
+		if (!bucket) {
 			bucket = this.createBucket(this.initialBucketCapacity);
 			bucket[0] = o;
 			this.buckets[b] = bucket;
@@ -99,8 +98,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 		// LOOK FOR IT IN BUCKET
 		for (let i=0; i<bucket.length; i++) {
-			let existing: T =  bucket[i];
-			if ( existing==null ) { // empty slot; not there, add.
+			let existing =  bucket[i];
+			if (!existing) {
+				// empty slot; not there, add.
 				bucket[i] = o;
 				this.n++;
 				return o;
@@ -116,16 +116,25 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return o;
 	}
 
-	get(o: T): T {
+	get(o: T): T | undefined {
 		if ( o==null ) return o;
 		let b: number =  this.getBucket(o);
-		let bucket: T[] =  this.buckets[b];
-		if ( bucket==null ) return null; // no bucket
+		let bucket =  this.buckets[b];
+		if (!bucket) {
+			// no bucket
+			return undefined;
+		}
+
 		for (let e of bucket) {
-			if ( e==null ) return null; // empty slot; not there
+			if (!e) {
+				// empty slot; not there
+				return undefined;
+			}
+
 			if ( this.comparator.equals(e, o) ) return e;
 		}
-		return null;
+
+		return undefined;
 	}
 
 	protected getBucket(o: T): number {
@@ -159,7 +168,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	protected expand(): void {
-		let old: T[][] =  this.buckets;
+		let old =  this.buckets;
 		this.currentPrime += 4;
 		let newCapacity: number =  this.buckets.length * 2;
 		let newTable: T[][] =  this.createBuckets(newCapacity);
@@ -277,15 +286,15 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		let b: number =  this.getBucket(obj);
-		let bucket: T[] =  this.buckets[b];
-		if ( bucket==null ) {
+		let bucket =  this.buckets[b];
+		if (!bucket) {
 			// no bucket
 			return false;
 		}
 
 		for (let i=0; i<bucket.length; i++) {
-			let e: T =  bucket[i];
-			if ( e==null ) {
+			let e =  bucket[i];
+			if (!e) {
 				// empty slot; not there
 				return false;
 			}

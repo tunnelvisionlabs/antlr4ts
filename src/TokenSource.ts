@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// ConvertTo-TS run at 2016-10-04T11:26:57.9604200-07:00
+
 import {CharStream} from './CharStream';
 import {Token} from './Token';
 import {TokenFactory} from './TokenFactory';
@@ -83,8 +85,7 @@ export interface TokenSource {
 	 * the input, or {@code null} if no input stream is available for the token
 	 * source.
 	 */
-	//@Nullable
-	getInputStream(): CharStream;
+	getInputStream(): CharStream | undefined;
 
 	/**
 	 * Gets the name of the underlying input source. This method returns a

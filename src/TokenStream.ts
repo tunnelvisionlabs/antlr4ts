@@ -28,7 +28,9 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {Interval} from './misc';
+// ConvertTo-TS run at 2016-10-04T11:26:58.0433998-07:00
+
+import {Interval} from './misc/Interval';
 import {IntStream} from './IntStream';
 import {RuleContext} from './RuleContext';
 import {Token} from './Token';

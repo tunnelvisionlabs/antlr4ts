@@ -82,8 +82,8 @@ export interface JavaCollection<E> extends JavaIterable<E> {
     add(e:E): boolean;
     addAll(collection: Collection<E>): boolean;
     clear(): void;
-    contains(o:any): boolean;                       // Shouldn't argument be restricted to E?
-    containsAll(collection: Collection<any>)        // Shouldn't argument be restricted to Collection<E>?
+    contains(o:any): boolean;                         // Shouldn't argument be restricted to E?
+    containsAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
     equals(o:any): boolean;
     hashCode(): number;
     isEmpty(): boolean;
@@ -116,6 +116,29 @@ export interface JavaSet<E> extends JavaCollection<E> {
     // toArray(a: E[]): E[];                                 
 }
 
+export interface JavaMap<K, V> extends Equatable {
+    clear(): void;
+    containsKey(key: K): boolean;
+    containsValue(value: V): boolean;
+    entrySet(): JavaSet<JavaMap.Entry<K, V>>;
+    get(key: K): V | undefined;
+    isEmpty(): boolean;
+    keySet(): JavaSet<K>;
+    put(key: K, value: V): V | undefined;
+    putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void;
+    remove(key: K): V | undefined;
+    size(): number;
+    values(): JavaCollection<V>;
+}
+
+export namespace JavaMap {
+    export interface Entry<K, V> extends Equatable {
+        getKey(): K;
+        getValue(): V;
+        setValue(value: V): V;
+    }
+}
+
 /**
  * Collection is a hybrid type can accept either JavaCollection or JavaScript Iterable
  */  
@@ -140,8 +163,12 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
     [Symbol.iterator]() { this._iterator = this.collection.iterator(); return this;}
 
     next(): IteratorResult<T> {
-        if (!this._iterator.hasNext()) return { done: true, value: undefined };
-        return {done: false, value: this._iterator.next()}
+        if (!this._iterator.hasNext()) {
+            // A bit of a hack needed here, tracking under https://github.com/Microsoft/TypeScript/issues/11375
+            return { done: true, value: undefined } as any as IteratorResult<T>;
+        }
+
+        return { done: false, value: this._iterator.next() }
     }
 }
 

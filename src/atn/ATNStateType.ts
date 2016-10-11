@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-export enum ATNStateType {
+export const enum ATNStateType {
 	INVALID_TYPE = 0,
 	BASIC = 1,
 	RULE_START = 2,
