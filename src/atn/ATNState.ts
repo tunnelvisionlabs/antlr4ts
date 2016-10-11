@@ -116,7 +116,7 @@ export abstract class ATNState {
 	];
 
 	/** Which ATN are we in? */
-	atn: ATN = null;
+	atn?: ATN;
 
 	stateNumber: number = ATNState.INVALID_STATE_NUMBER;
 
