@@ -1,6 +1,6 @@
 import * as assert from "assert";
 
-function echo(value?) { return value }
+function echo(value?: any) { return value }
 var x = echo();
 
 describe('Mocha', function() {
@@ -14,7 +14,7 @@ describe('Mocha', function() {
 describe('Equality', function() {
 
 describe('with "var a = undefined;"', function() {
-    var a = undefined;
+    var a: any = undefined;
 
     it('a == undefined', function() {
       assert( a == undefined );
@@ -36,7 +36,7 @@ describe('with "var a = undefined;"', function() {
 
 
 describe('with "var a = null;"', function() {
-    var a = null;
+    var a: any = null;
 
     it('a == undefined                      Surprise! (but useful)', function() {
       assert( a == undefined )

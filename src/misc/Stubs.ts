@@ -67,8 +67,8 @@ export interface JavaCollection<E> extends JavaIterable<E> {
     add(e:E): boolean;
     addAll(collection: Collection<E>): boolean;
     clear(): void;
-    contains(o:any): boolean;                       // Shouldn't argument be restricted to E?
-    containsAll(collection: Collection<any>)        // Shouldn't argument be restricted to Collection<E>?
+    contains(o:any): boolean;                         // Shouldn't argument be restricted to E?
+    containsAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
     equals(o:any): boolean;
     hashCode(): number;
     isEmpty(): boolean;
@@ -99,6 +99,29 @@ export interface JavaSet<E> extends JavaCollection<E> {
     // size(): number;
     // toArray(): any[];                       // Shouldn't return type be restricted to E?                                 
     // toArray(a: E[]): E[];                                 
+}
+
+export interface JavaMap<K, V> extends Equatable {
+    clear(): void;
+    containsKey(key: K): boolean;
+    containsValue(value: V): boolean;
+    entrySet(): JavaSet<JavaMap.Entry<K, V>>;
+    get(key: K): V;
+    isEmpty(): boolean;
+    keySet(): JavaSet<K>;
+    put(key: K, value: V): V;
+    putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void;
+    remove(key: K): V;
+    size(): number;
+    values(): JavaCollection<V>;
+}
+
+export namespace JavaMap {
+    export interface Entry<K, V> extends Equatable {
+        getKey(): K;
+        getValue(): V;
+        setValue(value: V): V;
+    }
 }
 
 /**

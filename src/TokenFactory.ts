@@ -28,6 +28,8 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// ConvertTo-TS run at 2016-10-04T11:26:57.8783640-07:00
+
 import {CharStream} from './CharStream';
 import {Token} from './Token';
 import {TokenSource} from './TokenSource';
@@ -54,5 +56,5 @@ export interface TokenFactory {
 
 	/** Generically useful */
 	//@NotNull
-	create(type: number, text: string): Token;
+	createSimple(type: number, text: string): Token;
 }

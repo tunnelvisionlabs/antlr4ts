@@ -15,11 +15,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] ANTLRInputStream.java
 * [ ] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
-* [ ] BufferedTokenStream.java
+* [x] BufferedTokenStream.java
 * [x] CharStream.java
-* [ ] CommonToken.java
-* [ ] CommonTokenFactory.java
-* [ ] CommonTokenStream.java
+* [x] CommonToken.java
+* [x] CommonTokenFactory.java
+* [x] CommonTokenStream.java
 * [ ] ConsoleErrorListener.java
 * [ ] DefaultErrorStrategy.java
 * [ ] Dependents.java
@@ -31,7 +31,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] Lexer.java
 * [ ] LexerInterpreter.java
 * [ ] LexerNoViableAltException.java
-* [ ] ListTokenSource.java
+* [x] ListTokenSource.java
 * [ ] NoViableAltException.java
 * [ ] Parser.java
 * [ ] ParserErrorListener.java
@@ -53,34 +53,35 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] TokenStreamRewriter.java
 * ~~[ ] UnbufferedCharStream.java~~ - for now use StringCharStream,ts,
 * [ ] UnbufferedTokenStream.java
-* [ ] Vocabulary.java
-* [ ] VocabularyImpl.java
+* [x] Vocabulary.java
+* [x] VocabularyImpl.java
 * [x] WritableToken.java
-* [ ] atn\AbstractPredicateTransition.java
-* [ ] atn\ActionTransition.java
+* [x] atn\AbstractPredicateTransition.java
+* [x] atn\ActionTransition.java
 * [ ] atn\AmbiguityInfo.java
-* [ ] atn\ArrayPredictionContext.java
+* [x] atn\ArrayPredictionContext.java
 * [ ] atn\ATN.java
 * [ ] atn\ATNConfig.java
 * [ ] atn\ATNConfigSet.java
-* [ ] atn\ATNDeserializationOptions.java
+* [x] atn\ATNDeserializationOptions.java
 * [ ] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
 * [ ] atn\ATNSimulator.java
-* [ ] atn\ATNState.java
-* [ ] atn\ATNType.java
-* [ ] atn\AtomTransition.java
-* [ ] atn\BasicBlockStartState.java
-* [ ] atn\BasicState.java
-* [ ] atn\BlockEndState.java
-* [ ] atn\BlockStartState.java
+* [x] atn\ATNState.java
+  * [x] atn\ATNStateType.ts
+* [x] atn\ATNType.java
+* [x] atn\AtomTransition.java
+* [x] atn\BasicBlockStartState.java
+* [x] atn\BasicState.java
+* [x] atn\BlockEndState.java
+* [x] atn\BlockStartState.java
 * [ ] atn\ConflictInfo.java
 * [ ] atn\ContextSensitivityInfo.java
 * [ ] atn\DecisionEventInfo.java
 * [ ] atn\DecisionInfo.java
-* [ ] atn\DecisionState.java
-* [ ] atn\EmptyPredictionContext.java
-* [ ] atn\EpsilonTransition.java
+* [x] atn\DecisionState.java
+* [x] atn\EmptyPredictionContext.java
+* [x] atn\EpsilonTransition.java
 * [ ] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
 * [ ] atn\LexerActionExecutor.java
@@ -97,57 +98,64 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\LexerTypeAction.java
 * [ ] atn\LL1Analyzer.java
 * [ ] atn\LookaheadEventInfo.java
-* [ ] atn\LoopEndState.java
-* [ ] atn\NotSetTransition.java
+* [x] atn\LoopEndState.java
+* [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
 * [ ] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
-* [ ] atn\PlusBlockStartState.java
-* [ ] atn\PlusLoopbackState.java
+* [x] atn\PlusBlockStartState.java
+* [x] atn\PlusLoopbackState.java
 * [ ] atn\PrecedencePredicateTransition.java
 * [ ] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
-* [ ] atn\PredictionContext.java
-* [ ] atn\PredictionContextCache.java
+* [x] atn\PredictionContext.java
+  * [ ] PredictionContext.fromRuleContext
+  * [ ] PredictionContext.toString
+  * [ ] PredictionContext.toStrings
+* [x] atn\PredictionContextCache.java
 * [ ] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
-* [ ] atn\RangeTransition.java
-* [ ] atn\RuleStartState.java
-* [ ] atn\RuleStopState.java
-* [ ] atn\RuleTransition.java
+* [x] atn\RangeTransition.java
+* [x] atn\RuleStartState.java
+* [x] atn\RuleStopState.java
+* [x] atn\RuleTransition.java
 * [ ] atn\SemanticContext.java
-* [ ] atn\SetTransition.java
+* [x] atn\SetTransition.java
 * [ ] atn\SimulatorState.java
-* [ ] atn\SingletonPredictionContext.java
-* [ ] atn\StarBlockStartState.java
-* [ ] atn\StarLoopbackState.java
-* [ ] atn\StarLoopEntryState.java
-* [ ] atn\TokensStartState.java
-* [ ] atn\Transition.java
-* [ ] atn\WildcardTransition.java
-* [ ] dfa\AbstractEdgeMap.java
+* [x] atn\SingletonPredictionContext.java
+* [x] atn\StarBlockStartState.java
+* [x] atn\StarLoopbackState.java
+* [x] atn\StarLoopEntryState.java
+* [x] atn\TokensStartState.java
+* [x] atn\Transition.java
+  * [x] atn\TransitionType.ts
+  * [ ] Transition.serializationTypes?
+* [x] atn\WildcardTransition.java
+* [x] dfa\AbstractEdgeMap.java
 * [ ] dfa\AcceptStateInfo.java
-* [ ] dfa\ArrayEdgeMap.java
+* [x] dfa\ArrayEdgeMap.java
 * [ ] dfa\DFA.java
 * [ ] dfa\DFASerializer.java
 * [ ] dfa\DFAState.java
-* [ ] dfa\EdgeMap.java
-* [ ] dfa\EmptyEdgeMap.java
+* [x] dfa\EdgeMap.java
+* [x] dfa\EmptyEdgeMap.java
 * [ ] dfa\LexerDFASerializer.java
-* [ ] dfa\SingletonEdgeMap.java
-* [ ] dfa\SparseEdgeMap.java
+* [x] dfa\SingletonEdgeMap.java
+* [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Args.java
 * [x] misc\Array2DHashSet.java
 * [ ] misc\DoubleKeyMap.java
 * [x] misc\EqualityComparator.java
 * [ ] misc\FlexibleHashMap.java
-* [ ] misc\Func0.java
-* [ ] misc\Func1.java
+* [x] ~~misc\Func0.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Func1.java~~ (Unnecessary in TypeScript)
 * [ ] misc\IntegerList.java
 * [ ] misc\IntegerStack.java
 * [x] misc\Interval.java
-* [ ] misc\IntervalSet.java
+* [x] misc\IntervalSet.java
+  * [ ] IntervalSet.toIntegerList
+  * [ ] IntervalSet.toSet
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java
@@ -158,36 +166,36 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
 * [ ] misc\ParseCancellationException.java
-* [ ] misc\Predicate.java
+* [x] ~~misc\Predicate.java~~ (Unnecessary in TypeScript)
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
-* [ ] misc\TestRig.java
-* [ ] misc\Tuple.java
-* [ ] misc\Tuple2.java
-* [ ] misc\Tuple3.java
+* [x] ~~misc\TestRig.java~~ (Deprecated prior to TypeScript port)
+* [x] ~~misc\Tuple.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple2.java~~ (Unnecessary in TypeScript)
+* [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Utils.java
-* [ ] tree\AbstractParseTreeVisitor.java
+* [x] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
-* [ ] tree\ErrorNodeImpl.java
+* [x] tree\ErrorNodeImpl.java
 * [x] tree\ParseTree.java
-* [ ] tree\ParseTreeListener.java
+* [x] tree\ParseTreeListener.java
 * [ ] tree\ParseTreeProperty.java
 * [x] tree\ParseTreeVisitor.java
 * [ ] tree\ParseTreeWalker.java
 * [x] tree\RuleNode.java
 * [x] tree\SyntaxTree.java
 * [x] tree\TerminalNode.java
-* [ ] tree\TerminalNodeImpl.java
+* [x] tree\TerminalNodeImpl.java
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
-* [ ] tree\pattern\Chunk.java
+* [x] tree\pattern\Chunk.java
 * [ ] tree\pattern\ParseTreeMatch.java
 * [ ] tree\pattern\ParseTreePattern.java
 * [ ] tree\pattern\ParseTreePatternMatcher.java
-* [ ] tree\pattern\RuleTagToken.java
-* [ ] tree\pattern\TagChunk.java
-* [ ] tree\pattern\TextChunk.java
-* [ ] tree\pattern\TokenTagToken.java
+* [x] tree\pattern\RuleTagToken.java
+* [x] tree\pattern\TagChunk.java
+* [x] tree\pattern\TextChunk.java
+* [x] tree\pattern\TokenTagToken.java
 * [ ] tree\xpath\XPath.java
 * [ ] tree\xpath\XPathElement.java
 * [ ] tree\xpath\XPathLexer.g4

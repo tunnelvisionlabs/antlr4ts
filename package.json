@@ -6,6 +6,8 @@
   "scripts": {
     "prepublish": "tsc",
     "test": "tsc & mocha",
+    "set": "set",
+    "cover": "tsc & istanbul cover node_modules/mocha/bin/_mocha && istanbul report",
     "dev-test-watch": "mocha-typescript-watch"
   },
   "repository": {
@@ -25,6 +27,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
+    "istanbul": "^0.4.5",
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
     "source-map-support": "^0.4.3",
