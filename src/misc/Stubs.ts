@@ -194,7 +194,7 @@ export namespace ATN {
 export class ATNConfig{
     getAlt(): number { throw new Error("Not implemented"); }
 }
-export class ATNConfigSet extends Array2DHashSet<ATNConfig> {
+export class ATNConfigSet  {
 }
 
 export class ATNInterpreter {
