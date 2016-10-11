@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.0343500-07:00
 
 import { CharStream } from '../../CharStream';
-import { NotNull, Nullable, Override } from '../../misc/Stubs';
+import { NotNull, Override } from '../../misc/Stubs';
 import { Token } from '../../Token';
 import { TokenSource } from '../../TokenSource';
 
@@ -53,7 +53,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * This is the backing field for {@link #getLabel}.
 	 */
-	private label: string;
+	private label?: string;
 
 	/**
 	 * Constructs a new instance of {@link RuleTagToken} with the specified rule
@@ -67,7 +67,7 @@ export class RuleTagToken implements Token {
 	 * @exception IllegalArgumentException if {@code ruleName} is {@code null}
 	 * or empty.
 	 */
-	constructor(@NotNull ruleName: string, bypassTokenType: number, @Nullable label: string = null) {
+	constructor(@NotNull ruleName: string, bypassTokenType: number, label?: string) {
 		if (ruleName == null || ruleName.length === 0) {
 			throw new Error("ruleName cannot be null or empty.");
 		}
@@ -93,8 +93,7 @@ export class RuleTagToken implements Token {
 	 * @return The name of the label associated with the rule tag, or
 	 * {@code null} if this is an unlabeled rule tag.
 	 */
-	@Nullable
-	getLabel(): string {
+	getLabel(): string | undefined {
 		return this.label;
 	}
 
