@@ -209,8 +209,9 @@ export class IntervalSet implements IntSet {
 	/** {@inheritDoc} */
 	@Override
 	complement(vocabulary: IntSet): IntervalSet {
-		if (vocabulary == null || vocabulary.isNil()) {
-			return null; // nothing in common with null set
+		if (vocabulary.isNil()) {
+			// nothing in common with null set
+			return IntervalSet.EMPTY_SET;
 		}
 
 		let vocabularyIS: IntervalSet;
@@ -241,17 +242,16 @@ export class IntervalSet implements IntSet {
 
 	/**
 	 * Compute the set difference between two interval sets. The specific
-	 * operation is {@code left - right}. If either of the input sets is
-	 * {@code null}, it is treated as though it was an empty set.
+	 * operation is {@code left - right}.
 	 */
 	@NotNull
-	static subtract( @Nullable left: IntervalSet, @Nullable right: IntervalSet): IntervalSet {
-		if (left == null || left.isNil()) {
+	static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {
+		if (left.isNil()) {
 			return new IntervalSet();
 		}
 
 		let result: IntervalSet = new IntervalSet(left.intervals);
-		if (right == null || right.isNil()) {
+		if (right.isNil()) {
 			// right set has no elements; just return the copy of the current set
 			return result;
 		}
@@ -274,8 +274,8 @@ export class IntervalSet implements IntSet {
 				continue;
 			}
 
-			let beforeCurrent: Interval = null;
-			let afterCurrent: Interval = null;
+			let beforeCurrent: Interval | undefined;
+			let afterCurrent: Interval | undefined;
 			if (rightInterval.a > resultInterval.a) {
 				beforeCurrent = new Interval(resultInterval.a, rightInterval.a - 1);
 			}
@@ -284,8 +284,8 @@ export class IntervalSet implements IntSet {
 				afterCurrent = new Interval(rightInterval.b + 1, resultInterval.b);
 			}
 
-			if (beforeCurrent != null) {
-				if (afterCurrent != null) {
+			if (beforeCurrent) {
+				if (afterCurrent) {
 					// split the current interval into two
 					result.intervals[resultI] = beforeCurrent;
 					result.intervals.splice(resultI + 1, 0, afterCurrent);
@@ -301,7 +301,7 @@ export class IntervalSet implements IntSet {
 				}
 			}
 			else {
-				if (afterCurrent != null) {
+				if (afterCurrent) {
 					// replace the current interval
 					result.intervals[resultI] = afterCurrent;
 					rightI++;
@@ -332,13 +332,14 @@ export class IntervalSet implements IntSet {
 	/** {@inheritDoc} */
 	@Override
 	and(other: IntSet): IntervalSet {
-		if (other == null) { //|| !(other instanceof IntervalSet) ) {
-			return null; // nothing in common with null set
+		if (other.isNil()) { //|| !(other instanceof IntervalSet) ) {
+			// nothing in common with null set
+			return new IntervalSet();
 		}
 
 		let myIntervals: Interval[] = this.intervals;
 		let theirIntervals: Interval[] = (other as IntervalSet).intervals;
-		let intersection: IntervalSet = null;
+		let intersection: IntervalSet | undefined;
 		let mySize: number = myIntervals.length;
 		let theirSize: number = theirIntervals.length;
 		let i: number = 0;
@@ -358,25 +359,28 @@ export class IntervalSet implements IntSet {
 			}
 			else if (mine.properlyContains(theirs)) {
 				// overlap, add intersection, get next theirs
-				if (intersection == null) {
+				if (!intersection) {
 					intersection = new IntervalSet();
 				}
+
 				intersection.addRange(mine.intersection(theirs));
 				j++;
 			}
 			else if (theirs.properlyContains(mine)) {
 				// overlap, add intersection, get next mine
-				if (intersection == null) {
+				if (!intersection) {
 					intersection = new IntervalSet();
 				}
+
 				intersection.addRange(mine.intersection(theirs));
 				i++;
 			}
 			else if (!mine.disjoint(theirs)) {
 				// overlap, add intersection
-				if (intersection == null) {
+				if (!intersection) {
 					intersection = new IntervalSet();
 				}
+
 				intersection.addRange(mine.intersection(theirs));
 				// Move the iterator of lower range [a..b], but not
 				// the upper range as it may contain elements that will collide
@@ -393,9 +397,11 @@ export class IntervalSet implements IntSet {
 				}
 			}
 		}
-		if (intersection == null) {
+
+		if (!intersection) {
 			return new IntervalSet();
 		}
+
 		return intersection;
 	}
 

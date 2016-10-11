@@ -44,7 +44,7 @@ import {SyntaxTree} from './SyntaxTree';
 export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods
 	//@Override
-	getParent(): ParseTree;
+	getParent(): ParseTree | undefined;
 
 	//@Override
 	getChild(i: number): ParseTree;

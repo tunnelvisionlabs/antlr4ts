@@ -155,8 +155,8 @@ export class Interval implements Equatable {
 	 *  within {@code this}, which would result in two disjoint intervals
 	 *  instead of the single one returned by this method.
 	 */
-	differenceNotProperlyContained(other: Interval): Interval {
-		let diff: Interval = null;
+	differenceNotProperlyContained(other: Interval): Interval | undefined {
+		let diff: Interval | undefined;
 		if (other.startsBeforeNonDisjoint(this)) {
 			// other.a to left of this.a (or same)
 			diff = Interval.of(Math.max(this.a, other.b + 1), this.b);

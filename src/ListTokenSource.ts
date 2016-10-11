@@ -27,7 +27,7 @@ export class ListTokenSource implements TokenSource {
 	 * the next token in {@link #tokens} (or the previous token if the end of
 	 * the input has been reached).
 	 */
-	private sourceName: string;
+	private sourceName?: string;
 
 	/**
 	 * The index into {@link #tokens} of token to return by the next call to
@@ -60,7 +60,7 @@ export class ListTokenSource implements TokenSource {
 	 *
 	 * @exception NullPointerException if {@code tokens} is {@code null}
 	 */
-	constructor(@NotNull tokens: Token[], sourceName: string = null) {
+	constructor(@NotNull tokens: Token[], sourceName?: string) {
 		if (tokens == null) {
 			throw new Error("tokens cannot be null");
 		}
@@ -184,7 +184,7 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	getSourceName(): string {
-		if (this.sourceName != null) {
+		if (this.sourceName) {
 			return this.sourceName;
 		}
 

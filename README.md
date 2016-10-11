@@ -2,10 +2,12 @@
 TypeScript/JavaScript target for ANTLR 4
 
 ## Dev setup with Visual Studio
+Any edition of [Visual Studio 2015](https://www.visualstudio.com/vs/) (or greater) should work, including Communitity Edition.
+You'll want to be sure you have the following VS extensions installed:
+- [Node Tools for Visual Studio 1.2](https://www.visualstudio.com/vs/node-js/) (or greater)
+- [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593) 2.03 or greater.
 
-Start by installing [TypeScript for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48593) to get the latest integration with TypeScript 2.0 features.
-
-You should be able to run tests from the Test Explorer, Test Menu, or by clicking on the margin icon next to specific tests or suites.   To if you create new test files, you will need to set the TestFramework property on the file to "Mocha".
+You ***should*** be able to run tests from the Test Explorer, etc... but there seems to be an unresolved problem making this work, for now use the command-line method below to be sure you run them all.
 
 ## Dev setup with NPM
 Of course, you'll need to install Node.js for your platform.   https://nodejs.org/en/

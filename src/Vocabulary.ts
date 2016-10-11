@@ -82,8 +82,7 @@ export interface Vocabulary {
 	 * @return The string literal associated with the specified token type, or
 	 * {@code null} if no string literal is associated with the type.
 	 */
-	//@Nullable
-	getLiteralName(tokenType: number): string;
+	getLiteralName(tokenType: number): string | undefined;
 
 	/**
 	 * Gets the symbolic name associated with a token type. The string returned
@@ -128,8 +127,7 @@ export interface Vocabulary {
 	 * @return The symbolic name associated with the specified token type, or
 	 * {@code null} if no symbolic name is associated with the type.
 	 */
-	//@Nullable
-	getSymbolicName(tokenType: number): string;
+	getSymbolicName(tokenType: number): string | undefined;
 
 	/**
 	 * Gets the display name of a token type.
