@@ -220,7 +220,7 @@ export class BufferedTokenStream implements TokenStream {
 	/** Get all tokens from start..stop inclusively. */
 	getRange(start: number, stop: number): Token[] {
 		if (start < 0 || stop < 0) {
-			return null;
+			return [];
 		}
 
 		this.lazyInit();
@@ -243,12 +243,17 @@ export class BufferedTokenStream implements TokenStream {
 
 	@Override
 	LA(i: number) {
-		return this.LT(i).getType();
+		let token = this.LT(i);
+		if (!token) {
+			return Token.INVALID_TYPE;
+		}
+
+		return token.getType();
 	}
 
-	protected LB(k: number): Token {
+	protected LB(k: number): Token | undefined {
 		if ((this.p - k) < 0) {
-			return null;
+			return undefined;
 		}
 
 		return this.tokens[this.p - k];
@@ -256,10 +261,10 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	LT(k: number): Token {
+	LT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
-			return null;
+			return undefined;
 		}
 
 		if (k < 0) {
@@ -331,7 +336,7 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		if (start > stop) {
-			return null;
+			return [];
 		}
 
 		if (types == null) {
@@ -345,10 +350,6 @@ export class BufferedTokenStream implements TokenStream {
 		// list = tokens[start:stop]:{T t, t.getType() in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
 		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.getType()); });
-
-		if (filteredTokens.length === 0) {
-			filteredTokens = null;
-		}
 
 		return filteredTokens;
 	}
@@ -443,12 +444,12 @@ export class BufferedTokenStream implements TokenStream {
 
 		if (tokenIndex === 0) {
 			// obviously no tokens can appear before the first token
-			return null;
+			return [];
 		}
 
 		let prevOnChannel: number = this.previousTokenOnChannel(tokenIndex - 1, Lexer.DEFAULT_TOKEN_CHANNEL);
 		if (prevOnChannel === tokenIndex - 1) {
-			return null;
+			return [];
 		}
 
 		// if none onchannel to left, prevOnChannel=-1 then from=0
@@ -471,10 +472,6 @@ export class BufferedTokenStream implements TokenStream {
 					hidden.push(t);
 				}
 			}
-		}
-
-		if (hidden.length === 0) {
-			return null;
 		}
 
 		return hidden;
