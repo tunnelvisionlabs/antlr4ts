@@ -34,10 +34,10 @@
  *  It is the most abstract interface for all the trees used by ANTLR.
  */
 export interface Tree {
-	/** The parent of this node. If the return value is null, then this
+	/** The parent of this node. If the return value is `undefined`, then this
 	 *  node is the root of the tree.
 	 */
-	getParent(): Tree;
+	getParent(): Tree | undefined;
 
 	/**
 	 * This method returns whatever object represents the data at this note. For
@@ -48,7 +48,10 @@ export interface Tree {
 	 */
 	getPayload(): any;
 
-	/** If there are children, get the {@code i}th value indexed from 0. */
+	/**
+	 * If there are children, get the `i`th value indexed from 0. Throws a `RangeError` if `i` is less than zero, or
+	 * greater than or equal to `getChildCount()`.
+	 */
 	getChild(i: number): Tree;
 
 	/** How many children are there? If there is none, then this
