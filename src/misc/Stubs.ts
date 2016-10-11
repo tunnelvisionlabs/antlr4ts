@@ -183,6 +183,11 @@ export class ATN {
     nextTokens(atnState: ATNState, p1?: void): IntervalSet { throw new Error("Not implemented"); }
 }
 
+export namespace ATN {
+    public const INVALID_ALT_NUMBER = 0;
+
+}
+
 export class ATNConfig{
     getAlt(): number { throw new Error("Not implemented"); }
 }
