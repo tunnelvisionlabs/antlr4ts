@@ -178,9 +178,7 @@ export class ATN {
     getExpectedTokens(offendingState: number, ruleContext?: RuleContext): IntervalSet {
          throw new Error("Not implemented");
     }
-
     states: ATNState[];
-
     nextTokens(atnState: ATNState): IntervalSet;
     nextTokens(atnState: ATNState, p1: void): IntervalSet;
     nextTokens(atnState: ATNState, p1?: void): IntervalSet { throw new Error("Not implemented"); }
@@ -188,7 +186,6 @@ export class ATN {
 
 export namespace ATN {
     const INVALID_ALT_NUMBER = 0;
-
 }
 
 export class ATNConfig{
@@ -202,14 +199,11 @@ export class ATNInterpreter {
 }
 export class ATNState {
     transition(number: number): Transition { throw new Error("Not implemented"); }
-
     getStateType(): ATNStateType { throw new Error("Not implemented"); }
-
     ruleIndex: number;
 }
 export abstract class Recognizer<T, T2>{
     getATN(): ATN { throw new Error("Not implemented"); }
-
     getState(): number { throw new Error("Not implemented"); }
 }
 
@@ -222,62 +216,40 @@ export class Vocabulary{
 }
 
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
+    _ctx: ParserRuleContext;
     getInputStream(): TokenStream { throw new Error("Not implemented"); }
     getInterpreter(): ATNInterpreter { throw new Error("Not implemented"); }
-
     getCurrentToken():Token { throw new Error("Not implemented"); }
-
-    _ctx: ParserRuleContext;
-
     getState(): number { throw new Error("Not implemented"); }
-
     notifyErrorListeners(message: string, recognitionException: RecognitionException): void;
     notifyErrorListeners(offendingToken: string): void;
-    notifyErrorListeners(...args: any[]): void {
-         throw new Error("Not implemented");
-    }
-
+    notifyErrorListeners(...args: any[]): void { throw new Error("Not implemented");}
     consume() { throw new Error("Not implemented"); }
-
     isExpectedToken(la: number): boolean { throw new Error("Not implemented"); }
-
     getExpectedTokens(): IntervalSet { throw new Error("Not implemented"); }
-
     getVocabulary(): Vocabulary { throw new Error("Not implemented"); }
-
     getRuleNames(): string[] { throw new Error("Not implemented"); }
-
     getContext(): ParserRuleContext { throw new Error("Not implemented"); }
 }
 export class ParserRuleContext extends RuleContext {
     getRuleIndex(): number { throw new Error("Not implemented"); }
-
     exception: Error;
-
     getParent(): ParserRuleContext { throw new Error("Not implemented"); }
 }
 export class IntervalSet {
     contains(e: number) { throw new Error("Not implemented"); }
-
     add(e: number) { throw new Error("Not implemented"); }
-
     or(other: IntervalSet): IntervalSet { throw new Error("Not implemented"); }
-
     toString(vocabulary?: Vocabulary): string { throw new Error("Not implemented"); }
-
     getMinElement(): number { throw new Error("Not implemented"); }
-
     addAll(intervalSet: IntervalSet) { throw new Error("Not implemented"); }
-
     remove(epsilon: number) { throw new Error("Not implemented"); }
 }
 export class PredictionContext {
     static fromRuleContext(atn: ATN, parserRuleContext: ParserRuleContext) { throw new Error("Not implemented"); }
 }
-
 export abstract class Transition {
     target: ATNState;
-
 }
 
 export class RuleTransition extends Transition {
@@ -285,7 +257,6 @@ export class RuleTransition extends Transition {
     precidence: number;
     ruleIndex: number;
 }
-
 export abstract class AbstractPredicateTransition extends Transition {}
 export class PredicateTransition extends AbstractPredicateTransition {
     ruleIndex: number;
