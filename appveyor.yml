@@ -1,0 +1,12 @@
+version: 1.0.{build}
+image: Visual Studio 2015
+init:
+- git config --global core.autocrlf true
+install:
+- ps: >-
+    Install-Product node 6
+
+    npm install
+build: off
+test_script:
+- npm test
