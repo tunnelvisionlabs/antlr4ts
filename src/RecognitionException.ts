@@ -43,144 +43,133 @@ import {Token} from "./Token";
 
 // Stubs
 import {
-    Nullable, SuppressWarnings, Parser, ParserRuleContext,
+    SuppressWarnings, Parser, ParserRuleContext,
     IntervalSet, Recognizer } from "./misc/Stubs";
 
 export class RecognitionException extends Error {
-	// private static serialVersionUID: number =  -3861826954750022374L;
+    // private static serialVersionUID: number =  -3861826954750022374L;
 
-	/** The {@link Recognizer} where this exception originated. */
-	@Nullable
-	private recognizer?: Recognizer<any,any>; 
+    /** The {@link Recognizer} where this exception originated. */
+    private recognizer?: Recognizer<any, any>;
 
-	@Nullable
-	private ctx?: RuleContext; 
+    private ctx?: RuleContext;
 
-	@Nullable
-	private input?: IntStream; 
+    private input?: IntStream;
 
-	/**
-	 * The current {@link Token} when an error occurred. Since not all streams
-	 * support accessing symbols by index, we have to track the {@link Token}
-	 * instance itself.
-	 */
-	private offendingToken: Token; 
+    /**
+     * The current {@link Token} when an error occurred. Since not all streams
+     * support accessing symbols by index, we have to track the {@link Token}
+     * instance itself.
+     */
+    private offendingToken?: Token;
 
-	private offendingState: number =  -1;
+    private offendingState: number = -1;
 
-	 constructor(lexer: Lexer | null | undefined, 
-			     input: CharStream);
+    constructor(lexer: Lexer | null | undefined,
+        input: CharStream);
+    constructor(recognizer?: Recognizer<Token, any>,
+        input?: IntStream,
+        ctx?: ParserRuleContext);
+    constructor(message: string,
+        recognizer?: Recognizer<Token, any>,
+        input?: IntStream,
+        ctx?: ParserRuleContext);
+    constructor(...args: any[]) {
+        super((typeof args[0] === 'string') ? args[0] : undefined);
+        if (args[0] instanceof Lexer) {
+            [this.recognizer, this.input] = args;
+        } else if (args[0] instanceof Recognizer) {
+            [this.recognizer, this.input, this.ctx] = args;
+        } else /* string */
+        {
+            [this.recognizer, this.input, this.ctx] = args.slice(1);
+        }
+        if (this.recognizer) this.offendingState = this.recognizer.getState();
+    }
 
-	 constructor(recognizer?: Recognizer<Token,any>, 
-				input?: IntStream,
-                ctx?: ParserRuleContext); 
+    /**
+     * Get the ATN state number the parser was in at the time the error
+     * occurred. For {@link NoViableAltException} and
+     * {@link LexerNoViableAltException} exceptions, this is the
+     * {@link DecisionState} number. For others, it is the state whose outgoing
+     * edge we couldn't match.
+     *
+     * <p>If the state number is not known, this method returns -1.</p>
+     */
+    getOffendingState(): number {
+        return this.offendingState;
+    }
 
-	 constructor(message: string, 
-				recognizer?: Recognizer<Token,any>,
-				input?: IntStream,
-                ctx?: ParserRuleContext);
+    protected setOffendingState(offendingState: number): void {
+        this.offendingState = offendingState;
+    }
 
-     constructor(...args: any[]) {
-         super((typeof args[0] === 'string') ? args[0] : undefined);
-         if (args[0] instanceof Lexer) {
-             [this.recognizer, this.input] = args;
-         } else if (args[0] instanceof Recognizer) {
-             [this.recognizer, this.input, this.ctx] = args;
-         } else /* string */
-         {
-             [this.recognizer, this.input, this.ctx] = args.slice(1);
-         }
-		if ( this.recognizer ) this.offendingState = this.recognizer.getState();
-	}
-
-	/**
-	 * Get the ATN state number the parser was in at the time the error
-	 * occurred. For {@link NoViableAltException} and
-	 * {@link LexerNoViableAltException} exceptions, this is the
-	 * {@link DecisionState} number. For others, it is the state whose outgoing
-	 * edge we couldn't match.
-	 *
-	 * <p>If the state number is not known, this method returns -1.</p>
-	 */
-	getOffendingState(): number {
-		return this.offendingState;
-	}
-
-	protected setOffendingState(offendingState: number): void {
-		this.offendingState = offendingState;
-	}
-
-	/**
-	 * Gets the set of input symbols which could potentially follow the
-	 * previously matched symbol at the time this exception was thrown.
-	 *
-	 * <p>If the set of expected tokens is not known and could not be computed,
-	 * this method returns {@code null}.</p>
-	 *
-	 * @return The set of token types that could potentially follow the current
-	 * state in the ATN, or {@code null} if the information is not available.
-	 */
-	@Nullable
-	getExpectedTokens(): IntervalSet | undefined {
-	    if (this.recognizer) {
+    /**
+     * Gets the set of input symbols which could potentially follow the
+     * previously matched symbol at the time this exception was thrown.
+     *
+     * <p>If the set of expected tokens is not known and could not be computed,
+     * this method returns {@code null}.</p>
+     *
+     * @return The set of token types that could potentially follow the current
+     * state in the ATN, or {@code null} if the information is not available.
+     */
+    getExpectedTokens(): IntervalSet | undefined {
+        if (this.recognizer) {
             return this.recognizer.getATN()
                 .getExpectedTokens(this.offendingState, this.ctx);
-	    }
-	    return undefined;
-	}
+        }
+        return undefined;
+    }
 
-	/**
-	 * Gets the {@link RuleContext} at the time this exception was thrown.
-	 *
-	 * <p>If the context is not available, this method returns {@code null}.</p>
-	 *
-	 * @return The {@link RuleContext} at the time this exception was thrown.
-	 * If the context is not available, this method returns {@code null}.
-	 */
-	@Nullable
-	getContext(): RuleContext | undefined {
-		return this.ctx;
-	}
+    /**
+     * Gets the {@link RuleContext} at the time this exception was thrown.
+     *
+     * <p>If the context is not available, this method returns {@code null}.</p>
+     *
+     * @return The {@link RuleContext} at the time this exception was thrown.
+     * If the context is not available, this method returns {@code null}.
+     */
+    getContext(): RuleContext | undefined {
+        return this.ctx;
+    }
 
-	/**
-	 * Gets the input stream which is the symbol source for the recognizer where
-	 * this exception was thrown.
-	 *
-	 * <p>If the input stream is not available, this method returns {@code null}.</p>
-	 *
-	 * @return The input stream which is the symbol source for the recognizer
-	 * where this exception was thrown, or {@code null} if the stream is not
-	 * available.
-	 */
-	@Nullable
-	getInputStream(): IntStream | undefined {
-		return this.input;
-	}
+    /**
+     * Gets the input stream which is the symbol source for the recognizer where
+     * this exception was thrown.
+     *
+     * <p>If the input stream is not available, this method returns {@code null}.</p>
+     *
+     * @return The input stream which is the symbol source for the recognizer
+     * where this exception was thrown, or {@code null} if the stream is not
+     * available.
+     */
+    getInputStream(): IntStream | undefined {
+        return this.input;
+    }
 
-	@Nullable
-    getOffendingToken(recognizer?: Recognizer<Token,any>): Token | undefined {
-	    if (recognizer && recognizer !== this.recognizer) return undefined;
-		return this.offendingToken;
-	}
+    getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
+        if (recognizer && recognizer !== this.recognizer) return undefined;
+        return this.offendingToken;
+    }
 
     protected setOffendingToken<Symbol extends Token>(
         recognizer: Recognizer<Symbol, any>,
-        @Nullable offendingToken: Symbol): void {
-		if (recognizer === this.recognizer) {
-			this.offendingToken = offendingToken;
-		}
-	}
+        offendingToken?: Symbol): void {
+        if (recognizer === this.recognizer) {
+            this.offendingToken = offendingToken;
+        }
+    }
 
-	/**
-	 * Gets the {@link Recognizer} where this exception occurred.
-	 *
-	 * <p>If the recognizer is not available, this method returns {@code null}.</p>
-	 *
-	 * @return The recognizer where this exception occurred, or {@code null} if
-	 * the recognizer is not available.
-	 */
-	@Nullable
-	getRecognizer() {
-		return this.recognizer;
-	}
+    /**
+     * Gets the {@link Recognizer} where this exception occurred.
+     *
+     * <p>If the recognizer is not available, this method returns {@code null}.</p>
+     *
+     * @return The recognizer where this exception occurred, or {@code null} if
+     * the recognizer is not available.
+     */
+    getRecognizer() {
+        return this.recognizer;
+    }
 }

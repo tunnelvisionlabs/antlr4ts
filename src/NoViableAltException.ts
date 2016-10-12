@@ -39,30 +39,28 @@ import {Token} from "./Token";
 import {TokenStream } from "./TokenStream";
 
 
-
 // Stubs
 import {
-    Nullable, NotNull, Recognizer, Parser, ParserRuleContext,
+    NotNull, Recognizer, Parser, ParserRuleContext,
     ATNConfigSet
-} from "./misc/Stubs";
+    } from "./misc/Stubs";
 
 
 export class NoViableAltException extends RecognitionException {
-	//private static serialVersionUID: number =  5096000008992867052L;
+    //private static serialVersionUID: number =  5096000008992867052L;
 
-	/** Which configurations did we try at input.index() that couldn't match input.LT(1)? */
-	@Nullable
-	private deadEndConfigs?: ATNConfigSet; 
+    /** Which configurations did we try at input.index() that couldn't match input.LT(1)? */
+    private deadEndConfigs?: ATNConfigSet;
 
-	/** The token object at the start index; the input stream might
-	 * 	not be buffering tokens so get a reference to it. (At the
-	 *  time the error occurred, of course the stream needs to keep a
-	 *  buffer all of the tokens but later we might not have access to those.)
-	 */
-	@NotNull
-	private startToken: Token; 
+    /** The token object at the start index; the input stream might
+     * 	not be buffering tokens so get a reference to it. (At the
+     *  time the error occurred, of course the stream needs to keep a
+     *  buffer all of the tokens but later we might not have access to those.)
+     */
+    @NotNull
+    private startToken: Token;
 
-    constructor( recognizer:Parser );
+    constructor(recognizer: Parser);
     constructor(
         recognizer: Recognizer<Token, any>,
         input: TokenStream,
@@ -70,14 +68,13 @@ export class NoViableAltException extends RecognitionException {
         offendingToken: Token,
         deadEndConfigs: ATNConfigSet,
         ctx: ParserRuleContext);
-
     constructor(
-            recognizer: Recognizer<Token, any>, 
-            input?: TokenStream,
-			startToken?: Token,
-			offendingToken?: Token,
-			deadEndConfigs?: ATNConfigSet,
-			ctx?: ParserRuleContext)  { 
+        recognizer: Recognizer<Token, any>,
+        input?: TokenStream,
+        startToken?: Token,
+        offendingToken?: Token,
+        deadEndConfigs?: ATNConfigSet,
+        ctx?: ParserRuleContext) {
         if (recognizer instanceof Parser) {
             input = recognizer.getInputStream();
             startToken = recognizer.getCurrentToken();
@@ -86,18 +83,17 @@ export class NoViableAltException extends RecognitionException {
             ctx = recognizer._ctx;
         }
         super(recognizer, input, ctx);
-		this.deadEndConfigs = deadEndConfigs;
-		this.startToken = startToken as Token;
-		super.setOffendingToken(recognizer, offendingToken as Token);
-	}
+        this.deadEndConfigs = deadEndConfigs;
+        this.startToken = startToken as Token;
+        super.setOffendingToken(recognizer, offendingToken as Token);
+    }
 
-	getStartToken(){
-		return this.startToken;
-	}
+    getStartToken() {
+        return this.startToken;
+    }
 
-	@Nullable
-	getDeadEndConfigs() {
-		return this.deadEndConfigs;
-	}
+    getDeadEndConfigs() {
+        return this.deadEndConfigs;
+    }
 
 }

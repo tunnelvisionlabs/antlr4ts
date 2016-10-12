@@ -93,7 +93,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 // 	writeFile(fileName, content, null);
 // }
 
-// export function writeFile(@NotNull fileName: string, @NotNull content: string, @Nullable encoding: string): void {
+// export function writeFile(@NotNull fileName: string, @NotNull content: string, encoding?: string): void {
 // 	let f: File =  new File(fileName);
 // 	let fos: FileOutputStream =  new FileOutputStream(f);
 // 	let osw: OutputStreamWriter; 
@@ -118,7 +118,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 // }
 
 // @NotNull
-// export function readFile(@NotNull fileName: string, @Nullable encoding: string): char[] {
+// export function readFile(@NotNull fileName: string, encoding?: string): char[] {
 // 	let f: File =  new File(fileName);
 // 	let size: number =  (int)f.length();
 // 	let isr: InputStreamReader; 

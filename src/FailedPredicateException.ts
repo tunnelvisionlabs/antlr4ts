@@ -36,61 +36,62 @@
  */
 import {RecognitionException} from "./RecognitionException";
 import {
-    NotNull, Nullable,
+    NotNull,
     ATN, ATNState, Recognizer, Parser,
-    AbstractPredicateTransition,PredicateTransition
+    AbstractPredicateTransition, PredicateTransition
     } from "./misc/Stubs";
 
 
 export class FailedPredicateException extends RecognitionException {
-	//private static serialVersionUID: number =  5379330841495778709L;
+    //private static serialVersionUID: number =  5379330841495778709L;
 
-	private ruleIndex: number; 
-	private predicateIndex: number; 
-	private predicate?: string; 
+    private ruleIndex: number;
+    private predicateIndex: number;
+    private predicate?: string;
 
-	constructor(@NotNull recognizer: Parser, 
-            @Nullable predicate?: string,
-			@Nullable message?: string) 
-	{
+    constructor(
+        @NotNull recognizer: Parser,
+        predicate?: string,
+        message?: string) {
         super(FailedPredicateException.formatMessage(
-            predicate, message), recognizer,
-            recognizer.getInputStream(), recognizer._ctx);
-		let s: ATNState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
+                predicate,
+                message),
+            recognizer,
+            recognizer.getInputStream(),
+            recognizer._ctx);
+        let s: ATNState = recognizer.getInterpreter().atn.states[recognizer.getState()];
 
         let trans = s.transition(0) as AbstractPredicateTransition;
-		if (trans instanceof PredicateTransition) {
-			this.ruleIndex = (trans as PredicateTransition).ruleIndex;
+        if (trans instanceof PredicateTransition) {
+            this.ruleIndex = (trans as PredicateTransition).ruleIndex;
             this.predicateIndex = (trans as PredicateTransition).predIndex;
-		}
-		else {
-			this.ruleIndex = 0;
-			this.predicateIndex = 0;
-		}
+        } else {
+            this.ruleIndex = 0;
+            this.predicateIndex = 0;
+        }
 
-		this.predicate = predicate;
-		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
-	}
+        this.predicate = predicate;
+        super.setOffendingToken(recognizer, recognizer.getCurrentToken());
+    }
 
-	getRuleIndex(): number {
-		return this.ruleIndex;
-	}
+    getRuleIndex(): number {
+        return this.ruleIndex;
+    }
 
-	getPredIndex(): number {
+    getPredIndex(): number {
         return this.predicateIndex;
-	}
+    }
 
-	@Nullable
-	getPredicate(): string | undefined {
+    getPredicate(): string | undefined {
         return this.predicate;
-	}
+    }
 
-	@NotNull
-	private static formatMessage(@Nullable predicate?: string, @Nullable message?: string): string {
-		if (message) {
-			return message;
-		}
+    @NotNull
+    private static formatMessage(predicate?: string, message?: string): string {
+        if (message) {
+            return message;
+        }
 
         return `failed predicate: {${predicate}}?`;
-	}
+    }
 }

@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
 import { RecognitionException } from "./RecognitionException";
-import { Nullable, NotNull, Override } from "./misc/Stubs";
+import { NotNull, Override } from "./misc/Stubs";
 import { Lexer } from "./Lexer";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
@@ -41,37 +41,35 @@ import * as Utils from "./misc/Utils";
 import { ATNConfigSet } from "./misc/Stubs";
 
 export class LexerNoViableAltException extends RecognitionException {
-	//private static serialVersionUID: number =  -730999203913001726L;
+    //private static serialVersionUID: number =  -730999203913001726L;
 
-	/** Matching attempted at what input index? */
-	private startIndex: number; 
+    /** Matching attempted at what input index? */
+    private startIndex: number;
 
-	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
-	@Nullable
-	private deadEndConfigs: ATNConfigSet; 
+    /** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
+    private deadEndConfigs?: ATNConfigSet;
 
-	 constructor(@Nullable lexer: Lexer, 
-									 @NotNull input: CharStream,
-									 startIndex: number,
-									 @Nullable deadEndConfigs: ATNConfigSet)  {
-		super(lexer, input);
-		this.startIndex = startIndex;
-		this.deadEndConfigs = deadEndConfigs;
-	}
+    constructor(lexer: Lexer | undefined,
+        @NotNull input: CharStream,
+        startIndex: number,
+        deadEndConfigs?: ATNConfigSet) {
+        super(lexer, input);
+        this.startIndex = startIndex;
+        this.deadEndConfigs = deadEndConfigs;
+    }
 
-	getStartIndex(): number {
-		return this.startIndex;
-	}
+    getStartIndex(): number {
+        return this.startIndex;
+    }
 
-	@Nullable
-	getDeadEndConfigs() {
+    getDeadEndConfigs() {
         return this.deadEndConfigs;
-	}
+    }
 
-	@Override
-	getInputStream(): CharStream {
-		return super.getInputStream() as CharStream;
-	}
+    @Override
+    getInputStream(): CharStream {
+        return super.getInputStream() as CharStream;
+    }
 
     @Override
     toString(): string {
