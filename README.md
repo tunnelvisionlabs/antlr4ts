@@ -1,5 +1,8 @@
 # antlr4ts
+
 TypeScript/JavaScript target for ANTLR 4
+
+[![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
 
 ## Dev setup with Visual Studio
 Any edition of [Visual Studio 2015](https://www.visualstudio.com/vs/) (or greater) should work, including Communitity Edition.
