@@ -12,7 +12,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] ANTLRErrorListener.java
 * [ ] ANTLRErrorStrategy.java
 * [ ] ANTLRFileStream.java
-* [ ] ANTLRInputStream.java
+* [x] ANTLRInputStream.java - Constructors for char[] & performing I/O are omitted.
 * [ ] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [x] BufferedTokenStream.java
