@@ -27,7 +27,10 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:40.6647101-07:00
+
+import { IntegerList } from './IntegerList';
 
 /**
  *
@@ -35,27 +38,20 @@
  */
 export class IntegerStack extends IntegerList {
 
-	 constructor()  {
-	}
-
-	 constructor1(capacity: number)  {
-		super(capacity);
-	}
-
-	 constructor2(@NotNull list: IntegerStack)  {
-		super(list);
+	constructor(arg?: number | IntegerStack) {
+		super(arg);
 	}
 
 	push(value: number): void {
-		add(value);
+		this.add(value);
 	}
 
 	pop(): number {
-		return removeAt(size() - 1);
+		return this.removeAt(this.size() - 1);
 	}
 
 	peek(): number {
-		return get(size() - 1);
+		return this.get(this.size() - 1);
 	}
 
 }

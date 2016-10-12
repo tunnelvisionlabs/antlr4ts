@@ -150,12 +150,10 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\FlexibleHashMap.java
 * [x] ~~misc\Func0.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Func1.java~~ (Unnecessary in TypeScript)
-* [ ] misc\IntegerList.java
-* [ ] misc\IntegerStack.java
+* [x] misc\IntegerList.java
+* [x] misc\IntegerStack.java
 * [x] misc\Interval.java
 * [x] misc\IntervalSet.java
-  * [ ] IntervalSet.toIntegerList
-  * [ ] IntervalSet.toSet
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java

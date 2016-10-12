@@ -27,95 +27,90 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:40.5099429-07:00
+
+import { Arrays } from './Arrays';
+import { JavaCollection, NotNull, Override } from './Stubs';
+
+const EMPTY_DATA: Int32Array = new Int32Array(0);
+
+const INITIAL_SIZE: number = 4;
+const MAX_ARRAY_SIZE: number = ((1 << 31) - 1) - 8;
 
 /**
  *
  * @author Sam Harwell
  */
 export class IntegerList {
-
-	private static EMPTY_DATA: number[] =  new int[0];
-
-	private static INITIAL_SIZE: number =  4;
-	private static MAX_ARRAY_SIZE: number =  Integer.MAX_VALUE - 8;
-
 	@NotNull
-	private int[] _data;
+	private _data: Int32Array;
 
-	private int _size;
+	private _size: number;
 
-	 constructor()  {
-		_data = EMPTY_DATA;
-	}
-
-	 constructor1(capacity: number)  {
-		if (capacity < 0) {
-			throw new IllegalArgumentException();
-		}
-
-		if (capacity == 0) {
-			_data = EMPTY_DATA;
+	constructor(arg?: number | IntegerList | Iterable<number>) {
+		if (!arg) {
+			this._data = EMPTY_DATA;
+		} else if (arg instanceof IntegerList) {
+			this._data = arg._data.slice(0);
+			this._size = arg._size;
+		} else if (typeof arg === 'number') {
+			if (arg === 0) {
+				this._data = EMPTY_DATA;
+			} else {
+				this._data = new Int32Array(arg);
+			}
 		} else {
-			_data = new int[capacity];
-		}
-	}
-
-	 constructor2(@NotNull list: IntegerList)  {
-		_data = list._data.clone();
-		_size = list._size;
-	}
-
-	 constructor3(@NotNull list: Collection<number>)  {
-		this(list.size());
-		for (let value of list) {
-			add(value);
+			// arg is Iterable<number>
+			this._data = EMPTY_DATA;
+			for (let value of arg) {
+				this.add(value);
+			}
 		}
 	}
 
 	add(value: number): void {
-		if (_data.length == _size) {
-			ensureCapacity(_size + 1);
+		if (this._data.length === this._size) {
+			this.ensureCapacity(this._size + 1);
 		}
 
-		_data[_size] = value;
-		_size++;
+		this._data[this._size] = value;
+		this._size++;
 	}
 
-	addAll(array: number[]): void {
-		ensureCapacity(_size + array.length);
-		System.arraycopy(array, 0, _data, _size, array.length);
-		_size += array.length;
-	}
+	addAll(list: number[] | IntegerList | JavaCollection<number>): void {
+		if (Array.isArray(list)) {
+			this.ensureCapacity(this._size + list.length);
+			this._data.subarray(this._size, this._size + list.length).set(list);
+			this._size += list.length;
+		} else if (list instanceof IntegerList) {
+			this.ensureCapacity(this._size + list._size);
+			this._data.subarray(this._size, this._size + list.size()).set(list._data);
+			this._size += list._size;
+		} else {
+			// list is JavaCollection<number>
+			this.ensureCapacity(this._size + list.size());
+			let current: number = 0;
+			for (let xi = list.iterator(); xi.hasNext(); /*empty*/) {
+				this._data[this._size + current] = xi.next();
+				current++;
+			}
 
-	addAll(list: IntegerList): void {
-		ensureCapacity(_size + list._size);
-		System.arraycopy(list._data, 0, _data, _size, list._size);
-		_size += list._size;
-	}
-
-	addAll(list: Collection<number>): void {
-		ensureCapacity(_size + list.size());
-		let current: number =  0;
-		for (let x of list) {
-			_data[_size + current] = x;
-			current++;
+			this._size += list.size();
 		}
-
-		_size += list.size();
 	}
 
 	get(index: number): number {
-		if (index < 0 || index >= _size) {
-			throw new IndexOutOfBoundsException();
+		if (index < 0 || index >= this._size) {
+			throw RangeError();
 		}
 
-		return _data[index];
+		return this._data[index];
 	}
 
 	contains(value: number): boolean {
-		for (let i = 0; i < _size; i++) {
-			if (_data[i] == value) {
+		for (let i = 0; i < this._size; i++) {
+			if (this._data[i] === value) {
 				return true;
 			}
 		}
@@ -124,67 +119,68 @@ export class IntegerList {
 	}
 
 	set(index: number, value: number): number {
-		if (index < 0 || index >= _size) {
-			throw new IndexOutOfBoundsException();
+		if (index < 0 || index >= this._size) {
+			throw RangeError();
 		}
 
-		let previous: number =  _data[index];
-		_data[index] = value;
+		let previous: number = this._data[index];
+		this._data[index] = value;
 		return previous;
 	}
 
 	removeAt(index: number): number {
-		let value: number =  get(index);
-		System.arraycopy(_data, index + 1, _data, index, _size - index - 1);
-		_data[_size - 1] = 0;
-		_size--;
+		let value: number = this.get(index);
+		this._data.copyWithin(index, index + 1, this._size);
+		this._data[this._size - 1] = 0;
+		this._size--;
 		return value;
 	}
 
 	removeRange(fromIndex: number, toIndex: number): void {
-		if (fromIndex < 0 || toIndex < 0 || fromIndex > _size || toIndex > _size) {
-			throw new IndexOutOfBoundsException();
-		}
-		if (fromIndex > toIndex) {
-			throw new IllegalArgumentException();
+		if (fromIndex < 0 || toIndex < 0 || fromIndex > this._size || toIndex > this._size) {
+			throw RangeError();
 		}
 
-		System.arraycopy(_data, toIndex, _data, fromIndex, _size - toIndex);
-		Arrays.fill(_data, _size - (toIndex - fromIndex), _size, 0);
-		_size -= (toIndex - fromIndex);
+		if (fromIndex > toIndex) {
+			throw RangeError();
+		}
+
+		this._data.copyWithin(toIndex, fromIndex, this._size);
+		this._data.fill(0, this._size - (toIndex - fromIndex), this._size);
+		this._size -= (toIndex - fromIndex);
 	}
 
 	isEmpty(): boolean {
-		return _size == 0;
+		return this._size === 0;
 	}
 
 	size(): number {
-		return _size;
+		return this._size;
 	}
 
 	trimToSize(): void {
-		if (_data.length == _size) {
+		if (this._data.length === this._size) {
 			return;
 		}
 
-		_data = Arrays.copyOf(_data, _size);
+		this._data = this._data.slice(0, this._size);
 	}
 
 	clear(): void {
-		Arrays.fill(_data, 0, _size, 0);
-		_size = 0;
+		this._data.fill(0, 0, this._size);
+		this._size = 0;
 	}
 
 	toArray(): number[] {
-		if (_size == 0) {
-			return EMPTY_DATA;
+		if (this._size === 0) {
+			return [];
 		}
 
-		return Arrays.copyOf(_data, _size);
+		return Array.from(this._data.subarray(0, this._size));
 	}
 
 	sort(): void {
-		Arrays.sort(_data, 0, _size);
+		this._data.subarray(0, this._size).sort();
 	}
 
 	/**
@@ -207,7 +203,7 @@ export class IntegerList {
 	 */
 	@Override
 	equals(o: any): boolean {
-		if (o == this) {
+		if (o === this) {
 			return true;
 		}
 
@@ -215,13 +211,12 @@ export class IntegerList {
 			return false;
 		}
 
-		let other: IntegerList =  (IntegerList)o;
-		if (_size != other._size) {
+		if (this._size !== o._size) {
 			return false;
 		}
 
-		for (let i = 0; i < _size; i++) {
-			if (_data[i] != other._data[i]) {
+		for (let i = 0; i < this._size; i++) {
+			if (this._data[i] !== o._data[i]) {
 				return false;
 			}
 		}
@@ -240,9 +235,9 @@ export class IntegerList {
 	 */
 	@Override
 	hashCode(): number {
-		let hashCode: number =  1;
-		for (let i = 0; i < _size; i++) {
-			hashCode = 31*hashCode + _data[i];
+		let hashCode: number = 1;
+		for (let i = 0; i < this._size; i++) {
+			hashCode = 31 * hashCode + this._data[i];
 		}
 
 		return hashCode;
@@ -253,34 +248,39 @@ export class IntegerList {
 	 */
 	@Override
 	toString(): string {
-		return Arrays.toString(toArray());
+		return this._data.toString();
 	}
 
-	binarySearch(key: number): number {
-		return Arrays.binarySearch(_data, 0, _size, key);
-	}
-
-	binarySearch(fromIndex: number, toIndex: number, key: number): number {
-		if (fromIndex < 0 || toIndex < 0 || fromIndex > _size || toIndex > _size) {
-			throw new IndexOutOfBoundsException();
+	binarySearch(key: number, fromIndex?: number, toIndex?: number): number {
+		if (fromIndex === undefined) {
+			fromIndex = 0;
 		}
+
+		if (toIndex === undefined) {
+			toIndex = this._size;
+		}
+
+		if (fromIndex < 0 || toIndex < 0 || fromIndex > this._size || toIndex > this._size) {
+			throw new RangeError();
+		}
+
 		if (fromIndex > toIndex) {
-			throw new IllegalArgumentException();
+			throw new RangeError();
 		}
 
-		return Arrays.binarySearch(_data, fromIndex, toIndex, key);
+		return Arrays.binarySearch(this._data, key, fromIndex, toIndex);
 	}
 
 	private ensureCapacity(capacity: number): void {
 		if (capacity < 0 || capacity > MAX_ARRAY_SIZE) {
-			throw new OutOfMemoryError();
+			throw new RangeError();
 		}
 
-		let newLength: number; 
-		if (_data.length == 0) {
+		let newLength: number;
+		if (this._data.length === 0) {
 			newLength = INITIAL_SIZE;
 		} else {
-			newLength = _data.length;
+			newLength = this._data.length;
 		}
 
 		while (newLength < capacity) {
@@ -290,7 +290,9 @@ export class IntegerList {
 			}
 		}
 
-		_data = Arrays.copyOf(_data, newLength);
+		let tmp = new Int32Array(newLength);
+		tmp.set(this._data);
+		this._data = tmp;
 	}
 
 }
