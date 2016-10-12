@@ -31,6 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
 import { ArrayEqualityComparator } from './ArrayEqualityComparator';
+import { IntegerList } from './IntegerList';
 import { Interval } from './Interval';
 import { IntSet } from './IntSet';
 import { Lexer } from '../Lexer';
@@ -628,19 +629,20 @@ export class IntervalSet implements IntSet {
 		return n;
 	}
 
-	// toIntegerList(): IntegerList {
-	// 	let values: IntegerList =  new IntegerList(size());
-	// 	let n: number =  intervals.size();
-	// 	for (let i = 0; i < n; i++) {
-	// 		let I: Interval =  intervals.get(i);
-	// 		let a: number =  I.a;
-	// 		let b: number =  I.b;
-	// 		for (let v=a; v<=b; v++) {
-	// 			values.add(v);
-	// 		}
-	// 	}
-	// 	return values;
-	// }
+	toIntegerList(): IntegerList {
+		let values: IntegerList = new IntegerList(this.size());
+		let n: number = this.intervals.length;
+		for (let i = 0; i < n; i++) {
+			let I: Interval = this.intervals[i];
+			let a: number = I.a;
+			let b: number = I.b;
+			for (let v = a; v <= b; v++) {
+				values.add(v);
+			}
+		}
+
+		return values;
+	}
 
 	@Override
 	toList(): number[] {
@@ -658,17 +660,18 @@ export class IntervalSet implements IntSet {
 		return values;
 	}
 
-	// toSet(): Set<number> {
-	// 	let s: Set<number> =  new HashSet<Integer>();
-	// 	for (let I of intervals) {
-	// 		let a: number =  I.a;
-	// 		let b: number =  I.b;
-	// 		for (let v=a; v<=b; v++) {
-	// 			s.add(v);
-	// 		}
-	// 	}
-	// 	return s;
-	// }
+	toSet(): Set<number> {
+		let s: Set<number> = new Set<number>();
+		for (let I of this.intervals) {
+			let a: number = I.a;
+			let b: number = I.b;
+			for (let v = a; v <= b; v++) {
+				s.add(v);
+			}
+		}
+
+		return s;
+	}
 
 	toArray(): number[] {
 		return this.toList();

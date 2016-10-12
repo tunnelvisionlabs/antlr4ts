@@ -154,8 +154,6 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] misc\IntegerStack.java
 * [x] misc\Interval.java
 * [x] misc\IntervalSet.java
-  * [ ] IntervalSet.toIntegerList
-  * [ ] IntervalSet.toSet
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java
