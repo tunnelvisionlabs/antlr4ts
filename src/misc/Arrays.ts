@@ -37,11 +37,11 @@ export namespace Arrays {
 	 * element greater than the key, or array.length if all elements in the array are less than the specified key. Note
 	 * that this guarantees that the return value will be >= 0 if and only if the key is found.
 	 */
-	export function binarySearch(array: number[], key: number, fromIndex?: number, toIndex?: number): number {
+	export function binarySearch(array: ArrayLike<number>, key: number, fromIndex?: number, toIndex?: number): number {
 		return binarySearch0(array, fromIndex || 0, toIndex || array.length, key);
 	}
 
-	function binarySearch0(array: number[], fromIndex: number, toIndex: number, key: number): number {
+	function binarySearch0(array: ArrayLike<number>, fromIndex: number, toIndex: number, key: number): number {
 		let low: number = fromIndex;
 		let high: number = toIndex - 1;
 
