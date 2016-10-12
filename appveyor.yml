@@ -7,6 +7,10 @@ install:
     Install-Product node 6
 
     npm install
-build: off
+branches:
+  only:
+  - master
+build_script:
+- mvn -B -f tool/pom.xml -DskipTests=true clean verify
 test_script:
 - npm test
