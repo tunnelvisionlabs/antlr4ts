@@ -37,9 +37,14 @@ jspm_packages/
 .node_repl_history
 
 # Build products
-target/
+/target/
+/tool/target/
 
 # Visual Studio build output and per-user files
 obj/
 bin/
 .vs/
+
+# Java IDEs
+.idea/
+*.iml
