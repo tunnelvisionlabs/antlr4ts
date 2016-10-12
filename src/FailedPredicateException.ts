@@ -41,10 +41,8 @@ import {
     AbstractPredicateTransition, PredicateTransition
     } from "./misc/Stubs";
 
-
 export class FailedPredicateException extends RecognitionException {
     //private static serialVersionUID: number =  5379330841495778709L;
-
     private ruleIndex: number;
     private predicateIndex: number;
     private predicate?: string;

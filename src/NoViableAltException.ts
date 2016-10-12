@@ -38,13 +38,11 @@ import {RecognitionException} from "./RecognitionException";
 import {Token} from "./Token";
 import {TokenStream } from "./TokenStream";
 
-
 // Stubs
 import {
     NotNull, Recognizer, Parser, ParserRuleContext,
     ATNConfigSet
     } from "./misc/Stubs";
-
 
 export class NoViableAltException extends RecognitionException {
     //private static serialVersionUID: number =  5096000008992867052L;
@@ -95,5 +93,4 @@ export class NoViableAltException extends RecognitionException {
     getDeadEndConfigs() {
         return this.deadEndConfigs;
     }
-
 }
