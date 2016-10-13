@@ -24,7 +24,7 @@ export * from './DecisionState';
 export * from './EpsilonTransition';
 // export * from './ErrorInfo';
 export * from './LexerAction';
-// export * from './LexerActionExecutor';
+export * from './LexerActionExecutor';
 export * from './LexerActionType';
 // export * from './LexerATNSimulator';
 export * from './LexerChannelAction';
