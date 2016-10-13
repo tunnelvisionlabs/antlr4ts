@@ -28,36 +28,48 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.0449220-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:29.5634388-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
 
 /**
- * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.
- *
- * <p>The {@code popMode} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * Implements the {@code channel} lexer action by calling
+ * {@link Lexer#setChannel} with the assigned channel.
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerPopModeAction implements LexerAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	static INSTANCE: LexerPopModeAction =  new LexerPopModeAction();
+export class LexerChannelAction implements LexerAction {
+	private readonly channel: number;
 
 	/**
-	 * Constructs the singleton instance of the lexer {@code popMode} command.
+	 * Constructs a new {@code channel} action with the specified channel value.
+	 * @param channel The channel value to pass to {@link Lexer#setChannel}.
 	 */
-	 constructor()  {
+	constructor(channel: number) {
+		this.channel = channel;
+	}
+
+	/**
+	 * Gets the channel to use for the {@link Token} created by the lexer.
+	 *
+	 * @return The channel to use for the {@link Token} created by the lexer.
+	 */
+	getChannel(): number {
+		return this.channel;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#POP_MODE}.
+	 * @return This method returns {@link LexerActionType#CHANNEL}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.POP_MODE;
+		return LexerActionType.CHANNEL;
 	}
 
 	/**
@@ -72,28 +84,35 @@ export class LexerPopModeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#popMode}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#setChannel} with the
+	 * value provided by {@link #getChannel}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.popMode();
+		lexer.setChannel(this.channel);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		return MurmurHash.finish(hash, 1);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.channel);
+		return MurmurHash.finish(hash, 2);
 	}
 
 	@Override
-	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
 	equals(obj: any): boolean {
-		return obj == this;
+		if (obj === this) {
+			return true;
+		} else if (!(obj instanceof LexerChannelAction)) {
+			return false;
+		}
+
+		return this.channel === obj.channel;
 	}
 
 	@Override
 	toString(): string {
-		return "popMode";
+		return `channel(${this.channel})`;
 	}
 }

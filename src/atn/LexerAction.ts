@@ -30,8 +30,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.7973969-07:00
 
-import {Lexer} from '../Lexer';
-import {LexerActionType} from './LexerActionType';
+import { Equatable } from '../misc/Stubs';
+import { Lexer } from '../Lexer';
+import { LexerActionType } from './LexerActionType';
 
 /**
  * Represents a single action which can be executed following the successful
@@ -41,7 +42,7 @@ import {LexerActionType} from './LexerActionType';
  * @author Sam Harwell
  * @since 4.2
  */
-export interface LexerAction {
+export interface LexerAction extends Equatable {
 	/**
 	 * Gets the serialization type of the lexer action.
 	 *

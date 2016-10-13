@@ -30,6 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.7613038-07:00
 
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
+
 /**
  * This implementation of {@link LexerAction} is used for tracking input offsets
  * for position-dependent actions within a {@link LexerActionExecutor}.
@@ -44,8 +50,8 @@
  * @since 4.2
  */
 export class LexerIndexedCustomAction implements LexerAction {
-	private offset: number; 
-	private action: LexerAction; 
+	private readonly offset: number;
+	private readonly action: LexerAction;
 
 	/**
 	 * Constructs a new indexed custom action by associating a character offset
@@ -60,7 +66,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @param action The lexer action to execute at a particular offset in the
 	 * input {@link CharStream}.
 	 */
-	 constructor(offset: number, @NotNull action: LexerAction)  {
+	constructor(offset: number, @NotNull action: LexerAction) {
 		this.offset = offset;
 		this.action = action;
 	}
@@ -74,7 +80,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * action should be executed.
 	 */
 	getOffset(): number {
-		return offset;
+		return this.offset;
 	}
 
 	/**
@@ -84,7 +90,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 */
 	@NotNull
 	getAction(): LexerAction {
-		return action;
+		return this.action;
 	}
 
 	/**
@@ -95,7 +101,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return action.getActionType();
+		return this.action.getActionType();
 	}
 
 	/**
@@ -116,29 +122,26 @@ export class LexerIndexedCustomAction implements LexerAction {
 	@Override
 	execute(lexer: Lexer): void {
 		// assume the input stream position was properly set by the calling code
-		action.execute(lexer);
+		this.action.execute(lexer);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, offset);
-		hash = MurmurHash.update(hash, action);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.offset);
+		hash = MurmurHash.update(hash, this.action);
 		return MurmurHash.finish(hash, 2);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
+		if (obj === this) {
 			return true;
-		}
-		else if (!(obj instanceof LexerIndexedCustomAction)) {
+		} else if (!(obj instanceof LexerIndexedCustomAction)) {
 			return false;
 		}
 
-		let other: LexerIndexedCustomAction =  (LexerIndexedCustomAction)obj;
-		return offset == other.offset
-			&& action.equals(other.action);
+		return this.offset === obj.offset
+			&& this.action.equals(obj.action);
 	}
-
 }

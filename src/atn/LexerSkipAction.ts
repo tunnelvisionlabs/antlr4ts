@@ -30,6 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.2324460-07:00
 
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
+
 /**
  * Implements the {@code skip} lexer action by calling {@link Lexer#skip}.
  *
@@ -41,14 +47,9 @@
  */
 export class LexerSkipAction implements LexerAction {
 	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	static INSTANCE: LexerSkipAction =  new LexerSkipAction();
-
-	/**
 	 * Constructs the singleton instance of the lexer {@code skip} command.
 	 */
-	 constructor()  {
+	constructor() {
 	}
 
 	/**
@@ -81,19 +82,25 @@ export class LexerSkipAction implements LexerAction {
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
 		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
-	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
 	equals(obj: any): boolean {
-		return obj == this;
+		return obj === this;
 	}
 
 	@Override
 	toString(): string {
 		return "skip";
 	}
+}
+
+export namespace LexerSkipAction {
+	/**
+	 * Provides a singleton instance of this parameterless lexer action.
+	 */
+	export const INSTANCE: LexerSkipAction = new LexerSkipAction();
 }
