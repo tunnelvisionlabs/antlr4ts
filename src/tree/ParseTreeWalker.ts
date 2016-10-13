@@ -29,27 +29,31 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.8252451-07:00
+import { ParseTree } from "./ParseTree";
+import { ParseTreeListener } from "./ParseTreeListener";
+import { ErrorNode } from "./ErrorNode";
+import { TerminalNode } from "./TerminalNode";
+import { RuleNode } from "./RuleNode";
+import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
-    static DEFAULT: ParseTreeWalker =  new ParseTreeWalker();
-
     walk(listener: ParseTreeListener, t: ParseTree): void {
 		if ( t instanceof ErrorNode ) {
-			listener.visitErrorNode((ErrorNode)t);
+			listener.visitErrorNode(t);
 			return;
 		}
 		else if ( t instanceof TerminalNode ) {
-			listener.visitTerminal((TerminalNode)t);
+			listener.visitTerminal(t);
 			return;
 		}
 
-		let r: RuleNode =  (RuleNode)t;
-        enterRule(listener, r);
+		let r = t as RuleNode;
+        this.enterRule(listener, r);
         let n: number =  r.getChildCount();
         for (let i = 0; i<n; i++) {
-            walk(listener, r.getChild(i));
+            this.walk(listener, r.getChild(i));
         }
-		exitRule(listener, r);
+		this.exitRule(listener, r);
     }
 
 	/**
@@ -59,14 +63,18 @@ export class ParseTreeWalker {
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
     protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
+        let ctx  = r.getRuleContext() as ParserRuleContext;
 		listener.enterEveryRule(ctx);
 		ctx.enterRule(listener);
     }
 
     protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
+        let ctx = r.getRuleContext() as ParserRuleContext;
 		ctx.exitRule(listener);
 		listener.exitEveryRule(ctx);
     }
+}
+
+export namespace ParseTreeWalker {
+	export const DEFAULT: ParseTreeWalker = new ParseTreeWalker();
 }
