@@ -30,7 +30,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
-import { BitSet } from './misc/Stub_BitSet';
+import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/Stub_DFA';
 import { Parser } from './Stub_Parser';
 import { SimulatorState } from './atn/Stub_SimulatorState';

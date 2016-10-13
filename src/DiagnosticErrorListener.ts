@@ -55,7 +55,7 @@
 import { ATNConfig } from './atn/Stub_ATNConfig';
 import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BaseErrorListener } from "./BaseErrorListener";
-import { BitSet } from './misc/Stub_BitSet';
+import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/Stub_DFA';
 import { Parser } from './Stub_Parser';
 import { SimulatorState } from './atn/Stub_SimulatorState';
