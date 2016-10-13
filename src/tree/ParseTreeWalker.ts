@@ -37,8 +37,6 @@ import { RuleNode } from "./RuleNode";
 import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
-    static DEFAULT: ParseTreeWalker =  new ParseTreeWalker();
-
     walk(listener: ParseTreeListener, t: ParseTree): void {
 		if ( t instanceof ErrorNode ) {
 			listener.visitErrorNode(t);
@@ -75,4 +73,8 @@ export class ParseTreeWalker {
 		ctx.exitRule(listener);
 		listener.exitEveryRule(ctx);
     }
+}
+
+export namespace ParseTreeWalker {
+	export const DEFAULT: ParseTreeWalker = new ParseTreeWalker();
 }
