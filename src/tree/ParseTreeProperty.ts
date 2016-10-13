@@ -46,10 +46,26 @@
  * You would make one decl (values here) in the listener and use lots of times
  * in your event methods.
  */
-export class ParseTreeProperty<V> {
-	protected annotations: Map<ParseTree, V> =  new IdentityHashMap<ParseTree, V>();
+import {ParseTree} from "./ParseTree";
 
-	get(ParseTree node) { return annotations.get(node): V; }
-	put(node: ParseTree,  V value) { annotations.put(node,  value): void; }
-	removeFrom(ParseTree node) { return annotations.remove(node): V; }
+export class ParseTreeProperty<V> {
+    private _symbol: symbol;
+
+    constructor(name: string = "ParseTreeProperty") {
+        this._symbol = Symbol(name);
+    }
+
+    get(node: ParseTree ): V {
+        return (node as any)[this._symbol] as V;
+    }
+
+    set(node: ParseTree, value: V): void {
+        (node as any)[this._symbol] = value;
+    }
+
+    removeFrom(node: ParseTree): V {
+        let result = (node as any)[this._symbol] as V;
+        delete (node as any)[this._symbol];
+        return result;
+    }
 }
