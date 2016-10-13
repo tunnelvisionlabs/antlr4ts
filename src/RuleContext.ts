@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,6 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
 /** A rule context is a record of a single rule invocation.
  *
@@ -78,5 +79,193 @@
  *
  *  @see ParserRuleContext
  */
-export class RuleContext {
+import {RuleNode} from "./tree/RuleNode";
+import {Override, Nullable, Recognizer, ATN, Parser } from "./misc/Stubs";
+import {Interval} from "./misc/Interval";
+import {ParseTree} from "./tree/ParseTree";
+import {ParseTreeVisitor} from "./tree/ParseTreeVisitor";
+import { Arrays } from "./misc/Arrays";
+"
+
+export class RuleContext implements RuleNode {
+	/** What context invoked this rule? */
+	parent?: RuleContext; 
+
+	/** What state invoked the rule associated with this context?
+	 *  The "return address" is the followState of invokingState
+	 *  If parent is null, this should be -1 this context object represents
+	 *  the start rule.
+	 */
+	invokingState: number;
+
+	constructor(parent?: RuleContext, invokingState?: number)  {
+		this.parent = parent;
+		//if ( parent!=null ) System.out.println("invoke "+stateNumber+" from "+parent);
+		this.invokingState = invokingState || -1;
+	}
+
+	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
+		return new RuleContext(parent, invokingState);
+	}
+
+	depth(): number {
+		let n: number =  0;
+		let p: RuleContext | undefined = this;
+		while ( p ) {
+			p = p.parent;
+			n++;
+		}
+		return n;
+	}
+
+	/** A context is empty if there is no invoking state; meaning nobody called
+	 *  current context.
+	 */
+	isEmpty(): boolean {
+		return this.invokingState === -1;
+	}
+
+	// satisfy the ParseTree / SyntaxTree interface
+
+	@Override
+	getSourceInterval(): Interval {
+		return Interval.INVALID;
+	}
+
+	@Override
+	getRuleContext(): RuleContext { return this; }
+
+	@Override
+	getParent(): RuleContext | undefined { return this.parent; }
+
+	@Override
+	getPayload(): RuleContext { return this; }
+
+	/** Return the combined text of all child nodes. This method only considers
+	 *  tokens which have been added to the parse tree.
+	 *  <p>
+	 *  Since tokens on hidden channels (e.g. whitespace or comments) are not
+	 *  added to the parse trees, they will not appear in the output of this
+	 *  method.
+	 */
+	@Override
+    getText(): string {
+	    const count = this.getChildCount();
+		if (count === 0) {
+			return "";
+		}
+
+	    let builder  = "";
+		for (let i = 0; i < count; i++) {
+			builder += this.getChild(i).getText();
+		}
+
+		return builder;
+	}
+
+	getRuleIndex(): number { return -1; }
+
+	/** For rule associated with this parse tree internal node, return
+	 *  the outer alternative number used to match the input. Default
+	 *  implementation does not compute nor store this alt num. Create
+	 *  a subclass of ParserRuleContext with backing field and set
+	 *  option contextSuperClass.
+	 *  to set it.
+	 *
+	 *  @since 4.5.3
+	 */
+	getAltNumber(): number { return ATN.INVALID_ALT_NUMBER; }
+
+	/** Set the outer alternative number for this context node. Default
+	 *  implementation does nothing to avoid backing field overhead for
+	 *  trees that don't need it.  Create
+     *  a subclass of ParserRuleContext with backing field and set
+     *  option contextSuperClass.
+	 *
+	 *  @since 4.5.3
+	 */
+	setAltNumber(altNumber: number): void { }
+
+	@Override
+	getChild(i: number): ParseTree{
+		throw RangeError("No children");
+	}
+
+	@Override
+	getChildCount(): number {
+		return 0;
+	}
+
+	@Override
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
+		return visitor.visitChildren(this);
+	}
+
+	/** Print out a whole tree, not just a node, in LISP format
+	 *  (root child1 .. childN). Print just a node if this is a leaf.
+	 *  We have to know the recognizer so we can get rule names.
+	 */
+	@Override
+	toStringTree(@Nullable recog: Parser): string {
+		return Trees.toStringTree(this, recog);
+	}
+
+	/** Print out a whole tree, not just a node, in LISP format
+	 *  (root child1 .. childN). Print just a node if this is a leaf.
+	 */
+	toStringTree(@Nullable ruleNames: List<string>): string {
+		return Trees.toStringTree(this, ruleNames);
+	}
+
+	@Override
+	toStringTree(): string {
+		return toStringTree((List<String>)null);
+	}
+
+	@Override
+	toString(): string {
+		return toString((List<String>)null, (RuleContext)null);
+	}
+
+	toString(@Nullable recog: Recognizer<any,any>): string {
+		return toString(recog, ParserRuleContext.emptyContext());
+	}
+
+	toString(@Nullable ruleNames: List<string>): string {
+		return toString(ruleNames, null);
+	}
+
+	// recog null unless ParserRuleContext, in which case we use subclass toString(...)
+	toString(@Nullable recog: Recognizer<any,any>, @Nullable stop: RuleContext): string {
+		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
+		return toString(ruleNamesList, stop);
+	}
+
+	toString(@Nullable ruleNames: List<string>, @Nullable stop: RuleContext): string {
+		let buf: StringBuilder =  new StringBuilder();
+		let p: RuleContext =  this;
+		buf.append("[");
+		while (p != null && p != stop) {
+			if (ruleNames == null) {
+				if (!p.isEmpty()) {
+					buf.append(p.invokingState);
+				}
+			}
+			else {
+				let ruleIndex: number =  p.getRuleIndex();
+				let ruleName: string =  ruleIndex >= 0 && ruleIndex < ruleNames.size() ? ruleNames.get(ruleIndex) : Integer.toString(ruleIndex);
+				buf.append(ruleName);
+			}
+
+			if (p.parent != null && (ruleNames != null || !p.parent.isEmpty())) {
+				buf.append(" ");
+			}
+
+			p = p.parent;
+		}
+
+		buf.append("]");
+		return buf.toString();
+	}
 }

@@ -9,11 +9,11 @@ will need a comment indicating the names of the two contributors who verified th
 semantics of the original code have been preserved. When the conversion is complete, this file and the sign-off comments
 in individual files can be removed and the antlr4 submodule commit will track the progress made on this code base.
 
-* [ ] ANTLRErrorListener.java
-* [ ] ANTLRErrorStrategy.java
+* [x] ANTLRErrorListener.java
+* [x] ANTLRErrorStrategy.java
 * [ ] ANTLRFileStream.java
 * [x] ANTLRInputStream.java - Constructors for char[] & performing I/O are omitted.
-* [ ] BailErrorStrategy.java
+* [x] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [x] BufferedTokenStream.java
 * [x] CharStream.java
@@ -21,27 +21,27 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] CommonTokenFactory.java
 * [x] CommonTokenStream.java
 * [ ] ConsoleErrorListener.java
-* [ ] DefaultErrorStrategy.java
+* [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
-* [ ] DiagnosticErrorListener.java
-* [ ] FailedPredicateException.java
-* [ ] InputMismatchException.java
+* [x] DiagnosticErrorListener.java
+* [x] FailedPredicateException.java
+* [x] InputMismatchException.java
 * [ ] InterpreterRuleContext.java
 * [x] IntStream.java
 * [ ] Lexer.java
 * [ ] LexerInterpreter.java
-* [ ] LexerNoViableAltException.java
+* [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
-* [ ] NoViableAltException.java
+* [x] NoViableAltException.java
 * [ ] Parser.java
-* [ ] ParserErrorListener.java
+* [x] ParserErrorListener.java
 * [ ] ParserInterpreter.java
 * [ ] ParserRuleContext.java
-* [ ] ProxyErrorListener.java
-* [ ] ProxyParserErrorListener.java
-* [ ] RecognitionException.java
+* [x] ProxyErrorListener.java
+* [x] ProxyParserErrorListener.java
+* [x] RecognitionException.java
 * [ ] Recognizer.java
-* [ ] RuleContext.java
+* [x] RuleContext.java
 * [ ] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
@@ -163,7 +163,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\NullUsageProcessor.java
 * [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
-* [ ] misc\ParseCancellationException.java
+* [x] misc\ParseCancellationException.java
 * [x] ~~misc\Predicate.java~~ (Unnecessary in TypeScript)
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
