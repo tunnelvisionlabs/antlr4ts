@@ -31,6 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
 
 import { RuleContext } from './RuleContext';
+import { ParseTreeListener } from "./tree/ParseTreeListener";
 
 /** A rule invocation record for parsing.
  *
@@ -55,4 +56,8 @@ import { RuleContext } from './RuleContext';
  *  satisfy the superclass interface.
  */
 export class ParserRuleContext extends RuleContext {
+    // Double dispatch methods for listeners
+
+    enterRule(listener: ParseTreeListener): void { }
+    exitRule(listener: ParseTreeListener): void { }
 }

@@ -174,7 +174,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\Utils.java
 * [x] tree\AbstractParseTreeVisitor.java
 * [x] tree\ErrorNode.java
-* [x] tree\ErrorNodeImpl.java
+* [x] ~~tree\ErrorNodeImpl.java~~ (Moved to ErrorNode)
 * [x] tree\ParseTree.java
 * [x] tree\ParseTreeListener.java
 * [ ] tree\ParseTreeProperty.java
@@ -183,7 +183,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] tree\RuleNode.java
 * [x] tree\SyntaxTree.java
 * [x] tree\TerminalNode.java
-* [x] tree\TerminalNodeImpl.java
+* [x] ~~tree\TerminalNodeImpl.java~~ (Moved to TerminalNode)
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
 * [x] tree\pattern\Chunk.java
