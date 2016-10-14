@@ -28,36 +28,37 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:29.9613221-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:30.0449220-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
 
 /**
- * Implements the {@code more} lexer action by calling {@link Lexer#more}.
+ * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.
  *
- * <p>The {@code more} command does not have any parameters, so this action is
+ * <p>The {@code popMode} command does not have any parameters, so this action is
  * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerMoreAction implements LexerAction {
+export class LexerPopModeAction implements LexerAction {
 	/**
-	 * Provides a singleton instance of this parameterless lexer action.
+	 * Constructs the singleton instance of the lexer {@code popMode} command.
 	 */
-	static INSTANCE: LexerMoreAction =  new LexerMoreAction();
-
-	/**
-	 * Constructs the singleton instance of the lexer {@code more} command.
-	 */
-	 constructor()  {
+	constructor() {
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#MORE}.
+	 * @return This method returns {@link LexerActionType#POP_MODE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.MORE;
+		return LexerActionType.POP_MODE;
 	}
 
 	/**
@@ -72,28 +73,34 @@ export class LexerMoreAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#more}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#popMode}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.more();
+		lexer.popMode();
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
 		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
-	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
 	equals(obj: any): boolean {
-		return obj == this;
+		return obj === this;
 	}
 
 	@Override
 	toString(): string {
-		return "more";
+		return "popMode";
 	}
+}
+
+export namespace LexerPopModeAction {
+	/**
+	 * Provides a singleton instance of this parameterless lexer action.
+	 */
+	export const INSTANCE: LexerPopModeAction = new LexerPopModeAction();
 }

@@ -30,6 +30,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.1172076-07:00
 
+import { LexerActionExecutor } from '../atn/LexerActionExecutor';
+
 /**
  * Stores information about a {@link DFAState} which is an accept state under
  * some condition. Certain settings, such as
@@ -40,15 +42,12 @@
  * @author Sam Harwell
  */
 export class AcceptStateInfo {
-	private prediction: number; 
-	private lexerActionExecutor: LexerActionExecutor; 
+	private prediction: number;
+	private lexerActionExecutor?: LexerActionExecutor;
 
-	 constructor(prediction: number)  {
-		this.prediction = prediction;
-		this.lexerActionExecutor = null;
-	}
-
-	 constructor1(prediction: number, lexerActionExecutor: LexerActionExecutor)  {
+	constructor(prediction: number);
+	constructor(prediction: number, lexerActionExecutor: LexerActionExecutor);
+	constructor(prediction: number, lexerActionExecutor?: LexerActionExecutor) {
 		this.prediction = prediction;
 		this.lexerActionExecutor = lexerActionExecutor;
 	}
@@ -61,14 +60,14 @@ export class AcceptStateInfo {
 	 * evaluation.
 	 */
 	getPrediction(): number {
-		return prediction;
+		return this.prediction;
 	}
 
 	/**
 	 * Gets the {@link LexerActionExecutor} which can be used to execute actions
 	 * and/or commands after the lexer matches a token.
 	 */
-	getLexerActionExecutor(): LexerActionExecutor {
-		return lexerActionExecutor;
+	getLexerActionExecutor(): LexerActionExecutor | undefined {
+		return this.lexerActionExecutor;
 	}
 }

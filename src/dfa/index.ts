@@ -1,5 +1,5 @@
 export * from './AbstractEdgeMap';
-// export * from './AcceptStateInfo';
+export * from './AcceptStateInfo';
 export * from './ArrayEdgeMap';
 // export * from './DFA';
 // export * from './DFASerializer';

@@ -84,18 +84,18 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\EpsilonTransition.java
 * [ ] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
-* [ ] atn\LexerActionExecutor.java
+* [x] atn\LexerActionExecutor.java
 * [x] atn\LexerActionType.java
 * [ ] atn\LexerATNSimulator.java
-* [ ] atn\LexerChannelAction.java
-* [ ] atn\LexerCustomAction.java
-* [ ] atn\LexerIndexedCustomAction.java
-* [ ] atn\LexerModeAction.java
-* [ ] atn\LexerMoreAction.java
-* [ ] atn\LexerPopModeAction.java
-* [ ] atn\LexerPushModeAction.java
-* [ ] atn\LexerSkipAction.java
-* [ ] atn\LexerTypeAction.java
+* [x] atn\LexerChannelAction.java
+* [x] atn\LexerCustomAction.java
+* [x] atn\LexerIndexedCustomAction.java
+* [x] atn\LexerModeAction.java
+* [x] atn\LexerMoreAction.java
+* [x] atn\LexerPopModeAction.java
+* [x] atn\LexerPushModeAction.java
+* [x] atn\LexerSkipAction.java
+* [x] atn\LexerTypeAction.java
 * [ ] atn\LL1Analyzer.java
 * [ ] atn\LookaheadEventInfo.java
 * [x] atn\LoopEndState.java
@@ -132,7 +132,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] Transition.serializationTypes?
 * [x] atn\WildcardTransition.java
 * [x] dfa\AbstractEdgeMap.java
-* [ ] dfa\AcceptStateInfo.java
+* [x] dfa\AcceptStateInfo.java
 * [x] dfa\ArrayEdgeMap.java
 * [ ] dfa\DFA.java
 * [ ] dfa\DFASerializer.java
