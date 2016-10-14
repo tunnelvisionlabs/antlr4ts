@@ -30,12 +30,31 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
 
-import {ParseTree} from './ParseTree';
-import {RuleContext} from '../RuleContext';
+import { RuleContext } from '../RuleContext';
+import { ParseTree } from "./ParseTree";
+import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { Parser } from "../Parser";
+import { Interval } from "../misc/Interval";
 
-export interface RuleNode extends ParseTree {
-	getRuleContext(): RuleContext;
+export abstract class RuleNode implements ParseTree {
+	abstract getRuleContext(): RuleContext;
 
 	//@Override
-	getParent(): RuleNode;
+    abstract getParent(): RuleContext;
+
+    abstract getChild(i: number): ParseTree;
+
+    abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
+
+    abstract getText(): string;
+
+    abstract toStringTree(parser?: Parser | undefined): string;
+
+    abstract getSourceInterval(): Interval;
+
+    abstract getPayload(): any;
+
+    abstract getChildCount(): number;
 }
+
+
