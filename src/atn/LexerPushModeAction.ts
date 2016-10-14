@@ -28,42 +28,48 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:29.5634388-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:30.1378801-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
 
 /**
- * Implements the {@code channel} lexer action by calling
- * {@link Lexer#setChannel} with the assigned channel.
+ * Implements the {@code pushMode} lexer action by calling
+ * {@link Lexer#pushMode} with the assigned mode.
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerChannelAction implements LexerAction {
-	private channel: number; 
+export class LexerPushModeAction implements LexerAction {
+	private readonly mode: number;
 
 	/**
-	 * Constructs a new {@code channel} action with the specified channel value.
-	 * @param channel The channel value to pass to {@link Lexer#setChannel}.
+	 * Constructs a new {@code pushMode} action with the specified mode value.
+	 * @param mode The mode value to pass to {@link Lexer#pushMode}.
 	 */
-	 constructor(channel: number)  {
-		this.channel = channel;
+	constructor(mode: number) {
+		this.mode = mode;
 	}
 
 	/**
-	 * Gets the channel to use for the {@link Token} created by the lexer.
+	 * Get the lexer mode this action should transition the lexer to.
 	 *
-	 * @return The channel to use for the {@link Token} created by the lexer.
+	 * @return The lexer mode for this {@code pushMode} command.
 	 */
-	getChannel(): number {
-		return channel;
+	getMode(): number {
+		return this.mode;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#CHANNEL}.
+	 * @return This method returns {@link LexerActionType#PUSH_MODE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.CHANNEL;
+		return LexerActionType.PUSH_MODE;
 	}
 
 	/**
@@ -78,36 +84,35 @@ export class LexerChannelAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#setChannel} with the
-	 * value provided by {@link #getChannel}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#pushMode} with the
+	 * value provided by {@link #getMode}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.setChannel(channel);
+		lexer.pushMode(this.mode);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		hash = MurmurHash.update(hash, channel);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.mode);
 		return MurmurHash.finish(hash, 2);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
+		if (obj === this) {
 			return true;
-		}
-		else if (!(obj instanceof LexerChannelAction)) {
+		} else if (!(obj instanceof LexerPushModeAction)) {
 			return false;
 		}
 
-		return channel == ((LexerChannelAction)obj).channel;
+		return this.mode === obj.mode;
 	}
 
 	@Override
 	toString(): string {
-		return String.format("channel(%d)", channel);
+		return `pushMode(${this.mode})`;
 	}
 }

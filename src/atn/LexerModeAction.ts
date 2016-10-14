@@ -28,42 +28,48 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.1378801-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:29.8653427-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
 
 /**
- * Implements the {@code pushMode} lexer action by calling
- * {@link Lexer#pushMode} with the assigned mode.
+ * Implements the {@code mode} lexer action by calling {@link Lexer#mode} with
+ * the assigned mode.
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerPushModeAction implements LexerAction {
-	private mode: number; 
+export class LexerModeAction implements LexerAction {
+	private readonly mode: number;
 
 	/**
-	 * Constructs a new {@code pushMode} action with the specified mode value.
-	 * @param mode The mode value to pass to {@link Lexer#pushMode}.
+	 * Constructs a new {@code mode} action with the specified mode value.
+	 * @param mode The mode value to pass to {@link Lexer#mode}.
 	 */
-	 constructor(mode: number)  {
+	constructor(mode: number) {
 		this.mode = mode;
 	}
 
 	/**
 	 * Get the lexer mode this action should transition the lexer to.
 	 *
-	 * @return The lexer mode for this {@code pushMode} command.
+	 * @return The lexer mode for this {@code mode} command.
 	 */
 	getMode(): number {
-		return mode;
+		return this.mode;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#PUSH_MODE}.
+	 * @return This method returns {@link LexerActionType#MODE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.PUSH_MODE;
+		return LexerActionType.MODE;
 	}
 
 	/**
@@ -78,36 +84,35 @@ export class LexerPushModeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#pushMode} with the
+	 * <p>This action is implemented by calling {@link Lexer#mode} with the
 	 * value provided by {@link #getMode}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.pushMode(mode);
+		lexer.mode(this.mode);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		hash = MurmurHash.update(hash, mode);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.mode);
 		return MurmurHash.finish(hash, 2);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
+		if (obj === this) {
 			return true;
-		}
-		else if (!(obj instanceof LexerPushModeAction)) {
+		} else if (!(obj instanceof LexerModeAction)) {
 			return false;
 		}
 
-		return mode == ((LexerPushModeAction)obj).mode;
+		return this.mode === obj.mode;
 	}
 
 	@Override
 	toString(): string {
-		return String.format("pushMode(%d)", mode);
+		return `mode(${this.mode})`;
 	}
 }

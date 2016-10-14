@@ -28,41 +28,37 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.3204839-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:29.9613221-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../misc/Stubs';
 
 /**
- * Implements the {@code type} lexer action by calling {@link Lexer#setType}
- * with the assigned type.
+ * Implements the {@code more} lexer action by calling {@link Lexer#more}.
+ *
+ * <p>The {@code more} command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerTypeAction implements LexerAction {
-	private type: number; 
-
+export class LexerMoreAction implements LexerAction {
 	/**
-	 * Constructs a new {@code type} action with the specified token type value.
-	 * @param type The type to assign to the token using {@link Lexer#setType}.
+	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
-	 constructor(type: number)  {
-		this.type = type;
-	}
-
-	/**
-	 * Gets the type to assign to a token created by the lexer.
-	 * @return The type to assign to a token created by the lexer.
-	 */
-	getType(): number {
-		return type;
+	constructor()  {
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#TYPE}.
+	 * @return This method returns {@link LexerActionType#MORE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.TYPE;
+		return LexerActionType.MORE;
 	}
 
 	/**
@@ -77,36 +73,34 @@ export class LexerTypeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#setType} with the
-	 * value provided by {@link #getType}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#more}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.setType(type);
+		lexer.more();
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		hash = MurmurHash.update(hash, type);
-		return MurmurHash.finish(hash, 2);
+		hash = MurmurHash.update(hash, this.getActionType());
+		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
-			return true;
-		}
-		else if (!(obj instanceof LexerTypeAction)) {
-			return false;
-		}
-
-		return type == ((LexerTypeAction)obj).type;
+		return obj === this;
 	}
 
 	@Override
 	toString(): string {
-		return String.format("type(%d)", type);
+		return "more";
 	}
+}
+
+export namespace LexerMoreAction {
+	/**
+	 * Provides a singleton instance of this parameterless lexer action.
+	 */
+	export const INSTANCE: LexerMoreAction = new LexerMoreAction();
 }
