@@ -34,7 +34,7 @@ import { Lexer } from '../Lexer';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
 import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../misc/Stubs';
+import { NotNull, Override } from '../Decorators';
 
 /**
  * Implements the {@code type} lexer action by calling {@link Lexer#setType}

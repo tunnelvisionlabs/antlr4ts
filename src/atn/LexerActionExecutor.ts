@@ -36,7 +36,7 @@ import { Lexer } from '../Lexer';
 import { LexerAction } from './LexerAction';
 import { LexerIndexedCustomAction } from './LexerIndexedCustomAction';
 import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Nullable, Override } from '../misc/Stubs';
+import { NotNull, Nullable, Override } from '../Decorators';
 
 /**
  * Represents an executor for a sequence of lexer actions which traversed during

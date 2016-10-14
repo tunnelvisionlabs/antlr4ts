@@ -32,7 +32,7 @@
 
 import { ATNStateType } from './ATNStateType';
 import { DecisionState } from './DecisionState';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { StarLoopbackState } from './StarLoopbackState';
 
 export class StarLoopEntryState extends DecisionState {

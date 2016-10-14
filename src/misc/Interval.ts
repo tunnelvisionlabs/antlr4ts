@@ -30,7 +30,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.7402214-07:00
 
-import {Equatable, Override} from './Stubs';
+import { Override } from '../Decorators';
+import { Equatable } from './Stubs';
 
 const INTERVAL_POOL_MAX_VALUE: number = 1000;
 

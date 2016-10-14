@@ -36,7 +36,7 @@ import { Interval } from './Interval';
 import { IntSet } from './IntSet';
 import { Lexer } from '../Lexer';
 import { MurmurHash } from './MurmurHash';
-import { Override, NotNull, Nullable } from './Stubs';
+import { Override, NotNull, Nullable } from '../Decorators';
 import { Token } from '../Token';
 import { Vocabulary } from '../Vocabulary';
 

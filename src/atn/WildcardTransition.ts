@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:37.9456839-07:00
 
 import { ATNState } from './ATNState';
-import { Override, NotNull } from '../misc/Stubs';
+import { Override, NotNull } from '../Decorators';
 import { Transition } from './Transition';
 import { TransitionType } from './TransitionType';
 

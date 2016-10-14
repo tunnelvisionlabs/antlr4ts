@@ -2,7 +2,7 @@
 
 import { CharStream } from './CharStream';
 import { CommonTokenFactory } from './CommonTokenFactory';
-import { NotNull, Override } from './misc/Stubs';
+import { NotNull, Override } from './Decorators';
 import { Token } from './Token';
 import { TokenFactory } from './TokenFactory';
 import { TokenSource } from './TokenSource';

@@ -32,7 +32,7 @@ import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { ArrayEdgeMap } from './ArrayEdgeMap';
 import { Arrays } from '../misc/Arrays';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import * as assert from 'assert';
 
 const DEFAULT_MAX_SIZE: number = 5;
