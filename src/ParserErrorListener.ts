@@ -28,6 +28,15 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
+import { ANTLRErrorListener } from './ANTLRErrorListener';
+import { Token } from './Token';
+// Stubs
+import {
+	DFA, BitSet, ATNConfigSet,
+	Parser, SimulatorState
+} from './misc/Stubs'
+import * as Stubs from "./misc/Stubs";
+import * as Exception from "./RecognitionException";
 
 /** How to emit recognition errors for parsers.
  */
@@ -72,13 +81,14 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param configs the ATN configuration set where the ambiguity was
 	 * identified
 	 */
-	reportAmbiguity(@NotNull recognizer: Parser, 
-						 @NotNull dfa: DFA,
-						 startIndex: number,
-						 stopIndex: number,
-						 exact: boolean,
-						 @Nullable ambigAlts: BitSet,
-						 @NotNull configs: ATNConfigSet): void;
+	reportAmbiguity(
+		/*@NotNull*/ recognizer: Parser,
+		/*@NotNull*/ dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		ambigAlts: BitSet | undefined,
+		/*@NotNull*/ configs: ATNConfigSet): void;
 
 	/**
 	 * This method is called when an SLL conflict occurs and the parser is about
@@ -99,12 +109,13 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param conflictState the simulator state when the SLL conflict was
 	 * detected
 	 */
-	reportAttemptingFullContext(@NotNull recognizer: Parser, 
-									 @NotNull dfa: DFA,
-									 startIndex: number,
-									 stopIndex: number,
-									 @Nullable conflictingAlts: BitSet,
-									 @NotNull conflictState: SimulatorState): void;
+	reportAttemptingFullContext(
+		/*@NotNull*/ recognizer: Parser,
+		/*@NotNull*/ dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet | undefined,
+		/*@NotNull*/ conflictState: SimulatorState): void;
 
 	/**
 	 * This method is called by the parser when a full-context prediction has a
@@ -142,10 +153,11 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param acceptState the simulator state when the unambiguous prediction
 	 * was determined
 	 */
-	reportContextSensitivity(@NotNull recognizer: Parser, 
-								  @NotNull dfa: DFA,
-								  startIndex: number,
-								  stopIndex: number,
-								  prediction: number,
-								  @NotNull acceptState: SimulatorState): void;
+	reportContextSensitivity(
+		/*@NotNull*/ recognizer: Parser,
+		/*@NotNull*/ dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		/*@NotNull*/ acceptState: SimulatorState): void;
 }

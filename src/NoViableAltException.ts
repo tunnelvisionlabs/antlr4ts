@@ -34,12 +34,23 @@
  *  of the offending input and also knows where the parser was
  *  in the various paths when the error. Reported by reportNoViableAlternative()
  */
+import {RecognitionException} from "./RecognitionException";
+import {Token} from "./Token";
+import { TokenStream } from "./TokenStream";
+import { IntStream } from "./IntStream";
+import { NotNull } from "./Decorators";
+// Stubs
+import {
+    Recognizer, Parser, ParserRuleContext,
+    ATNConfigSet
+} from "./misc/Stubs";
+
+
 export class NoViableAltException extends RecognitionException {
-	private static serialVersionUID: number =  5096000008992867052L;
+	//private static serialVersionUID: number =  5096000008992867052L;
 
 	/** Which configurations did we try at input.index() that couldn't match input.LT(1)? */
-	@Nullable
-	private deadEndConfigs: ATNConfigSet; 
+	private deadEndConfigs?: ATNConfigSet; 
 
 	/** The token object at the start index; the input stream might
 	 * 	not be buffering tokens so get a reference to it. (At the
@@ -49,35 +60,46 @@ export class NoViableAltException extends RecognitionException {
 	@NotNull
 	private startToken: Token; 
 
-	 constructor(@NotNull Parser recognizer) { // LL(1)  error
-		this(recognizer,
-			 recognizer.getInputStream(),
-			 recognizer.getCurrentToken(),
-			 recognizer.getCurrentToken(),
-			 null,
-			 recognizer._ctx);
-	}
+	constructor(/*@NotNull*/ recognizer:Parser );
+	constructor(
+		/*@NotNull*/ recognizer: Recognizer<Token, any>,
+		/*@NotNull*/ input: TokenStream,
+		/*@NotNull*/ startToken: Token,
+		/*@NotNull*/ offendingToken: Token,
+		deadEndConfigs: ATNConfigSet | undefined,
+		/*@NotNull*/ ctx: ParserRuleContext);
 
-	 constructor1(@NotNull recognizer: Recognizer<Token,any>, 
-								@NotNull input: TokenStream,
-								@NotNull startToken: Token,
-								@NotNull offendingToken: Token,
-								@Nullable deadEndConfigs: ATNConfigSet,
-								@NotNull ctx: ParserRuleContext) 
+	constructor(
+		recognizer: Recognizer<Token, any>,
+		input?: TokenStream,
+		startToken?: Token,
+		offendingToken?: Token,
+		deadEndConfigs?: ATNConfigSet,
+		ctx?: ParserRuleContext)
 	{
-		super(recognizer, input, ctx);
-		this.deadEndConfigs = deadEndConfigs;
-		this.startToken = startToken;
-		this.setOffendingToken(recognizer, offendingToken);
+
+		if (recognizer instanceof Parser) {
+			super(
+				recognizer,
+				recognizer.getInputStream(),
+				recognizer._ctx
+			);
+			super.setOffendingToken(recognizer, recognizer.getCurrentToken())
+
+		} else {
+			super(recognizer, input, ctx);
+			this.deadEndConfigs = deadEndConfigs;
+			this.startToken = startToken as Token;
+			super.setOffendingToken(recognizer, offendingToken);           
+		}
 	}
 
 	getStartToken(): Token {
-		return startToken;
+		return this.startToken;
 	}
 
-	@Nullable
-	getDeadEndConfigs(): ATNConfigSet {
-		return deadEndConfigs;
+	getDeadEndConfigs(): ATNConfigSet | undefined {
+		return this.deadEndConfigs;
 	}
 
 }

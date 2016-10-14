@@ -241,6 +241,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return this.get(obj) != null;
 	}
 
+	[Symbol.iterator]() {
+		return this.toArray().values();
+	}
+
 	@Override
 	iterator(): JavaIterator<T> {
 		return new SetIterator<T>(this.toArray(), this);

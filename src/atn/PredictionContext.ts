@@ -34,13 +34,15 @@
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { Arrays } from '../misc/Arrays';
-import { ATN } from './ATN';
+import { ATN } from '../misc/Stubs';
 import { ATNState } from './ATNState';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from "../Decorators";
 import { Equatable, JavaSet } from '../misc/Stubs';
 import { PredictionContextCache } from './PredictionContextCache';
+import { RuleContext } from '../RuleContext';
+import { RuleTransition } from './RuleTransition';
 // import { Recognizer } from '..';
 import * as assert from 'assert';
 
@@ -116,26 +118,22 @@ export abstract class PredictionContext implements Equatable {
 
 	protected abstract removeEmptyContext(): PredictionContext;
 
-	// static fromRuleContext(@NotNull atn: ATN, @NotNull outerContext: RuleContext): PredictionContext {
-	// 	return fromRuleContext(atn, outerContext, true);
-	// }
+	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
+		if (outerContext.isEmpty()) {
+			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
+		}
 
-	// static fromRuleContext(@NotNull atn: ATN, @NotNull outerContext: RuleContext, fullContext: boolean): PredictionContext {
-	// 	if (outerContext.isEmpty()) {
-	// 		return fullContext ? EMPTY_FULL : EMPTY_LOCAL;
-	// 	}
+		let parent: PredictionContext;
+		if (outerContext.parent) {
+			parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
+		} else {
+			parent = fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
+		}
 
-	// 	let parent: PredictionContext; 
-	// 	if (outerContext.parent != null) {
-	// 		parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
-	// 	} else {
-	// 		parent = fullContext ? EMPTY_FULL : EMPTY_LOCAL;
-	// 	}
-
-	// 	let state: ATNState =  atn.states.get(outerContext.invokingState);
-	// 	let transition: RuleTransition =  (RuleTransition)state.transition(0);
-	// 	return parent.getChild(transition.followState.stateNumber);
-	// }
+		let state: ATNState = atn.states[outerContext.invokingState];
+		let transition: RuleTransition = state.transition(0) as RuleTransition;
+		return parent.getChild(transition.followState.stateNumber);
+	}
 
 	private static addEmptyContext(context: PredictionContext): PredictionContext {
 		return context.addEmptyContext();

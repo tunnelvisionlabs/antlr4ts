@@ -34,32 +34,33 @@
  *  Disambiguating predicate evaluation occurs when we test a predicate during
  *  prediction.
  */
+
+import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
+import { ATNState } from './atn/ATNState';
+import { RecognitionException } from "./RecognitionException";
+import { NotNull } from "./Decorators";
+import { ATN, Recognizer, Parser, PredicateTransition } from "./misc/Stubs";
+
+
 export class FailedPredicateException extends RecognitionException {
-	private static serialVersionUID: number =  5379330841495778709L;
+	//private static serialVersionUID: number =  5379330841495778709L;
 
 	private ruleIndex: number; 
 	private predicateIndex: number; 
-	private predicate: string; 
+	private predicate?: string; 
 
-	 constructor(@NotNull recognizer: Parser)  {
-		this(recognizer, null);
-	}
+	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
+		super(
+			recognizer,
+			recognizer.getInputStream(),
+			recognizer._ctx,
+			FailedPredicateException.formatMessage(predicate, message));
+		let s: ATNState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
 
-	 constructor1(@NotNull recognizer: Parser, @Nullable predicate: string)  {
-		this(recognizer, predicate, null);
-	}
-
-	 constructor2(@NotNull recognizer: Parser, 
-														   @Nullable predicate: string,
-														   @Nullable message: string) 
-	{
-		super(formatMessage(predicate, message), recognizer, recognizer.getInputStream(), recognizer._ctx);
-		let s: ATNState =  recognizer.getInterpreter().atn.states.get(recognizer.getState());
-
-		let trans: AbstractPredicateTransition =  (AbstractPredicateTransition)s.transition(0);
+		let trans = s.transition(0) as AbstractPredicateTransition;
 		if (trans instanceof PredicateTransition) {
-			this.ruleIndex = ((PredicateTransition)trans).ruleIndex;
-			this.predicateIndex = ((PredicateTransition)trans).predIndex;
+			this.ruleIndex = trans.ruleIndex;
+			this.predicateIndex = trans.predIndex;
 		}
 		else {
 			this.ruleIndex = 0;
@@ -67,28 +68,27 @@ export class FailedPredicateException extends RecognitionException {
 		}
 
 		this.predicate = predicate;
-		this.setOffendingToken(recognizer, recognizer.getCurrentToken());
+		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
 	}
 
 	getRuleIndex(): number {
-		return ruleIndex;
+		return this.ruleIndex;
 	}
 
 	getPredIndex(): number {
-		return predicateIndex;
+		return this.predicateIndex;
 	}
 
-	@Nullable
-	getPredicate(): string {
-		return predicate;
+	getPredicate(): string | undefined {
+		return this.predicate;
 	}
 
 	@NotNull
-	private static formatMessage(@Nullable predicate: string, @Nullable message: string): string {
-		if (message != null) {
+	private static formatMessage(predicate: string | undefined, message: string | undefined): string {
+		if (message) {
 			return message;
 		}
 
-		return String.format(Locale.getDefault(), "failed predicate: {%s}?", predicate);
+		return `failed predicate: {${predicate}}?`;
 	}
 }

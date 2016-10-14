@@ -27,63 +27,44 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// ConvertTo-TS run at 2016-10-04T11:26:56.8126690-07:00
+import { ANTLRErrorListener } from './ANTLRErrorListener';
+import { RecognitionException } from "./RecognitionException";
+import { Override, NotNull } from "./Decorators";
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// Stubs
+import { Recognizer } from "./misc/Stubs";
 
-import { Token } from './Token';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/**
+ * This implementation of {@link ANTLRErrorListener} dispatches all calls to a
+ * collection of delegate listeners. This reduces the effort required to support multiple
+ * listeners.
+ *
+ * @author Sam Harwell
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class ProxyErrorListener<Symbol> implements ANTLRErrorListener<Symbol> {
+
+	constructor(private delegates: ANTLRErrorListener<Symbol>[]) {
+		if (!delegates) {
+			throw new Error("Invalid delegates");
+		}
 	}
 
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
+	protected getDelegates() {
+		return this.delegates;
 	}
 
-	setChannel(channel: number): void {
-		throw "not implemented";
+	@Override
+	syntaxError<T extends Symbol>(
+		@NotNull recognizer: Recognizer<T, any>,
+		offendingSymbol: T | undefined,
+		line: number,
+		charPositionInLine: number,
+		@NotNull msg: string,
+		e: RecognitionException | undefined): void {
+		this.delegates.forEach(listener => {
+			listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+		});
 	}
-
-	setType(type: number): void {
-		throw "not implemented";
-	}
-
-	pushMode(mode: number): void {
-		throw "not implemented";
-	}
-
-	popMode(): void {
-		throw "not implemented";
-	}
-
-	mode(mode: number): void {
-		throw "not implemented";
-	}
-
-	more(): void {
-		throw "not implemented";
-	}
-
-	skip(): void {
-		throw "not implemented";
-	}
-
-	action(arg: null, ruleIndex: number, actionIndex: number): void {
-		throw "not implemented";
-	}
-}
-
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }

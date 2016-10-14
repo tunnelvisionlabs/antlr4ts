@@ -58,6 +58,17 @@
  *
  * @see Parser#setErrorHandler(ANTLRErrorStrategy)
  */
+import {Token} from "./Token";
+import {DefaultErrorStrategy} from "./DefaultErrorStrategy";
+import {RecognitionException} from "./RecognitionException";
+import {ParseCancellationException} from "./misc/ParseCancellationException";
+import { InputMismatchException } from "./InputMismatchException";
+import { Override} from "./Decorators";
+
+// Stubs
+import { Parser, ParserRuleContext } from "./misc/Stubs";
+
+
 export class BailErrorStrategy extends DefaultErrorStrategy {
     /** Instead of recovering from exception {@code e}, re-throw it wrapped
      *  in a {@link ParseCancellationException} so it is not caught by the
@@ -66,7 +77,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
      */
     @Override
     recover(recognizer: Parser, e: RecognitionException): void {
-		for (ParserRuleContext context = recognizer.getContext(); context != null; context = context.getParent()) {
+		for (let context: ParserRuleContext = recognizer.getContext(); context != null; context = context.getParent()) {
 			context.exception = e;
 		}
 
@@ -81,7 +92,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
     {
 		let e: InputMismatchException =  new InputMismatchException(recognizer);
-		for (ParserRuleContext context = recognizer.getContext(); context != null; context = context.getParent()) {
+		for (let context = recognizer.getContext(); context != null; context = context.getParent()) {
 			context.exception = e;
 		}
 

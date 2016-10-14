@@ -51,97 +51,90 @@
  *
  * @author Sam Harwell
  */
-export class DiagnosticErrorListener extends BaseErrorListener {
-	/**
-	 * When {@code true}, only exactly known ambiguities are reported.
-	 */
-	protected exactOnly: boolean; 
+import { BaseErrorListener } from "./BaseErrorListener";
+import { Override, NotNull } from "./Decorators";
+import {DFA, BitSet, ATNConfig, ATNConfigSet,SimulatorState, Parser
+} from "./misc/Stubs";
+import { Interval } from "./misc/Interval";
 
-	/**
-	 * Initializes a new instance of {@link DiagnosticErrorListener} which only
-	 * reports exact ambiguities.
-	 */
-	 constructor()  {
-		this(true);
-	}
+export class DiagnosticErrorListener extends BaseErrorListener {
 
 	/**
 	 * Initializes a new instance of {@link DiagnosticErrorListener}, specifying
 	 * whether all ambiguities or only exact ambiguities are reported.
 	 *
 	 * @param exactOnly {@code true} to report only exact ambiguities, otherwise
-	 * {@code false} to report all ambiguities.
+	 * {@code false} to report all ambiguities.  Defaults to true.
 	 */
-	 constructor1(exactOnly: boolean)  {
+	constructor(protected exactOnly: boolean = true) {
+		super()
 		this.exactOnly = exactOnly;
 	}
 
 	@Override
-	reportAmbiguity(@NotNull recognizer: Parser, 
-								@NotNull dfa: DFA,
-								startIndex: number,
-								stopIndex: number,
-								exact: boolean,
-								@Nullable ambigAlts: BitSet,
-								@NotNull configs: ATNConfigSet): void
-	{
-		if (exactOnly && !exact) {
+	reportAmbiguity(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		ambigAlts: BitSet | undefined,
+		@NotNull configs: ATNConfigSet): void {
+		if (this.exactOnly && !exact) {
 			return;
 		}
 
-		let format: string =  "reportAmbiguity d=%s: ambigAlts=%s, input='%s'";
-		let decision: string =  getDecisionDescription(recognizer, dfa);
-		let conflictingAlts: BitSet =  getConflictingAlts(ambigAlts, configs);
-		let text: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
-		let message: string =  String.format(format, decision, conflictingAlts, text);
+		let decision: string = this.getDecisionDescription(recognizer, dfa);
+		let conflictingAlts: BitSet = this.getConflictingAlts(ambigAlts, configs);
+		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let message: string = `reportAmbiguity d=${decision}: ambigAlts=${conflictingAlts}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
 	@Override
-	reportAttemptingFullContext(@NotNull recognizer: Parser, 
-											@NotNull dfa: DFA,
-											startIndex: number,
-											stopIndex: number,
-											@Nullable conflictingAlts: BitSet,
-											@NotNull conflictState: SimulatorState): void
-	{
-		let format: string =  "reportAttemptingFullContext d=%s, input='%s'";
-		let decision: string =  getDecisionDescription(recognizer, dfa);
-		let text: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
-		let message: string =  String.format(format, decision, text);
+	reportAttemptingFullContext(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet | undefined,
+		@NotNull conflictState: SimulatorState): void {
+		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
+		let decision: string = this.getDecisionDescription(recognizer, dfa);
+		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let message: string = `reportAttemptingFullContext d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
 	@Override
-	reportContextSensitivity(@NotNull recognizer: Parser, 
-										 @NotNull dfa: DFA,
-										 startIndex: number,
-										 stopIndex: number,
-										 prediction: number,
-										 @NotNull acceptState: SimulatorState): void
-	{
-		let format: string =  "reportContextSensitivity d=%s, input='%s'";
-		let decision: string =  getDecisionDescription(recognizer, dfa);
-		let text: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
-		let message: string =  String.format(format, decision, text);
+	reportContextSensitivity(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		@NotNull acceptState: SimulatorState): void {
+		let format: string = "reportContextSensitivity d=%s, input='%s'";
+		let decision: string = this.getDecisionDescription(recognizer, dfa);
+		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let message: string = `reportContextSensitivity d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
-	protected getDecisionDescription<T extends Token>(@NotNull recognizer: Parser, @NotNull dfa: DFA): string {
-		let decision: number =  dfa.decision;
-		let ruleIndex: number =  dfa.atnStartState.ruleIndex;
+	protected getDecisionDescription(
+		@NotNull recognizer: Parser,
+		@NotNull dfa: DFA): string {
+		let decision: number = dfa.decision;
+		let ruleIndex: number = dfa.atnStartState.ruleIndex;
 
-		let ruleNames: string[] =  recognizer.getRuleNames();
+		let ruleNames: string[] = recognizer.getRuleNames();
 		if (ruleIndex < 0 || ruleIndex >= ruleNames.length) {
-			return String.valueOf(decision);
+			return decision.toString();
 		}
 
-		let ruleName: string =  ruleNames[ruleIndex];
-		if (ruleName == null || ruleName.isEmpty()) {
-			return String.valueOf(decision);
+		let ruleName: string = ruleNames[ruleIndex];
+		if (!ruleName) {
+			return decision.toString();
 		}
 
-		return String.format("%d (%s)", decision, ruleName);
+		return `${decision} (${ruleName})`;
 	}
 
 	/**
@@ -156,12 +149,12 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 	 * returns the set of alternatives represented in {@code configs}.
 	 */
 	@NotNull
-	protected getConflictingAlts(@Nullable reportedAlts: BitSet, @NotNull configs: ATNConfigSet): BitSet {
+	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {
 		if (reportedAlts != null) {
 			return reportedAlts;
 		}
 
-		let result: BitSet =  new BitSet();
+		let result: BitSet = new BitSet();
 		for (let config of configs) {
 			result.set(config.getAlt());
 		}

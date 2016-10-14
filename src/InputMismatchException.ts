@@ -27,50 +27,20 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// ConvertTo-TS run at 2016-10-04T11:26:51.5187682-07:00
 
-// ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
+/** This signifies any kind of mismatched input exceptions such as
+ *  when the current input does not match the expected token.
+ */
+import {RecognitionException} from "./RecognitionException";
+import { NotNull } from "./Decorators";
+import { Parser } from "./misc/Stubs";
 
-export class LexerNoViableAltException extends RecognitionException {
-	private static serialVersionUID: number =  -730999203913001726L;
+export class InputMismatchException extends RecognitionException {
+	//private static serialVersionUID: number =  1532568338707443067L;
 
-	/** Matching attempted at what input index? */
-	private startIndex: number; 
-
-	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
-	@Nullable
-	private deadEndConfigs: ATNConfigSet; 
-
-	 constructor(@Nullable lexer: Lexer, 
-									 @NotNull input: CharStream,
-									 startIndex: number,
-									 @Nullable deadEndConfigs: ATNConfigSet)  {
-		super(lexer, input);
-		this.startIndex = startIndex;
-		this.deadEndConfigs = deadEndConfigs;
-	}
-
-	getStartIndex(): number {
-		return startIndex;
-	}
-
-	@Nullable
-	getDeadEndConfigs(): ATNConfigSet {
-		return deadEndConfigs;
-	}
-
-	@Override
-	getInputStream(): CharStream {
-		return (CharStream)super.getInputStream();
-	}
-
-	@Override
-	toString(): string {
-		let symbol: string =  "";
-		if (startIndex >= 0 && startIndex < getInputStream().size()) {
-			symbol = getInputStream().getText(Interval.of(startIndex,startIndex));
-			symbol = Utils.escapeWhitespace(symbol, false);
-		}
-
-		return String.format(Locale.getDefault(), "%s('%s')", LexerNoViableAltException.class.getSimpleName(), symbol);
+	 constructor(@NotNull recognizer: Parser)  {
+		super(recognizer, recognizer.getInputStream(), recognizer._ctx);
+		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
 	}
 }

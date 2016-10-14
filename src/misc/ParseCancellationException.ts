@@ -27,39 +27,23 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// ConvertTo-TS run at 2016-10-04T11:26:50.5479602-07:00
+
+// ConvertTo-TS run at 2016-10-04T11:26:42.5447085-07:00
 
 /**
+ * This exception is thrown to cancel a parsing operation. This exception does
+ * not extend {@link RecognitionException}, allowing it to bypass the standard
+ * error recovery mechanisms. {@link BailErrorStrategy} throws this exception in
+ * response to a parse error.
  *
  * @author Sam Harwell
  */
-export class ConsoleErrorListener implements ANTLRErrorListener<Object> {
-	/**
-	 * Provides a default instance of {@link ConsoleErrorListener}.
-	 */
-	static INSTANCE: ConsoleErrorListener =  new ConsoleErrorListener();
+export class ParseCancellationException extends Error {
+	// private static serialVersionUID: number =  -3529552099366979683L;
+	 readonly stack?: string;
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>
-	 * This implementation prints messages to {@link System#err} containing the
-	 * values of {@code line}, {@code charPositionInLine}, and {@code msg} using
-	 * the following format.</p>
-	 *
-	 * <pre>
-	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
-	 * </pre>
-	 */
-	@Override
-	syntaxError<T extends Object>(recognizer: Recognizer<T,any>, 
-											   offendingSymbol: T,
-											   line: number,
-											   charPositionInLine: number,
-											   msg: string,
-											   e: RecognitionException): void
-	{
-		System.err.println("line " + line + ":" + charPositionInLine + " " + msg);
-	}
-
+	 constructor(public cause: Error)  {
+		 super(cause.message);
+		 this.stack = cause.stack;
+	 }
 }

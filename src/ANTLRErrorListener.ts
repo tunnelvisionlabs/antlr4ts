@@ -31,6 +31,9 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.7499997-07:00
 
 /** How to emit recognition errors. */
+import { Recognizer } from "./misc/Stubs";
+import { RecognitionException } from "./RecognitionException";
+
 export interface ANTLRErrorListener<Symbol> {
 	/**
 	 * Upon syntax error, notify any interested parties. This is not how to
@@ -45,7 +48,7 @@ export interface ANTLRErrorListener<Symbol> {
 	 * token insertion and deletion mechanism).</p>
 	 *
 	 * @param recognizer
-     *        What parser got the error. From this
+	 *        What parser got the error. From this
 	 * 		  object, you can access the context as well
 	 * 		  as the input stream.
 	 * @param offendingSymbol
@@ -65,10 +68,12 @@ export interface ANTLRErrorListener<Symbol> {
 	 *        the parser was able to recover in line without exiting the
 	 *        surrounding rule.
 	 */
-	syntaxError<T extends Symbol>(@NotNull recognizer: Recognizer<T,any>, 
-											   @Nullable offendingSymbol: T,
-											   line: number,
-											   charPositionInLine: number,
-											   @NotNull msg: string,
-											   @Nullable e: RecognitionException): void;
+	syntaxError<T extends Symbol>(
+		/*@NotNull*/ recognizer: Recognizer<T, any>,
+		offendingSymbol: T | undefined,
+		line: number,
+		charPositionInLine: number,
+		/*@NotNull*/
+		msg: string,
+		e: RecognitionException | undefined): void;
 }

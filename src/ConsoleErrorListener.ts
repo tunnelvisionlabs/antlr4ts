@@ -27,16 +27,43 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-// ConvertTo-TS run at 2016-10-04T11:26:51.5187682-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:50.5479602-07:00
 
-/** This signifies any kind of mismatched input exceptions such as
- *  when the current input does not match the expected token.
+/**
+ *
+ * @author Sam Harwell
  */
-export class InputMismatchException extends RecognitionException {
-	private static serialVersionUID: number =  1532568338707443067L;
+import {ANTLRErrorListener} from "./ANTLRErrorListener";
+import { RecognitionException } from "./RecognitionException";
 
-	 constructor(@NotNull recognizer: Parser)  {
-		super(recognizer, recognizer.getInputStream(), recognizer._ctx);
-		this.setOffendingToken(recognizer, recognizer.getCurrentToken());
+// Stubs
+import {Recognizer} from "./misc/Stubs";
+
+export class ConsoleErrorListener implements ANTLRErrorListener<any> {
+	/**
+	 * Provides a default instance of {@link ConsoleErrorListener}.
+	 */
+	static INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * This implementation prints messages to {@link System#err} containing the
+	 * values of {@code line}, {@code charPositionInLine}, and {@code msg} using
+	 * the following format.</p>
+	 *
+	 * <pre>
+	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
+	 * </pre>
+	 */
+	syntaxError<T>(
+		recognizer: Recognizer<T, any>,
+		offendingSymbol: T,
+		line: number,
+		charPositionInLine: number,
+		msg: string,
+		e: RecognitionException): void {
+		console.error(`line ${line}:${charPositionInLine} ${msg}`);
 	}
 }
