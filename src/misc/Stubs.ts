@@ -148,8 +148,6 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
     }
 }
 
-
-
 // Delete these stubs when integrated...
 export class ATN {
     getExpectedTokens(offendingState: number, ruleContext: RuleContext): IntervalSet { throw new Error("Not implemented"); }
@@ -213,7 +211,6 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     getExpectedTokens(): IntervalSet { throw new Error("Not implemented"); }
 
     getVocabulary(): Vocabulary { throw new Error("Not implemented"); }
-
 
     getContext(): ParserRuleContext { throw new Error("Not implemented"); }
 
