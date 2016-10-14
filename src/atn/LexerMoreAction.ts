@@ -28,42 +28,37 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:29.8653427-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:29.9613221-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../Decorators';
 
 /**
- * Implements the {@code mode} lexer action by calling {@link Lexer#mode} with
- * the assigned mode.
+ * Implements the {@code more} lexer action by calling {@link Lexer#more}.
+ *
+ * <p>The {@code more} command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerModeAction implements LexerAction {
-	private mode: number; 
-
+export class LexerMoreAction implements LexerAction {
 	/**
-	 * Constructs a new {@code mode} action with the specified mode value.
-	 * @param mode The mode value to pass to {@link Lexer#mode}.
+	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
-	 constructor(mode: number)  {
-		this.mode = mode;
-	}
-
-	/**
-	 * Get the lexer mode this action should transition the lexer to.
-	 *
-	 * @return The lexer mode for this {@code mode} command.
-	 */
-	getMode(): number {
-		return mode;
+	constructor()  {
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#MODE}.
+	 * @return This method returns {@link LexerActionType#MORE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.MODE;
+		return LexerActionType.MORE;
 	}
 
 	/**
@@ -78,36 +73,34 @@ export class LexerModeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#mode} with the
-	 * value provided by {@link #getMode}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#more}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.mode(mode);
+		lexer.more();
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		hash = MurmurHash.update(hash, mode);
-		return MurmurHash.finish(hash, 2);
+		hash = MurmurHash.update(hash, this.getActionType());
+		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
-			return true;
-		}
-		else if (!(obj instanceof LexerModeAction)) {
-			return false;
-		}
-
-		return mode == ((LexerModeAction)obj).mode;
+		return obj === this;
 	}
 
 	@Override
 	toString(): string {
-		return String.format("mode(%d)", mode);
+		return "more";
 	}
+}
+
+export namespace LexerMoreAction {
+	/**
+	 * Provides a singleton instance of this parameterless lexer action.
+	 */
+	export const INSTANCE: LexerMoreAction = new LexerMoreAction();
 }

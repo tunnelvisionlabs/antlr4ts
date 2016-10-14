@@ -30,6 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.6567992-07:00
 
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../Decorators';
+
 /**
  * Executes a custom lexer action by calling {@link Recognizer#action} with the
  * rule and action indexes assigned to the custom action. The implementation of
@@ -44,8 +50,8 @@
  * @since 4.2
  */
 export class LexerCustomAction implements LexerAction {
-	private ruleIndex: number; 
-	private actionIndex: number; 
+	private readonly ruleIndex: number;
+	private readonly actionIndex: number;
 
 	/**
 	 * Constructs a custom lexer action with the specified rule and action
@@ -56,7 +62,7 @@ export class LexerCustomAction implements LexerAction {
 	 * @param actionIndex The action index to use for calls to
 	 * {@link Recognizer#action}.
 	 */
-	 constructor(ruleIndex: number, actionIndex: number)  {
+	constructor(ruleIndex: number, actionIndex: number) {
 		this.ruleIndex = ruleIndex;
 		this.actionIndex = actionIndex;
 	}
@@ -67,7 +73,7 @@ export class LexerCustomAction implements LexerAction {
 	 * @return The rule index for the custom action.
 	 */
 	getRuleIndex(): number {
-		return ruleIndex;
+		return this.ruleIndex;
 	}
 
 	/**
@@ -76,7 +82,7 @@ export class LexerCustomAction implements LexerAction {
 	 * @return The action index for the custom action.
 	 */
 	getActionIndex(): number {
-		return actionIndex;
+		return this.actionIndex;
 	}
 
 	/**
@@ -113,29 +119,27 @@ export class LexerCustomAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.action(null, ruleIndex, actionIndex);
+		lexer.action(null, this.ruleIndex, this.actionIndex);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		hash = MurmurHash.update(hash, ruleIndex);
-		hash = MurmurHash.update(hash, actionIndex);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.ruleIndex);
+		hash = MurmurHash.update(hash, this.actionIndex);
 		return MurmurHash.finish(hash, 3);
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
+		if (obj === this) {
 			return true;
-		}
-		else if (!(obj instanceof LexerCustomAction)) {
+		} else if (!(obj instanceof LexerCustomAction)) {
 			return false;
 		}
 
-		let other: LexerCustomAction =  (LexerCustomAction)obj;
-		return ruleIndex == other.ruleIndex
-			&& actionIndex == other.actionIndex;
+		return this.ruleIndex === obj.ruleIndex
+			&& this.actionIndex === obj.actionIndex;
 	}
 }

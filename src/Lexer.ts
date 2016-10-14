@@ -45,6 +45,38 @@ export abstract class Lexer {
 	static get HIDDEN(): number {
 		return Token.HIDDEN_CHANNEL;
 	}
+
+	setChannel(channel: number): void {
+		throw "not implemented";
+	}
+
+	setType(type: number): void {
+		throw "not implemented";
+	}
+
+	pushMode(mode: number): void {
+		throw "not implemented";
+	}
+
+	popMode(): void {
+		throw "not implemented";
+	}
+
+	mode(mode: number): void {
+		throw "not implemented";
+	}
+
+	more(): void {
+		throw "not implemented";
+	}
+
+	skip(): void {
+		throw "not implemented";
+	}
+
+	action(arg: null, ruleIndex: number, actionIndex: number): void {
+		throw "not implemented";
+	}
 }
 
 export namespace Lexer {

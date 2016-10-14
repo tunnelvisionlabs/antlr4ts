@@ -28,36 +28,47 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.0449220-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:30.3204839-07:00
+
+import { Lexer } from '../Lexer';
+import { LexerAction } from './LexerAction';
+import { LexerActionType } from './LexerActionType';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../Decorators';
 
 /**
- * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.
- *
- * <p>The {@code popMode} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * Implements the {@code type} lexer action by calling {@link Lexer#setType}
+ * with the assigned type.
  *
  * @author Sam Harwell
  * @since 4.2
  */
-export class LexerPopModeAction implements LexerAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	static INSTANCE: LexerPopModeAction =  new LexerPopModeAction();
+export class LexerTypeAction implements LexerAction {
+	private readonly type: number;
 
 	/**
-	 * Constructs the singleton instance of the lexer {@code popMode} command.
+	 * Constructs a new {@code type} action with the specified token type value.
+	 * @param type The type to assign to the token using {@link Lexer#setType}.
 	 */
-	 constructor()  {
+	constructor(type: number) {
+		this.type = type;
+	}
+
+	/**
+	 * Gets the type to assign to a token created by the lexer.
+	 * @return The type to assign to a token created by the lexer.
+	 */
+	getType(): number {
+		return this.type;
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#POP_MODE}.
+	 * @return This method returns {@link LexerActionType#TYPE}.
 	 */
 	@Override
 	getActionType(): LexerActionType {
-		return LexerActionType.POP_MODE;
+		return LexerActionType.TYPE;
 	}
 
 	/**
@@ -72,28 +83,35 @@ export class LexerPopModeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#popMode}.</p>
+	 * <p>This action is implemented by calling {@link Lexer#setType} with the
+	 * value provided by {@link #getType}.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.popMode();
+		lexer.setType(this.type);
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
-		hash = MurmurHash.update(hash, getActionType().ordinal());
-		return MurmurHash.finish(hash, 1);
+		let hash: number = MurmurHash.initialize();
+		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.type);
+		return MurmurHash.finish(hash, 2);
 	}
 
 	@Override
-	@SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
 	equals(obj: any): boolean {
-		return obj == this;
+		if (obj === this) {
+			return true;
+		} else if (!(obj instanceof LexerTypeAction)) {
+			return false;
+		}
+
+		return this.type === obj.type;
 	}
 
 	@Override
 	toString(): string {
-		return "popMode";
+		return `type(${this.type})`;
 	}
 }
