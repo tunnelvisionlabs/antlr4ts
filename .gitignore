@@ -44,6 +44,7 @@ jspm_packages/
 obj/
 bin/
 .vs/
+*.user
 
 # Java IDEs
 .idea/
