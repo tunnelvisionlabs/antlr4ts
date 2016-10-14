@@ -53,7 +53,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 
 // // Seriously: why isn't this built in to java? ugh!
 // export function join<T>(iter: Iterator<T>, separator: string): string {
-//     let buf: StringBuilder =  new StringBuilder();
+//     let buf = "";
 //     while ( iter.hasNext() ) {
 //         buf.append(iter.next());
 //         if ( iter.hasNext() ) {

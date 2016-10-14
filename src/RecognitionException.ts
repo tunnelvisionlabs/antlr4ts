@@ -153,8 +153,7 @@ export class RecognitionException extends Error {
 	getInputStream(): IntStream | undefined {
 		return this.input;
 	}
-	
-    getOffendingToken(recognizer?: Recognizer<Token,any>): Token|undefined {
+    getOffendingToken(recognizer?: Recognizer<Token, any>): Token |  undefined {
 	    if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
 	}

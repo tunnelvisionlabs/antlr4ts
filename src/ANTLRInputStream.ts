@@ -39,7 +39,7 @@
 import * as assert from "assert";
 import {CharStream} from "./CharStream";
 import {Arrays} from "./misc/Arrays";
-import {Override} from "./misc/Stubs";
+import {Override} from "./Decorators";
 import {IntStream} from "./IntStream";
 import {Interval} from "./misc/Interval";
 

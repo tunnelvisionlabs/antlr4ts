@@ -552,7 +552,6 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * deletion successfully recovers from the mismatched input, otherwise
 	 * {@code null}
 	 */
-	@Nullable
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number =  recognizer.getInputStream().LA(2);
         let expecting: IntervalSet = this.getExpectedTokens(recognizer);

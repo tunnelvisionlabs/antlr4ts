@@ -77,7 +77,6 @@ export class NoViableAltException extends RecognitionException {
             deadEndConfigs?: ATNConfigSet,
             ctx?: ParserRuleContext)
     { 
-    
         if (recognizer instanceof Parser) {
             super(
                 recognizer as Recognizer<Token, any>,

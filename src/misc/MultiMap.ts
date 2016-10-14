@@ -28,26 +28,30 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:42.5447085-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:42.1346951-07:00
 
-/**
- * This exception is thrown to cancel a parsing operation. This exception does
- * not extend {@link RecognitionException}, allowing it to bypass the standard
- * error recovery mechanisms. {@link BailErrorStrategy} throws this exception in
- * response to a parse error.
- *
- * @author Sam Harwell
- */
-export class ParseCancellationException extends Error {
-	// private static serialVersionUID: number =  -3529552099366979683L;
-     readonly stack?: string;
+export class MultiMap<K, V> extends Map<K, V[]> {
+	//private static serialVersionUID: number =  -4956746660057462312L;
+    constructor() {
+        super();
+    }
 
-	 constructor(public cause: Error)  {
-         super("Parse Canceled");
-	     this.stack = cause.stack;
-     }
+	map(key: K, value: V): void {
+		let elementsForKey = super.get(key);
+		if ( !elementsForKey ) {
+			elementsForKey = [] as V[];
+			super.set(key, elementsForKey);
+		}
+		elementsForKey.push(value);
+	}
 
-     getCause(): Error {
-         return this.cause;
-     }
+    getPairs(): [K, V][] {
+        let pairs: [K, V][]  = [];
+        this.forEach((values: V[], key: K) => {
+            values.forEach(v => {
+                pairs.push([key, v])
+            });
+        });
+    	return pairs;
+	}
 }
