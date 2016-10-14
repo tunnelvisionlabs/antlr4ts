@@ -57,7 +57,7 @@ export interface ANTLRErrorStrategy {
 	 * Reset the error handler state for the specified {@code recognizer}.
 	 * @param recognizer the parser instance
 	 */
-	reset( recognizer: Parser): void;
+	reset(/*@NotNull*/ recognizer: Parser): void;
 
 	/**
 	 * This method is called when an unexpected symbol is encountered during an
@@ -77,7 +77,7 @@ export interface ANTLRErrorStrategy {
 	 * @ if the error strategy was not able to
 	 * recover from the unexpected input symbol
 	 */
-	recoverInline( recognizer: Parser): Token;
+	recoverInline(/*@NotNull*/ recognizer: Parser): Token;
 
 	/**
 	 * This method is called to recover from exception {@code e}. This method is
@@ -91,7 +91,7 @@ export interface ANTLRErrorStrategy {
 	 * @ if the error strategy could not recover from
 	 * the recognition exception
 	 */
-	recover( recognizer: Parser, e: RecognitionException): void;
+	recover(/*@NotNull*/ recognizer: Parser, /*@NotNull*/ e: RecognitionException): void;
 
 	/**
 	 * This method provides the error handler with an opportunity to handle
@@ -112,7 +112,7 @@ export interface ANTLRErrorStrategy {
 	 * strategy but cannot be automatically recovered at the current state in
 	 * the parsing process
 	 */
-	sync( recognizer: Parser): void;
+	sync(/*@NotNull*/ recognizer: Parser): void;
 
 	/**
 	 * Tests whether or not {@code recognizer} is in the process of recovering
@@ -125,7 +125,7 @@ export interface ANTLRErrorStrategy {
 	 * @return {@code true} if the parser is currently recovering from a parse
 	 * error, otherwise {@code false}
 	 */
-	inErrorRecoveryMode( recognizer: Parser): boolean;
+	inErrorRecoveryMode(/*@NotNull*/ recognizer: Parser): boolean;
 
 	/**
 	 * This method is called by when the parser successfully matches an input
@@ -133,7 +133,7 @@ export interface ANTLRErrorStrategy {
 	 *
 	 * @param recognizer the parser instance
 	 */
-	reportMatch( recognizer: Parser): void;
+	reportMatch(/*@NotNull*/ recognizer: Parser): void;
 
 	/**
 	 * Report any kind of {@link RecognitionException}. This method is called by
@@ -142,7 +142,7 @@ export interface ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception to report
 	 */
-    reportError(
-         recognizer: Parser, 
-		 e: RecognitionException): void;
+	reportError(
+		/*@NotNull*/ recognizer: Parser,
+		/*@NotNull*/ e: RecognitionException): void;
 }

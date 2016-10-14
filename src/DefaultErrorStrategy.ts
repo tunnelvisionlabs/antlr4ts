@@ -339,7 +339,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	protected reportInputMismatch(@NotNull recognizer: Parser, 
 		@NotNull e: InputMismatchException): void {
 		let expected = e.getExpectedTokens();
-		let expectedString = expected ? expected.toStringVocabulary(recognizer.getVocabulary() as Vocabulary) : "";
+		let expectedString = expected ? expected.toStringVocabulary(recognizer.getVocabulary()) : "";
 		let msg: string =  "mismatched input "+this.getTokenErrorDisplay(e.getOffendingToken(recognizer))+
 		" expecting "+ expectedString;
 		this.notifyErrorListeners(recognizer, msg, e);
@@ -552,7 +552,6 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * deletion successfully recovers from the mismatched input, otherwise
 	 * {@code null}
 	 */
-	@Nullable
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number =  recognizer.getInputStream().LA(2);
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
@@ -639,7 +638,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *  your token objects because you don't have to go modify your lexer
 	 *  so that it creates a new Java type.
 	 */
-	protected getTokenErrorDisplay(t?: Token): string {
+	protected getTokenErrorDisplay(t: Token | undefined): string {
 		if ( !t ) return "<no token>";
 		let s = this.getSymbolText(t);
 		if ( !s) {

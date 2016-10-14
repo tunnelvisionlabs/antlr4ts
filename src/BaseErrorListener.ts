@@ -46,39 +46,43 @@ import {
 	Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
 } from "./misc/Stubs";
 
-// This class seems unused, but might clean up ParserProxyErrorListener a liettle bit if used consistantly.
+// This class seems unused, but might clean up ParserProxyErrorListener a little bit if used consistently.
 
 export class BaseErrorListener implements ParserErrorListener {
 	@Override
-	syntaxError(@NotNull recognizer: Recognizer<Token, any>,
-		@Nullable offendingSymbol: Token,
+	syntaxError<T extends Token>(
+		@NotNull recognizer: Recognizer<T, any>,
+		offendingSymbol: T | undefined,
 		line: number,
 		charPositionInLine: number,
 		@NotNull msg: string,
-		@Nullable e: RecognitionException): void {
+		e: RecognitionException | undefined): void {
 	}
 
 	@Override
-	reportAmbiguity(@NotNull recognizer: Parser,
+	reportAmbiguity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
-		@Nullable ambigAlts: BitSet,
+		ambigAlts: BitSet | undefined,
 		@NotNull configs: ATNConfigSet): void {
 	}
 
 	@Override
-	reportAttemptingFullContext(@NotNull recognizer: Parser,
+	reportAttemptingFullContext(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
-		@Nullable conflictingAlts: BitSet,
+		conflictingAlts: BitSet | undefined,
 		@NotNull conflictState: SimulatorState): void {
 	}
 
 	@Override
-	reportContextSensitivity(@NotNull recognizer: Parser,
+	reportContextSensitivity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

@@ -118,7 +118,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		recognizer.notifyErrorListeners(message);
 	}
 
-	protected getDecisionDescription<T>(
+	protected getDecisionDescription(
 		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA): string {
 		let decision: number = dfa.decision;

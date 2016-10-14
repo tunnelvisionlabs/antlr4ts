@@ -35,7 +35,7 @@ import { NotNull, Nullable } from "./Decorators";
 import { Recognizer } from "./misc/Stubs";
 import {RecognitionException} from "./RecognitionException";
 
-export interface ANTLRErrorListener<T> {
+export interface ANTLRErrorListener<Symbol> {
 	/**
 	 * Upon syntax error, notify any interested parties. This is not how to
 	 * recover from errors or compute error messages. {@link ANTLRErrorStrategy}
@@ -69,10 +69,9 @@ export interface ANTLRErrorListener<T> {
 	 *        the parser was able to recover in line without exiting the
 	 *        surrounding rule.
 	 */
-	syntaxError(
+	syntaxError<T extends Symbol>(
 		/*@NotNull*/ recognizer: Recognizer<T, any>,
-		/*@Nullable*/
-		offendingSymbol: T,
+		offendingSymbol: T | undefined,
 		line: number,
 		charPositionInLine: number,
 		/*@NotNull*/

@@ -64,7 +64,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	}
 
 	@Nullable
-	getDeadEndConfigs() {
+	getDeadEndConfigs(): ATNConfigSet {
 		return this.deadEndConfigs;
 	}
 

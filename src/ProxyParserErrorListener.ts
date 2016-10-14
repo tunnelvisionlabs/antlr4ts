@@ -59,8 +59,8 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		configs: ATNConfigSet): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if ((listener as any).reportAmbiguity) {
-					(listener as any).reportAmbiguity(
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportAmbiguity(
 						recognizer,
 						dfa,
 						startIndex,
@@ -82,8 +82,8 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		conflictState: SimulatorState): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if ((listener as any).reportAttemptingFullContext) {
-					(listener as any).reportAttemptingFullContext(
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportAttemptingFullContext(
 						recognizer,
 						dfa,
 						startIndex,
@@ -103,8 +103,8 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		acceptState: SimulatorState): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if ((listener as any).reportContextSensitivity) {
-					(listener as any).reportContextSensitivity(
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportContextSensitivity(
 						recognizer,
 						dfa,
 						startIndex,
@@ -113,5 +113,9 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 						acceptState);
 				}
 			});
+	}
+
+	static isParserErrorListener(listener: ANTLRErrorListener<Token>): listener is ParserErrorListener {
+		return (listener as any).reportAmbiguity;
 	}
 }

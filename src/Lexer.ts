@@ -30,6 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
 
+import { Recognizer } from './misc/Stubs';
 import { Token } from './Token';
 
 /** A lexer is recognizer that draws input symbols from a character stream.
@@ -37,7 +38,7 @@ import { Token } from './Token';
  *  uses simplified match() and error recovery mechanisms in the interest
  *  of speed.
  */
-export abstract class Lexer {
+export abstract class Lexer extends Recognizer<number, any> {
 	static get DEFAULT_TOKEN_CHANNEL(): number {
 		return Token.DEFAULT_CHANNEL;
 	}

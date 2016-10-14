@@ -60,28 +60,28 @@ export class NoViableAltException extends RecognitionException {
 	@NotNull
 	private startToken: Token; 
 
-	constructor( recognizer:Parser );
+	constructor(/*@NotNull*/ recognizer:Parser );
 	constructor(
-		recognizer: Recognizer<Token, any>,
-		input: TokenStream,
-		startToken: Token,
-		offendingToken: Token,
-		deadEndConfigs: ATNConfigSet,
-		ctx: ParserRuleContext);
+		/*@NotNull*/ recognizer: Recognizer<Token, any>,
+		/*@NotNull*/ input: TokenStream,
+		/*@NotNull*/ startToken: Token,
+		/*@NotNull*/ offendingToken: Token,
+		/*@Nullable*/ deadEndConfigs: ATNConfigSet,
+		/*@NotNull*/ ctx: ParserRuleContext);
 
 	constructor(
-		recognizer: Recognizer<Token, any>, 
-			input?: TokenStream,
-			startToken?: Token,
-			offendingToken?: Token,
-			deadEndConfigs?: ATNConfigSet,
-			ctx?: ParserRuleContext)
-	{ 
+		recognizer: Recognizer<Token, any>,
+		input?: TokenStream,
+		startToken?: Token,
+		offendingToken?: Token,
+		deadEndConfigs?: ATNConfigSet,
+		ctx?: ParserRuleContext)
+	{
 
 		if (recognizer instanceof Parser) {
 			super(
-				recognizer as Recognizer<Token, any>,
-				recognizer.getInputStream() as IntStream,
+				recognizer,
+				recognizer.getInputStream(),
 				recognizer._ctx
 			);
 			super.setOffendingToken(recognizer, recognizer.getCurrentToken())
@@ -94,12 +94,11 @@ export class NoViableAltException extends RecognitionException {
 		}
 	}
 
-	getStartToken(){
+	getStartToken(): Token {
 		return this.startToken;
 	}
 
-	@Nullable
-	getDeadEndConfigs() {
+	getDeadEndConfigs(): ATNConfigSet | undefined {
 		return this.deadEndConfigs;
 	}
 
