@@ -32,7 +32,7 @@
 
 import { ATNState } from './ATNState';
 import { ATNStateType } from './ATNStateType';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { StarLoopEntryState } from './StarLoopEntryState';
 
 export class StarLoopbackState extends ATNState {

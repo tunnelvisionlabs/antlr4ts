@@ -33,7 +33,8 @@
  *  when the current input does not match the expected token.
  */
 import {RecognitionException} from "./RecognitionException";
-import {NotNull, Parser } from "./misc/Stubs";
+import { NotNull } from "./Decorators";
+import { Parser } from "./misc/Stubs";
 
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;

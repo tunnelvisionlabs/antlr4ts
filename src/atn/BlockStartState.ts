@@ -32,7 +32,7 @@
 
 import { BlockEndState } from './BlockEndState';
 import { DecisionState } from './DecisionState';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 
 /**  The start of a regular {@code (...)} block. */
 export abstract class BlockStartState extends DecisionState {

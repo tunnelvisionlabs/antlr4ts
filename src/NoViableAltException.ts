@@ -36,13 +36,12 @@
  */
 import {RecognitionException} from "./RecognitionException";
 import {Token} from "./Token";
-import {TokenStream } from "./TokenStream";
-
-
-
+import { TokenStream } from "./TokenStream";
+import { IntStream } from "./IntStream";
+import { Nullable, NotNull} from "./Decorators";
 // Stubs
 import {
-    Nullable, NotNull, Recognizer, Parser, ParserRuleContext,
+    Recognizer, Parser, ParserRuleContext,
     ATNConfigSet
 } from "./misc/Stubs";
 
@@ -51,8 +50,7 @@ export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
 
 	/** Which configurations did we try at input.index() that couldn't match input.LT(1)? */
-	@Nullable
-	private deadEndConfigs: ATNConfigSet | null; 
+	private deadEndConfigs?: ATNConfigSet ; 
 
 	/** The token object at the start index; the input stream might
 	 * 	not be buffering tokens so get a reference to it. (At the
@@ -72,19 +70,28 @@ export class NoViableAltException extends RecognitionException {
         ctx: ParserRuleContext);
 
     constructor(
-            recognizer, 
-            input?,
-			startToken?,
-			offendingToken?,
-			deadEndConfigs?,
-			ctx?)  { 
+        recognizer: Recognizer<Token, any>, 
+            input?: TokenStream,
+            startToken?: Token,
+            offendingToken?: Token,
+            deadEndConfigs?: ATNConfigSet,
+            ctx?: ParserRuleContext)
+    { 
+    
         if (recognizer instanceof Parser) {
-            
+            super(
+                recognizer as Recognizer<Token, any>,
+                recognizer.getInputStream() as IntStream,
+                recognizer._ctx
+            );
+            super.setOffendingToken(recognizer, recognizer.getCurrentToken())
+
+        } else {
+            super(recognizer, input, ctx);
+            this.deadEndConfigs = deadEndConfigs;
+            this.startToken = startToken as Token;
+            super.setOffendingToken(recognizer, offendingToken);           
         }
-        super(recognizer, input, ctx);
-		this.deadEndConfigs = deadEndConfigs;
-		this.startToken = startToken;
-		super.setOffendingToken(recognizer, offendingToken);
 	}
 
 	getStartToken(){

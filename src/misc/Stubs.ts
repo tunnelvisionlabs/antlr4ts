@@ -27,43 +27,19 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-/**
- * JavaScript's Object class lacks these (compared to Java...)
- */
 import { RuleContext } from "../RuleContext";
 import { Token } from "../Token";
 import { IntStream } from "../IntStream";
 import { TokenStream } from "../TokenStream";
 import { ATNStateType } from "../atn/ATNStateType";
 import { Array2DHashSet } from "./Array2DHashSet";
+import { BailErrorStrategy } from "../BailErrorStrategy";
+import { IntervalSet } from "./IntervalSet";
+import { Vocabulary } from "../Vocabulary";
 
 export interface Equatable {
 	equals(other: any): boolean;
 	hashCode(): number;
-}
-
-export function NotNull(
-    target: any,
-    propertyKey: PropertyKey,
-    propertyDescriptor?: PropertyDescriptor) {
-}
-
-export function Nullable(
-    target: any,
-    propertyKey: PropertyKey,
-    propertyDescriptor?: PropertyDescriptor) {
-}
-
-export function Override(target: any,
-    propertyKey: PropertyKey,
-    propertyDescriptor?: PropertyDescriptor) {
-        // do something with 'target' ...
-}
-
-export function SuppressWarnings(options: string) {
-    return (target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) => {
-    }
 }
 
 export interface JavaIterator<E> {
@@ -172,6 +148,8 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
     }
 }
 
+
+
 // Delete these stubs when integrated...
 export class ATN {
     getExpectedTokens(offendingState: number, ruleContext: RuleContext): IntervalSet { throw new Error("Not implemented"); }
@@ -184,14 +162,13 @@ export class ATN {
 }
 
 export namespace ATN {
-    public const INVALID_ALT_NUMBER = 0;
-
+    export const INVALID_ALT_NUMBER = 0;
 }
 
 export class ATNConfig{
     getAlt(): number { throw new Error("Not implemented"); }
 }
-export class ATNConfigSet extends Array2DHashSet<ATNConfig> {
+export abstract class ATNConfigSet  extends Set<ATNConfig>{
 }
 
 export class ATNInterpreter {
@@ -206,15 +183,14 @@ export class ATNState {
 }
 export abstract class Recognizer<T, T2>{
     getATN(): ATN { throw new Error("Not implemented"); }
+    getTokenType(tag: string): number { throw new Error("Not implemented"); }
+    getRuleNames(): string[] { throw new Error("Not implemented"); }
+
 }
 
 export class ParserATN extends ATN {}
 
 export class ParserATNSimulator{}
-
-export class Vocabulary{
-    getDisplayName(expectedTokenType: number): string { throw new Error("Not implemented"); }
-}
 
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     getInputStream(): TokenStream { throw new Error("Not implemented"); }
@@ -226,9 +202,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
     getState(): number { throw new Error("Not implemented"); }
 
-    notifyErrorListeners(offendingToken, message: string, recognitionException);
-    notifyErrorListeners(offendingToken: string);
-    notifyErrorListeners(offendingToken: any, message?: string, recognitionException?) { throw new Error("Not implemented"); }
+    notifyErrorListeners(offendingToken:any, message: string, recognitionException:any): void;
+    notifyErrorListeners(offendingToken: any): void;
+    notifyErrorListeners(offendingToken: any, message?: string, recognitionException?:any): void { throw new Error("Not implemented"); }
 
     consume() { throw new Error("Not implemented"); }
 
@@ -238,9 +214,14 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
     getVocabulary(): Vocabulary { throw new Error("Not implemented"); }
 
-    getRuleNames(): string[] { throw new Error("Not implemented"); }
 
     getContext(): ParserRuleContext { throw new Error("Not implemented"); }
+
+    getGrammarFileName(): any { throw new Error("Not implemented"); }
+
+    getATNWithBypassAlts(): any { throw new Error("Not implemented"); }
+
+    getRuleIndex(tag: any): number { throw new Error("Not implemented"); }
 }
 export class ParserRuleContext extends RuleContext {
     getRuleIndex(): number { throw new Error("Not implemented"); }
@@ -248,22 +229,10 @@ export class ParserRuleContext extends RuleContext {
     exception: Error;
 
     getParent(): ParserRuleContext { throw new Error("Not implemented"); }
+
+    static emptyContext(): RuleContext { throw new Error("Not implemented"); }
 }
-export class IntervalSet {
-    contains(e: number) { throw new Error("Not implemented"); }
 
-    add(e: number) { throw new Error("Not implemented"); }
-
-    or(other: IntervalSet): IntervalSet { throw new Error("Not implemented"); }
-
-    toString(vocabulary?): string { throw new Error("Not implemented"); }
-
-    getMinElement(): number { throw new Error("Not implemented"); }
-
-    addAll(intervalSet: IntervalSet) { throw new Error("Not implemented"); }
-
-    remove(epsilon: number) { throw new Error("Not implemented"); }
-}
 export class PredictionContext {
     static fromRuleContext(atn: ATN, parserRuleContext: ParserRuleContext) { throw new Error("Not implemented"); }
 }
@@ -293,3 +262,32 @@ export class BitSet {
 }
 export class SimulatorState { }
 
+export class ParserInterpreter extends Parser {
+    constructor(...args: any[]) { super(); throw new Error("Not implemented"); }
+
+    setErrorHandler(bailErrorStrategy: BailErrorStrategy): any { throw new Error("Not implemented"); }
+
+    parse(patternRuleIndex: number): any { throw new Error("Not implemented"); }
+}
+
+export abstract class Lexer {
+	static get DEFAULT_TOKEN_CHANNEL(): number {
+		return Token.DEFAULT_CHANNEL;
+	}
+
+	static get HIDDEN(): number {
+		return Token.HIDDEN_CHANNEL;
+	}
+
+    setInputStream(input: any): any { throw new Error("Not implemented"); }
+    nextToken(): any { throw new Error("Not implemented"); }
+}
+
+export namespace Lexer {
+	export const DEFAULT_MODE: number = 0;
+	export const MORE: number = -2;
+	export const SKIP: number = -3;
+
+	export const MIN_CHAR_VALUE: number = 0x0000;
+	export const MAX_CHAR_VALUE: number = 0xFFFE;
+}

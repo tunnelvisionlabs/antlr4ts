@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
 import { RecognitionException } from "./RecognitionException";
-import { Nullable, NotNull, Override } from "./misc/Stubs";
+import { Nullable, NotNull, Override } from "./Decorators";
 import { Lexer } from "./Lexer";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";

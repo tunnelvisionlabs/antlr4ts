@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.3281988-07:00
 
 import { CommonToken } from '../../CommonToken';
-import { NotNull, Override } from '../../misc/Stubs';
+import { NotNull, Override } from '../../Decorators';
 
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,

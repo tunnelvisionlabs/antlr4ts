@@ -80,28 +80,16 @@
  *  @see ParserRuleContext
  */
 import {RuleNode} from "./tree/RuleNode";
-import {Override, Nullable, Recognizer, ATN, Parser } from "./misc/Stubs";
-import {Interval} from "./misc/Interval";
-import {ParseTree} from "./tree/ParseTree";
-import {ParseTreeVisitor} from "./tree/ParseTreeVisitor";
-import { Arrays } from "./misc/Arrays";
-"
+import {ParseTree as Tree } from "./tree/ParseTree";
+import { Interval } from "./misc/Interval";
+import { Override, Nullable} from "./Decorators"
+import {ATN, Recognizer, Parser, ParserRuleContext } from "./misc/Stubs";
+import {Trees} from "./tree/Trees";
+import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
 
 export class RuleContext implements RuleNode {
-	/** What context invoked this rule? */
-	parent?: RuleContext; 
 
-	/** What state invoked the rule associated with this context?
-	 *  The "return address" is the followState of invokingState
-	 *  If parent is null, this should be -1 this context object represents
-	 *  the start rule.
-	 */
-	invokingState: number;
-
-	constructor(parent?: RuleContext, invokingState?: number)  {
-		this.parent = parent;
-		//if ( parent!=null ) System.out.println("invoke "+stateNumber+" from "+parent);
-		this.invokingState = invokingState || -1;
+    constructor(public readonly parent: RuleContext, public readonly invokingState = -1)  {
 	}
 
 	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
@@ -109,8 +97,8 @@ export class RuleContext implements RuleNode {
 	}
 
 	depth(): number {
-		let n: number =  0;
-		let p: RuleContext | undefined = this;
+		let n =  0;
+		let p: RuleContext =  this;
 		while ( p ) {
 			p = p.parent;
 			n++;
@@ -136,7 +124,7 @@ export class RuleContext implements RuleNode {
 	getRuleContext(): RuleContext { return this; }
 
 	@Override
-	getParent(): RuleContext | undefined { return this.parent; }
+	getParent(): RuleContext { return this.parent; }
 
 	@Override
 	getPayload(): RuleContext { return this; }
@@ -149,18 +137,17 @@ export class RuleContext implements RuleNode {
 	 *  method.
 	 */
 	@Override
-    getText(): string {
-	    const count = this.getChildCount();
-		if (count === 0) {
+	getText(): string {
+		if (this.getChildCount() == 0) {
 			return "";
 		}
 
-	    let builder  = "";
-		for (let i = 0; i < count; i++) {
+		let builder = "";
+		for (let i = 0; i < this.getChildCount(); i++) {
 			builder += this.getChild(i).getText();
 		}
 
-		return builder;
+		return builder.toString();
 	}
 
 	getRuleIndex(): number { return -1; }
@@ -187,8 +174,8 @@ export class RuleContext implements RuleNode {
 	setAltNumber(altNumber: number): void { }
 
 	@Override
-	getChild(i: number): ParseTree{
-		throw RangeError("No children");
+	getChild(i: number): Tree {
+		throw new RangeError("No child contexts");
 	}
 
 	@Override
@@ -197,75 +184,81 @@ export class RuleContext implements RuleNode {
 	}
 
 	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
+	accept<T>(visitor: ParserTreeVisitor<T>): T {
 		return visitor.visitChildren(this);
 	}
 
-	/** Print out a whole tree, not just a node, in LISP format
-	 *  (root child1 .. childN). Print just a node if this is a leaf.
-	 *  We have to know the recognizer so we can get rule names.
-	 */
+	// /** Print out a whole tree, not just a node, in LISP format
+	//  *  (root child1 .. childN). Print just a node if this is a leaf.
+	//  *  We have to know the recognizer so we can get rule names.
+	//  */
 	@Override
-	toStringTree(@Nullable recog: Parser): string {
-		return Trees.toStringTree(this, recog);
+	toStringTree(recog: Parser | string[]): string {
+	    return Trees.toStringTree(this, recog);
 	}
 
-	/** Print out a whole tree, not just a node, in LISP format
-	 *  (root child1 .. childN). Print just a node if this is a leaf.
-	 */
-	toStringTree(@Nullable ruleNames: List<string>): string {
-		return Trees.toStringTree(this, ruleNames);
-	}
+	// /** Print out a whole tree, not just a node, in LISP format
+	//  *  (root child1 .. childN). Print just a node if this is a leaf.
+	//  */
+	// toStringTree(@Nullable ruleNames: string[]): string {
+	// 	return Trees.toStringTree(this, ruleNames);
+	// }
 
-	@Override
-	toStringTree(): string {
-		return toStringTree((List<String>)null);
-	}
+	// @Override
+	// toStringTree(): string {
+	// 	return toStringTree((string[])null);
+	// }
 
-	@Override
-	toString(): string {
-		return toString((List<String>)null, (RuleContext)null);
-	}
+	// @Override
+	// toString(): string {
+	// 	return toString((string[])null, (RuleContext)null);
+	// }
 
-	toString(@Nullable recog: Recognizer<any,any>): string {
-		return toString(recog, ParserRuleContext.emptyContext());
-	}
+	// toString(@Nullable recog: Recognizer<any,any>): string {
+	// 	return toString(recog, ParserRuleContext.emptyContext());
+	// }
 
-	toString(@Nullable ruleNames: List<string>): string {
-		return toString(ruleNames, null);
-	}
+	// toString(@Nullable ruleNames: string[]): string {
+	// 	return toString(ruleNames, null);
+	// }
 
-	// recog null unless ParserRuleContext, in which case we use subclass toString(...)
-	toString(@Nullable recog: Recognizer<any,any>, @Nullable stop: RuleContext): string {
-		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
-		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
-		return toString(ruleNamesList, stop);
-	}
+	// // recog null unless ParserRuleContext, in which case we use subclass toString(...)
+	// toString(@Nullable recog: Recognizer<any,any>, @Nullable stop: RuleContext): string {
+	// 	let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+	// 	let ruleNamesList: string[] =  ruleNames != null ? Arrays.asList(ruleNames) : null;
+	// 	return toString(ruleNamesList, stop);
+	// }
 
-	toString(@Nullable ruleNames: List<string>, @Nullable stop: RuleContext): string {
-		let buf: StringBuilder =  new StringBuilder();
+    toString(
+        arg1?: Recognizer<any, any> | string[],
+        stop: RuleContext = ParserRuleContext.emptyContext()): string
+    {
+        const ruleNames = (arg1 instanceof Recognizer) ?
+            (arg1.getRuleNames()) : arg1 as string[];
+		
+		let buf = "";
 		let p: RuleContext =  this;
-		buf.append("[");
+		buf += ("[");
 		while (p != null && p != stop) {
 			if (ruleNames == null) {
 				if (!p.isEmpty()) {
-					buf.append(p.invokingState);
+					buf += (p.invokingState);
 				}
-			}
-			else {
+			} else {
 				let ruleIndex: number =  p.getRuleIndex();
-				let ruleName: string =  ruleIndex >= 0 && ruleIndex < ruleNames.size() ? ruleNames.get(ruleIndex) : Integer.toString(ruleIndex);
-				buf.append(ruleName);
+                let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
+                    ? ruleNames[ruleIndex] : ruleIndex.toString();
+				buf += (ruleName);
 			}
 
-			if (p.parent != null && (ruleNames != null || !p.parent.isEmpty())) {
-				buf.append(" ");
+			if (p.parent && (ruleNames || !p.parent.isEmpty())) {
+				buf += (" ");
 			}
 
 			p = p.parent;
 		}
 
-		buf.append("]");
+		buf += ("]");
 		return buf.toString();
 	}
 }

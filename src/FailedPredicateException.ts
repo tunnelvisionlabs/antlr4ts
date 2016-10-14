@@ -34,9 +34,9 @@
  *  Disambiguating predicate evaluation occurs when we test a predicate during
  *  prediction.
  */
-import {RecognitionException} from "./RecognitionException";
+import { RecognitionException } from "./RecognitionException";
+import { NotNull, Nullable } from "./Decorators";
 import {
-    NotNull, Nullable,
     ATN, ATNState, Recognizer, Parser,
     AbstractPredicateTransition,PredicateTransition
     } from "./misc/Stubs";
@@ -50,8 +50,8 @@ export class FailedPredicateException extends RecognitionException {
 	private predicate?: string; 
 
 	constructor(@NotNull recognizer: Parser, 
-            @Nullable predicate?: string,
-			@Nullable message?: string) 
+            predicate?: string,
+			message?: string) 
 	{
         super(FailedPredicateException.formatMessage(
             predicate, message), recognizer,
@@ -81,13 +81,13 @@ export class FailedPredicateException extends RecognitionException {
 	}
 
 	@Nullable
-	getPredicate(): string {
+	getPredicate() {
         return this.predicate;
 	}
 
 	@NotNull
-	private static formatMessage(@Nullable predicate: string, @Nullable message: string): string {
-		if (message != null) {
+	private static formatMessage( predicate?: string, message?: string): string {
+		if (message) {
 			return message;
 		}
 

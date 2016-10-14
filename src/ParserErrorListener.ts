@@ -30,10 +30,10 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { Token } from './Token';
-
+import { NotNull, Nullable } from "./Decorators";
 // Stubs
 import {
-    NotNull, Nullable, DFA, BitSet, ATNConfigSet,
+    DFA, BitSet, ATNConfigSet,
     Parser, SimulatorState
 } from './misc/Stubs'
 import * as Stubs from "./misc/Stubs";

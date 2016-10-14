@@ -35,17 +35,16 @@
  *  in the input, where it is in the ATN, the rule invocation stack,
  *  and what kind of problem occurred.
  */
-import {RuleContext} from "./RuleContext";
-import {Lexer} from "./Lexer";
-import {CharStream} from "./CharStream";
-import {IntStream} from './IntStream';
-import {Token} from "./Token";
+import { RuleContext } from "./RuleContext";
+import { Lexer } from "./Lexer";
+import { CharStream } from "./CharStream";
+import { IntStream } from './IntStream';
+import { Token } from "./Token";
+import { IntervalSet } from "./misc/IntervalSet"
+import { SuppressWarnings, Nullable } from "./Decorators";
 
 // Stubs
-import {
-    Nullable, SuppressWarnings, Recognizer, Parser, ParserRuleContext,
-    IntervalSet
-} from "./misc/Stubs";
+import { Recognizer, Parser, ParserRuleContext} from "./misc/Stubs";
 
 export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;
@@ -65,7 +64,7 @@ export class RecognitionException extends Error {
 	 * support accessing symbols by index, we have to track the {@link Token}
 	 * instance itself.
 	 */
-	private offendingToken: Token; 
+	private offendingToken?: Token; 
 
 	private offendingState: number =  -1;
 
@@ -81,7 +80,7 @@ export class RecognitionException extends Error {
 				input?: IntStream,
                 ctx?: ParserRuleContext);
 
-     constructor( message, recognizer?, input?, ctx? ) {
+     constructor( message: any, recognizer?: any, input?: any, ctx?: any ) {
          super(typeof message === 'string' ? message : undefined);
          if (typeof message !== 'string') {
              [recognizer, input, ctx] = [message, recognizer, input];
@@ -120,13 +119,11 @@ export class RecognitionException extends Error {
 	 * @return The set of token types that could potentially follow the current
 	 * state in the ATN, or {@code null} if the information is not available.
 	 */
-	@Nullable
-	getExpectedTokens(): IntervalSet {
+	getExpectedTokens(): IntervalSet | undefined{
 		if (this.recognizer) {
 			return this.recognizer.getATN().getExpectedTokens(this.offendingState, this.ctx);
 		}
-
-		return null;
+		return undefined;
 	}
 
 	/**
@@ -152,20 +149,19 @@ export class RecognitionException extends Error {
 	 * where this exception was thrown, or {@code null} if the stream is not
 	 * available.
 	 */
-	@Nullable
-	getInputStream(): IntStream {
+	
+	getInputStream(): IntStream | undefined {
 		return this.input;
 	}
-
-	@Nullable
-    getOffendingToken(recognizer?): Token {
-	    if (recognizer && recognizer !== this.recognizer) return null;
+	
+    getOffendingToken(recognizer?: Recognizer<Token,any>): Token|undefined {
+	    if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
 	}
 
     protected setOffendingToken<Symbol extends Token>(
         recognizer: Recognizer<Symbol, any>,
-        @Nullable offendingToken: Symbol): void {
+        offendingToken?: Symbol): void {
 		if (recognizer === this.recognizer) {
 			this.offendingToken = offendingToken;
 		}

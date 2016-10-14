@@ -31,7 +31,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:35.6390614-07:00
 
 import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { JavaMap, Override } from '../misc/Stubs';
+import { Override } from "../Decorators";
+import { JavaMap } from '../misc/Stubs';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import * as assert from 'assert';
