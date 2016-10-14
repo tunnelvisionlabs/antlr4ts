@@ -65,7 +65,7 @@ export class LexerNoViableAltException extends RecognitionException {
 
 	@Nullable
 	getDeadEndConfigs() {
-        return this.deadEndConfigs;
+		return this.deadEndConfigs;
 	}
 
 	@Override
@@ -73,15 +73,15 @@ export class LexerNoViableAltException extends RecognitionException {
 		return super.getInputStream() as CharStream;
 	}
 
-    @Override
-    toString(): string {
-        let symbol = "";
-        if (this.startIndex >= 0 && this.startIndex < this.getInputStream().size()) {
-            symbol = this.getInputStream().getText(Interval.of(this.startIndex, this.startIndex));
-            symbol = Utils.escapeWhitespace(symbol, false);
-        }
+	@Override
+	toString(): string {
+		let symbol = "";
+		if (this.startIndex >= 0 && this.startIndex < this.getInputStream().size()) {
+			symbol = this.getInputStream().getText(Interval.of(this.startIndex, this.startIndex));
+			symbol = Utils.escapeWhitespace(symbol, false);
+		}
 
-        // return String.format(Locale.getDefault(), "%s('%s')", LexerNoViableAltException.class.getSimpleName(), symbol);
-        return `LexerNoViableAltException('${symbol}')`;
-    }
+		// return String.format(Locale.getDefault(), "%s('%s')", LexerNoViableAltException.class.getSimpleName(), symbol);
+		return `LexerNoViableAltException('${symbol}')`;
+	}
 }

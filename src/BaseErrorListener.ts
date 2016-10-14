@@ -43,46 +43,46 @@ import { Override, NotNull, Nullable } from "./Decorators";
 
 // Stubs
 import {
-    Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
+	Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
 } from "./misc/Stubs";
 
 // This class seems unused, but might clean up ParserProxyErrorListener a liettle bit if used consistantly.
 
 export class BaseErrorListener implements ParserErrorListener {
-    @Override
-    syntaxError(@NotNull recognizer: Recognizer<Token, any>,
-        @Nullable offendingSymbol: Token,
-        line: number,
-        charPositionInLine: number,
-        @NotNull msg: string,
-        @Nullable e: RecognitionException): void {
-    }
+	@Override
+	syntaxError(@NotNull recognizer: Recognizer<Token, any>,
+		@Nullable offendingSymbol: Token,
+		line: number,
+		charPositionInLine: number,
+		@NotNull msg: string,
+		@Nullable e: RecognitionException): void {
+	}
 
-    @Override
-    reportAmbiguity(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        exact: boolean,
-        @Nullable ambigAlts: BitSet,
-        @NotNull configs: ATNConfigSet): void {
-    }
+	@Override
+	reportAmbiguity(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		@Nullable ambigAlts: BitSet,
+		@NotNull configs: ATNConfigSet): void {
+	}
 
-    @Override
-    reportAttemptingFullContext(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        @Nullable conflictingAlts: BitSet,
-        @NotNull conflictState: SimulatorState): void {
-    }
+	@Override
+	reportAttemptingFullContext(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		@Nullable conflictingAlts: BitSet,
+		@NotNull conflictState: SimulatorState): void {
+	}
 
-    @Override
-    reportContextSensitivity(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        prediction: number,
-        @NotNull acceptState: SimulatorState): void {
-    }
+	@Override
+	reportContextSensitivity(@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		@NotNull acceptState: SimulatorState): void {
+	}
 }

@@ -45,26 +45,26 @@ import { Recognizer } from "./misc/Stubs";
  */
 export class ProxyErrorListener<Symbol> implements ANTLRErrorListener<Symbol> {
 
-    constructor(private delegates: ANTLRErrorListener<Symbol>[]) {
-        if (!delegates) {
-            throw new Error("Invalid delegates");
-        }
-    }
+	constructor(private delegates: ANTLRErrorListener<Symbol>[]) {
+		if (!delegates) {
+			throw new Error("Invalid delegates");
+		}
+	}
 
-    protected getDelegates() {
-        return this.delegates;
-    }
+	protected getDelegates() {
+		return this.delegates;
+	}
 
-    @Override
-    syntaxError<T extends Symbol>(
-        @NotNull recognizer: Recognizer<T, any>,
-        @Nullable offendingSymbol: T,
-        line: number,
-        charPositionInLine: number,
-        @NotNull msg: string,
-        @Nullable e: RecognitionException): void {
-        this.delegates.forEach(listener => {
-            listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
-        });
-    }
+	@Override
+	syntaxError<T extends Symbol>(
+		@NotNull recognizer: Recognizer<T, any>,
+		@Nullable offendingSymbol: T,
+		line: number,
+		charPositionInLine: number,
+		@NotNull msg: string,
+		@Nullable e: RecognitionException): void {
+		this.delegates.forEach(listener => {
+			listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+		});
+	}
 }

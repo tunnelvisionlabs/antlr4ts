@@ -69,22 +69,22 @@ export class RecognitionException extends Error {
 	private offendingState: number =  -1;
 
 	 constructor(lexer: Lexer | null | undefined, 
-			     input: CharStream);
+				 input: CharStream);
 
 	 constructor(recognizer?: Recognizer<Token,any>, 
 				input?: IntStream,
-                ctx?: ParserRuleContext); 
+				ctx?: ParserRuleContext); 
 
 	 constructor(message: string, 
 				recognizer?: Recognizer<Token,any>,
 				input?: IntStream,
-                ctx?: ParserRuleContext);
+				ctx?: ParserRuleContext);
 
-     constructor( message: any, recognizer?: any, input?: any, ctx?: any ) {
-         super(typeof message === 'string' ? message : undefined);
-         if (typeof message !== 'string') {
-             [recognizer, input, ctx] = [message, recognizer, input];
-         }
+	 constructor( message: any, recognizer?: any, input?: any, ctx?: any ) {
+		 super(typeof message === 'string' ? message : undefined);
+		 if (typeof message !== 'string') {
+			 [recognizer, input, ctx] = [message, recognizer, input];
+		 }
 
 		this.recognizer = recognizer;
 		this.input = input;
@@ -154,14 +154,14 @@ export class RecognitionException extends Error {
 		return this.input;
 	}
 	
-    getOffendingToken(recognizer?: Recognizer<Token,any>): Token|undefined {
-	    if (recognizer && recognizer !== this.recognizer) return undefined;
+	getOffendingToken(recognizer?: Recognizer<Token,any>): Token|undefined {
+		if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
 	}
 
-    protected setOffendingToken<Symbol extends Token>(
-        recognizer: Recognizer<Symbol, any>,
-        offendingToken?: Symbol): void {
+	protected setOffendingToken<Symbol extends Token>(
+		recognizer: Recognizer<Symbol, any>,
+		offendingToken?: Symbol): void {
 		if (recognizer === this.recognizer) {
 			this.offendingToken = offendingToken;
 		}

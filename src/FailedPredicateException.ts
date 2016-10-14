@@ -50,18 +50,18 @@ export class FailedPredicateException extends RecognitionException {
 	private predicate?: string; 
 
 	constructor(@NotNull recognizer: Parser, 
-            predicate?: string,
+			predicate?: string,
 			message?: string) 
 	{
-        super(FailedPredicateException.formatMessage(
-            predicate, message), recognizer,
-            recognizer.getInputStream(), recognizer._ctx);
+		super(FailedPredicateException.formatMessage(
+			predicate, message), recognizer,
+			recognizer.getInputStream(), recognizer._ctx);
 		let s: ATNState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
 
-        let trans = s.transition(0) as AbstractPredicateTransition;
+		let trans = s.transition(0) as AbstractPredicateTransition;
 		if (trans instanceof PredicateTransition) {
 			this.ruleIndex = (trans as PredicateTransition).ruleIndex;
-            this.predicateIndex = (trans as PredicateTransition).predIndex;
+			this.predicateIndex = (trans as PredicateTransition).predIndex;
 		}
 		else {
 			this.ruleIndex = 0;
@@ -77,12 +77,12 @@ export class FailedPredicateException extends RecognitionException {
 	}
 
 	getPredIndex(): number {
-        return this.predicateIndex;
+		return this.predicateIndex;
 	}
 
 	@Nullable
 	getPredicate() {
-        return this.predicate;
+		return this.predicate;
 	}
 
 	@NotNull
@@ -91,6 +91,6 @@ export class FailedPredicateException extends RecognitionException {
 			return message;
 		}
 
-        return `failed predicate: {${predicate}}?`;
+		return `failed predicate: {${predicate}}?`;
 	}
 }

@@ -40,10 +40,10 @@
  */
 export class ParseCancellationException extends Error {
 	// private static serialVersionUID: number =  -3529552099366979683L;
-     readonly stack?: string;
+	 readonly stack?: string;
 
 	 constructor(public cause: Error)  {
-         super(cause.message);
-	     this.stack = cause.stack;
+		 super(cause.message);
+		 this.stack = cause.stack;
 	 }
 }
