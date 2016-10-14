@@ -35,7 +35,7 @@
  *  prediction.
  */
 import { RecognitionException } from "./RecognitionException";
-import { NotNull, Nullable } from "./Decorators";
+import { NotNull } from "./Decorators";
 import {
     ATN, ATNState, Recognizer, Parser,
     AbstractPredicateTransition,PredicateTransition

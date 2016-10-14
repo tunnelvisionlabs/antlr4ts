@@ -39,7 +39,7 @@
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
 import {ParserErrorListener} from "./ParserErrorListener";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override, NotNull } from "./Decorators";
 
 // Stubs
 import {

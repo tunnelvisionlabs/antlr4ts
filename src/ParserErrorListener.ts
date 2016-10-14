@@ -30,7 +30,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { Token } from './Token';
-import { NotNull, Nullable } from "./Decorators";
 // Stubs
 import {
 	DFA, BitSet, ATNConfigSet,
@@ -84,15 +83,12 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 */
 	reportAmbiguity(
 		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/
-		dfa: DFA,
+		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
-		/*@Nullable*/
-		ambigAlts: BitSet,
-		/*@NotNull*/
-		configs: ATNConfigSet): void;
+		ambigAlts: BitSet | undefined,
+		/*@NotNull*/ configs: ATNConfigSet): void;
 
 	/**
 	 * This method is called when an SLL conflict occurs and the parser is about
@@ -115,14 +111,11 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 */
 	reportAttemptingFullContext(
 		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/
-		dfa: DFA,
+		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
-		/*@Nullable*/
-		conflictingAlts: BitSet,
-		/*@NotNull*/
-		conflictState: SimulatorState): void;
+		conflictingAlts: BitSet | undefined,
+		/*@NotNull*/ conflictState: SimulatorState): void;
 
 	/**
 	 * This method is called by the parser when a full-context prediction has a
@@ -162,11 +155,9 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 */
 	reportContextSensitivity(
 		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/
-		dfa: DFA,
+		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		prediction: number,
-		/*@NotNull*/
-		acceptState: SimulatorState): void;
+		/*@NotNull*/ acceptState: SimulatorState): void;
 }

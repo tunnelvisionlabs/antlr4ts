@@ -41,7 +41,6 @@ import { CharStream } from "./CharStream";
 import { IntStream } from './IntStream';
 import { Token } from "./Token";
 import { IntervalSet } from "./misc/IntervalSet"
-import { SuppressWarnings, Nullable } from "./Decorators";
 
 // Stubs
 import { Recognizer, Parser, ParserRuleContext} from "./misc/Stubs";

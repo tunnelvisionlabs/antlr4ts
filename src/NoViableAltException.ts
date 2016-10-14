@@ -38,7 +38,7 @@ import {RecognitionException} from "./RecognitionException";
 import {Token} from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
-import { Nullable, NotNull} from "./Decorators";
+import { NotNull } from "./Decorators";
 // Stubs
 import {
     Recognizer, Parser, ParserRuleContext,
@@ -66,7 +66,7 @@ export class NoViableAltException extends RecognitionException {
 		/*@NotNull*/ input: TokenStream,
 		/*@NotNull*/ startToken: Token,
 		/*@NotNull*/ offendingToken: Token,
-		/*@Nullable*/ deadEndConfigs: ATNConfigSet,
+		deadEndConfigs: ATNConfigSet | undefined,
 		/*@NotNull*/ ctx: ParserRuleContext);
 
 	constructor(

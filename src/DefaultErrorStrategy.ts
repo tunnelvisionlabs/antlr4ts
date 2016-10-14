@@ -47,7 +47,7 @@ import { RuleContext } from "./RuleContext";
 import { ATNStateType } from "./atn/ATNStateType";
 import { IntervalSet } from "./misc/IntervalSet";
 import { Vocabulary } from "./Vocabulary";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override, NotNull } from "./Decorators";
 // Stubs
 import {
     Parser, ParserATN, PredictionContext,

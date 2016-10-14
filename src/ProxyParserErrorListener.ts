@@ -32,7 +32,7 @@ import { Token } from './Token';
 import { RecognitionException } from "./RecognitionException";
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { ParserErrorListener } from "./ParserErrorListener";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override } from "./Decorators";
 // Stubs
 import {
 	Recognizer, BitSet, ATNConfigSet, DFA, Parser,

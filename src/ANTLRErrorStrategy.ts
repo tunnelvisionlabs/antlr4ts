@@ -47,7 +47,6 @@
  *
  * <p>TODO: what to do about lexers</p>
  */
-import { NotNull } from "./Decorators";
 import {Parser} from "./misc/Stubs";
 import {Token} from "./Token";
 import {RecognitionException} from "./RecognitionException";

@@ -36,7 +36,6 @@ import { Interval } from './misc/Interval';
 import { Lexer } from './Lexer';
 import { NotNull, Override } from './Decorators';
 import { RuleContext } from './RuleContext';
-import { SyntaxTree } from './tree/SyntaxTree';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
 import { TokenStream } from './TokenStream';

@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
 import { RecognitionException } from "./RecognitionException";
-import { Nullable, NotNull, Override } from "./Decorators";
+import { NotNull, Override } from "./Decorators";
 import { Lexer } from "./Lexer";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
@@ -47,13 +47,12 @@ export class LexerNoViableAltException extends RecognitionException {
 	private startIndex: number; 
 
 	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
-	@Nullable
-	private deadEndConfigs: ATNConfigSet; 
+	private deadEndConfigs?: ATNConfigSet;
 
-	 constructor(@Nullable lexer: Lexer, 
+	 constructor(lexer: Lexer | undefined,
 									 @NotNull input: CharStream,
 									 startIndex: number,
-									 @Nullable deadEndConfigs: ATNConfigSet)  {
+									 deadEndConfigs: ATNConfigSet | undefined)  {
 		super(lexer, input);
 		this.startIndex = startIndex;
 		this.deadEndConfigs = deadEndConfigs;
@@ -63,8 +62,7 @@ export class LexerNoViableAltException extends RecognitionException {
 		return this.startIndex;
 	}
 
-	@Nullable
-	getDeadEndConfigs(): ATNConfigSet {
+	getDeadEndConfigs(): ATNConfigSet | undefined {
 		return this.deadEndConfigs;
 	}
 

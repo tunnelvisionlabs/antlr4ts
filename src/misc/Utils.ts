@@ -34,7 +34,7 @@
 // as much of it may be supported natively by JavaScript. Or otherwise need
 // substantial rethink
 
-import {NotNull, Nullable } from "../Decorators";
+import { NotNull } from "../Decorators";
 
 export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
     return escapeSpaces ? s.replace(/ /, '\u00B7') : s

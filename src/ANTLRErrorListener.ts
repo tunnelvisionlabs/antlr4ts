@@ -31,9 +31,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.7499997-07:00
 
 /** How to emit recognition errors. */
-import { NotNull, Nullable } from "./Decorators";
 import { Recognizer } from "./misc/Stubs";
-import {RecognitionException} from "./RecognitionException";
+import { RecognitionException } from "./RecognitionException";
 
 export interface ANTLRErrorListener<Symbol> {
 	/**
@@ -76,6 +75,5 @@ export interface ANTLRErrorListener<Symbol> {
 		charPositionInLine: number,
 		/*@NotNull*/
 		msg: string,
-		/*@Nullable*/
-		e?: RecognitionException): void;
+		e: RecognitionException | undefined): void;
 }

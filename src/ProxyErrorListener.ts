@@ -30,7 +30,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.8126690-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { RecognitionException } from "./RecognitionException";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override, NotNull } from "./Decorators";
 
 // Stubs
 import { Recognizer } from "./misc/Stubs";
@@ -58,11 +58,11 @@ export class ProxyErrorListener<Symbol> implements ANTLRErrorListener<Symbol> {
 	@Override
 	syntaxError<T extends Symbol>(
 		@NotNull recognizer: Recognizer<T, any>,
-		@Nullable offendingSymbol: T,
+		offendingSymbol: T | undefined,
 		line: number,
 		charPositionInLine: number,
 		@NotNull msg: string,
-		@Nullable e: RecognitionException): void {
+		e: RecognitionException | undefined): void {
 		this.delegates.forEach(listener => {
 			listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
 		});

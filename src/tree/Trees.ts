@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
-import { NotNull, Nullable } from "../Decorators";
+import { NotNull } from "../Decorators";
 import { Parser, ATN, ParserRuleContext } from "../misc/Stubs";
 import {Arrays} from "../misc/Arrays";
 import {RuleNode} from "./RuleNode";

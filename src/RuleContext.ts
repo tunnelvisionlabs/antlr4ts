@@ -82,7 +82,7 @@
 import {RuleNode} from "./tree/RuleNode";
 import {ParseTree as Tree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
-import { Override, Nullable} from "./Decorators"
+import { Override } from "./Decorators"
 import {ATN, Recognizer, Parser, ParserRuleContext } from "./misc/Stubs";
 import {Trees} from "./tree/Trees";
 import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";

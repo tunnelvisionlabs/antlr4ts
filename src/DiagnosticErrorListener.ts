@@ -52,7 +52,7 @@
  * @author Sam Harwell
  */
 import { BaseErrorListener } from "./BaseErrorListener";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override, NotNull } from "./Decorators";
 import {DFA, BitSet, ATNConfig, ATNConfigSet,SimulatorState, Parser
 } from "./misc/Stubs";
 import { Interval } from "./misc/Interval";
@@ -77,7 +77,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
-		@Nullable ambigAlts: BitSet,
+		ambigAlts: BitSet | undefined,
 		@NotNull configs: ATNConfigSet): void {
 		if (this.exactOnly && !exact) {
 			return;
@@ -95,7 +95,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
-		@Nullable conflictingAlts: BitSet,
+		conflictingAlts: BitSet | undefined,
 		@NotNull conflictState: SimulatorState): void {
 		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
@@ -149,7 +149,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 	 * returns the set of alternatives represented in {@code configs}.
 	 */
 	@NotNull
-	protected getConflictingAlts(@Nullable reportedAlts: BitSet, @NotNull configs: ATNConfigSet): BitSet {
+	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {
 		if (reportedAlts != null) {
 			return reportedAlts;
 		}
