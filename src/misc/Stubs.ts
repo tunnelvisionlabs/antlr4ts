@@ -27,14 +27,18 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { RuleContext } from "../RuleContext";
-import { Token } from "../Token";
-import { IntStream } from "../IntStream";
-import { TokenStream } from "../TokenStream";
-import { ATNStateType } from "../atn/ATNStateType";
+import { AbstractPredicateTransition } from '../atn/AbstractPredicateTransition';
 import { Array2DHashSet } from "./Array2DHashSet";
+import { ATNState } from '../atn/ATNState';
+import { ATNStateType } from "../atn/ATNStateType";
 import { BailErrorStrategy } from "../BailErrorStrategy";
 import { IntervalSet } from "./IntervalSet";
+import { IntStream } from "../IntStream";
+import { ParseTreeListener } from '../tree/ParseTreeListener';
+import { PredictionContext } from '../atn/PredictionContext';
+import { RuleContext } from "../RuleContext";
+import { Token } from "../Token";
+import { TokenStream } from "../TokenStream";
 import { Vocabulary } from "../Vocabulary";
 
 export interface Equatable {
@@ -156,9 +160,9 @@ export class ATN {
 
     states: ATNState[];
 
-    nextTokens(atnState: ATNState): IntervalSet;
-    nextTokens(atnState: ATNState, p1: void): IntervalSet;
-    nextTokens(atnState: ATNState, p1?: void): IntervalSet { throw new Error("Not implemented"); }
+    nextTokens(s: ATNState): IntervalSet;
+    nextTokens(s: ATNState, ctx: PredictionContext): IntervalSet;
+    nextTokens(s: ATNState, ctx?: PredictionContext): IntervalSet { throw new Error("Not implemented"); }
 }
 
 export namespace ATN {
@@ -171,16 +175,6 @@ export class ATNConfig{
 export abstract class ATNConfigSet  extends Set<ATNConfig>{
 }
 
-export class ATNInterpreter {
-    atn: ATN;
-}
-export class ATNState {
-    transition(number: number): Transition { throw new Error("Not implemented"); }
-
-    getStateType(): ATNStateType { throw new Error("Not implemented"); }
-
-    ruleIndex: number;
-}
 export abstract class Recognizer<T, T2>{
     getATN(): ATN { throw new Error("Not implemented"); }
     getTokenType(tag: string): number { throw new Error("Not implemented"); }
@@ -188,13 +182,15 @@ export abstract class Recognizer<T, T2>{
     getState(): number { throw new Error("not implemented"); }
 }
 
-export class ParserATN extends ATN {}
+export abstract class ATNSimulator {
+	atn: ATN;
+}
 
-export class ParserATNSimulator{}
+export class ParserATNSimulator extends ATNSimulator {}
 
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
-    getInputStream(): TokenStream { throw new Error("Not implemented"); }
-    getInterpreter(): ATNInterpreter { throw new Error("Not implemented"); }
+	getInputStream(): TokenStream { throw new Error("Not implemented"); }
+	getInterpreter(): ParserATNSimulator { throw new Error("Not implemented"); }
 
     getCurrentToken():Token { throw new Error("Not implemented"); }
 
@@ -231,25 +227,12 @@ export class ParserRuleContext extends RuleContext {
     getParent(): ParserRuleContext { throw new Error("Not implemented"); }
 
     static emptyContext(): RuleContext { throw new Error("Not implemented"); }
+
+	enterRule(listener: ParseTreeListener): void { }
+	exitRule(listener: ParseTreeListener): void { }
 }
 
-export class PredictionContext {
-    static fromRuleContext(atn: ATN, parserRuleContext: ParserRuleContext) { throw new Error("Not implemented"); }
-}
-
-export abstract class Transition {
-    target: ATNState;
-
-}
-
-export class RuleTransition extends Transition {
-    followState: ATNState;
-    precidence: number;
-    ruleIndex: number;
-}
-
-export abstract class AbstractPredicateTransition extends Transition {}
-export class PredicateTransition extends AbstractPredicateTransition {
+export abstract class PredicateTransition extends AbstractPredicateTransition {
     ruleIndex: number;
     predIndex: number;
 }
@@ -270,7 +253,7 @@ export class ParserInterpreter extends Parser {
     parse(patternRuleIndex: number): any { throw new Error("Not implemented"); }
 }
 
-export abstract class Lexer {
+export abstract class Lexer extends Recognizer<number, any> {
 	static get DEFAULT_TOKEN_CHANNEL(): number {
 		return Token.DEFAULT_CHANNEL;
 	}
@@ -279,8 +262,37 @@ export abstract class Lexer {
 		return Token.HIDDEN_CHANNEL;
 	}
 
-    setInputStream(input: any): any { throw new Error("Not implemented"); }
-    nextToken(): any { throw new Error("Not implemented"); }
+	setChannel(channel: number): void {
+		throw "not implemented";
+	}
+
+	setType(type: number): void {
+		throw "not implemented";
+	}
+
+	pushMode(mode: number): void {
+		throw "not implemented";
+	}
+
+	popMode(): void {
+		throw "not implemented";
+	}
+
+	mode(mode: number): void {
+		throw "not implemented";
+	}
+
+	more(): void {
+		throw "not implemented";
+	}
+
+	skip(): void {
+		throw "not implemented";
+	}
+
+	action(arg: null, ruleIndex: number, actionIndex: number): void {
+		throw "not implemented";
+	}
 }
 
 export namespace Lexer {

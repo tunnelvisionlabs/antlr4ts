@@ -34,12 +34,12 @@
  *  Disambiguating predicate evaluation occurs when we test a predicate during
  *  prediction.
  */
+
+import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
+import { ATNState } from './atn/ATNState';
 import { RecognitionException } from "./RecognitionException";
 import { NotNull } from "./Decorators";
-import {
-    ATN, ATNState, Recognizer, Parser,
-    AbstractPredicateTransition,PredicateTransition
-    } from "./misc/Stubs";
+import { ATN, Recognizer, Parser, PredicateTransition } from "./misc/Stubs";
 
 
 export class FailedPredicateException extends RecognitionException {

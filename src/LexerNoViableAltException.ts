@@ -32,7 +32,7 @@
 
 import { RecognitionException } from "./RecognitionException";
 import { NotNull, Override } from "./Decorators";
-import { Lexer } from "./Lexer";
+import { Lexer } from "./misc/Stubs";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
 import * as Utils from "./misc/Utils";

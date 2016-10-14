@@ -35,24 +35,24 @@
  * error reporting and recovery in ANTLR parsers.
  */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
-import { RecognitionException } from "./RecognitionException";
-import { NoViableAltException } from "./NoViableAltException";
-import { InputMismatchException } from "./InputMismatchException";
+import { ATNState } from './atn/ATNState';
+import { ATNStateType } from "./atn/ATNStateType";
 import { FailedPredicateException } from "./FailedPredicateException";
+import { InputMismatchException } from "./InputMismatchException";
+import { IntervalSet } from "./misc/IntervalSet";
+import { NoViableAltException } from "./NoViableAltException";
+import { PredictionContext } from './atn/PredictionContext';
+import { RecognitionException } from "./RecognitionException";
+import { RuleContext } from "./RuleContext";
+import { RuleTransition } from './atn/RuleTransition';
 import { TokenStream } from "./TokenStream";
 import { Token } from "./Token";
-import { TokenSource } from "./TokenSource";
 import { TokenFactory } from "./TokenFactory";
-import { RuleContext } from "./RuleContext";
-import { ATNStateType } from "./atn/ATNStateType";
-import { IntervalSet } from "./misc/IntervalSet";
+import { TokenSource } from "./TokenSource";
 import { Vocabulary } from "./Vocabulary";
 import { Override, NotNull } from "./Decorators";
 // Stubs
-import {
-    Parser, ParserATN, PredictionContext,
-    ATN, ATNState, RuleTransition
-} from "./misc/Stubs";
+import { Parser, ATN } from "./misc/Stubs";
 
 
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {

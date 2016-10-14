@@ -36,7 +36,7 @@
  *  and what kind of problem occurred.
  */
 import { RuleContext } from "./RuleContext";
-import { Lexer } from "./Lexer";
+import { Lexer } from "./misc/Stubs";
 import { CharStream } from "./CharStream";
 import { IntStream } from './IntStream';
 import { Token } from "./Token";
