@@ -52,9 +52,8 @@
  * @author Sam Harwell
  */
 import { BaseErrorListener } from "./BaseErrorListener";
-import {
-    Override, NotNull, Nullable, DFA, BitSet, ATNConfig, ATNConfigSet,
-    SimulatorState, Parser
+import { Override, NotNull, Nullable } from "./Decorators";
+import {DFA, BitSet, ATNConfig, ATNConfigSet,SimulatorState, Parser
 } from "./misc/Stubs";
 import { Interval } from "./misc/Interval";
 

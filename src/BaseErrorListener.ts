@@ -39,11 +39,11 @@
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
 import {ParserErrorListener} from "./ParserErrorListener";
+import { Override, NotNull, Nullable } from "./Decorators";
 
 // Stubs
 import {
-    Override, NotNull, Recognizer, Nullable,
-    ATNConfigSet, Parser, DFA, BitSet, SimulatorState
+    Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
 } from "./misc/Stubs";
 
 // This class seems unused, but might clean up ParserProxyErrorListener a liettle bit if used consistantly.

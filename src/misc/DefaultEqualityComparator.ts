@@ -29,7 +29,8 @@
  */
 
 import { EqualityComparator } from './EqualityComparator';
-import { Override, Equatable } from './Stubs';
+import { Override} from '../Decorators';
+import { Equatable } from './Stubs';
 import { MurmurHash } from './MurmurHash';
 import { ObjectEqualityComparator } from './ObjectEqualityComparator';
 

@@ -30,9 +30,10 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.8126690-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { RecognitionException } from "./RecognitionException";
+import { Override, NotNull, Nullable } from "./Decorators";
 
 // Stubs
-import { Override, NotNull, Recognizer, Nullable } from "./misc/Stubs";
+import { Recognizer } from "./misc/Stubs";
 
 
 /**

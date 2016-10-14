@@ -31,7 +31,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.7499997-07:00
 
 /** How to emit recognition errors. */
-import {NotNull, Recognizer, Nullable } from "./misc/Stubs";
+import { NotNull, Nullable } from "./Decorators";
+import { Recognizer } from "./misc/Stubs";
 import {RecognitionException} from "./RecognitionException";
 
 export interface ANTLRErrorListener<T> {

@@ -32,7 +32,7 @@
 
 import { ATNStateType } from './ATNStateType';
 import { BlockStartState } from './BlockStartState';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { PlusLoopbackState } from './PlusLoopbackState';
 
 /** Start of {@code (A|B|...)+} loop. Technically a decision state, but

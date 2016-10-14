@@ -32,7 +32,7 @@
 
 import { ATNState } from './ATNState';
 import { ATNStateType } from './ATNStateType';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 
 /** Mark the end of a * or + loop. */
 export class LoopEndState extends ATNState {

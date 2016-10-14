@@ -29,7 +29,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:39.0995965-07:00
 
 import { AbstractEdgeMap } from './AbstractEdgeMap';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { SingletonEdgeMap } from './SingletonEdgeMap';
 
 /**

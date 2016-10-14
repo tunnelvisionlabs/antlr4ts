@@ -29,7 +29,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:38.0251372-07:00
 
 import { EdgeMap } from './EdgeMap';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import * as assert from 'assert';
 
 /**

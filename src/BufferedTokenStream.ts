@@ -34,7 +34,7 @@ import assert = require('assert');
 import { CommonToken } from './CommonToken';
 import { Interval } from './misc/Interval';
 import { Lexer } from './Lexer';
-import { NotNull, Override } from './misc/Stubs';
+import { NotNull, Override } from './Decorators';
 import { RuleContext } from './RuleContext';
 import { SyntaxTree } from './tree/SyntaxTree';
 import { Token } from './Token';
@@ -520,8 +520,7 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	getTextFromContext(ctx: RuleContext): string {
-		// TODO: Remove this cast after RuleContext has a proper definition
-		return this.getTextFromInterval((<SyntaxTree>ctx).getSourceInterval());
+		return this.getTextFromInterval(ctx.getSourceInterval());
 	}
 
 	@NotNull

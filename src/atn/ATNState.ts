@@ -33,7 +33,7 @@
 import { ATN } from './ATN';
 import { ATNStateType } from './ATNStateType';
 import { IntervalSet } from '../misc/IntervalSet';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { Transition } from './Transition';
 
 const INITIAL_NUM_TRANSITIONS: number = 4;

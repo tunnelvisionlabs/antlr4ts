@@ -62,10 +62,11 @@ import {Token} from "./Token";
 import {DefaultErrorStrategy} from "./DefaultErrorStrategy";
 import {RecognitionException} from "./RecognitionException";
 import {ParseCancellationException} from "./misc/ParseCancellationException";
-import {InputMismatchException} from "./InputMismatchException";
+import { InputMismatchException } from "./InputMismatchException";
+import { Override} from "./Decorators";
 
 // Stubs
-import { Override, ParserRuleContext, Parser } from "./misc/Stubs";
+import { Parser, ParserRuleContext } from "./misc/Stubs";
 
 
 export class BailErrorStrategy extends DefaultErrorStrategy {
