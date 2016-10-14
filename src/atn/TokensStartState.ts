@@ -32,7 +32,7 @@
 
 import { ATNStateType } from './ATNStateType';
 import { DecisionState } from './DecisionState';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 
 /** The Tokens rule start state linking to each lexer rule start state */
 export class TokensStartState extends DecisionState {

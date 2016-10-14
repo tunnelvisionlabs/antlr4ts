@@ -33,7 +33,7 @@
 import { CharStream } from './CharStream';
 import { CommonToken } from './CommonToken';
 import { Interval } from './misc/Interval';
-import { Override } from './misc/Stubs';
+import { Override } from './Decorators';
 import { TokenFactory } from './TokenFactory';
 import { TokenSource } from './TokenSource';
 

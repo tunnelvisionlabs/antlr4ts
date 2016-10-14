@@ -1,7 +1,6 @@
 ﻿/*
  * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
+ *  Copyright (c) 2016 Burt Harris
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,42 +27,25 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:24.7363448-07:00
+export function NotNull(
+	target: any,
+	propertyKey: PropertyKey,
+	propertyDescriptor?: PropertyDescriptor) {
+}
 
-import { ATNState } from './ATNState';
-import { Override, NotNull } from '../Decorators';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+export function Nullable(
+	target: any,
+	propertyKey: PropertyKey,
+	propertyDescriptor?: PropertyDescriptor) {
+}
 
-export class ActionTransition extends Transition {
-	ruleIndex: number;
-	actionIndex: number;
-	isCtxDependent: boolean;  // e.g., $i ref in action
+export function Override(target: any,
+	propertyKey: PropertyKey,
+	propertyDescriptor?: PropertyDescriptor) {
+	// do something with 'target' ...
+}
 
-	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex: number = -1, isCtxDependent: boolean = false) {
-		super(target);
-		this.ruleIndex = ruleIndex;
-		this.actionIndex = actionIndex;
-		this.isCtxDependent = isCtxDependent;
-	}
-
-	@Override
-	getSerializationType(): TransitionType {
-		return TransitionType.ACTION;
-	}
-
-	@Override
-	isEpsilon(): boolean {
-		return true; // we are to be ignored by analysis 'cept for predicates
-	}
-
-	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
-		return false;
-	}
-
-	@Override
-	toString(): string {
-		return "action_" + this.ruleIndex + ":" + this.actionIndex;
+export function SuppressWarnings(options: string) {
+	return (target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) => {
 	}
 }

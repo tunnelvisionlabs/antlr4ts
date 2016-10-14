@@ -30,7 +30,7 @@
 
 import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { SparseEdgeMap } from './SparseEdgeMap';
 
 /**

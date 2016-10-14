@@ -32,7 +32,7 @@
 
 import { ATNState } from './ATNState';
 import { IntervalSet } from '../misc/IntervalSet';
-import { Override, NotNull } from '../misc/Stubs';
+import { Override, NotNull } from '../Decorators';
 import { Transition } from './Transition';
 import { TransitionType } from './TransitionType';
 

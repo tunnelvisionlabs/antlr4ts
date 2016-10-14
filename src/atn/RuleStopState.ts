@@ -32,7 +32,7 @@
 
 import { ATNState } from './ATNState';
 import { ATNStateType } from './ATNStateType';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 
 /** The last node in the ATN for a rule, unless that rule is the start symbol.
  *  In that case, there is one transition to EOF. Later, we might encode

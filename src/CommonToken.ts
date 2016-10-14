@@ -32,7 +32,7 @@
 
 import { CharStream } from './CharStream';
 import { Interval } from './misc/Interval';
-import { NotNull, Override } from './misc/Stubs';
+import { NotNull, Override } from './Decorators';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
 import { WritableToken } from './WritableToken';

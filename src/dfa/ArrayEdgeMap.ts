@@ -31,7 +31,7 @@
 import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { EdgeMap } from './EdgeMap';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { SingletonEdgeMap } from './SingletonEdgeMap';
 import { SparseEdgeMap } from './SparseEdgeMap';
 import * as assert from 'assert';

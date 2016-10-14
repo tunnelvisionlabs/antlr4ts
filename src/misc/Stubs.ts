@@ -36,21 +36,6 @@ export interface Equatable {
 	hashCode(): number;
 }
 
-export function NotNull(target:any, propertyKey: PropertyKey, propertyDescriptor?: PropertyDescriptor) {
-}
-
-export function Nullable(target:any, propertyKey: PropertyKey, propertyDescriptor?: PropertyDescriptor) {
-}
-
-export function Override(target:any, propertyKey: PropertyKey, propertyDescriptor?: PropertyDescriptor) {
-        // do something with 'target' ...
-}
-
-export function SuppressWarnings(options: string) {
-        return function(target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) {
-    }
-}
-
 export interface JavaIterator<E> {
     hasNext(): boolean;
     next(): E;

@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.0343500-07:00
 
 import { CharStream } from '../../CharStream';
-import { NotNull, Override } from '../../misc/Stubs';
+import { NotNull, Override } from '../../Decorators';
 import { Token } from '../../Token';
 import { TokenSource } from '../../TokenSource';
 
