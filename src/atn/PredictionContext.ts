@@ -41,9 +41,10 @@ import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from "../Decorators";
 import { Equatable, JavaSet } from '../misc/Stubs';
 import { PredictionContextCache } from './PredictionContextCache';
+import { Recognizer } from '../misc/Stubs';
 import { RuleContext } from '../RuleContext';
 import { RuleTransition } from './RuleTransition';
-// import { Recognizer } from '..';
+
 import * as assert from 'assert';
 
 const INITIAL_HASH: number = 1;
@@ -324,76 +325,70 @@ export abstract class PredictionContext implements Equatable {
 	// @Override
 	abstract equals(o: any): boolean;
 
-	// @Override
-	// toString(): string {
-	// 	return this.toStrings(null, PredictionContext.EMPTY_FULL_STATE_KEY);
-	// }
+	toStrings(recognizer: Recognizer<any, any> | undefined, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
+		let result: string[] = [];
 
-	// toStrings(recognizer: Recognizer<any, any>, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
-	// 	let result: string[] = [];
+		outer:
+		for (let perm = 0; ; perm++) {
+			let offset: number = 0;
+			let last: boolean = true;
+			let p: PredictionContext = this;
+			let stateNumber: number = currentState;
+			let localBuffer: string = "";
+			localBuffer += "[";
+			while (!p.isEmpty() && p !== stop) {
+				let index: number = 0;
+				if (p.size() > 0) {
+					let bits: number = 1;
+					while ((1 << bits) < p.size()) {
+						bits++;
+					}
 
-	// 	outer:
-	// 	for (let perm = 0; ; perm++) {
-	// 		let offset: number =  0;
-	// 		let last: boolean =  true;
-	// 		let p: PredictionContext =  this;
-	// 		let stateNumber: number =  currentState;
-	// 		let localBuffer: string = "";
-	// 		localBuffer += "[";
-	// 		while ( !p.isEmpty() && p !== stop ) {
-	// 			let index: number =  0;
-	// 			if (p.size() > 0) {
-	// 				let bits: number =  1;
-	// 				while ((1 << bits) < p.size()) {
-	// 					bits++;
-	// 				}
+					let mask: number = (1 << bits) - 1;
+					index = (perm >> offset) & mask;
+					last = last && index >= p.size() - 1;
+					if (index >= p.size()) {
+						continue outer;
+					}
 
-	// 				let mask: number =  (1 << bits) - 1;
-	// 				index = (perm >> offset) & mask;
-	// 				last = last && index >= p.size() - 1;
-	// 				if (index >= p.size()) {
-	// 					continue outer;
-	// 				}
+					offset += bits;
+				}
 
-	// 				offset += bits;
-	// 			}
+				if (recognizer) {
+					if (localBuffer.length > 1) {
+						// first char is '[', if more than that this isn't the first rule
+						localBuffer += ' ';
+					}
 
-	// 			if ( recognizer!=null ) {
-	// 				if (localBuffer.length > 1) {
-	// 					// first char is '[', if more than that this isn't the first rule
-	// 					localBuffer += ' ';
-	// 				}
+					let atn: ATN = recognizer.getATN();
+					let s: ATNState = atn.states[stateNumber];
+					let ruleName: string = recognizer.getRuleNames()[s.ruleIndex];
+					localBuffer += ruleName;
+				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
+					if (!p.isEmpty()) {
+						if (localBuffer.length > 1) {
+							// first char is '[', if more than that this isn't the first rule
+							localBuffer += ' ';
+						}
 
-	// 				let atn: ATN =  recognizer.getATN();
-	// 				let s: ATNState =  atn.states[stateNumber];
-	// 				let ruleName: string =  recognizer.getRuleNames()[s.ruleIndex];
-	// 				localBuffer += ruleName;
-	// 			}
-	// 			else if ( p.getReturnState(index)!=PredictionContext.EMPTY_FULL_STATE_KEY ) {
-	// 				if ( !p.isEmpty() ) {
-	// 					if (localBuffer.length > 1) {
-	// 						// first char is '[', if more than that this isn't the first rule
-	// 						localBuffer += ' ';
-	// 					}
+						localBuffer += p.getReturnState(index);
+					}
+				}
 
-	// 					localBuffer += p.getReturnState(index);
-	// 				}
-	// 			}
+				stateNumber = p.getReturnState(index);
+				p = p.getParent(index);
+			}
 
-	// 			stateNumber = p.getReturnState(index);
-	// 			p = p.getParent(index);
-	// 		}
+			localBuffer += "]";
+			result.push(localBuffer);
 
-	// 		localBuffer += "]";
-	// 		result.push(localBuffer);
+			if (last) {
+				break;
+			}
+		}
 
-	// 		if (last) {
-	// 			break;
-	// 		}
-	// 	}
-
-	// 	return result;
-	// }
+		return result;
+	}
 }
 
 class EmptyPredictionContext extends PredictionContext {
