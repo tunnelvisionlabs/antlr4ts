@@ -110,8 +110,8 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\PredicateTransition.java
 * [x] atn\PredictionContext.java
   * [x] PredictionContext.fromRuleContext
-  * [ ] PredictionContext.toString
-  * [ ] PredictionContext.toStrings
+  * [x] ~~PredictionContext.toString~~ (Doesn't actually exist in the Java target)
+  * [x] PredictionContext.toStrings
 * [x] atn\PredictionContextCache.java
 * [ ] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
