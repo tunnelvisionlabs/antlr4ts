@@ -109,7 +109,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
 * [x] atn\PredictionContext.java
-  * [ ] PredictionContext.fromRuleContext
+  * [x] PredictionContext.fromRuleContext
   * [ ] PredictionContext.toString
   * [ ] PredictionContext.toStrings
 * [x] atn\PredictionContextCache.java
