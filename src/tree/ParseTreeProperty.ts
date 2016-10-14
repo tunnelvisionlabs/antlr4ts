@@ -28,27 +28,44 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.4646355-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:47.6782223-07:00
 
-import { ErrorNode } from './ErrorNode';
-import { Override } from '../misc/Stubs';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { TerminalNodeImpl } from './TerminalNodeImpl';
-import { Token } from '../Token';
-
-/** Represents a token that was consumed during resynchronization
- *  rather than during a valid match operation. For example,
- *  we will create this kind of a node during single token insertion
- *  and deletion as well as during "consume until error recovery set"
- *  upon no viable alternative exceptions.
+/**
+ * Associate a property with a parse tree node. Useful with parse tree listeners
+ * that need to associate values with particular tree nodes, kind of like
+ * specifying a return value for the listener event method that visited a
+ * particular node. Example:
+ *
+ * <pre>
+ * ParseTreeProperty&lt;Integer&gt; values = new ParseTreeProperty&lt;Integer&gt;();
+ * values.put(tree, 36);
+ * int x = values.get(tree);
+ * values.removeFrom(tree);
+ * </pre>
+ *
+ * You would make one decl (values here) in the listener and use lots of times
+ * in your event methods.
  */
-export class ErrorNodeImpl extends TerminalNodeImpl implements ErrorNode {
-	constructor(token: Token) {
-		super(token);
-	}
+import {ParseTree} from "./ParseTree";
 
-	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
-		return visitor.visitErrorNode(this);
-	}
+export class ParseTreeProperty<V> {
+    private _symbol: symbol;
+
+    constructor(name: string = "ParseTreeProperty") {
+        this._symbol = Symbol(name);
+    }
+
+    get(node: ParseTree ): V {
+        return (node as any)[this._symbol] as V;
+    }
+
+    set(node: ParseTree, value: V): void {
+        (node as any)[this._symbol] = value;
+    }
+
+    removeFrom(node: ParseTree): V {
+        let result = (node as any)[this._symbol] as V;
+        delete (node as any)[this._symbol];
+        return result;
+    }
 }

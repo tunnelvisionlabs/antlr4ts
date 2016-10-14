@@ -28,77 +28,30 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:40.6647101-07:00
 
-import { Interval } from '../misc/Interval';
-import { Override } from '../misc/Stubs';
-import { Parser } from '../Parser';
-import { ParseTree } from './ParseTree';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { RuleNode } from './RuleNode';
-import { TerminalNode } from './TerminalNode';
-import { Token } from '../Token';
+import { IntegerList } from './IntegerList';
 
-export class TerminalNodeImpl implements TerminalNode {
-	symbol: Token;
-	parent: RuleNode;
+/**
+ *
+ * @author Sam Harwell
+ */
+export class IntegerStack extends IntegerList {
 
-	constructor(symbol: Token) {
-		this.symbol = symbol;
+	constructor(arg?: number | IntegerStack) {
+		super(arg);
 	}
 
-	@Override
-	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than zero and less than getChildCount()");
+	push(value: number): void {
+		this.add(value);
 	}
 
-	@Override
-	getSymbol(): Token {
-		return this.symbol;
+	pop(): number {
+		return this.removeAt(this.size() - 1);
 	}
 
-	@Override
-	getParent(): RuleNode {
-		return this.parent;
+	peek(): number {
+		return this.get(this.size() - 1);
 	}
 
-	@Override
-	getPayload(): Token {
-		return this.symbol;
-	}
-
-	@Override
-	getSourceInterval(): Interval {
-		let tokenIndex: number = this.symbol.getTokenIndex();
-		return new Interval(tokenIndex, tokenIndex);
-	}
-
-	@Override
-	getChildCount(): number {
-		return 0;
-	}
-
-	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
-		return visitor.visitTerminal(this);
-	}
-
-	@Override
-	getText(): string {
-		return this.symbol.getText() || "";
-	}
-
-	@Override
-	toStringTree(parser?: Parser): string {
-		return toString();
-	}
-
-	@Override
-	toString(): string {
-		if (this.symbol.getType() === Token.EOF) {
-			return "<EOF>";
-		}
-
-		return this.symbol.getText() || "";
-	}
 }

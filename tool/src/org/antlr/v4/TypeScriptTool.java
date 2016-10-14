@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,46 +27,70 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.antlr.v4;
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.8252451-07:00
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
+import org.antlr.v4.tool.ErrorType;
+import org.antlr.v4.tool.Grammar;
 
-export class ParseTreeWalker {
-    static DEFAULT: ParseTreeWalker =  new ParseTreeWalker();
+/**
+ *
+ * @author Sam Harwell
+ */
+public class TypeScriptTool extends Tool {
 
-    walk(listener: ParseTreeListener, t: ParseTree): void {
-		if ( t instanceof ErrorNode ) {
-			listener.visitErrorNode((ErrorNode)t);
+	public TypeScriptTool() {
+	}
+
+	public TypeScriptTool(String[] args) {
+		super(args);
+	}
+
+	public static void main(String[] args) {
+		Tool antlr = new TypeScriptTool(args);
+		if (args.length == 0) {
+			antlr.help();
+			antlr.exit(0);
+		}
+
+		try {
+			antlr.processGrammarsOnCommandLine();
+		} finally {
+			if (antlr.log) {
+				try {
+					String logname = antlr.logMgr.save();
+					System.out.println("wrote " + logname);
+				}
+				catch (IOException ioe) {
+					antlr.errMgr.toolError(ErrorType.INTERNAL_ERROR, ioe);
+				}
+			}
+		}
+
+		if (antlr.return_dont_exit) {
 			return;
 		}
-		else if ( t instanceof TerminalNode ) {
-			listener.visitTerminal((TerminalNode)t);
-			return;
+
+		if (antlr.errMgr.getNumErrors() > 0) {
+			antlr.exit(1);
 		}
 
-		let r: RuleNode =  (RuleNode)t;
-        enterRule(listener, r);
-        let n: number =  r.getChildCount();
-        for (let i = 0; i<n; i++) {
-            walk(listener, r.getChild(i));
-        }
-		exitRule(listener, r);
-    }
+		antlr.exit(0);
+	}
 
-	/**
-	 * The discovery of a rule node, involves sending two events: the generic
-	 * {@link ParseTreeListener#enterEveryRule} and a
-	 * {@link RuleContext}-specific event. First we trigger the generic and then
-	 * the rule specific. We to them in reverse order upon finishing the node.
-	 */
-    protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
-		listener.enterEveryRule(ctx);
-		ctx.enterRule(listener);
-    }
+	@Override
+	public Writer getOutputFileWriter(Grammar g, String fileName) throws IOException {
+		if (outputDirectory != null) {
+			// output directory is a function of where the grammar file lives
+			// for subdir/T.g4, you get subdir here.  Well, depends on -o etc...
+			File outputDir = getOutputDirectory(g.fileName);
+			File outputFile = new File(outputDir, fileName);
+			System.out.format("Generating file '%s' for grammar '%s'%n", outputFile.getAbsolutePath(), g.fileName);
+		}
 
-    protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx: ParserRuleContext =  (ParserRuleContext)r.getRuleContext();
-		ctx.exitRule(listener);
-		listener.exitEveryRule(ctx);
-    }
+		return super.getOutputFileWriter(g, fileName);
+	}
+
 }

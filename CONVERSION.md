@@ -150,12 +150,10 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\FlexibleHashMap.java
 * [x] ~~misc\Func0.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Func1.java~~ (Unnecessary in TypeScript)
-* [ ] misc\IntegerList.java
-* [ ] misc\IntegerStack.java
+* [x] misc\IntegerList.java
+* [x] misc\IntegerStack.java
 * [x] misc\Interval.java
 * [x] misc\IntervalSet.java
-  * [ ] IntervalSet.toIntegerList
-  * [ ] IntervalSet.toSet
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
 * [ ] misc\MultiMap.java
@@ -175,17 +173,17 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Utils.java
 * [x] tree\AbstractParseTreeVisitor.java
-* [x] tree\ErrorNode.java
-* [x] tree\ErrorNodeImpl.java
+* [x] ~~tree\ErrorNode.java~~ (No separate interface in TypeScript)
+* [x] tree\ErrorNodeImpl.java (Moved to ErrorNode)
 * [x] tree\ParseTree.java
 * [x] tree\ParseTreeListener.java
-* [ ] tree\ParseTreeProperty.java
+* [x] tree\ParseTreeProperty.java
 * [x] tree\ParseTreeVisitor.java
-* [ ] tree\ParseTreeWalker.java
+* [x] tree\ParseTreeWalker.java
 * [x] tree\RuleNode.java
 * [x] tree\SyntaxTree.java
-* [x] tree\TerminalNode.java
-* [x] tree\TerminalNodeImpl.java
+* [x] ~~tree\TerminalNode.java~~ (No separate interface in TypeScript)
+* [x] tree\TerminalNodeImpl.java (Moved to TerminalNode)
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
 * [x] tree\pattern\Chunk.java

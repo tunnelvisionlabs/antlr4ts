@@ -1,4 +1,4 @@
-﻿/*
+/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,77 +27,81 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package org.antlr.v4.test.runtime.typescript;
 
-// ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
+import org.antlr.v4.Tool;
+import org.antlr.v4.runtime.misc.Utils;
+import org.antlr.v4.tool.ANTLRMessage;
+import org.antlr.v4.tool.ANTLRToolListener;
+import org.antlr.v4.tool.ToolMessage;
+import org.stringtemplate.v4.ST;
 
-import { Interval } from '../misc/Interval';
-import { Override } from '../misc/Stubs';
-import { Parser } from '../Parser';
-import { ParseTree } from './ParseTree';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { RuleNode } from './RuleNode';
-import { Token } from '../Token';
+import java.util.ArrayList;
+import java.util.List;
 
-export class TerminalNode implements ParseTree  {
-	symbol: Token;
-	parent: RuleNode;
+public class ErrorQueue implements ANTLRToolListener {
+	public final Tool tool;
+	public final List<String> infos = new ArrayList<String>();
+	public final List<ANTLRMessage> errors = new ArrayList<ANTLRMessage>();
+	public final List<ANTLRMessage> warnings = new ArrayList<ANTLRMessage>();
+	public final List<ANTLRMessage> all = new ArrayList<ANTLRMessage>();
 
-	constructor(symbol: Token) {
-		this.symbol = symbol;
+	public ErrorQueue() {
+		this(null);
+	}
+
+	public ErrorQueue(Tool tool) {
+		this.tool = tool;
 	}
 
 	@Override
-	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than zero and less than getChildCount()");
+	public void info(String msg) {
+		infos.add(msg);
 	}
 
 	@Override
-	getSymbol(): Token {
-		return this.symbol;
+	public void error(ANTLRMessage msg) {
+		errors.add(msg);
+        all.add(msg);
 	}
 
 	@Override
-	getParent(): RuleNode {
-		return this.parent;
+	public void warning(ANTLRMessage msg) {
+		warnings.add(msg);
+        all.add(msg);
+	}
+
+	public void error(ToolMessage msg) {
+		errors.add(msg);
+		all.add(msg);
+	}
+
+	public int size() {
+		return all.size() + infos.size();
 	}
 
 	@Override
-	getPayload(): Token {
-		return this.symbol;
+	public String toString() {
+		return toString(false);
 	}
 
-	@Override
-	getSourceInterval(): Interval {
-		let tokenIndex: number = this.symbol.getTokenIndex();
-		return new Interval(tokenIndex, tokenIndex);
-	}
-
-	@Override
-	getChildCount(): number {
-		return 0;
-	}
-
-	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
-		return visitor.visitTerminal(this);
-	}
-
-	@Override
-	getText(): string {
-		return this.symbol.getText() || "";
-	}
-
-	@Override
-	toStringTree(parser?: Parser): string {
-		return toString();
-	}
-
-	@Override
-	toString(): string {
-		if (this.symbol.getType() === Token.EOF) {
-			return "<EOF>";
+	public String toString(boolean rendered) {
+		if (!rendered) {
+			return Utils.join(all.iterator(), "\n");
 		}
 
-		return this.symbol.getText() || "";
+		if (tool == null) {
+			throw new IllegalStateException(String.format("No %s instance is available.", Tool.class.getName()));
+		}
+
+		StringBuilder buf = new StringBuilder();
+		for (ANTLRMessage m : all) {
+			ST st = tool.errMgr.getMessageTemplate(m);
+			buf.append(st.render());
+			buf.append("\n");
+		}
+
+		return buf.toString();
 	}
+
 }
