@@ -5,7 +5,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{d6642ae4-3c11-4a8f-b700-f844afcbdd94}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
     <StartupFile />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
