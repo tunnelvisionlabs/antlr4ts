@@ -30,6 +30,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.3330673-07:00
 
+import { AmbiguityInfo } from './AmbiguityInfo';
+import { ContextSensitivityInfo } from './ContextSensitivityInfo';
+import { ErrorInfo } from './ErrorInfo';
+import { LookaheadEventInfo } from './LookaheadEventInfo';
+import { Override } from '../Decorators';
+import { PredicateEvalInfo } from './PredicateEvalInfo';
+
 /**
  * This class contains profiling gathered for a particular decision.
  *
@@ -47,12 +54,14 @@ export class DecisionInfo {
 	/**
 	 * The decision number, which is an index into {@link ATN#decisionToState}.
 	 */
-	decision: number; 
+	decision: number;
+
 	/**
 	 * The total number of times {@link ParserATNSimulator#adaptivePredict} was
 	 * invoked for this decision.
 	 */
-	invocations: number; 
+	invocations: number;
+
 	/**
 	 * The total time spent in {@link ParserATNSimulator#adaptivePredict} for
 	 * this decision, in nanoseconds.
@@ -67,7 +76,7 @@ export class DecisionInfo {
 	 * call {@link ATNSimulator#clearDFA} to reset the DFA cache to its initial
 	 * state before starting the profiling measurement pass.</p>
 	 */
-	timeInPrediction: number; 
+	timeInPrediction: number;
 
 	/**
 	 * The sum of the lookahead required for SLL prediction for this decision.
@@ -75,31 +84,35 @@ export class DecisionInfo {
 	 * reasons even when {@link PredictionMode#LL} or
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} is used.
 	 */
-	SLL_TotalLook: number; 
+	SLL_TotalLook: number;
+
 	/**
 	 * Gets the minimum lookahead required for any single SLL prediction to
 	 * complete for this decision, by reaching a unique prediction, reaching an
 	 * SLL conflict state, or encountering a syntax error.
 	 */
-	SLL_MinLook: number; 
+	SLL_MinLook: number;
+
 	/**
 	 * Gets the maximum lookahead required for any single SLL prediction to
 	 * complete for this decision, by reaching a unique prediction, reaching an
 	 * SLL conflict state, or encountering a syntax error.
 	 */
-	SLL_MaxLook: number; 
+	SLL_MaxLook: number;
+
 	/**
 	 * Gets the {@link LookaheadEventInfo} associated with the event where the
 	 * {@link #SLL_MaxLook} value was set.
 	 */
-	SLL_MaxLookEvent: LookaheadEventInfo; 
+	SLL_MaxLookEvent: LookaheadEventInfo;
 
 	/**
 	 * The sum of the lookahead required for LL prediction for this decision.
 	 * Note that LL prediction is only used when SLL prediction reaches a
 	 * conflict state.
 	 */
-	LL_TotalLook: number; 
+	LL_TotalLook: number;
+
 	/**
 	 * Gets the minimum lookahead required for any single LL prediction to
 	 * complete for this decision. An LL prediction completes when the algorithm
@@ -107,7 +120,8 @@ export class DecisionInfo {
 	 * {@link PredictionMode#LL}, an ambiguity state (for
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
 	 */
-	LL_MinLook: number; 
+	LL_MinLook: number;
+
 	/**
 	 * Gets the maximum lookahead required for any single LL prediction to
 	 * complete for this decision. An LL prediction completes when the algorithm
@@ -115,12 +129,13 @@ export class DecisionInfo {
 	 * {@link PredictionMode#LL}, an ambiguity state (for
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
 	 */
-	LL_MaxLook: number; 
+	LL_MaxLook: number;
+
 	/**
 	 * Gets the {@link LookaheadEventInfo} associated with the event where the
 	 * {@link #LL_MaxLook} value was set.
 	 */
-	LL_MaxLookEvent: LookaheadEventInfo; 
+	LL_MaxLookEvent: LookaheadEventInfo;
 
 	/**
 	 * A collection of {@link ContextSensitivityInfo} instances describing the
@@ -128,7 +143,8 @@ export class DecisionInfo {
 	 *
 	 * @see ContextSensitivityInfo
 	 */
-	contextSensitivities: List<ContextSensitivityInfo> =  new ArrayList<ContextSensitivityInfo>();
+	contextSensitivities: ContextSensitivityInfo[] = [];
+
 	/**
 	 * A collection of {@link ErrorInfo} instances describing the parse errors
 	 * identified during calls to {@link ParserATNSimulator#adaptivePredict} for
@@ -136,14 +152,15 @@ export class DecisionInfo {
 	 *
 	 * @see ErrorInfo
 	 */
-	errors: List<ErrorInfo> =  new ArrayList<ErrorInfo>();
+	errors: ErrorInfo[] = [];
+
 	/**
 	 * A collection of {@link AmbiguityInfo} instances describing the
 	 * ambiguities encountered during LL prediction for this decision.
 	 *
 	 * @see AmbiguityInfo
 	 */
-	ambiguities: List<AmbiguityInfo> =  new ArrayList<AmbiguityInfo>();
+	ambiguities: AmbiguityInfo[] = [];
 
 	/**
 	 * A collection of {@link PredicateEvalInfo} instances describing the
@@ -152,7 +169,7 @@ export class DecisionInfo {
 	 *
 	 * @see PredicateEvalInfo
 	 */
-	predicateEvals: List<PredicateEvalInfo> =  new ArrayList<PredicateEvalInfo>();
+	predicateEvals: PredicateEvalInfo[] = [];
 
 	/**
 	 * The total number of ATN transitions required during SLL prediction for
@@ -170,7 +187,8 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#computeTargetState
 	 * @see LexerATNSimulator#computeTargetState
 	 */
-	SLL_ATNTransitions: number; 
+	SLL_ATNTransitions: number;
+
 	/**
 	 * The total number of DFA transitions required during SLL prediction for
 	 * this decision.
@@ -181,7 +199,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState
 	 */
-	SLL_DFATransitions: number; 
+	SLL_DFATransitions: number;
 
 	/**
 	 * Gets the total number of times SLL prediction completed in a conflict
@@ -194,7 +212,7 @@ export class DecisionInfo {
 	 * this decision, {@link PredictionMode#SLL} would produce the same overall
 	 * parsing result as {@link PredictionMode#LL}.</p>
 	 */
-	LL_Fallback: number; 
+	LL_Fallback: number;
 
 	/**
 	 * The total number of ATN transitions required during LL prediction for
@@ -212,7 +230,8 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#computeTargetState
 	 * @see LexerATNSimulator#computeTargetState
 	 */
-	LL_ATNTransitions: number; 
+	LL_ATNTransitions: number;
+
 	/**
 	 * The total number of DFA transitions required during LL prediction for
 	 * this decision.
@@ -223,7 +242,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState
 	 */
-	LL_DFATransitions: number; 
+	LL_DFATransitions: number;
 
 	/**
 	 * Constructs a new instance of the {@link DecisionInfo} class to contain
@@ -231,23 +250,23 @@ export class DecisionInfo {
 	 *
 	 * @param decision The decision number
 	 */
-	 constructor(decision: number)  {
+	constructor(decision: number) {
 		this.decision = decision;
 	}
 
 	@Override
 	toString(): string {
 		return "{" +
-			   "decision=" + decision +
-			   ", contextSensitivities=" + contextSensitivities.size() +
-			   ", errors=" + errors.size() +
-			   ", ambiguities=" + ambiguities.size() +
-			   ", SLL_lookahead=" + SLL_TotalLook +
-			   ", SLL_ATNTransitions=" + SLL_ATNTransitions +
-			   ", SLL_DFATransitions=" + SLL_DFATransitions +
-			   ", LL_Fallback=" + LL_Fallback +
-			   ", LL_lookahead=" + LL_TotalLook +
-			   ", LL_ATNTransitions=" + LL_ATNTransitions +
-			   '}';
+			"decision=" + this.decision +
+			", contextSensitivities=" + this.contextSensitivities.length +
+			", errors=" + this.errors.length +
+			", ambiguities=" + this.ambiguities.length +
+			", SLL_lookahead=" + this.SLL_TotalLook +
+			", SLL_ATNTransitions=" + this.SLL_ATNTransitions +
+			", SLL_DFATransitions=" + this.SLL_DFATransitions +
+			", LL_Fallback=" + this.LL_Fallback +
+			", LL_lookahead=" + this.LL_TotalLook +
+			", LL_ATNTransitions=" + this.LL_ATNTransitions +
+			'}';
 	}
 }

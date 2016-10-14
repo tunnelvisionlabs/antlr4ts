@@ -30,6 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.2401032-07:00
 
+import { NotNull } from '../Decorators';
+import { SimulatorState } from '../misc/Stubs';
+import { TokenStream } from '../TokenStream';
+
 /**
  * This is the base class for gathering detailed information about prediction
  * events which occur during parsing.
@@ -51,38 +55,46 @@ export class DecisionEventInfo {
 	 *
 	 * @see ATN#decisionToState
 	 */
-	decision: number; 
+	decision: number;
+
 	/**
 	 * The simulator state containing additional information relevant to the
 	 * prediction state when the current event occurred, or {@code null} if no
 	 * additional information is relevant or available.
 	 */
-	@Nullable
-	state: SimulatorState; 
+	state: SimulatorState | undefined;
+
 	/**
 	 * The input token stream which is being parsed.
 	 */
 	@NotNull
-	input: TokenStream; 
+	input: TokenStream;
+
 	/**
 	 * The token index in the input stream at which the current prediction was
 	 * originally invoked.
 	 */
-	startIndex: number; 
+	startIndex: number;
+
 	/**
 	 * The token index in the input stream at which the current event occurred.
 	 */
-	stopIndex: number; 
+	stopIndex: number;
+
 	/**
 	 * {@code true} if the current event occurred during LL prediction;
 	 * otherwise, {@code false} if the input occurred during SLL prediction.
 	 */
-	fullCtx: boolean; 
+	fullCtx: boolean;
 
-	 constructor(decision: number, @Nullable state: SimulatorState, 
-							 @NotNull input: TokenStream, startIndex: number,
-							 stopIndex: number, fullCtx: boolean) 
-	{
+	constructor(
+		decision: number,
+		state: SimulatorState | undefined,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number,
+		fullCtx: boolean) {
+
 		this.decision = decision;
 		this.fullCtx = fullCtx;
 		this.stopIndex = stopIndex;

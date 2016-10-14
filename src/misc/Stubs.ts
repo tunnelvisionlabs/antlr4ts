@@ -67,18 +67,18 @@ export interface JavaCollection<E> extends JavaIterable<E> {
     equals(o:any): boolean;
     hashCode(): number;
     isEmpty(): boolean;
-    iterator():  JavaIterator<E>;                
+    iterator():  JavaIterator<E>;
     remove(o: any): boolean;                        // Shouldn't argument be restricted to E?
     removeAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
     retainAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
     size(): number;
-    toArray(): any[];                               // Shouldn't return type be restricted to E[]?                                 
-    toArray(a: E[]): E[];             
+    toArray(): any[];                               // Shouldn't return type be restricted to E[]?
+    toArray(a: E[]): E[];
 }
 
 export interface JavaSet<E> extends JavaCollection<E> {
     // Seems like Java's Set doesn't really seem to extend Java's Collection with anything...
- 
+
     // add(e:E): boolean;
     // addAll(collection:Iterable<E>): boolean;
     // clear(): void;
@@ -87,13 +87,13 @@ export interface JavaSet<E> extends JavaCollection<E> {
     // equals(o:any): boolean;
     // hashCode(): number;
     // isEmpty(): boolean;
-    // iterator(): JavaIterator<E>;                
+    // iterator(): JavaIterator<E>;
     // remove(o: any);                         // Shouldn't argument be restricted to E?
     // removeAll(collection: Iterable<any>);   // Shouldn't argument be restricted to E?
     // retainAll(collection: Iterable<any>);   // Shouldn't argument be restricted to E?
     // size(): number;
-    // toArray(): any[];                       // Shouldn't return type be restricted to E?                                 
-    // toArray(a: E[]): E[];                                 
+    // toArray(): any[];                       // Shouldn't return type be restricted to E?
+    // toArray(a: E[]): E[];
 }
 
 export interface JavaMap<K, V> extends Equatable {
@@ -121,12 +121,12 @@ export namespace JavaMap {
 
 /**
  * Collection is a hybrid type can accept either JavaCollection or JavaScript Iterable
- */  
+ */
 
 export type Collection<T> = JavaCollection<T> | Iterable<T>;
 
 /**
- * This adapter function allows Collection<T> arguments to be used in JavaScript for...of loops 
+ * This adapter function allows Collection<T> arguments to be used in JavaScript for...of loops
  */
 
 export function asIterable<T>( collection: Collection<T> ): Iterable<T> {
@@ -186,6 +186,8 @@ export abstract class ATNSimulator {
 	atn: ATN;
 }
 
+export abstract class SemanticContext { }
+
 export class ParserATNSimulator extends ATNSimulator {}
 
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
@@ -240,10 +242,14 @@ export class DFA {
     decision: number;
     atnStartState: ATNState;
 }
-export class BitSet {
+export class BitSet implements Equatable {
     set(alt: number) { throw new Error("Not implemented"); }
+	hashCode(): number { throw new Error("Not implemented"); }
+	equals(obj: any): boolean { throw new Error("Not implemented"); }
 }
-export class SimulatorState { }
+export class SimulatorState {
+	useContext: boolean;
+}
 
 export class ParserInterpreter extends Parser {
     constructor(...args: any[]) { super(); throw new Error("Not implemented"); }

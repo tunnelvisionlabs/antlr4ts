@@ -30,6 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.8229279-07:00
 
+import { BitSet } from '../misc/Stubs';
+import { DecisionEventInfo } from './DecisionEventInfo';
+import { NotNull } from '../Decorators';
+import { SimulatorState } from '../misc/Stubs';
+import { TokenStream } from '../TokenStream';
+
 /**
  * This class represents profiling event information for an ambiguity.
  * Ambiguities are decisions where a particular input resulted in an SLL
@@ -62,7 +68,7 @@
 export class AmbiguityInfo extends DecisionEventInfo {
 	/** The set of alternative numbers for this decision event that lead to a valid parse. */
 	@NotNull
-	private ambigAlts: BitSet; 
+	private ambigAlts: BitSet;
 
 	/**
 	 * Constructs a new instance of the {@link AmbiguityInfo} class with the
@@ -78,10 +84,10 @@ export class AmbiguityInfo extends DecisionEventInfo {
 	 * @param stopIndex The index at which the ambiguity was identified during
 	 * prediction
 	 */
-	 constructor(decision: number, 
+	 constructor(decision: number,
 						 @NotNull state: SimulatorState,
 						 @NotNull ambigAlts: BitSet,
-						 @NotNull input: TokenStream, startIndex: number, stopIndex: number) 
+						 @NotNull input: TokenStream, startIndex: number, stopIndex: number)
 	{
 		super(decision, state, input, startIndex, stopIndex, state.useContext);
 		this.ambigAlts = ambigAlts;
@@ -94,6 +100,6 @@ export class AmbiguityInfo extends DecisionEventInfo {
 	 */
 	@NotNull
 	getAmbiguousAlternatives(): BitSet {
-		return ambigAlts;
+		return this.ambigAlts;
 	}
 }

@@ -28,43 +28,51 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:30.6852565-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:28.1575933-07:00
+
+import { DecisionEventInfo } from './DecisionEventInfo';
+import { NotNull } from '../Decorators';
+import { SimulatorState } from '../misc/Stubs';
+import { TokenStream } from '../TokenStream';
 
 /**
- * This class represents profiling event information for tracking the lookahead
- * depth required in order to make a prediction.
+ * This class represents profiling event information for a context sensitivity.
+ * Context sensitivities are decisions where a particular input resulted in an
+ * SLL conflict, but LL prediction produced a single unique alternative.
+ *
+ * <p>
+ * In some cases, the unique alternative identified by LL prediction is not
+ * equal to the minimum represented alternative in the conflicting SLL
+ * configuration set. Grammars and inputs which result in this scenario are
+ * unable to use {@link PredictionMode#SLL}, which in turn means they cannot use
+ * the two-stage parsing strategy to improve parsing performance for that
+ * input.</p>
+ *
+ * @see ParserATNSimulator#reportContextSensitivity
+ * @see ParserErrorListener#reportContextSensitivity
  *
  * @since 4.3
  */
-export class LookaheadEventInfo extends DecisionEventInfo {
-	/** The alternative chosen by adaptivePredict(), not necessarily
-	 *  the outermost alt shown for a rule; left-recursive rules have
-	 *  user-level alts that differ from the rewritten rule with a (...) block
-	 *  and a (..)* loop.
-	 */
-	predictedAlt: number; 
-
+export class ContextSensitivityInfo extends DecisionEventInfo {
 	/**
-	 * Constructs a new instance of the {@link LookaheadEventInfo} class with
-	 * the specified detailed lookahead information.
+	 * Constructs a new instance of the {@link ContextSensitivityInfo} class
+	 * with the specified detailed context sensitivity information.
 	 *
 	 * @param decision The decision number
-	 * @param state The final simulator state containing the necessary
-	 * information to determine the result of a prediction, or {@code null} if
-	 * the final state is not available
+	 * @param state The final simulator state containing the unique
+	 * alternative identified by full-context prediction
 	 * @param input The input token stream
 	 * @param startIndex The start index for the current prediction
-	 * @param stopIndex The index at which the prediction was finally made
-	 * @param fullCtx {@code true} if the current lookahead is part of an LL
-	 * prediction; otherwise, {@code false} if the current lookahead is part of
-	 * an SLL prediction
+	 * @param stopIndex The index at which the context sensitivity was
+	 * identified during full-context prediction
 	 */
-	 constructor(decision: number, @Nullable state: SimulatorState, 
-							  predictedAlt: number,
-							  @NotNull input: TokenStream, startIndex: number, stopIndex: number,
-							  fullCtx: boolean) 
-	{
-		super(decision, state, input, startIndex, stopIndex, fullCtx);
-		this.predictedAlt = predictedAlt;
+	constructor(
+		decision: number,
+		@NotNull state: SimulatorState,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number) {
+
+		super(decision, state, input, startIndex, stopIndex, true);
 	}
 }

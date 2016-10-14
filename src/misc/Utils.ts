@@ -40,7 +40,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
     return escapeSpaces ? s.replace(/ /, '\u00B7') : s
         .replace(/\t/, "\\t")
         .replace(/\n/, "\\n")
-        .replace(/\r/, "\\r"); 
+        .replace(/\r/, "\\r");
 }
 
 // export function join(iter: Iterable<any>, separator: string): string {
@@ -63,17 +63,17 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 //     return buf.toString();
 // }
 
-// export function equals(x: any, y: any): boolean {
-// 	if (x == y) {
-// 		return true;
-// 	}
+export function equals(x: any, y: any): boolean {
+	if (x === y) {
+		return true;
+	}
 
-// 	if (x == null || y == null) {
-// 		return false;
-// 	}
+	if (x == null || y == null) {
+		return false;
+	}
 
-// 	return x.equals(y);
-// }
+	return x.equals(y);
+}
 
 // export function numNonnull(data: any[]): number {
 // 	let n: number =  0;
@@ -96,7 +96,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 // export function writeFile(@NotNull fileName: string, @NotNull content: string, @Nullable encoding: string): void {
 // 	let f: File =  new File(fileName);
 // 	let fos: FileOutputStream =  new FileOutputStream(f);
-// 	let osw: OutputStreamWriter; 
+// 	let osw: OutputStreamWriter;
 // 	if (encoding != null) {
 // 		osw = new OutputStreamWriter(fos, encoding);
 // 	}
@@ -121,7 +121,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 // export function readFile(@NotNull fileName: string, @Nullable encoding: string): char[] {
 // 	let f: File =  new File(fileName);
 // 	let size: number =  (int)f.length();
-// 	let isr: InputStreamReader; 
+// 	let isr: InputStreamReader;
 // 	let fis: FileInputStream =  new FileInputStream(fileName);
 // 	if ( encoding!=null ) {
 // 		isr = new InputStreamReader(fis, encoding);

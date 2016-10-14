@@ -30,15 +30,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.0710131-07:00
 
+import { BitSet } from '../misc/Stubs';
+import { Override } from '../Decorators';
+import * as Utils from '../misc/Utils';
+
 /**
  * This class stores information about a configuration conflict.
  *
  * @author Sam Harwell
  */
 export class ConflictInfo {
-	private conflictedAlts: BitSet; 
+	private conflictedAlts: BitSet;
 
-	private exact: boolean; 
+	private exact: boolean;
 
 	 constructor(conflictedAlts: BitSet, exact: boolean)  {
 		this.conflictedAlts = conflictedAlts;
@@ -49,7 +53,7 @@ export class ConflictInfo {
 	 * Gets the set of conflicting alternatives for the configuration set.
 	 */
 	getConflictedAlts(): BitSet {
-		return conflictedAlts;
+		return this.conflictedAlts;
 	}
 
 	/**
@@ -67,25 +71,23 @@ export class ConflictInfo {
 	 * states.</p>
 	 */
 	isExact(): boolean {
-		return exact;
+		return this.exact;
 	}
 
 	@Override
 	equals(obj: any): boolean {
-		if (obj == this) {
+		if (obj === this) {
 			return true;
-		}
-		else if (!(obj instanceof ConflictInfo)) {
+		} else if (!(obj instanceof ConflictInfo)) {
 			return false;
 		}
 
-		let other: ConflictInfo =  (ConflictInfo)obj;
-		return isExact() == other.isExact()
-			&& Utils.equals(getConflictedAlts(), other.getConflictedAlts());
+		return this.isExact() === obj.isExact()
+			&& Utils.equals(this.getConflictedAlts(), obj.getConflictedAlts());
 	}
 
 	@Override
 	hashCode(): number {
-		return getConflictedAlts().hashCode();
+		return this.getConflictedAlts().hashCode();
 	}
 }
