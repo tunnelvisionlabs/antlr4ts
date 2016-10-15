@@ -36,12 +36,19 @@
  *
  * <p>If you need encoding, pass in stream/reader with correct encoding.</p>
  */
-export class ANTLRInputStream implements CharStream {
-    static READ_BUFFER_SIZE: number =  1024;
-   	static INITIAL_BUFFER_SIZE: number =  1024;
+import * as assert from "assert";
+import {CharStream} from "./CharStream";
+import {Arrays} from "./misc/Arrays";
+import {Override} from "./Decorators";
+import {IntStream} from "./IntStream";
+import {Interval} from "./misc/Interval";
 
+const READ_BUFFER_SIZE: number =  1024;
+const INITIAL_BUFFER_SIZE: number =  1024;
+
+export class ANTLRInputStream implements CharStream {
 	/** The data being scanned */
-	protected data: char[]; 
+	protected data: string; 
 
 	/** How many characters are actually in the buffer */
 	protected n: number; 
@@ -52,127 +59,57 @@ export class ANTLRInputStream implements CharStream {
 	/** What is name or source of this char stream? */
 	name: string; 
 
-     constructor()  { }
-
 	/** Copy data in string to a local char array */
-	 constructor1(input: string)  {
-		this.data = input.toCharArray();
-		this.n = input.length();
+	constructor(input: string)  {
+		this.data = input;
+		this.n = input.length;
 	}
-
-	/** This is the preferred constructor for strings as no data is copied */
-	 constructor2(data: char[], numberOfActualCharsInArray: number)  {
-		this.data = data;
-		this.n = numberOfActualCharsInArray;
-	}
-
-     constructor3(r: Reader)  {
-        this(r, INITIAL_BUFFER_SIZE, READ_BUFFER_SIZE);
-    }
-
-     constructor4(r: Reader, initialSize: number)  {
-        this(r, initialSize, READ_BUFFER_SIZE);
-    }
-
-     constructor5(r: Reader, initialSize: number, readChunkSize: number)  {
-        load(r, initialSize, readChunkSize);
-    }
-
-	 constructor6(input: InputStream)  {
-		this(new InputStreamReader(input), INITIAL_BUFFER_SIZE);
-	}
-
-	 constructor7(input: InputStream, initialSize: number)  {
-		this(new InputStreamReader(input), initialSize);
-	}
-
-	 constructor8(input: InputStream, initialSize: number, readChunkSize: number)  {
-		this(new InputStreamReader(input), initialSize, readChunkSize);
-	}
-
-	load(r: Reader, size: number, readChunkSize: number): void
-
-	{
-		if ( r==null ) {
-			return;
-		}
-		if ( size<=0 ) {
-			size = INITIAL_BUFFER_SIZE;
-		}
-		if ( readChunkSize<=0 ) {
-			readChunkSize = READ_BUFFER_SIZE;
-   		}
-   		// System.out.println("load "+size+" in chunks of "+readChunkSize);
-   		try {
-   			// alloc initial buffer size.
-   			data = new char[size];
-   			// read all the data in chunks of readChunkSize
-   			let numRead: number = 0;
-   			let p: number =  0;
-   			do {
-   				if ( p+readChunkSize > data.length ) { // overflow?
-   					// System.out.println("### overflow p="+p+", data.length="+data.length);
-   					data = Arrays.copyOf(data, data.length * 2);
-   				}
-   				numRead = r.read(data, p, readChunkSize);
-   				// System.out.println("read "+numRead+" chars; p was "+p+" is now "+(p+numRead));
-   				p += numRead;
-   			} while (numRead!=-1); // while not EOF
-   			// set the actual size of the data available;
-   			// EOF subtracted one above in p+=numRead; add one back
-   			n = p+1;
-   			//System.out.println("n="+n);
-   		}
-   		finally {
-   			r.close();
-   		}
-   	}
 
 	/** Reset the stream so that it's in the same state it was
 	 *  when the object was created *except* the data array is not
 	 *  touched.
 	 */
 	reset(): void {
-		p = 0;
+		this.p = 0;
 	}
 
     @Override
     consume(): void {
-		if (p >= n) {
-			assert(LA(1) == IntStream.EOF);
-			throw new IllegalStateException("cannot consume EOF");
+		if (this.p >= this.n) {
+			assert(this.LA(1) === IntStream.EOF);
+			throw new Error("cannot consume EOF");
 		}
 
 		//System.out.println("prev p="+p+", c="+(char)data[p]);
-        if ( p < n ) {
-            p++;
+        if (this.p < this.n ) {
+            this.p++;
 			//System.out.println("p moves to "+p+" (c='"+(char)data[p]+"')");
         }
     }
 
     @Override
     LA(i: number): number {
-		if ( i==0 ) {
+		if ( i === 0 ) {
 			return 0; // undefined
 		}
 		if ( i<0 ) {
 			i++; // e.g., translate LA(-1) to use offset i=0; then data[p+0-1]
-			if ( (p+i-1) < 0 ) {
+			if ((this.p+i-1) < 0 ) {
 				return IntStream.EOF; // invalid; no char before first char
 			}
 		}
 
-		if ( (p+i-1) >= n ) {
+		if ((this.p + i - 1) >= this.n ) {
             //System.out.println("char LA("+i+")=EOF; p="+p);
             return IntStream.EOF;
         }
         //System.out.println("char LA("+i+")="+(char)data[p+i-1]+"; p="+p);
 		//System.out.println("LA("+i+"); p="+p+" n="+n+" data.length="+data.length);
-		return data[p+i-1];
+		return this.data.charCodeAt(this.p + i - 1);
     }
 
 	LT(i: number): number {
-		return LA(i);
+		return this.LA(i);
 	}
 
 	/** Return the current input symbol index 0..n where n indicates the
@@ -181,12 +118,12 @@ export class ANTLRInputStream implements CharStream {
      */
     @Override
     index(): number {
-        return p;
+        return this.p;
     }
 
 	@Override
 	size(): number {
-		return n;
+		return this.n;
 	}
 
     /** mark/release do nothing; we have entire buffer */
@@ -204,14 +141,14 @@ export class ANTLRInputStream implements CharStream {
 	 */
 	@Override
 	seek(index: number): void {
-		if ( index<=p ) {
-			p = index; // just jump; don't update stream state (line, ...)
+		if (index <= this.p ) {
+			this.p = index; // just jump; don't update stream state (line, ...)
 			return;
 		}
 		// seek forward, consume until p hits index or n (whichever comes first)
-		index = Math.min(index, n);
-		while ( p<index ) {
-			consume();
+		index = Math.min(index, this.n);
+		while (this.p<index ) {
+			this.consume();
 		}
 	}
 
@@ -219,24 +156,23 @@ export class ANTLRInputStream implements CharStream {
 	getText(interval: Interval): string {
 		let start: number =  interval.a;
 		let stop: number =  interval.b;
-		if ( stop >= n ) stop = n-1;
-		let count: number =  stop - start + 1;
-		if ( start >= n ) return "";
+		if (stop >= this.n) stop = this.n - 1;
+		let count: number = stop - start + 1;
+		if (start >= this.n ) return "";
 //		System.err.println("data: "+Arrays.toString(data)+", n="+n+
 //						   ", start="+start+
 //						   ", stop="+stop);
-		return new String(data, start, count);
+		return this.data.substr(start, count);
 	}
 
 	@Override
 	getSourceName(): string {
-		if (name == null || name.isEmpty()) {
-			return UNKNOWN_SOURCE_NAME;
+		if (!this.name) {
+			return IntStream.UNKNOWN_SOURCE_NAME;
 		}
-
 		return name;
 	}
 
     @Override
-    toString() { return new String(data): string; }
+    toString() { return this.data; }
 }
