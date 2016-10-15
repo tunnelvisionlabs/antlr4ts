@@ -101,7 +101,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
-* [ ] atn\ParseInfo.java
+* [x] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java

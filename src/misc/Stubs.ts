@@ -28,10 +28,12 @@
  */
 
 import { AbstractPredicateTransition } from '../atn/AbstractPredicateTransition';
+import { Array2DHashMap } from './Array2DHashMap';
 import { Array2DHashSet } from "./Array2DHashSet";
 import { ATNState } from '../atn/ATNState';
 import { ATNStateType } from "../atn/ATNStateType";
 import { BailErrorStrategy } from "../BailErrorStrategy";
+import { DecisionInfo } from '../atn/DecisionInfo';
 import { IntervalSet } from "./IntervalSet";
 import { IntStream } from "../IntStream";
 import { ParseTreeListener } from '../tree/ParseTreeListener';
@@ -159,6 +161,7 @@ export class ATN {
     getExpectedTokens(offendingState: number, ruleContext: RuleContext | undefined): IntervalSet { throw new Error("Not implemented"); }
 
     states: ATNState[];
+	decisionToDFA: DFA[];
 
     nextTokens(s: ATNState): IntervalSet;
     nextTokens(s: ATNState, ctx: PredictionContext): IntervalSet;
@@ -189,6 +192,10 @@ export abstract class ATNSimulator {
 export abstract class SemanticContext { }
 
 export class ParserATNSimulator extends ATNSimulator {}
+
+export class ProfilingATNSimulator extends ParserATNSimulator {
+	getDecisionInfo(): DecisionInfo[] { throw new Error("Not implemented"); }
+}
 
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	getInputStream(): TokenStream { throw new Error("Not implemented"); }
@@ -238,9 +245,12 @@ export abstract class PredicateTransition extends AbstractPredicateTransition {
     ruleIndex: number;
     predIndex: number;
 }
+export class DFAState {
+}
 export class DFA {
     decision: number;
     atnStartState: ATNState;
+	states: Array2DHashMap<DFAState, DFAState>;
 }
 export class BitSet implements Equatable {
     set(alt: number) { throw new Error("Not implemented"); }
