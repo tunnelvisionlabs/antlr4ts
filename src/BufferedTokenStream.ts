@@ -33,7 +33,7 @@
 import assert = require('assert');
 import { CommonToken } from './CommonToken';
 import { Interval } from './misc/Interval';
-import { Lexer } from './misc/Stubs';
+import { Lexer } from './Stub_Lexer';
 import { NotNull, Override } from './Decorators';
 import { RuleContext } from './RuleContext';
 import { Token } from './Token';

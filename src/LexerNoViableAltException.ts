@@ -30,15 +30,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
+import { ATNConfigSet } from "./atn/Stub_ATNConfigSet";
 import { RecognitionException } from "./RecognitionException";
 import { NotNull, Override } from "./Decorators";
-import { Lexer } from "./misc/Stubs";
+import { Lexer } from "./Stub_Lexer";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
 import * as Utils from "./misc/Utils";
-
-// Stubs
-import { ATNConfigSet } from "./misc/Stubs";
 
 export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;

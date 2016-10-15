@@ -34,7 +34,7 @@ import { ArrayEqualityComparator } from './ArrayEqualityComparator';
 import { IntegerList } from './IntegerList';
 import { Interval } from './Interval';
 import { IntSet } from './IntSet';
-import { Lexer } from '../misc/Stubs';
+import { Lexer } from '../Stub_Lexer';
 import { MurmurHash } from './MurmurHash';
 import { Override, NotNull, Nullable } from '../Decorators';
 import { Token } from '../Token';

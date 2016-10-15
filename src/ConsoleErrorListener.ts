@@ -35,9 +35,7 @@
  */
 import {ANTLRErrorListener} from "./ANTLRErrorListener";
 import { RecognitionException } from "./RecognitionException";
-
-// Stubs
-import {Recognizer} from "./misc/Stubs";
+import { Recognizer } from './Stub_Recognizer';
 
 export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**

@@ -34,17 +34,16 @@
  *  of the offending input and also knows where the parser was
  *  in the various paths when the error. Reported by reportNoViableAlternative()
  */
+
+import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { Parser } from './Stub_Parser';
+import { ParserRuleContext } from './Stub_ParserRuleContext';
 import {RecognitionException} from "./RecognitionException";
+import { Recognizer } from './Stub_Recognizer';
 import {Token} from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
 import { NotNull } from "./Decorators";
-// Stubs
-import {
-    Recognizer, Parser, ParserRuleContext,
-    ATNConfigSet
-} from "./misc/Stubs";
-
 
 export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;

@@ -51,10 +51,15 @@
  *
  * @author Sam Harwell
  */
+
+import { ATNConfig } from './atn/Stub_ATNConfig';
+import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BaseErrorListener } from "./BaseErrorListener";
+import { BitSet } from './misc/Stub_BitSet';
+import { DFA } from './dfa/Stub_DFA';
+import { Parser } from './Stub_Parser';
+import { SimulatorState } from './atn/Stub_SimulatorState';
 import { Override, NotNull } from "./Decorators";
-import {DFA, BitSet, ATNConfig, ATNConfigSet,SimulatorState, Parser
-} from "./misc/Stubs";
 import { Interval } from "./misc/Interval";
 
 export class DiagnosticErrorListener extends BaseErrorListener {
