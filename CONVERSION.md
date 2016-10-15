@@ -58,7 +58,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] WritableToken.java
 * [x] atn\AbstractPredicateTransition.java
 * [x] atn\ActionTransition.java
-* [ ] atn\AmbiguityInfo.java
+* [x] atn\AmbiguityInfo.java
 * [x] atn\ArrayPredictionContext.java
 * [ ] atn\ATN.java
 * [ ] atn\ATNConfig.java
@@ -75,14 +75,14 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\BasicState.java
 * [x] atn\BlockEndState.java
 * [x] atn\BlockStartState.java
-* [ ] atn\ConflictInfo.java
-* [ ] atn\ContextSensitivityInfo.java
-* [ ] atn\DecisionEventInfo.java
-* [ ] atn\DecisionInfo.java
+* [x] atn\ConflictInfo.java
+* [x] atn\ContextSensitivityInfo.java
+* [x] atn\DecisionEventInfo.java
+* [x] atn\DecisionInfo.java
 * [x] atn\DecisionState.java
 * [x] atn\EmptyPredictionContext.java
 * [x] atn\EpsilonTransition.java
-* [ ] atn\ErrorInfo.java
+* [x] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
 * [x] atn\LexerActionExecutor.java
 * [x] atn\LexerActionType.java
@@ -97,7 +97,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LexerSkipAction.java
 * [x] atn\LexerTypeAction.java
 * [ ] atn\LL1Analyzer.java
-* [ ] atn\LookaheadEventInfo.java
+* [x] atn\LookaheadEventInfo.java
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
@@ -106,7 +106,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java
 * [ ] atn\PrecedencePredicateTransition.java
-* [ ] atn\PredicateEvalInfo.java
+* [x] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
 * [x] atn\PredictionContext.java
   * [x] PredictionContext.fromRuleContext

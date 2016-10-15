@@ -30,6 +30,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.1914305-07:00
 
+import { DecisionEventInfo } from './DecisionEventInfo';
+import { NotNull } from '../Decorators';
+import { SemanticContext } from '../misc/Stubs';
+import { SimulatorState } from '../misc/Stubs';
+import { TokenStream } from '../TokenStream';
+
 /**
  * This class represents profiling event information for semantic predicate
  * evaluations which occur during prediction.
@@ -42,24 +48,24 @@ export class PredicateEvalInfo extends DecisionEventInfo {
 	/**
 	 * The semantic context which was evaluated.
 	 */
-	semctx: SemanticContext; 
+	semctx: SemanticContext;
 	/**
 	 * The alternative number for the decision which is guarded by the semantic
 	 * context {@link #semctx}. Note that other ATN
 	 * configurations may predict the same alternative which are guarded by
 	 * other semantic contexts and/or {@link SemanticContext#NONE}.
 	 */
-	predictedAlt: number; 
+	predictedAlt: number;
 	/**
 	 * The result of evaluating the semantic context {@link #semctx}.
 	 */
-	evalResult: boolean; 
+	evalResult: boolean;
 
 	/**
 	 * Constructs a new instance of the {@link PredicateEvalInfo} class with the
 	 * specified detailed predicate evaluation information.
 	 *
-	 * @param state The simulator state 
+	 * @param state The simulator state
 	 * @param decision The decision number
 	 * @param input The input token stream
 	 * @param startIndex The start index for the current prediction
@@ -75,12 +81,16 @@ export class PredicateEvalInfo extends DecisionEventInfo {
 	 * @see ParserATNSimulator#evalSemanticContext(SemanticContext, ParserRuleContext, int)
 	 * @see SemanticContext#eval(Recognizer, RuleContext)
 	 */
-	 constructor(@NotNull state: SimulatorState, decision: number, 
-							 @NotNull input: TokenStream, startIndex: number, stopIndex: number,
-							 @NotNull semctx: SemanticContext,
-							 evalResult: boolean,
-							 predictedAlt: number) 
-	{
+	constructor(
+		@NotNull state: SimulatorState,
+		decision: number,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number,
+		@NotNull semctx: SemanticContext,
+		evalResult: boolean,
+		predictedAlt: number) {
+
 		super(decision, state, input, startIndex, stopIndex, state.useContext);
 		this.semctx = semctx;
 		this.evalResult = evalResult;
