@@ -36,10 +36,12 @@
  */
 
 import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
+import { ATN } from './atn/Stub_ATN';
 import { ATNState } from './atn/ATNState';
+import { Parser } from './Stub_Parser';
 import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from './Stub_Recognizer';
 import { NotNull } from "./Decorators";
-import { ATN, Recognizer, Parser } from "./misc/Stubs";
 import { PredicateTransition } from './atn/PredicateTransition';
 
 export class FailedPredicateException extends RecognitionException {

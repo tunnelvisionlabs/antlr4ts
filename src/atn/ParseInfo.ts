@@ -31,9 +31,9 @@
 // ConvertTo-TS run at 2016-10-04T11:26:31.0349605-07:00
 
 import { DecisionInfo } from './DecisionInfo';
-import { DFA } from '../misc/Stubs';
+import { DFA } from '../dfa/Stub_DFA';
 import { NotNull } from '../Decorators';
-import { ProfilingATNSimulator } from '../misc/Stubs';
+import { ProfilingATNSimulator } from './Stub_ProfilingATNSimulator';
 
 /**
  * This class provides access to specific and aggregate statistics gathered

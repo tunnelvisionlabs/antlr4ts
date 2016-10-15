@@ -35,15 +35,16 @@
  *  in the input, where it is in the ATN, the rule invocation stack,
  *  and what kind of problem occurred.
  */
+
+import { Parser } from './Stub_Parser';
+import { ParserRuleContext } from './Stub_ParserRuleContext';
+import { Recognizer } from './Stub_Recognizer';
 import { RuleContext } from "./RuleContext";
-import { Lexer } from "./misc/Stubs";
+import { Lexer } from "./Stub_Lexer";
 import { CharStream } from "./CharStream";
 import { IntStream } from './IntStream';
 import { Token } from "./Token";
 import { IntervalSet } from "./misc/IntervalSet"
-
-// Stubs
-import { Recognizer, Parser, ParserRuleContext} from "./misc/Stubs";
 
 export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;

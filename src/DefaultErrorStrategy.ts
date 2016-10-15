@@ -35,12 +35,14 @@
  * error reporting and recovery in ANTLR parsers.
  */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
+import { ATN } from './atn/Stub_ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from "./atn/ATNStateType";
 import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
+import { Parser } from './Stub_Parser';
 import { PredictionContext } from './atn/PredictionContext';
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
@@ -51,9 +53,6 @@ import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
 import { Vocabulary } from "./Vocabulary";
 import { Override, NotNull } from "./Decorators";
-// Stubs
-import { Parser, ATN } from "./misc/Stubs";
-
 
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**

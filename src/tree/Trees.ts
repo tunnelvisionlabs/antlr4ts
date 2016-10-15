@@ -31,8 +31,10 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
+import { ATN } from '../atn/Stub_ATN';
+import { Parser } from '../Stub_Parser';
+import { ParserRuleContext } from '../Stub_ParserRuleContext';
 import { NotNull } from "../Decorators";
-import { Parser, ATN, ParserRuleContext } from "../misc/Stubs";
 import {Arrays} from "../misc/Arrays";
 import {RuleNode} from "./RuleNode";
 import {RuleContext} from "../RuleContext";

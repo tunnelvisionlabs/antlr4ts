@@ -32,7 +32,7 @@
 
 import { DecisionEventInfo } from './DecisionEventInfo';
 import { NotNull } from '../Decorators';
-import { SimulatorState } from '../misc/Stubs';
+import { SimulatorState } from './Stub_SimulatorState';
 import { TokenStream } from '../TokenStream';
 
 /**

@@ -79,11 +79,15 @@
  *
  *  @see ParserRuleContext
  */
+
+import { ATN } from './atn/Stub_ATN';
+import { Parser } from './Stub_Parser';
+import { ParserRuleContext } from './Stub_ParserRuleContext';
+import { Recognizer } from './Stub_Recognizer';
 import {RuleNode} from "./tree/RuleNode";
 import {ParseTree as Tree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators"
-import {ATN, Recognizer, Parser, ParserRuleContext } from "./misc/Stubs";
 import {Trees} from "./tree/Trees";
 import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
 

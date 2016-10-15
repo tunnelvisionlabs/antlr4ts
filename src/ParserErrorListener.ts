@@ -29,12 +29,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
+import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { BitSet } from './misc/Stub_BitSet';
+import { DFA } from './dfa/Stub_DFA';
+import { Parser } from './Stub_Parser';
+import { SimulatorState } from './atn/Stub_SimulatorState';
 import { Token } from './Token';
-// Stubs
-import {
-	DFA, BitSet, ATNConfigSet,
-	Parser, SimulatorState
-} from './misc/Stubs'
 import * as Stubs from "./misc/Stubs";
 import * as Exception from "./RecognitionException";
 

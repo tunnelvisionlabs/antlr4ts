@@ -62,12 +62,10 @@ import {Token} from "./Token";
 import {DefaultErrorStrategy} from "./DefaultErrorStrategy";
 import {RecognitionException} from "./RecognitionException";
 import {ParseCancellationException} from "./misc/ParseCancellationException";
+import { Parser } from './Stub_Parser';
+import { ParserRuleContext } from './Stub_ParserRuleContext';
 import { InputMismatchException } from "./InputMismatchException";
 import { Override} from "./Decorators";
-
-// Stubs
-import { Parser, ParserRuleContext } from "./misc/Stubs";
-
 
 export class BailErrorStrategy extends DefaultErrorStrategy {
     /** Instead of recovering from exception {@code e}, re-throw it wrapped
