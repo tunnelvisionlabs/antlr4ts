@@ -42,12 +42,14 @@ const DEFAULT_MAX_SIZE: number = 5;
  * @author Sam Harwell
  */
 export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
+	private readonly maxSparseSize: number;
 	private keys: number[];
 	private values: T[];
 
 	constructor(minIndex: number, maxIndex: number, maxSparseSize: number = DEFAULT_MAX_SIZE) {
 		super(minIndex, maxIndex);
-		this.keys = new Array<number>(maxSparseSize);
+		this.maxSparseSize = maxSparseSize;
+		this.keys = new Array<number>();
 		this.values = new Array<T>();
 	}
 
@@ -73,7 +75,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 	}
 
 	getMaxSparseSize(): number {
-		return this.keys.length;
+		return this.maxSparseSize;
 	}
 
 	@Override
@@ -125,7 +127,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 		let insertIndex: number = -index - 1;
 		if (this.size() < this.getMaxSparseSize() && insertIndex == this.size()) {
 			// stay sparse and add new entry
-			this.keys[insertIndex] = key;
+			this.keys.push(key);
 			this.values.push(value);
 			return this;
 		}
@@ -142,8 +144,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 		}
 		else {
 			let resized: SparseEdgeMap<T> = new SparseEdgeMap<T>(this.minIndex, this.maxIndex, desiredSize);
-			resized.keys.copyWithin(insertIndex + 1, insertIndex, this.size());
-			resized.keys[insertIndex] = key;
+			resized.keys.splice(insertIndex, 0, key);
 			resized.values.splice(insertIndex, 0, value);
 			return resized;
 		}
@@ -160,7 +161,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 		result.keys = this.keys.slice(0);
 		result.values = this.values.slice(0);
 
-		result.keys.copyWithin(index, index + 1);
+		result.keys.splice(index, 1);
 		result.values.splice(index, 1);
 		return result;
 	}
