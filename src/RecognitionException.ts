@@ -114,7 +114,7 @@ export class RecognitionException extends Error {
 	 * state in the ATN, or {@code null} if the information is not available.
 	 */
 	getExpectedTokens(): IntervalSet | undefined{
-		if (this.recognizer && this.ctx) {
+		if (this.recognizer) {
 			return this.recognizer.getATN().getExpectedTokens(this.offendingState, this.ctx);
 		}
 		return undefined;

@@ -38,7 +38,7 @@ import { DFA } from '../dfa/Stub_DFA';
 import { IntervalSet } from '../misc/IntervalSet';
 import { LexerAction } from './LexerAction';
 import { LL1Analyzer } from './Stub_LL1Analyzer';
-import { NotNull, Nullable } from '../Decorators';
+import { NotNull } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import { RuleContext } from '../RuleContext';
@@ -181,12 +181,9 @@ export class ATN {
 		}
 	}
 
-	addState(@Nullable state: ATNState): void {
-		if (state != null) {
-			state.atn = this;
-			state.stateNumber = this.states.length;
-		}
-
+	addState(state: ATNState): void {
+		state.atn = this;
+		state.stateNumber = this.states.length;
 		this.states.push(state);
 	}
 
@@ -235,12 +232,12 @@ export class ATN {
 	 * number {@code stateNumber}
 	 */
 	@NotNull
-	getExpectedTokens(stateNumber: number, @Nullable context: RuleContext): IntervalSet {
+	getExpectedTokens(stateNumber: number, context: RuleContext | undefined): IntervalSet {
 		if (stateNumber < 0 || stateNumber >= this.states.length) {
 			throw new RangeError("Invalid state number.");
 		}
 
-		let ctx: RuleContext =  context;
+		let ctx: RuleContext | undefined =  context;
 		let s: ATNState =  this.states[stateNumber];
 		let following: IntervalSet =  this.nextTokens(s);
 		if (!following.contains(Token.EPSILON)) {
