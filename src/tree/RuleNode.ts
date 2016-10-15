@@ -33,7 +33,7 @@
 import { RuleContext } from '../RuleContext';
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
-import { Parser } from "../Parser";
+import { Parser } from "../misc/Stubs";
 import { Interval } from "../misc/Interval";
 
 export abstract class RuleNode implements ParseTree {
