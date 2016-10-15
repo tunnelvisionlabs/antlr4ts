@@ -34,14 +34,17 @@
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { Arrays } from '../misc/Arrays';
-import { ATN } from './ATN';
+import { ATN } from '../misc/Stubs';
 import { ATNState } from './ATNState';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from "../Decorators";
 import { Equatable, JavaSet } from '../misc/Stubs';
 import { PredictionContextCache } from './PredictionContextCache';
-// import { Recognizer } from '..';
+import { Recognizer } from '../misc/Stubs';
+import { RuleContext } from '../RuleContext';
+import { RuleTransition } from './RuleTransition';
+
 import * as assert from 'assert';
 
 const INITIAL_HASH: number = 1;
@@ -116,26 +119,22 @@ export abstract class PredictionContext implements Equatable {
 
 	protected abstract removeEmptyContext(): PredictionContext;
 
-	// static fromRuleContext(@NotNull atn: ATN, @NotNull outerContext: RuleContext): PredictionContext {
-	// 	return fromRuleContext(atn, outerContext, true);
-	// }
+	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
+		if (outerContext.isEmpty()) {
+			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
+		}
 
-	// static fromRuleContext(@NotNull atn: ATN, @NotNull outerContext: RuleContext, fullContext: boolean): PredictionContext {
-	// 	if (outerContext.isEmpty()) {
-	// 		return fullContext ? EMPTY_FULL : EMPTY_LOCAL;
-	// 	}
+		let parent: PredictionContext;
+		if (outerContext.parent) {
+			parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
+		} else {
+			parent = fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
+		}
 
-	// 	let parent: PredictionContext; 
-	// 	if (outerContext.parent != null) {
-	// 		parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
-	// 	} else {
-	// 		parent = fullContext ? EMPTY_FULL : EMPTY_LOCAL;
-	// 	}
-
-	// 	let state: ATNState =  atn.states.get(outerContext.invokingState);
-	// 	let transition: RuleTransition =  (RuleTransition)state.transition(0);
-	// 	return parent.getChild(transition.followState.stateNumber);
-	// }
+		let state: ATNState = atn.states[outerContext.invokingState];
+		let transition: RuleTransition = state.transition(0) as RuleTransition;
+		return parent.getChild(transition.followState.stateNumber);
+	}
 
 	private static addEmptyContext(context: PredictionContext): PredictionContext {
 		return context.addEmptyContext();
@@ -326,76 +325,70 @@ export abstract class PredictionContext implements Equatable {
 	// @Override
 	abstract equals(o: any): boolean;
 
-	// @Override
-	// toString(): string {
-	// 	return this.toStrings(null, PredictionContext.EMPTY_FULL_STATE_KEY);
-	// }
+	toStrings(recognizer: Recognizer<any, any> | undefined, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
+		let result: string[] = [];
 
-	// toStrings(recognizer: Recognizer<any, any>, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
-	// 	let result: string[] = [];
+		outer:
+		for (let perm = 0; ; perm++) {
+			let offset: number = 0;
+			let last: boolean = true;
+			let p: PredictionContext = this;
+			let stateNumber: number = currentState;
+			let localBuffer: string = "";
+			localBuffer += "[";
+			while (!p.isEmpty() && p !== stop) {
+				let index: number = 0;
+				if (p.size() > 0) {
+					let bits: number = 1;
+					while ((1 << bits) < p.size()) {
+						bits++;
+					}
 
-	// 	outer:
-	// 	for (let perm = 0; ; perm++) {
-	// 		let offset: number =  0;
-	// 		let last: boolean =  true;
-	// 		let p: PredictionContext =  this;
-	// 		let stateNumber: number =  currentState;
-	// 		let localBuffer: string = "";
-	// 		localBuffer += "[";
-	// 		while ( !p.isEmpty() && p !== stop ) {
-	// 			let index: number =  0;
-	// 			if (p.size() > 0) {
-	// 				let bits: number =  1;
-	// 				while ((1 << bits) < p.size()) {
-	// 					bits++;
-	// 				}
+					let mask: number = (1 << bits) - 1;
+					index = (perm >> offset) & mask;
+					last = last && index >= p.size() - 1;
+					if (index >= p.size()) {
+						continue outer;
+					}
 
-	// 				let mask: number =  (1 << bits) - 1;
-	// 				index = (perm >> offset) & mask;
-	// 				last = last && index >= p.size() - 1;
-	// 				if (index >= p.size()) {
-	// 					continue outer;
-	// 				}
+					offset += bits;
+				}
 
-	// 				offset += bits;
-	// 			}
+				if (recognizer) {
+					if (localBuffer.length > 1) {
+						// first char is '[', if more than that this isn't the first rule
+						localBuffer += ' ';
+					}
 
-	// 			if ( recognizer!=null ) {
-	// 				if (localBuffer.length > 1) {
-	// 					// first char is '[', if more than that this isn't the first rule
-	// 					localBuffer += ' ';
-	// 				}
+					let atn: ATN = recognizer.getATN();
+					let s: ATNState = atn.states[stateNumber];
+					let ruleName: string = recognizer.getRuleNames()[s.ruleIndex];
+					localBuffer += ruleName;
+				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
+					if (!p.isEmpty()) {
+						if (localBuffer.length > 1) {
+							// first char is '[', if more than that this isn't the first rule
+							localBuffer += ' ';
+						}
 
-	// 				let atn: ATN =  recognizer.getATN();
-	// 				let s: ATNState =  atn.states[stateNumber];
-	// 				let ruleName: string =  recognizer.getRuleNames()[s.ruleIndex];
-	// 				localBuffer += ruleName;
-	// 			}
-	// 			else if ( p.getReturnState(index)!=PredictionContext.EMPTY_FULL_STATE_KEY ) {
-	// 				if ( !p.isEmpty() ) {
-	// 					if (localBuffer.length > 1) {
-	// 						// first char is '[', if more than that this isn't the first rule
-	// 						localBuffer += ' ';
-	// 					}
+						localBuffer += p.getReturnState(index);
+					}
+				}
 
-	// 					localBuffer += p.getReturnState(index);
-	// 				}
-	// 			}
+				stateNumber = p.getReturnState(index);
+				p = p.getParent(index);
+			}
 
-	// 			stateNumber = p.getReturnState(index);
-	// 			p = p.getParent(index);
-	// 		}
+			localBuffer += "]";
+			result.push(localBuffer);
 
-	// 		localBuffer += "]";
-	// 		result.push(localBuffer);
+			if (last) {
+				break;
+			}
+		}
 
-	// 		if (last) {
-	// 			break;
-	// 		}
-	// 	}
-
-	// 	return result;
-	// }
+		return result;
+	}
 }
 
 class EmptyPredictionContext extends PredictionContext {

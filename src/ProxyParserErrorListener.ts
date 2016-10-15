@@ -32,86 +32,90 @@ import { Token } from './Token';
 import { RecognitionException } from "./RecognitionException";
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { ParserErrorListener } from "./ParserErrorListener";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override } from "./Decorators";
 // Stubs
 import {
-    Recognizer, BitSet, ATNConfigSet, DFA, Parser,
-    SimulatorState } from "./misc/Stubs";
+	Recognizer, BitSet, ATNConfigSet, DFA, Parser,
+	SimulatorState } from "./misc/Stubs";
 
 /**
  * @author Sam Harwell
  */
 export class ProxyParserErrorListener extends ProxyErrorListener<Token>
-    implements ParserErrorListener {
+	implements ParserErrorListener {
 
-    constructor(delegates: ANTLRErrorListener<Token>[]) {
-        super(delegates);
-    }
+	constructor(delegates: ANTLRErrorListener<Token>[]) {
+		super(delegates);
+	}
 
-    @Override
-    reportAmbiguity(
-        recognizer: Parser,
-        dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        exact: boolean,
-        ambigAlts: BitSet,
-        configs: ATNConfigSet): void {
-        this.getDelegates()
-            .forEach(listener => {
-                if ((listener as any).reportAmbiguity) {
-                    (listener as any).reportAmbiguity(
-                        recognizer,
-                        dfa,
-                        startIndex,
-                        stopIndex,
-                        exact,
-                        ambigAlts,
-                        configs);
-                }
+	@Override
+	reportAmbiguity(
+		recognizer: Parser,
+		dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		ambigAlts: BitSet,
+		configs: ATNConfigSet): void {
+		this.getDelegates()
+			.forEach(listener => {
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportAmbiguity(
+						recognizer,
+						dfa,
+						startIndex,
+						stopIndex,
+						exact,
+						ambigAlts,
+						configs);
+				}
 
-            });
-    }
+			});
+	}
 
-    @Override
-    reportAttemptingFullContext(recognizer: Parser,
-        dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        conflictingAlts: BitSet,
-        conflictState: SimulatorState): void {
-        this.getDelegates()
-            .forEach(listener => {
-                if ((listener as any).reportAttemptingFullContext) {
-                    (listener as any).reportAttemptingFullContext(
-                        recognizer,
-                        dfa,
-                        startIndex,
-                        stopIndex,
-                        conflictingAlts,
-                        conflictState);
-                }
-            });
-    }
+	@Override
+	reportAttemptingFullContext(recognizer: Parser,
+		dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet,
+		conflictState: SimulatorState): void {
+		this.getDelegates()
+			.forEach(listener => {
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportAttemptingFullContext(
+						recognizer,
+						dfa,
+						startIndex,
+						stopIndex,
+						conflictingAlts,
+						conflictState);
+				}
+			});
+	}
 
-    @Override
-    reportContextSensitivity(recognizer: Parser,
-        dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        prediction: number,
-        acceptState: SimulatorState): void {
-        this.getDelegates()
-            .forEach(listener => {
-                if ((listener as any).reportContextSensitivity) {
-                    (listener as any).reportContextSensitivity(
-                        recognizer,
-                        dfa,
-                        startIndex,
-                        stopIndex,
-                        prediction,
-                        acceptState);
-                }
-            });
-    }
+	@Override
+	reportContextSensitivity(recognizer: Parser,
+		dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		acceptState: SimulatorState): void {
+		this.getDelegates()
+			.forEach(listener => {
+				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+					listener.reportContextSensitivity(
+						recognizer,
+						dfa,
+						startIndex,
+						stopIndex,
+						prediction,
+						acceptState);
+				}
+			});
+	}
+
+	static isParserErrorListener(listener: ANTLRErrorListener<Token>): listener is ParserErrorListener {
+		return (listener as any).reportAmbiguity;
+	}
 }

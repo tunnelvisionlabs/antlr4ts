@@ -40,21 +40,19 @@ export abstract class RuleNode implements ParseTree {
 	abstract getRuleContext(): RuleContext;
 
 	//@Override
-    abstract getParent(): RuleContext;
+	abstract getParent(): RuleContext;
 
-    abstract getChild(i: number): ParseTree;
+	abstract getChild(i: number): ParseTree;
 
-    abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
+	abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
 
-    abstract getText(): string;
+	abstract getText(): string;
 
-    abstract toStringTree(parser?: Parser | undefined): string;
+	abstract toStringTree(parser?: Parser | undefined): string;
 
-    abstract getSourceInterval(): Interval;
+	abstract getSourceInterval(): Interval;
 
-    abstract getPayload(): any;
+	abstract getPayload(): any;
 
-    abstract getChildCount(): number;
+	abstract getChildCount(): number;
 }
-
-

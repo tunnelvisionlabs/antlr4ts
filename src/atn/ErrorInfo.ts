@@ -1,7 +1,7 @@
 ﻿/*
  * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
+ *  Copyright (c) 2014 Terence Parr
+ *  Copyright (c) 2014 Sam Harwell
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -28,62 +28,43 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:28.7213647-07:00
 
-import { Token } from './Token';
+import { DecisionEventInfo } from './DecisionEventInfo';
+import { NotNull } from '../Decorators';
+import { SimulatorState } from '../misc/Stubs';
+import { TokenStream } from '../TokenStream';
 
-/** A lexer is recognizer that draws input symbols from a character stream.
- *  lexer grammars result in a subclass of this object. A Lexer object
- *  uses simplified match() and error recovery mechanisms in the interest
- *  of speed.
+/**
+ * This class represents profiling event information for a syntax error
+ * identified during prediction. Syntax errors occur when the prediction
+ * algorithm is unable to identify an alternative which would lead to a
+ * successful parse.
+ *
+ * @see Parser#notifyErrorListeners(Token, String, RecognitionException)
+ * @see ANTLRErrorListener#syntaxError
+ *
+ * @since 4.3
  */
-export abstract class Lexer {
-	static get DEFAULT_TOKEN_CHANNEL(): number {
-		return Token.DEFAULT_CHANNEL;
+export class ErrorInfo extends DecisionEventInfo {
+	/**
+	 * Constructs a new instance of the {@link ErrorInfo} class with the
+	 * specified detailed syntax error information.
+	 *
+	 * @param decision The decision number
+	 * @param state The final simulator state reached during prediction
+	 * prior to reaching the {@link ATNSimulator#ERROR} state
+	 * @param input The input token stream
+	 * @param startIndex The start index for the current prediction
+	 * @param stopIndex The index at which the syntax error was identified
+	 */
+	constructor(
+		decision: number,
+		@NotNull state: SimulatorState,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number) {
+
+		super(decision, state, input, startIndex, stopIndex, state.useContext);
 	}
-
-	static get HIDDEN(): number {
-		return Token.HIDDEN_CHANNEL;
-	}
-
-	setChannel(channel: number): void {
-		throw "not implemented";
-	}
-
-	setType(type: number): void {
-		throw "not implemented";
-	}
-
-	pushMode(mode: number): void {
-		throw "not implemented";
-	}
-
-	popMode(): void {
-		throw "not implemented";
-	}
-
-	mode(mode: number): void {
-		throw "not implemented";
-	}
-
-	more(): void {
-		throw "not implemented";
-	}
-
-	skip(): void {
-		throw "not implemented";
-	}
-
-	action(arg: null, ruleIndex: number, actionIndex: number): void {
-		throw "not implemented";
-	}
-}
-
-export namespace Lexer {
-	export const DEFAULT_MODE: number = 0;
-	export const MORE: number = -2;
-	export const SKIP: number = -3;
-
-	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }

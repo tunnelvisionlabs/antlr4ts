@@ -39,50 +39,54 @@
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
 import {ParserErrorListener} from "./ParserErrorListener";
-import { Override, NotNull, Nullable } from "./Decorators";
+import { Override, NotNull } from "./Decorators";
 
 // Stubs
 import {
-    Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
+	Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
 } from "./misc/Stubs";
 
-// This class seems unused, but might clean up ParserProxyErrorListener a liettle bit if used consistantly.
+// This class seems unused, but might clean up ParserProxyErrorListener a little bit if used consistently.
 
 export class BaseErrorListener implements ParserErrorListener {
-    @Override
-    syntaxError(@NotNull recognizer: Recognizer<Token, any>,
-        @Nullable offendingSymbol: Token,
-        line: number,
-        charPositionInLine: number,
-        @NotNull msg: string,
-        @Nullable e: RecognitionException): void {
-    }
+	@Override
+	syntaxError<T extends Token>(
+		@NotNull recognizer: Recognizer<T, any>,
+		offendingSymbol: T | undefined,
+		line: number,
+		charPositionInLine: number,
+		@NotNull msg: string,
+		e: RecognitionException | undefined): void {
+	}
 
-    @Override
-    reportAmbiguity(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        exact: boolean,
-        @Nullable ambigAlts: BitSet,
-        @NotNull configs: ATNConfigSet): void {
-    }
+	@Override
+	reportAmbiguity(
+		@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		ambigAlts: BitSet | undefined,
+		@NotNull configs: ATNConfigSet): void {
+	}
 
-    @Override
-    reportAttemptingFullContext(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        @Nullable conflictingAlts: BitSet,
-        @NotNull conflictState: SimulatorState): void {
-    }
+	@Override
+	reportAttemptingFullContext(
+		@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet | undefined,
+		@NotNull conflictState: SimulatorState): void {
+	}
 
-    @Override
-    reportContextSensitivity(@NotNull recognizer: Parser,
-        @NotNull dfa: DFA,
-        startIndex: number,
-        stopIndex: number,
-        prediction: number,
-        @NotNull acceptState: SimulatorState): void {
-    }
+	@Override
+	reportContextSensitivity(
+		@NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		@NotNull acceptState: SimulatorState): void {
+	}
 }

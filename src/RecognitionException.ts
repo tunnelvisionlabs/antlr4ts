@@ -36,12 +36,11 @@
  *  and what kind of problem occurred.
  */
 import { RuleContext } from "./RuleContext";
-import { Lexer } from "./Lexer";
+import { Lexer } from "./misc/Stubs";
 import { CharStream } from "./CharStream";
 import { IntStream } from './IntStream';
 import { Token } from "./Token";
 import { IntervalSet } from "./misc/IntervalSet"
-import { SuppressWarnings, Nullable } from "./Decorators";
 
 // Stubs
 import { Recognizer, Parser, ParserRuleContext} from "./misc/Stubs";
@@ -50,14 +49,11 @@ export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;
 
 	/** The {@link Recognizer} where this exception originated. */
-	@Nullable
-	private recognizer: Recognizer<any,any>; 
+	private recognizer?: Recognizer<any, any>;
 
-	@Nullable
-	private ctx: RuleContext; 
+	private ctx?: RuleContext;
 
-	@Nullable
-	private input: IntStream; 
+	private input?: IntStream;
 
 	/**
 	 * The current {@link Token} when an error occurred. Since not all streams
@@ -68,23 +64,20 @@ export class RecognitionException extends Error {
 
 	private offendingState: number =  -1;
 
-	 constructor(lexer: Lexer | null | undefined, 
-			     input: CharStream);
+	 constructor(lexer: Lexer | undefined,
+				 input: CharStream);
 
-	 constructor(recognizer?: Recognizer<Token,any>, 
-				input?: IntStream,
-                ctx?: ParserRuleContext); 
+	 constructor(recognizer: Recognizer<Token,any> | undefined,
+				input: IntStream | undefined,
+				ctx: ParserRuleContext | undefined);
 
-	 constructor(message: string, 
-				recognizer?: Recognizer<Token,any>,
-				input?: IntStream,
-                ctx?: ParserRuleContext);
+	 constructor(recognizer: Recognizer<Token,any> | undefined,
+				input: IntStream | undefined,
+				ctx: ParserRuleContext | undefined,
+				message: string);
 
-     constructor( message: any, recognizer?: any, input?: any, ctx?: any ) {
-         super(typeof message === 'string' ? message : undefined);
-         if (typeof message !== 'string') {
-             [recognizer, input, ctx] = [message, recognizer, input];
-         }
+	 constructor(recognizer: Lexer | Recognizer<Token, any> | undefined, input: CharStream | IntStream | undefined, ctx?: ParserRuleContext, message?: string) {
+		 super(message);
 
 		this.recognizer = recognizer;
 		this.input = input;
@@ -134,8 +127,7 @@ export class RecognitionException extends Error {
 	 * @return The {@link RuleContext} at the time this exception was thrown.
 	 * If the context is not available, this method returns {@code null}.
 	 */
-	@Nullable
-	getContext(): RuleContext {
+	getContext(): RuleContext | undefined {
 		return this.ctx;
 	}
 
@@ -153,14 +145,15 @@ export class RecognitionException extends Error {
 	getInputStream(): IntStream | undefined {
 		return this.input;
 	}
-    getOffendingToken(recognizer?: Recognizer<Token, any>): Token |  undefined {
-	    if (recognizer && recognizer !== this.recognizer) return undefined;
+	
+	getOffendingToken(recognizer?: Recognizer<Token,any>): Token | undefined {
+		if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
 	}
 
-    protected setOffendingToken<Symbol extends Token>(
-        recognizer: Recognizer<Symbol, any>,
-        offendingToken?: Symbol): void {
+	protected setOffendingToken<Symbol extends Token>(
+		recognizer: Recognizer<Symbol, any>,
+		offendingToken?: Symbol): void {
 		if (recognizer === this.recognizer) {
 			this.offendingToken = offendingToken;
 		}
@@ -174,8 +167,7 @@ export class RecognitionException extends Error {
 	 * @return The recognizer where this exception occurred, or {@code null} if
 	 * the recognizer is not available.
 	 */
-	@Nullable
-	getRecognizer() {
+	getRecognizer(): Recognizer<any, any> | undefined {
 		return this.recognizer;
 	}
 }

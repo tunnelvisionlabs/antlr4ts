@@ -34,12 +34,12 @@
  *  Disambiguating predicate evaluation occurs when we test a predicate during
  *  prediction.
  */
+
+import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
+import { ATNState } from './atn/ATNState';
 import { RecognitionException } from "./RecognitionException";
-import { NotNull, Nullable } from "./Decorators";
-import {
-    ATN, ATNState, Recognizer, Parser,
-    AbstractPredicateTransition,PredicateTransition
-    } from "./misc/Stubs";
+import { NotNull } from "./Decorators";
+import { ATN, Recognizer, Parser, PredicateTransition } from "./misc/Stubs";
 
 
 export class FailedPredicateException extends RecognitionException {
@@ -49,19 +49,18 @@ export class FailedPredicateException extends RecognitionException {
 	private predicateIndex: number; 
 	private predicate?: string; 
 
-	constructor(@NotNull recognizer: Parser, 
-            predicate?: string,
-			message?: string) 
-	{
-        super(FailedPredicateException.formatMessage(
-            predicate, message), recognizer,
-            recognizer.getInputStream(), recognizer._ctx);
+	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
+		super(
+			recognizer,
+			recognizer.getInputStream(),
+			recognizer._ctx,
+			FailedPredicateException.formatMessage(predicate, message));
 		let s: ATNState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
 
-        let trans = s.transition(0) as AbstractPredicateTransition;
+		let trans = s.transition(0) as AbstractPredicateTransition;
 		if (trans instanceof PredicateTransition) {
-			this.ruleIndex = (trans as PredicateTransition).ruleIndex;
-            this.predicateIndex = (trans as PredicateTransition).predIndex;
+			this.ruleIndex = trans.ruleIndex;
+			this.predicateIndex = trans.predIndex;
 		}
 		else {
 			this.ruleIndex = 0;
@@ -77,20 +76,19 @@ export class FailedPredicateException extends RecognitionException {
 	}
 
 	getPredIndex(): number {
-        return this.predicateIndex;
+		return this.predicateIndex;
 	}
 
-	@Nullable
-	getPredicate() {
-        return this.predicate;
+	getPredicate(): string | undefined {
+		return this.predicate;
 	}
 
 	@NotNull
-	private static formatMessage( predicate?: string, message?: string): string {
+	private static formatMessage(predicate: string | undefined, message: string | undefined): string {
 		if (message) {
 			return message;
 		}
 
-        return `failed predicate: {${predicate}}?`;
+		return `failed predicate: {${predicate}}?`;
 	}
 }
