@@ -32,9 +32,9 @@
 
 export class MultiMap<K, V> extends Map<K, V[]> {
 	//private static serialVersionUID: number =  -4956746660057462312L;
-    constructor() {
-        super();
-    }
+	constructor() {
+		super();
+	}
 
 	map(key: K, value: V): void {
 		let elementsForKey = super.get(key);
@@ -45,13 +45,13 @@ export class MultiMap<K, V> extends Map<K, V[]> {
 		elementsForKey.push(value);
 	}
 
-    getPairs(): [K, V][] {
-        let pairs: [K, V][]  = [];
-        this.forEach((values: V[], key: K) => {
-            values.forEach(v => {
-                pairs.push([key, v])
-            });
-        });
-    	return pairs;
+	getPairs(): [K, V][] {
+		let pairs: [K, V][]  = [];
+		this.forEach((values: V[], key: K) => {
+			values.forEach(v => {
+				pairs.push([key, v])
+			});
+		});
+		return pairs;
 	}
 }

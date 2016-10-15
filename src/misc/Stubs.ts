@@ -308,9 +308,9 @@ export abstract class Lexer extends Recognizer<number, any> {
 		throw "not implemented";
 	}
 
-    setInputStream(antlrInputStream: CharStream): void  { throw new Error("Not implemented"); }
+	setInputStream(antlrInputStream: CharStream): void  { throw new Error("Not implemented"); }
 
-    nextToken(): Token { throw new Error("Not implemented"); }
+	nextToken(): Token { throw new Error("Not implemented"); }
 }
 
 export namespace Lexer {
@@ -323,5 +323,5 @@ export namespace Lexer {
 }
 
 export class XPath {
-    static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
+	static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
 }
