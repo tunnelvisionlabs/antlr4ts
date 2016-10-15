@@ -28,16 +28,16 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
-import { RuleContext } from "./RuleContext";
-import { Token } from "./Token";
-import { ParseTree } from "./tree/ParseTree";
-import { RecognitionException } from "./RecognitionException";
-import { ParseTreeListener } from "./tree/ParseTreeListener";
+import { ErrorNode } from "./tree/ErrorNode";
+import { Interval } from "./misc/Interval";
 import { Nullable, Override } from "./Decorators";
-import {TerminalNode} from "./tree/TerminalNode";
-import {ErrorNode} from "./tree/ErrorNode";
-import {Interval} from "./misc/Interval";
-import {Parser} from "./misc/Stubs";
+import { Parser } from "./misc/Stubs";
+import { ParseTree } from "./tree/ParseTree";
+import { ParseTreeListener } from "./tree/ParseTreeListener";
+import { RecognitionException } from "./RecognitionException";
+import { RuleContext } from "./RuleContext";
+import { TerminalNode } from "./tree/TerminalNode";
+import { Token } from "./Token";
 
 /** A rule invocation record for parsing.
  *
