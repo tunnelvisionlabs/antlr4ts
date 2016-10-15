@@ -33,7 +33,7 @@ import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BitSet } from './misc/Stub_BitSet';
 import { DFA } from './dfa/Stub_DFA';
 import { Parser } from './Stub_Parser';
-import { SimulatorState } from './atn/Stub_SimulatorState';
+import { SimulatorState } from './atn/SimulatorState';
 import { Token } from './Token';
 import * as Stubs from "./misc/Stubs";
 import * as Exception from "./RecognitionException";

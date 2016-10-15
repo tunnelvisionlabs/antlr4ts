@@ -45,7 +45,7 @@ import { Token } from "./Token"
 import { Parser } from './Stub_Parser';
 import {ParserErrorListener} from "./ParserErrorListener";
 import { Recognizer } from './Stub_Recognizer';
-import { SimulatorState } from './atn/Stub_SimulatorState';
+import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";
 
 // This class seems unused, but might clean up ParserProxyErrorListener a little bit if used consistently.

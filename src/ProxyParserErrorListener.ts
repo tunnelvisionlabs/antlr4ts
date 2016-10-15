@@ -36,7 +36,7 @@ import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Stub_Recognizer';
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { ParserErrorListener } from "./ParserErrorListener";
-import { SimulatorState } from './atn/Stub_SimulatorState';
+import { SimulatorState } from './atn/SimulatorState';
 import { Token } from './Token';
 import { Override } from "./Decorators";
 
