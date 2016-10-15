@@ -43,25 +43,22 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
         .replace(/\r/, "\\r");
 }
 
-// export function join(iter: Iterable<any>, separator: string): string {
-// 	return join(iter.iterator(), separator);
-// }
+// Seriously: why isn't this built in to java? ugh!
+export function join(collection: Iterable<any>, separator: string): string {
+	let buf = "";
+	let first = true;
+	for (let current of collection) {
+		if (first) {
+			first = false;
+		} else {
+			buf += separator;
+		}
 
-// export function join<T>(array: T[], separator: string): string {
-// 	return join(Arrays.asList(array), separator);
-// }
+		buf += current;
+	}
 
-// // Seriously: why isn't this built in to java? ugh!
-// export function join<T>(iter: Iterator<T>, separator: string): string {
-//     let buf = "";
-//     while ( iter.hasNext() ) {
-//         buf.append(iter.next());
-//         if ( iter.hasNext() ) {
-//             buf.append(separator);
-//         }
-//     }
-//     return buf.toString();
-// }
+	return buf;
+}
 
 export function equals(x: any, y: any): boolean {
 	if (x === y) {

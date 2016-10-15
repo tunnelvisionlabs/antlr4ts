@@ -114,9 +114,9 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] atn\ParserATNSimulator.java
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java
-* [ ] atn\PrecedencePredicateTransition.java
+* [x] atn\PrecedencePredicateTransition.java
 * [x] atn\PredicateEvalInfo.java
-* [ ] atn\PredicateTransition.java
+* [x] atn\PredicateTransition.java
 * [x] atn\PredictionContext.java
   * [x] PredictionContext.fromRuleContext
   * [x] ~~PredictionContext.toString~~ (Doesn't actually exist in the Java target)
@@ -128,7 +128,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\RuleStartState.java
 * [x] atn\RuleStopState.java
 * [x] atn\RuleTransition.java
-* [ ] atn\SemanticContext.java
+* [x] atn\SemanticContext.java
 * [x] atn\SetTransition.java
 * [ ] atn\SimulatorState.java
 * [x] atn\SingletonPredictionContext.java
@@ -152,7 +152,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] dfa\SingletonEdgeMap.java
 * [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
-* [ ] misc\Args.java
+* [x] misc\Args.java
 * [x] misc\Array2DHashSet.java
 * [ ] misc\DoubleKeyMap.java
 * [x] misc\EqualityComparator.java

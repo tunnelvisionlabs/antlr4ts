@@ -32,7 +32,7 @@
 
 import { Interval } from '../misc/Interval';
 import { Override } from '../Decorators';
-import { Parser } from '../Parser';
+import { Parser } from '../misc/Stubs';
 import { ParseTree } from './ParseTree';
 import { ParseTreeVisitor } from './ParseTreeVisitor';
 import { RuleNode } from './RuleNode';

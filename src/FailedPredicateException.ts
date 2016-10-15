@@ -39,8 +39,8 @@ import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
 import { ATNState } from './atn/ATNState';
 import { RecognitionException } from "./RecognitionException";
 import { NotNull } from "./Decorators";
-import { ATN, Recognizer, Parser, PredicateTransition } from "./misc/Stubs";
-
+import { ATN, Recognizer, Parser } from "./misc/Stubs";
+import { PredicateTransition } from './atn/PredicateTransition';
 
 export class FailedPredicateException extends RecognitionException {
 	//private static serialVersionUID: number =  5379330841495778709L;
