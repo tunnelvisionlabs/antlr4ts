@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -27,6 +27,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+// ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
 /** A rule context is a record of a single rule invocation.
  *
@@ -78,5 +79,169 @@
  *
  *  @see ParserRuleContext
  */
-export class RuleContext {
+import {RuleNode} from "./tree/RuleNode";
+import {ParseTree as Tree } from "./tree/ParseTree";
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators"
+import {ATN, Recognizer, Parser, ParserRuleContext } from "./misc/Stubs";
+import {Trees} from "./tree/Trees";
+import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
+
+export class RuleContext implements RuleNode {
+
+	constructor(public readonly parent: RuleContext, public readonly invokingState = -1) {
+	}
+
+	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
+		return new RuleContext(parent, invokingState);
+	}
+
+	depth(): number {
+		let n =  0;
+		let p: RuleContext =  this;
+		while ( p ) {
+			p = p.parent;
+			n++;
+		}
+		return n;
+	}
+
+	/** A context is empty if there is no invoking state; meaning nobody called
+	 *  current context.
+	 */
+	isEmpty(): boolean {
+		return this.invokingState === -1;
+	}
+
+	// satisfy the ParseTree / SyntaxTree interface
+
+	@Override
+	getSourceInterval(): Interval {
+		return Interval.INVALID;
+	}
+
+	@Override
+	getRuleContext(): RuleContext { return this; }
+
+	@Override
+	getParent(): RuleContext { return this.parent; }
+
+	@Override
+	getPayload(): RuleContext { return this; }
+
+	/** Return the combined text of all child nodes. This method only considers
+	 *  tokens which have been added to the parse tree.
+	 *  <p>
+	 *  Since tokens on hidden channels (e.g. whitespace or comments) are not
+	 *  added to the parse trees, they will not appear in the output of this
+	 *  method.
+	 */
+	@Override
+	getText(): string {
+		if (this.getChildCount() == 0) {
+			return "";
+		}
+
+		let builder = "";
+		for (let i = 0; i < this.getChildCount(); i++) {
+			builder += this.getChild(i).getText();
+		}
+
+		return builder.toString();
+	}
+
+	getRuleIndex(): number { return -1; }
+
+	/** For rule associated with this parse tree internal node, return
+	 *  the outer alternative number used to match the input. Default
+	 *  implementation does not compute nor store this alt num. Create
+	 *  a subclass of ParserRuleContext with backing field and set
+	 *  option contextSuperClass.
+	 *  to set it.
+	 *
+	 *  @since 4.5.3
+	 */
+	getAltNumber(): number { return ATN.INVALID_ALT_NUMBER; }
+
+	/** Set the outer alternative number for this context node. Default
+	 *  implementation does nothing to avoid backing field overhead for
+	 *  trees that don't need it.  Create
+     *  a subclass of ParserRuleContext with backing field and set
+     *  option contextSuperClass.
+	 *
+	 *  @since 4.5.3
+	 */
+	setAltNumber(altNumber: number): void { }
+
+	@Override
+	getChild(i: number): Tree {
+		throw new RangeError("No child contexts");
+	}
+
+	@Override
+	getChildCount(): number {
+		return 0;
+	}
+
+	@Override
+	accept<T>(visitor: ParserTreeVisitor<T>): T {
+		return visitor.visitChildren(this);
+	}
+
+	/** Print out a whole tree, not just a node, in LISP format
+	 *  (root child1 .. childN). Print just a node if this is a leaf.
+	 *  We have to know the recognizer so we can get rule names.
+	 */
+	toStringTree(recog: Parser): string;
+
+	/** Print out a whole tree, not just a node, in LISP format
+	 *  (root child1 .. childN). Print just a node if this is a leaf.
+	 */
+	toStringTree(ruleNames: string[] | undefined): string;
+
+	toStringTree(): string;
+
+	@Override
+	toStringTree(recog?: Parser | string[]): string {
+		return Trees.toStringTree(this, recog);
+	}
+
+	toString(): string;
+	toString(recog: Recognizer<any, any> | undefined): string;
+	toString(ruleNames: string[] | undefined): string;
+
+	// // recog null unless ParserRuleContext, in which case we use subclass toString(...)
+	toString(recog: Recognizer<any, any> | undefined, stop: RuleContext | undefined): string;
+
+	toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
+
+	toString(arg1?: Recognizer<any, any> | string[], stop?: RuleContext): string {
+		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
+		stop = stop || ParserRuleContext.emptyContext();
+
+		let buf = "";
+		let p: RuleContext =  this;
+		buf += ("[");
+		while (p && p !== stop) {
+			if (!ruleNames) {
+				if (!p.isEmpty()) {
+					buf += (p.invokingState);
+				}
+			} else {
+				let ruleIndex: number =  p.getRuleIndex();
+				let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
+					? ruleNames[ruleIndex] : ruleIndex.toString();
+				buf += (ruleName);
+			}
+
+			if (p.parent && (ruleNames || !p.parent.isEmpty())) {
+				buf += (" ");
+			}
+
+			p = p.parent;
+		}
+
+		buf += ("]");
+		return buf.toString();
+	}
 }

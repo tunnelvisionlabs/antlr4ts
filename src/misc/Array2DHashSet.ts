@@ -34,7 +34,7 @@
 import * as assert from "assert";
 import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import {EqualityComparator} from './EqualityComparator';
-import {NotNull, Nullable, Override,SuppressWarnings} from './Stubs';
+import {NotNull, Nullable, Override,SuppressWarnings} from '../Decorators';
 import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
 import {ObjectEqualityComparator} from './ObjectEqualityComparator';
 import {MurmurHash} from './MurmurHash';
@@ -239,6 +239,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		return this.get(obj) != null;
+	}
+
+	[Symbol.iterator]() {
+		return this.toArray().values();
 	}
 
 	@Override

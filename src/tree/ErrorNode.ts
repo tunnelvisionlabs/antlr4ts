@@ -1,4 +1,4 @@
-/*
+﻿/*
  * [The "BSD license"]
  *  Copyright (c) 2012 Terence Parr
  *  Copyright (c) 2012 Sam Harwell
@@ -28,9 +28,26 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:47.3963987-07:00
+// ConvertTo-TS run at 2016-10-04T11:26:47.4646355-07:00
 
-import {TerminalNode} from './TerminalNode';
+import { Override } from '../Decorators';
+import { ParseTreeVisitor } from './ParseTreeVisitor';
+import { TerminalNode } from './TerminalNode';
+import { Token } from '../Token';
 
-export interface ErrorNode extends TerminalNode {
+/** Represents a token that was consumed during resynchronization
+ *  rather than during a valid match operation. For example,
+ *  we will create this kind of a node during single token insertion
+ *  and deletion as well as during "consume until error recovery set"
+ *  upon no viable alternative exceptions.
+ */
+export class ErrorNode extends TerminalNode {
+	constructor(token: Token) {
+		super(token);
+	}
+
+	@Override
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
+		return visitor.visitErrorNode(this);
+	}
 }

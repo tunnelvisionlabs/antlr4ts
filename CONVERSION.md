@@ -9,11 +9,11 @@ will need a comment indicating the names of the two contributors who verified th
 semantics of the original code have been preserved. When the conversion is complete, this file and the sign-off comments
 in individual files can be removed and the antlr4 submodule commit will track the progress made on this code base.
 
-* [ ] ANTLRErrorListener.java
-* [ ] ANTLRErrorStrategy.java
+* [x] ANTLRErrorListener.java
+* [x] ANTLRErrorStrategy.java
 * [ ] ANTLRFileStream.java
 * [x] ANTLRInputStream.java - Constructors for char[] & performing I/O are omitted.
-* [ ] BailErrorStrategy.java
+* [x] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [x] BufferedTokenStream.java
 * [x] CharStream.java
@@ -21,27 +21,27 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] CommonTokenFactory.java
 * [x] CommonTokenStream.java
 * [ ] ConsoleErrorListener.java
-* [ ] DefaultErrorStrategy.java
+* [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
-* [ ] DiagnosticErrorListener.java
-* [ ] FailedPredicateException.java
-* [ ] InputMismatchException.java
+* [x] DiagnosticErrorListener.java
+* [x] FailedPredicateException.java
+* [x] InputMismatchException.java
 * [ ] InterpreterRuleContext.java
 * [x] IntStream.java
 * [ ] Lexer.java
 * [ ] LexerInterpreter.java
-* [ ] LexerNoViableAltException.java
+* [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
-* [ ] NoViableAltException.java
+* [x] NoViableAltException.java
 * [ ] Parser.java
-* [ ] ParserErrorListener.java
+* [x] ParserErrorListener.java
 * [ ] ParserInterpreter.java
 * [ ] ParserRuleContext.java
-* [ ] ProxyErrorListener.java
-* [ ] ProxyParserErrorListener.java
-* [ ] RecognitionException.java
+* [x] ProxyErrorListener.java
+* [x] ProxyParserErrorListener.java
+* [x] RecognitionException.java
 * [ ] Recognizer.java
-* [ ] RuleContext.java
+* [x] RuleContext.java
 * [ ] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
@@ -58,7 +58,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] WritableToken.java
 * [x] atn\AbstractPredicateTransition.java
 * [x] atn\ActionTransition.java
-* [ ] atn\AmbiguityInfo.java
+* [x] atn\AmbiguityInfo.java
 * [x] atn\ArrayPredictionContext.java
 * [ ] atn\ATN.java
 * [ ] atn\ATNConfig.java
@@ -75,43 +75,43 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\BasicState.java
 * [x] atn\BlockEndState.java
 * [x] atn\BlockStartState.java
-* [ ] atn\ConflictInfo.java
-* [ ] atn\ContextSensitivityInfo.java
-* [ ] atn\DecisionEventInfo.java
-* [ ] atn\DecisionInfo.java
+* [x] atn\ConflictInfo.java
+* [x] atn\ContextSensitivityInfo.java
+* [x] atn\DecisionEventInfo.java
+* [x] atn\DecisionInfo.java
 * [x] atn\DecisionState.java
 * [x] atn\EmptyPredictionContext.java
 * [x] atn\EpsilonTransition.java
-* [ ] atn\ErrorInfo.java
+* [x] atn\ErrorInfo.java
 * [x] atn\LexerAction.java
-* [ ] atn\LexerActionExecutor.java
+* [x] atn\LexerActionExecutor.java
 * [x] atn\LexerActionType.java
 * [ ] atn\LexerATNSimulator.java
-* [ ] atn\LexerChannelAction.java
-* [ ] atn\LexerCustomAction.java
-* [ ] atn\LexerIndexedCustomAction.java
-* [ ] atn\LexerModeAction.java
-* [ ] atn\LexerMoreAction.java
-* [ ] atn\LexerPopModeAction.java
-* [ ] atn\LexerPushModeAction.java
-* [ ] atn\LexerSkipAction.java
-* [ ] atn\LexerTypeAction.java
+* [x] atn\LexerChannelAction.java
+* [x] atn\LexerCustomAction.java
+* [x] atn\LexerIndexedCustomAction.java
+* [x] atn\LexerModeAction.java
+* [x] atn\LexerMoreAction.java
+* [x] atn\LexerPopModeAction.java
+* [x] atn\LexerPushModeAction.java
+* [x] atn\LexerSkipAction.java
+* [x] atn\LexerTypeAction.java
 * [ ] atn\LL1Analyzer.java
-* [ ] atn\LookaheadEventInfo.java
+* [x] atn\LookaheadEventInfo.java
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
-* [ ] atn\ParseInfo.java
+* [x] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java
 * [ ] atn\PrecedencePredicateTransition.java
-* [ ] atn\PredicateEvalInfo.java
+* [x] atn\PredicateEvalInfo.java
 * [ ] atn\PredicateTransition.java
 * [x] atn\PredictionContext.java
-  * [ ] PredictionContext.fromRuleContext
-  * [ ] PredictionContext.toString
-  * [ ] PredictionContext.toStrings
+  * [x] PredictionContext.fromRuleContext
+  * [x] ~~PredictionContext.toString~~ (Doesn't actually exist in the Java target)
+  * [x] PredictionContext.toStrings
 * [x] atn\PredictionContextCache.java
 * [ ] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
@@ -132,7 +132,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] Transition.serializationTypes?
 * [x] atn\WildcardTransition.java
 * [x] dfa\AbstractEdgeMap.java
-* [ ] dfa\AcceptStateInfo.java
+* [x] dfa\AcceptStateInfo.java
 * [x] dfa\ArrayEdgeMap.java
 * [ ] dfa\DFA.java
 * [ ] dfa\DFASerializer.java
@@ -163,7 +163,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] misc\NullUsageProcessor.java
 * [x] misc\ObjectEqualityComparator.java
 * [ ] misc\OrderedHashSet.java
-* [ ] misc\ParseCancellationException.java
+* [x] misc\ParseCancellationException.java
 * [x] ~~misc\Predicate.java~~ (Unnecessary in TypeScript)
 * [ ] misc\RuleDependencyChecker.java
 * [ ] misc\RuleDependencyProcessor.java
@@ -173,17 +173,17 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
 * [ ] misc\Utils.java
 * [x] tree\AbstractParseTreeVisitor.java
-* [x] tree\ErrorNode.java
-* [x] tree\ErrorNodeImpl.java
+* [x] ~~tree\ErrorNode.java~~ (No separate interface in TypeScript)
+* [x] tree\ErrorNodeImpl.java (Moved to ErrorNode)
 * [x] tree\ParseTree.java
 * [x] tree\ParseTreeListener.java
-* [ ] tree\ParseTreeProperty.java
+* [x] tree\ParseTreeProperty.java
 * [x] tree\ParseTreeVisitor.java
-* [ ] tree\ParseTreeWalker.java
+* [x] tree\ParseTreeWalker.java
 * [x] tree\RuleNode.java
 * [x] tree\SyntaxTree.java
-* [x] tree\TerminalNode.java
-* [x] tree\TerminalNodeImpl.java
+* [x] ~~tree\TerminalNode.java~~ (No separate interface in TypeScript)
+* [x] tree\TerminalNodeImpl.java (Moved to TerminalNode)
 * [x] tree\Tree.java
 * [ ] tree\Trees.java
 * [x] tree\pattern\Chunk.java

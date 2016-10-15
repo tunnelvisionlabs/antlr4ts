@@ -36,7 +36,7 @@
  * @author Sam Harwell
  * @since 4.2
  */
-export enum LexerActionType {
+export const enum LexerActionType {
 	/**
 	 * The type of a {@link LexerChannelAction} action.
 	 */

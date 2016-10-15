@@ -30,10 +30,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-import { ATN } from './ATN';
+import { ATN } from '../misc/Stubs';
 import { ATNStateType } from './ATNStateType';
 import { IntervalSet } from '../misc/IntervalSet';
-import { Override } from '../misc/Stubs';
+import { Override } from '../Decorators';
 import { Transition } from './Transition';
 
 const INITIAL_NUM_TRANSITIONS: number = 4;

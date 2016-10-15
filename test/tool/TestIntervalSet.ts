@@ -32,7 +32,7 @@
 
 require('source-map-support').install();
 import { IntervalSet } from '../../src/misc/IntervalSet';
-import { Lexer } from '../../src/Lexer';
+import { Lexer } from '../../src/misc/Stubs';
 import { Token } from '../../src/Token';
 
 import { suite, test as Test } from 'mocha-typescript';
