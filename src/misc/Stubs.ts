@@ -27,7 +27,6 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { AbstractPredicateTransition } from '../atn/AbstractPredicateTransition';
 import { Array2DHashMap } from './Array2DHashMap';
 import { Array2DHashSet } from "./Array2DHashSet";
 import { ATNState } from '../atn/ATNState';
@@ -47,6 +46,10 @@ import { Vocabulary } from "../Vocabulary";
 export interface Equatable {
 	equals(other: any): boolean;
 	hashCode(): number;
+}
+
+export interface Comparable<T> {
+	compareTo(o: T): number;
 }
 
 export interface JavaIterator<E> {
@@ -182,13 +185,22 @@ export abstract class Recognizer<T, T2>{
     getTokenType(tag: string): number { throw new Error("Not implemented"); }
     getRuleNames(): string[] { throw new Error("Not implemented"); }
     getState(): number { throw new Error("not implemented"); }
+
+	sempred(_localctx: RuleContext | undefined, ruleIndex: number, actionIndex: number): boolean {
+		return true;
+	}
+
+	precpred(localctx: RuleContext | undefined, precedence: number): boolean {
+		return true;
+	}
+
+	action(_localctx: RuleContext | undefined, ruleIndex: number, actionIndex: number): void {
+	}
 }
 
 export abstract class ATNSimulator {
 	atn: ATN;
 }
-
-export abstract class SemanticContext { }
 
 export class ParserATNSimulator extends ATNSimulator {}
 
@@ -239,10 +251,6 @@ export class ParserRuleContext extends RuleContext {
 	exitRule(listener: ParseTreeListener): void { }
 }
 
-export abstract class PredicateTransition extends AbstractPredicateTransition {
-    ruleIndex: number;
-    predIndex: number;
-}
 export class DFAState {
 }
 export class DFA {
@@ -301,10 +309,6 @@ export abstract class Lexer extends Recognizer<number, any> {
 	}
 
 	skip(): void {
-		throw "not implemented";
-	}
-
-	action(arg: null, ruleIndex: number, actionIndex: number): void {
 		throw "not implemented";
 	}
 

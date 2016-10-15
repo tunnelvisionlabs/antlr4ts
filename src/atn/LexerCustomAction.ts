@@ -119,7 +119,7 @@ export class LexerCustomAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.action(null, this.ruleIndex, this.actionIndex);
+		lexer.action(undefined, this.ruleIndex, this.actionIndex);
 	}
 
 	@Override
