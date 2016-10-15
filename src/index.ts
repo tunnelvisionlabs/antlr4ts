@@ -1,7 +1,7 @@
 // export * from './ANTLRErrorListener';
 // export * from './ANTLRErrorStrategy';
 // export * from './ANTLRFileStream';
-// export * from './ANTLRInputStream';
+export * from './ANTLRInputStream';
 // export * from './BailErrorStrategy';
 // export * from './BaseErrorListener';
 export * from './BufferedTokenStream';
