@@ -26,24 +26,19 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:39.6568608-07:00
 
 /**
+ * Validates that an argument is not `null` or `undefined`.
  *
- * @author Sam Harwell
+ * @param parameterName The name of the parameter
+ * @param value The argument value
+ *
+ * @throws `TypeError` if `value` is `null` or `undefined`.
  */
-export class Args {
-
-	/**
-	 * @ if {@code value} is {@code null}.
-	 */
-	static notNull(parameterName: string, value: any): void {
-		if (value == null) {
-			throw new NullPointerException(parameterName + " cannot be null.");
-		}
+export function notNull(parameterName: string, value: any): void {
+	if (value == null) {
+		throw new TypeError(parameterName + " cannot be null.");
 	}
-
-	 constructor()  {
-	}
-
 }

@@ -152,7 +152,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] dfa\SingletonEdgeMap.java
 * [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)
-* [ ] misc\Args.java
+* [x] misc\Args.java
 * [x] misc\Array2DHashSet.java
 * [ ] misc\DoubleKeyMap.java
 * [x] misc\EqualityComparator.java
