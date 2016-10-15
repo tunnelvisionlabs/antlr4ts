@@ -1,4 +1,3 @@
-// export * from './AbstractEqualityComparator';
 export * from './Array2DHashMap';
 export * from './ArrayEqualityComparator';
 export * from './Args';
