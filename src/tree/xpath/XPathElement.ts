@@ -29,14 +29,13 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// CONVERSTION complete, Burt Harris 10/14/2016import { Collection } from "../../misc/Stubs";
-import { Collection } from "../../misc/Stubs";
+// CONVERSTION complete, Burt Harris 10/14/2016
 import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 
 export abstract class XPathElement {
 	protected nodeName: string; 
-	protected invert: boolean; 
+	public invert: boolean; 
 
 	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
 	 *  op is null if just node
@@ -49,7 +48,7 @@ export abstract class XPathElement {
 	 * Given tree rooted at {@code t} return all nodes matched by this path
 	 * element.
 	 */
-	abstract evaluate(t: ParseTree): Collection<ParseTree>;
+	abstract evaluate(t: ParseTree): ParseTree[];
 
 	@Override
 	toString(): string {

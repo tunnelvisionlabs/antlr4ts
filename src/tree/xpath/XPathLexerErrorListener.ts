@@ -29,7 +29,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// CONVERSTION complete, Burt Harris 10/14/2016import { Collection } from "../../misc/Stubs";
+// CONVERSTION complete, Burt Harris 10/14/2016
 
 import { ANTLRErrorListener } from "../../ANTLRErrorListener";
 import { Override } from "../../Decorators";

@@ -30,7 +30,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Collection, ParserRuleContext } from "../../misc/Stubs";
+import { ParserRuleContext } from "../../misc/Stubs";
 import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { Trees } from "../Trees";
@@ -49,7 +49,7 @@ export class XPathRuleAnywhereElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): Collection<ParseTree> {
+    evaluate(t: ParseTree): ParseTree[] {
 		return Trees.findAllRuleNodes(t, this.ruleIndex);
 	}
 }

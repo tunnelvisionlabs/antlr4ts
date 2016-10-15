@@ -39,8 +39,10 @@ import { ParseTreeListener } from '../tree/ParseTreeListener';
 import { PredictionContext } from '../atn/PredictionContext';
 import { RuleContext } from "../RuleContext";
 import { Token } from "../Token";
+import { TokenSource } from "../TokenSource";
 import { TokenStream } from "../TokenStream";
 import { Vocabulary } from "../Vocabulary";
+import * as TokenFactory from "../TokenFactory";
 
 export interface Equatable {
 	equals(other: any): boolean;
@@ -220,6 +222,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     getRuleIndex(tag: any): number { throw new Error("Not implemented"); }
 }
 export class ParserRuleContext extends RuleContext {
+    constructor(a: any, b: any) {super(a)}
+
     getRuleIndex(): number { throw new Error("Not implemented"); }
 
     exception: Error;
@@ -230,6 +234,8 @@ export class ParserRuleContext extends RuleContext {
 
 	enterRule(listener: ParseTreeListener): void { }
 	exitRule(listener: ParseTreeListener): void { }
+
+    addChild(tree: any): any { throw new Error("Not implemented"); }
 }
 
 export abstract class PredicateTransition extends AbstractPredicateTransition {
@@ -257,7 +263,7 @@ export class ParserInterpreter extends Parser {
     parse(patternRuleIndex: number): any { throw new Error("Not implemented"); }
 }
 
-export abstract class Lexer extends Recognizer<number, any> {
+export abstract class Lexer extends Recognizer<number, any> implements TokenSource {
 	static get DEFAULT_TOKEN_CHANNEL(): number {
 		return Token.DEFAULT_CHANNEL;
 	}
@@ -301,9 +307,21 @@ export abstract class Lexer extends Recognizer<number, any> {
     setInputStream(antlrInputStream: CharStream): void  { throw new Error("Not implemented"); }
 
     nextToken(): Token { throw new Error("Not implemented"); }
+
+    getLine(): number { throw new Error("Not implemented"); }
+
+    getCharPositionInLine(): number { throw new Error("Not implemented"); }
+
+    getInputStream(): CharStream | undefined { throw new Error("Not implemented"); }
+
+    getSourceName(): string { throw new Error("Not implemented"); }
+
+    setTokenFactory(factory: TokenFactory.TokenFactory): void {}
+
+    getTokenFactory(): TokenFactory.TokenFactory { throw new Error("Not implemented"); }
 }
 
-export namespace Lexer {
+export namespace Lexer  {
 	export const DEFAULT_MODE: number = 0;
 	export const MORE: number = -2;
 	export const SKIP: number = -3;
@@ -312,8 +330,23 @@ export namespace Lexer {
 	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
 
-export class XPath {
-    static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
-    static readonly WILDCARD: string = "*"; // word not operator/separator
-    static readonly NOT: string = "!"; 	   // word for invert operator
+export class XPathLexer extends Lexer {
+    constructor(input: CharStream) {super()}
+
+    recover: any;
+
+    removeErrorListeners(): any { throw new Error("Not implemented"); }
+
+    addErrorListener(xPathLexerErrorListener: any): any { throw new Error("Not implemented"); }
+
+    getCharPositionInLine(): number { throw new Error("Not implemented"); }
+
+    static readonly ROOT = 0; 
+    static readonly ANYWHERE = 1;
+    static readonly BANG = 2;
+    static readonly TOKEN_REF = 3;
+    static readonly RULE_REF = 4;
+    static readonly WILDCARD = 5;
+    static readonly STRING = 6;
+
 }

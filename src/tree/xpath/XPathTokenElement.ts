@@ -30,7 +30,6 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Collection } from "../../misc/Stubs";
 import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { TerminalNode } from "../TerminalNode";
@@ -45,9 +44,9 @@ export class XPathTokenElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): Collection<ParseTree> {
+	evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
-		let nodes = [] as Array<ParseTree>;
+        let nodes = [] as ParseTree[];
 		for (let c of Trees.getChildren(t)) {
 			if ( c instanceof TerminalNode ) {
                 if ((c.getSymbol().getType() == this.tokenType && !this.invert) ||

@@ -35,7 +35,7 @@ import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
 
 // Stubs
-import { XPath } from "../../misc/Stubs";
+import { XPath } from "../xpath/XPath";
 
 /**
  * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by

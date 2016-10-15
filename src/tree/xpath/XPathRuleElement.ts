@@ -30,7 +30,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Collection, ParserRuleContext } from "../../misc/Stubs";
+import { ParserRuleContext } from "../../misc/Stubs";
 import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { Trees } from "../Trees";
@@ -44,9 +44,9 @@ export class XPathRuleElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): Collection<ParseTree> {
+    evaluate(t: ParseTree): ParseTree[] {
 				// return all children of t that match nodeName
-		let nodes = [] as Array<ParseTree>;
+        let nodes = [] as ParseTree[];
 		for (let c of Trees.getChildren(t)) {
 			if ( c instanceof ParserRuleContext ) {
                 if ((c.getRuleIndex() === this.ruleIndex && !this.invert) ||
