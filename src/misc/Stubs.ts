@@ -32,6 +32,7 @@ import { Array2DHashSet } from "./Array2DHashSet";
 import { ATNState } from '../atn/ATNState';
 import { ATNStateType } from "../atn/ATNStateType";
 import { BailErrorStrategy } from "../BailErrorStrategy";
+import { CharStream } from "../CharStream";
 import { IntervalSet } from "./IntervalSet";
 import { IntStream } from "../IntStream";
 import { ParseTreeListener } from '../tree/ParseTreeListener';
@@ -296,6 +297,10 @@ export abstract class Lexer extends Recognizer<number, any> {
 	action(arg: null, ruleIndex: number, actionIndex: number): void {
 		throw "not implemented";
 	}
+
+    setInputStream(antlrInputStream: CharStream): void  { throw new Error("Not implemented"); }
+
+    nextToken(): Token { throw new Error("Not implemented"); }
 }
 
 export namespace Lexer {
