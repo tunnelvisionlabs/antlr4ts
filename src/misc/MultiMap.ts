@@ -31,7 +31,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:42.1346951-07:00
 
 export class MultiMap<K, V> extends Map<K, V[]> {
-	//private static serialVersionUID: number =  -4956746660057462312L;
 	constructor() {
 		super();
 	}

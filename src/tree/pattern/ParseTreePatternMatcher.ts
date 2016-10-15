@@ -110,8 +110,6 @@ import { TokenTagToken } from "./TokenTagToken";
  * {@code \<} and {@code \>}.</p>
  */
 export class ParseTreePatternMatcher {
-	/* Nested classes moved to namespace at end */
-
 	/**
 	 * This is the backing field for {@link #getLexer()}.
 	 */
@@ -241,11 +239,11 @@ export class ParseTreePatternMatcher {
 		} catch (e) {
 			if (e instanceof ParseCancellationException) {
 				throw e.getCause();
-
-		} else if (e instanceof RecognitionException) {
-			throw e;
-		} else
+			} else if (e instanceof RecognitionException) {
+				throw e;
+			} else {
 				throw new ParseTreePatternMatcher.CannotInvokeStartRule(e);
+			}
 		}
 
 		// Make sure tree pattern compilation checks for a complete parse
@@ -308,7 +306,9 @@ export class ParseTreePatternMatcher {
 					// track label->list-of-nodes for both token name and label (if any)
 					labels.map(tokenTagToken.getTokenName(), tree);
 					const l = tokenTagToken.getLabel();
-					if (l) labels.map(l, tree);
+					if (l) {
+						labels.map(l, tree);
+					}
 				}
 				else if ( tree.getText()===patternTree.getText() ) {
 					// x and x
@@ -340,7 +340,9 @@ export class ParseTreePatternMatcher {
 					// track label->list-of-nodes for both rule name and label (if any)
 					labels.map(ruleTagToken.getRuleName(), tree);
 					const l = ruleTagToken.getLabel();
-					if ( l ) labels.map(l, tree);
+					if ( l ) {
+						labels.map(l, tree);
+					}
 				}
 				else {
 					if (!mismatchedNode) {
@@ -394,7 +396,7 @@ export class ParseTreePatternMatcher {
 		let chunks = this.split(pattern);
 
 		// create token stream from text and tags
-		let tokens = [] as Token[]; 
+		let tokens: Token[] = [];
 
 		for (let chunk of chunks) {
 			if ( chunk instanceof TagChunk ) {
@@ -441,11 +443,11 @@ export class ParseTreePatternMatcher {
 	split(pattern: string): Chunk[] {
 		let p: number =  0;
 		let n: number =  pattern.length;
-		let chunks = [] as Chunk[];
+		let chunks: Chunk[] = [];
 		let buf: "";
 		// find all start and stop indexes first, then collect
-		let starts = [] as number[];
-		let stops = [] as number[];
+		let starts: number[] = [];
+		let stops: number[] = [];
 		while ( p<n ) {
 			if ( p === pattern.indexOf(this.escape + this.start, p) ) {
 				p += this.escape.length + this.start.length;
