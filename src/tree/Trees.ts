@@ -183,23 +183,26 @@ export class Trees {
 		}
 	}
 
-	///** Get all descendents; includes t itself.
-	// *
-	// * @since 4.5.1
- //	 */
-	//static getDescendants(t: ParseTree): List<ParseTree> {
-	//	let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
-	//	nodes.add(t);
+	/** Get all descendents; includes t itself.
+	 *
+	 * @since 4.5.1
+ 	 */
+    static getDescendants(t: ParseTree): Array<ParseTree> {
+        let nodes = [] as Array<ParseTree>;
 
-	//	let n: number =  t.getChildCount();
-	//	for (let i = 0 ; i < n ; i++){
-	//		nodes.addAll(getDescendants(t.getChild(i)));
-	//	}
-	//	return nodes;
-	//}
+        function recurse(e: ParseTree): void {
+            nodes.push(e);
+            const n = e.getChildCount();
+            for (let i = 0; i < n; i++) {
+                recurse(e.getChild(i));
+            }
+        }
+        recurse(t);
+        return nodes;
+    }
 
 
-	///** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
+    ///** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
 	// *  inclusively using postorder traversal.  Recursive depth-first-search.
 	// *
 	// *  @since 4.5

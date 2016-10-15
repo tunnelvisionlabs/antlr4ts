@@ -314,4 +314,6 @@ export namespace Lexer {
 
 export class XPath {
     static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
+    static readonly WILDCARD: string = "*"; // word not operator/separator
+    static readonly NOT: string = "!"; 	   // word for invert operator
 }
