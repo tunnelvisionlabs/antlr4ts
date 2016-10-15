@@ -128,7 +128,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\RuleStartState.java
 * [x] atn\RuleStopState.java
 * [x] atn\RuleTransition.java
-* [ ] atn\SemanticContext.java
+* [x] atn\SemanticContext.java
 * [x] atn\SetTransition.java
 * [ ] atn\SimulatorState.java
 * [x] atn\SingletonPredictionContext.java

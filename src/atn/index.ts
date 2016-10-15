@@ -56,7 +56,7 @@ export * from './RangeTransition';
 export * from './RuleStartState';
 export * from './RuleStopState';
 export * from './RuleTransition';
-// export * from './SemanticContext';
+export * from './SemanticContext';
 export * from './SetTransition';
 // export * from './SimulatorState';
 export * from './StarBlockStartState';

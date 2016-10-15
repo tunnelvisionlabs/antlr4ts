@@ -49,6 +49,10 @@ export interface Equatable {
 	hashCode(): number;
 }
 
+export interface Comparable<T> {
+	compareTo(o: T): number;
+}
+
 export interface JavaIterator<E> {
     hasNext(): boolean;
     next(): E;
@@ -182,13 +186,22 @@ export abstract class Recognizer<T, T2>{
     getTokenType(tag: string): number { throw new Error("Not implemented"); }
     getRuleNames(): string[] { throw new Error("Not implemented"); }
     getState(): number { throw new Error("not implemented"); }
+
+	sempred(_localctx: RuleContext | undefined, ruleIndex: number, actionIndex: number): boolean {
+		return true;
+	}
+
+	precpred(localctx: RuleContext | undefined, precedence: number): boolean {
+		return true;
+	}
+
+	action(_localctx: RuleContext | undefined, ruleIndex: number, actionIndex: number): void {
+	}
 }
 
 export abstract class ATNSimulator {
 	atn: ATN;
 }
-
-export abstract class SemanticContext { }
 
 export class ParserATNSimulator extends ATNSimulator {}
 
@@ -301,10 +314,6 @@ export abstract class Lexer extends Recognizer<number, any> {
 	}
 
 	skip(): void {
-		throw "not implemented";
-	}
-
-	action(arg: null, ruleIndex: number, actionIndex: number): void {
 		throw "not implemented";
 	}
 
