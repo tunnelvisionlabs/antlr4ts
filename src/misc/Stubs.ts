@@ -37,14 +37,15 @@ import { CharStream } from "../CharStream";
 import { DecisionInfo } from '../atn/DecisionInfo';
 import { IntervalSet } from "./IntervalSet";
 import { IntStream } from "../IntStream";
+import { ParserRuleContext } from "../ParserRuleContext"
 import { ParseTreeListener } from '../tree/ParseTreeListener';
 import { PredictionContext } from '../atn/PredictionContext';
 import { RuleContext } from "../RuleContext";
 import { Token } from "../Token";
+import { TokenFactory } from "../TokenFactory";
 import { TokenSource } from "../TokenSource";
 import { TokenStream } from "../TokenStream";
 import { Vocabulary } from "../Vocabulary";
-import * as TokenFactory from "../TokenFactory";
 
 export interface Equatable {
 	equals(other: any): boolean;
@@ -227,22 +228,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     getATNWithBypassAlts(): any { throw new Error("Not implemented"); }
 
     getRuleIndex(tag: any): number { throw new Error("Not implemented"); }
-}
-export class ParserRuleContext extends RuleContext {
-    constructor(a: any, b: any) {super(a)}
 
-    getRuleIndex(): number { throw new Error("Not implemented"); }
-
-    exception: Error;
-
-    getParent(): ParserRuleContext { throw new Error("Not implemented"); }
-
-    static emptyContext(): RuleContext { throw new Error("Not implemented"); }
-
-	enterRule(listener: ParseTreeListener): void { }
-	exitRule(listener: ParseTreeListener): void { }
-
-    addChild(tree: any): any { throw new Error("Not implemented"); }
+    getRuleInvocationStack(p?: RuleContext): string[] { throw new Error("Not implemented"); }
 }
 
 export abstract class PredicateTransition extends AbstractPredicateTransition {
@@ -326,16 +313,15 @@ export abstract class Lexer extends Recognizer<number, any> implements TokenSour
 
     getSourceName(): string { throw new Error("Not implemented"); }
 
-    setTokenFactory(factory: TokenFactory.TokenFactory): void {}
+    setTokenFactory(factory: TokenFactory): void {}
 
-    getTokenFactory(): TokenFactory.TokenFactory { throw new Error("Not implemented"); }
+    getTokenFactory(): TokenFactory { throw new Error("Not implemented"); }
 }
 
-export namespace Lexer  {
+export namespace Lexer {
 	export const DEFAULT_MODE: number = 0;
 	export const MORE: number = -2;
 	export const SKIP: number = -3;
-
 	export const MIN_CHAR_VALUE: number = 0x0000;
 	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }

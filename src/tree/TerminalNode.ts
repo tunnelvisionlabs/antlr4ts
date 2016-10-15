@@ -40,15 +40,16 @@ import { Token } from '../Token';
 
 export class TerminalNode implements ParseTree  {
 	symbol: Token;
-	parent: RuleNode;
+	parent: RuleNode | undefined;
 
-	constructor(symbol: Token) {
-		this.symbol = symbol;
+	constructor(symbol: Token, parent? : RuleNode) {
+        this.symbol = symbol;
+	    this.parent = parent;
 	}
 
 	@Override
 	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than zero and less than getChildCount()");
+		throw new RangeError("Terminal Node has no children.");
 	}
 
 	@Override
@@ -57,7 +58,7 @@ export class TerminalNode implements ParseTree  {
 	}
 
 	@Override
-	getParent(): RuleNode {
+	getParent(): RuleNode | undefined {
 		return this.parent;
 	}
 

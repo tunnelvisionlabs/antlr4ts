@@ -41,6 +41,7 @@ import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
+import { ParserRuleContext } from "./ParserRuleContext";
 import { PredictionContext } from './atn/PredictionContext';
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
@@ -763,9 +764,9 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@NotNull
 	protected getErrorRecoverySet(@NotNull recognizer: Parser): IntervalSet {
 		let atn: ATN =  recognizer.getInterpreter().atn;
-		let ctx: RuleContext =  recognizer._ctx;
+		let ctx: ParserRuleContext | undefined  = recognizer._ctx;
 		let recoverSet: IntervalSet =  new IntervalSet();
-		while ( ctx && ctx.invokingState>=0 ) {
+		while ( ctx && ctx.invokingState >= 0 ) {
 			// compute what follows who invoked us
 			let invokingState: ATNState =  atn.states[ctx.invokingState];
 			let rt = invokingState.transition(0) as RuleTransition;

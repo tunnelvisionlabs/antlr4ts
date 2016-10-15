@@ -58,15 +58,16 @@
  *
  * @see Parser#setErrorHandler(ANTLRErrorStrategy)
  */
-import {Token} from "./Token";
-import {DefaultErrorStrategy} from "./DefaultErrorStrategy";
-import {RecognitionException} from "./RecognitionException";
-import {ParseCancellationException} from "./misc/ParseCancellationException";
+import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
 import { InputMismatchException } from "./InputMismatchException";
-import { Override} from "./Decorators";
+import { Override } from "./Decorators";
+import { ParseCancellationException } from "./misc/ParseCancellationException";
+import { ParserRuleContext } from "./ParserRuleContext";
+import { RecognitionException } from "./RecognitionException";
+import { Token } from "./Token";
 
 // Stubs
-import { Parser, ParserRuleContext } from "./misc/Stubs";
+import { Parser} from "./misc/Stubs";
 
 
 export class BailErrorStrategy extends DefaultErrorStrategy {
@@ -77,11 +78,14 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
      */
     @Override
     recover(recognizer: Parser, e: RecognitionException): void {
-		for (let context: ParserRuleContext = recognizer.getContext(); context != null; context = context.getParent()) {
-			context.exception = e;
+        let context: ParserRuleContext | undefined;
+        context = recognizer.getContext();
+        for (; context; context = context.getParent())
+        {
+			context.exception = e as Error;
 		}
 
-        throw new ParseCancellationException(e);
+        throw new ParseCancellationException(e as Error);
     }
 
     /** Make sure we don't attempt to recover inline; if the parser
@@ -91,9 +95,11 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
     recoverInline(recognizer: Parser): Token
 
     {
-		let e: InputMismatchException =  new InputMismatchException(recognizer);
-		for (let context = recognizer.getContext(); context != null; context = context.getParent()) {
-			context.exception = e;
+		let e = new InputMismatchException(recognizer);
+        let context: ParserRuleContext | undefined =
+            recognizer.getContext();
+        for (; context; context = context.getParent()) {
+			context.exception = e as Error;
 		}
 
         throw new ParseCancellationException(e);

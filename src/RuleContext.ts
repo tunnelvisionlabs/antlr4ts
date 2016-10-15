@@ -83,14 +83,22 @@ import {RuleNode} from "./tree/RuleNode";
 import {ParseTree as Tree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators"
-import {ATN, Recognizer, Parser, ParserRuleContext } from "./misc/Stubs";
+import {ATN, Recognizer, Parser } from "./misc/Stubs";
 import {Trees} from "./tree/Trees";
 import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
+import {ParserRuleContext} from "./ParserRuleContext";
 
 export class RuleContext implements RuleNode {
+    protected _parent: RuleContext | undefined;
+    protected _invokingState: number;
 
-	constructor(public readonly parent: RuleContext, public readonly invokingState = -1) {
-	}
+    get parent() { return this._parent; }
+    get invokingState() { return this._invokingState; }
+
+    constructor(parent: RuleContext | undefined, invokingState: number = -1) {
+        this._parent = parent;
+        this._invokingState = invokingState as number;
+    }
 
 	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
 		return new RuleContext(parent, invokingState);
@@ -98,7 +106,7 @@ export class RuleContext implements RuleNode {
 
 	depth(): number {
 		let n =  0;
-		let p: RuleContext =  this;
+		let p: RuleContext | undefined = this;
 		while ( p ) {
 			p = p.parent;
 			n++;
@@ -121,10 +129,10 @@ export class RuleContext implements RuleNode {
 	}
 
 	@Override
-	getRuleContext(): RuleContext { return this; }
+	getRuleContext() { return this; }
 
 	@Override
-	getParent(): RuleContext { return this.parent; }
+	getParent(): RuleContext | undefined { return this.parent; }
 
 	@Override
 	getPayload(): RuleContext { return this; }
@@ -174,8 +182,10 @@ export class RuleContext implements RuleNode {
 	setAltNumber(altNumber: number): void { }
 
 	@Override
-	getChild(i: number): Tree {
-		throw new RangeError("No child contexts");
+    getChild(i: number): RuleContext {
+        // HACK: for now we return undefined, rather than throw.
+		// throw new RangeError("No child contexts");
+	    return undefined as any as RuleContext;
 	}
 
 	@Override
@@ -215,12 +225,16 @@ export class RuleContext implements RuleNode {
 
 	toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
 
-	toString(arg1?: Recognizer<any, any> | string[], stop?: RuleContext): string {
+    toString(
+        arg1?: Recognizer<any, any> | string[],
+        stop?: RuleContext)
+        : string
+    {
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
 		let buf = "";
-		let p: RuleContext =  this;
+		let p: RuleContext | undefined = this;
 		buf += ("[");
 		while (p && p !== stop) {
 			if (!ruleNames) {

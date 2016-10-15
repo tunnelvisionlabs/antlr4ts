@@ -35,15 +35,16 @@
  *  in the input, where it is in the ATN, the rule invocation stack,
  *  and what kind of problem occurred.
  */
-import { RuleContext } from "./RuleContext";
-import { Lexer } from "./misc/Stubs";
 import { CharStream } from "./CharStream";
-import { IntStream } from './IntStream';
-import { Token } from "./Token";
 import { IntervalSet } from "./misc/IntervalSet"
+import { IntStream } from './IntStream';
+import { Lexer } from "./misc/Stubs";
+import { ParserRuleContext } from "./ParserRuleContext";
+import { RuleContext } from "./RuleContext";
+import { Token } from "./Token";
 
 // Stubs
-import { Recognizer, Parser, ParserRuleContext} from "./misc/Stubs";
+import { Recognizer, Parser} from "./misc/Stubs";
 
 export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;
@@ -76,7 +77,11 @@ export class RecognitionException extends Error {
 				ctx: ParserRuleContext | undefined,
 				message: string);
 
-	 constructor(recognizer: Lexer | Recognizer<Token, any> | undefined, input: CharStream | IntStream | undefined, ctx?: ParserRuleContext, message?: string) {
+     constructor(
+         recognizer: Lexer | Recognizer<Token, any> | undefined,
+         input: CharStream | IntStream | undefined,
+         ctx?: ParserRuleContext,
+         message?: string) {
 		 super(message);
 
 		this.recognizer = recognizer;

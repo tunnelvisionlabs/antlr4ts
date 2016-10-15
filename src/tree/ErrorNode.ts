@@ -34,6 +34,7 @@ import { Override } from '../Decorators';
 import { ParseTreeVisitor } from './ParseTreeVisitor';
 import { TerminalNode } from './TerminalNode';
 import { Token } from '../Token';
+import { RuleNode } from "./RuleNode";
 
 /** Represents a token that was consumed during resynchronization
  *  rather than during a valid match operation. For example,
@@ -42,8 +43,8 @@ import { Token } from '../Token';
  *  upon no viable alternative exceptions.
  */
 export class ErrorNode extends TerminalNode {
-	constructor(token: Token) {
-		super(token);
+    constructor(token: Token, parent?: RuleNode ) {
+		super(token, parent);
 	}
 
 	@Override
