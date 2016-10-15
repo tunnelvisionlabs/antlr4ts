@@ -34,7 +34,7 @@
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { Arrays } from '../misc/Arrays';
-import { ATN } from './Stub_ATN';
+import { ATN } from './ATN';
 import { ATNState } from './ATNState';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { MurmurHash } from '../misc/MurmurHash';

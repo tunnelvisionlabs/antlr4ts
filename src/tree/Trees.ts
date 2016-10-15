@@ -30,8 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
-/** A set of utility routines useful for all kinds of ANTLR trees. */
-import { ATN } from '../atn/Stub_ATN';
+import { ATN } from '../atn/ATN';
 import { Parser } from '../Stub_Parser';
 import { ParserRuleContext } from '../Stub_ParserRuleContext';
 import { NotNull } from "../Decorators";
@@ -46,6 +45,7 @@ import {Interval} from "../misc/Interval";
 import { CommonToken } from "../CommonToken";
 import * as Utils from "../misc/Utils";
 
+/** A set of utility routines useful for all kinds of ANTLR trees. */
 export class Trees {
 	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
 	 *  node payloads to get the text for the nodes.  Detect

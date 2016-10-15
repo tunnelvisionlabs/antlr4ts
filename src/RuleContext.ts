@@ -80,7 +80,7 @@
  *  @see ParserRuleContext
  */
 
-import { ATN } from './atn/Stub_ATN';
+import { ATN } from './atn/ATN';
 import { Parser } from './Stub_Parser';
 import { ParserRuleContext } from './Stub_ParserRuleContext';
 import { Recognizer } from './Stub_Recognizer';

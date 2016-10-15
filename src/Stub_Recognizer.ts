@@ -1,4 +1,4 @@
-import { ATN } from './atn/Stub_ATN';
+import { ATN } from './atn/ATN';
 import { RuleContext } from './RuleContext';
 
 export abstract class Recognizer<T, T2>{

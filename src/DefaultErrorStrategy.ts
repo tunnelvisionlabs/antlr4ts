@@ -35,7 +35,7 @@
  * error reporting and recovery in ANTLR parsers.
  */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
-import { ATN } from './atn/Stub_ATN';
+import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from "./atn/ATNStateType";
 import { FailedPredicateException } from "./FailedPredicateException";
