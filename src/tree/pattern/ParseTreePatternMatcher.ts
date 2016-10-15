@@ -152,11 +152,11 @@ export class ParseTreePatternMatcher {
 	 * @exception IllegalArgumentException if {@code stop} is {@code null} or empty.
 	 */
 	setDelimiters(start: string, stop: string, escapeLeft: string): void {
-		if (!start || start.length === 0) {
+		if (!start) {
 			throw new Error("start cannot be null or empty");
 		}
 
-		if (!stop || stop.length === 0) {
+		if (!stop) {
 			throw new Error("stop cannot be null or empty");
 		}
 
@@ -174,14 +174,13 @@ export class ParseTreePatternMatcher {
 	 */
 	matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
 
-	matches(tree: ParseTree, pattern: ParseTreePattern|string, patternRuleIndex?: number): boolean {
-		if (typeof patternRuleIndex === "number") {
-			let p: ParseTreePattern = this.compile(pattern as string, patternRuleIndex);
+	matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
+		if (typeof pattern === "string") {
+			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.matches(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree,
-				(pattern as ParseTreePattern).getPatternTree(), labels);
+			let mismatchedNode = this.matchImpl(tree, pattern.getPatternTree(), labels);
 			return !mismatchedNode;
 		}
 	}
@@ -203,14 +202,14 @@ export class ParseTreePatternMatcher {
 
 	// Implementation of match
 	@NotNull
-	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex?: number): ParseTreeMatch {
+	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
 		if (typeof pattern == "string") {
-			let p: ParseTreePattern = this.compile(pattern as string, patternRuleIndex as number);
+			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
 			let mismatchedNode = this.matchImpl(tree, pattern.getPatternTree(), labels);
-			return new ParseTreeMatch(tree, pattern as ParseTreePattern, labels, mismatchedNode);
+			return new ParseTreeMatch(tree, pattern, labels, mismatchedNode);
 		}
 	}
 
@@ -365,7 +364,7 @@ export class ParseTreePatternMatcher {
 			let n: number =  tree.getChildCount();
 			for (let i = 0; i<n; i++) {
 				let childMatch = this.matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
-				if ( !childMatch ) {
+				if ( childMatch ) {
 					return childMatch;
 				}
 			}
@@ -413,7 +412,7 @@ export class ParseTreePatternMatcher {
 				}
 				else if ( firstChar === firstChar.toLowerCase()) {
 					let ruleIndex: number = this.parser.getRuleIndex(tagChunk.getTag());
-					if ( ruleIndex==-1 ) {
+					if ( ruleIndex===-1 ) {
 						throw new Error("Unknown rule "+tagChunk.getTag()+" in pattern: "+pattern);
 					}
 					let ruleImaginaryTokenType: number =  this.parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
