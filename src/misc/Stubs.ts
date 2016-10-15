@@ -27,7 +27,6 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { AbstractPredicateTransition } from '../atn/AbstractPredicateTransition';
 import { Array2DHashMap } from './Array2DHashMap';
 import { Array2DHashSet } from "./Array2DHashSet";
 import { ATNState } from '../atn/ATNState';
@@ -252,10 +251,6 @@ export class ParserRuleContext extends RuleContext {
 	exitRule(listener: ParseTreeListener): void { }
 }
 
-export abstract class PredicateTransition extends AbstractPredicateTransition {
-    ruleIndex: number;
-    predIndex: number;
-}
 export class DFAState {
 }
 export class DFA {
