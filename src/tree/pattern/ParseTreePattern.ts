@@ -28,7 +28,14 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:45.4603255-07:00
+// CONVERSTION complete, Burt Harris 10/14/2016
+import { NotNull } from "../../Decorators";
+import { ParseTree } from "../ParseTree";
+import { ParseTreeMatch } from "./ParseTreeMatch";
+import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
+
+// Stubs
+import { XPath } from "../../misc/Stubs";
 
 /**
  * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
@@ -68,8 +75,11 @@ export class ParseTreePattern {
 	 * tree pattern.
 	 * @param patternTree The tree pattern in {@link ParseTree} form.
 	 */
-	 constructor(@NotNull matcher: ParseTreePatternMatcher, 
-							@NotNull pattern: string, patternRuleIndex: number, @NotNull patternTree: ParseTree) 
+	constructor(
+		@NotNull matcher: ParseTreePatternMatcher, 
+		@NotNull pattern: string,
+		patternRuleIndex: number,
+		@NotNull patternTree: ParseTree) 
 	{
 		this.matcher = matcher;
 		this.patternRuleIndex = patternRuleIndex;
@@ -87,7 +97,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	match(@NotNull tree: ParseTree): ParseTreeMatch {
-		return matcher.match(tree, this);
+		return this.matcher.match(tree, this);
 	}
 
 	/**
@@ -98,7 +108,7 @@ export class ParseTreePattern {
 	 * pattern; otherwise, {@code false}.
 	 */
 	matches(@NotNull tree: ParseTree): boolean {
-		return matcher.match(tree, this).succeeded();
+		return this.matcher.match(tree, this).succeeded();
 	}
 
 	/**
@@ -113,13 +123,13 @@ export class ParseTreePattern {
 	 * regardless of the reason for the failure.
 	 */
 	@NotNull
-	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): List<ParseTreeMatch> {
-		let subtrees: Collection<ParseTree> =  XPath.findAll(tree, xpath, matcher.getParser());
-		let matches: List<ParseTreeMatch> =  new ArrayList<ParseTreeMatch>();
+	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
+		let subtrees: ParseTree[] =  XPath.findAll(tree, xpath, this.matcher.getParser());
+		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
-			let match: ParseTreeMatch =  match(t);
-			if ( match.succeeded() ) {
-				matches.add(match);
+			let match: ParseTreeMatch = this.match(t);
+			if (match.succeeded()) {
+				matches.push(match);
 			}
 		}
 		return matches;
@@ -133,7 +143,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	getMatcher(): ParseTreePatternMatcher {
-		return matcher;
+		return this.matcher;
 	}
 
 	/**
@@ -143,7 +153,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	getPattern(): string {
-		return pattern;
+		return this.pattern;
 	}
 
 	/**
@@ -154,7 +164,7 @@ export class ParseTreePattern {
 	 * pattern.
 	 */
 	getPatternRuleIndex(): number {
-		return patternRuleIndex;
+		return this.patternRuleIndex;
 	}
 
 	/**
@@ -166,6 +176,6 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	getPatternTree(): ParseTree {
-		return patternTree;
+		return this.patternTree;
 	}
 }

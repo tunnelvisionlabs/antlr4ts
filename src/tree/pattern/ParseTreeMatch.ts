@@ -28,7 +28,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:45.3531168-07:00
+// CONVERSTION complete, Burt Harris 10/14/2016
+import { MultiMap } from "../../misc/MultiMap";
+import { NotNull, Nullable, Override } from "../../Decorators";
+import { ParseTree } from "../ParseTree";
+import { ParseTreePattern } from "./ParseTreePattern";
 
 /**
  * Represents the result of matching a {@link ParseTree} against a tree pattern.
@@ -52,7 +56,7 @@ export class ParseTreeMatch {
 	/**
 	 * This is the backing field for {@link #getMismatchedNode()}.
 	 */
-	private mismatchedNode: ParseTree; 
+	private mismatchedNode?: ParseTree; 
 
 	/**
 	 * Constructs a new instance of {@link ParseTreeMatch} from the specified
@@ -69,17 +73,21 @@ export class ParseTreeMatch {
 	 * @exception IllegalArgumentException if {@code pattern} is {@code null}
 	 * @exception IllegalArgumentException if {@code labels} is {@code null}
 	 */
-	 constructor(@NotNull tree: ParseTree, @NotNull pattern: ParseTreePattern, @NotNull labels: MultiMap<string,ParseTree>, @Nullable mismatchedNode: ParseTree)  {
-		if (tree == null) {
-			throw new IllegalArgumentException("tree cannot be null");
+	constructor(
+		@NotNull tree: ParseTree,
+		@NotNull pattern: ParseTreePattern,
+		@NotNull labels: MultiMap<string, ParseTree>,
+		mismatchedNode: ParseTree | undefined) {
+		if (!tree) {
+			throw new Error("tree cannot be null");
 		}
 
-		if (pattern == null) {
-			throw new IllegalArgumentException("pattern cannot be null");
+		if (!pattern) {
+			throw new Error("pattern cannot be null");
 		}
 
-		if (labels == null) {
-			throw new IllegalArgumentException("labels cannot be null");
+		if (!labels) {
+			throw new Error("labels cannot be null");
 		}
 
 		this.tree = tree;
@@ -104,14 +112,13 @@ export class ParseTreeMatch {
 	 * @return The last {@link ParseTree} to match a tag with the specified
 	 * label, or {@code null} if no parse tree matched a tag with the label.
 	 */
-	@Nullable
-	get(label: string): ParseTree {
-		let parseTrees: List<ParseTree> =  labels.get(label);
-		if ( parseTrees==null || parseTrees.size()==0 ) {
-			return null;
+	get(label: string): ParseTree | undefined {
+		let parseTrees = this.labels.get(label);
+		if (!parseTrees || parseTrees.length === 0) {
+			return undefined;
 		}
 
-		return parseTrees.get( parseTrees.size()-1 ); // return last if multiple
+		return parseTrees[parseTrees.length - 1]; // return last if multiple
 	}
 
 	/**
@@ -138,12 +145,11 @@ export class ParseTreeMatch {
 	 * is returned.
 	 */
 	@NotNull
-	getAll(@NotNull label: string): List<ParseTree> {
-		let nodes: List<ParseTree> =  labels.get(label);
-		if ( nodes==null ) {
-			return Collections.emptyList();
+	getAll(@NotNull label: string): ParseTree[] {
+		const nodes = this.labels.get(label);
+		if (!nodes) {
+			return [];
 		}
-
 		return nodes;
 	}
 
@@ -159,7 +165,7 @@ export class ParseTreeMatch {
 	 */
 	@NotNull
 	getLabels(): MultiMap<string, ParseTree> {
-		return labels;
+		return this.labels;
 	}
 
 	/**
@@ -168,9 +174,8 @@ export class ParseTreeMatch {
 	 * @return the node at which we first detected a mismatch, or {@code null}
 	 * if the match was successful.
 	 */
-	@Nullable
-	getMismatchedNode(): ParseTree {
-		return mismatchedNode;
+	getMismatchedNode(): ParseTree | undefined {
+		return this.mismatchedNode;
 	}
 
 	/**
@@ -180,7 +185,7 @@ export class ParseTreeMatch {
 	 * {@code false}.
 	 */
 	succeeded(): boolean {
-		return mismatchedNode == null;
+		return !this.mismatchedNode;
 	}
 
 	/**
@@ -190,7 +195,7 @@ export class ParseTreeMatch {
 	 */
 	@NotNull
 	getPattern(): ParseTreePattern {
-		return pattern;
+		return this.pattern;
 	}
 
 	/**
@@ -200,7 +205,7 @@ export class ParseTreeMatch {
 	 */
 	@NotNull
 	getTree(): ParseTree {
-		return tree;
+		return this.tree;
 	}
 
 	/**
@@ -208,9 +213,8 @@ export class ParseTreeMatch {
 	 */
 	@Override
 	toString(): string {
-		return String.format(
-			"Match %s; found %d labels",
-			succeeded() ? "succeeded" : "failed",
-			getLabels().size());
+		return `Match ${
+			this.succeeded() ? "succeeded" : "failed"}; found ${
+			this.getLabels().size} labels`;
 	}
 }

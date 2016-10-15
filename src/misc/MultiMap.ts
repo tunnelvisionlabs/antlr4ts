@@ -30,25 +30,27 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:42.1346951-07:00
 
-export class MultiMap<K, V> extends LinkedHashMap<K, List<V>> {
-	private static serialVersionUID: number =  -4956746660057462312L;
-
-	map(key: K, value: V): void {
-		let elementsForKey: List<V> =  get(key);
-		if ( elementsForKey==null ) {
-			elementsForKey = new ArrayList<V>();
-			super.put(key, elementsForKey);
-		}
-		elementsForKey.add(value);
+export class MultiMap<K, V> extends Map<K, V[]> {
+	constructor() {
+		super();
 	}
 
-	getPairs(): List<Tuple2<K, V>> {
-		let pairs: List<Tuple2<K, V>> =  new ArrayList<Tuple2<K, V>>();
-		for (let key of keySet()) {
-			for (let value of get(key)) {
-				pairs.add(Tuple.create(key, value));
-			}
+	map(key: K, value: V): void {
+		let elementsForKey = super.get(key);
+		if ( !elementsForKey ) {
+			elementsForKey = [] as V[];
+			super.set(key, elementsForKey);
 		}
+		elementsForKey.push(value);
+	}
+
+	getPairs(): [K, V][] {
+		let pairs: [K, V][]  = [];
+		this.forEach((values: V[], key: K) => {
+			values.forEach(v => {
+				pairs.push([key, v])
+			});
+		});
 		return pairs;
 	}
 }

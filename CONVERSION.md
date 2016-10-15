@@ -165,7 +165,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] misc\IntervalSet.java
 * [x] misc\IntSet.java
 * [ ] misc\LogManager.java
-* [ ] misc\MultiMap.java
+* [x] misc\MultiMap.java
 * [x] misc\MurmurHash.java
 * [x] misc\NotNull.java
 * [x] misc\Nullable.java
@@ -180,7 +180,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ~~misc\Tuple.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Tuple2.java~~ (Unnecessary in TypeScript)
 * [x] ~~misc\Tuple3.java~~ (Unnecessary in TypeScript)
-* [ ] misc\Utils.java
+* [x] misc\Utils.java (Partial, rather language specific)
 * [x] tree\AbstractParseTreeVisitor.java
 * [x] ~~tree\ErrorNode.java~~ (No separate interface in TypeScript)
 * [x] tree\ErrorNodeImpl.java (Moved to ErrorNode)
@@ -194,11 +194,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ~~tree\TerminalNode.java~~ (No separate interface in TypeScript)
 * [x] tree\TerminalNodeImpl.java (Moved to TerminalNode)
 * [x] tree\Tree.java
-* [ ] tree\Trees.java
+* [x] tree\Trees.java
 * [x] tree\pattern\Chunk.java
-* [ ] tree\pattern\ParseTreeMatch.java
-* [ ] tree\pattern\ParseTreePattern.java
-* [ ] tree\pattern\ParseTreePatternMatcher.java
+* [x] tree\pattern\ParseTreeMatch.java
+* [x] tree\pattern\ParseTreePattern.java
+* [x] tree\pattern\ParseTreePatternMatcher.java
 * [x] tree\pattern\RuleTagToken.java
 * [x] tree\pattern\TagChunk.java
 * [x] tree\pattern\TextChunk.java
