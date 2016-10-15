@@ -34,7 +34,7 @@ import { ParseTreeListener } from "./ParseTreeListener";
 import { ErrorNode } from "./ErrorNode";
 import { TerminalNode } from "./TerminalNode";
 import { RuleNode } from "./RuleNode";
-import { ParserRuleContext } from "../misc/Stubs";
+import { ParserRuleContext } from '../ParserRuleContext';
 
 export class ParseTreeWalker {
     walk(listener: ParseTreeListener, t: ParseTree): void {

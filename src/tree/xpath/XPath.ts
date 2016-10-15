@@ -1,6 +1,6 @@
 ﻿// ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
 import { XPathElement } from "./XPathElement";
-import { Parser, XPathLexer, ParserRuleContext } from "../../misc/Stubs";
+import { Parser, XPathLexer } from "../../misc/Stubs";
 import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
 import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
@@ -13,6 +13,7 @@ import { XPathTokenAnywhereElement } from "./XPathTokenAnywhereElement";
 import { XPathRuleAnywhereElement } from "./XPathRuleAnywhereElement";
 import { XPathRuleElement } from "./XPathRuleElement";
 import { ParseTree } from "../ParseTree";
+import { ParserRuleContext } from "../../ParserRuleContext";
 
 /**
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
@@ -188,8 +189,8 @@ loop:
 	 * {@link #evaluate}.
 	 */
     evaluate(t: ParseTree ): ParseTree[] {
-        let dummyRoot = new ParserRuleContext(undefined, undefined);
-        dummyRoot.addChild(t);
+        let dummyRoot = new ParserRuleContext();
+        dummyRoot.addChild(t as ParserRuleContext);
 
 		let work = [dummyRoot] as ParseTree[];
 

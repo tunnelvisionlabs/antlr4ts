@@ -103,8 +103,8 @@ export class ParserRuleContext extends RuleContext {
 	exception: RecognitionException; 
 
     constructor();
-    constructor( @Nullable parent: ParserRuleContext, invokingStateNumber: number);
-    constructor( parent?: ParserRuleContext, invokingStateNumber?: number ) {
+    constructor(parent: ParserRuleContext, invokingStateNumber: number);
+    constructor( @Nullable parent?: ParserRuleContext, invokingStateNumber?: number ) {
          super(parent, invokingStateNumber);
      }
 
@@ -130,14 +130,17 @@ export class ParserRuleContext extends RuleContext {
 	exitRule(listener: ParseTreeListener): void { }
 
 	/** Does not set parent link; other add methods do that */
-    addChild(t: ParserRuleContext | Token): void {
-        if (!(t instanceof ParserRuleContext)) {
-            t = new TerminalNode(t as Token);
+    addChild(t: ParserRuleContext | ErrorNode | Token): void {
+        let tree: ParseTree;
+        if (t instanceof ParserRuleContext || t instanceof ErrorNode ) {
+            tree = t;
+        } else {
+            tree = new TerminalNode(t);
         }
         if (!this.children)
-            this.children = [t] as Array<ParseTree>;
+            this.children = [tree] as Array<ParseTree>;
         else 
-            this.children.push(t);
+            this.children.push(tree);
 	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
@@ -155,7 +158,6 @@ export class ParserRuleContext extends RuleContext {
 //		states.add(s);
 //	}
 
-
 	addErrorNode(badToken: Token): ErrorNode {
 		let t = new ErrorNode(badToken, this);
 		this.addChild(t);
@@ -166,8 +168,9 @@ export class ParserRuleContext extends RuleContext {
 	/** Override to make type more specific */
 	getParent(): ParserRuleContext | undefined {
         return super.getParent() as any as ParserRuleContext | undefined;
-	}
-    getChild(i: number): RuleContext;
+    }
+
+    getChild(i: number): ParserRuleContext;
     getChild<T extends ParseTree>(i: number, ctxType: {new(): T;}): T | undefined;
     // Note: in TypeScript, order or arguments reversed 
     getChild<T extends ParseTree>(i: number, ctxType?: {new(): T;}): T | undefined {
@@ -223,14 +226,18 @@ export class ParserRuleContext extends RuleContext {
 
     // NOTE: argument order change from Java verision
     getRuleContext<T extends ParserRuleContext>(
-        i: number,
-        ctxType?: { new (): T; })
-        : T | undefined
-    {
-        if (ctxType)
-            return this.getChild(i, ctxType);
-        else
-            return this.getChild(i) as any as T;  // HACK
+        i?: number,
+        ctxType?: { new(): T; }): T {
+        let result: any;
+
+        if (i === undefined) {
+            result = this;
+        } else if (ctxType) {
+            result = this.getChild(i, ctxType);
+        } else {
+            result = this.getChild(i); 
+        }
+        return result as T; // HACK typing to match Java
     }
 
     getRuleContexts<T extends ParserRuleContext>(

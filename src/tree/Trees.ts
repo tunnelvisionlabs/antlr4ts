@@ -243,14 +243,15 @@ export class Trees {
 											   startIndex: number,
 											   stopIndex: number): void
 	{
-		if ( t==null ) return;
-		for (let i = 0; i < t.getChildCount(); i++) {
-			let child: ParseTree = t.getChild(i);
+        if (!t) return;
+	    let count = t.getChildCount();
+		for (let i = 0; i < count; i++) {
+			let child = t.getChild(i);
 			let range: Interval =  child.getSourceInterval();
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
 				if ( Trees.isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
-					t.children.set(i, new TerminalNode(abbrev));
+					(t as any).children[i] = new TerminalNode(abbrev); // HACK access to private
 				}
 			}
 		}

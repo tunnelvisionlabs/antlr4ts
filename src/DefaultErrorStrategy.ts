@@ -764,7 +764,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@NotNull
 	protected getErrorRecoverySet(@NotNull recognizer: Parser): IntervalSet {
 		let atn: ATN =  recognizer.getInterpreter().atn;
-		let ctx: ParserRuleContext | undefined  = recognizer._ctx;
+		let ctx: RuleContext | undefined  = recognizer._ctx;
 		let recoverSet: IntervalSet =  new IntervalSet();
 		while ( ctx && ctx.invokingState >= 0 ) {
 			// compute what follows who invoked us

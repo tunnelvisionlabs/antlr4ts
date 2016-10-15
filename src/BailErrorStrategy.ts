@@ -82,7 +82,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
         context = recognizer.getContext();
         for (; context; context = context.getParent())
         {
-			context.exception = e as Error;
+			context.exception = e;
 		}
 
         throw new ParseCancellationException(e as Error);
@@ -99,7 +99,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
         let context: ParserRuleContext | undefined =
             recognizer.getContext();
         for (; context; context = context.getParent()) {
-			context.exception = e as Error;
+			context.exception = e;
 		}
 
         throw new ParseCancellationException(e);

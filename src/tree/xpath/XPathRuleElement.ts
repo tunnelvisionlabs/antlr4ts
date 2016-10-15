@@ -30,7 +30,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { ParserRuleContext } from "../../misc/Stubs";
+import { ParserRuleContext } from "../../ParserRuleContext";
 import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { Trees } from "../Trees";
