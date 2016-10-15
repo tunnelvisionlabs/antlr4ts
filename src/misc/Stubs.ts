@@ -311,3 +311,7 @@ export namespace Lexer {
 	export const MIN_CHAR_VALUE: number = 0x0000;
 	export const MAX_CHAR_VALUE: number = 0xFFFE;
 }
+
+export class XPath {
+    static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
+}

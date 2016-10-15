@@ -28,23 +28,19 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:45.4603255-07:00
+// CONVERSTION complete, Burt Harris 10/14/2016
+import { NotNull } from "../../Decorators";
+import { ParseTree } from "../ParseTree";
+import { ParseTreeMatch } from "./ParseTreeMatch";
+import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
+
+// Stubs
+import { XPath } from "../../misc/Stubs";
 
 /**
  * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
  * {@link ParseTreePatternMatcher#compile(String, int)}.
  */
-import { NotNull } from "../../Decorators";
-import { ParseTree } from "../ParseTree";
-import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
-import { ParseTreeMatch } from "./ParseTreeMatch";
-
-
-// Stubs
-export class XPath {
-    static findAll(tree: any, xpath: string, parser: any): any { throw new Error("Not implemented"); }
-}
-
 export class ParseTreePattern {
 	/**
 	 * This is the backing field for {@link #getPatternRuleIndex()}.
@@ -99,10 +95,10 @@ export class ParseTreePattern {
 	 * match operation. The {@link ParseTreeMatch#succeeded()} method can be
 	 * used to determine whether or not the match was successful.
 	 */
-	@NotNull
-	match(@NotNull tree: ParseTree): ParseTreeMatch {
-		return this.matcher.match(tree, this);
-	}
+    @NotNull
+    match(@NotNull tree: ParseTree): ParseTreeMatch {
+        return this.matcher.match(tree, this);
+    }
 
 	/**
 	 * Determine whether or not a parse tree matches this tree pattern.
@@ -132,9 +128,9 @@ export class ParseTreePattern {
 	    let matches = [] as ParseTreeMatch[]; 
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);
-			if ( match.succeeded() ) {
-				matches.push(match);
-			}
+            if (match.succeeded()) {
+                matches.push(match);
+            }
 		}
 		return matches;
 	}

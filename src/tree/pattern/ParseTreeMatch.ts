@@ -28,11 +28,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:26:45.3531168-07:00
+// CONVERSTION complete, Burt Harris 10/14/2016
+import { MultiMap } from "../../misc/MultiMap";
+import { NotNull, Nullable, Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { ParseTreePattern } from "./ParseTreePattern";
-import { NotNull, Nullable, Override } from "../../Decorators";
-import { MultiMap } from "../../misc/MultiMap";
 
 /**
  * Represents the result of matching a {@link ParseTree} against a tree pattern.
@@ -77,7 +77,7 @@ export class ParseTreeMatch {
         @NotNull tree: ParseTree,
         @NotNull pattern: ParseTreePattern,
         @NotNull labels: MultiMap<string, ParseTree>,
-        @Nullable mismatchedNode?: ParseTree) {
+        mismatchedNode: ParseTree | undefined) {
 		if (!tree) {
 			throw new Error("tree cannot be null");
 		}
@@ -112,15 +112,14 @@ export class ParseTreeMatch {
 	 * @return The last {@link ParseTree} to match a tag with the specified
 	 * label, or {@code null} if no parse tree matched a tag with the label.
 	 */
-	@Nullable
-	get(label: string): ParseTree | undefined{
-		let parseTrees = this.labels.get(label);
-		if ( !parseTrees || parseTrees.length ===0 ) {
-			return undefined;
-		}
+    get(label: string): ParseTree | undefined {
+        let parseTrees = this.labels.get(label);
+        if (!parseTrees || parseTrees.length === 0) {
+            return undefined;
+        }
 
-		return parseTrees[ parseTrees.length-1 ]; // return last if multiple
-	}
+        return parseTrees[parseTrees.length - 1]; // return last if multiple
+    }
 
 	/**
 	 * Return all nodes matching a rule or token tag with the specified label.
@@ -146,13 +145,13 @@ export class ParseTreeMatch {
 	 * is returned.
 	 */
 	@NotNull
-	getAll(@NotNull label: string): ParseTree[] {
-		let nodes =  this.labels.get(label);
-		if ( nodes==null ) {
-			return [];
-		}
-		return nodes;
-	}
+    getAll( @NotNull label: string): ParseTree[] {
+        const nodes = this.labels.get(label);
+        if (!nodes) {
+            return [];
+        }
+        return nodes;
+    }
 
 	/**
 	 * Return a mapping from label &rarr; [list of nodes].
@@ -164,10 +163,10 @@ export class ParseTreeMatch {
 	 * @return A mapping from labels to parse tree nodes. If the parse tree
 	 * pattern did not contain any rule or token tags, this map will be empty.
 	 */
-	@NotNull
-	getLabels(): MultiMap<string, ParseTree> {
-		return this.labels;
-	}
+    @NotNull
+    getLabels(): MultiMap<string, ParseTree> {
+        return this.labels;
+    }
 
 	/**
 	 * Get the node at which we first detected a mismatch.
@@ -175,8 +174,7 @@ export class ParseTreeMatch {
 	 * @return the node at which we first detected a mismatch, or {@code null}
 	 * if the match was successful.
 	 */
-	@Nullable
-	getMismatchedNode() {
+	getMismatchedNode(): ParseTree | undefined {
 		return this.mismatchedNode;
 	}
 
