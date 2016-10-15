@@ -12,7 +12,16 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ANTLRErrorListener.java
 * [x] ANTLRErrorStrategy.java
 * [ ] ANTLRFileStream.java
-* [x] ANTLRInputStream.java - Constructors for char[] & performing I/O are omitted.
+* [x] ANTLRInputStream.java
+  * [ ] ANTLRInputStream.constructor()
+  * [ ] ANTLRInputStream.constructor(char[], number)
+  * [ ] ANTLRInputStream.constructor(Reader)
+  * [ ] ANTLRInputStream.constructor(Reader, number)
+  * [ ] ANTLRInputStream.constructor(Reader, number, number)
+  * [ ] ANTLRInputStream.constructor(InputStream)
+  * [ ] ANTLRInputStream.constructor(InputStream, number)
+  * [ ] ANTLRInputStream.constructor(InputStream, number, number)
+  * [ ] ANTLRInputStream.load(Reader, number, number)
 * [x] BailErrorStrategy.java
 * [ ] BaseErrorListener.java
 * [x] BufferedTokenStream.java
@@ -101,7 +110,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
 * [ ] atn\OrderedATNConfigSet.java
-* [ ] atn\ParseInfo.java
+* [x] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java

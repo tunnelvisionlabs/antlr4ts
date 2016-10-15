@@ -75,11 +75,11 @@ export class ParseTreePattern {
 	 * tree pattern.
 	 * @param patternTree The tree pattern in {@link ParseTree} form.
 	 */
-    constructor(
-        @NotNull matcher: ParseTreePatternMatcher, 
-        @NotNull pattern: string,
-        patternRuleIndex: number,
-        @NotNull patternTree: ParseTree) 
+	constructor(
+		@NotNull matcher: ParseTreePatternMatcher, 
+		@NotNull pattern: string,
+		patternRuleIndex: number,
+		@NotNull patternTree: ParseTree) 
 	{
 		this.matcher = matcher;
 		this.patternRuleIndex = patternRuleIndex;
@@ -95,10 +95,10 @@ export class ParseTreePattern {
 	 * match operation. The {@link ParseTreeMatch#succeeded()} method can be
 	 * used to determine whether or not the match was successful.
 	 */
-    @NotNull
-    match(@NotNull tree: ParseTree): ParseTreeMatch {
-        return this.matcher.match(tree, this);
-    }
+	@NotNull
+	match(@NotNull tree: ParseTree): ParseTreeMatch {
+		return this.matcher.match(tree, this);
+	}
 
 	/**
 	 * Determine whether or not a parse tree matches this tree pattern.
@@ -125,12 +125,12 @@ export class ParseTreePattern {
 	@NotNull
 	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
 		let subtrees: ParseTree[] =  XPath.findAll(tree, xpath, this.matcher.getParser());
-	    let matches = [] as ParseTreeMatch[]; 
+		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);
-            if (match.succeeded()) {
-                matches.push(match);
-            }
+			if (match.succeeded()) {
+				matches.push(match);
+			}
 		}
 		return matches;
 	}

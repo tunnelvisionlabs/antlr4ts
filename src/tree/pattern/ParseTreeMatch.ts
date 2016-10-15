@@ -73,11 +73,11 @@ export class ParseTreeMatch {
 	 * @exception IllegalArgumentException if {@code pattern} is {@code null}
 	 * @exception IllegalArgumentException if {@code labels} is {@code null}
 	 */
-    constructor(
-        @NotNull tree: ParseTree,
-        @NotNull pattern: ParseTreePattern,
-        @NotNull labels: MultiMap<string, ParseTree>,
-        mismatchedNode: ParseTree | undefined) {
+	constructor(
+		@NotNull tree: ParseTree,
+		@NotNull pattern: ParseTreePattern,
+		@NotNull labels: MultiMap<string, ParseTree>,
+		mismatchedNode: ParseTree | undefined) {
 		if (!tree) {
 			throw new Error("tree cannot be null");
 		}
@@ -112,14 +112,14 @@ export class ParseTreeMatch {
 	 * @return The last {@link ParseTree} to match a tag with the specified
 	 * label, or {@code null} if no parse tree matched a tag with the label.
 	 */
-    get(label: string): ParseTree | undefined {
-        let parseTrees = this.labels.get(label);
-        if (!parseTrees || parseTrees.length === 0) {
-            return undefined;
-        }
+	get(label: string): ParseTree | undefined {
+		let parseTrees = this.labels.get(label);
+		if (!parseTrees || parseTrees.length === 0) {
+			return undefined;
+		}
 
-        return parseTrees[parseTrees.length - 1]; // return last if multiple
-    }
+		return parseTrees[parseTrees.length - 1]; // return last if multiple
+	}
 
 	/**
 	 * Return all nodes matching a rule or token tag with the specified label.
@@ -145,13 +145,13 @@ export class ParseTreeMatch {
 	 * is returned.
 	 */
 	@NotNull
-    getAll( @NotNull label: string): ParseTree[] {
-        const nodes = this.labels.get(label);
-        if (!nodes) {
-            return [];
-        }
-        return nodes;
-    }
+	getAll(@NotNull label: string): ParseTree[] {
+		const nodes = this.labels.get(label);
+		if (!nodes) {
+			return [];
+		}
+		return nodes;
+	}
 
 	/**
 	 * Return a mapping from label &rarr; [list of nodes].
@@ -163,10 +163,10 @@ export class ParseTreeMatch {
 	 * @return A mapping from labels to parse tree nodes. If the parse tree
 	 * pattern did not contain any rule or token tags, this map will be empty.
 	 */
-    @NotNull
-    getLabels(): MultiMap<string, ParseTree> {
-        return this.labels;
-    }
+	@NotNull
+	getLabels(): MultiMap<string, ParseTree> {
+		return this.labels;
+	}
 
 	/**
 	 * Get the node at which we first detected a mismatch.
@@ -185,7 +185,7 @@ export class ParseTreeMatch {
 	 * {@code false}.
 	 */
 	succeeded(): boolean {
-		return !this.mismatchedNode ;
+		return !this.mismatchedNode;
 	}
 
 	/**
@@ -205,7 +205,7 @@ export class ParseTreeMatch {
 	 */
 	@NotNull
 	getTree(): ParseTree {
-        return this.tree;
+		return this.tree;
 	}
 
 	/**
@@ -213,8 +213,8 @@ export class ParseTreeMatch {
 	 */
 	@Override
 	toString(): string {
-        return `Match ${
-            this.succeeded() ? "succeeded" : "failed"}; found ${
-            this.getLabels().size} labels`;
+		return `Match ${
+			this.succeeded() ? "succeeded" : "failed"}; found ${
+			this.getLabels().size} labels`;
 	}
 }

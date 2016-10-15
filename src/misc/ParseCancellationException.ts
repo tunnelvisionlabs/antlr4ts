@@ -47,7 +47,7 @@ export class ParseCancellationException extends Error {
 		 this.stack = cause.stack;
 	 }
 
-     getCause(): Error {
-         return this.cause;
-     }
+	getCause(): Error {
+		return this.cause;
+	}
 }
