@@ -28,6 +28,16 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // ConvertTo-TS run at 2016-10-04T11:26:57.0697674-07:00
+import { CharStream } from "./CharStream";
+import { IntervalSet } from "./misc/IntervalSet"
+import { IntStream } from './IntStream';
+import { Lexer } from "./Stub_Lexer";
+import { Parser } from './Stub_Parser';
+import { ParserRuleContext } from "./ParserRuleContext";
+import { Recognizer } from './Stub_Recognizer';
+import { RuleContext } from "./RuleContext";
+import { Token } from "./Token";
+
 
 /** The root of the ANTLR exception hierarchy. In general, ANTLR tracks just
  *  3 kinds of errors: prediction errors, failed predicate errors, and
@@ -35,17 +45,6 @@
  *  in the input, where it is in the ATN, the rule invocation stack,
  *  and what kind of problem occurred.
  */
-import { CharStream } from "./CharStream";
-import { IntervalSet } from "./misc/IntervalSet"
-import { IntStream } from './IntStream';
-import { Lexer } from "./misc/Stubs";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { RuleContext } from "./RuleContext";
-import { Token } from "./Token";
-
-// Stubs
-import { Recognizer, Parser} from "./misc/Stubs";
-
 export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;
 

@@ -33,8 +33,6 @@ import { NotNull } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
-
-// Stubs
 import { XPath } from "../xpath/XPath";
 
 /**

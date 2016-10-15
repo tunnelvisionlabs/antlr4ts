@@ -34,13 +34,14 @@ import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
 import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
+import { Lexer } from '../../Stub_Lexer';
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { Nullable, NotNull } from "../../Decorators";
-import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { Parser, Lexer } from "../../misc/Stubs";
+import { ParseCancellationException } from "../../misc/ParseCancellationException
+import { Parser } from '../../Stub_Parser';
+import { ParserInterpreter } from "../../Stub_ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
-import { ParserInterpreter } from "../../misc/Stubs";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePattern } from "./ParseTreePattern";

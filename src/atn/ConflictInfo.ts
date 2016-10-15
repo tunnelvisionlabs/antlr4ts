@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.0710131-07:00
 
-import { BitSet } from '../misc/Stubs';
+import { BitSet } from '../misc/Stub_BitSet';
 import { Override } from '../Decorators';
 import * as Utils from '../misc/Utils';
 

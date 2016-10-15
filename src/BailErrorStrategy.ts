@@ -59,16 +59,13 @@
  * @see Parser#setErrorHandler(ANTLRErrorStrategy)
  */
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
+import { Parser } from './Stub_Parser';
 import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
 import { ParseCancellationException } from "./misc/ParseCancellationException";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token";
-
-// Stubs
-import { Parser} from "./misc/Stubs";
-
 
 export class BailErrorStrategy extends DefaultErrorStrategy {
     /** Instead of recovering from exception {@code e}, re-throw it wrapped

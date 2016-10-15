@@ -31,7 +31,7 @@
 import { ErrorNode } from "./tree/ErrorNode";
 import { Interval } from "./misc/Interval";
 import { Nullable, Override } from "./Decorators";
-import { Parser } from "./misc/Stubs";
+import { Parser } from "./Stub_Parser";
 import { ParseTree } from "./tree/ParseTree";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
 import { RecognitionException } from "./RecognitionException";

@@ -34,7 +34,7 @@
  */
 import {RecognitionException} from "./RecognitionException";
 import { NotNull } from "./Decorators";
-import { Parser } from "./misc/Stubs";
+import { Parser } from "./Stub_Parser";
 
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;

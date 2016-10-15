@@ -36,15 +36,17 @@
  *
  * @author Sam Harwell
  */
+
+import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { BitSet } from './misc/Stub_BitSet';
+import { DFA } from './dfa/Stub_DFA';
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
+import { Parser } from './Stub_Parser';
 import {ParserErrorListener} from "./ParserErrorListener";
+import { Recognizer } from './Stub_Recognizer';
+import { SimulatorState } from './atn/Stub_SimulatorState';
 import { Override, NotNull } from "./Decorators";
-
-// Stubs
-import {
-	Recognizer, ATNConfigSet, Parser, DFA, BitSet, SimulatorState
-} from "./misc/Stubs";
 
 // This class seems unused, but might clean up ParserProxyErrorListener a little bit if used consistently.
 

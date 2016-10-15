@@ -79,14 +79,17 @@
  *
  *  @see ParserRuleContext
  */
-import {RuleNode} from "./tree/RuleNode";
-import {ParseTree as Tree } from "./tree/ParseTree";
+
+import { ATN } from './atn/Stub_ATN';
+import { Parser } from './Stub_Parser';
+import { Recognizer } from './Stub_Recognizer';
+import { RuleNode } from "./tree/RuleNode";
+import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators"
-import {ATN, Recognizer, Parser } from "./misc/Stubs";
-import {Trees} from "./tree/Trees";
-import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
-import {ParserRuleContext} from "./ParserRuleContext";
+import { Trees } from "./tree/Trees";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext implements RuleNode {
     protected _parent: RuleContext | undefined;
@@ -146,7 +149,7 @@ export class RuleContext implements RuleNode {
 	 */
 	@Override
 	getText(): string {
-		if (this.getChildCount() == 0) {
+		if (this.getChildCount() === 0) {
 			return "";
 		}
 
@@ -194,7 +197,7 @@ export class RuleContext implements RuleNode {
 	}
 
 	@Override
-	accept<T>(visitor: ParserTreeVisitor<T>): T {
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitChildren(this);
 	}
 

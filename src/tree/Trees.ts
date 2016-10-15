@@ -32,11 +32,12 @@
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
 import { Arrays } from "../misc/Arrays";
+import { ATN } from '../atn/Stub_ATN';
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
 import { NotNull, Nullable } from "../Decorators";
-import { Parser, ATN } from "../misc/Stubs";
+import { Parser } from '../Stub_Parser';
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
