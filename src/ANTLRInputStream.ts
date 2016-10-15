@@ -43,10 +43,10 @@ import {Override} from "./Decorators";
 import {IntStream} from "./IntStream";
 import {Interval} from "./misc/Interval";
 
-export class ANTLRInputStream implements CharStream {
-    static READ_BUFFER_SIZE: number =  1024;
-   	static INITIAL_BUFFER_SIZE: number =  1024;
+const READ_BUFFER_SIZE: number =  1024;
+const INITIAL_BUFFER_SIZE: number =  1024;
 
+export class ANTLRInputStream implements CharStream {
 	/** The data being scanned */
 	protected data: string; 
 
