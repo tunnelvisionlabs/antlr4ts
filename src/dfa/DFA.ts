@@ -58,7 +58,7 @@ export class DFA {
 
 	s0full: DFAState | undefined;
 
-	decision: number;
+	readonly decision: number;
 
 	/** From which ATN state did we create this DFA? */
 	@NotNull
