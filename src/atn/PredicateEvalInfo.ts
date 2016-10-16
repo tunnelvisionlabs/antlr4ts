@@ -33,7 +33,7 @@
 import { DecisionEventInfo } from './DecisionEventInfo';
 import { NotNull } from '../Decorators';
 import { SemanticContext } from './SemanticContext';
-import { SimulatorState } from './Stub_SimulatorState';
+import { SimulatorState } from './SimulatorState';
 import { TokenStream } from '../TokenStream';
 
 /**

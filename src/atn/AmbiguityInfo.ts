@@ -33,7 +33,7 @@
 import { BitSet } from '../misc/Stub_BitSet';
 import { DecisionEventInfo } from './DecisionEventInfo';
 import { NotNull } from '../Decorators';
-import { SimulatorState } from './Stub_SimulatorState';
+import { SimulatorState } from './SimulatorState';
 import { TokenStream } from '../TokenStream';
 
 /**

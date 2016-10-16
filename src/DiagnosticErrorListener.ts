@@ -58,7 +58,7 @@ import { BaseErrorListener } from "./BaseErrorListener";
 import { BitSet } from './misc/Stub_BitSet';
 import { DFA } from './dfa/Stub_DFA';
 import { Parser } from './Stub_Parser';
-import { SimulatorState } from './atn/Stub_SimulatorState';
+import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
 
