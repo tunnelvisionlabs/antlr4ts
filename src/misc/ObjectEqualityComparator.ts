@@ -38,7 +38,7 @@ import { Equatable } from './Stubs';
  *
  * @author Sam Harwell
  */
-export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
+export class ObjectEqualityComparator implements EqualityComparator<Equatable | null | undefined> {
 	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**
@@ -48,7 +48,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: Equatable): number {
+	hashCode(obj: Equatable | null | undefined): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -66,7 +66,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable> {
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: Equatable, b: Equatable): boolean {
+	equals(a: Equatable | null | undefined, b: Equatable | null | undefined): boolean {
 		if (a == null) {
 			return b == null;
 		}

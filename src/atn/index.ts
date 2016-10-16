@@ -2,7 +2,7 @@ export * from './AbstractPredicateTransition';
 export * from './ActionTransition';
 export * from './AmbiguityInfo';
 // export * from './ATN';
-// export * from './ATNConfig';
+export * from './ATNConfig';
 // export * from './ATNConfigSet';
 export * from './ATNDeserializationOptions';
 // export * from './ATNDeserializer';

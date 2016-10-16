@@ -1,4 +1,4 @@
-import { ATNConfig } from './Stub_ATNConfig';
+import { ATNConfig } from './ATNConfig';
 
 export abstract class ATNConfigSet extends Set<ATNConfig>{
 }

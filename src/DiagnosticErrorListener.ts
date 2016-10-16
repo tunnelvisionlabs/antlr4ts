@@ -52,7 +52,7 @@
  * @author Sam Harwell
  */
 
-import { ATNConfig } from './atn/Stub_ATNConfig';
+import { ATNConfig } from './atn/ATNConfig';
 import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BaseErrorListener } from "./BaseErrorListener";
 import { BitSet } from './misc/Stub_BitSet';
