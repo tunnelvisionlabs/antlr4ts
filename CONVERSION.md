@@ -147,7 +147,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] dfa\ArrayEdgeMap.java
 * [x] dfa\DFA.java
 * [x] dfa\DFASerializer.java
-* [ ] dfa\DFAState.java
+* [x] dfa\DFAState.java
 * [x] dfa\EdgeMap.java
 * [x] dfa\EmptyEdgeMap.java
 * [x] dfa\LexerDFASerializer.java

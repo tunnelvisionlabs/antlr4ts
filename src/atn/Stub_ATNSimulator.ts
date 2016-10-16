@@ -1,6 +1,6 @@
 import { ATN } from './ATN';
 import { ATNConfigSet } from './Stub_ATNConfigSet';
-import { DFAState } from '../dfa/Stub_DFAState';
+import { DFAState } from '../dfa/DFAState';
 import { EmptyEdgeMap } from '../dfa/EmptyEdgeMap';
 import { PredictionContext } from './PredictionContext';
 

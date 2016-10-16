@@ -34,7 +34,7 @@ import { ATN } from '../atn/ATN';
 import { ATNSimulator } from '../atn/Stub_ATNSimulator';
 import { ATNState } from '../atn/ATNState';
 import { DFA } from './DFA';
-import { DFAState } from './Stub_DFAState';
+import { DFAState } from './DFAState';
 import { NotNull, Nullable, Override } from '../Decorators';
 import { PredictionContext } from '../atn/PredictionContext';
 import { Recognizer } from '../Stub_Recognizer';

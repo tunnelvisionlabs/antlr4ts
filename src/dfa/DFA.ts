@@ -36,7 +36,7 @@ import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
 import { DFASerializer } from './DFASerializer';
-import { DFAState } from './Stub_DFAState';
+import { DFAState } from './DFAState';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerATNSimulator } from '../atn/Stub_LexerATNSimulator';
 import { LexerDFASerializer } from './LexerDFASerializer';
@@ -168,7 +168,7 @@ export class DFA {
 	 * @ if this is not a precedence DFA.
 	 * @see #isPrecedenceDfa()
 	 */
-	getPrecedenceStartState(precedence: number, fullContext: boolean): DFAState {
+	getPrecedenceStartState(precedence: number, fullContext: boolean): DFAState | undefined {
 		if (!this.isPrecedenceDfa()) {
 			throw new Error("Only precedence DFAs may contain a precedence start state.");
 		}
