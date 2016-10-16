@@ -30,45 +30,40 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.5097925-07:00
 
+import { ATN } from '../atn/ATN';
+import { ATNSimulator } from '../atn/Stub_ATNSimulator';
+import { ATNState } from '../atn/ATNState';
+import { DFA } from './DFA';
+import { DFAState } from './Stub_DFAState';
+import { NotNull, Nullable, Override } from '../Decorators';
+import { PredictionContext } from '../atn/PredictionContext';
+import { Recognizer } from '../Stub_Recognizer';
+import { Vocabulary } from '../Vocabulary';
+import { VocabularyImpl } from '../VocabularyImpl';
+
 /** A DFA walker that knows how to dump them to serialized strings. */
 export class DFASerializer {
 	@NotNull
-	private dfa: DFA; 
+	private dfa: DFA;
 	@NotNull
-	private vocabulary: Vocabulary; 
-	@Nullable
-	ruleNames: string[]; 
-	@Nullable
-	atn: ATN; 
+	private vocabulary: Vocabulary;
 
-	/**
-	 * @deprecated Use {@link #DFASerializer(DFA, Vocabulary)} instead.
-	 */
-	@Deprecated
-	 constructor(@NotNull dfa: DFA, @Nullable tokenNames: string[])  {
-		this(dfa, VocabularyImpl.fromTokenNames(tokenNames), null, null);
-	}
+	ruleNames?: string[];
 
-	 constructor1(@NotNull dfa: DFA, @NotNull vocabulary: Vocabulary)  {
-		this(dfa, vocabulary, null, null);
-	}
+	atn?: ATN;
 
-	 constructor2(@NotNull dfa: DFA, @Nullable parser: Recognizer<any,any>)  {
-		this(dfa,
-			 parser != null ? parser.getVocabulary() : VocabularyImpl.EMPTY_VOCABULARY,
-			 parser != null ? parser.getRuleNames() : null,
-			 parser != null ? parser.getATN() : null);
-	}
+	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary);
+	constructor(/*@NotNull*/ dfa: DFA, /*@Nullable*/ parser: Recognizer<any,any> | undefined);
+	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary, /*@Nullable*/ ruleNames: string[] | undefined, /*@Nullable*/ atn: ATN | undefined);
+	constructor(dfa: DFA, vocabulary: Vocabulary | Recognizer<any, any> | undefined, ruleNames?: string[], atn?: ATN) {
+		if (vocabulary instanceof Recognizer) {
+			ruleNames = vocabulary.getRuleNames();
+			atn = vocabulary.getATN();
+			vocabulary = vocabulary.getVocabulary();
+		} else if (!vocabulary) {
+			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
+		}
 
-	/**
-	 * @deprecated Use {@link #DFASerializer(DFA, Vocabulary, String[], ATN)} instead.
-	 */
-	@Deprecated
-	 constructor3(@NotNull dfa: DFA, @Nullable tokenNames: string[], @Nullable ruleNames: string[], @Nullable atn: ATN)  {
-		this(dfa, VocabularyImpl.fromTokenNames(tokenNames), ruleNames, atn);
-	}
-
-	 constructor4(@NotNull dfa: DFA, @NotNull vocabulary: Vocabulary, @Nullable ruleNames: string[], @Nullable atn: ATN)  {
 		this.dfa = dfa;
 		this.vocabulary = vocabulary;
 		this.ruleNames = ruleNames;
@@ -77,94 +72,91 @@ export class DFASerializer {
 
 	@Override
 	toString(): string {
-		if ( dfa.s0.get()==null ) return null;
-		let buf: StringBuilder =  new StringBuilder();
+		if ( !this.dfa.s0 ) {
+			return "";
+		}
 
-		if ( dfa.states!=null ) {
-			let states: List<DFAState> =  new ArrayList<DFAState>(dfa.states.values());
-			Collections.sort(states, new Comparator<DFAState>(){
+		let buf = "";
 
-				@Override
-				compare(o1: DFAState, o2: DFAState): number {
-					return o1.stateNumber - o2.stateNumber;
-				}
-			});
+		if ( this.dfa.states ) {
+			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.values().toArray());
+			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
 				let edges: Map<number, DFAState> =  s.getEdgeMap();
 				let contextEdges: Map<number, DFAState> =  s.getContextEdgeMap();
-				for (Map.Entry<Integer, DFAState> entry : edges.entrySet()) {
-					if ((entry.getValue() == null || entry.getValue() == ATNSimulator.ERROR) && !s.isContextSymbol(entry.getKey())) {
+				for (let entry of edges) {
+					if ((entry[1] == null || entry[1] === ATNSimulator.ERROR) && !s.isContextSymbol(entry[0])) {
 						continue;
 					}
 
 					let contextSymbol: boolean =  false;
-					buf.append(getStateString(s)).append("-").append(getEdgeLabel(entry.getKey())).append("->");
-					if (s.isContextSymbol(entry.getKey())) {
-						buf.append("!");
+					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry[0])) + ("->");
+					if (s.isContextSymbol(entry[0])) {
+						buf += ("!");
 						contextSymbol = true;
 					}
 
-					let t: DFAState =  entry.getValue();
-					if ( t!=null && t.stateNumber != Integer.MAX_VALUE ) {
-						buf.append(getStateString(t)).append('\n');
+					let t: DFAState =  entry[1];
+					if ( t && t.stateNumber !== ATNSimulator.ERROR.stateNumber ) {
+						buf += (this.getStateString(t)) + ('\n');
 					}
 					else if (contextSymbol) {
-						buf.append("ctx\n");
+						buf += ("ctx\n");
 					}
 				}
 
 				if (s.isContextSensitive()) {
-					for (Map.Entry<Integer, DFAState> entry : contextEdges.entrySet()) {
-						buf.append(getStateString(s))
-							.append("-")
-							.append(getContextLabel(entry.getKey()))
-							.append("->")
-							.append(getStateString(entry.getValue()))
-							.append("\n");
+					for (let entry of contextEdges) {
+						buf += (this.getStateString(s))
+							+ ("-")
+							+ (this.getContextLabel(entry[0]))
+							+ ("->")
+							+ (this.getStateString(entry[1]))
+							+ ("\n");
 					}
 				}
 			}
 		}
-		let output: string =  buf.toString();
-		if ( output.length()==0 ) return null;
+		let output: string =  buf;
+		if ( output.length===0 ) return "";
 		//return Utils.sortLinesInString(output);
 		return output;
 	}
 
 	protected getContextLabel(i: number): string {
-		if (i == PredictionContext.EMPTY_FULL_STATE_KEY) {
+		if (i === PredictionContext.EMPTY_FULL_STATE_KEY) {
 			return "ctx:EMPTY_FULL";
 		}
-		else if (i == PredictionContext.EMPTY_LOCAL_STATE_KEY) {
+		else if (i === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
 			return "ctx:EMPTY_LOCAL";
 		}
 
-		if (atn != null && i > 0 && i <= atn.states.size()) {
-			let state: ATNState =  atn.states.get(i);
+		if (this.atn && i > 0 && i <= this.atn.states.length) {
+			let state: ATNState =  this.atn.states[i];
 			let ruleIndex: number =  state.ruleIndex;
-			if (ruleNames != null && ruleIndex >= 0 && ruleIndex < ruleNames.length) {
-				return "ctx:" + String.valueOf(i) + "(" + ruleNames[ruleIndex] + ")";
+			if (this.ruleNames && ruleIndex >= 0 && ruleIndex < this.ruleNames.length) {
+				return "ctx:" + String(i) + "(" + this.ruleNames[ruleIndex] + ")";
 			}
 		}
 
-		return "ctx:" + String.valueOf(i);
+		return "ctx:" + String(i);
 	}
 
 	protected getEdgeLabel(i: number): string {
-		return vocabulary.getDisplayName(i);
+		return this.vocabulary.getDisplayName(i);
 	}
 
 	getStateString(s: DFAState): string {
-		if (s == ATNSimulator.ERROR) {
+		if (s === ATNSimulator.ERROR) {
 			return "ERROR";
 		}
 
 		let n: number =  s.stateNumber;
 		let stateStr: string =  "s"+n;
 		if ( s.isAcceptState() ) {
-            if ( s.predicates!=null ) {
-                stateStr = ":s"+n+"=>"+Arrays.toString(s.predicates);
+            if ( s.predicates ) {
+                stateStr = ":s"+n+"=>"+s.predicates;
             }
             else {
                 stateStr = ":s"+n+"=>"+s.getPrediction();

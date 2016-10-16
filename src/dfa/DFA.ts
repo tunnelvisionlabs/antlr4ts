@@ -35,7 +35,7 @@ import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
-import { DFASerializer } from './Stub_DFASerializer';
+import { DFASerializer } from './DFASerializer';
 import { DFAState } from './Stub_DFAState';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerATNSimulator } from '../atn/Stub_LexerATNSimulator';

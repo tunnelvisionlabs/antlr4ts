@@ -1,5 +1,5 @@
 import { DFA } from './DFA';
-import { DFASerializer } from './Stub_DFASerializer';
+import { DFASerializer } from './DFASerializer';
 import { NotNull } from '../Decorators';
 import { VocabularyImpl } from '../VocabularyImpl';
 
