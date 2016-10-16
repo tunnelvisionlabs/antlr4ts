@@ -7,7 +7,7 @@ export * from './ATNConfigSet';
 export * from './ATNDeserializationOptions';
 // export * from './ATNDeserializer';
 // export * from './ATNSerializer';
-// export * from './ATNSimulator';
+export * from './ATNSimulator';
 export * from './ATNState';
 export * from './ATNStateType';
 export * from './ATNType';

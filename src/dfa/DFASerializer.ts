@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:38.5097925-07:00
 
 import { ATN } from '../atn/ATN';
-import { ATNSimulator } from '../atn/Stub_ATNSimulator';
+import { ATNSimulator } from '../atn/ATNSimulator';
 import { ATNState } from '../atn/ATNState';
 import { DFA } from './DFA';
 import { DFAState } from './DFAState';

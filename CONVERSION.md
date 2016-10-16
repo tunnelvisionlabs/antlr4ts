@@ -77,7 +77,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ATNDeserializationOptions.java
 * [ ] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
-* [ ] atn\ATNSimulator.java
+* [x] atn\ATNSimulator.java
 * [x] atn\ATNState.java
   * [x] atn\ATNStateType.ts
 * [x] atn\ATNType.java
