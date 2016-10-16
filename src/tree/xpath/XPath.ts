@@ -1,19 +1,23 @@
 ﻿// ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
-import { XPathElement } from "./XPathElement";
-import { Parser, XPathLexer } from "../../misc/Stubs";
 import { ANTLRInputStream } from "../../ANTLRInputStream";
-import { LexerNoViableAltException } from "../../LexerNoViableAltException";
-import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 import { CommonTokenStream } from "../../CommonTokenStream";
+import { Lexer } from "../../Stub_Lexer";
+import { LexerNoViableAltException } from "../../LexerNoViableAltException";
+import { Parser } from "../../Stub_Parser";
+import { ParserRuleContext } from "../../ParserRuleContext";
+import { ParseTree } from "../ParseTree";
+import { RecognitionException } from "../../RecognitionException";
 import { Token } from "../../Token";
-import { XPathWildcardAnywhereElement } from "./XPathWildcardAnywhereElement";
-import { XPathWildcardElement } from "./XPathWildcardElement";
-import { XPathTokenElement } from "./XPathTokenElement";
-import { XPathTokenAnywhereElement } from "./XPathTokenAnywhereElement";
+import { XPathElement } from "./XPathElement";
+import { XPathLexer } from "../../Stub_XPathLexer";
+import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 import { XPathRuleAnywhereElement } from "./XPathRuleAnywhereElement";
 import { XPathRuleElement } from "./XPathRuleElement";
-import { ParseTree } from "../ParseTree";
-import { ParserRuleContext } from "../../ParserRuleContext";
+import { XPathTokenAnywhereElement } from "./XPathTokenAnywhereElement";
+import { XPathTokenElement } from "./XPathTokenElement";
+import { XPathWildcardAnywhereElement } from "./XPathWildcardAnywhereElement";
+import { XPathWildcardElement } from "./XPathWildcardElement";
+
 
 /**
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
@@ -58,7 +62,7 @@ import { ParserRuleContext } from "../../ParserRuleContext";
  * <p>
  * Whitespace is not allowed.</p>
  */
- 
+
 export class XPath {
 	static WILDCARD: string =  "*"; // word not operator/separator
 	static NOT: string =  "!"; 	   // word for invert operator

@@ -38,7 +38,7 @@ import { Lexer } from '../../Stub_Lexer';
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { Nullable, NotNull } from "../../Decorators";
-import { ParseCancellationException } from "../../misc/ParseCancellationException
+import { ParseCancellationException } from "../../misc/ParseCancellationException";
 import { Parser } from '../../Stub_Parser';
 import { ParserInterpreter } from "../../Stub_ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
