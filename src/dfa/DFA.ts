@@ -39,7 +39,7 @@ import { DFASerializer } from './DFASerializer';
 import { DFAState } from './Stub_DFAState';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerATNSimulator } from '../atn/Stub_LexerATNSimulator';
-import { LexerDFASerializer } from './Stub_LexerDFASerializer';
+import { LexerDFASerializer } from './LexerDFASerializer';
 import { NotNull } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { StarLoopEntryState } from '../atn/StarLoopEntryState';
