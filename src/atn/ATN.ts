@@ -30,43 +30,61 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.1063510-07:00
 
+import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { ATNState } from './ATNState';
+import { ATNType } from './ATNType';
+import { DecisionState } from './DecisionState';
+import { DFA } from '../dfa/Stub_DFA';
+import { IntervalSet } from '../misc/IntervalSet';
+import { LexerAction } from './LexerAction';
+import { LL1Analyzer } from './Stub_LL1Analyzer';
+import { NotNull } from '../Decorators';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { PredictionContext } from './PredictionContext';
+import { RuleContext } from '../RuleContext';
+import { RuleStartState } from './RuleStartState';
+import { RuleStopState } from './RuleStopState';
+import { RuleTransition } from './RuleTransition';
+import { Token } from '../Token';
+import { TokensStartState } from './TokensStartState';
+
+import * as assert from 'assert';
+
 /** */
 export class ATN {
-	static INVALID_ALT_NUMBER: number =  0;
-
 	@NotNull
-	states: List<ATNState> =  new ArrayList<ATNState>();
+	states: ATNState[] = [];
 
 	/** Each subrule/rule is a decision point and we must track them so we
 	 *  can go back later and build DFA predictors for them.  This includes
 	 *  all the rules, subrules, optional blocks, ()+, ()* etc...
 	 */
 	@NotNull
-	decisionToState: List<DecisionState> =  new ArrayList<DecisionState>();
+	decisionToState: DecisionState[] = [];
 
 	/**
 	 * Maps from rule index to starting state number.
 	 */
-	ruleToStartState: RuleStartState[]; 
+	ruleToStartState: RuleStartState[];
 
 	/**
 	 * Maps from rule index to stop state number.
 	 */
-	ruleToStopState: RuleStopState[]; 
+	ruleToStopState: RuleStopState[];
 
 	@NotNull
-	modeNameToStartState: Map<string, TokensStartState> = 
-		new LinkedHashMap<String, TokensStartState>();
+	modeNameToStartState: Map<string, TokensStartState> =
+		new Map<string, TokensStartState>();
 
 	/**
 	 * The type of the ATN.
 	 */
-	grammarType: ATNType; 
+	grammarType: ATNType;
 
 	/**
 	 * The maximum value for any symbol recognized by a transition in the ATN.
 	 */
-	maxTokenType: number; 
+	maxTokenType: number;
 
 	/**
 	 * For lexer ATNs, this maps the rule index to the resulting token type.
@@ -75,26 +93,26 @@ export class ATN {
 	 * {@link ATNDeserializationOptions#isGenerateRuleBypassTransitions}
 	 * deserialization option was specified; otherwise, this is {@code null}.
 	 */
-	ruleToTokenType: number[]; 
+	ruleToTokenType: number[];
 
 	/**
 	 * For lexer ATNs, this is an array of {@link LexerAction} objects which may
 	 * be referenced by action transitions in the ATN.
 	 */
-	lexerActions: LexerAction[]; 
+	lexerActions: LexerAction[];
 
 	@NotNull
-	modeToStartState: List<TokensStartState> =  new ArrayList<TokensStartState>();
+	modeToStartState: TokensStartState[] = [];
 
-	private contextCache: ConcurrentMap<PredictionContext, PredictionContext> = 
-		new ConcurrentHashMap<PredictionContext, PredictionContext>();
+	private contextCache: Array2DHashMap<PredictionContext, PredictionContext> =
+		new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
 	@NotNull
-	decisionToDFA: DFA[] =  new DFA[0];
+	decisionToDFA: DFA[] = [];
 	@NotNull
-	modeToDFA: DFA[] =  new DFA[0];
+	modeToDFA: DFA[] = [];
 
-	protected LL1Table: ConcurrentMap<number, number> =  new ConcurrentHashMap<Integer, Integer>();
+	protected LL1Table: Map<number, number> =  new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
 	 constructor(@NotNull grammarType: ATNType, maxTokenType: number)  {
@@ -103,31 +121,31 @@ export class ATN {
 	}
 
 	clearDFA(): void {
-		decisionToDFA = new DFA[decisionToState.size()];
-		for (let i = 0; i < decisionToDFA.length; i++) {
-			decisionToDFA[i] = new DFA(decisionToState.get(i), i);
+		this.decisionToDFA = new Array<DFA>(this.decisionToState.length);
+		for (let i = 0; i < this.decisionToDFA.length; i++) {
+			this.decisionToDFA[i] = new DFA(this.decisionToState[i], i);
 		}
 
-		modeToDFA = new DFA[modeToStartState.size()];
-		for (let i = 0; i < modeToDFA.length; i++) {
-			modeToDFA[i] = new DFA(modeToStartState.get(i));
+		this.modeToDFA = new Array<DFA>(this.modeToStartState.length);
+		for (let i = 0; i < this.modeToDFA.length; i++) {
+			this.modeToDFA[i] = new DFA(this.modeToStartState[i]);
 		}
 
-		contextCache.clear();
-		LL1Table.clear();
+		this.contextCache.clear();
+		this.LL1Table.clear();
 	}
 
 	getContextCacheSize(): number {
-		return contextCache.size();
+		return this.contextCache.size();
 	}
 
 	getCachedContext(context: PredictionContext): PredictionContext {
-		return PredictionContext.getCachedContext(context, contextCache, new PredictionContext.IdentityHashMap());
+		return PredictionContext.getCachedContext(context, this.contextCache, new PredictionContext.IdentityHashMap());
 	}
 
 	getDecisionToDFA(): DFA[] {
-		assert(decisionToDFA != null && decisionToDFA.length == decisionToState.size());
-		return decisionToDFA;
+		assert(this.decisionToDFA != null && this.decisionToDFA.length === this.decisionToState.length);
+		return this.decisionToDFA;
 	}
 
 	/** Compute the set of valid tokens that can occur starting in state {@code s}.
@@ -135,65 +153,63 @@ export class ATN {
 	 *  the rule surrounding {@code s}. In other words, the set will be
 	 *  restricted to tokens reachable staying within {@code s}'s rule.
 	 */
-	@NotNull
-	nextTokens(s: ATNState, @NotNull ctx: PredictionContext): IntervalSet {
-		Args.notNull("ctx", ctx);
-		let anal: LL1Analyzer =  new LL1Analyzer(this);
-		let next: IntervalSet =  anal.LOOK(s, ctx);
-		return next;
-	}
+	// @NotNull
+	nextTokens(s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
     /**
 	 * Compute the set of valid tokens that can occur starting in {@code s} and
 	 * staying in same rule. {@link Token#EPSILON} is in set if we reach end of
 	 * rule.
      */
+	// @NotNull
+    nextTokens(/*@NotNull*/ s: ATNState): IntervalSet;
+
 	@NotNull
-    nextTokens(@NotNull s: ATNState): IntervalSet {
-        if ( s.nextTokenWithinRule != null ) return s.nextTokenWithinRule;
-        s.nextTokenWithinRule = nextTokens(s, PredictionContext.EMPTY_LOCAL);
-        s.nextTokenWithinRule.setReadonly(true);
-        return s.nextTokenWithinRule;
-    }
+	nextTokens(s: ATNState, ctx?: PredictionContext): IntervalSet {
+		if (ctx) {
+			let anal: LL1Analyzer =  new LL1Analyzer(this);
+			let next: IntervalSet =  anal.LOOK(s, ctx);
+			return next;
+		} else {
+			if ( s.nextTokenWithinRule ) {
+				return s.nextTokenWithinRule;
+			}
 
-	addState(@Nullable state: ATNState): void {
-		if (state != null) {
-			state.atn = this;
-			state.stateNumber = states.size();
+			s.nextTokenWithinRule = this.nextTokens(s, PredictionContext.EMPTY_LOCAL);
+			s.nextTokenWithinRule.setReadonly(true);
+			return s.nextTokenWithinRule;
 		}
-
-		states.add(state);
 	}
 
-	removeState(@NotNull state: ATNState): void {
-		states.set(state.stateNumber, null); // just free mem, don't shift states in list
+	addState(state: ATNState): void {
+		state.atn = this;
+		state.stateNumber = this.states.length;
+		this.states.push(state);
 	}
 
 	defineMode(@NotNull name: string, @NotNull s: TokensStartState): void {
-		modeNameToStartState.put(name, s);
-		modeToStartState.add(s);
-		modeToDFA = Arrays.copyOf(modeToDFA, modeToStartState.size());
-		modeToDFA[modeToDFA.length - 1] = new DFA(s);
-		defineDecisionState(s);
+		this.modeNameToStartState.set(name, s);
+		this.modeToStartState.push(s);
+		this.modeToDFA.push(new DFA(s));
+		this.defineDecisionState(s);
 	}
 
 	defineDecisionState(@NotNull s: DecisionState): number {
-		decisionToState.add(s);
-		s.decision = decisionToState.size()-1;
-		decisionToDFA = Arrays.copyOf(decisionToDFA, decisionToState.size());
-		decisionToDFA[decisionToDFA.length - 1] = new DFA(s, s.decision);
+		this.decisionToState.push(s);
+		s.decision = this.decisionToState.length-1;
+		this.decisionToDFA.push(new DFA(s, s.decision));
 		return s.decision;
 	}
 
-    getDecisionState(decision: number): DecisionState {
-        if ( !decisionToState.isEmpty() ) {
-            return decisionToState.get(decision);
+    getDecisionState(decision: number): DecisionState | undefined {
+        if ( this.decisionToState.length > 0 ) {
+            return this.decisionToState[decision];
         }
-        return null;
+        return undefined;
     }
 
 	getNumberOfDecisions(): number {
-		return decisionToState.size();
+		return this.decisionToState.length;
 	}
 
 	/**
@@ -216,14 +232,14 @@ export class ATN {
 	 * number {@code stateNumber}
 	 */
 	@NotNull
-	getExpectedTokens(stateNumber: number, @Nullable context: RuleContext): IntervalSet {
-		if (stateNumber < 0 || stateNumber >= states.size()) {
-			throw new IllegalArgumentException("Invalid state number.");
+	getExpectedTokens(stateNumber: number, context: RuleContext | undefined): IntervalSet {
+		if (stateNumber < 0 || stateNumber >= this.states.length) {
+			throw new RangeError("Invalid state number.");
 		}
 
-		let ctx: RuleContext =  context;
-		let s: ATNState =  states.get(stateNumber);
-		let following: IntervalSet =  nextTokens(s);
+		let ctx: RuleContext | undefined =  context;
+		let s: ATNState =  this.states[stateNumber];
+		let following: IntervalSet =  this.nextTokens(s);
 		if (!following.contains(Token.EPSILON)) {
 			return following;
 		}
@@ -232,9 +248,9 @@ export class ATN {
 		expected.addAll(following);
 		expected.remove(Token.EPSILON);
 		while (ctx != null && ctx.invokingState >= 0 && following.contains(Token.EPSILON)) {
-			let invokingState: ATNState =  states.get(ctx.invokingState);
-			let rt: RuleTransition =  (RuleTransition)invokingState.transition(0);
-			following = nextTokens(rt.followState);
+			let invokingState: ATNState =  this.states[ctx.invokingState];
+			let rt: RuleTransition =  invokingState.transition(0) as RuleTransition;
+			following = this.nextTokens(rt.followState);
 			expected.addAll(following);
 			expected.remove(Token.EPSILON);
 			ctx = ctx.parent;
@@ -246,4 +262,8 @@ export class ATN {
 
 		return expected;
 	}
+}
+
+export namespace ATN {
+	export const INVALID_ALT_NUMBER: number = 0;
 }

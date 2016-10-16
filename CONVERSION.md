@@ -69,7 +69,9 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ActionTransition.java
 * [x] atn\AmbiguityInfo.java
 * [x] atn\ArrayPredictionContext.java
-* [ ] atn\ATN.java
+* [x] atn\ATN.java
+  * [x] ~~`ATN.removeState`~~ (Not required by runtime-only code)
+  * [x] ~~`ATN.addState(undefined)`~~ (*Hopefully* not required by runtime-only code)
 * [ ] atn\ATNConfig.java
 * [ ] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java

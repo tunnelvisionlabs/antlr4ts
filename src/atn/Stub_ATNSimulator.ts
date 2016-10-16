@@ -1,4 +1,4 @@
-import { ATN } from './Stub_ATN';
+import { ATN } from './ATN';
 
 export abstract class ATNSimulator {
 	atn: ATN;
