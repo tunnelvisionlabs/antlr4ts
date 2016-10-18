@@ -686,12 +686,18 @@ export class BitSet implements Iterable<number>{
 			return false;
 		}
 
-		if (this.length() !== obj.length()) {
+		const len = this.length();
+
+		if (len !== obj.length()) {
 			return false;
 		}
 
-		let bound = getIndex(this.length() - 1);
-		for (let i = 0; i < bound; i++) {
+		if (len=== 0) {
+			return true;
+		}
+
+		let bound = getIndex(len - 1);
+		for (let i = 0; i <= bound; i++) {
 			if (this.data[i] !== obj.data[i]) {
 				return false;
 			}

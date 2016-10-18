@@ -50,6 +50,78 @@ describe("BitSet Tests", function() {
 
 		it("equals itself", ()=>{
 			assert( empty.equals(empty));
+		});
+
+		it("equals oversize", ()=>{
+			const o = new BitSet(100);
+			assert(o.size() >= 100);
+			assert(o.size() <= 116);
+			assert(o.isEmpty());
+			assert(o.equals(empty));
+			assert(empty.equals(o));
+		})
+
+		it("grows on deman", ()=>{
+			const a = primes.clone();
+			a.set(1000,1050);
+			a.xor(primes);
+			a.flip(1004, 1050);
+			a.clear(2000,2003);
+			assert.equal(a, "{1000, 1001, 1002, 1003}");
+		})
+
+		it("oversize truncation", ()=>{
+			const o = new BitSet(100);
+			const p = new BitSet(200);
+			let a = o.clone()
+			a.and(p);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = p.clone()
+			a.and(o);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = o.clone()
+			a.or(p);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = p.clone()
+			a.or(o);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = o.clone()
+			a.xor(p);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = p.clone()
+			a.xor(o);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = o.clone()
+			a.andNot(p);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = p.clone()
+			a.andNot(o);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 0);
+
+			a = p.clone();
+			a.clear(7,1000);
+			assert(a.isEmpty());
+			assert.equal(a.size(), 208);
+
+			a = p.clone();
+			a.set(75);
+			a.xor(o);
+			assert.equal(a, "{75}");
 		})
     });
 
@@ -174,9 +246,21 @@ describe("BitSet Tests", function() {
 	describe("range operations", ()=> {
 		const ninetys = new BitSet();
 		ninetys.set(90, 99);
+		const tens = new BitSet();
+		tens.set(10,19);
 
 		const composites = new BitSet(primes);
 		composites.flip(2,99);
+
+		it("tens or ninetys", ()=>{
+			const a = tens.clone();
+			a.or(ninetys);
+			assert.equal( a, "{10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}");
+
+			const b = ninetys.clone();
+			b.or(tens);
+			assert(a.equals(b));
+		})
 
 		it("primes and composites isEmpty", ()=>{
 			let a = primes.clone();
