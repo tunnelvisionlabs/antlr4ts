@@ -176,7 +176,7 @@ export abstract class ATNState {
 	}
 
 	getTransitions(): Transition[] {
-		return this.transitions.splice(0);
+		return this.transitions.slice(0);
 	}
 
 	getNumberOfTransitions(): number {
