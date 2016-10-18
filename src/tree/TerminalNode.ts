@@ -40,7 +40,7 @@ import { Token } from '../Token';
 
 export class TerminalNode implements ParseTree  {
 	symbol: Token;
-	parent: RuleNode;
+	parent: RuleNode | undefined;
 
 	constructor(symbol: Token) {
 		this.symbol = symbol;
@@ -57,7 +57,7 @@ export class TerminalNode implements ParseTree  {
 	}
 
 	@Override
-	getParent(): RuleNode {
+	getParent(): RuleNode | undefined {
 		return this.parent;
 	}
 
