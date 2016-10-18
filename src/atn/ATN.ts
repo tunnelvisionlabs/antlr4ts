@@ -34,7 +34,7 @@ import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { ATNState } from './ATNState';
 import { ATNType } from './ATNType';
 import { DecisionState } from './DecisionState';
-import { DFA } from '../dfa/Stub_DFA';
+import { DFA } from '../dfa/DFA';
 import { IntervalSet } from '../misc/IntervalSet';
 import { LexerAction } from './LexerAction';
 import { LL1Analyzer } from './Stub_LL1Analyzer';

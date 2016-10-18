@@ -8,7 +8,7 @@ export class ParserRuleContext extends RuleContext {
 
 	getParent(): ParserRuleContext { throw new Error("Not implemented"); }
 
-	static emptyContext(): RuleContext { throw new Error("Not implemented"); }
+	static emptyContext(): ParserRuleContext { throw new Error("Not implemented"); }
 
 	enterRule(listener: ParseTreeListener): void { }
 	exitRule(listener: ParseTreeListener): void { }
