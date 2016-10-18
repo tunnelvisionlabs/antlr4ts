@@ -128,18 +128,24 @@ export class ParserRuleContext extends RuleContext {
 	enterRule(listener: ParseTreeListener): void { }
 	exitRule(listener: ParseTreeListener): void { }
 
-	/** Does not set parent link; other add methods do that */
-	addChild(t: ParserRuleContext | ErrorNode | Token): void {
-		let tree: ParseTree;
-		if (t instanceof ParserRuleContext || t instanceof ErrorNode ) {
-			tree = t;
+	addChild(t: TerminalNode): void;
+	addChild(ruleInvocation: RuleContext): void;
+	addChild(matchedToken: Token): void;
+	addChild(t: TerminalNode | RuleContext | Token): void {
+		if (t instanceof TerminalNode) {
+			// Does not set parent link
+		} else if (t instanceof RuleContext) {
+			// Does not set parent link
 		} else {
-			tree = new TerminalNode(t);
+			t = new TerminalNode(t);
+			t.parent = this;
 		}
-		if (!this.children)
-			this.children = [tree] as Array<ParseTree>;
-		else
-			this.children.push(tree);
+
+		if (!this.children) {
+			this.children = [t];
+		} else {
+			this.children.push(t);
+		}
 	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
@@ -158,8 +164,9 @@ export class ParserRuleContext extends RuleContext {
 //	}
 
 	addErrorNode(badToken: Token): ErrorNode {
-		let t = new ErrorNode(badToken, this);
+		let t = new ErrorNode(badToken);
 		this.addChild(t);
+		t.parent = this;
 		return t;
 	}
 

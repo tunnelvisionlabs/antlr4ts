@@ -42,9 +42,8 @@ export class TerminalNode implements ParseTree  {
 	symbol: Token;
 	parent: RuleNode | undefined;
 
-	constructor(symbol: Token, parent? : RuleNode) {
+	constructor(symbol: Token) {
 		this.symbol = symbol;
-		this.parent = parent;
 	}
 
 	@Override
