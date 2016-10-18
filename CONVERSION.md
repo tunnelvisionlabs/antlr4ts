@@ -145,12 +145,12 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] dfa\AbstractEdgeMap.java
 * [x] dfa\AcceptStateInfo.java
 * [x] dfa\ArrayEdgeMap.java
-* [ ] dfa\DFA.java
-* [ ] dfa\DFASerializer.java
-* [ ] dfa\DFAState.java
+* [x] dfa\DFA.java
+* [x] dfa\DFASerializer.java
+* [x] dfa\DFAState.java
 * [x] dfa\EdgeMap.java
 * [x] dfa\EmptyEdgeMap.java
-* [ ] dfa\LexerDFASerializer.java
+* [x] dfa\LexerDFASerializer.java
 * [x] dfa\SingletonEdgeMap.java
 * [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)

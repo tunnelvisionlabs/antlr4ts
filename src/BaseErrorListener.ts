@@ -39,7 +39,7 @@
 
 import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BitSet } from './misc/Stub_BitSet';
-import { DFA } from './dfa/Stub_DFA';
+import { DFA } from './dfa/DFA';
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
 import { Parser } from './Stub_Parser';

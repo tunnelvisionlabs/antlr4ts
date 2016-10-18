@@ -30,6 +30,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.7771056-07:00
 
+import { AbstractEdgeMap } from './AbstractEdgeMap';
+import { AcceptStateInfo } from './AcceptStateInfo';
+import { ATN } from '../atn/ATN';
+import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
+import { BitSet } from '../misc/Stub_BitSet';
+import { DFA } from './DFA';
+import { EmptyEdgeMap } from './EmptyEdgeMap';
+import { LexerActionExecutor } from '../atn/LexerActionExecutor';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull, Override } from '../Decorators';
+import { PredictionContext } from '../atn/PredictionContext';
+import { SemanticContext } from '../atn/SemanticContext';
+
+import * as assert from 'assert';
+
 /** A DFA state represents a set of possible ATN configurations.
  *  As Aho, Sethi, Ullman p. 117 says "The DFA uses its state
  *  to keep track of all possible states the ATN can be in after
@@ -63,85 +78,77 @@ export class DFAState {
 	/** {@code edges.get(symbol)} points to target of symbol.
 	 */
 	@NotNull
-	private volatile AbstractEdgeMap<DFAState> edges;
+	private edges: AbstractEdgeMap<DFAState>;
 
-	private acceptStateInfo: AcceptStateInfo; 
+	private acceptStateInfo: AcceptStateInfo | undefined;
 
 	/** These keys for these edges are the top level element of the global context. */
 	@NotNull
-	private volatile AbstractEdgeMap<DFAState> contextEdges;
+	private contextEdges: AbstractEdgeMap<DFAState>;
 
 	/** Symbols in this set require a global context transition before matching an input symbol. */
-	@Nullable
-	private contextSymbols: BitSet; 
+	private contextSymbols: BitSet | undefined;
 
 	/**
 	 * This list is computed by {@link ParserATNSimulator#predicateDFAState}.
 	 */
-	@Nullable
-	predicates: PredPrediction[]; 
+	predicates: DFAState.PredPrediction[] | undefined;
 
-	/** Map a predicate to a predicted alternative. */
-	public static class PredPrediction {
-		@NotNull
-		pred: SemanticContext;  // never null; at least SemanticContext.NONE
-		alt: number; 
-		public PredPrediction(@NotNull SemanticContext pred, int alt) {
-			this.alt = alt;
-			this.pred = pred;
+	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ configs: ATNConfigSet);
+	constructor(/*@NotNull*/ emptyEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ emptyContextEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ configs: ATNConfigSet);
+	constructor(arg0: DFA | EmptyEdgeMap<DFAState>, arg1: ATNConfigSet | EmptyEdgeMap<DFAState>, arg2?: ATNConfigSet) {
+		let emptyContextEdges: EmptyEdgeMap<DFAState>;
+		let emptyEdges: EmptyEdgeMap<DFAState>;
+		let configs: ATNConfigSet;
+		if (arg0 instanceof DFA) {
+			emptyEdges = arg0.getEmptyEdgeMap();
+			emptyContextEdges = arg0.getEmptyContextEdgeMap();
+			configs = <ATNConfigSet>arg1;
+		} else {
+			emptyEdges = arg0;
+			emptyContextEdges = <EmptyEdgeMap<DFAState>>arg1;
+			configs = <ATNConfigSet>arg2;
 		}
-		@Override
-		toString(): string {
-			return "("+pred+", "+alt+ ")";
-		}
-	}
 
-	 constructor(@NotNull dfa: DFA, @NotNull configs: ATNConfigSet)  {
-		this(dfa.getEmptyEdgeMap(), dfa.getEmptyContextEdgeMap(), configs);
-	}
-
-	 constructor1(@NotNull emptyContextEdges: EmptyEdgeMap<DFAState> emptyEdges,@NotNull EmptyEdgeMap<DFAState>, @NotNull configs: ATNConfigSet)  {
 		this.configs = configs;
 		this.edges = emptyEdges;
 		this.contextEdges = emptyContextEdges;
 	}
 
 	isContextSensitive(): boolean {
-		return contextSymbols != null;
+		return !!this.contextSymbols;
 	}
 
 	isContextSymbol(symbol: number): boolean {
-		if (!isContextSensitive() || symbol < edges.minIndex) {
+		if (!this.isContextSensitive() || symbol < this.edges.minIndex) {
 			return false;
 		}
 
-		return contextSymbols.get(symbol - edges.minIndex);
+		return (<BitSet>this.contextSymbols).get(symbol - this.edges.minIndex);
 	}
 
 	setContextSymbol(symbol: number): void {
-		assert(isContextSensitive());
-		if (symbol < edges.minIndex) {
+		assert(this.isContextSensitive());
+		if (symbol < this.edges.minIndex) {
 			return;
 		}
 
-		contextSymbols.set(symbol - edges.minIndex);
+		(<BitSet>this.contextSymbols).set(symbol - this.edges.minIndex);
 	}
 
 	setContextSensitive(atn: ATN): void {
-		assert(!configs.isOutermostConfigSet());
-		if (isContextSensitive()) {
+		assert(!this.configs.isOutermostConfigSet());
+		if (this.isContextSensitive()) {
 			return;
 		}
 
-		synchronized (this) {
-			if (contextSymbols == null) {
-				contextSymbols = new BitSet();
-			}
+		if (!this.contextSymbols) {
+			this.contextSymbols = new BitSet();
 		}
 	}
 
-	getAcceptStateInfo(): AcceptStateInfo {
-		return acceptStateInfo;
+	getAcceptStateInfo(): AcceptStateInfo | undefined {
+		return this.acceptStateInfo;
 	}
 
 	setAcceptState(acceptStateInfo: AcceptStateInfo): void {
@@ -149,71 +156,69 @@ export class DFAState {
 	}
 
 	isAcceptState(): boolean {
-		return acceptStateInfo != null;
+		return !!this.acceptStateInfo;
 	}
 
 	getPrediction(): number {
-		if (acceptStateInfo == null) {
+		if (!this.acceptStateInfo) {
 			return ATN.INVALID_ALT_NUMBER;
 		}
 
-		return acceptStateInfo.getPrediction();
+		return this.acceptStateInfo.getPrediction();
 	}
 
-	getLexerActionExecutor(): LexerActionExecutor {
-		if (acceptStateInfo == null) {
-			return null;
+	getLexerActionExecutor(): LexerActionExecutor | undefined {
+		if (!this.acceptStateInfo) {
+			return undefined;
 		}
 
-		return acceptStateInfo.getLexerActionExecutor();
+		return this.acceptStateInfo.getLexerActionExecutor();
 	}
 
-	getTarget(symbol: number): DFAState {
-		return edges.get(symbol);
+	getTarget(symbol: number): DFAState | undefined {
+		return this.edges.get(symbol);
 	}
 
 	setTarget(symbol: number, target: DFAState): void {
-		edges = edges.put(symbol, target);
+		this.edges = this.edges.put(symbol, target);
 	}
 
 	getEdgeMap(): Map<number, DFAState> {
-		return edges.toMap();
+		return this.edges.toMap();
 	}
 
-	public synchronized DFAState getContextTarget(int invokingState) {
-		if (invokingState == PredictionContext.EMPTY_FULL_STATE_KEY) {
+	getContextTarget(invokingState: number): DFAState | undefined {
+		if (invokingState === PredictionContext.EMPTY_FULL_STATE_KEY) {
 			invokingState = -1;
 		}
 
-		return contextEdges.get(invokingState);
+		return this.contextEdges.get(invokingState);
 	}
 
-	public synchronized void setContextTarget(int invokingState, DFAState target) {
-		if (!isContextSensitive()) {
-			throw new IllegalStateException("The state is not context sensitive.");
+	setContextTarget(invokingState: number, target: DFAState): void {
+		if (!this.isContextSensitive()) {
+			throw new Error("The state is not context sensitive.");
 		}
 
-		if (invokingState == PredictionContext.EMPTY_FULL_STATE_KEY) {
+		if (invokingState === PredictionContext.EMPTY_FULL_STATE_KEY) {
 			invokingState = -1;
 		}
 
-		contextEdges = contextEdges.put(invokingState, target);
+		this.contextEdges = this.contextEdges.put(invokingState, target);
 	}
 
 	getContextEdgeMap(): Map<number, DFAState> {
-		let map: Map<number, DFAState> =  contextEdges.toMap();
-		if (map.containsKey(-1)) {
-			if (map.size() == 1) {
-				return Collections.singletonMap(PredictionContext.EMPTY_FULL_STATE_KEY, map.get(-1));
+		let map: Map<number, DFAState> =  this.contextEdges.toMap();
+		if (map.has(-1)) {
+			if (map.size === 1) {
+				let result = new Map<number, DFAState>();
+				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, map.get(-1));
+				return result;
 			}
 			else {
-				try {
-					map.put(PredictionContext.EMPTY_FULL_STATE_KEY, map.remove(-1));
-				} catch (UnsupportedOperationException ex) {
-					// handles read only, non-singleton maps
-					map = new LinkedHashMap<Integer, DFAState>(map);
-					map.put(PredictionContext.EMPTY_FULL_STATE_KEY, map.remove(-1));
-				}
+				let removed = map.get(-1);
+				map.delete(-1);
+				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, removed);
 			}
 		}
 
@@ -223,7 +228,7 @@ export class DFAState {
 	@Override
 	hashCode(): number {
 		let hash: number =  MurmurHash.initialize(7);
-		hash = MurmurHash.update(hash, configs.hashCode());
+		hash = MurmurHash.update(hash, this.configs.hashCode());
 		hash = MurmurHash.finish(hash, 1);
 		return hash;
 	}
@@ -244,13 +249,13 @@ export class DFAState {
 	@Override
 	equals(o: any): boolean {
 		// compare set of ATN configurations in this set with other
-		if ( this==o ) return true;
+		if ( this===o ) return true;
 
 		if (!(o instanceof DFAState)) {
 			return false;
 		}
 
-		let other: DFAState =  (DFAState)o;
+		let other: DFAState =  o;
 		let sameSet: boolean =  this.configs.equals(other.configs);
 //		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
@@ -258,17 +263,35 @@ export class DFAState {
 
 	@Override
 	toString(): string {
-        let buf: StringBuilder =  new StringBuilder();
-        buf.append(stateNumber).append(":").append(configs);
-        if ( isAcceptState() ) {
-            buf.append("=>");
-            if ( predicates!=null ) {
-                buf.append(Arrays.toString(predicates));
+        let buf = "";
+        buf += (this.stateNumber) + (":") + (this.configs);
+        if ( this.isAcceptState() ) {
+            buf += ("=>");
+            if ( this.predicates ) {
+                buf += this.predicates;
             }
             else {
-                buf.append(getPrediction());
+                buf += (this.getPrediction());
             }
         }
 		return buf.toString();
+	}
+}
+
+export namespace DFAState {
+	/** Map a predicate to a predicted alternative. */
+	export class PredPrediction {
+		@NotNull
+		pred: SemanticContext;  // never null; at least SemanticContext.NONE
+		alt: number;
+		constructor(@NotNull pred: SemanticContext, alt: number) {
+			this.alt = alt;
+			this.pred = pred;
+		}
+
+		@Override
+		toString(): string {
+			return "("+this.pred+", "+this.alt+ ")";
+		}
 	}
 }

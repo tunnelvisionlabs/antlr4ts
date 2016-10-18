@@ -31,7 +31,7 @@
 import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
 import { BitSet } from './misc/Stub_BitSet';
-import { DFA } from './dfa/Stub_DFA';
+import { DFA } from './dfa/DFA';
 import { Parser } from './Stub_Parser';
 import { SimulatorState } from './atn/SimulatorState';
 import { Token } from './Token';

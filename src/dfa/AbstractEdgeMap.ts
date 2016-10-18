@@ -37,8 +37,8 @@ import * as assert from 'assert';
  * @author Sam Harwell
  */
 export abstract class AbstractEdgeMap<T> implements EdgeMap<T> {
-	protected minIndex: number;
-	protected maxIndex: number;
+	readonly minIndex: number;
+	readonly maxIndex: number;
 
 	constructor(minIndex: number, maxIndex: number) {
 		// the allowed range (with minIndex and maxIndex inclusive) should be less than 2^32
