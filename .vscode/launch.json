@@ -8,7 +8,7 @@
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
             "args": [
-                "--debug"
+                "--debug", "-R", "dot"
             ],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": "tsc",
