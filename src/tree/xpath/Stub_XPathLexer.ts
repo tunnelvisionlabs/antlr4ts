@@ -1,6 +1,6 @@
-import { Lexer } from "./Stub_Lexer";
-import { RecognitionException } from "./RecognitionException";
-import { XPathLexerErrorListener } from "./tree/xpath/XPathLexerErrorListener";
+import { Lexer } from "../../Stub_Lexer";
+import { RecognitionException } from "../../RecognitionException";
+import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 
 export class XPathLexer extends Lexer {
 	constructor(input: any) { super(); throw new Error("Not implemented"); }
