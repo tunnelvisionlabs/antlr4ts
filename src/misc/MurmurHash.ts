@@ -57,7 +57,7 @@ export namespace MurmurHash {
 	 * @param value the value to add to the current hash
 	 * @return the updated intermediate hash value
 	 */
-	export function update(hash: number, value: number | string | Equatable ): number {
+	export function update(hash: number, value: number | string | Equatable | null | undefined): number {
 		const c1: number =  0xCC9E2D51;
 		const c2: number =  0x1B873593;
 		const r1: number =  15;

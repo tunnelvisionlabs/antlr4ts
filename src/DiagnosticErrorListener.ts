@@ -52,8 +52,8 @@
  * @author Sam Harwell
  */
 
-import { ATNConfig } from './atn/Stub_ATNConfig';
-import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { ATNConfig } from './atn/ATNConfig';
+import { ATNConfigSet } from './atn/ATNConfigSet';
 import { BaseErrorListener } from "./BaseErrorListener";
 import { BitSet } from './misc/Stub_BitSet';
 import { DFA } from './dfa/DFA';
@@ -61,6 +61,7 @@ import { Parser } from './Stub_Parser';
 import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
+import { asIterable } from './misc/Stubs';
 
 export class DiagnosticErrorListener extends BaseErrorListener {
 
@@ -160,7 +161,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		}
 
 		let result: BitSet = new BitSet();
-		for (let config of configs) {
+		for (let config of asIterable(configs)) {
 			result.set(config.getAlt());
 		}
 

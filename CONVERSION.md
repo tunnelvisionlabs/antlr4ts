@@ -72,8 +72,8 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ATN.java
   * [x] ~~`ATN.removeState`~~ (Not required by runtime-only code)
   * [x] ~~`ATN.addState(undefined)`~~ (*Hopefully* not required by runtime-only code)
-* [ ] atn\ATNConfig.java
-* [ ] atn\ATNConfigSet.java
+* [x] atn\ATNConfig.java
+* [x] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java
 * [ ] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java

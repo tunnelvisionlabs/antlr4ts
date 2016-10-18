@@ -37,7 +37,7 @@
  * @author Sam Harwell
  */
 
-import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { ATNConfigSet } from './atn/ATNConfigSet';
 import { BitSet } from './misc/Stub_BitSet';
 import { DFA } from './dfa/DFA';
 import { RecognitionException } from "./RecognitionException";
