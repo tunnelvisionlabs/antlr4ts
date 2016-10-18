@@ -76,11 +76,11 @@ export class RecognitionException extends Error {
 				ctx: ParserRuleContext | undefined,
 				message: string);
 
-     constructor(
-         recognizer: Lexer | Recognizer<Token, any> | undefined,
-         input: CharStream | IntStream | undefined,
-         ctx?: ParserRuleContext,
-         message?: string) {
+	 constructor(
+		 recognizer: Lexer | Recognizer<Token, any> | undefined,
+		 input: CharStream | IntStream | undefined,
+		 ctx?: ParserRuleContext,
+		 message?: string) {
 		 super(message);
 
 		this.recognizer = recognizer;

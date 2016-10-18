@@ -185,10 +185,10 @@ export class RuleContext implements RuleNode {
 	setAltNumber(altNumber: number): void { }
 
 	@Override
-    getChild(i: number): RuleContext {
-        // HACK: for now we return undefined, rather than throw.
+	getChild(i: number): RuleContext {
+		// HACK: for now we return undefined, rather than throw.
 		// throw new RangeError("No child contexts");
-	    return undefined as any as RuleContext;
+		return undefined as any as RuleContext;
 	}
 
 	@Override
@@ -228,11 +228,11 @@ export class RuleContext implements RuleNode {
 
 	toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
 
-    toString(
-        arg1?: Recognizer<any, any> | string[],
-        stop?: RuleContext)
-        : string
-    {
+	toString(
+		arg1?: Recognizer<any, any> | string[],
+		stop?: RuleContext)
+		: string
+	{
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 

@@ -43,7 +43,7 @@ import { RuleNode } from "./RuleNode";
  *  upon no viable alternative exceptions.
  */
 export class ErrorNode extends TerminalNode {
-    constructor(token: Token, parent?: RuleNode ) {
+	constructor(token: Token, parent?: RuleNode) {
 		super(token, parent);
 	}
 

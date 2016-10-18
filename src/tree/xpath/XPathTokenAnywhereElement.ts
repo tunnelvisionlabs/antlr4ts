@@ -43,7 +43,7 @@ export class XPathTokenAnywhereElement extends XPathElement {
 	}
 
 	@Override
-    evaluate(t: ParseTree): ParseTree[] {
+	evaluate(t: ParseTree): ParseTree[] {
 		return Trees.findAllTokenNodes(t, this.tokenType);
 	}
 }

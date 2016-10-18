@@ -18,7 +18,6 @@ import { XPathTokenElement } from "./XPathTokenElement";
 import { XPathWildcardAnywhereElement } from "./XPathWildcardAnywhereElement";
 import { XPathWildcardElement } from "./XPathWildcardElement";
 
-
 /**
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
  * parse trees.
@@ -62,7 +61,6 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * <p>
  * Whitespace is not allowed.</p>
  */
-
 export class XPath {
 	static WILDCARD: string =  "*"; // word not operator/separator
 	static NOT: string =  "!"; 	   // word for invert operator
@@ -82,8 +80,8 @@ export class XPath {
 
 	split(path: string): XPathElement[] {
 		let input = new ANTLRInputStream(path);
-        let lexer = new XPathLexer(input);
-	    lexer.recover = (e: LexerNoViableAltException) => { throw e; };
+		let lexer = new XPathLexer(input);
+		lexer.recover = (e: LexerNoViableAltException) => { throw e; };
 
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(new XPathLexerErrorListener());
@@ -91,18 +89,18 @@ export class XPath {
 		try {
 			tokenStream.fill();
 		}
-        catch (e) {
-            if (e instanceof LexerNoViableAltException) {
-                let pos: number = lexer.getCharPositionInLine();
-                let msg: string = "Invalid tokens or characters at index " + pos + " in path '" + path + "' -- " + e.message;
-                throw new RangeError(msg);
-            }
-            throw e;
-        }
+		catch (e) {
+			if (e instanceof LexerNoViableAltException) {
+				let pos: number = lexer.getCharPositionInLine();
+				let msg: string = "Invalid tokens or characters at index " + pos + " in path '" + path + "' -- " + e.message;
+				throw new RangeError(msg);
+			}
+			throw e;
+		}
 
 		let tokens: Token[] = tokenStream.getTokens();
 //		System.out.println("path="+path+"=>"+tokens);
-	    let elements = [] as XPathElement[];
+		let elements = [] as XPathElement[];
 		let n: number =  tokens.length;
 		let i: number = 0;
 loop:
@@ -140,7 +138,7 @@ loop:
 					throw new Error("Unknowth path element "+el);
 			}
 		}
-	    return elements; // WAS elements.toArray(new XPathElement[0]);
+		return elements; // WAS elements.toArray(new XPathElement[0]);
 	}
 
 	/**
@@ -154,12 +152,12 @@ loop:
 		}
 		let word = wordToken.getText() || ""; // WORKAROUND getText can return Unknown!
 		let ttype: number =  this.parser.getTokenType(word);
-        let ruleIndex: number = this.parser.getRuleIndex(word);
+		let ruleIndex: number = this.parser.getRuleIndex(word);
 		switch ( wordToken.getType() ) {
 			case XPathLexer.WILDCARD :
-                return anywhere ?
-                    new XPathWildcardAnywhereElement() :
-                    new XPathWildcardElement();
+				return anywhere ?
+					new XPathWildcardAnywhereElement() :
+					new XPathWildcardElement();
 			case XPathLexer.TOKEN_REF :
 			case XPathLexer.STRING :
 				if ( ttype===Token.INVALID_TYPE ) {
@@ -168,7 +166,7 @@ loop:
 									" isn't a valid token name");
 				}
 				return anywhere ?
-                    new XPathTokenAnywhereElement(word,  ttype) :
+					new XPathTokenAnywhereElement(word,  ttype) :
 					new XPathTokenElement(word,  ttype);
 			default :
 				if ( ruleIndex==-1 ) {
@@ -192,9 +190,9 @@ loop:
 	 * path. The root {@code /} is relative to the node passed to
 	 * {@link #evaluate}.
 	 */
-    evaluate(t: ParseTree ): ParseTree[] {
-        let dummyRoot = new ParserRuleContext();
-        dummyRoot.addChild(t as ParserRuleContext);
+	evaluate(t: ParseTree ): ParseTree[] {
+		let dummyRoot = new ParserRuleContext();
+		dummyRoot.addChild(t as ParserRuleContext);
 
 		let work = [dummyRoot] as ParseTree[];
 
@@ -206,8 +204,8 @@ loop:
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.
-                    let matching = this.elements[i].evaluate(node);
-				    next = next.concat(matching);
+					let matching = this.elements[i].evaluate(node);
+					next = next.concat(matching);
 				}
 			}
 			i++;

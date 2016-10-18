@@ -43,8 +43,8 @@ export class TerminalNode implements ParseTree  {
 	parent: RuleNode | undefined;
 
 	constructor(symbol: Token, parent? : RuleNode) {
-        this.symbol = symbol;
-	    this.parent = parent;
+		this.symbol = symbol;
+		this.parent = parent;
 	}
 
 	@Override

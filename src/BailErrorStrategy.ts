@@ -75,10 +75,9 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
      */
     @Override
     recover(recognizer: Parser, e: RecognitionException): void {
-        let context: ParserRuleContext | undefined;
-        context = recognizer.getContext();
-        for (; context; context = context.getParent())
-        {
+		let context: ParserRuleContext | undefined;
+		context = recognizer.getContext();
+		for (; context; context = context.getParent()) {
 			context.exception = e;
 		}
 
@@ -93,9 +92,9 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
     {
 		let e = new InputMismatchException(recognizer);
-        let context: ParserRuleContext | undefined =
-            recognizer.getContext();
-        for (; context; context = context.getParent()) {
+		let context: ParserRuleContext | undefined =
+			recognizer.getContext();
+		for (; context; context = context.getParent()) {
 			context.exception = e;
 		}
 

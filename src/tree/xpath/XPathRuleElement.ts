@@ -44,13 +44,13 @@ export class XPathRuleElement extends XPathElement {
 	}
 
 	@Override
-    evaluate(t: ParseTree): ParseTree[] {
+	evaluate(t: ParseTree): ParseTree[] {
 				// return all children of t that match nodeName
-        let nodes = [] as ParseTree[];
+		let nodes = [] as ParseTree[];
 		for (let c of Trees.getChildren(t)) {
 			if ( c instanceof ParserRuleContext ) {
-                if ((c.getRuleIndex() === this.ruleIndex && !this.invert) ||
-                    (c.getRuleIndex() !== this.ruleIndex && this.invert) )
+				if ((c.getRuleIndex() === this.ruleIndex && !this.invert) ||
+					(c.getRuleIndex() !== this.ruleIndex && this.invert) )
 				{
 					nodes.push(c);
 				}
