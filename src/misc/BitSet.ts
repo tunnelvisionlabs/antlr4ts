@@ -27,25 +27,65 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+import * as assert from "assert";
+import * as util from "util";
+import {MurmurHash} from "./MurmurHash";
 
+/**
+ * Private empty array used to construct empty BitSets
+ */
 const EMPTY_DATA: Uint16Array = new Uint16Array(0);
 
 /**
- * Gets the index of the element in `BitSet.data` containing the bit with the specified index.
+ * Gets the word index of the `UInt16` element in `BitSet.data` containing the bit with the specified index.
  */
 function getIndex(bitNumber: number) {
 	return bitNumber >>> 4;
 }
 
 /**
- * Gets the offset within the element of `BitSet.data` containing the bit with the specified index.
+ * Convert a word index into the bit index of the LSB of that word
  */
-function getOffset(bitNumber: number) {
-	return bitNumber % 16;
+
+function unIndex( n: number) {
+	return n*16;
 }
 
 /**
- * A lookup table for number of set bits in a 16-bit integer.
+ * Get's the bit number of the least signficant bit set LSB which is set in a word non-zero word;
+ * Bit numbers run from LSB to MSB starting with 0.
+ */
+function findLSBSet(word: number) {
+	let bit = 1;
+	for (let i = 0; i < 16; i++) {
+		if ((word & bit) !== 0) return i;
+		bit = bit << 1;
+	}
+	throw new RangeError("No specified bit found");
+}
+
+function findMSBSet(word: number) {
+	let bit = 1<<15;;
+	for (let i = 15; i >= 0; i--) {
+		if ((word & bit) !== 0) return i;
+		bit = bit >> 1;
+	}
+	throw new RangeError("No specified bit found");
+}
+
+/**
+ * Gets a 16-bit mask with bit numbers fromBit to toBit (inclusive) set.
+ * Bit numbers run from LSB to MSB starting with 0.
+ */
+function bitsFor(fromBit: number, toBit: number ): number {
+	fromBit &= 0xF;
+	toBit &= 0xF
+	if (fromBit === toBit) return 1 << fromBit;
+	return ((0xFFFF >> (15-toBit)) ^ (0xFFFF >> (16-fromBit)));
+}
+
+/**
+ * A lookup table for number of set bits in a 16-bit integer.   This is used to quickly count the cardinality (number of unique elements) of a BitSet.
  */
 const POP_CNT: Uint8Array = new Uint8Array(65536);
 for (let i = 0; i < 16; i++) {
@@ -63,7 +103,7 @@ for (let i = 0; i < 16; i++) {
 	}
 }
 
-export class BitSet {
+export class BitSet implements Iterable<number>{
 	private data: Uint16Array;
 
 	/**
@@ -76,14 +116,38 @@ export class BitSet {
 	 * through `nbits-1`. All bits are initially `false`.
 	 */
 	constructor(nbits: number);
-	constructor(nbits?: number) {
-		if (!nbits) {
+
+	/**
+	 * Creates a bit set from a iterable list of numbers (including another BitSet);
+	 */
+	constructor( numbers: Iterable<number>);
+
+	/*
+	** constructor implementation
+	*/
+	constructor(arg?: number | Iterable<number>) {
+		if (!arg) {
 			// covering the case of unspecified and nbits===0
 			this.data = EMPTY_DATA;
-		} else if (nbits < 0) {
-			throw new RangeError("nbits cannot be negative");
+		} else if (typeof arg === "number") {
+			if (arg < 0) {
+				throw new RangeError("nbits cannot be negative");
+			} else {
+				this.data = new Uint16Array(getIndex(arg - 1) + 1);
+			}
 		} else {
-			this.data = new Uint16Array(getIndex(nbits - 1) + 1);
+			if (arg instanceof BitSet) {
+				this.data = arg.data.slice(0); // Clone the data
+			} else {
+				let max = -1;
+				for (let v of arg) {
+					if ( max < v ) max = v;
+				}
+				this.data = new Uint16Array(getIndex(max - 1) + 1);
+				for (let v of arg) {
+					this.set(v);
+				}
+			}
 		}
 	}
 
@@ -93,15 +157,52 @@ export class BitSet {
 	 * bit in the bit set argument also had the value `true`.
 	 */
 	and(set: BitSet): void {
-		throw "not implemented";
+		const data = this.data;
+		const other = set.data;
+		const words = Math.min(data.length, other.length);
+
+		let lastWord = -1;	// Keep track of index of last non-zero word
+
+		for (let i=0; i<words; i++) {
+			if ((data[i] &= other[i]) !== 0) {
+				lastWord = i;;
+			}
+		}
+
+		if (lastWord === -1) {
+			this.data = EMPTY_DATA;
+		}
+
+		if (lastWord < data.length - 1) {
+			this.data = data.slice(0, lastWord+1);
+		}
 	}
 
 	/**
 	 * Clears all of the bits in this `BitSet` whose corresponding bit is set in the specified `BitSet`.
 	 */
 	andNot(set: BitSet): void {
-		throw "not implemented";
+		const data = this.data;
+		const other = set.data;
+		const words = Math.min(data.length, other.length);
+
+		let lastWord = -1;	// Keep track of index of last non-zero word
+
+		for (let i=0; i<words; i++) {
+			if ((data[i] &= (other[i]^0xFFFF)) !== 0) {
+				lastWord = i;;
+			}
+		}
+
+		if (lastWord === -1) {
+			this.data = EMPTY_DATA;
+		}
+
+		if (lastWord < data.length - 1) {
+			this.data = data.slice(0, lastWord+1);
+		}
 	}
+
 
 	/**
 	 * Returns the number of bits set to `true` in this `BitSet`.
@@ -110,11 +211,12 @@ export class BitSet {
 		if (this.isEmpty()) {
 			return 0;
 		}
-
-		let bound = getIndex(this.length() - 1);
+		const data = this.data;
+		const length= data.length;
 		let result = 0;
-		for (let i = 0; i < bound; i++) {
-			result += POP_CNT[this.data[i]];
+
+		for (let i = 0; i < length; i++) {
+			result += POP_CNT[data[i]];
 		}
 
 		return result;
@@ -176,11 +278,20 @@ export class BitSet {
 		if (toIndex == null) {
 			toIndex = fromIndex;
 		}
+		if (fromIndex < 0 || toIndex < fromIndex) throw new RangeError();
 
-		// NOTE: This could be implemented more efficiently
-		let set = new BitSet(toIndex);
-		set.set(fromIndex, toIndex);
-		this.xor(set);
+		let word = getIndex(fromIndex);
+		const lastWord = getIndex(toIndex);
+
+		if (word === lastWord) {
+			this.data[word] ^= bitsFor(fromIndex, toIndex);
+		} else {
+			this.data[word++] ^= bitsFor(fromIndex,15);
+			while (word < lastWord) {
+				this.data[word++] ^= 0xFFFF;
+			}
+			this.data[word++] ^= bitsFor(0,toIndex)
+		}
 	}
 
 	/**
@@ -203,17 +314,14 @@ export class BitSet {
 	 */
 	get(fromIndex: number, toIndex: number): BitSet;
 	get(fromIndex: number, toIndex?: number): boolean | BitSet {
-		if (toIndex == null) {
-			// return a boolean
-			throw "not implemented";
+		if (toIndex === undefined) {
+			return !!(this.data[getIndex(fromIndex)] & bitsFor(fromIndex, fromIndex));
 		} else {
 			// return a BitSet
-			let count = toIndex - fromIndex;
-			let result = new BitSet(count);
-			for (let i = 0; i < count; i++) {
-				result.set(i, this.get(i + fromIndex));
+			let result = new BitSet(toIndex+1);
+			for (let i = fromIndex; i <= toIndex; i++) {
+				result.set(i, this.get(i));
 			}
-
 			return result;
 		}
 	}
@@ -224,13 +332,13 @@ export class BitSet {
 	 * @param set `BitSet` to intersect with
 	 */
 	intersects(set: BitSet): boolean {
-		let smallerLength = Math.max(this.length(), set.length());
+		let smallerLength = Math.min(this.length(), set.length());
 		if (smallerLength === 0) {
 			return false;
 		}
 
 		let bound = getIndex(smallerLength - 1);
-		for (let i = 0; i < bound; i++) {
+		for (let i = 0; i <= bound; i++) {
 			if ((this.data[i] & set.data[i]) !== 0) {
 				return true;
 			}
@@ -251,11 +359,13 @@ export class BitSet {
 	 * zero if the `BitSet` contains no set bits.
 	 */
 	length(): number {
-		throw "not implemented";
+		if (!this.data.length) return 0;
+		return this.previousSetBit(unIndex(this.data.length) - 1) + 1;
 	}
 
 	/**
-	 * Returns the index of the first bit that is set to `false` that occurs on or after the specified starting index.
+	 * Returns the index of the first bit that is set to `false` that occurs on or after the specified starting index,
+	 * If no such bit exists then `-1` is returned.
 	 *
 	 * @param fromIndex the index to start checking from (inclusive)
 	 *
@@ -266,12 +376,27 @@ export class BitSet {
 			throw new RangeError("fromIndex cannot be negative");
 		}
 
-		throw "not implemented";
+		const data = this.data;
+		const length = data.length;
+		let word = getIndex(fromIndex);
+		if (word > length) return -1;
+
+		let ignore = 0xFFFF ^ bitsFor(fromIndex,15);
+
+		if ((data[word] | ignore) === 0xFFFF) {
+			word++;
+			ignore  = 0;
+			for (; word < length; word++ ) {
+				if (data[word] !== 0xFFFF ) break;
+			}
+			if (word === length ) return -1;	// Hit the end
+		}
+		return unIndex(word) + findLSBSet((data[word]|ignore) ^ 0xFFFF);
 	}
 
 	/**
-	 * Returns the index of the first bit that is set to `true` that occurs on or after the specified starting index. If
-	 * no such bit exists then `-1` is returned.
+	 * Returns the index of the first bit that is set to `true` that occurs on or after the specified starting index.
+	 * If no such bit exists then `-1` is returned.
 	 *
 	 * To iterate over the `true` bits in a `BitSet`, use the following loop:
 	 *
@@ -290,7 +415,21 @@ export class BitSet {
 			throw new RangeError("fromIndex cannot be negative");
 		}
 
-		throw "not implemented";
+		const data = this.data;
+		const length = data.length;
+		let word = getIndex(fromIndex);
+		if (word > length) return -1;
+		let mask = bitsFor(fromIndex,15);
+
+		if ((data[word] & mask) === 0) {
+			word++;
+			mask = 0xFFFF;
+			for (; word < length; word++ ) {
+				if (data[word] !== 0) break;
+			}
+			if (word >= length ) return -1;
+		}
+		return unIndex(word) + findLSBSet(data[word] & mask);
 	}
 
 	/**
@@ -299,12 +438,34 @@ export class BitSet {
 	 * set argument has the value `true`.
 	 */
 	or(set: BitSet): void {
-		if (set.length() > this.size()) {
-			// Need to resize
-			throw "not implemented";
+		const data = this.data;
+		const other = set.data;
+		const minWords = Math.min(data.length, other.length);
+		const words = Math.max(data.length, other.length);
+		const dest = data.length === words ? data : new Uint16Array(words);
+
+		let lastWord = -1;
+
+		// Or those words both sets have in common
+
+		for (let i=0; i<minWords; i++) {
+			if ((dest[i] = data[i] | other[i]) !== 0) lastWord = i;
 		}
 
-		throw "not implemented";
+		// Copy words from larger set (if there is one)
+
+		const longer = data.length > other.length ? data : other;
+		for (let i=minWords; i<words; i++) {
+			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+		}
+
+		if (lastWord === -1) {
+			this.data = EMPTY_DATA;
+		} else if (dest.length === lastWord+1) {
+			this.data = dest;
+		} else {
+			this.data = dest.slice(0,lastWord);
+		}
 	}
 
 	/**
@@ -316,12 +477,28 @@ export class BitSet {
 	 * @throws RangeError if the specified index is less than `-1`
 	 */
 	previousClearBit(fromIndex: number): number {
-		if (fromIndex < -1) {
-			throw new RangeError("fromIndex cannot be less than -1");
+		if (fromIndex < 0) {
+			throw new RangeError("fromIndex cannot be negative");
 		}
 
-		throw "not implemented";
+		const data = this.data;
+		const length = data.length;
+		let word = getIndex(fromIndex);
+		if (word >= length) word = length-1;
+
+		let ignore = 0xFFFF ^ bitsFor(0,fromIndex);
+
+		if ((data[word] | ignore) === 0xFFFF) {
+			ignore  = 0;
+			word--;
+			for (; word >= 0; word-- ) {
+				if (data[word] !== 0xFFFF ) break;
+			}
+			if (word < 0 ) return -1;	// Hit the end
+		}
+		return unIndex(word) + findMSBSet((data[word]|ignore) ^ 0xFFFF);
 	}
+
 
 	/**
 	 * Returns the index of the nearest bit that is set to `true` that occurs on or before the specified starting index.
@@ -340,11 +517,26 @@ export class BitSet {
 	 * @throws RangeError if the specified index is less than `-1`
 	 */
 	previousSetBit(fromIndex: number): number {
-		if (fromIndex < -1) {
-			throw new RangeError("fromIndex cannot be less than -1");
+		if (fromIndex < 0) {
+			throw new RangeError("fromIndex cannot be negative");
 		}
 
-		throw "not implemented";
+		const data = this.data;
+		const length = data.length;
+		let word = getIndex(fromIndex);
+		if (word >= length) word = length-1;
+
+		let mask = bitsFor(0,fromIndex);
+
+		if ((data[word] & mask) === 0) {
+			word--;
+			mask = 0xFFFF;
+			for (; word >= 0; word-- ) {
+				if (data[word] !== 0) break;
+			}
+			if (word < 0 ) return -1;
+		}
+		return unIndex(word) + findMSBSet(data[word] & mask);
 	}
 
 	/**
@@ -388,7 +580,7 @@ export class BitSet {
 	 */
 	set(fromIndex: number, toIndex: number, value: boolean): void;
 	set(fromIndex: number, toIndex?: boolean | number, value?: boolean): void {
-		if (toIndex == null) {
+		if (toIndex === undefined) {
 			toIndex = fromIndex;
 			value = true;
 		} else if (typeof toIndex === 'boolean') {
@@ -396,23 +588,50 @@ export class BitSet {
 			toIndex = fromIndex;
 		}
 
-		if (value == null) {
+		if (value === undefined) {
 			value = true;
 		}
 
-		if (fromIndex < 0) {
-			throw new RangeError("fromIndex cannot be negative");
+		if (fromIndex < 0 || fromIndex > toIndex) {
+			throw new RangeError();
 		}
 
-		if (toIndex < 0) {
-			throw new RangeError("toIndex cannot be negative");
+		let word = getIndex(fromIndex);
+		let lastWord = getIndex(toIndex);
+
+		if (value && lastWord >= this.data.length) {
+			// Grow array "just enough" for bits we need to set
+			var temp = new Uint16Array(lastWord+1);
+			this.data.forEach((value, index) => temp[index] = value);
+			this.data = temp;
+		} else if (!value) {
+			// But there is no need to grow array to clear bits.
+			if (word >= this.data.length)
+				return; // Early exit
+			if (lastWord >= this.data.length) {
+				// Adjust work to fit array
+				lastWord = this.data.length-1;
+				toIndex = this.data.length * 16 - 1;
+			}
 		}
 
-		if (fromIndex > toIndex) {
-			throw new RangeError("fromIndex cannot be greater than toIndex");
+		if (word === lastWord) {
+				this._setBits(word, value, bitsFor(fromIndex, toIndex));
+		} else {
+			this._setBits(word++, value, bitsFor(fromIndex, 15));
+			while (word < lastWord) {
+				this.data[word++] = value ? 0xFFFF : 0;
+			}
+			this._setBits(word, value, bitsFor(0, toIndex));
 		}
+	}
 
-		throw "not implemented";
+	private _setBits(word: number, value: boolean, mask: number) {
+		if (value) {
+			this.data[word] |= mask;
+		} else {
+			this.data[word] &= 0xFFFF ^ mask;
+		}
 	}
 
 	/**
@@ -431,9 +650,9 @@ export class BitSet {
 	 * then `bytes.length === (s.length()+7)/8` and `s.get(n) === ((bytes[n/8] & (1<<(n%8))) != 0)` for all
 	 * `n < 8 * bytes.length`.
 	 */
-	toByteArray(): Int8Array {
-		throw "not implemented";
-	}
+	// toByteArray(): Int8Array {
+	// 	throw "NOT IMPLEMENTED";
+	// }
 
 	/**
 	 * Returns a new integer array containing all the bits in this bit set.
@@ -443,12 +662,12 @@ export class BitSet {
 	 * then `integers.length === (s.length()+31)/32` and `s.get(n) === ((integers[n/32] & (1<<(n%32))) != 0)` for all
 	 * `n < 32 * integers.length`.
 	 */
-	toIntegerArray(): Int32Array {
-		throw "not implemented";
-	}
+	// toIntegerArray(): Int32Array {
+	// 	throw "NOT IMPLEMENTED";
+	// }
 
 	hashCode(): number {
-		throw "not implemented";
+		return MurmurHash.hashCode(this.data, 22);
 	}
 
 	/**
@@ -520,12 +739,12 @@ export class BitSet {
 		return result;
 	}
 
-	static valueOf(bytes: Int8Array): BitSet;
-	static valueOf(buffer: ArrayBuffer): BitSet;
-	static valueOf(integers: Int32Array): BitSet;
-	static valueOf(data: Int8Array | Int32Array | ArrayBuffer): BitSet {
-		throw "not implemented";
-	}
+	// static valueOf(bytes: Int8Array): BitSet;
+	// static valueOf(buffer: ArrayBuffer): BitSet;
+	// static valueOf(integers: Int32Array): BitSet;
+	// static valueOf(data: Int8Array | Int32Array | ArrayBuffer): BitSet {
+	// 	throw "NOT IMPLEMENTED";
+	// }
 
 	/**
 	 * Performs a logical **XOR** of this bit set with the bit set argument. This bit set is modified so that a bit in
@@ -535,6 +754,69 @@ export class BitSet {
 	 * * The bit initially has the value `false`, and the corresponding bit in the argument has the value `true`.
 	 */
 	xor(set: BitSet): void {
-		throw "not implemented";
+		const data = this.data;
+		const other = set.data;
+		const minWords = Math.min(data.length, other.length);
+		const words = Math.max(data.length, other.length);
+		const dest = data.length === words ? data : new Uint16Array(words);
+
+		let lastWord = -1;
+
+		// Xor those words both sets have in common
+
+		for (let i=0; i<minWords; i++) {
+			if ((dest[i] = data[i] ^ other[i]) !== 0) lastWord = i;
+		}
+
+		// Copy words from larger set (if there is one)
+
+		const longer = data.length > other.length ? data : other;
+		for (let i=minWords; i<words; i++) {
+			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+		}
+
+		if (lastWord === -1) {
+			this.data = EMPTY_DATA;
+		} else if (dest.length === lastWord+1) {
+			this.data = dest;
+		} else {
+			this.data = dest.slice(0,lastWord+1);
+		}
 	}
+
+	clone()  {
+		return new BitSet( this );
+	}
+
+	[Symbol.iterator](): IterableIterator<number> {
+		return new BitSetIterator(this.data);
+	}
+
+	// Overrides formatting for nodejs assert etc.
+	[(util.inspect as any).custom](): string {
+		return "BitSet " + this.toString();
+	}
+}
+
+class BitSetIterator implements IterableIterator<number>{
+	private index = 0;
+	private mask = 0xFFFF;
+
+	constructor (private data: Uint16Array) {}
+
+	next() {
+		while (this.index < this.data.length) {
+			const bits = this.data[this.index] & this.mask;;
+			if (bits !== 0) {
+				const bitNumber = unIndex(this.index) + findLSBSet(bits);
+				this.mask = bitsFor(bitNumber + 1, 15);
+				return {done: false, value: bitNumber};
+			}
+			this.index++;
+			this.mask = 0xFFFF;
+		}
+		return {done:true, value: -1};
+	}
+
+	[Symbol.iterator]():  IterableIterator<number> { return this; }
 }
