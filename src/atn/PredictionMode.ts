@@ -30,6 +30,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
+import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { asIterable } from '../misc/Stubs';
+import { ATN } from './ATN';
+import { ATNConfig } from './ATNConfig';
+import { ATNConfigSet } from './ATNConfigSet';
+import { ATNState } from './ATNState';
+import { BitSet } from '../misc/BitSet';
+import { Collection } from '../misc/Stubs';
+import { EqualityComparator } from '../misc/EqualityComparator';
+import { MurmurHash } from '../misc/MurmurHash';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Override } from '../Decorators';
+import { RuleStopState } from './RuleStopState';
+import { SemanticContext } from './SemanticContext';
+
 /**
  * This enumeration defines the prediction modes available in ANTLR 4 along with
  * utility methods for analyzing configuration sets for conflicts and/or
@@ -94,16 +109,19 @@ export enum PredictionMode {
 	 * This prediction mode does not provide any guarantees for prediction
 	 * behavior for syntactically-incorrect inputs.</p>
 	 */
-	LL_EXACT_AMBIG_DETECTION;
+	LL_EXACT_AMBIG_DETECTION
+}
 
+export namespace PredictionMode {
 	/** A Map that uses just the state and the stack context as the key. */
-	static class AltAndContextMap extends FlexibleHashMap<ATNConfig,BitSet> {
-		public AltAndContextMap() {
+	// NOTE: Base type used to be FlexibleHashMap<ATNConfig, BitSet>
+	class AltAndContextMap extends Array2DHashMap<ATNConfig, BitSet> {
+		constructor() {
 			super(AltAndContextConfigEqualityComparator.INSTANCE);
 		}
 	}
 
-	private static final class AltAndContextConfigEqualityComparator extends AbstractEqualityComparator<ATNConfig> {
+	class AltAndContextConfigEqualityComparator implements EqualityComparator<ATNConfig> {
 		static INSTANCE: AltAndContextConfigEqualityComparator =  new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
@@ -223,7 +241,7 @@ export enum PredictionMode {
 	 * the configurations to strip out all of the predicates so that a standard
 	 * {@link ATNConfigSet} will merge everything ignoring predicates.</p>
 	 */
-	static hasSLLConflictTerminatingPrediction(mode: PredictionMode, @NotNull configs: ATNConfigSet): boolean {
+	export function hasSLLConflictTerminatingPrediction(mode: PredictionMode, /*@NotNull*/ configs: ATNConfigSet): boolean {
 		/* Configs in rule stop states indicate reaching the end of the decision
 		 * rule (local context) or end of start rule (full context). If all
 		 * configs meet this condition, then none of the configurations is able
@@ -241,8 +259,8 @@ export enum PredictionMode {
 			if ( configs.hasSemanticContext() ) {
 				// dup configs, tossing out semantic predicates
 				let dup: ATNConfigSet =  new ATNConfigSet();
-				for (let c of configs) {
-					c = c.transform(c.getState(), SemanticContext.NONE, false);
+				for (let c of asIterable(configs)) {
+					c = c.transform(c.getState(), false, SemanticContext.NONE);
 					dup.add(c);
 				}
 				configs = dup;
@@ -253,7 +271,7 @@ export enum PredictionMode {
 		// pure SLL or combined SLL+LL mode parsing
 
 		let altsets: Collection<BitSet> =  getConflictingAltSubsets(configs);
-		let heuristic: boolean = 
+		let heuristic: boolean =
 			hasConflictingAltSet(altsets) && !hasStateAssociatedWithOneAlt(configs);
 		return heuristic;
 	}
@@ -268,8 +286,8 @@ export enum PredictionMode {
 	 * @return {@code true} if any configuration in {@code configs} is in a
 	 * {@link RuleStopState}, otherwise {@code false}
 	 */
-	static hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
-		for (let c of configs) {
+	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
+		for (let c of asIterable(configs)) {
 			if (c.getState() instanceof RuleStopState) {
 				return true;
 			}
@@ -288,8 +306,8 @@ export enum PredictionMode {
 	 * @return {@code true} if all configurations in {@code configs} are in a
 	 * {@link RuleStopState}, otherwise {@code false}
 	 */
-	static allConfigsInRuleStopStates(@NotNull configs: ATNConfigSet): boolean {
-		for (let config of configs) {
+	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
+		for (let config of asIterable(configs)) {
 			if (!(config.getState() instanceof RuleStopState)) {
 				return false;
 			}
@@ -445,7 +463,7 @@ export enum PredictionMode {
 	 * we need exact ambiguity detection when the sets look like
 	 * {@code A={{1,2}}} or {@code {{1,2},{1,2}}}, etc...</p>
 	 */
-	static resolvesToJustOneViableAlt(@NotNull altsets: Collection<BitSet>): number {
+	export function resolvesToJustOneViableAlt(/*@NotNull*/ altsets: Collection<BitSet>): number {
 		return getSingleViableAlt(altsets);
 	}
 
@@ -457,7 +475,7 @@ export enum PredictionMode {
 	 * @return {@code true} if every {@link BitSet} in {@code altsets} has
 	 * {@link BitSet#cardinality cardinality} &gt; 1, otherwise {@code false}
 	 */
-	static allSubsetsConflict(@NotNull altsets: Collection<BitSet>): boolean {
+	export function allSubsetsConflict(/*@NotNull*/ altsets: Collection<BitSet>): boolean {
 		return !hasNonConflictingAltSet(altsets);
 	}
 
@@ -469,8 +487,8 @@ export enum PredictionMode {
 	 * @return {@code true} if {@code altsets} contains a {@link BitSet} with
 	 * {@link BitSet#cardinality cardinality} 1, otherwise {@code false}
 	 */
-	static hasNonConflictingAltSet(@NotNull altsets: Collection<BitSet>): boolean {
-		for (let alts of altsets) {
+	export function hasNonConflictingAltSet(/*@NotNull*/ altsets: Collection<BitSet>): boolean {
+		for (let alts of asIterable(altsets)) {
 			if ( alts.cardinality()==1 ) {
 				return true;
 			}
@@ -486,8 +504,8 @@ export enum PredictionMode {
 	 * @return {@code true} if {@code altsets} contains a {@link BitSet} with
 	 * {@link BitSet#cardinality cardinality} &gt; 1, otherwise {@code false}
 	 */
-	static hasConflictingAltSet(@NotNull altsets: Collection<BitSet>): boolean {
-		for (let alts of altsets) {
+	export function hasConflictingAltSet(/*@NotNull*/ altsets: Collection<BitSet>): boolean {
+		for (let alts of asIterable(altsets)) {
 			if ( alts.cardinality()>1 ) {
 				return true;
 			}
@@ -502,13 +520,16 @@ export enum PredictionMode {
 	 * @return {@code true} if every member of {@code altsets} is equal to the
 	 * others, otherwise {@code false}
 	 */
-	static allSubsetsEqual(@NotNull altsets: Collection<BitSet>): boolean {
-		let it: Iterator<BitSet> =  altsets.iterator();
-		let first: BitSet =  it.next();
-		while ( it.hasNext() ) {
-			let next: BitSet =  it.next();
-			if ( !next.equals(first) ) return false;
+	export function allSubsetsEqual(/*@NotNull*/ altsets: Collection<BitSet>): boolean {
+		let first: BitSet | undefined;
+		for (let alts of asIterable(altsets)) {
+			if (!first) {
+				first = alts;
+			} else if (!alts.equals(first)) {
+				return false;
+			}
 		}
+
 		return true;
 	}
 
@@ -519,7 +540,7 @@ export enum PredictionMode {
 	 *
 	 * @param altsets a collection of alternative subsets
 	 */
-	static getUniqueAlt(@NotNull altsets: Collection<BitSet>): number {
+	export function getUniqueAlt(/*@NotNull*/ altsets: Collection<BitSet>): number {
 		let all: BitSet =  getAlts(altsets);
 		if ( all.cardinality()==1 ) return all.nextSetBit(0);
 		return ATN.INVALID_ALT_NUMBER;
@@ -533,24 +554,26 @@ export enum PredictionMode {
 	 * @param altsets a collection of alternative subsets
 	 * @return the set of represented alternatives in {@code altsets}
 	 */
-	static getAlts(@NotNull altsets: Collection<BitSet>): BitSet {
-		let all: BitSet =  new BitSet();
-		for (let alts of altsets) {
-			all.or(alts);
-		}
-		return all;
-	}
+	export function getAlts(/*@NotNull*/ altsets: Collection<BitSet>): BitSet;
 
 	/**
 	 * Get union of all alts from configs.
 	 *
 	 * @since 4.5
 	 */
-	@NotNull
-	static getAlts(@NotNull configs: ATNConfigSet): BitSet {
+	// @NotNull
+	export function getAlts(/*@NotNull*/ configs: ATNConfigSet): BitSet;
+
+	export function getAlts(/*@NotNull*/ configs: Collection<BitSet> | ATNConfigSet): BitSet {
 		let alts: BitSet =  new BitSet();
-		for (let config of configs) {
-			alts.set(config.getAlt());
+		if (configs instanceof ATNConfigSet) {
+			for (let config of asIterable(configs)) {
+				alts.set(config.getAlt());
+			}
+		} else {
+			for (let config of asIterable(configs)) {
+				alts.or(config);
+			}
 		}
 		return alts;
 	}
@@ -564,11 +587,11 @@ export enum PredictionMode {
 	 * alt and not pred
 	 * </pre>
 	 */
-	@NotNull
-	static getConflictingAltSubsets(@NotNull configs: ATNConfigSet): Collection<BitSet> {
+	// @NotNull
+	export function getConflictingAltSubsets(/*@NotNull*/ configs: ATNConfigSet): Collection<BitSet> {
 		let configToAlts: AltAndContextMap =  new AltAndContextMap();
-		for (let c of configs) {
-			let alts: BitSet =  configToAlts.get(c);
+		for (let c of asIterable(configs)) {
+			let alts: BitSet | undefined =  configToAlts.get(c);
 			if ( alts==null ) {
 				alts = new BitSet();
 				configToAlts.put(c, alts);
@@ -586,11 +609,11 @@ export enum PredictionMode {
 	 * map[c.{@link ATNConfig#state state}] U= c.{@link ATNConfig#getAlt getAlt()}
 	 * </pre>
 	 */
-	@NotNull
-	static getStateToAltMap(@NotNull configs: ATNConfigSet): Map<ATNState, BitSet> {
-		let m: Map<ATNState, BitSet> =  new HashMap<ATNState, BitSet>();
-		for (let c of configs) {
-			let alts: BitSet =  m.get(c.getState());
+	// @NotNull
+	export function getStateToAltMap(/*@NotNull*/ configs: ATNConfigSet): Array2DHashMap<ATNState, BitSet> {
+		let m: Array2DHashMap<ATNState, BitSet> =  new Array2DHashMap<ATNState, BitSet>(ObjectEqualityComparator.INSTANCE);
+		for (let c of asIterable(configs)) {
+			let alts: BitSet | undefined =  m.get(c.getState());
 			if ( alts==null ) {
 				alts = new BitSet();
 				m.put(c.getState(), alts);
@@ -600,17 +623,17 @@ export enum PredictionMode {
 		return m;
 	}
 
-	static hasStateAssociatedWithOneAlt(@NotNull configs: ATNConfigSet): boolean {
-		let x: Map<ATNState, BitSet> =  getStateToAltMap(configs);
-		for (let alts of x.values()) {
+	export function hasStateAssociatedWithOneAlt(/*@NotNull*/ configs: ATNConfigSet): boolean {
+		let x: Array2DHashMap<ATNState, BitSet> =  getStateToAltMap(configs);
+		for (let alts of asIterable(x.values())) {
 			if ( alts.cardinality()==1 ) return true;
 		}
 		return false;
 	}
 
-	static getSingleViableAlt(@NotNull altsets: Collection<BitSet>): number {
+	export function getSingleViableAlt(/*@NotNull*/ altsets: Collection<BitSet>): number {
 		let viableAlts: BitSet =  new BitSet();
-		for (let alts of altsets) {
+		for (let alts of asIterable(altsets)) {
 			let minAlt: number =  alts.nextSetBit(0);
 			viableAlts.set(minAlt);
 			if ( viableAlts.cardinality()>1 ) { // more than 1 viable alt

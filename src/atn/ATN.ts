@@ -36,6 +36,7 @@ import { ATNType } from './ATNType';
 import { DecisionState } from './DecisionState';
 import { DFA } from '../dfa/DFA';
 import { IntervalSet } from '../misc/IntervalSet';
+import { InvalidState } from './InvalidState';
 import { LexerAction } from './LexerAction';
 import { LL1Analyzer } from './Stub_LL1Analyzer';
 import { NotNull } from '../Decorators';
@@ -185,6 +186,14 @@ export class ATN {
 		state.atn = this;
 		state.stateNumber = this.states.length;
 		this.states.push(state);
+	}
+
+	removeState(@NotNull state: ATNState): void {
+		// just replace the state, don't shift states in list
+		let invalidState = new InvalidState();
+		invalidState.atn = this;
+		invalidState.stateNumber = state.stateNumber;
+		this.states[state.stateNumber] = invalidState;
 	}
 
 	defineMode(@NotNull name: string, @NotNull s: TokensStartState): void {
