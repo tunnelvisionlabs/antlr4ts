@@ -34,7 +34,7 @@ import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
-import { BitSet } from '../misc/Stub_BitSet';
+import { BitSet } from '../misc/BitSet';
 import { DFA } from './DFA';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerActionExecutor } from '../atn/LexerActionExecutor';
@@ -73,7 +73,7 @@ export class DFAState {
 	stateNumber: number =  -1;
 
 	@NotNull
-	configs: ATNConfigSet; 
+	configs: ATNConfigSet;
 
 	/** {@code edges.get(symbol)} points to target of symbol.
 	 */
