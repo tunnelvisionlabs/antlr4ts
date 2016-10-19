@@ -1,4 +1,5 @@
-import { ATNSimulator } from './Stub_ATNSimulator';
+import { ATNSimulator } from './ATNSimulator';
 
 export class ParserATNSimulator extends ATNSimulator {
+	reset(): void { throw new Error("Not implemented"); }
 }

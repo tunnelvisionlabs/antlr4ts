@@ -34,7 +34,7 @@ import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
 import { ATN } from './ATN';
 import { ATNConfig } from './ATNConfig';
-import { ATNSimulator } from './Stub_ATNSimulator';
+import { ATNSimulator } from './ATNSimulator';
 import { ATNState } from './ATNState';
 import { BitSet } from '../misc/Stub_BitSet';
 import { Collection, JavaIterator, asIterable } from '../misc/Stubs';
