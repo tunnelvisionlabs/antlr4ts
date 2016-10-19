@@ -38,7 +38,7 @@ import { ATNType } from '../atn/ATNType';
 import { DFASerializer } from './DFASerializer';
 import { DFAState } from './DFAState';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
-import { LexerATNSimulator } from '../atn/Stub_LexerATNSimulator';
+import { LexerATNSimulator } from '../atn/LexerATNSimulator';
 import { LexerDFASerializer } from './LexerDFASerializer';
 import { NotNull } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';

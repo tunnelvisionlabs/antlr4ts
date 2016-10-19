@@ -46,7 +46,7 @@ export class AcceptStateInfo {
 	private lexerActionExecutor?: LexerActionExecutor;
 
 	constructor(prediction: number);
-	constructor(prediction: number, lexerActionExecutor: LexerActionExecutor);
+	constructor(prediction: number, lexerActionExecutor: LexerActionExecutor | undefined);
 	constructor(prediction: number, lexerActionExecutor?: LexerActionExecutor) {
 		this.prediction = prediction;
 		this.lexerActionExecutor = lexerActionExecutor;

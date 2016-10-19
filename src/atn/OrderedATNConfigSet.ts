@@ -30,22 +30,29 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.9444556-07:00
 
+import { ATNConfig } from './ATNConfig';
+import { ATNConfigSet } from './ATNConfigSet';
+import { Override } from '../Decorators';
+
 /**
  *
  * @author Sam Harwell
  */
 export class OrderedATNConfigSet extends ATNConfigSet {
 
-	 constructor()  {
-	}
-
-	 constructor1(set: ATNConfigSet, readonly: boolean)  {
-		super(set, readonly);
+	constructor();
+	constructor(set: ATNConfigSet, readonly: boolean);
+	constructor(set?: ATNConfigSet, readonly?: boolean) {
+		if (set != null && readonly != null) {
+			super(set, readonly);
+		} else {
+			super();
+		}
 	}
 
 	@Override
 	clone(readonly: boolean): ATNConfigSet {
-		let copy: OrderedATNConfigSet =  new OrderedATNConfigSet(this, readonly);
+		let copy: OrderedATNConfigSet = new OrderedATNConfigSet(this, readonly);
 		if (!readonly && this.isReadOnly()) {
 			copy.addAll(this);
 		}
@@ -54,12 +61,13 @@ export class OrderedATNConfigSet extends ATNConfigSet {
 	}
 
 	@Override
-	protected getKey(e: ATNConfig): number {
-		return e.hashCode();
+	protected getKey(e: ATNConfig): { state: number, alt: number } {
+		// This is a specially crafted key to ensure configurations are only merged if they are equal
+		return { state: 0, alt: e.hashCode() };
 	}
 
 	@Override
-	protected canMerge(left: ATNConfig, leftKey: number, right: ATNConfig): boolean {
+	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
 		return left.equals(right);
 	}
 

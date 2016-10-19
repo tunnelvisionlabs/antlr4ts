@@ -97,7 +97,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LexerAction.java
 * [x] atn\LexerActionExecutor.java
 * [x] atn\LexerActionType.java
-* [ ] atn\LexerATNSimulator.java
+* [x] atn\LexerATNSimulator.java
 * [x] atn\LexerChannelAction.java
 * [x] atn\LexerCustomAction.java
 * [x] atn\LexerIndexedCustomAction.java
@@ -111,7 +111,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LookaheadEventInfo.java
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
-* [ ] atn\OrderedATNConfigSet.java
+* [x] atn\OrderedATNConfigSet.java
 * [x] atn\ParseInfo.java
 * [ ] atn\ParserATNSimulator.java
 * [x] atn\PlusBlockStartState.java

@@ -66,5 +66,5 @@ export namespace Lexer {
 	export const SKIP: number = -3;
 
 	export const MIN_CHAR_VALUE: number = 0x0000;
-	export const MAX_CHAR_VALUE: number = 0xFFFE;
+	export const MAX_CHAR_VALUE: number = 0xFFFF;
 }
