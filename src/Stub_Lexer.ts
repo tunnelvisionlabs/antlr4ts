@@ -1,8 +1,12 @@
 import { CharStream } from './CharStream';
 import { Recognizer } from './Stub_Recognizer';
 import { Token } from './Token';
+import { TokenFactory } from "./TokenFactory";
+import { TokenSource } from "./TokenSource";
 
-export abstract class Lexer extends Recognizer<number, any> {
+export abstract class Lexer extends Recognizer<number, any>
+    implements TokenSource
+{
 	static get DEFAULT_TOKEN_CHANNEL(): number {
 		return Token.DEFAULT_CHANNEL;
 	}
@@ -42,6 +46,18 @@ export abstract class Lexer extends Recognizer<number, any> {
 	setInputStream(antlrInputStream: CharStream): void { throw new Error("Not implemented"); }
 
 	nextToken(): Token { throw new Error("Not implemented"); }
+
+    getLine(): number { throw new Error("Not implemented"); }
+
+    getCharPositionInLine(): number { throw new Error("Not implemented"); }
+
+    getInputStream(): CharStream | undefined { throw new Error("Not implemented"); }
+
+    getSourceName(): string { throw new Error("Not implemented"); }
+
+    setTokenFactory(factory: TokenFactory): void {}
+
+    getTokenFactory(): TokenFactory { throw new Error("Not implemented"); }
 }
 
 export namespace Lexer {

@@ -30,7 +30,7 @@
 
 import { DFAState } from '../dfa/DFAState';
 import { NotNull } from '../Decorators';
-import { ParserRuleContext } from '../Stub_ParserRuleContext';
+import { ParserRuleContext } from '../ParserRuleContext';
 
 /**
  *

@@ -30,19 +30,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
+import { Arrays } from "../misc/Arrays";
 import { ATN } from '../atn/ATN';
-import { Parser } from '../Stub_Parser';
-import { ParserRuleContext } from '../Stub_ParserRuleContext';
-import { NotNull } from "../Decorators";
-import {Arrays} from "../misc/Arrays";
-import {RuleNode} from "./RuleNode";
-import {RuleContext} from "../RuleContext";
-import {ErrorNode} from "./ErrorNode";
-import {TerminalNode} from "./TerminalNode";
-import {Token} from "../Token";
-import {ParseTree} from "./ParseTree";
-import {Interval} from "../misc/Interval";
 import { CommonToken } from "../CommonToken";
+import { ErrorNode } from "./ErrorNode";
+import { Interval } from "../misc/Interval";
+import { NotNull, Nullable } from "../Decorators";
+import { Parser } from '../Stub_Parser';
+import { ParserRuleContext } from "../ParserRuleContext";
+import { ParseTree } from "./ParseTree";
+import { RuleContext } from "../RuleContext";
+import { RuleNode } from "./RuleNode";
+import { TerminalNode } from "./TerminalNode";
+import { Token } from "../Token";
 import * as Utils from "../misc/Utils";
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
@@ -185,75 +185,79 @@ export class Trees {
 		}
 	}
 
-	///** Get all descendents; includes t itself.
-	// *
-	// * @since 4.5.1
- //	 */
-	//static getDescendants(t: ParseTree): List<ParseTree> {
-	//	let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
-	//	nodes.add(t);
+	/** Get all descendents; includes t itself.
+	 *
+	 * @since 4.5.1
+	 */
+	static getDescendants(t: ParseTree): ParseTree[] {
+		let nodes: ParseTree[] = [];
 
-	//	let n: number =  t.getChildCount();
-	//	for (let i = 0 ; i < n ; i++){
-	//		nodes.addAll(getDescendants(t.getChild(i)));
-	//	}
-	//	return nodes;
-	//}
+		function recurse(e: ParseTree): void {
+			nodes.push(e);
+			const n = e.getChildCount();
+			for (let i = 0; i < n; i++) {
+				recurse(e.getChild(i));
+			}
+		}
 
+		recurse(t);
+		return nodes;
+	}
 
-	///** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
-	// *  inclusively using postorder traversal.  Recursive depth-first-search.
-	// *
-	// *  @since 4.5
-	// */
-	//@Nullable
-	//static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree, 
-	//																int startTokenIndex, // inclusive
-	//																stopTokenIndex: number): ParserRuleContext  // inclusive
-	//{
-	//	let n: number =  t.getChildCount();
-	//	for (let i = 0; i<n; i++) {
-	//		let child: ParseTree =  t.getChild(i);
-	//		let r: ParserRuleContext =  getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
-	//		if ( r!=null ) return r;
-	//	}
-	//	if ( t instanceof ParserRuleContext ) {
-	//		let r: ParserRuleContext =  (ParserRuleContext) t;
-	//		if ( startTokenIndex>=r.getStart().getTokenIndex() && // is range fully contained in t?
-	//			 (r.getStop()==null || stopTokenIndex<=r.getStop().getTokenIndex()) )
-	//		{
-	//			// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
-	//			return r;
-	//		}
-	//	}
-	//	return null;
-	//}
+	/** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
+	*  inclusively using postorder traversal.  Recursive depth-first-search.
+	*
+	*  @since 4.5
+	*/
+	@Nullable
+	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree, 
+											 startTokenIndex: number, // inclusive
+											stopTokenIndex: number // inclusive
+											): ParserRuleContext | undefined
+	{
+		let n: number =  t.getChildCount();
+		for (let i = 0; i<n; i++) {
+			let child: ParseTree =  t.getChild(i);
+			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
+			if ( r ) return r;
+		}
+		if ( t instanceof ParserRuleContext ) {
+			if ( startTokenIndex>=t.getStart().getTokenIndex() && // is range fully contained in t?
+				 (t.getStop()==null || stopTokenIndex<=t.getStop().getTokenIndex()) )
+			{
+				// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
+				return t;
+			}
+		}
+		return undefined;
+	}
 
-	///** Replace any subtree siblings of root that are completely to left
-	// *  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
-	// *  node. The source interval for t is not altered to suit smaller range!
-	// *
-	// *  WARNING: destructive to t.
-	// *
-	// *  @since 4.5.1
-	// */
-	//static stripChildrenOutOfRange(t: ParserRuleContext, 
-	//										   root: ParserRuleContext,
-	//										   startIndex: number,
-	//										   stopIndex: number): void
-	//{
-	//	if ( t==null ) return;
-	//	for (let i = 0; i < t.getChildCount(); i++) {
-	//		let child: ParseTree =  t.getChild(i);
-	//		let range: Interval =  child.getSourceInterval();
-	//		if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
-	//			if ( isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
-	//				let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
-	//				t.children.set(i, new TerminalNodeImpl(abbrev));
-	//			}
-	//		}
-	//	}
-	//}
+	/** Replace any subtree siblings of root that are completely to left
+	*  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
+	*  node. The source interval for t is not altered to suit smaller range!
+	*
+	*  WARNING: destructive to t.
+	*
+	*  @since 4.5.1
+	*/
+	static stripChildrenOutOfRange(t: ParserRuleContext, 
+											   root: ParserRuleContext,
+											   startIndex: number,
+											   stopIndex: number): void
+	{
+        if (!t) return;
+	    let count = t.getChildCount();
+		for (let i = 0; i < count; i++) {
+			let child = t.getChild(i);
+			let range: Interval =  child.getSourceInterval();
+			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
+				if ( Trees.isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
+					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
+					t.children[i] = new TerminalNode(abbrev); // HACK access to private
+				}
+			}
+		}
+	}
 
 	///** Return first node satisfying the pred
 	// *

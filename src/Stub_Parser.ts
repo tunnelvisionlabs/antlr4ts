@@ -1,7 +1,8 @@
 import { IntervalSet } from './misc/IntervalSet';
 import { ParserATNSimulator } from './atn/Stub_ParserATNSimulator';
-import { ParserRuleContext } from './Stub_ParserRuleContext';
+import { ParserRuleContext } from './ParserRuleContext';
 import { Recognizer } from './Stub_Recognizer';
+import { RuleContext } from './RuleContext';
 import { Token } from './Token';
 import { TokenStream } from './TokenStream';
 import { Vocabulary } from './Vocabulary';
@@ -35,4 +36,6 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     getATNWithBypassAlts(): any { throw new Error("Not implemented"); }
 
     getRuleIndex(tag: any): number { throw new Error("Not implemented"); }
+
+    getRuleInvocationStack(p: RuleContext): string[] { throw new Error("Not implemented"); }
 }

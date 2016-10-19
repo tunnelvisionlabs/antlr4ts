@@ -37,10 +37,10 @@
 
 import { ATNConfigSet } from './atn/ATNConfigSet';
 import { Parser } from './Stub_Parser';
-import { ParserRuleContext } from './Stub_ParserRuleContext';
-import {RecognitionException} from "./RecognitionException";
+import { ParserRuleContext } from './ParserRuleContext';
+import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Stub_Recognizer';
-import {Token} from "./Token";
+import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
 import { NotNull } from "./Decorators";

@@ -82,18 +82,24 @@
 
 import { ATN } from './atn/ATN';
 import { Parser } from './Stub_Parser';
-import { ParserRuleContext } from './Stub_ParserRuleContext';
 import { Recognizer } from './Stub_Recognizer';
-import {RuleNode} from "./tree/RuleNode";
-import {ParseTree as Tree } from "./tree/ParseTree";
+import { RuleNode } from "./tree/RuleNode";
+import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators"
-import {Trees} from "./tree/Trees";
-import {ParseTreeVisitor as ParserTreeVisitor} from "./tree/ParseTreeVisitor";
+import { Trees } from "./tree/Trees";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext implements RuleNode {
+	parent: RuleContext | undefined;
+	invokingState: number;
 
-	constructor(public readonly parent: RuleContext, public readonly invokingState = -1) {
+	constructor();
+	constructor(parent: RuleContext | undefined, invokingState: number);
+	constructor(parent?: RuleContext, invokingState?: number) {
+		this.parent = parent;
+		this.invokingState = invokingState != null ? invokingState : -1;
 	}
 
 	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
@@ -102,7 +108,7 @@ export class RuleContext implements RuleNode {
 
 	depth(): number {
 		let n =  0;
-		let p: RuleContext =  this;
+		let p: RuleContext | undefined = this;
 		while ( p ) {
 			p = p.parent;
 			n++;
@@ -128,7 +134,7 @@ export class RuleContext implements RuleNode {
 	getRuleContext(): RuleContext { return this; }
 
 	@Override
-	getParent(): RuleContext { return this.parent; }
+	getParent(): RuleContext | undefined { return this.parent; }
 
 	@Override
 	getPayload(): RuleContext { return this; }
@@ -142,7 +148,7 @@ export class RuleContext implements RuleNode {
 	 */
 	@Override
 	getText(): string {
-		if (this.getChildCount() == 0) {
+		if (this.getChildCount() === 0) {
 			return "";
 		}
 
@@ -178,8 +184,8 @@ export class RuleContext implements RuleNode {
 	setAltNumber(altNumber: number): void { }
 
 	@Override
-	getChild(i: number): Tree {
-		throw new RangeError("No child contexts");
+	getChild(i: number): ParseTree {
+		throw new RangeError("i must be greater than or equal to 0 and less than getChildCount()");
 	}
 
 	@Override
@@ -188,7 +194,7 @@ export class RuleContext implements RuleNode {
 	}
 
 	@Override
-	accept<T>(visitor: ParserTreeVisitor<T>): T {
+	accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitChildren(this);
 	}
 
@@ -219,12 +225,16 @@ export class RuleContext implements RuleNode {
 
 	toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
 
-	toString(arg1?: Recognizer<any, any> | string[], stop?: RuleContext): string {
+	toString(
+		arg1?: Recognizer<any, any> | string[],
+		stop?: RuleContext)
+		: string
+	{
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
 		let buf = "";
-		let p: RuleContext =  this;
+		let p: RuleContext | undefined = this;
 		buf += ("[");
 		while (p && p !== stop) {
 			if (!ruleNames) {

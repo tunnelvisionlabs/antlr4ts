@@ -41,7 +41,7 @@ import { Nullable, NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
 import { Parser } from '../../Stub_Parser';
 import { ParserInterpreter } from "../../Stub_ParserInterpreter";
-import { ParserRuleContext } from '../../Stub_ParserRuleContext';
+import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePattern } from "./ParseTreePattern";

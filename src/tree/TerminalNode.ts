@@ -47,8 +47,8 @@ export class TerminalNode implements ParseTree  {
 	}
 
 	@Override
-	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than zero and less than getChildCount()");
+	getChild(i: number): never {
+		throw new RangeError("Terminal Node has no children.");
 	}
 
 	@Override

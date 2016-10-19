@@ -45,7 +45,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [ ] Parser.java
 * [x] ParserErrorListener.java
 * [ ] ParserInterpreter.java
-* [ ] ParserRuleContext.java
+* [x] ParserRuleContext.java
 * [x] ProxyErrorListener.java
 * [x] ProxyParserErrorListener.java
 * [x] RecognitionException.java
@@ -205,13 +205,13 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] tree\pattern\TagChunk.java
 * [x] tree\pattern\TextChunk.java
 * [x] tree\pattern\TokenTagToken.java
-* [ ] tree\xpath\XPath.java
-* [ ] tree\xpath\XPathElement.java
+* [x] tree\xpath\XPath.java
+* [x] tree\xpath\XPathElement.java
 * [ ] tree\xpath\XPathLexer.g4
-* [ ] tree\xpath\XPathLexerErrorListener.java
-* [ ] tree\xpath\XPathRuleAnywhereElement.java
-* [ ] tree\xpath\XPathRuleElement.java
-* [ ] tree\xpath\XPathTokenAnywhereElement.java
-* [ ] tree\xpath\XPathTokenElement.java
-* [ ] tree\xpath\XPathWildcardAnywhereElement.java
-* [ ] tree\xpath\XPathWildcardElement.java
+* [x] tree\xpath\XPathLexerErrorListener.java
+* [x] tree\xpath\XPathRuleAnywhereElement.java
+* [x] tree\xpath\XPathRuleElement.java
+* [x] tree\xpath\XPathTokenAnywhereElement.java
+* [x] tree\xpath\XPathTokenElement.java
+* [x] tree\xpath\XPathWildcardAnywhereElement.java
+* [x] tree\xpath\XPathWildcardElement.java

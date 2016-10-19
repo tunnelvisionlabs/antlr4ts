@@ -33,7 +33,7 @@ import { NotNull } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
-import { XPath } from "../xpath/Stub_XPath";
+import { XPath } from "../xpath/XPath";
 
 /**
  * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
