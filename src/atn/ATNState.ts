@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-import { ATN } from './Stub_ATN';
+import { ATN } from './ATN';
 import { ATNStateType } from './ATNStateType';
 import { IntervalSet } from '../misc/IntervalSet';
 import { Override } from '../Decorators';
@@ -176,7 +176,7 @@ export abstract class ATNState {
 	}
 
 	getTransitions(): Transition[] {
-		return this.transitions.splice(0);
+		return this.transitions.slice(0);
 	}
 
 	getNumberOfTransitions(): number {

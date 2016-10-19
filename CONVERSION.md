@@ -69,9 +69,11 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ActionTransition.java
 * [x] atn\AmbiguityInfo.java
 * [x] atn\ArrayPredictionContext.java
-* [ ] atn\ATN.java
-* [ ] atn\ATNConfig.java
-* [ ] atn\ATNConfigSet.java
+* [x] atn\ATN.java
+  * [x] ~~`ATN.removeState`~~ (Not required by runtime-only code)
+  * [x] ~~`ATN.addState(undefined)`~~ (*Hopefully* not required by runtime-only code)
+* [x] atn\ATNConfig.java
+* [x] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java
 * [ ] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
@@ -143,12 +145,12 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] dfa\AbstractEdgeMap.java
 * [x] dfa\AcceptStateInfo.java
 * [x] dfa\ArrayEdgeMap.java
-* [ ] dfa\DFA.java
-* [ ] dfa\DFASerializer.java
-* [ ] dfa\DFAState.java
+* [x] dfa\DFA.java
+* [x] dfa\DFASerializer.java
+* [x] dfa\DFAState.java
 * [x] dfa\EdgeMap.java
 * [x] dfa\EmptyEdgeMap.java
-* [ ] dfa\LexerDFASerializer.java
+* [x] dfa\LexerDFASerializer.java
 * [x] dfa\SingletonEdgeMap.java
 * [x] dfa\SparseEdgeMap.java
 * [x] ~~misc\AbstractEqualityComparator.java~~ (Unnecessary in TypeScript)

@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
-import { ATNConfigSet } from "./atn/Stub_ATNConfigSet";
+import { ATNConfigSet } from "./atn/ATNConfigSet";
 import { RecognitionException } from "./RecognitionException";
 import { NotNull, Override } from "./Decorators";
 import { Lexer } from "./Stub_Lexer";

@@ -40,7 +40,7 @@ export abstract class RuleNode implements ParseTree {
 	abstract getRuleContext(): RuleContext;
 
 	//@Override
-	abstract getParent(): RuleContext | undefined;
+	abstract getParent(): RuleNode | undefined;
 
 	abstract getChild(i: number): ParseTree;
 

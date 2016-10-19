@@ -1,11 +1,13 @@
-import { ATN } from './atn/Stub_ATN';
+import { ATN } from './atn/ATN';
 import { RuleContext } from './RuleContext';
+import { Vocabulary } from './Vocabulary';
 
 export abstract class Recognizer<T, T2>{
     getATN(): ATN { throw new Error("Not implemented"); }
     getTokenType(tag: string): number { throw new Error("Not implemented"); }
     getRuleNames(): string[] { throw new Error("Not implemented"); }
     getState(): number { throw new Error("not implemented"); }
+	getVocabulary(): Vocabulary { throw new Error("Not implemented"); }
 
 	sempred(_localctx: RuleContext | undefined, ruleIndex: number, actionIndex: number): boolean {
 		return true;

@@ -35,7 +35,7 @@
  *  in the various paths when the error. Reported by reportNoViableAlternative()
  */
 
-import { ATNConfigSet } from './atn/Stub_ATNConfigSet';
+import { ATNConfigSet } from './atn/ATNConfigSet';
 import { Parser } from './Stub_Parser';
 import { ParserRuleContext } from './ParserRuleContext';
 import { RecognitionException } from "./RecognitionException";

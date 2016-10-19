@@ -36,7 +36,7 @@
  */
 
 import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
-import { ATN } from './atn/Stub_ATN';
+import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { Parser } from './Stub_Parser';
 import { RecognitionException } from "./RecognitionException";
