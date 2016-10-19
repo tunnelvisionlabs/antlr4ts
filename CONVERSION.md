@@ -70,8 +70,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\AmbiguityInfo.java
 * [x] atn\ArrayPredictionContext.java
 * [x] atn\ATN.java
-  * [x] ~~`ATN.removeState`~~ (Not required by runtime-only code)
-  * [x] ~~`ATN.addState(undefined)`~~ (*Hopefully* not required by runtime-only code)
+  * [x] ~~`ATN.addState(undefined)`~~ (Use `addState(new InvalidState())` instead)
 * [x] atn\ATNConfig.java
 * [x] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java
