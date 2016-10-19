@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.8229279-07:00
 
-import { BitSet } from '../misc/Stub_BitSet';
+import { BitSet } from '../misc/BitSet';
 import { DecisionEventInfo } from './DecisionEventInfo';
 import { NotNull } from '../Decorators';
 import { SimulatorState } from './SimulatorState';
