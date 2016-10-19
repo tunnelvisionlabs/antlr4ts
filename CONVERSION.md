@@ -124,7 +124,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [x] ~~PredictionContext.toString~~ (Doesn't actually exist in the Java target)
   * [x] PredictionContext.toStrings
 * [x] atn\PredictionContextCache.java
-* [ ] atn\PredictionMode.java
+* [x] atn\PredictionMode.java
 * [ ] atn\ProfilingATNSimulator.java
 * [x] atn\RangeTransition.java
 * [x] atn\RuleStartState.java
