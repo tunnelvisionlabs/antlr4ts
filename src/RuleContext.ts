@@ -92,16 +92,15 @@ import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext implements RuleNode {
-    protected _parent: RuleContext | undefined;
-    protected _invokingState: number;
+	parent: RuleContext | undefined;
+	invokingState: number;
 
-    get parent() { return this._parent; }
-    get invokingState() { return this._invokingState; }
-
-    constructor(parent: RuleContext | undefined, invokingState: number = -1) {
-        this._parent = parent;
-        this._invokingState = invokingState as number;
-    }
+	constructor();
+	constructor(parent: RuleContext | undefined, invokingState: number);
+	constructor(parent?: RuleContext, invokingState?: number) {
+		this.parent = parent;
+		this.invokingState = invokingState != null ? invokingState : -1;
+	}
 
 	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
 		return new RuleContext(parent, invokingState);
@@ -132,7 +131,7 @@ export class RuleContext implements RuleNode {
 	}
 
 	@Override
-	getRuleContext() { return this; }
+	getRuleContext(): RuleContext { return this; }
 
 	@Override
 	getParent(): RuleContext | undefined { return this.parent; }
@@ -185,10 +184,8 @@ export class RuleContext implements RuleNode {
 	setAltNumber(altNumber: number): void { }
 
 	@Override
-	getChild(i: number): RuleContext {
-		// HACK: for now we return undefined, rather than throw.
-		// throw new RangeError("No child contexts");
-		return undefined as any as RuleContext;
+	getChild(i: number): ParseTree {
+		throw new RangeError("i must be greater than or equal to 0 and less than getChildCount()");
 	}
 
 	@Override

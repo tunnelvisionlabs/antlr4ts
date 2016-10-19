@@ -100,13 +100,13 @@ export class XPath {
 
 		let tokens: Token[] = tokenStream.getTokens();
 //		System.out.println("path="+path+"=>"+tokens);
-		let elements = [] as XPathElement[];
+		let elements: XPathElement[] = [];
 		let n: number =  tokens.length;
 		let i: number = 0;
 loop:
 		while ( i<n ) {
 			let el: Token =  tokens[i];
-			let next: Token | null =  null;
+			let next: Token | undefined;
 			switch ( el.getType() ) {
 				case XPathLexer.ROOT :
 				case XPathLexer.ANYWHERE :
@@ -138,7 +138,7 @@ loop:
 					throw new Error("Unknowth path element "+el);
 			}
 		}
-		return elements; // WAS elements.toArray(new XPathElement[0]);
+		return elements;
 	}
 
 	/**
@@ -150,8 +150,13 @@ loop:
 		if ( wordToken.getType()==Token.EOF ) {
 			throw new Error("Missing path element at end of path");
 		}
-		let word = wordToken.getText() || ""; // WORKAROUND getText can return Unknown!
-		let ttype: number =  this.parser.getTokenType(word);
+
+		let word = wordToken.getText();
+		if (word == null) {
+			throw new Error("Expected wordToken to have text content.");
+		}
+
+		let ttype: number = this.parser.getTokenType(word);
 		let ruleIndex: number = this.parser.getRuleIndex(word);
 		switch ( wordToken.getType() ) {
 			case XPathLexer.WILDCARD :

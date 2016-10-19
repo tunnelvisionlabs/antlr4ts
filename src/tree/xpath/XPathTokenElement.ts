@@ -46,7 +46,7 @@ export class XPathTokenElement extends XPathElement {
 	@Override
 	evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
-		let nodes = [] as ParseTree[];
+		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if ( c instanceof TerminalNode ) {
 				if ((c.getSymbol().getType() == this.tokenType && !this.invert) ||

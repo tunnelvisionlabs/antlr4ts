@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 import { Arrays } from "../misc/Arrays";
-import { ATN } from '../atn/Stub_ATN';
+import { ATN } from '../atn/ATN';
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
@@ -189,8 +189,8 @@ export class Trees {
 	 *
 	 * @since 4.5.1
 	 */
-	static getDescendants(t: ParseTree): Array<ParseTree> {
-		let nodes = [] as Array<ParseTree>;
+	static getDescendants(t: ParseTree): ParseTree[] {
+		let nodes: ParseTree[] = [];
 
 		function recurse(e: ParseTree): void {
 			nodes.push(e);
@@ -199,6 +199,7 @@ export class Trees {
 				recurse(e.getChild(i));
 			}
 		}
+
 		recurse(t);
 		return nodes;
 	}
@@ -252,7 +253,7 @@ export class Trees {
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
 				if ( Trees.isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
-					(t as any).children[i] = new TerminalNode(abbrev); // HACK access to private
+					t.children[i] = new TerminalNode(abbrev); // HACK access to private
 				}
 			}
 		}

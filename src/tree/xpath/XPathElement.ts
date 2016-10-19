@@ -53,7 +53,7 @@ export abstract class XPathElement {
 	@Override
 	toString(): string {
 		let inv: string = this.invert ? "!" : "";
-		let className : string = Object.constructor.name;
+		let className: string = Object.constructor.name;
 		return className+"["+inv+this.nodeName+"]";
 	}
 }

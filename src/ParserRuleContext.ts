@@ -70,7 +70,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	private children: Array<ParseTree>; 
+	children: ParseTree[];
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -102,22 +102,25 @@ export class ParserRuleContext extends RuleContext {
 	exception: RecognitionException; 
 
 	constructor();
-	constructor(parent: ParserRuleContext, invokingStateNumber: number);
-	constructor(@Nullable parent?: ParserRuleContext, invokingStateNumber?: number) {
-		super(parent, invokingStateNumber);
+	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);
+	constructor(parent?: ParserRuleContext, invokingStateNumber?: number) {
+		if (invokingStateNumber == null) {
+			super();
+		} else {
+			super(parent, invokingStateNumber);
+		}
 	}
 
 	static emptyContext(): ParserRuleContext {
 		return ParserRuleContext.EMPTY;
 	}
 
-
 	/** COPY a ctx (I'm deliberately not using copy constructor) to avoid
 	 *  confusion with creating node with parent. Does not copy children.
 	 */
 	copyFrom(ctx: ParserRuleContext): void {
-		this._parent = ctx.parent;
-		this._invokingState = ctx.invokingState;
+		this.parent = ctx.parent;
+		this.invokingState = ctx.invokingState;
 
 		this.start = ctx.start;
 		this.stop = ctx.stop;
@@ -173,26 +176,42 @@ export class ParserRuleContext extends RuleContext {
 	@Override
 	/** Override to make type more specific */
 	getParent(): ParserRuleContext | undefined {
-		return super.getParent() as any as ParserRuleContext | undefined;
+		let parent = super.getParent();
+		if (parent === undefined || parent instanceof ParserRuleContext) {
+			return parent;
+		}
+
+		throw new TypeError("Invalid parent type for ParserRuleContext");
 	}
 
-	getChild(i: number): ParserRuleContext;
-	getChild<T extends ParseTree>(i: number, ctxType: {new(): T;}): T | undefined;
+	getChild(i: number): ParseTree;
+	getChild<T extends ParseTree>(i: number, ctxType: {new(): T;}): T;
 	// Note: in TypeScript, order or arguments reversed
-	getChild<T extends ParseTree>(i: number, ctxType?: {new(): T;}): T | undefined {
+	getChild<T extends ParseTree>(i: number, ctxType?: {new(): T;}): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
 		}
-		const result = this.children[i];
-		if (ctxType && !(result instanceof ctxType)) {
-			return undefined;
+
+		if (ctxType == null) {
+			return this.children[i];
 		}
-		return result as T;
+
+		let j: number =  -1; // what node with ctxType have we found?
+		for (let o of this.children) {
+			if (o instanceof ctxType) {
+				j++;
+				if ( j === i ) {
+					return o;
+				}
+			}
+		}
+
+		throw new Error("The specified node does not exist");
 	}
 
-	getToken(ttype: number, i: number): TerminalNode | undefined {
+	getToken(ttype: number, i: number): TerminalNode {
 		if (!this.children || i < 0 || i >= this.children.length ) {
-			return undefined;
+			throw new Error("The specified token does not exist");
 		}
 
 		let j: number =  -1; // what token with ttype have we found?
@@ -208,11 +227,11 @@ export class ParserRuleContext extends RuleContext {
 			}
 		}
 
-		return undefined;
+		throw new Error("The specified token does not exist");
 	}
 
-	getTokens(ttype: number): Array<TerminalNode> {
-		let tokens = [] as Array<TerminalNode>;
+	getTokens(ttype: number): TerminalNode[] {
+		let tokens: TerminalNode[] = [];
 
 		if ( !this.children) {
 			return tokens;
@@ -230,27 +249,23 @@ export class ParserRuleContext extends RuleContext {
 		return tokens;
 	}
 
-	// NOTE: argument order change from Java verision
-	getRuleContext<T extends ParserRuleContext>(
-		i?: number,
-		ctxType?: { new(): T; }): T {
-		let result: any;
-
+	// NOTE: argument order change from Java version
+	getRuleContext(): this;
+	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (): T; }): T;
+	getRuleContext<T extends ParserRuleContext>(i?: number, ctxType?: { new (): T; }): this | T {
 		if (i === undefined) {
-			result = this;
-		} else if (ctxType) {
-			result = this.getChild(i, ctxType);
-		} else {
-			result = this.getChild(i);
+			return this;
 		}
-		return result as T; // HACK typing to match Java
+
+		if (ctxType) {
+			return this.getChild(i, ctxType);
+		}
+
+		throw new Error("Required ctxType was not provided");
 	}
 
-	getRuleContexts<T extends ParserRuleContext>(
-		ctxType: { new (): T; })
-		: Array<T>
-	{
-		let contexts = [] as Array<T>;
+	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (): T; }): T[] {
+		let contexts: T[] = [];
 		if (!this.children) {
 			return contexts;
 		}
@@ -260,6 +275,7 @@ export class ParserRuleContext extends RuleContext {
 				contexts.push(o);
 			}
 		}
+
 		return contexts;
 	}
 
