@@ -31,7 +31,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:27.3184311-07:00
 
 import { ATN } from './ATN';
-import { ATNConfigSet } from './Stub_ATNConfigSet';
+import { ATNConfigSet } from './ATNConfigSet';
 import { DFAState } from '../dfa/DFAState';
 import { EmptyEdgeMap } from '../dfa/EmptyEdgeMap';
 import { NotNull } from '../Decorators';
