@@ -48,6 +48,7 @@ import { DFA } from '../dfa/DFA';
 import { EpsilonTransition } from './EpsilonTransition';
 import { Interval } from '../misc/Interval';
 import { IntervalSet } from '../misc/IntervalSet';
+import { InvalidState } from './InvalidState';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
 import { LexerChannelAction } from './LexerChannelAction';
@@ -191,7 +192,7 @@ export class ATNDeserializer {
 			let stype: ATNStateType = ATNDeserializer.toInt(data[p++]);
 			// ignore bad type of states
 			if ( stype===ATNStateType.INVALID_TYPE ) {
-				atn.addState(new BasicState());
+				atn.addState(new InvalidState());
 				continue;
 			}
 
@@ -615,7 +616,8 @@ export class ATNDeserializer {
 	protected verifyATN(atn: ATN): void {
 		// verify assumptions
 		for (let state of atn.states) {
-			if (state == null) {
+			this.checkCondition(state != null, "ATN states should not be null.");
+			if (state.getStateType() === ATNStateType.INVALID_TYPE) {
 				continue;
 			}
 
@@ -1109,7 +1111,7 @@ export class ATNDeserializer {
 	protected stateFactory(type: ATNStateType, ruleIndex: number): ATNState {
 		let s: ATNState;
 		switch (type) {
-			case ATNStateType.INVALID_TYPE: return new BasicState();
+			case ATNStateType.INVALID_TYPE: return new InvalidState();
 			case ATNStateType.BASIC : s = new BasicState(); break;
 			case ATNStateType.RULE_START : s = new RuleStartState(); break;
 			case ATNStateType.BLOCK_START : s = new BasicBlockStartState(); break;

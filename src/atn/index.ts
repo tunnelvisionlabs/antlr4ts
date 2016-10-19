@@ -23,6 +23,7 @@ export * from './DecisionInfo';
 export * from './DecisionState';
 export * from './EpsilonTransition';
 export * from './ErrorInfo';
+export * from './InvalidState';
 export * from './LexerAction';
 export * from './LexerActionExecutor';
 export * from './LexerActionType';
