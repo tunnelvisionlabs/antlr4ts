@@ -27,25 +27,6 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Array2DHashMap } from './Array2DHashMap';
-import { Array2DHashSet } from "./Array2DHashSet";
-import { ATNState } from '../atn/ATNState';
-import { ATNStateType } from "../atn/ATNStateType";
-import { BailErrorStrategy } from "../BailErrorStrategy";
-import { CharStream } from "../CharStream";
-import { DecisionInfo } from '../atn/DecisionInfo';
-import { IntervalSet } from "./IntervalSet";
-import { IntStream } from "../IntStream";
-import { ParserRuleContext } from "../ParserRuleContext"
-import { ParseTreeListener } from '../tree/ParseTreeListener';
-import { PredictionContext } from '../atn/PredictionContext';
-import { RuleContext } from "../RuleContext";
-import { Token } from "../Token";
-import { TokenFactory } from "../TokenFactory";
-import { TokenSource } from "../TokenSource";
-import { TokenStream } from "../TokenStream";
-import { Vocabulary } from "../Vocabulary";
-
 export interface Equatable {
 	equals(other: any): boolean;
 	hashCode(): number;
