@@ -32,7 +32,7 @@
 
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { ATN } from '../atn/ATN';
-import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
+import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
 import { DFASerializer } from './DFASerializer';

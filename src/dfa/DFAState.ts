@@ -33,7 +33,7 @@
 import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
-import { ATNConfigSet } from '../atn/Stub_ATNConfigSet';
+import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { BitSet } from '../misc/BitSet';
 import { DFA } from './DFA';
 import { EmptyEdgeMap } from './EmptyEdgeMap';
