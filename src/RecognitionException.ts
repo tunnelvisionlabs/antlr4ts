@@ -31,7 +31,7 @@
 import { CharStream } from "./CharStream";
 import { IntervalSet } from "./misc/IntervalSet"
 import { IntStream } from './IntStream';
-import { Lexer } from "./Stub_Lexer";
+import { Lexer } from "./Lexer";
 import { Parser } from './Stub_Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
 import { Recognizer } from './Recognizer';

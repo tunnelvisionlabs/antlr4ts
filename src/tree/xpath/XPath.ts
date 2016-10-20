@@ -1,7 +1,7 @@
 ﻿// ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
 import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from "../../Stub_Lexer";
+import { Lexer } from "../../Lexer";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
 import { Parser } from "../../Stub_Parser";
 import { ParserRuleContext } from "../../ParserRuleContext";

@@ -32,7 +32,7 @@
 
 import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
 import { CharStream } from '../CharStream';
-import { Lexer } from '../Stub_Lexer';
+import { Lexer } from '../Lexer';
 import { LexerAction } from './LexerAction';
 import { LexerIndexedCustomAction } from './LexerIndexedCustomAction';
 import { MurmurHash } from '../misc/MurmurHash';

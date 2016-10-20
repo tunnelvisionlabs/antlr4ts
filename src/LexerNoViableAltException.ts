@@ -33,7 +33,7 @@
 import { ATNConfigSet } from "./atn/ATNConfigSet";
 import { RecognitionException } from "./RecognitionException";
 import { NotNull, Override } from "./Decorators";
-import { Lexer } from "./Stub_Lexer";
+import { Lexer } from "./Lexer";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
 import * as Utils from "./misc/Utils";

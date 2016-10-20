@@ -1,18 +1,17 @@
-import { Lexer } from "../../Stub_Lexer";
+import { Lexer } from "../../Lexer";
 import { RecognitionException } from "../../RecognitionException";
 import { Vocabulary } from "../../Vocabulary";
 import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 
 export class XPathLexer extends Lexer {
-	constructor(input: any) { super(); throw new Error("Not implemented"); }
+	constructor(input: any) { super(input); throw new Error("Not implemented"); }
 
 	// TODO: Is this now obsolete, or not?
 	getRuleNames(): string[] { throw new Error("Not implemented");}
 	getGrammarFileName(): string { throw new Error("Not implemented");}
 	getVocabulary(): Vocabulary { throw new Error("Not implemented");}
-
-
-	recover: (e: RecognitionException) => never;
+	
+	recover(e: RecognitionException) {throw new Error("Not implemented");}
 
 	removeErrorListeners(): any { throw new Error("Not implemented"); }
 
