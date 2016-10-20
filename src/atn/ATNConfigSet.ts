@@ -524,7 +524,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return this.conflictInfo;
 	}
 
-	setConflictInfo(conflictInfo: ConflictInfo): void {
+	setConflictInfo(conflictInfo: ConflictInfo | undefined): void {
 		this.ensureWritable();
 		this.conflictInfo = conflictInfo;
 	}

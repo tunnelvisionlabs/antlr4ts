@@ -113,7 +113,7 @@ export class ATN {
 	@NotNull
 	modeToDFA: DFA[] = [];
 
-	protected LL1Table: Map<number, number> =  new Map<number, number>();
+	LL1Table: Map<number, number> =  new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
 	 constructor(@NotNull grammarType: ATNType, maxTokenType: number)  {

@@ -250,9 +250,9 @@ export class BufferedTokenStream implements TokenStream {
 		return token.getType();
 	}
 
-	protected LB(k: number): Token | undefined {
+	protected LB(k: number): Token {
 		if ((this.p - k) < 0) {
-			return undefined;
+			throw new RangeError("requested lookback index out of range");
 		}
 
 		return this.tokens[this.p - k];
@@ -260,10 +260,10 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	LT(k: number): Token | undefined {
+	LT(k: number): Token {
 		this.lazyInit();
 		if (k === 0) {
-			return undefined;
+			throw new RangeError("0 is not a valid lookahead index")
 		}
 
 		if (k < 0) {

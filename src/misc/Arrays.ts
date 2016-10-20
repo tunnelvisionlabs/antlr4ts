@@ -83,4 +83,29 @@ export namespace Arrays {
 
 		return -1;
 	}
+
+	export function toString<T>(array: ArrayLike<T>) {
+		let result = "[";
+
+		let first = true;
+		for (let i = 0; i < array.length; i++) {
+			if (first) {
+				first = false;
+			} else {
+				result += ", ";
+			}
+
+			let element = array[i];
+			if (element === null) {
+				result += "null";
+			} else if (element === undefined) {
+				result += "undefined";
+			} else {
+				result += element;
+			}
+		}
+
+		result += "]";
+		return result;
+	}
 }

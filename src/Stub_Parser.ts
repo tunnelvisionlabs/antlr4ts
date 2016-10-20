@@ -1,5 +1,6 @@
 import { IntervalSet } from './misc/IntervalSet';
-import { ParserATNSimulator } from './atn/Stub_ParserATNSimulator';
+import { ParserATNSimulator } from './atn/ParserATNSimulator';
+import { ParserErrorListener } from './ParserErrorListener';
 import { ParserRuleContext } from './ParserRuleContext';
 import { Recognizer } from './Stub_Recognizer';
 import { RuleContext } from './RuleContext';
@@ -21,6 +22,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
     notifyErrorListeners(offendingToken: any): void;
     notifyErrorListeners(offendingToken: any, message?: string, recognitionException?:any): void { throw new Error("Not implemented"); }
 
+	getErrorListenerDispatch(): ParserErrorListener { throw new Error("Not implemented"); }
+
     consume() { throw new Error("Not implemented"); }
 
     isExpectedToken(la: number): boolean { throw new Error("Not implemented"); }
@@ -37,5 +40,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
     getRuleIndex(tag: any): number { throw new Error("Not implemented"); }
 
-    getRuleInvocationStack(p: RuleContext): string[] { throw new Error("Not implemented"); }
+    getRuleInvocationStack(p?: RuleContext): string[] { throw new Error("Not implemented"); }
+
+	getPrecedence(): number { throw new Error("Not implemented"); }
 }

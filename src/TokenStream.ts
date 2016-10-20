@@ -50,7 +50,7 @@ export interface TokenStream extends IntStream {
 	 * @see IntStream#LA
 	 */
 	//@NotNull
-	LT(k: number): Token | undefined;
+	LT(k: number): Token;
 
 	/**
 	 * Gets the {@link Token} at the specified {@code index} in the stream. When

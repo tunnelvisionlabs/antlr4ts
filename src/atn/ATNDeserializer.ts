@@ -62,7 +62,7 @@ import { LexerTypeAction } from './LexerTypeAction';
 import { LoopEndState } from './LoopEndState';
 import { NotNull } from '../Decorators';
 import { NotSetTransition } from './NotSetTransition';
-import { ParserATNSimulator } from './Stub_ParserATNSimulator';
+import { ParserATNSimulator } from './ParserATNSimulator';
 import { PlusBlockStartState } from './PlusBlockStartState';
 import { PlusLoopbackState } from './PlusLoopbackState';
 import { PrecedencePredicateTransition } from './PrecedencePredicateTransition';
