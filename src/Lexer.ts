@@ -217,14 +217,14 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	pushMode(m: number): void {
-		if ( LexerATNSimulator.debug ) console.debug("pushMode "+m);
+		if ( LexerATNSimulator.debug ) console.log("pushMode "+m);
 		this._modeStack.push(this._mode);
 		this.mode(m);
 	}
 
 	popMode(): number {
 		if ( this._modeStack.isEmpty() ) throw new Error("EmptyStackException");
-		if ( LexerATNSimulator.debug ) console.debug("popMode back to "+ this._modeStack.peek());
+		if ( LexerATNSimulator.debug ) console.log("popMode back to "+ this._modeStack.peek());
 		this.mode( this._modeStack.pop() );
 		return this._mode;
 	}
