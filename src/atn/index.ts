@@ -52,7 +52,7 @@ export * from './PredicateTransition';
 export * from './PredictionContext';
 export * from './PredictionContextCache';
 export * from './PredictionMode';
-// export * from './ProfilingATNSimulator';
+export * from './ProfilingATNSimulator';
 export * from './RangeTransition';
 export * from './RuleStartState';
 export * from './RuleStopState';

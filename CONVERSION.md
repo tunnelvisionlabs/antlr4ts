@@ -125,7 +125,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [x] PredictionContext.toStrings
 * [x] atn\PredictionContextCache.java
 * [x] atn\PredictionMode.java
-* [ ] atn\ProfilingATNSimulator.java
+* [x] atn\ProfilingATNSimulator.java
 * [x] atn\RangeTransition.java
 * [x] atn\RuleStartState.java
 * [x] atn\RuleStopState.java
