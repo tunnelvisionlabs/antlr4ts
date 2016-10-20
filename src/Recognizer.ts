@@ -29,22 +29,19 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.1954441-07:00
-import {ATN} from "./atn/ATN";
-import {ATNSimulator} from "./atn/ATNSimulator";
-import {Vocabulary} from "./Vocabulary";
-import {ANTLRErrorListener} from "./ANTLRErrorListener";
-import {ConsoleErrorListener} from "./ConsoleErrorListener";
-import {SuppressWarnings, NotNull, Nullable} from "./decorators";
-import {ProxyErrorListener} from "./ProxyErrorListener";
-import {VocabularyImpl} from "./VocabularyImpl";
-import {Token} from "./Token";
-import {RecognitionException} from "./RecognitionException";
-import {RuleContext} from "./RuleContext";
-import {IntStream} from "./IntStream";
-import {ParseInfo} from "./atn/ParseInfo";
-
-type WeakHashMap<K,V> = WeakMap<K,V>;
-
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ATN } from "./atn/ATN";
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { ConsoleErrorListener } from "./ConsoleErrorListener";
+import { IntStream } from "./IntStream";
+import { ParseInfo } from "./atn/ParseInfo";
+import { ProxyErrorListener } from "./ProxyErrorListener";
+import { RecognitionException } from "./RecognitionException";
+import { RuleContext } from "./RuleContext";
+import { SuppressWarnings, NotNull, Nullable } from "./decorators";
+import { Token } from "./Token";
+import { Vocabulary } from "./Vocabulary";
+import { VocabularyImpl } from "./VocabularyImpl";
 
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static EOF: number = -1;
@@ -59,6 +56,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	private _listeners: ANTLRErrorListener<Symbol>[] = [ConsoleErrorListener.INSTANCE];
 
 	protected  _interp: ATNInterpreter;
+
+	// TODO: Is this now obsolete, or not?
+	abstract getRuleNames(): string[];
 
 	private _stateNumber = -1;
 
@@ -233,15 +233,26 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	// subclass needs to override these if there are sempreds or actions
 	// that the ATN interp needs to execute
-	sempred(@Nullable _localctx: RuleContext, ruleIndex: number, actionIndex: number): boolean {
+	sempred(
+		@Nullable _localctx: RuleContext | undefined,
+	 	ruleIndex: number,
+		actionIndex: number): boolean
+	{
 		return true;
 	}
 
-	precpred(@Nullable localctx: RuleContext, precedence: number): boolean {
+	precpred(
+		@Nullable localctx: RuleContext | undefined,
+		precedence: number): boolean
+	{
 		return true;
 	}
 
-	action(@Nullable _localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
+	action(
+		@Nullable _localctx: RuleContext | undefined,
+		ruleIndex: number,
+		actionIndex: number): void
+	{
 	}
 
 	getState(): number {
@@ -261,5 +272,5 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 //		if ( traceATNStates ) _ctx.trace(atnState);
 	}
 
-	abstract getInputStream(): IntStream;
+	abstract getInputStream(): IntStream | undefined;
 }

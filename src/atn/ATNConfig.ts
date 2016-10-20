@@ -40,7 +40,7 @@ import { NotNull, Override } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Stub_Recognizer';
+import { Recognizer } from '../Recognizer';
 import { SemanticContext } from './SemanticContext';
 
 import * as assert from 'assert';

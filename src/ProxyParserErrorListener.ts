@@ -33,7 +33,7 @@ import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/DFA';
 import { Parser } from './Stub_Parser';
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { ParserErrorListener } from "./ParserErrorListener";
 import { SimulatorState } from './atn/SimulatorState';

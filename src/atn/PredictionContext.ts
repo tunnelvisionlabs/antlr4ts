@@ -41,7 +41,7 @@ import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from "../Decorators";
 import { Equatable, JavaSet } from '../misc/Stubs';
 import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Stub_Recognizer';
+import { Recognizer } from '../Recognizer';
 import { RuleContext } from '../RuleContext';
 import { RuleTransition } from './RuleTransition';
 

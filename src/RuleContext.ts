@@ -82,7 +82,7 @@
 
 import { ATN } from './atn/ATN';
 import { Parser } from './Stub_Parser';
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { RuleNode } from "./tree/RuleNode";
 import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";

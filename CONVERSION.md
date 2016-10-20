@@ -49,7 +49,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ProxyErrorListener.java
 * [x] ProxyParserErrorListener.java
 * [x] RecognitionException.java
-* [ ] Recognizer.java
+* [x] Recognizer.java
 * [x] RuleContext.java
 * [ ] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java

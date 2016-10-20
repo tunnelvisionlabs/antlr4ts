@@ -1,7 +1,7 @@
 import { IntervalSet } from './misc/IntervalSet';
 import { ParserATNSimulator } from './atn/Stub_ParserATNSimulator';
 import { ParserRuleContext } from './ParserRuleContext';
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { RuleContext } from './RuleContext';
 import { Token } from './Token';
 import { TokenStream } from './TokenStream';

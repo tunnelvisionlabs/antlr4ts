@@ -33,7 +33,7 @@
 
 import { ANTLRErrorListener } from "../../ANTLRErrorListener";
 import { Override } from "../../Decorators";
-import { Recognizer } from "../../Stub_Recognizer";
+import { Recognizer } from "../../Recognizer";
 import { RecognitionException } from "../../RecognitionException";
 
 export class XPathLexerErrorListener implements ANTLRErrorListener<number> {

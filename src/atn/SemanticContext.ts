@@ -37,7 +37,7 @@ import { Equatable } from '../misc/Stubs';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { Recognizer } from '../Stub_Recognizer';
+import { Recognizer } from '../Recognizer';
 import { RuleContext } from '../RuleContext';
 import * as Utils from '../misc/Utils';
 

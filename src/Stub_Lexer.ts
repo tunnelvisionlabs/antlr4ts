@@ -1,5 +1,5 @@
 import { CharStream } from './CharStream';
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { Token } from './Token';
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
