@@ -53,12 +53,18 @@ import { TokenSource } from './TokenSource';
 export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	implements TokenSource
 {
-	static DEFAULT_MODE: number =  0;
-	static MORE: number =  -2;
-	static SKIP: number =  -3;
+	static readonly DEFAULT_MODE: number =  0;
+	static readonly MORE: number =  -2;
+	static readonly SKIP: number =  -3;
 
-	static readonly DEFAULT_TOKEN_CHANNEL: number =  Token.DEFAULT_CHANNEL;
-	static readonly HIDDEN: number =  Token.HIDDEN_CHANNEL;
+	static get DEFAULT_TOKEN_CHANNEL(): number {
+		return Token.DEFAULT_CHANNEL;
+	}
+
+	static get HIDDEN(): number {
+		return Token.HIDDEN_CHANNEL;
+	}
+
 	static readonly MIN_CHAR_VALUE: number =  0x0000;
 	static readonly MAX_CHAR_VALUE: number =  0xFFFE;
 

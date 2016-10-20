@@ -83,6 +83,20 @@ function min<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
  *  {@link SemanticContext} within the scope of this outer class.</p>
  */
 export abstract class SemanticContext implements Equatable {
+	private static _NONE: SemanticContext;
+
+	/**
+	 * The default {@link SemanticContext}, which is semantically equivalent to
+	 * a predicate of the form {@code {true}?}.
+	 */
+	static get NONE(): SemanticContext {
+		if (SemanticContext._NONE === undefined) {
+			SemanticContext._NONE = new SemanticContext.Predicate();
+		}
+
+		return SemanticContext._NONE;
+	}
+
 	/**
 	 * For context independent predicates, we evaluate them without a local
 	 * context (i.e., null context). That way, we can evaluate them without
@@ -159,12 +173,6 @@ export namespace SemanticContext {
 	 * This random 30-bit prime represents the value of `OR.class.hashCode()`.
 	 */
 	const OR_HASHCODE = 486279973;
-
-	/**
-	 * The default {@link SemanticContext}, which is semantically equivalent to
-	 * a predicate of the form {@code {true}?}.
-	 */
-	export const NONE: SemanticContext =  new SemanticContext.Predicate();
 
 	function filterPrecedencePredicates(collection: SemanticContext[]): SemanticContext.PrecedencePredicate[] {
 		let result: SemanticContext.PrecedencePredicate[] = [];
@@ -372,7 +380,7 @@ export namespace SemanticContext {
 					// The AND context is false if any element is false
 					return undefined;
 				}
-				else if (evaluated !== NONE) {
+				else if (evaluated !== SemanticContext.NONE) {
 					// Reduce the result by skipping true elements
 					operands.push(evaluated);
 				}
@@ -384,7 +392,7 @@ export namespace SemanticContext {
 
 			if (operands.length === 0) {
 				// all elements were true, so the AND context is true
-				return NONE;
+				return SemanticContext.NONE;
 			}
 
 			let result: SemanticContext =  operands[0];
@@ -467,9 +475,9 @@ export namespace SemanticContext {
 			for (let context of this.opnds) {
 				let evaluated: SemanticContext | undefined =  context.evalPrecedence(parser, parserCallStack);
 				differs = differs || (evaluated !== context);
-				if (evaluated === NONE) {
+				if (evaluated === SemanticContext.NONE) {
 					// The OR context is true if any element is true
-					return NONE;
+					return SemanticContext.NONE;
 				} else if (evaluated) {
 					// Reduce the result by skipping false elements
 					operands.push(evaluated);
