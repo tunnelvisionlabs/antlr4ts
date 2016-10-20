@@ -131,7 +131,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		let startState: ATNState =  this.atn.modeToStartState[this.mode];
 
 		if ( LexerATNSimulator.debug ) {
-			console.debug(`matchATN mode ${this.mode} start: ${startState}`);
+			console.log(`matchATN mode ${this.mode} start: ${startState}`);
 		}
 
 		let old_mode: number =  this.mode;
@@ -155,7 +155,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		let predict: number =  this.execATN(input, next);
 
 		if ( LexerATNSimulator.debug ) {
-			console.debug(`DFA after matchATN: ${this.atn.modeToDFA[old_mode].toLexerString()}`);
+			console.log(`DFA after matchATN: ${this.atn.modeToDFA[old_mode].toLexerString()}`);
 		}
 
 		return predict;
@@ -164,7 +164,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	protected execATN(@NotNull input: CharStream, @NotNull ds0: DFAState): number {
 		//System.out.println("enter exec index "+input.index()+" from "+ds0.configs);
 		if ( LexerATNSimulator.debug ) {
-			console.debug(`start state closure=${ds0.configs}`);
+			console.log(`start state closure=${ds0.configs}`);
 		}
 
 		if (ds0.isAcceptState()) {
@@ -178,7 +178,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		while ( true ) { // while more work
 			if ( LexerATNSimulator.debug ) {
-				console.debug(`execATN loop starting closure: ${s.configs}`);
+				console.log(`execATN loop starting closure: ${s.configs}`);
 			}
 
 			// As we move src->trg, src->trg, we keep track of the previous trg to
@@ -319,7 +319,7 @@ export class LexerATNSimulator extends ATNSimulator {
 			}
 
 			if ( LexerATNSimulator.debug ) {
-				console.debug(`testing ${this.getTokenName(t)} at ${c.toString(this.recog, true)}`);
+				console.log(`testing ${this.getTokenName(t)} at ${c.toString(this.recog, true)}`);
 			}
 
 			let n: number =  c.getState().getNumberOfOptimizedTransitions();
@@ -353,7 +353,7 @@ export class LexerATNSimulator extends ATNSimulator {
 						  startIndex: number, index: number, line: number, charPos: number): void
 	{
 		if ( LexerATNSimulator.debug ) {
-			console.debug(`ACTION ${lexerActionExecutor}`);
+			console.log(`ACTION ${lexerActionExecutor}`);
 		}
 
 		// seek to after last char in token
@@ -406,10 +406,10 @@ export class LexerATNSimulator extends ATNSimulator {
 		if ( config.getState() instanceof RuleStopState ) {
 			if ( LexerATNSimulator.debug ) {
 				if ( this.recog!=null ) {
-					console.debug(`closure at ${this.recog.getRuleNames()[config.getState().ruleIndex]} rule stop ${config}`);
+					console.log(`closure at ${this.recog.getRuleNames()[config.getState().ruleIndex]} rule stop ${config}`);
 				}
 				else {
-					console.debug(`closure at rule stop ${config}`);
+					console.log(`closure at rule stop ${config}`);
 				}
 			}
 
