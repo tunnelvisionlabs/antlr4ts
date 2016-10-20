@@ -37,7 +37,7 @@ export * from './LexerPopModeAction';
 export * from './LexerPushModeAction';
 export * from './LexerSkipAction';
 export * from './LexerTypeAction';
-// export * from './LL1Analyzer';
+export * from './LL1Analyzer';
 export * from './LookaheadEventInfo';
 export * from './LoopEndState';
 export * from './NotSetTransition';

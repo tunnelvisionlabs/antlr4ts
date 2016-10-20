@@ -38,7 +38,7 @@ import { DFA } from '../dfa/DFA';
 import { IntervalSet } from '../misc/IntervalSet';
 import { InvalidState } from './InvalidState';
 import { LexerAction } from './LexerAction';
-import { LL1Analyzer } from './Stub_LL1Analyzer';
+import { LL1Analyzer } from './LL1Analyzer';
 import { NotNull } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
