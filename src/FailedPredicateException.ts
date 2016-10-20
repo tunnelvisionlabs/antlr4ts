@@ -40,7 +40,7 @@ import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { Parser } from './Stub_Parser';
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { NotNull } from "./Decorators";
 import { PredicateTransition } from './atn/PredicateTransition';
 

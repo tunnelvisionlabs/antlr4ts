@@ -34,7 +34,7 @@ import { IntStream } from './IntStream';
 import { Lexer } from "./Stub_Lexer";
 import { Parser } from './Stub_Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { RuleContext } from "./RuleContext";
 import { Token } from "./Token";
 

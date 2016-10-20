@@ -29,7 +29,7 @@ export * from './ParserRuleContext';
 export * from './ProxyErrorListener';
 export * from './ProxyParserErrorListener';
 export * from './RecognitionException';
-// export * from './Recognizer';
+export * from './Recognizer';
 export * from './RuleContext';
 // export * from './RuleContextWithAltNum';
 // export * from './RuleDependencies';

@@ -39,7 +39,7 @@ import { ATNConfigSet } from './atn/ATNConfigSet';
 import { Parser } from './Stub_Parser';
 import { ParserRuleContext } from './ParserRuleContext';
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
@@ -49,7 +49,7 @@ export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
 
 	/** Which configurations did we try at input.index() that couldn't match input.LT(1)? */
-	private deadEndConfigs?: ATNConfigSet; 
+	private deadEndConfigs?: ATNConfigSet;
 
 	/** The token object at the start index; the input stream might
 	 * 	not be buffering tokens so get a reference to it. (At the
@@ -57,7 +57,7 @@ export class NoViableAltException extends RecognitionException {
 	 *  buffer all of the tokens but later we might not have access to those.)
 	 */
 	@NotNull
-	private startToken: Token; 
+	private startToken: Token;
 
 	constructor(/*@NotNull*/ recognizer:Parser );
 	constructor(
@@ -89,7 +89,7 @@ export class NoViableAltException extends RecognitionException {
 			super(recognizer, input, ctx);
 			this.deadEndConfigs = deadEndConfigs;
 			this.startToken = startToken as Token;
-			super.setOffendingToken(recognizer, offendingToken);           
+			super.setOffendingToken(recognizer, offendingToken);
 		}
 	}
 

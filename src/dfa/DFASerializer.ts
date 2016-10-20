@@ -38,7 +38,7 @@ import { DFA } from './DFA';
 import { DFAState } from './DFAState';
 import { NotNull, Nullable, Override } from '../Decorators';
 import { PredictionContext } from '../atn/PredictionContext';
-import { Recognizer } from '../Stub_Recognizer';
+import { Recognizer } from '../Recognizer';
 import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
 

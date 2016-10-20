@@ -44,7 +44,7 @@ import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
 import { Parser } from './Stub_Parser';
 import {ParserErrorListener} from "./ParserErrorListener";
-import { Recognizer } from './Stub_Recognizer';
+import { Recognizer } from './Recognizer';
 import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";
 

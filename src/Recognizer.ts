@@ -29,32 +29,37 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.1954441-07:00
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ATN } from "./atn/ATN";
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { ConsoleErrorListener } from "./ConsoleErrorListener";
+import { IntStream } from "./IntStream";
+import { ParseInfo } from "./atn/ParseInfo";
+import { ProxyErrorListener } from "./ProxyErrorListener";
+import { RecognitionException } from "./RecognitionException";
+import { RuleContext } from "./RuleContext";
+import { SuppressWarnings, NotNull } from "./decorators";
+import { Token } from "./Token";
+import { Vocabulary } from "./Vocabulary";
+import { VocabularyImpl } from "./VocabularyImpl";
+
+import * as Utils from './misc/Utils';
 
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static EOF: number = -1;
 
-	private static tokenTypeMapCache: Map<Vocabulary, Map<string, number>> = 
-		new WeakHashMap<Vocabulary, Map<String, Integer>>();
-	private static ruleIndexMapCache: Map<string[], Map<string, number>> = 
-		new WeakHashMap<String[], Map<String, Integer>>();
+	private static tokenTypeMapCache =
+	 	new WeakMap<Vocabulary, Map<string, number>>();
+	private static ruleIndexMapCache =
+	 	new WeakMap<string[], Map<string, number>>();
 
 	@SuppressWarnings("serial")
 	@NotNull
-	private List<ANTLRErrorListener<? super Symbol>> _listeners =
-		new CopyOnWriteArrayList<ANTLRErrorListener<? super Symbol>>() {{ add(ConsoleErrorListener.INSTANCE); }};
+	private _listeners: ANTLRErrorListener<Symbol>[] = [ConsoleErrorListener.INSTANCE];
 
-	protected ATNInterpreter _interp;
+	protected  _interp: ATNInterpreter;
 
-	private int _stateNumber = -1;
-
-	/** Used to print out token names like ID during debugging and
-	 *  error reporting.  The generated parsers implement a method
-	 *  that overrides this to point to their String[] tokenNames.
-	 *
-	 * @deprecated Use {@link #getVocabulary()} instead.
-	 */
-	@Deprecated
-	abstract getTokenNames(): string[];
+	private _stateNumber = -1;
 
 	abstract getRuleNames(): string[];
 
@@ -64,11 +69,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @return A {@link Vocabulary} instance providing information about the
 	 * vocabulary used by the grammar.
 	 */
-	@NotNull
-	@SuppressWarnings("deprecation")
-	getVocabulary(): Vocabulary {
-		return VocabularyImpl.fromTokenNames(getTokenNames());
-	}
+	abstract getVocabulary(): Vocabulary;
 
 	/**
 	 * Get a map from token names to token types.
@@ -77,30 +78,28 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getTokenTypeMap(): Map<string, number> {
-		let vocabulary: Vocabulary =  getVocabulary();
-		synchronized (tokenTypeMapCache) {
-			let result: Map<string, number> =  tokenTypeMapCache.get(vocabulary);
-			if (result == null) {
-				result = new HashMap<String, Integer>();
-				for (let i = 0; i < getATN().maxTokenType; i++) {
-					let literalName: string =  vocabulary.getLiteralName(i);
-					if (literalName != null) {
-						result.put(literalName, i);
-					}
-
-					let symbolicName: string =  vocabulary.getSymbolicName(i);
-					if (symbolicName != null) {
-						result.put(symbolicName, i);
-					}
+		let vocabulary: Vocabulary = this.getVocabulary();
+		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
+		if (result == null) {
+			result = new Map<string, number>();
+			for (let i = 0; i < this.getATN().maxTokenType; i++) {
+				let literalName = vocabulary.getLiteralName(i);
+				if (literalName != null) {
+					result.set(literalName, i);
 				}
 
-				result.put("EOF", Token.EOF);
-				result = Collections.unmodifiableMap(result);
-				tokenTypeMapCache.put(vocabulary, result);
+				let symbolicName = vocabulary.getSymbolicName(i);
+				if (symbolicName != null) {
+					result.set(symbolicName, i);
+				}
 			}
 
-			return result;
+			result.set("EOF", Token.EOF);
+			Object.freeze(result);
+			Recognizer.tokenTypeMapCache.set(vocabulary, result);
 		}
+
+		return result;
 	}
 
 	/**
@@ -110,24 +109,22 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getRuleIndexMap(): Map<string, number> {
-		let ruleNames: string[] =  getRuleNames();
+		let ruleNames: string[] = this.getRuleNames();
 		if (ruleNames == null) {
-			throw new UnsupportedOperationException("The current recognizer does not provide a list of rule names.");
+			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
 
-		synchronized (ruleIndexMapCache) {
-			let result: Map<string, number> =  ruleIndexMapCache.get(ruleNames);
-			if (result == null) {
-				result = Collections.unmodifiableMap(Utils.toMap(ruleNames));
-				ruleIndexMapCache.put(ruleNames, result);
-			}
-
-			return result;
+		let result: Map<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
+		if (result == null) {
+			result = Object.freeze(Utils.toMap(ruleNames));
+			Recognizer.ruleIndexMapCache.set(ruleNames, result);
 		}
+
+		return result;
 	}
 
 	getTokenType(tokenName: string): number {
-		let ttype: number =  getTokenTypeMap().get(tokenName);
+		let ttype = this.getTokenTypeMap().get(tokenName);
 		if ( ttype!=null ) return ttype;
 		return Token.INVALID_TYPE;
 	}
@@ -141,7 +138,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getSerializedATN(): string {
-		throw new UnsupportedOperationException("there is no serialized ATN");
+		throw new Error("there is no serialized ATN");
 	}
 
 	/** For debugging and other purposes, might want the grammar name.
@@ -156,7 +153,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getATN(): ATN {
-		return _interp.atn;
+		return this._interp.atn;
 	}
 
 	/**
@@ -166,7 +163,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getInterpreter(): ATNInterpreter {
-		return _interp;
+		return this._interp;
 	}
 
 	/** If profiling during the parse/lex, this will return DecisionInfo records
@@ -174,8 +171,8 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 *
 	 * @since 4.3
 	 */
-	getParseInfo(): ParseInfo {
-		return null;
+	getParseInfo(): ParseInfo | undefined {
+		return undefined;
 	}
 
 	/**
@@ -185,88 +182,73 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * prediction.
 	 */
 	setInterpreter(@NotNull interpreter: ATNInterpreter): void {
-		_interp = interpreter;
+		this._interp = interpreter;
 	}
 
 	/** What is the error header, normally line/character position information? */
 	@NotNull
 	getErrorHeader(@NotNull e: RecognitionException): string {
-		let line: number =  e.getOffendingToken().getLine();
-		let charPositionInLine: number =  e.getOffendingToken().getCharPositionInLine();
+		let token = e.getOffendingToken()
+		if (!token) return ""
+		let line = token.getLine();
+		let charPositionInLine: number =  token.getCharPositionInLine();
 		return "line "+line+":"+charPositionInLine;
-	}
-
-	/** How should a token be displayed in an error message? The default
-	 *  is to display just the text, but during development you might
-	 *  want to have a lot of information spit out.  Override in that case
-	 *  to use t.toString() (which, for CommonToken, dumps everything about
-	 *  the token). This is better than forcing you to override a method in
-	 *  your token objects because you don't have to go modify your lexer
-	 *  so that it creates a new Java type.
-	 *
-	 * @deprecated This method is not called by the ANTLR 4 Runtime. Specific
-	 * implementations of {@link ANTLRErrorStrategy} may provide a similar
-	 * feature when necessary. For example, see
-	 * {@link DefaultErrorStrategy#getTokenErrorDisplay}.
-	 */
-	@Deprecated
-	getTokenErrorDisplay(t: Token): string {
-		if ( t==null ) return "<no token>";
-		let s: string =  t.getText();
-		if ( s==null ) {
-			if ( t.getType()==Token.EOF ) {
-				s = "<EOF>";
-			}
-			else {
-				s = "<"+t.getType()+">";
-			}
-		}
-		s = s.replace("\n","\\n");
-		s = s.replace("\r","\\r");
-		s = s.replace("\t","\\t");
-		return "'"+s+"'";
 	}
 
 	/**
 	 * @exception NullPointerException if {@code listener} is {@code null}.
 	 */
-	addErrorListener(@NotNull listener: ANTLRErrorListener<? super Symbol>): void {
-		Args.notNull("listener", listener);
-		_listeners.add(listener);
+	addErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+		if (!listener) throw new TypeError("listener must not be null");
+		this._listeners.push(listener);
 	}
 
-	removeErrorListener(@NotNull listener: ANTLRErrorListener<? super Symbol>): void {
-		_listeners.remove(listener);
+	removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+		let position = this._listeners.indexOf( listener );
+		if (position !== -1) {
+			this._listeners.splice(position, 1);
+		}
 	}
 
 	removeErrorListeners(): void {
-		_listeners.clear();
+		this._listeners.length = 0;
 	}
 
 	@NotNull
-	getErrorListeners(): List<? extends ANTLRErrorListener<? super Symbol>> {
-		return new ArrayList<ANTLRErrorListener<? super Symbol>>(_listeners);
+	getErrorListeners(): ANTLRErrorListener<Symbol>[] {
+		return this._listeners.slice(0);
 	}
 
-	getErrorListenerDispatch(): ANTLRErrorListener<? super Symbol> {
-		return new ProxyErrorListener<Symbol>(getErrorListeners());
+	getErrorListenerDispatch(): ANTLRErrorListener<Symbol> {
+		return new ProxyErrorListener<Symbol>(this.getErrorListeners());
 	}
 
 	// subclass needs to override these if there are sempreds or actions
 	// that the ATN interp needs to execute
-	sempred(@Nullable RuleContext _localctx, ruleIndex: number, actionIndex: number): boolean {
+	sempred(
+		_localctx: RuleContext | undefined,
+	 	ruleIndex: number,
+		actionIndex: number): boolean
+	{
 		return true;
 	}
 
-	precpred(@Nullable localctx: RuleContext, precedence: number): boolean {
+	precpred(
+		localctx: RuleContext | undefined,
+		precedence: number): boolean
+	{
 		return true;
 	}
 
-	action(@Nullable RuleContext _localctx, ruleIndex: number, actionIndex: number): void {
+	action(
+		_localctx: RuleContext | undefined,
+		ruleIndex: number,
+		actionIndex: number): void
+	{
 	}
 
 	getState(): number {
-		return _stateNumber;
+		return this._stateNumber;
 	}
 
 	/** Indicate that the recognizer has changed internal state that is
@@ -278,9 +260,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	setState(atnState: number): void {
 //		System.err.println("setState "+atnState);
-		_stateNumber = atnState;
+		this._stateNumber = atnState;
 //		if ( traceATNStates ) _ctx.trace(atnState);
 	}
 
-	abstract getInputStream(): IntStream;
+	abstract getInputStream(): IntStream | undefined;
 }
