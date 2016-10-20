@@ -43,6 +43,8 @@ import { Token } from "./Token";
 import { Vocabulary } from "./Vocabulary";
 import { VocabularyImpl } from "./VocabularyImpl";
 
+import * as Utils from './misc/Utils';
+
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static EOF: number = -1;
 
@@ -95,6 +97,27 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 			result.set("EOF", Token.EOF);
 			Object.freeze(result);
 			Recognizer.tokenTypeMapCache.set(vocabulary, result);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Get a map from rule names to rule indexes.
+	 *
+	 * <p>Used for XPath and tree pattern compilation.</p>
+	 */
+	@NotNull
+	getRuleIndexMap(): Map<string, number> {
+		let ruleNames: string[] = this.getRuleNames();
+		if (ruleNames == null) {
+			throw new Error("The current recognizer does not provide a list of rule names.");
+		}
+
+		let result: Map<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
+		if (result == null) {
+			result = Object.freeze(Utils.toMap(ruleNames));
+			Recognizer.ruleIndexMapCache.set(ruleNames, result);
 		}
 
 		return result;
