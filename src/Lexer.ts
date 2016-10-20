@@ -66,14 +66,14 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	static readonly MIN_CHAR_VALUE: number =  0x0000;
-	static readonly MAX_CHAR_VALUE: number =  0xFFFE;
+	static readonly MAX_CHAR_VALUE: number =  0xFFFF;
 
-	public _input: CharStream;
+	_input: CharStream;
 
 	protected _tokenFactorySourcePair: [TokenSource, CharStream];
 
 	/** How to create token objects */
-	protected _factory = CommonTokenFactory.DEFAULT;
+	protected _factory: TokenFactory = CommonTokenFactory.DEFAULT;
 
 	/** The goal of all lexer rules/methods is to create a token object.
 	 *  This is an instance variable as multiple rules may collaborate to
@@ -83,38 +83,38 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  something nonnull so that the auto token emit mechanism will not
 	 *  emit another token.
 	 */
-	public _token: Token | null;
+	_token: Token | undefined;
 
 	/** What character index in the stream did the current token start at?
 	 *  Needed, for example, to get the text for current token.  Set at
 	 *  the start of nextToken.
 	 */
-	public _tokenStartCharIndex = -1;
+	_tokenStartCharIndex: number = -1;
 
 	/** The line on which the first character of the token resides */
-	public _tokenStartLine: number;
+	_tokenStartLine: number;
 
 	/** The character position of first character within the line */
-	public _tokenStartCharPositionInLine: number;
+	_tokenStartCharPositionInLine: number;
 
 	/** Once we see EOF on char stream, next token will be EOF.
 	 *  If you have DONE : EOF ; then you see DONE EOF.
 	 */
-	public _hitEOF: boolean;
+	_hitEOF: boolean;
 
 	/** The channel number for the current token */
-	public _channel: number;
+	_channel: number;
 
 	/** The token type for the current token */
-	public _type: number;
+	_type: number;
 
-	public _modeStack = new IntegerStack();
-	public _mode = Lexer.DEFAULT_MODE;
+	readonly _modeStack: IntegerStack = new IntegerStack();
+	_mode: number = Lexer.DEFAULT_MODE;
 
 	/** You can set the text for the current token to override what is in
 	 *  the input char buffer.  Use setText() or can set this instance var.
 	 */
-	public _text: string;
+	_text: string | undefined;
 
 	constructor(input: CharStream)  {
 		super();
@@ -122,18 +122,21 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._tokenFactorySourcePair = [this, input];
 	}
 
-	reset(noSeek: boolean = false): void {
+	reset(): void;
+	reset(resetInput: boolean): void;
+	reset(resetInput?: boolean): void {
 		// wack Lexer state variables
-		if ( !noSeek ) {
+		if ( resetInput === undefined || resetInput === true ) {
 			this._input.seek(0); // rewind the input
 		}
-		this._token = null;
+
+		this._token = undefined;
 		this._type = Token.INVALID_TYPE;
 		this._channel = Token.DEFAULT_CHANNEL;
 		this._tokenStartCharIndex = -1;
 		this._tokenStartCharPositionInLine = -1;
 		this._tokenStartLine = -1;
-		this._text = "";
+		this._text = undefined;
 
 		this._hitEOF = false;
 		this._mode = Lexer.DEFAULT_MODE;
@@ -161,12 +164,12 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 					return this.emitEOF();
 				}
 
-				this._token = null;
+				this._token = undefined;
 				this._channel = Token.DEFAULT_CHANNEL;
 				this._tokenStartCharIndex = this._input.index();
 				this._tokenStartCharPositionInLine = this.getInterpreter().getCharPositionInLine();
 				this._tokenStartLine = this.getInterpreter().getLine();
-				this._text = "";
+				this._text = undefined;
 				do {
 					this._type = Token.INVALID_TYPE;
 //				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
@@ -247,8 +250,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	/** Set the char stream and reset the lexer */
 	setInputStream(input: CharStream): void {
-		this._tokenFactorySourcePair = [this, this._input];
-		this.reset(true);
+		this.reset(false);
 		this._input = input;
 		this._tokenFactorySourcePair = [this, this._input];
 	}
@@ -270,12 +272,15 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  use that to set the token's text.  Override this method to emit
 	 *  custom Token objects or provide a new factory.
 	 */
+	emit(token: Token): Token;
 
 	/** By default does not support multiple emits per nextToken invocation
 	 *  for efficiency reasons.  Subclass and override this method, nextToken,
 	 *  and getToken (to push tokens into a list and pull from that list
 	 *  rather than a single variable as this implementation does).
 	 */
+	emit(): Token;
+
 	emit(token?: Token): Token  {
 		if (!token) token = this._factory.create(
 			this._tokenFactorySourcePair, this._type, this._text, this._channel,
@@ -289,7 +294,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		let cpos: number = this.getCharPositionInLine();
 		let line: number = this.getLine();
 		let eof: Token = this._factory.create(
-			this._tokenFactorySourcePair, Token.EOF, "",
+			this._tokenFactorySourcePair, Token.EOF, undefined,
 			Token.DEFAULT_CHANNEL, this._input.index(), this._input.index()-1,
 			line, cpos);
 		this.emit(eof);
@@ -337,7 +342,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	/** Override if emitting multiple tokens. */
-	getToken(): Token | null { return this._token; }
+	getToken(): Token | undefined { return this._token; }
 
 	setToken(_token: Token): void {
 		this._token = _token;
@@ -359,25 +364,13 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this._channel;
 	}
 
-	getModeNames(): string[] {
-		return ["default"];
-	}
-
-	// /** Used to print out token names like ID during debugging and
-	//  *  error reporting.  The generated parsers implement a method
-	//  *  that overrides this to point to their String[] tokenNames.
-	//  */
-	// @Override
-	// @Deprecated
-	// getTokenNames(): string[] {
-	// 	return null;
-	// }
+	abstract getModeNames(): string[];
 
 	/** Return a list of all Token objects in input char stream.
 	 *  Forces load of all tokens. Does not include EOF token.
 	 */
-	getAllTokens(): Array<Token> {
-		let tokens: Array<Token> = new Array<Token>();
+	getAllTokens(): Token[] {
+		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
 		while ( t.getType()!=Token.EOF ) {
 			tokens.push(t);
@@ -385,7 +378,6 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		}
 		return tokens;
 	}
-
 
 	notifyListeners(e: LexerNoViableAltException): void {
 		let text: string =  this._input.getText(
@@ -426,16 +418,19 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  it all works out.  You can instead use the rule invocation stack
 	 *  to do sophisticated error recovery if you are in a fragment rule.
 	 */
+	recover(re: RecognitionException): void;
+	recover(re: LexerNoViableAltException): void;
 	recover(re: RecognitionException): void {
 		if (re instanceof LexerNoViableAltException) {
 			if (this._input.LA(1) != IntStream.EOF) {
 				// skip a char and try again
 				this.getInterpreter().consume(this._input);
 			}
+		} else {
+			//System.out.println("consuming char "+(char)input.LA(1)+" during recovery");
+			//re.printStackTrace();
+			// TODO: Do we lose character or line position information?
+			this._input.consume();
 		}
-		//System.out.println("consuming char "+(char)input.LA(1)+" during recovery");
-		//re.printStackTrace();
-		// TODO: Do we lose character or line position information?
-		this._input.consume();
 	}
 }
