@@ -54,13 +54,15 @@ import * as Utils from '../misc/Utils';
 type KeyType = { state: number, alt: number };
 
 class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
-		hashCode(key: KeyType){ 
-			return key.state ^ key.alt;
-		}
-		equals(a: KeyType, b: KeyType) {
-			return a.state === b.state && a.alt === b.alt;
-		}
-		static INSTANCE = new KeyTypeEqualityComparer();
+	hashCode(key: KeyType) {
+		return key.state ^ key.alt;
+	}
+
+	equals(a: KeyType, b: KeyType) {
+		return a.state === b.state && a.alt === b.alt;
+	}
+
+	static readonly INSTANCE = new KeyTypeEqualityComparer();
 }
 
 function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
@@ -138,10 +140,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				this.mergedConfigs = undefined;
 				this.unmerged = undefined;
 			} else if (!set.isReadOnly()) {
-				this.mergedConfigs =  NewKeyedConfigMap(set.mergedConfigs);
+				this.mergedConfigs = NewKeyedConfigMap(set.mergedConfigs);
 				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
 			} else {
-				this.mergedConfigs =  NewKeyedConfigMap();;
+				this.mergedConfigs = NewKeyedConfigMap();
 				this.unmerged = [];
 			}
 
@@ -596,7 +598,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let config: ATNConfig = this.configs[index];
 		this.configs.splice(index, 1);
 		let key = this.getKey(config);
-		if (this.mergedConfigs.get(key) == config) {
+		if (this.mergedConfigs.get(key) === config) {
 			this.mergedConfigs.remove(key);
 		} else {
 			for (let i = 0; i < this.unmerged.length; i++) {
