@@ -106,7 +106,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\LexerPushModeAction.java
 * [x] atn\LexerSkipAction.java
 * [x] atn\LexerTypeAction.java
-* [ ] atn\LL1Analyzer.java
+* [x] atn\LL1Analyzer.java
 * [x] atn\LookaheadEventInfo.java
 * [x] atn\LoopEndState.java
 * [x] atn\NotSetTransition.java
