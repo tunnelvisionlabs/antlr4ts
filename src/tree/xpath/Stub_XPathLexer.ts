@@ -6,7 +6,6 @@ import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 export class XPathLexer extends Lexer {
 	constructor(input: any) { super(input); throw new Error("Not implemented"); }
 
-	// TODO: Is this now obsolete, or not?
 	getRuleNames(): string[] { throw new Error("Not implemented"); }
 	getModeNames(): string[] { throw new Error("Not implemented"); }
 	getGrammarFileName(): string { throw new Error("Not implemented");}

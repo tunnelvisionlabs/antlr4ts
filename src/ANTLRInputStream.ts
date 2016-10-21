@@ -48,16 +48,16 @@ const INITIAL_BUFFER_SIZE: number =  1024;
 
 export class ANTLRInputStream implements CharStream {
 	/** The data being scanned */
-	protected data: string; 
+	protected data: string;
 
 	/** How many characters are actually in the buffer */
-	protected n: number; 
+	protected n: number;
 
 	/** 0..n-1 index into string of next char */
 	protected p: number = 0;
 
 	/** What is name or source of this char stream? */
-	name: string; 
+	name: string;
 
 	/** Copy data in string to a local char array */
 	constructor(input: string)  {
@@ -170,7 +170,7 @@ export class ANTLRInputStream implements CharStream {
 		if (!this.name) {
 			return IntStream.UNKNOWN_SOURCE_NAME;
 		}
-		return name;
+		return this.name;
 	}
 
     @Override

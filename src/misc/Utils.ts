@@ -172,17 +172,17 @@ export function equals(x: any, y: any): boolean {
 // 	}
 // }
 
-// /** Convert array of strings to string&rarr;index map. Useful for
-// 	*  converting rulenames to name&rarr;ruleindex map.
-// 	*/
+/** Convert array of strings to string&rarr;index map. Useful for
+ *  converting rulenames to name&rarr;ruleindex map.
+ */
+export function toMap(keys: string[]): Map<string, number> {
+	let m: Map<string, number> = new Map<string, number>();
+	for (let i = 0; i < keys.length; i++) {
+		m.set(keys[i], i);
+	}
 
-// export function toMap(keys: string[]): Map<string, number> {
-// 	let m: Map<string, number> =  new HashMap<String, Integer>();
-// 	for (let i=0; i<keys.length; i++) {
-// 		m.put(keys[i], i);
-// 	}
-// 	return m;
-// }
+	return m;
+}
 
 // export function toCharArray(data: IntegerList): char[] {
 // 	if ( data==null ) return null;

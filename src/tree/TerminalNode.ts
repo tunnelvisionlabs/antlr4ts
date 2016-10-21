@@ -89,7 +89,7 @@ export class TerminalNode implements ParseTree  {
 
 	@Override
 	toStringTree(parser?: Parser): string {
-		return toString();
+		return this.toString();
 	}
 
 	@Override
