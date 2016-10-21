@@ -26,9 +26,9 @@ BANG	 : '!' ;
 
 ID			:	NameStartChar NameChar*
 				{
-				String text = getText();
-				if ( Character.isUpperCase(text.charAt(0)) ) setType(TOKEN_REF);
-				else setType(RULE_REF);
+				let text = this.getText();
+				if (text.charAt(0) === text.charAt(0).toUpperCase()) this.setType(XPathLexer.TOKEN_REF);
+				else this.setType(XPathLexer.RULE_REF);
 				}
 			;
 
