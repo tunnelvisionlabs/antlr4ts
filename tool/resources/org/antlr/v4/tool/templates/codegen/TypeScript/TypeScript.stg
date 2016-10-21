@@ -367,13 +367,13 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 	<exceptions; separator="\n">
 	<else>
 	catch (re) {
-        if (re instanceof RecognitionException) {
-            _localctx.exception = re;
-            this._errHandler.reportError(this, re);
-            this._errHandler.recover(this, re);
-        } else {
-            throw re;
-        }
+		if (re instanceof RecognitionException) {
+			_localctx.exception = re;
+			this._errHandler.reportError(this, re);
+			this._errHandler.recover(this, re);
+		} else {
+			throw re;
+		}
 	}
 	<endif>
 	finally {
@@ -400,13 +400,13 @@ LeftFactoredRuleFunction(currentRule,args,code,locals,namedActions,finallyAction
 		<postamble; separator="\n">
 		<namedActions.after>
 	} catch (re) {
-        if (re instanceof RecognitionException) {
-            _localctx.exception = re;
-            this._errHandler.reportError(this, re);
-            this._errHandler.recover(this, re);
-        } else {
-            throw re;
-        }
+		if (re instanceof RecognitionException) {
+			_localctx.exception = re;
+			this._errHandler.reportError(this, re);
+			this._errHandler.recover(this, re);
+		} else {
+			throw re;
+		}
 	}
 	finally {
 		<finallyAction>
@@ -436,13 +436,13 @@ LeftUnfactoredRuleFunction(currentRule,args,code,locals,namedActions,finallyActi
 		<namedActions.after>
 	}
 	catch (re) {
-        if (re instanceof RecognitionException) {
-            _localctx.exception = re;
-            this._errHandler.reportError(this, re);
-            this._errHandler.recover(this, re);
-        } else {
-            throw re;
-        }
+		if (re instanceof RecognitionException) {
+			_localctx.exception = re;
+			this._errHandler.reportError(this, re);
+			this._errHandler.recover(this, re);
+		} else {
+			throw re;
+		}
 	}
 	finally {
 		<finallyAction>
@@ -482,13 +482,13 @@ private <currentRule.name>(_p: number<args:{a | , <a>}>): <currentRule.ctxType> 
 		<namedActions.after>
 	}
 	catch (re) {
-        if (re instanceof RecognitionException) {
-            _localctx.exception = re;
-            this._errHandler.reportError(this, re);
-            this._errHandler.recover(this, re);
-        } else {
-            throw re;
-        }
+		if (re instanceof RecognitionException) {
+			_localctx.exception = re;
+			this._errHandler.reportError(this, re);
+			this._errHandler.recover(this, re);
+		} else {
+			throw re;
+		}
 	}
 	finally {
 		<finallyAction>
