@@ -425,7 +425,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		if ( state==null ) {
 			if ( outerContext==null ) outerContext = ParserRuleContext.emptyContext();
-			if ( ParserATNSimulator.debug ) console.debug("ATN decision "+dfa.decision+
+			if ( ParserATNSimulator.debug ) console.log("ATN decision "+dfa.decision+
 											" exec LA(1)=="+ this.getLookaheadName(input) +
 											", outerContext="+outerContext.toString(this.parser));
 
@@ -436,7 +436,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let index: number =  input.index();
 		try {
 			let alt: number =  this.execDFA(dfa, input, index, state);
-			if ( ParserATNSimulator.debug ) console.debug("DFA after predictATN: "+dfa.toString(this.parser.getVocabulary(), this.parser.getRuleNames()));
+			if ( ParserATNSimulator.debug ) console.log("DFA after predictATN: "+dfa.toString(this.parser.getVocabulary(), this.parser.getRuleNames()));
 			return alt;
 		}
 		finally {
@@ -508,17 +508,17 @@ export class ParserATNSimulator extends ATNSimulator {
 					   @NotNull state: SimulatorState): number
     {
 		let outerContext: ParserRuleContext =  state.outerContext;
-		if ( ParserATNSimulator.dfa_debug ) console.debug("DFA decision "+dfa.decision+
+		if ( ParserATNSimulator.dfa_debug ) console.log("DFA decision "+dfa.decision+
 											" exec LA(1)=="+ this.getLookaheadName(input) +
 											", outerContext="+outerContext.toString(this.parser));
-		if ( ParserATNSimulator.dfa_debug ) console.debug(dfa.toString(this.parser.getVocabulary(), this.parser.getRuleNames()));
+		if ( ParserATNSimulator.dfa_debug ) console.log(dfa.toString(this.parser.getVocabulary(), this.parser.getRuleNames()));
 		let s: DFAState =  state.s0;
 
 		let t: number =  input.LA(1);
 		let remainingOuterContext: ParserRuleContext | undefined =  state.remainingOuterContext;
 
 		while ( true ) {
-			if ( ParserATNSimulator.dfa_debug ) console.debug("DFA state "+s.stateNumber+" LA(1)=="+this.getLookaheadName(input));
+			if ( ParserATNSimulator.dfa_debug ) console.log("DFA state "+s.stateNumber+" LA(1)=="+this.getLookaheadName(input));
 			if ( state.useContext ) {
 				while ( s.isContextSymbol(t) ) {
 					let next: DFAState | undefined;
@@ -541,10 +541,10 @@ export class ParserATNSimulator extends ATNSimulator {
 
 			if ( this.isAcceptState(s, state.useContext) ) {
 				if ( s.predicates!=null ) {
-					if ( ParserATNSimulator.dfa_debug ) console.debug("accept "+s);
+					if ( ParserATNSimulator.dfa_debug ) console.log("accept "+s);
 				}
 				else {
-					if ( ParserATNSimulator.dfa_debug ) console.debug("accept; predict "+s.getPrediction() +" in state "+s.stateNumber);
+					if ( ParserATNSimulator.dfa_debug ) console.log("accept; predict "+s.getPrediction() +" in state "+s.stateNumber);
 				}
 
 				// keep going unless we're at EOF or state only has one alt number
@@ -560,7 +560,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			// if no edge, pop over to ATN interpreter, update DFA and return
 			let target: DFAState | undefined =  this.getExistingTargetState(s, t);
 			if ( target == null ) {
-				if ( ParserATNSimulator.dfa_debug && t>=0 ) console.debug("no edge for "+this.parser.getVocabulary().getDisplayName(t));
+				if ( ParserATNSimulator.dfa_debug && t>=0 ) console.log("no edge for "+this.parser.getVocabulary().getDisplayName(t));
 				let alt: number;
 				if ( ParserATNSimulator.dfa_debug ) {
 					let interval: Interval =  Interval.of(startIndex, this.parser.getInputStream().index());
@@ -576,7 +576,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					//dump(dfa);
 				}
 				// action already executed
-				if ( ParserATNSimulator.dfa_debug ) console.debug("DFA decision "+dfa.decision+
+				if ( ParserATNSimulator.dfa_debug ) console.log("DFA decision "+dfa.decision+
 													" predicts "+alt);
 				return alt; // we've updated DFA, exec'd action, and have our deepest answer
 			}
@@ -672,7 +672,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		if ( ParserATNSimulator.dfa_debug ) console.debug("DFA decision "+dfa.decision+
+		if ( ParserATNSimulator.dfa_debug ) console.log("DFA decision "+dfa.decision+
 											" predicts "+s.getPrediction());
 		return s.getPrediction();
 	}
@@ -765,7 +765,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					   @NotNull input: TokenStream, startIndex: number,
 					   @NotNull initialState: SimulatorState): number
 	{
-		if ( ParserATNSimulator.debug ) console.debug("execATN decision "+dfa.decision+" exec LA(1)=="+ this.getLookaheadName(input));
+		if ( ParserATNSimulator.debug ) console.log("execATN decision "+dfa.decision+" exec LA(1)=="+ this.getLookaheadName(input));
 
 		let outerContext: ParserRuleContext =  initialState.outerContext;
 		let useContext: boolean =  initialState.useContext;
@@ -867,7 +867,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					assert(!useContext);
 					assert(this.isAcceptState(D, false));
 
-					if ( ParserATNSimulator.debug ) console.debug("RETRY with outerContext="+outerContext);
+					if ( ParserATNSimulator.debug ) console.log("RETRY with outerContext="+outerContext);
 					let fullContextState: SimulatorState =  this.computeStartState(dfa, outerContext, true);
 					if (this.reportAmbiguities) {
 						this.reportAttemptingFullContext(dfa, conflictingAlts, nextState, startIndex, input.index());
@@ -1116,7 +1116,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			let skippedStopStates: ATNConfig[] | undefined;
 
 			for (let c of closureConfigs) {
-				if ( ParserATNSimulator.debug ) console.debug("testing "+this.getTokenName(t)+" at "+c.toString());
+				if ( ParserATNSimulator.debug ) console.log("testing "+this.getTokenName(t)+" at "+c.toString());
 
 				if (c.getState() instanceof RuleStopState) {
 					assert(c.getContext().isEmpty());
@@ -1551,7 +1551,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			throw new Error("This unhandled scenario is intended to be unreachable, but I'm currently not sure of why we know that's the case.")
 		}
 
-		if ( ParserATNSimulator.debug ) console.debug("predicateDFAState "+D);
+		if ( ParserATNSimulator.debug ) console.log("predicateDFAState "+D);
 		let altToPred: SemanticContext[] | undefined = this.getPredsForAmbigAlts(conflictingAlts, configs, nalts);
 		// altToPred[uniqueAlt] is now our validating predicate (if any)
 		let predPredictions: DFAState.PredPrediction[] | undefined;
@@ -1604,7 +1604,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		// nonambig alts are undefined in result
 		if ( nPredAlts===0 ) result = undefined;
-		if ( ParserATNSimulator.debug ) console.debug("getPredsForAmbigAlts result "+(result ? Arrays.toString(result) : "undefined"));
+		if ( ParserATNSimulator.debug ) console.log("getPredsForAmbigAlts result "+(result ? Arrays.toString(result) : "undefined"));
 		return result;
 	}
 
@@ -1664,7 +1664,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 
 			if ( evaluatedResult ) {
-				if ( ParserATNSimulator.debug || ParserATNSimulator.dfa_debug ) console.debug("PREDICT "+pair.alt);
+				if ( ParserATNSimulator.debug || ParserATNSimulator.dfa_debug ) console.log("PREDICT "+pair.alt);
 				predictions.set(pair.alt);
 				if (!complete) {
 					break;
@@ -1746,7 +1746,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						   depth: number,
 						   treatEofAsEpsilon: boolean): void
 	{
-		if ( ParserATNSimulator.debug ) console.debug("closure("+config.toString(this.parser,true)+")");
+		if ( ParserATNSimulator.debug ) console.log("closure("+config.toString(this.parser,true)+")");
 
 		if ( config.getState() instanceof RuleStopState ) {
 			// We hit rule end. If we have context info, use it
@@ -1778,7 +1778,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 			else {
 				// else if we have no context info, just chase follow links (if greedy)
-				if ( ParserATNSimulator.debug ) console.debug("FALLING off rule "+
+				if ( ParserATNSimulator.debug ) console.log("FALLING off rule "+
 												this.getRuleName(config.getState().ruleIndex));
 
 				if (config.getContext() === PredictionContext.EMPTY_FULL) {
@@ -1798,7 +1798,7 @@ export class ParserATNSimulator extends ATNSimulator {
             configs.add(config, contextCache);
 			// make sure to not return here, because EOF transitions can act as
 			// both epsilon transitions and non-epsilon transitions.
-            if ( ParserATNSimulator.debug ) console.debug("added config "+configs);
+            if ( ParserATNSimulator.debug ) console.log("added config "+configs);
         }
 
         for (let i=0; i < p.getNumberOfOptimizedTransitions(); i++) {
@@ -1843,7 +1843,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 					assert(newDepth > MIN_INTEGER_VALUE);
 					newDepth--;
-					if ( ParserATNSimulator.debug ) console.debug("dips into outer ctx: "+c);
+					if ( ParserATNSimulator.debug ) console.log("dips into outer ctx: "+c);
 				}
 				else if (t instanceof RuleTransition) {
 					if (this.optimize_tail_calls && (<RuleTransition>t).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.getContext()))) {
@@ -1914,7 +1914,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	@NotNull
 	protected actionTransition(@NotNull config: ATNConfig, @NotNull t: ActionTransition): ATNConfig {
-		if ( ParserATNSimulator.debug ) console.debug("ACTION edge "+t.ruleIndex+":"+t.actionIndex);
+		if ( ParserATNSimulator.debug ) console.log("ACTION edge "+t.ruleIndex+":"+t.actionIndex);
 		return config.transform(t.target, false);
 	}
 
@@ -1943,7 +1943,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			c = config.transform(pt.target, false);
 		}
 
-		if ( ParserATNSimulator.debug ) console.debug("config from pred transition="+c);
+		if ( ParserATNSimulator.debug ) console.log("config from pred transition="+c);
         return c;
 	}
 
@@ -1974,7 +1974,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			c = config.transform(pt.target, false);
 		}
 
-		if ( ParserATNSimulator.debug ) console.debug("config from pred transition="+c);
+		if ( ParserATNSimulator.debug ) console.log("config from pred transition="+c);
         return c;
 	}
 
@@ -2296,9 +2296,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-        if ( ParserATNSimulator.debug ) console.debug("EDGE "+from+" -> "+to+" upon "+this.getTokenName(t));
+        if ( ParserATNSimulator.debug ) console.log("EDGE "+from+" -> "+to+" upon "+this.getTokenName(t));
 		this.setDFAEdge(from, t, to);
-		if ( ParserATNSimulator.debug ) console.debug("DFA=\n"+dfa.toString(this.parser!=null?this.parser.getVocabulary():VocabularyImpl.EMPTY_VOCABULARY, this.parser!=null?this.parser.getRuleNames():undefined));
+		if ( ParserATNSimulator.debug ) console.log("DFA=\n"+dfa.toString(this.parser!=null?this.parser.getVocabulary():VocabularyImpl.EMPTY_VOCABULARY, this.parser!=null?this.parser.getRuleNames():undefined));
 		return to;
 	}
 
@@ -2369,7 +2369,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		let added: DFAState =  dfa.addState(newState);
-        if ( ParserATNSimulator.debug && added === newState ) console.debug("adding new DFA state: "+newState);
+        if ( ParserATNSimulator.debug && added === newState ) console.log("adding new DFA state: "+newState);
 		return added;
 	}
 
