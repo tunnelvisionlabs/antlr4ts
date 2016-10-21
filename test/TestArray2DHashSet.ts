@@ -1,7 +1,7 @@
 require('source-map-support').install();
 import {Equatable} from '../src/misc/Stubs';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
-import {MurmurHash} from '../src/misc/MurmurHash'
+import {MurmurHash} from '../src/misc/MurmurHash';
 import { suite, test } from 'mocha-typescript';
 import * as assert from "assert";
 
