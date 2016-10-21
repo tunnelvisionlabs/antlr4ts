@@ -63,8 +63,12 @@ class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
 		static INSTANCE = new KeyTypeEqualityComparer();
 }
 
-function NewKeyedConfigMap() {
-	return new Array2DHashMap<KeyType, ATNConfig>( KeyTypeEqualityComparer.INSTANCE );
+function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
+	if (map) {
+		return new Array2DHashMap<KeyType, ATNConfig>(map);
+	} else {
+		return new Array2DHashMap<KeyType, ATNConfig>(KeyTypeEqualityComparer.INSTANCE);
+	}
 }
 
 /**
@@ -134,7 +138,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				this.mergedConfigs = undefined;
 				this.unmerged = undefined;
 			} else if (!set.isReadOnly()) {
-				this.mergedConfigs =  NewKeyedConfigMap();
+				this.mergedConfigs =  NewKeyedConfigMap(set.mergedConfigs);
 				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
 			} else {
 				this.mergedConfigs =  NewKeyedConfigMap();;
