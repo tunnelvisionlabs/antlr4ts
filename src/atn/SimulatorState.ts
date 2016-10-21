@@ -42,9 +42,9 @@ export class SimulatorState {
 	s0: DFAState;
 
 	useContext: boolean;
-	remainingOuterContext: ParserRuleContext;
+	remainingOuterContext: ParserRuleContext | undefined;
 
-	constructor(outerContext: ParserRuleContext, @NotNull s0: DFAState, useContext: boolean, remainingOuterContext: ParserRuleContext) {
+	constructor(outerContext: ParserRuleContext, @NotNull s0: DFAState, useContext: boolean, remainingOuterContext: ParserRuleContext | undefined) {
 		this.outerContext = outerContext != null ? outerContext : ParserRuleContext.emptyContext();
 		this.s0 = s0;
 		this.useContext = useContext;

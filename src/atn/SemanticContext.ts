@@ -124,8 +124,8 @@ export abstract class SemanticContext implements Equatable {
 
 	abstract equals(obj: any): boolean;
 
-	static and(a: SemanticContext, b: SemanticContext): SemanticContext {
-		if ( a === SemanticContext.NONE ) return b;
+	static and(a: SemanticContext | undefined, b: SemanticContext): SemanticContext {
+		if ( !a || a === SemanticContext.NONE ) return b;
 		if ( b === SemanticContext.NONE ) return a;
 		let result: SemanticContext.AND =  new SemanticContext.AND(a, b);
 		if (result.opnds.length === 1) {
@@ -139,7 +139,11 @@ export abstract class SemanticContext implements Equatable {
 	 *
 	 *  @see ParserATNSimulator#getPredsForAmbigAlts
 	 */
-	static or(a: SemanticContext, b: SemanticContext): SemanticContext {
+	static or(a: SemanticContext | undefined, b: SemanticContext): SemanticContext {
+		if (!a) {
+			return b;
+		}
+
 		if ( a === SemanticContext.NONE || b === SemanticContext.NONE ) return SemanticContext.NONE;
 		let result: SemanticContext.OR =  new SemanticContext.OR(a, b);
 		if (result.opnds.length === 1) {

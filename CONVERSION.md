@@ -112,7 +112,8 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\NotSetTransition.java
 * [x] atn\OrderedATNConfigSet.java
 * [x] atn\ParseInfo.java
-* [ ] atn\ParserATNSimulator.java
+* [x] atn\ParserATNSimulator.java
+  * [ ] Ability to pass `undefined` as the `Parser` instance
 * [x] atn\PlusBlockStartState.java
 * [x] atn\PlusLoopbackState.java
 * [x] atn\PrecedencePredicateTransition.java

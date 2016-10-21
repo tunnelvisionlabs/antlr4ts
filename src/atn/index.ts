@@ -43,7 +43,7 @@ export * from './LoopEndState';
 export * from './NotSetTransition';
 export * from './OrderedATNConfigSet';
 export * from './ParseInfo';
-// export * from './ParserATNSimulator';
+export * from './ParserATNSimulator';
 export * from './PlusBlockStartState';
 export * from './PlusLoopbackState';
 export * from './PrecedencePredicateTransition';
