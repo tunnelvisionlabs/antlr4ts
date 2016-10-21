@@ -30,6 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.5488013-07:00
 
+import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
 import { ATN } from './ATN';
@@ -39,6 +40,7 @@ import { ATNState } from './ATNState';
 import { BitSet } from '../misc/BitSet';
 import { Collection, JavaIterator, asIterable } from '../misc/Stubs';
 import { ConflictInfo } from './ConflictInfo';
+import { EqualityComparator } from '../misc/EqualityComparator';
 import { JavaSet } from '../misc/Stubs';
 import { NotNull, Override } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
@@ -50,6 +52,26 @@ import * as assert from 'assert';
 import * as Utils from '../misc/Utils';
 
 type KeyType = { state: number, alt: number };
+
+class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
+	hashCode(key: KeyType) {
+		return key.state ^ key.alt;
+	}
+
+	equals(a: KeyType, b: KeyType) {
+		return a.state === b.state && a.alt === b.alt;
+	}
+
+	static readonly INSTANCE = new KeyTypeEqualityComparer();
+}
+
+function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
+	if (map) {
+		return new Array2DHashMap<KeyType, ATNConfig>(map);
+	} else {
+		return new Array2DHashMap<KeyType, ATNConfig>(KeyTypeEqualityComparer.INSTANCE);
+	}
+}
 
 /**
  *
@@ -66,7 +88,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * This map is only used for optimizing the process of adding configs to the set,
 	 * and is {@code null} for read-only sets stored in the DFA.
 	 */
-	private mergedConfigs?: Map<KeyType, ATNConfig>;
+	private mergedConfigs?: Array2DHashMap<KeyType, ATNConfig>;
 
 	/**
 	 * This is an "overflow" list holding configs which cannot be merged with one
@@ -107,7 +129,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	constructor(set: ATNConfigSet, readonly: boolean);
 	constructor(set?: ATNConfigSet, readonly?: boolean) {
 		if (!set) {
-			this.mergedConfigs = new Map<{ state: number, alt: number }, ATNConfig>();
+			this.mergedConfigs = NewKeyedConfigMap();
 			this.unmerged = [];
 			this.configs = [];
 
@@ -118,10 +140,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				this.mergedConfigs = undefined;
 				this.unmerged = undefined;
 			} else if (!set.isReadOnly()) {
-				this.mergedConfigs = new Map<KeyType, ATNConfig>(<Map<KeyType, ATNConfig>>set.mergedConfigs);
+				this.mergedConfigs = NewKeyedConfigMap(set.mergedConfigs);
 				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
 			} else {
-				this.mergedConfigs = new Map<KeyType, ATNConfig>();
+				this.mergedConfigs = NewKeyedConfigMap();
 				this.unmerged = [];
 			}
 
@@ -316,7 +338,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				unmergedConfig.setContext(joined);
 
 				if (addKey) {
-					this.mergedConfigs.set(key, unmergedConfig);
+					this.mergedConfigs.put(key, unmergedConfig);
 					this.unmerged.splice(i, 1);
 				}
 
@@ -326,7 +348,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		this.configs.push(e);
 		if (addKey) {
-			this.mergedConfigs.set(key, e);
+			this.mergedConfigs.put(key, e);
 		} else {
 			this.unmerged.push(e);
 		}
@@ -576,8 +598,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let config: ATNConfig = this.configs[index];
 		this.configs.splice(index, 1);
 		let key = this.getKey(config);
-		if (this.mergedConfigs.get(key) == config) {
-			this.mergedConfigs.delete(key);
+		if (this.mergedConfigs.get(key) === config) {
+			this.mergedConfigs.remove(key);
 		} else {
 			for (let i = 0; i < this.unmerged.length; i++) {
 				if (this.unmerged[i] === config) {
