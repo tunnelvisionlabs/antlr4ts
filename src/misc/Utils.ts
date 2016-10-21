@@ -184,6 +184,15 @@ export function toMap(keys: string[]): Map<string, number> {
 	return m;
 }
 
+export function toCharArray(str: string): Uint16Array {
+	let result = new Uint16Array(str.length);
+	for (let i = 0; i < str.length; i++) {
+		result[i] = str.charCodeAt(0);
+	}
+
+	return result;
+}
+
 // export function toCharArray(data: IntegerList): char[] {
 // 	if ( data==null ) return null;
 // 	let cdata: char[] =  new char[data.size()];
