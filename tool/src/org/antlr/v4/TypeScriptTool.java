@@ -32,6 +32,7 @@ package org.antlr.v4;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import org.antlr.v4.tool.ErrorType;
 import org.antlr.v4.tool.Grammar;
 
@@ -42,10 +43,13 @@ import org.antlr.v4.tool.Grammar;
 public class TypeScriptTool extends Tool {
 
 	public TypeScriptTool() {
+		this(null);
 	}
 
 	public TypeScriptTool(String[] args) {
 		super(args);
+		grammarOptions = new HashMap<String, String>();
+		grammarOptions.put("language", "TypeScript");
 	}
 
 	public static void main(String[] args) {

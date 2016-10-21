@@ -44,8 +44,6 @@ public class TypeScriptTarget extends Target {
 
 	public TypeScriptTarget(CodeGenerator gen) {
 		super(gen, "TypeScript");
-		targetCharValueEscape[0] = "\\0";
-		targetCharValueEscape[0x0007] = "\\a";
 		targetCharValueEscape[0x000B] = "\\v";
 	}
 
@@ -59,11 +57,19 @@ public class TypeScriptTarget extends Target {
 			return targetCharValueEscape[v];
 		}
 
-		if (v >= 0x20 && v < 127 && (v < '0' || v > '9') && (v < 'a' || v > 'f') && (v < 'A' || v > 'F')) {
+		if (v >= 0x20 && v < 127) {
 			return String.valueOf((char)v);
 		}
 
-		return String.format("\\x%X", v & 0xFFFF);
+		if (v < 16) {
+			return String.format("\\x0%X", v & 0xFFFF);
+		} else if (v < 256) {
+			return String.format("\\x%X", v & 0xFF);
+		} else if (v < 4096) {
+			return String.format("\\u0%X", v & 0xFFFF);
+		} else {
+			return String.format("\\u%X", v & 0xFFFF);
+		}
 	}
 
 	@Override
