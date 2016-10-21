@@ -33,7 +33,7 @@
 import { DecisionInfo } from './DecisionInfo';
 import { DFA } from '../dfa/DFA';
 import { NotNull } from '../Decorators';
-import { ProfilingATNSimulator } from './Stub_ProfilingATNSimulator';
+import { ProfilingATNSimulator } from './ProfilingATNSimulator';
 
 /**
  * This class provides access to specific and aggregate statistics gathered
