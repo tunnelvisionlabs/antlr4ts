@@ -26,10 +26,6 @@
  *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { EqualityComparator } from './EqualityComparator';
-import { Equatable } from './Stubs';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
-
 export namespace Arrays {
 	/**
 	 * Searches the specified array of numbers for the specified value using the binary search algorithm. The array must
@@ -65,23 +61,6 @@ export namespace Arrays {
 
 		// key not found.
 		return -(low + 1);
-	}
-
-	export function indexOf<T extends Equatable>(array: ArrayLike<T>, obj: T): number;
-	export function indexOf<T>(array: ArrayLike<T>, obj: T, comparator: EqualityComparator<T>): number;
-	export function indexOf<T>(array: ArrayLike<T>, obj: T, comparator?: EqualityComparator<T>): number {
-		if (comparator == null) {
-			// This is safe because comparator can only be optional if T extends Equatable
-			comparator = ObjectEqualityComparator.INSTANCE as any as EqualityComparator<T>;
-		}
-
-		for (let i = 0; i < array.length; i++) {
-			if (comparator.equals(array[i], obj)) {
-				return i;
-			}
-		}
-
-		return -1;
 	}
 
 	export function toString<T>(array: ArrayLike<T>) {

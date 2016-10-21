@@ -31,7 +31,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
 
 import { ActionTransition } from './ActionTransition';
-import { Arrays } from '../misc/Arrays';
 import { ATN } from './ATN';
 import { ATNDeserializationOptions } from './ATNDeserializationOptions';
 import { ATNState } from './ATNState';
@@ -147,12 +146,12 @@ export class ATNDeserializer {
 	 * introduced; otherwise, {@code false}.
 	 */
 	protected isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
-		let featureIndex: number = Arrays.indexOf(ATNDeserializer.SUPPORTED_UUIDS, feature);
+		let featureIndex: number = ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(feature));
 		if (featureIndex < 0) {
 			return false;
 		}
 
-		return Arrays.indexOf(ATNDeserializer.SUPPORTED_UUIDS, actualUuid) >= featureIndex;
+		return ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(actualUuid)) >= featureIndex;
 	}
 
 	deserialize(@NotNull data: Uint16Array): ATN {
@@ -180,7 +179,7 @@ export class ATNDeserializer {
 
 		let uuid: UUID = ATNDeserializer.toUUID(data, p);
 		p += 8;
-		if (Arrays.indexOf(ATNDeserializer.SUPPORTED_UUIDS, uuid) >= 0) {
+		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) >= 0) {
 			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer.SERIALIZED_UUID} or a legacy UUID).`;
 			throw new Error(reason);
 		}
