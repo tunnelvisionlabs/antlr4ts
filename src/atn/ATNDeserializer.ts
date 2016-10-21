@@ -157,7 +157,16 @@ export class ATNDeserializer {
 
 	deserialize(@NotNull data: Uint16Array): ATN {
 		data = data.slice(0);
-		// don't adjust the first value since that's the version number
+
+		// Each Uint16 value in data is shifted by +2 at the entry to this method. This is an encoding optimization
+		// targeting the serialized values 0 and -1 (serialized to 0xFFFF), each of which are very common in the
+		// serialized form of the ATN. In the modified UTF-8 that Java uses for compiled string literals, these two
+		// character values have multi-byte forms. By shifting each value by +2, they become characters 2 and 1 prior
+		// to writing the string, each of which have single-byte representations. Since the shift occurs in the tool
+		// during ATN serialization, each target is responsible for adjusting the values during deserialization.
+		//
+		// As a special case, note that the first element of data is not adjusted because it contains the major version
+		// number of the serialized ATN, which was fixed at 3 at the time the value shifting was implemented.
 		for (let i = 1; i < data.length; i++) {
 			data[i] = (data[i] - 2) & 0xFFFF;
 		}
