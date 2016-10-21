@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "tsc",
-    "test": "tsc & mocha",
+    "pretest": "tsc",
+    "test": "mocha",
     "set": "set",
-    "cover": "tsc & istanbul cover node_modules/mocha/bin/_mocha && istanbul report",
+    "precover": "tsc",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+    "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch"
   },
   "repository": {
