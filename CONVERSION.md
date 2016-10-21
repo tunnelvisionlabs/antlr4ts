@@ -207,7 +207,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] tree\pattern\TokenTagToken.java
 * [x] tree\xpath\XPath.java
 * [x] tree\xpath\XPathElement.java
-* [ ] tree\xpath\XPathLexer.g4
+* [x] tree\xpath\XPathLexer.g4
 * [x] tree\xpath\XPathLexerErrorListener.java
 * [x] tree\xpath\XPathRuleAnywhereElement.java
 * [x] tree\xpath\XPathRuleElement.java

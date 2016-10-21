@@ -9,7 +9,7 @@ import { ParseTree } from "../ParseTree";
 import { RecognitionException } from "../../RecognitionException";
 import { Token } from "../../Token";
 import { XPathElement } from "./XPathElement";
-import { XPathLexer } from "./Stub_XPathLexer";
+import { XPathLexer } from "./XPathLexer";
 import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
 import { XPathRuleAnywhereElement } from "./XPathRuleAnywhereElement";
 import { XPathRuleElement } from "./XPathRuleElement";

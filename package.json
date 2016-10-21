@@ -4,11 +4,11 @@
   "description": "Antlr4 runtime for JavaScript written in Typescript",
   "main": "index.js",
   "scripts": {
-    "prepublish": "tsc",
-    "pretest": "tsc",
+    "prepublish": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
+    "pretest": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
     "test": "mocha",
     "set": "set",
-    "precover": "tsc",
+    "precover": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch"
