@@ -43,7 +43,7 @@ import { DFA } from '../dfa/DFA';
 import { DFAState } from '../dfa/DFAState';
 import { Interval } from '../misc/Interval';
 import { IntStream } from '../IntStream';
-import { Lexer } from '../Stub_Lexer';
+import { Lexer } from '../Lexer';
 import { LexerActionExecutor } from './LexerActionExecutor';
 import { LexerNoViableAltException } from '../LexerNoViableAltException';
 import { NotNull, Nullable, Override } from '../Decorators';

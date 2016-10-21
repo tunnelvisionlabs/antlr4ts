@@ -30,7 +30,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.8653427-07:00
 
-import { Lexer } from '../Stub_Lexer';
+import { Lexer } from '../Lexer';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
 import { MurmurHash } from '../misc/MurmurHash';

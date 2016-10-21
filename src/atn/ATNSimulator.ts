@@ -39,7 +39,7 @@ import { PredictionContext } from './PredictionContext';
 
 export abstract class ATNSimulator {
 	/** Must distinguish between missing edge and edge we know leads nowhere */
-	private static _ERROR: DFAState = new DFAState(new EmptyEdgeMap<DFAState>(0, -1), new EmptyEdgeMap<DFAState>(0, -1), new ATNConfigSet());
+	private static _ERROR: DFAState;
 	@NotNull
 	static get ERROR(): DFAState {
 		if (!ATNSimulator._ERROR) {

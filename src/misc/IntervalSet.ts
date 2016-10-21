@@ -34,7 +34,7 @@ import { ArrayEqualityComparator } from './ArrayEqualityComparator';
 import { IntegerList } from './IntegerList';
 import { Interval } from './Interval';
 import { IntSet } from './IntSet';
-import { Lexer } from '../Stub_Lexer';
+import { Lexer } from '../Lexer';
 import { MurmurHash } from './MurmurHash';
 import { Override, NotNull, Nullable } from '../Decorators';
 import { Token } from '../Token';
@@ -53,8 +53,14 @@ import { Vocabulary } from '../Vocabulary';
  * (inclusive).</p>
  */
 export class IntervalSet implements IntSet {
+	private static _COMPLETE_CHAR_SET: IntervalSet;
 	static get COMPLETE_CHAR_SET(): IntervalSet {
-		return _COMPLETE_CHAR_SET;
+		if (IntervalSet._COMPLETE_CHAR_SET === undefined) {
+			IntervalSet._COMPLETE_CHAR_SET = IntervalSet.of(Lexer.MIN_CHAR_VALUE, Lexer.MAX_CHAR_VALUE);
+			IntervalSet._COMPLETE_CHAR_SET.setReadonly(true);
+		}
+
+		return IntervalSet._COMPLETE_CHAR_SET;
 	}
 
 	private static _EMPTY_SET: IntervalSet;
@@ -727,6 +733,3 @@ export class IntervalSet implements IntSet {
 		this.readonly = readonly;
 	}
 }
-
-let _COMPLETE_CHAR_SET: IntervalSet = IntervalSet.of(Lexer.MIN_CHAR_VALUE, Lexer.MAX_CHAR_VALUE);
-_COMPLETE_CHAR_SET.setReadonly(true);

@@ -34,7 +34,7 @@ import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
 import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from '../../Stub_Lexer';
+import { Lexer } from '../../Lexer';
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { Nullable, NotNull } from "../../Decorators";
