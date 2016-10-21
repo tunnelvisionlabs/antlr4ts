@@ -56,8 +56,14 @@ class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>>
 export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	private backingStore: Array2DHashSet<Bucket<K, V>>;
 
-	constructor(keyComparer: EqualityComparator<K>) {
-		this.backingStore = new Array2DHashSet(new MapKeyEqualityComparator<K, V>(keyComparer));
+	constructor(keyComparer: EqualityComparator<K>);
+	constructor(map: Array2DHashMap<K, V>);
+	constructor(keyComparer: EqualityComparator<K> | Array2DHashMap<K, V>) {
+		if (keyComparer instanceof Array2DHashMap) {
+			this.backingStore = new Array2DHashSet<Bucket<K, V>>(keyComparer.backingStore);
+		} else {
+			this.backingStore = new Array2DHashSet<Bucket<K, V>>(new MapKeyEqualityComparator<K, V>(keyComparer));
+		}
 	}
 
 	clear(): void {

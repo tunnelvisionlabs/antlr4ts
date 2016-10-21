@@ -63,14 +63,31 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected currentPrime: number =  1; // jump by 4 primes each expand or whatever
 	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
 
+	constructor(comparator?: EqualityComparator<T>, initialCapacity?: number, initialBucketCapacity?: number);
+	constructor(set: Array2DHashSet<T>);
 	constructor(
-		 comparator?: EqualityComparator<T>,
-		 initialCapacity: number = INITAL_CAPACITY,
-		 initialBucketCapacity: number = INITAL_BUCKET_CAPACITY)  {
+		comparatorOrSet?: EqualityComparator<T> | Array2DHashSet<T>,
+		initialCapacity: number = INITAL_CAPACITY,
+		initialBucketCapacity: number = INITAL_BUCKET_CAPACITY) {
 
-		this.comparator = comparator || DefaultEqualityComparator.INSTANCE;
-		this.buckets = this.createBuckets(initialCapacity);
-		this.initialBucketCapacity = initialBucketCapacity;
+		if (comparatorOrSet instanceof Array2DHashSet) {
+			this.comparator = comparatorOrSet.comparator;
+			this.buckets = comparatorOrSet.buckets.slice(0);
+			for (let i = 0; i < this.buckets.length; i++) {
+				if (this.buckets[i]) {
+					this.buckets[i] = this.buckets[i].slice(0);
+				}
+			}
+
+			this.n = comparatorOrSet.n;
+			this.threshold = comparatorOrSet.threshold;
+			this.currentPrime = comparatorOrSet.currentPrime;
+			this.initialBucketCapacity = comparatorOrSet.initialBucketCapacity;
+		} else {
+			this.comparator = comparatorOrSet || DefaultEqualityComparator.INSTANCE;
+			this.buckets = this.createBuckets(initialCapacity);
+			this.initialBucketCapacity = initialBucketCapacity;
+		}
 	}
 
 	/**
