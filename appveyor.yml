@@ -16,3 +16,4 @@ test_script:
 - npm test
 cache:
 - node_modules -> **\package.json
+- C:\Users\appveyor\.m2 -> **\pom.xml
