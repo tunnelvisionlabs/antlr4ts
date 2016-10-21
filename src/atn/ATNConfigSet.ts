@@ -42,7 +42,6 @@ import { Collection, JavaIterator, asIterable } from '../misc/Stubs';
 import { ConflictInfo } from './ConflictInfo';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { JavaSet } from '../misc/Stubs';
-import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
@@ -56,7 +55,7 @@ type KeyType = { state: number, alt: number };
 
 class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
 		hashCode(key: KeyType){ 
-			return MurmurHash.hashCode([key.state, key.alt])
+			return key.state ^ key.alt;
 		}
 		equals(a: KeyType, b: KeyType) {
 			return a.state === b.state && a.alt === b.alt;
