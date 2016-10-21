@@ -30,8 +30,12 @@
  */
 
 import { Array2DHashSet } from './Array2DHashSet';
+import { asIterable } from './Stubs';
+import { Collection } from './Stubs';
+import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import { EqualityComparator } from './EqualityComparator';
 import { Equatable, JavaCollection, JavaMap, JavaSet } from './Stubs';
+import { JavaIterator } from './Stubs';
 
 // Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
 // key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.
@@ -75,11 +79,11 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	containsValue(value: V): boolean {
-		throw "not implemented";
+		return this.values().contains(value);
 	}
 
 	entrySet(): JavaSet<JavaMap.Entry<K, V>> {
-		throw "not implemented";
+		return new EntrySet<K, V>(this, this.backingStore);
 	}
 
 	get(key: K): V | undefined {
@@ -96,7 +100,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	keySet(): JavaSet<K> {
-		throw "not implemented";
+		return new KeySet<K, V>(this, this.backingStore);
 	}
 
 	put(key: K, value: V): V | undefined {
@@ -125,7 +129,9 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void {
-		throw "not implemented";
+		for (let entry of asIterable(m.entrySet())) {
+			this.put(entry.getKey(), entry.getValue());
+		}
 	}
 
 	remove(key: K): V | undefined {
@@ -139,7 +145,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	values(): JavaCollection<V> {
-		throw "not implemented";
+		return new ValueCollection<K, V>(this, this.backingStore);
 	}
 
 	hashCode(): number {
@@ -152,5 +158,266 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		}
 
 		return this.backingStore.equals(o.backingStore);
+	}
+}
+
+class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
+	private readonly map: Array2DHashMap<K, V>;
+	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+
+	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
+		this.map = map;
+		this.backingStore = backingStore;
+	}
+
+	add(e: JavaMap.Entry<K, V>): boolean {
+		throw new Error("Not implemented");
+	}
+
+	addAll(collection: Collection<JavaMap.Entry<K, V>>): boolean {
+		throw new Error("Not implemented");
+	}
+
+	clear(): void {
+		this.map.clear();
+	}
+
+	contains(o: any): boolean {
+		throw new Error("Not implemented");
+	}
+
+	containsAll(collection: Collection<any>): boolean {
+		for (let key of asIterable(collection)) {
+			if (!this.contains(key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	equals(o:any): boolean {
+		if (o === this) {
+			return true;
+		} else if (!(o instanceof EntrySet)) {
+			return false;
+		}
+
+		return this.backingStore.equals(o.backingStore);
+	}
+
+	hashCode(): number {
+		return this.backingStore.hashCode();
+	}
+
+	isEmpty(): boolean {
+		return this.backingStore.isEmpty();
+	}
+
+	iterator(): JavaIterator<JavaMap.Entry<K, V>> {
+		throw new Error("Not implemented");
+	}
+
+	remove(o: any): boolean {
+		throw new Error("Not implemented");
+	}
+
+	removeAll(collection: Collection<any>): boolean {
+		let removedAny = false;
+		for (let key of asIterable(collection)) {
+			removedAny = this.remove(key) || removedAny;
+		}
+
+		return removedAny;
+	}
+
+	retainAll(collection: Collection<any>): boolean {
+		throw new Error("Not implemented");
+	}
+
+	size(): number {
+		return this.backingStore.size();
+	}
+
+	toArray(): JavaMap.Entry<K, V>[];
+	toArray(a: JavaMap.Entry<K, V>[]): JavaMap.Entry<K, V>[];
+	toArray(a?: JavaMap.Entry<K, V>[]): JavaMap.Entry<K, V>[] {
+		throw new Error("Not implemented");
+	}
+}
+
+class KeySet<K, V> implements JavaSet<K> {
+	private readonly map: Array2DHashMap<K, V>;
+	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+
+	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
+		this.map = map;
+		this.backingStore = backingStore;
+	}
+
+	add(e:K): boolean {
+		throw new Error("Not supported");
+	}
+
+	addAll(collection: Collection<K>): boolean {
+		throw new Error("Not supported");
+	}
+
+	clear(): void {
+		this.map.clear();
+	}
+
+	contains(o:any): boolean {
+		return this.backingStore.contains({ key: o });
+	}
+
+	containsAll(collection: Collection<any>): boolean {
+		for (let key of asIterable(collection)) {
+			if (!this.contains(key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	equals(o:any): boolean {
+		if (o === this) {
+			return true;
+		} else if (!(o instanceof KeySet)) {
+			return false;
+		}
+
+		return this.backingStore.equals(o.backingStore);
+	}
+
+	hashCode(): number {
+		return this.backingStore.hashCode();
+	}
+
+	isEmpty(): boolean {
+		return this.backingStore.isEmpty();
+	}
+
+	iterator(): JavaIterator<K> {
+		throw new Error("Not implemented");
+	}
+
+	remove(o: any): boolean {
+		return this.backingStore.remove({key: o});
+	}
+
+	removeAll(collection: Collection<any>): boolean {
+		let removedAny = false;
+		for (let key of asIterable(collection)) {
+			removedAny = this.remove(key) || removedAny;
+		}
+
+		return removedAny;
+	}
+
+	retainAll(collection: Collection<any>): boolean {
+		throw new Error("Not implemented");
+	}
+
+	size(): number {
+		return this.backingStore.size();
+	}
+
+	toArray(): K[];
+	toArray(a: K[]): K[];
+	toArray(a?: K[]): K[] {
+		throw new Error("Not implemented");
+	}
+}
+
+class ValueCollection<K, V> implements JavaCollection<V> {
+	private readonly map: Array2DHashMap<K, V>;
+	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+
+	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
+		this.map = map;
+		this.backingStore = backingStore;
+	}
+
+	add(e: V): boolean {
+		throw new Error("Not supported");
+	}
+
+	addAll(collection: Collection<V>): boolean {
+		throw new Error("Not supported");
+	}
+
+	clear(): void {
+		this.map.clear();
+	}
+
+	contains(o: any): boolean {
+		for (let bucket of this.backingStore) {
+			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	containsAll(collection: Collection<any>): boolean {
+		for (let key of asIterable(collection)) {
+			if (!this.contains(key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	equals(o:any): boolean {
+		if (o === this) {
+			return true;
+		} else if (!(o instanceof ValueCollection)) {
+			return false;
+		}
+
+		return this.backingStore.equals(o.backingStore);
+	}
+
+	hashCode(): number {
+		return this.backingStore.hashCode();
+	}
+
+	isEmpty(): boolean {
+		return this.backingStore.isEmpty();
+	}
+
+	iterator(): JavaIterator<V> {
+		throw new Error("Not implemented");
+	}
+
+	remove(o: any): boolean {
+		throw new Error("Not implemented");
+	}
+
+	removeAll(collection: Collection<any>): boolean {
+		let removedAny = false;
+		for (let key of asIterable(collection)) {
+			removedAny = this.remove(key) || removedAny;
+		}
+
+		return removedAny;
+	}
+
+	retainAll(collection: Collection<any>): boolean {
+		throw new Error("Not implemented");
+	}
+
+	size(): number {
+		return this.backingStore.size();
+	}
+
+	toArray(): V[];
+	toArray(a: V[]): V[];
+	toArray(a?: V[]): V[] {
+		throw new Error("Not implemented");
 	}
 }
