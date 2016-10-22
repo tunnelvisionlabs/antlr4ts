@@ -21,7 +21,7 @@ system. The first time you check out the code, and after any changes are made to
 the following command should be run from the project root directory (the directory containing this readme file).
 
 ```
-mvn -f tool/pom.xml verify
+npm run build-tool
 ```
 
 Of course, you'll need to install Node.js for your platform.   https://nodejs.org/en/
