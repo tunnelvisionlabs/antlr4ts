@@ -134,7 +134,8 @@ export class ParserRuleContext extends RuleContext {
 	addChild(t: TerminalNode): void;
 	addChild(ruleInvocation: RuleContext): void;
 	addChild(matchedToken: Token): TerminalNode;
-	addChild(t: TerminalNode | RuleContext | Token): any {
+	addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
+		let result: TerminalNode | void;
 		if (t instanceof TerminalNode) {
 			// Does not set parent link
 		} else if (t instanceof RuleContext) {
@@ -142,6 +143,7 @@ export class ParserRuleContext extends RuleContext {
 		} else {
 			t = new TerminalNode(t);
 			t.parent = this;
+			result = t;
 		}
 
 		if (!this.children) {
@@ -149,7 +151,8 @@ export class ParserRuleContext extends RuleContext {
 		} else {
 			this.children.push(t);
 		}
-		return t;
+
+		return result;
 	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
