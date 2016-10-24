@@ -65,8 +65,8 @@ ListenerFile(file, header) ::= <<
 
 <header>
 
-import { Token } from '../../Token';
-import { ParseTreeListener } from '../../tree/ParseTreeListener';
+import { Token } from '<basePath()>/Token';
+import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -102,12 +102,12 @@ BaseListenerFile(file, header) ::= <<
 
 <header>
 
-import { ErrorNode } from '../../tree/ErrorNode';
-import { NotNull } from '../../Decorators';
-import { Override } from '../../Decorators';
-import { ParserRuleContext } from '../../ParserRuleContext';
-import { TerminalNode } from '../../tree/TerminalNode';
-import { Token } from '../../Token';
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { NotNull } from '<basePath()>/Decorators';
+import { Override } from '<basePath()>/Decorators';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
 
 /**
  * This class provides an empty implementation of `<file.grammarName>Listener`,
@@ -161,8 +161,8 @@ VisitorFile(file, header) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from '../../tree/ParseTreeVisitor';
-import { Token } from '../../Token';
+import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
+import { Token } from '<basePath()>/Token';
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -192,8 +192,8 @@ BaseVisitorFile(file, header) ::= <<
 
 <header>
 
-import { AbstractParseTreeVisitor } from '../../tree/AbstractParseTreeVisitor';
-import { Token } from '../../Token';
+import { AbstractParseTreeVisitor } from '<basePath()>/tree/AbstractParseTreeVisitor';
+import { Token } from '<basePath()>/Token';
 
 /**
  * This class provides an empty implementation of `<file.grammarName>Visitor`,
@@ -914,18 +914,18 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from '../../atn/ATN';
-import { ATNDeserializer } from '../../atn/ATNDeserializer';
-import { CharStream } from '../../CharStream';
-import { Lexer } from '../../Lexer';
-import { LexerATNSimulator } from '../../atn/LexerATNSimulator';
-import { NotNull } from '../../Decorators';
-import { Override } from '../../Decorators';
-import { RuleContext } from '../../RuleContext';
-import { Vocabulary } from '../../Vocabulary';
-import { VocabularyImpl } from '../../VocabularyImpl';
+import { ATN } from '<basePath()>/atn/ATN';
+import { ATNDeserializer } from '<basePath()>/atn/ATNDeserializer';
+import { CharStream } from '<basePath()>/CharStream';
+import { Lexer } from '<basePath()>/Lexer';
+import { LexerATNSimulator } from '<basePath()>/atn/LexerATNSimulator';
+import { NotNull } from '<basePath()>/Decorators';
+import { Override } from '<basePath()>/Decorators';
+import { RuleContext } from '<basePath()>/RuleContext';
+import { Vocabulary } from '<basePath()>/Vocabulary';
+import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
 
-import * as Utils from '../../misc/Utils';
+import * as Utils from '<basePath()>/misc/Utils';
 
 <lexer>
 >>
@@ -983,6 +983,14 @@ public static readonly _ATN: ATN =
 	System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 }!>
 >>
+
+basePath() ::= <%
+<if(file.factory.grammar.ast.cmdLineOptions.("baseImportPath"))>
+<file.factory.grammar.ast.cmdLineOptions.("baseImportPath")>
+<else>
+antlr4ts
+<endif>
+%>
 
 /** Using a type to init value map, try to init a type; if not in table
  *	must be an object, default value is "null".
