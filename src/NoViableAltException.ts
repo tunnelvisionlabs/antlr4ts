@@ -36,7 +36,7 @@
  */
 
 import { ATNConfigSet } from './atn/ATNConfigSet';
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { ParserRuleContext } from './ParserRuleContext';
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Recognizer';
@@ -81,7 +81,7 @@ export class NoViableAltException extends RecognitionException {
 			super(
 				recognizer,
 				recognizer.getInputStream(),
-				recognizer._ctx
+				recognizer.getContext()
 			);
 			super.setOffendingToken(recognizer, recognizer.getCurrentToken())
 

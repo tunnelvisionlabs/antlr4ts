@@ -47,7 +47,7 @@
  *
  * <p>TODO: what to do about lexers</p>
  */
-import {Parser} from "./Stub_Parser";
+import {Parser} from "./Parser";
 import {Token} from "./Token";
 import {RecognitionException} from "./RecognitionException";
 

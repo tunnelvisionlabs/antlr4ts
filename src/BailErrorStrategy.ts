@@ -59,7 +59,7 @@
  * @see Parser#setErrorHandler(ANTLRErrorStrategy)
  */
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
 import { ParseCancellationException } from "./misc/ParseCancellationException";

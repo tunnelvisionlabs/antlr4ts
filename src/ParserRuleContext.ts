@@ -31,7 +31,7 @@
 import { ErrorNode } from "./tree/ErrorNode";
 import { Interval } from "./misc/Interval";
 import { Nullable, Override } from "./Decorators";
-import { Parser } from "./Stub_Parser";
+import { Parser } from "./Parser";
 import { ParseTree } from "./tree/ParseTree";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
 import { RecognitionException } from "./RecognitionException";
@@ -99,7 +99,7 @@ export class ParserRuleContext extends RuleContext {
 	 * The exception that forced this rule to return. If the rule successfully
 	 * completed, this is {@code null}.
 	 */
-	exception: RecognitionException; 
+	exception: RecognitionException;
 
 	constructor();
 	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);
@@ -133,8 +133,9 @@ export class ParserRuleContext extends RuleContext {
 
 	addChild(t: TerminalNode): void;
 	addChild(ruleInvocation: RuleContext): void;
-	addChild(matchedToken: Token): void;
-	addChild(t: TerminalNode | RuleContext | Token): void {
+	addChild(matchedToken: Token): TerminalNode;
+	addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
+		let result: TerminalNode | void;
 		if (t instanceof TerminalNode) {
 			// Does not set parent link
 		} else if (t instanceof RuleContext) {
@@ -142,6 +143,7 @@ export class ParserRuleContext extends RuleContext {
 		} else {
 			t = new TerminalNode(t);
 			t.parent = this;
+			result = t;
 		}
 
 		if (!this.children) {
@@ -149,6 +151,8 @@ export class ParserRuleContext extends RuleContext {
 		} else {
 			this.children.push(t);
 		}
+
+		return result;
 	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
@@ -295,8 +299,8 @@ export class ParserRuleContext extends RuleContext {
 		return Interval.of(this.start.getTokenIndex(), this.stop.getTokenIndex());
 	}
 
-	/** 
-	 * Get the initial token in this context. 
+	/**
+	 * Get the initial token in this context.
 	 * Note that the range from start to stop is inclusive, so for rules that do not consume anything
 	 * (for example, zero length or error productions) this token may exceed stop.
 	 */

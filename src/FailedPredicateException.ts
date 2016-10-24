@@ -38,7 +38,7 @@
 import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
 import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Recognizer';
 import { NotNull } from "./Decorators";
@@ -47,15 +47,15 @@ import { PredicateTransition } from './atn/PredicateTransition';
 export class FailedPredicateException extends RecognitionException {
 	//private static serialVersionUID: number =  5379330841495778709L;
 
-	private ruleIndex: number; 
-	private predicateIndex: number; 
-	private predicate?: string; 
+	private ruleIndex: number;
+	private predicateIndex: number;
+	private predicate?: string;
 
 	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
 		super(
 			recognizer,
 			recognizer.getInputStream(),
-			recognizer._ctx,
+			recognizer.getContext(),
 			FailedPredicateException.formatMessage(predicate, message));
 		let s: ATNState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
 

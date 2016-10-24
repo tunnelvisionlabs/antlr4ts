@@ -55,7 +55,7 @@ import { NotNull, Nullable, Override } from '../Decorators';
 import { NotSetTransition } from './NotSetTransition';
 import { NoViableAltException } from '../NoViableAltException';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { Parser } from '../Stub_Parser';
+import { Parser } from '../Parser';
 import { ParserRuleContext } from '../ParserRuleContext';
 import { PrecedencePredicateTransition } from './PrecedencePredicateTransition';
 import { PredicateTransition } from './PredicateTransition';

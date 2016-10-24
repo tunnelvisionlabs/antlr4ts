@@ -42,7 +42,7 @@ import { DFAState } from '../dfa/DFAState';
 import { ErrorInfo } from './ErrorInfo';
 import { NotNull, Override } from '../Decorators';
 import { LookaheadEventInfo } from './LookaheadEventInfo';
-import { Parser } from '../Stub_Parser';
+import { Parser } from '../Parser';
 import { ParserATNSimulator } from './ParserATNSimulator';
 import { ParserRuleContext } from '../ParserRuleContext';
 import { PredicateEvalInfo } from './PredicateEvalInfo';

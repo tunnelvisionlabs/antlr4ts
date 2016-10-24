@@ -32,15 +32,15 @@
 /** This signifies any kind of mismatched input exceptions such as
  *  when the current input does not match the expected token.
  */
-import {RecognitionException} from "./RecognitionException";
+import { RecognitionException } from "./RecognitionException";
 import { NotNull } from "./Decorators";
-import { Parser } from "./Stub_Parser";
+import { Parser } from "./Parser";
 
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;
 
 	 constructor(@NotNull recognizer: Parser)  {
-		super(recognizer, recognizer.getInputStream(), recognizer._ctx);
+		super(recognizer, recognizer.getInputStream(), recognizer.getContext());
 		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
 	}
 }

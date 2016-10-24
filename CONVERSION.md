@@ -42,7 +42,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
 * [x] NoViableAltException.java
-* [ ] Parser.java
+* [x] Parser.java
 * [x] ParserErrorListener.java
 * [ ] ParserInterpreter.java
 * [x] ParserRuleContext.java

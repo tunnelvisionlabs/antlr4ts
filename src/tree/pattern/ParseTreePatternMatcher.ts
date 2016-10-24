@@ -39,7 +39,7 @@ import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { Nullable, NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { Parser } from '../../Stub_Parser';
+import { Parser } from '../../Parser';
 import { ParserInterpreter } from "../../Stub_ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
@@ -120,7 +120,7 @@ export class ParseTreePatternMatcher {
 	/**
 	 * This is the backing field for {@link #getParser()}.
 	 */
-	private parser: Parser; 
+	private parser: Parser;
 
 	protected start = "<";
 	protected stop = ">";
@@ -285,7 +285,7 @@ export class ParseTreePatternMatcher {
 	 * algorithm used by the implementation, and may be overridden.
 	 */
 	protected matchImpl(
-		@NotNull tree: ParseTree, 
+		@NotNull tree: ParseTree,
 		@NotNull patternTree: ParseTree,
 		@NotNull labels: MultiMap<string, ParseTree> ): ParseTree | undefined
 	{

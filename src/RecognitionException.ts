@@ -32,7 +32,7 @@ import { CharStream } from "./CharStream";
 import { IntervalSet } from "./misc/IntervalSet"
 import { IntStream } from './IntStream';
 import { Lexer } from "./Lexer";
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
 import { Recognizer } from './Recognizer';
 import { RuleContext } from "./RuleContext";
@@ -60,7 +60,7 @@ export class RecognitionException extends Error {
 	 * support accessing symbols by index, we have to track the {@link Token}
 	 * instance itself.
 	 */
-	private offendingToken?: Token; 
+	private offendingToken?: Token;
 
 	private offendingState: number =  -1;
 
@@ -145,11 +145,11 @@ export class RecognitionException extends Error {
 	 * where this exception was thrown, or {@code null} if the stream is not
 	 * available.
 	 */
-	
+
 	getInputStream(): IntStream | undefined {
 		return this.input;
 	}
-	
+
 	getOffendingToken(recognizer?: Recognizer<Token,any>): Token | undefined {
 		if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
