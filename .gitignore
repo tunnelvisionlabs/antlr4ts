@@ -51,3 +51,6 @@ bin/
 # Java IDEs
 .idea/
 *.iml
+
+# ALM IDE
+.alm/
