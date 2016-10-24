@@ -36,7 +36,7 @@ import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
 import { NotNull, Nullable } from "../Decorators";
-import { Parser } from '../Stub_Parser';
+import { Parser } from '../Parser';
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
@@ -56,7 +56,7 @@ export class Trees {
      *  node payloads to get the text for the nodes.  Detect
      *  parse trees and extract data appropriately.
      */
-    
+
     /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
      *  node payloads to get the text for the nodes.
      */
@@ -94,7 +94,7 @@ export class Trees {
             }
             return t.getPayload().toString();;
         }
-        
+
 		if ( t instanceof RuleNode ) {
 			let ruleContext: RuleContext =  t.getRuleContext();
 			let ruleIndex: number =  ruleContext.getRuleIndex();
@@ -210,7 +210,7 @@ export class Trees {
 	*  @since 4.5
 	*/
 	@Nullable
-	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree, 
+	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
 											 startTokenIndex: number, // inclusive
 											stopTokenIndex: number // inclusive
 											): ParserRuleContext | undefined
@@ -240,7 +240,7 @@ export class Trees {
 	*
 	*  @since 4.5.1
 	*/
-	static stripChildrenOutOfRange(t: ParserRuleContext, 
+	static stripChildrenOutOfRange(t: ParserRuleContext,
 											   root: ParserRuleContext,
 											   startIndex: number,
 											   stopIndex: number): void

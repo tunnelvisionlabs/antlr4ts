@@ -22,7 +22,7 @@ export * from './Lexer';
 export * from './LexerNoViableAltException';
 export * from './ListTokenSource';
 export * from './NoViableAltException';
-// export * from './Parser';
+export * from './Parser';
 export * from './ParserErrorListener';
 // export * from './ParserInterpreter';
 export * from './ParserRuleContext';

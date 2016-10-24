@@ -31,7 +31,7 @@ import { ANTLRErrorListener } from './ANTLRErrorListener';
 import { ATNConfigSet } from './atn/ATNConfigSet';
 import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/DFA';
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Recognizer';
 import { ProxyErrorListener } from "./ProxyErrorListener";

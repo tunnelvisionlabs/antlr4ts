@@ -42,7 +42,7 @@ import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
 import { PredictionContext } from './atn/PredictionContext';
 import { RecognitionException } from "./RecognitionException";
@@ -73,7 +73,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	protected lastErrorIndex: number =  -1;
 
-	protected lastErrorStates?: IntervalSet; 
+	protected lastErrorStates?: IntervalSet;
 
 	/**
 	 * {@inheritDoc}
@@ -146,7 +146,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * </ul>
 	 */
 	@Override
-	reportError(recognizer: Parser, 
+	reportError(recognizer: Parser,
 				e: RecognitionException): void
 	{
 		// if we've already reported an error and have not matched a token
@@ -172,7 +172,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	}
 
 	protected notifyErrorListeners(@NotNull recognizer: Parser, message: string, e: RecognitionException): void {
-		recognizer.notifyErrorListeners(e.getOffendingToken(recognizer), message, e);
+		recognizer.notifyErrorListeners( e.getOffendingToken(recognizer), message, e);
 	}
 
 	/**
@@ -291,7 +291,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 //			System.err.println("at loop back: "+s.getClass().getSimpleName());
 			this.reportUnwantedToken(recognizer);
 			let expecting: IntervalSet =  recognizer.getExpectedTokens();
-			let whatFollowsLoopIterationOrRule: IntervalSet = 
+			let whatFollowsLoopIterationOrRule: IntervalSet =
 				expecting.or(this.getErrorRecoverySet(recognizer));
 			this.consumeUntil(recognizer, whatFollowsLoopIterationOrRule);
 			break;
@@ -311,11 +311,11 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportNoViableAlternative(@NotNull recognizer: Parser, 
+	protected reportNoViableAlternative(@NotNull recognizer: Parser,
 											 @NotNull e: NoViableAltException): void
 	{
 		let tokens: TokenStream =  recognizer.getInputStream();
-		let input: string; 
+		let input: string;
 		if ( tokens ) {
 			if ( e.getStartToken().getType() === Token.EOF ) input = "<EOF>";
 			else input = tokens.getTextFromRange(e.getStartToken(), e.getOffendingToken());
@@ -336,7 +336,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportInputMismatch(@NotNull recognizer: Parser, 
+	protected reportInputMismatch(@NotNull recognizer: Parser,
 		@NotNull e: InputMismatchException): void {
 		let expected = e.getExpectedTokens();
 		let expectedString = expected ? expected.toStringVocabulary(recognizer.getVocabulary()) : "";
@@ -354,10 +354,10 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportFailedPredicate(@NotNull recognizer: Parser, 
+	protected reportFailedPredicate(@NotNull recognizer: Parser,
 								 @NotNull e: FailedPredicateException): void
 	{
-		let ruleName: string =  recognizer.getRuleNames()[recognizer._ctx.getRuleIndex()];
+		let ruleName: string =  recognizer.getRuleNames()[recognizer.getContext().getRuleIndex()];
 		let msg: string =  "rule "+ruleName+" "+e.toString();
 		this.notifyErrorListeners(recognizer, msg, e);
 	}
@@ -392,7 +392,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let msg: string =  "extraneous input "+tokenName+" expecting "+
 			expecting.toStringVocabulary(recognizer.getVocabulary());
-		recognizer.notifyErrorListeners(t, msg, null);
+		recognizer.notifyErrorListeners(t, msg, undefined);
 	}
 
 	/**
@@ -424,7 +424,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let msg: string =  "missing "+expecting.toStringVocabulary(recognizer.getVocabulary())+
 			" at " + this.getTokenErrorDisplay(t);
 
-		recognizer.notifyErrorListeners(t, msg, null);
+		recognizer.notifyErrorListeners(t, msg, undefined);
 	}
 
 	/**
@@ -524,7 +524,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let currentState =  recognizer.getInterpreter().atn.states[recognizer.getState()];
 		let next: ATNState =  currentState.transition(0).target;
 		let atn: ATN =  recognizer.getInterpreter().atn;
-		let expectingAtLL2: IntervalSet =  atn.nextTokens(next, PredictionContext.fromRuleContext(atn, recognizer._ctx));
+		let expectingAtLL2: IntervalSet =  atn.nextTokens(next, PredictionContext.fromRuleContext(atn, recognizer.getContext()));
 //		console.warn("LT(2) set="+expectingAtLL2.toString(recognizer.getTokenNames()));
 		if ( expectingAtLL2.contains(currentSymbolType) ) {
 			this.reportMissingToken(recognizer);
@@ -596,7 +596,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let currentSymbol: Token =  recognizer.getCurrentToken();
         let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let expectedTokenType: number =  expecting.getMinElement(); // get any element
-		let tokenText: string; 
+		let tokenText: string;
 		if ( expectedTokenType === Token.EOF ) tokenText = "<missing EOF>";
 		else tokenText = "<missing "+recognizer.getVocabulary().getDisplayName(expectedTokenType)+">";
 		let current: Token =  currentSymbol;
@@ -763,7 +763,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@NotNull
 	protected getErrorRecoverySet(@NotNull recognizer: Parser): IntervalSet {
 		let atn: ATN =  recognizer.getInterpreter().atn;
-		let ctx: RuleContext | undefined  = recognizer._ctx;
+		let ctx: RuleContext | undefined  = recognizer.getContext();
 		let recoverSet: IntervalSet =  new IntervalSet();
 		while ( ctx && ctx.invokingState >= 0 ) {
 			// compute what follows who invoked us

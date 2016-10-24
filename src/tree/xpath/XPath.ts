@@ -3,7 +3,7 @@ import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { CommonTokenStream } from "../../CommonTokenStream";
 import { Lexer } from "../../Lexer";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
-import { Parser } from "../../Stub_Parser";
+import { Parser } from "../../Parser";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
 import { RecognitionException } from "../../RecognitionException";
@@ -65,9 +65,9 @@ export class XPath {
 	static WILDCARD: string =  "*"; // word not operator/separator
 	static NOT: string =  "!"; 	   // word for invert operator
 
-	protected path: string; 
-	protected elements: XPathElement[]; 
-	protected parser: Parser; 
+	protected path: string;
+	protected elements: XPathElement[];
+	protected parser: Parser;
 
 	 constructor(parser: Parser, path: string)  {
 		this.parser = parser;

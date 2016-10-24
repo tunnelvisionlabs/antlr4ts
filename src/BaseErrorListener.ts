@@ -42,8 +42,8 @@ import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/DFA';
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token"
-import { Parser } from './Stub_Parser';
-import {ParserErrorListener} from "./ParserErrorListener";
+import { Parser } from './Parser';
+import { ParserErrorListener } from "./ParserErrorListener";
 import { Recognizer } from './Recognizer';
 import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";

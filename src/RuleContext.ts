@@ -81,7 +81,7 @@
  */
 
 import { ATN } from './atn/ATN';
-import { Parser } from './Stub_Parser';
+import { Parser } from './Parser';
 import { Recognizer } from './Recognizer';
 import { RuleNode } from "./tree/RuleNode";
 import { ParseTree } from "./tree/ParseTree";
