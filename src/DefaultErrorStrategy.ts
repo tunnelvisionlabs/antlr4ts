@@ -172,7 +172,15 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	}
 
 	protected notifyErrorListeners(@NotNull recognizer: Parser, message: string, e: RecognitionException): void {
-		recognizer.notifyErrorListeners( e.getOffendingToken(recognizer), message, e);
+		let offendingToken: Token | null | undefined = e.getOffendingToken(recognizer);
+		if (offendingToken === undefined) {
+			// Pass null to notifyErrorListeners so it in turn calls the error listeners with undefined as the offending
+			// token. If we passed undefined, it would instead call the listeners with getCurrentToken() from the
+			// parser.
+			offendingToken = null;
+		}
+
+		recognizer.notifyErrorListeners(message, offendingToken, e);
 	}
 
 	/**
@@ -392,7 +400,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let msg: string =  "extraneous input "+tokenName+" expecting "+
 			expecting.toStringVocabulary(recognizer.getVocabulary());
-		recognizer.notifyErrorListeners(t, msg, undefined);
+		recognizer.notifyErrorListeners(msg, t, undefined);
 	}
 
 	/**
@@ -424,7 +432,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let msg: string =  "missing "+expecting.toStringVocabulary(recognizer.getVocabulary())+
 			" at " + this.getTokenErrorDisplay(t);
 
-		recognizer.notifyErrorListeners(t, msg, undefined);
+		recognizer.notifyErrorListeners(msg, t, undefined);
 	}
 
 	/**

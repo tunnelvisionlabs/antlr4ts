@@ -552,11 +552,13 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	notifyErrorListeners(/*@NotNull*/ msg: string): void;
-	notifyErrorListeners(/*@NotNull*/ msg: string, /*@NotNull*/ offendingToken: Token, e: RecognitionException | undefined): void;
+	notifyErrorListeners(/*@NotNull*/ msg: string, /*@NotNull*/ offendingToken: Token | null, e: RecognitionException | undefined): void;
 
-	notifyErrorListeners(msg: string, offendingToken?: Token, e?: RecognitionException | undefined): void {
-		if (offendingToken == null) {
+	notifyErrorListeners(msg: string, offendingToken?: Token | null, e?: RecognitionException | undefined): void {
+		if (offendingToken === undefined) {
 			offendingToken = this.getCurrentToken();
+		} else if (offendingToken === null) {
+			offendingToken = undefined;
 		}
 
 		this._syntaxErrors++;
