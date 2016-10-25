@@ -481,7 +481,10 @@ public abstract class BaseTest {
 			File outputFile = new File(tmpdir, "tsconfig.json");
 			FileUtils.copyInputStreamToFile(input, outputFile);
 			String tsconfigText = FileUtils.readFileToString(outputFile, "UTF-8");
-			String antlr4ts = new File("J:\\dev\\antlr4ts\\target\\src").getAbsolutePath().replace('\\', '/');
+
+			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
+			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
+			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target\\src").getAbsolutePath().replace('\\', '/');
 			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$ANTLR4TS$$", antlr4ts), "UTF-8");
 
 			String packageName = "package.json";
