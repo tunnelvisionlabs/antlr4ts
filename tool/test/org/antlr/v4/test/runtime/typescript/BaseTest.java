@@ -30,6 +30,7 @@
 package org.antlr.v4.test.runtime.typescript;
 
 import org.antlr.v4.Tool;
+import org.antlr.v4.TypeScriptTool;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
@@ -57,12 +58,11 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,8 +71,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.antlr.v4.TypeScriptTool;
+import org.apache.commons.io.FileUtils;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -82,17 +85,17 @@ public abstract class BaseTest {
 	public static final String pathSep = System.getProperty("path.separator");
 
 	/**
-	 * When the {@code antlr.preserve-test-dir} runtime property is set to
-	 * {@code true}, the temporary directories created by the test run will not
-	 * be removed at the end of the test run, even for tests that completed
-	 * successfully.
+	 * When the {@code antlr-preserve-typescript-test-dir} runtime property is
+	 * set to {@code true}, the temporary directories created by the test run
+	 * will not be removed at the end of the test run, even for tests that
+	 * completed successfully.
 	 *
 	 * <p>
 	 * The default behavior (used in all other cases) is removing the temporary
 	 * directories for all tests which completed successfully, and preserving
 	 * the directories for tests which failed.</p>
 	 */
-	public static final boolean PRESERVE_TEST_DIR = Boolean.parseBoolean(System.getProperty("antlr-preserve-csharp-test-dir"));
+	public static final boolean PRESERVE_TEST_DIR = Boolean.parseBoolean(System.getProperty("antlr-preserve-typescript-test-dir"));
 
 	/**
 	 * The base test directory is the directory where generated files get placed
@@ -118,7 +121,7 @@ public abstract class BaseTest {
 	public static final boolean CREATE_PER_TEST_DIRECTORIES;
 
 	static {
-		String baseTestDir = System.getProperty("antlr-csharp-test-dir");
+		String baseTestDir = System.getProperty("antlr-typescript-test-dir");
 		boolean perTestDirectories = false;
 		if (baseTestDir == null || baseTestDir.isEmpty()) {
 			baseTestDir = System.getProperty("java.io.tmpdir");
@@ -209,7 +212,7 @@ public abstract class BaseTest {
 	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
 		Collections.addAll(options, extraOptions);
-		options.add("-Dlanguage=CSharp_v4_5");
+//		options.add("-DbaseImportPath=src");
 		if ( !options.contains("-o") ) {
 			options.add("-o");
 			options.add(tmpdir);
@@ -288,7 +291,7 @@ public abstract class BaseTest {
 		assertTrue(success);
 		writeFile(tmpdir, "input", input);
 		writeLexerTestFile(lexerName, showDFA);
-		addSourceFiles("Test.cs");
+		addSourceFiles("Test.ts");
 		if(!compile()) {
 			System.err.println("Failed to compile!");
 			return stderrDuringParse;
@@ -352,19 +355,19 @@ public abstract class BaseTest {
 
 		List<String> files = new ArrayList<String>();
 		if ( lexerName!=null ) {
-			files.add(lexerName+".cs");
+			files.add(lexerName+".ts");
 		}
 		if ( parserName!=null ) {
-			files.add(parserName+".cs");
+			files.add(parserName+".ts");
 			Set<String> optionsSet = new HashSet<String>(Arrays.asList(extraOptions));
 			String grammarName = grammarFileName.substring(0, grammarFileName.lastIndexOf('.'));
 			if (!optionsSet.contains("-no-listener")) {
-				files.add(grammarName+"Listener.cs");
-				files.add(grammarName+"BaseListener.cs");
+				files.add(grammarName+"Listener.ts");
+				files.add(grammarName+"BaseListener.ts");
 			}
 			if (optionsSet.contains("-visitor")) {
-				files.add(grammarName+"Visitor.cs");
-				files.add(grammarName+"BaseVisitor.cs");
+				files.add(grammarName+"Visitor.ts");
+				files.add(grammarName+"BaseVisitor.ts");
 			}
 		}
 		addSourceFiles(files.toArray(new String[files.size()]));
@@ -387,7 +390,7 @@ public abstract class BaseTest {
 						  debug);
 		}
 
-		addSourceFiles("Test.cs");
+		addSourceFiles("Test.ts");
 		return execRecognizer();
 	}
 
@@ -398,29 +401,23 @@ public abstract class BaseTest {
 
 	public boolean compile() {
 		try {
-			if(!createProject())
+			if(!createProject()) {
 				return false;
-			if(!buildProject())
+			}
+
+			if(!buildProject()) {
 				return false;
+			}
+
 			return true;
 		} catch(Exception e) {
 			return false;
 		}
 	}
 
-	private File getTestProjectFile() {
-		return new File(tmpdir, "Antlr4.Test.mono.csproj");
-	}
-
 	private boolean buildProject() throws Exception {
-		String msbuild = locateMSBuild();
-		String[] args = {
-				msbuild,
-				"/p:Configuration=Release",
-				"/p:SignAssembly=false",
-                "/p:BuildProjectReferences=false",
-				getTestProjectFile().getAbsolutePath()
-			};
+		String tsc = locateTypeScriptCompiler();
+		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", "install" };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.directory(new File(tmpdir));
@@ -441,19 +438,20 @@ public abstract class BaseTest {
 		return success;
 	}
 
-	private String locateMSBuild() {
-		if(isWindows())
-			return "\"C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\MSBuild.exe\"";
-		else
-			return locateTool("xbuild");
+	private String locateTypeScriptCompiler() {
+		return "tsc";
 	}
 
 	private boolean isWindows() {
 		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
-	private String locateExec() {
-		return new File(tmpdir, "bin/Release/Test.exe").getAbsolutePath();
+	private String locateNpm() {
+		if (isWindows()) {
+			return "C:\\Program Files (x86)\\nodejs\\npm.cmd";
+		} else {
+			return new File(tmpdir, "npm").getAbsolutePath();
+		}
 	}
 
 	private String locateTool(String tool) {
@@ -468,47 +466,21 @@ public abstract class BaseTest {
 	public boolean createProject() {
 		try {
 			String pack = BaseTest.class.getPackage().getName().replace(".", "/") + "/";
-			// save auxiliary files
-			saveResourceAsFile(pack + "AssemblyInfo.cs", new File(tmpdir, "AssemblyInfo.cs"));
-			saveResourceAsFile(pack + "App.config", new File(tmpdir, "App.config"));
-			// update project
-			String projectName = isWindows() ? "Antlr4.Test.vs2013.csproj" : "Antlr4.Test.mono.csproj";
+
+			String tsconfigName = "tsconfig.json";
 			final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			InputStream input = loader.getResourceAsStream(pack + projectName);
-			Document prjXml = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input);
-			// update runtime project reference
-			// find project file as a resource not relative pathname (now that we've merged repos)
-			String runtimeName = isWindows() ? "Antlr4.Runtime.net45.csproj" : "Antlr4.Runtime.mono.csproj";
-			final URL runtimeProj = loader.getResource("CSharp/Antlr4.Runtime/"+runtimeName);
-			if ( runtimeProj==null ) {
-				throw new RuntimeException("C# runtime project file not found!");
-			}
-			String runtimeProjPath = new File(runtimeProj.toURI()).getAbsolutePath();
-			XPathExpression exp = XPathFactory.newInstance().newXPath()
-				.compile("/Project/ItemGroup/ProjectReference[@Include='" + runtimeName + "']");
-			Element node = (Element)exp.evaluate(prjXml, XPathConstants.NODE);
-			node.setAttribute("Include", runtimeProjPath.replace("/", "\\"));
-			// update project file list
-			exp = XPathFactory.newInstance().newXPath().compile("/Project/ItemGroup[Compile/@Include='AssemblyInfo.cs']");
-			Element group = (Element)exp.evaluate(prjXml, XPathConstants.NODE);
-			if(group==null)
-				return false;
-			// remove existing children
-			while(group.hasChildNodes())
-				group.removeChild(group.getFirstChild());
-			// add AssemblyInfo.cs, not a generated source
-			sourceFiles.add("AssemblyInfo.cs");
-			// add files to compile
-			for(String file : sourceFiles) {
-				Element elem = group.getOwnerDocument().createElement("Compile");
-				elem.setAttribute("Include", file);
-				group.appendChild(elem);
-			}
-			// save project
-			File prjFile = getTestProjectFile();
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(new DOMSource(prjXml), new StreamResult(prjFile));
+			InputStream input = loader.getResourceAsStream(pack + tsconfigName);
+			File outputFile = new File(tmpdir, "tsconfig.json");
+			FileUtils.copyInputStreamToFile(input, outputFile);
+			String tsconfigText = FileUtils.readFileToString(outputFile, "UTF-8");
+			String antlr4ts = new File("J:\\dev\\antlr4ts\\target\\src").getAbsolutePath().replace('\\', '/');
+			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$ANTLR4TS$$", antlr4ts), "UTF-8");
+
+			String packageName = "package.json";
+			input = loader.getResourceAsStream(pack + packageName);
+			outputFile = new File(tmpdir, "package.json");
+			FileUtils.copyInputStreamToFile(input, outputFile);
+
 			return true;
 		} catch(Exception e) {
 			e.printStackTrace(System.err);
@@ -516,26 +488,10 @@ public abstract class BaseTest {
 		}
 	}
 
-	private void saveResourceAsFile(String resourceName, File file) throws IOException {
-		InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
-		if ( input==null ) {
-			System.err.println("Can't find " + resourceName + " as resource");
-			throw new IOException("Missing resource:" + resourceName);
-		}
-		OutputStream output = new FileOutputStream(file.getAbsolutePath());
-		while(input.available()>0) {
-			output.write(input.read());
-		}
-		output.close();
-		input.close();
-	}
-
 	public String execTest() {
 		try {
-			String exec = locateExec();
-			String[] args = isWindows() ?
-					new String[] { exec, new File(tmpdir, "input").getAbsolutePath() } :
-					new String[] { "mono", exec, new File(tmpdir, "input").getAbsolutePath() };
+			String npm = locateNpm();
+			String[] args = new String[] { npm, new File(tmpdir, "input").getAbsolutePath() };
 			ProcessBuilder pb = new ProcessBuilder(args);
 			pb.directory(new File(tmpdir));
 			Process process = pb.start();
@@ -744,29 +700,29 @@ public abstract class BaseTest {
 		outputFileST.add("parserName", parserName);
 		outputFileST.add("lexerName", lexerName);
 		outputFileST.add("parserStartRuleName", parserStartRuleName);
-		writeFile(tmpdir, "Test.cs", outputFileST.render());
+		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-			"using System;\n" +
-			"using Antlr4.Runtime;\n" +
-			"\n" +
-			"public class Test {\n" +
-			"    public static void Main(string[] args) {\n" +
-			"        ICharStream input = new AntlrFileStream(args[0]);\n" +
-			"        <lexerName> lex = new <lexerName>(input);\n" +
-			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
-			"        tokens.Fill();\n" +
-			"        foreach (object t in tokens.GetTokens())\n" +
-			"			Console.WriteLine(t);\n" +
-			(showDFA?"Console.Write(lex.Interpreter.GetDFA(Lexer.DefaultMode).ToLexerString());\n":"")+
-			"    }\n" +
-			"}"
+			"//using System;\n" +
+			"//using Antlr4.Runtime;\n" +
+			"//\n" +
+			"//public class Test {\n" +
+			"//    public static void Main(string[] args) {\n" +
+			"//        ICharStream input = new AntlrFileStream(args[0]);\n" +
+			"//        <lexerName> lex = new <lexerName>(input);\n" +
+			"//        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
+			"//        tokens.Fill();\n" +
+			"//        foreach (object t in tokens.GetTokens())\n" +
+			"//			Console.WriteLine(t);\n" +
+			(showDFA?"//Console.Write(lex.Interpreter.GetDFA(Lexer.DefaultMode).ToLexerString());\n":"")+
+			"//    }\n" +
+			"//}"
 			);
 
 		outputFileST.add("lexerName", lexerName);
-		writeFile(tmpdir, "Test.cs", outputFileST.render());
+		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 
 	public void writeRecognizerAndCompile(String parserName, String lexerName,
@@ -782,7 +738,7 @@ public abstract class BaseTest {
 						  debug);
 		}
 
-		addSourceFiles("Test.cs");
+		addSourceFiles("Test.ts");
 	}
 
 

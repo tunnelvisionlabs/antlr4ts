@@ -151,9 +151,9 @@ string(text) ::= <<
 
 writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
-writeln(s) ::= <<System.Console.WriteLine(<s>);>>
+writeln(s) ::= <<console.log(<s>);>>
 
-write(s) ::= <<System.Console.Write(<s>);>>
+write(s) ::= <<console.log(<s>);>>
 
 False() ::= "false"
 
@@ -161,7 +161,7 @@ True() ::= "true"
 
 Not(v) ::= "!<v>"
 
-Assert(s) ::= <<if (!(<s>)) throw new System.InvalidOperationException("Assertion failed");>>
+Assert(s) ::= <<if (!(<s>)) throw new Error("InvalidOperationException: Assertion failed");>>
 
 Cast(t,v) ::= "((<t>)<v>)"
 
@@ -207,33 +207,33 @@ ToStringTree(s) ::= <%<s>.ToStringTree(this)%>
 
 Column() ::= "this.Column"
 
-Text() ::= "this.Text"
+Text() ::= "this.getText()"
 
 ValEquals(a,b) ::= <%<a>==<b>%>
 
-TextEquals(a) ::= <%this.Text.Equals("<a>")%>
+TextEquals(a) ::= <%this.getText() === "<a>"%>
 
-PlusText(a) ::= <%"<a>" + this.Text%>
+PlusText(a) ::= <%"<a>" + this.getText()%>
 
-InputText() ::= "this._input.GetText()"
+InputText() ::= "this._input.getText()"
 
-LTEquals(i, v) ::= <%this._input.Lt(<i>).Text.Equals(<v>)%>
+LTEquals(i, v) ::= <%this._input.LT(<i>).getText() === <v>%>
 
-LANotEquals(i, v) ::= <%this._input.La(<i>)!=<v>%>
+LANotEquals(i, v) ::= <%this._input.LA(<i>)!==<v>%>
 
 TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
 ImportListener(X) ::= ""
 
-GetExpectedTokenNames() ::= "this.GetExpectedTokens().ToString(Vocabulary)"
+GetExpectedTokenNames() ::= "this.getExpectedTokens().toString(Vocabulary)"
 
-RuleInvocationStack() ::= "GetRuleInvocationStack()"
+RuleInvocationStack() ::= "getRuleInvocationStack()"
 
-LL_EXACT_AMBIG_DETECTION() ::= <<Interpreter.PredictionMode = PredictionMode.LlExactAmbigDetection;>>
+LL_EXACT_AMBIG_DETECTION() ::= <<getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
 
 ParserPropertyMember() ::= <<
 @members {
-bool Property() {
+get property(): boolean {
   return true;
 }
 }

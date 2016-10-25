@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "lib": [
+      "es6"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "preserveConstEnums": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "mocha"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "antlr4ts/*": [
+        "$$ANTLR4TS$$/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
