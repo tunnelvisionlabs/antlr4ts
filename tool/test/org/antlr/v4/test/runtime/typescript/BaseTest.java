@@ -668,44 +668,48 @@ public abstract class BaseTest {
 								 boolean debug)
 	{
 		ST outputFileST = new ST(
-			"using System;\n" +
-			"using Antlr4.Runtime;\n" +
-			"using Antlr4.Runtime.Tree;\n" +
+			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
+			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
+			"import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';\n" +
+			"import { ErrorNode } from 'antlr4ts/tree/ErrorNode';\n" +
+			"import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';\n" +
+			"import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';\n" +
+			"import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';\n" +
+			"import { RuleNode } from 'antlr4ts/tree/RuleNode';\n" +
+			"import { TerminalNode } from 'antlr4ts/tree/TerminalNode';\n" +
 			"\n" +
-			"public class Test {\n" +
-			"    public static void Main(string[] args) {\n" +
-			"        ICharStream input = new AntlrFileStream(args[0]);\n" +
-			"        <lexerName> lex = new <lexerName>(input);\n" +
-			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
-			"        <createParser>\n"+
-			"		 parser.BuildParseTree = true;\n" +
-			"        ParserRuleContext tree = parser.<parserStartRuleName>();\n" +
-			"        ParseTreeWalker.Default.Walk(new TreeShapeListener(), tree);\n" +
-			"    }\n" +
-			"}\n" +
+			"import * as fs from 'fs';\n" +
 			"\n" +
-			"class TreeShapeListener : IParseTreeListener {\n" +
-			"	public void VisitTerminal(ITerminalNode node) { }\n" +
-			"	public void VisitErrorNode(IErrorNode node) { }\n" +
-			"	public void ExitEveryRule(ParserRuleContext ctx) { }\n" +
+			"import { <lexerName> } from './<lexerName>';\n" +
+			"import { <parserName> } from './<parserName>';\n" +
 			"\n" +
-			"	public void EnterEveryRule(ParserRuleContext ctx) {\n" +
-			"		for (int i = 0; i \\< ctx.ChildCount; i++) {\n" +
-			"			IParseTree parent = ctx.GetChild(i).Parent;\n" +
-			"			if (!(parent is IRuleNode) || ((IRuleNode)parent).RuleContext != ctx) {\n" +
-			"				throw new Exception(\"Invalid parse tree shape detected.\");\n" +
+			"class TreeShapeListener implements ParseTreeListener {\n" +
+			"	visitTerminal(node: TerminalNode): void { }\n" +
+			"	visitErrorNode(node: ErrorNode): void { }\n" +
+			"	exitEveryRule(ctx: ParserRuleContext): void { }\n" +
+			"	enterEveryRule(ctx: ParserRuleContext): void {\n" +
+			"		for (let i = 0; i \\< ctx.getChildCount(); i++) {\n" +
+			"			let parent = ctx.getChild(i).getParent();\n" +
+			"			if (!(parent instanceof RuleNode) || parent.getRuleContext() !== ctx) {\n" +
+			"				throw new Error(\"Invalid parse tree shape detected.\");\n" +
 			"			}\n" +
 			"		}\n" +
 			"	}\n" +
-			"}"
-			);
-        ST createParserST = new ST("        <parserName> parser = new <parserName>(tokens);\n");
+			"}\n" +
+			"\n" +
+			"let input = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
+			"let lex = new <lexerName>(input);\n" +
+			"let tokens = new CommonTokenStream(lex);\n" +
+			"<createParser>\n" +
+			"parser.setBuildParseTree(true);\n" +
+			"let tree = parser.<parserStartRuleName>();\n" +
+			"ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);\n");
+		ST createParserST = new ST("let parser = new <parserName>(tokens);\n");
 		if ( debug ) {
-			createParserST =
-				new ST(
-				"        <parserName> parser = new <parserName>(tokens);\n" +
-				"        parser.Interpreter.reportAmbiguities = true;\n" +
-                "        parser.AddErrorListener(new DiagnosticErrorListener());\n");
+			createParserST = new ST(
+				"let parser = new <parserName>(tokens);\n" +
+				"parser.getInterpreter().reportAmbiguities = true;\n" +
+				"parser.addErrorListener(new DiagnosticErrorListener());\n");
 		}
 		outputFileST.add("createParser", createParserST);
 		outputFileST.add("parserName", parserName);
