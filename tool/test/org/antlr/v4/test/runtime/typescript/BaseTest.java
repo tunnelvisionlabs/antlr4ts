@@ -446,6 +446,14 @@ public abstract class BaseTest {
 		return System.getProperty("os.name").toLowerCase().contains("windows");
 	}
 
+	private String locateNode() {
+		if (isWindows()) {
+			return "C:\\Program Files (x86)\\nodejs\\node.exe";
+		} else {
+			return new File(tmpdir, "node").getAbsolutePath();
+		}
+	}
+
 	private String locateNpm() {
 		if (isWindows()) {
 			return "C:\\Program Files (x86)\\nodejs\\npm.cmd";
@@ -490,8 +498,8 @@ public abstract class BaseTest {
 
 	public String execTest() {
 		try {
-			String npm = locateNpm();
-			String[] args = new String[] { npm, new File(tmpdir, "input").getAbsolutePath() };
+			String node = locateNode();
+			String[] args = new String[] { node, "./Test.js", new File(tmpdir, "input").getAbsolutePath() };
 			ProcessBuilder pb = new ProcessBuilder(args);
 			pb.directory(new File(tmpdir));
 			Process process = pb.start();
@@ -705,20 +713,22 @@ public abstract class BaseTest {
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-			"//using System;\n" +
-			"//using Antlr4.Runtime;\n" +
-			"//\n" +
-			"//public class Test {\n" +
-			"//    public static void Main(string[] args) {\n" +
-			"//        ICharStream input = new AntlrFileStream(args[0]);\n" +
-			"//        <lexerName> lex = new <lexerName>(input);\n" +
-			"//        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
-			"//        tokens.Fill();\n" +
-			"//        foreach (object t in tokens.GetTokens())\n" +
-			"//			Console.WriteLine(t);\n" +
-			(showDFA?"//Console.Write(lex.Interpreter.GetDFA(Lexer.DefaultMode).ToLexerString());\n":"")+
-			"//    }\n" +
-			"//}"
+			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
+			"import { CharStream } from 'antlr4ts/CharStream';\n" +
+			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
+			"import { Lexer } from 'antlr4ts/Lexer';\n" +
+			"import * as fs from 'fs';\n" +
+			"\n" +
+			"import { <lexerName> } from './<lexerName>';\n" +
+			"\n" +
+			"let input: CharStream = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
+			"let lex: <lexerName> = new <lexerName>(input);\n" +
+			"let tokens = new CommonTokenStream(lex);\n" +
+			"tokens.fill();\n" +
+			"for (let t of tokens.getTokens()) {\n" +
+			"	console.log(t);\n" +
+			(showDFA?"	console.log(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"") +
+			"}\n"
 			);
 
 		outputFileST.add("lexerName", lexerName);
