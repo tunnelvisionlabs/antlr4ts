@@ -781,17 +781,20 @@ public <t.name>(i: number): TerminalNode {
 >>
 ContextRuleGetterDecl(r)       ::= <<
 public <r.name>(): <r.ctxName> {
-	return this.getRuleContext(0, <r.ctxName>.class);
+	return this.getRuleContext(0, <r.ctxName>);
 }
 >>
 ContextRuleListGetterDecl(r)   ::= <<
-public <r.name>(): <r.ctxName>[] {
-	return this.getRuleContexts(<r.ctxName>.class);
-}
+public <r.name>(): <r.ctxName>[];
 >>
 ContextRuleListIndexedGetterDecl(r)   ::= <<
-public <r.name>(i: number): <r.ctxName> {
-	return getRuleContext(i, <r.ctxName>.class);
+public <r.name>(i: number): <r.ctxName>;
+public <r.name>(i?: number): <r.ctxName> | <r.ctxName>[] {
+	if (i === undefined) {
+		return this.getRuleContexts(<r.ctxName>);
+	} else {
+		return this.getRuleContext(i, <r.ctxName>);
+	}
 }
 >>
 

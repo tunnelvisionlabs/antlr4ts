@@ -189,9 +189,9 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	getChild(i: number): ParseTree;
-	getChild<T extends ParseTree>(i: number, ctxType: {new(): T;}): T;
+	getChild<T extends ParseTree>(i: number, ctxType: {new(...args: any[]): T;}): T;
 	// Note: in TypeScript, order or arguments reversed
-	getChild<T extends ParseTree>(i: number, ctxType?: {new(): T;}): ParseTree {
+	getChild<T extends ParseTree>(i: number, ctxType?: {new(...args: any[]): T;}): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
 		}
@@ -255,8 +255,8 @@ export class ParserRuleContext extends RuleContext {
 
 	// NOTE: argument order change from Java version
 	getRuleContext(): this;
-	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (): T; }): T;
-	getRuleContext<T extends ParserRuleContext>(i?: number, ctxType?: { new (): T; }): this | T {
+	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T;
+	getRuleContext<T extends ParserRuleContext>(i?: number, ctxType?: { new (...args: any[]): T; }): this | T {
 		if (i === undefined) {
 			return this;
 		}
@@ -268,7 +268,7 @@ export class ParserRuleContext extends RuleContext {
 		throw new Error("Required ctxType was not provided");
 	}
 
-	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (): T; }): T[] {
+	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
 		let contexts: T[] = [];
 		if (!this.children) {
 			return contexts;
