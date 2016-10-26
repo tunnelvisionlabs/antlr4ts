@@ -815,7 +815,7 @@ SetNonLocalAttr(s, rhsChunks)	  ::=
 AddToLabelList(a) ::= "<ctx(a.label)>._<a.listName>.push(<labelref(a.label)>);"
 
 TokenDecl(t) ::= "_<t.name>: <TokenLabelType()>"
-TokenTypeDecl(t) ::= "<t.name>: number;"
+TokenTypeDecl(t) ::= "let <t.name>: number;"
 TokenListDecl(t) ::= "_<t.name>: Token[] = []"
 RuleContextDecl(r) ::= "_<r.name>: <r.ctxName>"
 RuleContextListDecl(rdecl) ::= "_<rdecl.name>: <rdecl.ctxName>[] = []"
