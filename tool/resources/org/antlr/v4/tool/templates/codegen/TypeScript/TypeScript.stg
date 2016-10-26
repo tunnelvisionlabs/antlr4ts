@@ -80,8 +80,11 @@ ListenerFile(file, header) ::= <<
 
 <header>
 
-import { Token } from '<basePath()>/Token';
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
 import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
@@ -89,7 +92,7 @@ import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
  * This interface defines a complete listener for a parse tree produced by
  * `<file.parserName>`.
  */
-export interface <file.grammarName>Listener extends ParseTreeListener {
+export abstract class <file.grammarName>Listener implements ParseTreeListener {
 	<file.listenerNames:{lname |
 /**
 <if(file.listenerLabelRuleNames.(lname))>
@@ -100,7 +103,7 @@ export interface <file.grammarName>Listener extends ParseTreeListener {
 <endif>
  * @param ctx the parse tree
  */
-enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
+abstract enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
 /**
 <if(file.listenerLabelRuleNames.(lname))>
  * Exit a parse tree produced by the `<lname>`
@@ -110,7 +113,12 @@ enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
 <endif>
  * @param ctx the parse tree
  */
-exit<lname; format="cap">(ctx: <lname; format="cap">Context): void;}; separator="\n">
+abstract exit<lname; format="cap">(ctx: <lname; format="cap">Context): void;}; separator="\n">
+
+	abstract visitTerminal(node: TerminalNode): void;
+	abstract visitErrorNode(node: ErrorNode): void;
+	abstract enterEveryRule(ctx: ParserRuleContext): void;
+	abstract exitEveryRule( ctx: ParserRuleContext): void;
 }
 >>
 
@@ -126,6 +134,7 @@ import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
 import { TerminalNode } from '<basePath()>/tree/TerminalNode';
 import { Token } from '<basePath()>/Token';
 
+import { <file.grammarName>Listener } from './<file.grammarName>Listener';
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
@@ -180,7 +189,11 @@ VisitorFile(file, header) ::= <<
 
 <header>
 
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { ParseTree } from '<basePath()>/tree/ParseTree';
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
+import { RuleNode } from '<basePath()>/tree/RuleNode';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
 import { Token } from '<basePath()>/Token';
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
@@ -192,7 +205,7 @@ import { Token } from '<basePath()>/Token';
  * @param \<Result> The return type of the visit operation. Use `void` for
  * operations with no return type.
  */
-export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Result> {
+export abstract class <file.grammarName>Visitor\<Result> implements ParseTreeVisitor\<Result> {
 	<file.visitorNames:{lname |
 /**
 <if(file.visitorLabelRuleNames.(lname))>
@@ -204,7 +217,12 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  * @param ctx the parse tree
  * @return the visitor result
  */
-visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result;}; separator="\n">
+abstract visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result;}; separator="\n">
+
+abstract visit(tree: ParseTree): Result;
+abstract visitChildren(node: RuleNode): Result;
+abstract visitTerminal(node: TerminalNode): Result;
+abstract visitErrorNode(node: ErrorNode): Result;
 }
 >>
 
@@ -214,8 +232,10 @@ BaseVisitorFile(file, header) ::= <<
 <header>
 
 import { AbstractParseTreeVisitor } from '<basePath()>/tree/AbstractParseTreeVisitor';
+import { Override } from '<basePath()>/Decorators';
 import { Token } from '<basePath()>/Token';
 
+import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
@@ -889,14 +909,14 @@ export class <struct.name> extends <currentRule.currentRule.name; format="cap">C
 ListenerDispatchMethod(method) ::= <<
 @Override
 public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: ParseTreeListener): void {
-	if ( listener instanceof <parser.grammarName>Listener ) (\<<parser.grammarName>Listener>listener).<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
+	if ( listener instanceof <parser.grammarName>Listener ) (listener as <parser.grammarName>Listener).<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
 }
 >>
 
 VisitorDispatchMethod(method) ::= <<
 @Override
 public accept\<Result>(visitor: ParseTreeVisitor\<Result>): Result {
-	if ( visitor instanceof <parser.grammarName>Visitor ) return (\<<parser.grammarName>Visitor\<Result>\>visitor).visit<struct.derivedFromName; format="cap">(this);
+	if ( visitor instanceof <parser.grammarName>Visitor ) return (visitor as <parser.grammarName>Visitor\<Result>).visit<struct.derivedFromName; format="cap">(this);
 	else return visitor.visitChildren(this);
 }
 >>
