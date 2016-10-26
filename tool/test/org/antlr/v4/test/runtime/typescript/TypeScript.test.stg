@@ -163,7 +163,7 @@ Not(v) ::= "!<v>"
 
 Assert(s) ::= <<if (!(<s>)) throw new Error("InvalidOperationException: Assertion failed");>>
 
-Cast(t,v) ::= "((<t>)<v>)"
+Cast(t,v) ::= "(<v> as <t>)"
 
 Append(a,b) ::= "<a> + <b>"
 

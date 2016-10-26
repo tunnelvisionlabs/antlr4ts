@@ -300,7 +300,7 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 		switch (ruleIndex) {
 		<parser.sempredFuncs.values:{f|
 case <f.ruleIndex>:
-	return this.<f.name>_sempred(\<<f.ctxType>\>_localctx, predIndex);}; separator="\n">
+	return this.<f.name>_sempred(_localctx as <f.ctxType>, predIndex);}; separator="\n">
 		}
 		return true;
 	}
@@ -356,7 +356,7 @@ public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): bo
 	switch (ruleIndex) {
 	<recog.sempredFuncs.values:{f|
 case <f.ruleIndex>:
-	return this.<f.name>_sempred(<if(!recog.modes)>\<<f.ctxType>\><endif>_localctx, predIndex);}; separator="\n">
+	return this.<f.name>_sempred(_localctx<if(!recog.modes)> as <f.ctxType><endif>, predIndex);}; separator="\n">
 	}
 	return true;
 }
@@ -808,9 +808,9 @@ ThisRulePropertyRef_text(r)	 ::= "this._input.getText(_localctx.start, this._inp
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
-NonLocalAttrRef(s)		 ::= "(\<<s.ruleName; format=\"cap\">Context>getInvokingContext(<s.ruleIndex>)).<s.name>"
+NonLocalAttrRef(s)		 ::= "(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name>"
 SetNonLocalAttr(s, rhsChunks)	  ::=
-	"(\<<s.ruleName; format=\"cap\">Context>getInvokingContext(<s.ruleIndex>)).<s.name> = <rhsChunks>;"
+	"(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name> = <rhsChunks>;"
 
 AddToLabelList(a) ::= "<ctx(a.label)>.<a.listName>.push(<labelref(a.label)>);"
 
@@ -934,7 +934,7 @@ labelref(x) ::= "<if(!x.isLocal)><typedContext(x.ctx)>.<endif><x.name>"
 ctx(actionChunk) ::= "<typedContext(actionChunk.ctx)>"
 
 // only casts _localctx to the type when the cast isn't redundant (i.e. to a sub-context for a labeled alt)
-typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(\<<ctx.name>\>_localctx)<else>_localctx<endif>"
+typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(_localctx as <ctx.name>)<else>_localctx<endif>"
 
 // used for left-recursive rules
 recRuleAltPredicate(ruleName,opPrec)  ::= "this.precpred(this._ctx, <opPrec>)"
@@ -957,9 +957,9 @@ recRuleLabeledAltStartAction(ruleName, currentAltLabel, label, isListLabel) ::= 
 _localctx = new <currentAltLabel; format="cap">Context(new <ruleName; format="cap">Context(_parentctx, _parentState));
 <if(label)>
 <if(isListLabel)>
-(\<<currentAltLabel; format="cap">Context>_localctx).<label>.push(_prevctx);
+(_localctx as <currentAltLabel; format="cap">Context).<label>.push(_prevctx);
 <else>
-(\<<currentAltLabel; format="cap">Context>_localctx).<label> = _prevctx;
+(_localctx as <currentAltLabel; format="cap">Context).<label> = _prevctx;
 <endif>
 <endif>
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
