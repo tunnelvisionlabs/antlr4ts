@@ -644,7 +644,7 @@ testShiftInRange(shiftAmount) ::= <<
 
 // produces smaller bytecode only when bits.ttypes contains more than two items
 bitsetBitfieldComparison(s, bits) ::= <%
-(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1L \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1L \<\< <offsetShift(ttype, bits.shift)>)}; separator=" | ">)) != 0)
+(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1 \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1 \<\< <offsetShift({<parser.name>.<ttype>}, bits.shift)>)}; separator=" | ">)) != 0)
 %>
 
 isZero ::= [
@@ -658,11 +658,11 @@ offsetShift(shiftAmount, offset) ::= <%
 
 // produces more efficient bytecode when bits.ttypes contains at most two items
 bitsetInlineComparison(s, bits) ::= <%
-<bits.ttypes:{ttype | <s.varName>===<ttype>}; separator=" || ">
+<bits.ttypes:{ttype | <s.varName>===<parser.name>.<ttype>}; separator=" || ">
 %>
 
 cases(ttypes) ::= <<
-<ttypes:{t | case <t>:}; separator="\n">
+<ttypes:{t | case <parser.name>.<t>:}; separator="\n">
 >>
 
 InvokeRule(r, argExprsChunks) ::= <<
@@ -672,7 +672,7 @@ this.setState(<r.stateNumber>);
 
 MatchToken(m) ::= <<
 this.setState(<m.stateNumber>);
-<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this.match(<m.name>);
+<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this.match(<parser.name>.<m.name>);
 >>
 
 MatchSet(m, expr, capture) ::= "<CommonSetStuff(m, expr, capture, false)>"
