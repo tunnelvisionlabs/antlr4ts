@@ -788,7 +788,7 @@ SetAttr(s,rhsChunks) ::= "<ctx(s)>.<s.name> = <rhsChunks>;"
 TokenLabelType() ::= "<file.TokenLabelType; null={Token}>"
 InputSymbolType() ::= "<file.InputSymbolType; null={Token}>"
 
-TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():null)"
+TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():undefined)"
 TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getType():0)"
 TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getLine():0)"
 TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getCharPositionInLine():0)"
@@ -796,9 +796,9 @@ TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.
 TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getTokenIndex():0)"
 TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Integer.valueOf(<ctx(t)>._<t.label>.getText()):0)"
 
-RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):null)"
-RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):null)"
-RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getTextFromRange(<ctx(r)>._<r.label>.start,<ctx(r)>._<r.label>.stop):null)"
+RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):undefined)"
+RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):undefined)"
+RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getTextFromRange(<ctx(r)>._<r.label>.start,<ctx(r)>._<r.label>.stop):undefined)"
 RulePropertyRef_ctx(r)	 ::= "<ctx(r)>._<r.label>"
 RulePropertyRef_parser(r)	 ::= "this"
 
