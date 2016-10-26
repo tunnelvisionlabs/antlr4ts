@@ -361,9 +361,8 @@ case <index>:
 >>
 
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
-
-@RuleVersion(<namedActions.version; null="0">)
-<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.ctxType> <currentRule.name>(<args; separator=",">) {
+//@RuleVersion(<namedActions.version; null="0">)
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.getState()<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
 	<namedActions.init>
@@ -469,13 +468,14 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	namedActions,finallyAction,postamble) ::=
 <<
 
+//@RuleVersion(<namedActions.version; null="0">)
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType>;
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p: number): <currentRule.ctxType>;
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p?: number): <currentRule.ctxType> {
+	if (_p === undefined) {
+		_p = 0;
+	}
 
-@RuleVersion(<namedActions.version; null="0">)
-<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType> {
-	return this.<currentRule.name>(0<currentRule.args:{a | , <a.name>}>);
-}
-
-private <currentRule.name>(_p: number<args:{a | , <a>}>): <currentRule.ctxType> {
 	let _parentctx: ParserRuleContext = this._ctx;
 	let _parentState: number = this.getState();
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
@@ -678,7 +678,7 @@ cases(ttypes) ::= <<
 
 InvokeRule(r, argExprsChunks) ::= <<
 this.setState(<r.stateNumber>);
-<if(r.labels)><r.labels:{l | <labelref(l)> = }><endif><r.name>(<if(r.ast.options.p)><r.ast.options.p><if(argExprsChunks)>,<endif><endif><argExprsChunks>);
+<if(r.labels)><r.labels:{l | <labelref(l)> = }><endif>this.<r.name>(<argExprsChunks><if(r.ast.options.p)><if(argExprsChunks)>,<endif><r.ast.options.p><endif>);
 >>
 
 MatchToken(m) ::= <<
@@ -784,10 +784,15 @@ RuleContextListDecl(rdecl) ::= "<rdecl.name>: <rdecl.ctxName>[] = []"
 ContextTokenGetterDecl(t)      ::=
     "public <t.name>(): TerminalNode { return this.getToken(<parser.name>.<t.name>, 0); }"
 ContextTokenListGetterDecl(t)  ::=
-    "public <t.name>(): TerminalNode[] { return this.getTokens(<parser.name>.<t.name>); }"
+    "public <t.name>(): TerminalNode[];"
 ContextTokenListIndexedGetterDecl(t)  ::= <<
-public <t.name>(i: number): TerminalNode {
-	return this.getToken(<parser.name>.<t.name>, i);
+public <t.name>(i: number): TerminalNode;
+public <t.name>(i?: number): TerminalNode | TerminalNode[] {
+	if (i === undefined) {
+		return this.getTokens(<parser.name>.<t.name>);
+	} else {
+		return this.getToken(<parser.name>.<t.name>, i);
+	}
 }
 >>
 ContextRuleGetterDecl(r)       ::= <<
@@ -829,14 +834,24 @@ StructDecl(struct,ctorAttrs,attrs,getters,dispatchMethods,interfaces,extensionMe
 export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>ParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	<if(ctorAttrs)>constructor(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }<endif>
-	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>) {
-		super(parent, invokingState);
+<if(struct.provideCopyFrom)>
+	constructor();
+<endif>
+<if(ctorAttrs)>
+	constructor(parent: ParserRuleContext, invokingState: number);
+<endif>
+	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>);
+	constructor(parent?: ParserRuleContext, invokingState?: number<ctorAttrs:{a | , <a>}>) {
+		if (parent !== undefined && invokingState !== undefined) {
+			super(parent, invokingState);
+		} else {
+			super();
+		}
+
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
 	@Override public getRuleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
 <if(struct.provideCopyFrom)> <! don't need copy unless we have subclasses !>
-	constructor() { }
 	public copyFrom(ctx: <struct.name>): void {
 		super.copyFrom(ctx);
 		<struct.attrs:{a | this.<a.name> = ctx.<a.name>;}; separator="\n">
@@ -851,7 +866,7 @@ AltLabelStructDecl(struct,attrs,getters,dispatchMethods) ::= <<
 export class <struct.name> extends <currentRule.currentRule.name; format="cap">Context {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) { this.copyFrom(ctx); }
+	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) { super(); this.copyFrom(ctx); }
 	<dispatchMethods; separator="\n">
 }
 >>
