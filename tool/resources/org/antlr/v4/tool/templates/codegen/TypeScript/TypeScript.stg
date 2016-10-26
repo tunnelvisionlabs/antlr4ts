@@ -250,7 +250,7 @@ import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
  * @param \<Result> The return type of the visit operation. Use `void` for
  * operations with no return type.
  */
-export class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVisitor\<Result> implements <file.grammarName>Visitor\<Result> {
+export abstract class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVisitor\<Result> implements <file.grammarName>Visitor\<Result> {
 	<file.visitorNames:{lname |
 /**
  * {@inheritDoc\}
