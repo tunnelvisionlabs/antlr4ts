@@ -778,28 +778,28 @@ ActionTemplate(t) ::= "<t.st>"
 ArgRef(a) ::= "_localctx.<a.name>"
 LocalRef(a) ::= "_localctx.<a.name>"
 RetValueRef(a) ::= "_localctx.<a.name>"
-QRetValueRef(a) ::= "<ctx(a)>.<a.dict>.<a.name>"
+QRetValueRef(a) ::= "<ctx(a)>._<a.dict>.<a.name>"
 /** How to translate $tokenLabel */
-TokenRef(t) ::= "<ctx(t)>.<t.name>"
-LabelRef(t) ::= "<ctx(t)>.<t.name>"
+TokenRef(t) ::= "<ctx(t)>._<t.name>"
+LabelRef(t) ::= "<ctx(t)>._<t.name>"
 ListLabelRef(t) ::= "<ctx(t)>.<ListLabelName(t.name)>"
 SetAttr(s,rhsChunks) ::= "<ctx(s)>.<s.name> = <rhsChunks>;"
 
 TokenLabelType() ::= "<file.TokenLabelType; null={Token}>"
 InputSymbolType() ::= "<file.InputSymbolType; null={Token}>"
 
-TokenPropertyRef_text(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getText():null)"
-TokenPropertyRef_type(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getType():0)"
-TokenPropertyRef_line(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getLine():0)"
-TokenPropertyRef_pos(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getCharPositionInLine():0)"
-TokenPropertyRef_channel(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getChannel():0)"
-TokenPropertyRef_index(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getTokenIndex():0)"
-TokenPropertyRef_int(t) ::= "(<ctx(t)>.<t.label>!=null?Integer.valueOf(<ctx(t)>.<t.label>.getText()):0)"
+TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():null)"
+TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getType():0)"
+TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getLine():0)"
+TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getCharPositionInLine():0)"
+TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getChannel():0)"
+TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getTokenIndex():0)"
+TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Integer.valueOf(<ctx(t)>._<t.label>.getText()):0)"
 
-RulePropertyRef_start(r) ::= "(<ctx(r)>.<r.label>!=null?(<ctx(r)>.<r.label>.start):null)"
-RulePropertyRef_stop(r)	 ::= "(<ctx(r)>.<r.label>!=null?(<ctx(r)>.<r.label>.stop):null)"
-RulePropertyRef_text(r)	 ::= "(<ctx(r)>.<r.label>!=null?this._input.getText(<ctx(r)>.<r.label>.start,<ctx(r)>.<r.label>.stop):null)"
-RulePropertyRef_ctx(r)	 ::= "<ctx(r)>.<r.label>"
+RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):null)"
+RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):null)"
+RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getText(<ctx(r)>._<r.label>.start,<ctx(r)>._<r.label>.stop):null)"
+RulePropertyRef_ctx(r)	 ::= "<ctx(r)>._<r.label>"
 RulePropertyRef_parser(r)	 ::= "this"
 
 ThisRulePropertyRef_start(r) ::= "_localctx.start"
@@ -812,13 +812,13 @@ NonLocalAttrRef(s)		 ::= "(getInvokingContext(<s.ruleIndex>) as <s.ruleName; for
 SetNonLocalAttr(s, rhsChunks)	  ::=
 	"(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name> = <rhsChunks>;"
 
-AddToLabelList(a) ::= "<ctx(a.label)>.<a.listName>.push(<labelref(a.label)>);"
+AddToLabelList(a) ::= "<ctx(a.label)>._<a.listName>.push(<labelref(a.label)>);"
 
-TokenDecl(t) ::= "<t.name>: <TokenLabelType()>"
+TokenDecl(t) ::= "_<t.name>: <TokenLabelType()>"
 TokenTypeDecl(t) ::= "<t.name>: number;"
-TokenListDecl(t) ::= "<t.name>: Token[] = []"
-RuleContextDecl(r) ::= "<r.name>: <r.ctxName>"
-RuleContextListDecl(rdecl) ::= "<rdecl.name>: <rdecl.ctxName>[] = []"
+TokenListDecl(t) ::= "_<t.name>: Token[] = []"
+RuleContextDecl(r) ::= "_<r.name>: <r.ctxName>"
+RuleContextListDecl(rdecl) ::= "_<rdecl.name>: <rdecl.ctxName>[] = []"
 
 ContextTokenGetterDecl(t)      ::=
     "public <t.name>(): TerminalNode { return this.getToken(<parser.name>.<t.name>, 0); }"
@@ -928,7 +928,7 @@ public accept\<Result>(visitor: ParseTreeVisitor\<Result>): Result {
 AttributeDecl(d) ::= "<d.name>: <d.type><if(d.initValue)> = <d.initValue><endif>"
 
 /** If we don't know location of label def x, use this template */
-labelref(x) ::= "<if(!x.isLocal)><typedContext(x.ctx)>.<endif><x.name>"
+labelref(x) ::= "<if(!x.isLocal)><typedContext(x.ctx)>.<endif>_<x.name>"
 
 /** For any action chunk, what is correctly-typed context struct ptr? */
 ctx(actionChunk) ::= "<typedContext(actionChunk.ctx)>"
@@ -945,9 +945,9 @@ recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
 _localctx = new <ctxName>Context(_parentctx, _parentState);
 <if(label)>
 <if(isListLabel)>
-_localctx.<label>.push(_prevctx);
+_localctx._<label>.push(_prevctx);
 <else>
-_localctx.<label> = _prevctx;
+_localctx._<label> = _prevctx;
 <endif>
 <endif>
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
@@ -957,9 +957,9 @@ recRuleLabeledAltStartAction(ruleName, currentAltLabel, label, isListLabel) ::= 
 _localctx = new <currentAltLabel; format="cap">Context(new <ruleName; format="cap">Context(_parentctx, _parentState));
 <if(label)>
 <if(isListLabel)>
-(_localctx as <currentAltLabel; format="cap">Context).<label>.push(_prevctx);
+(_localctx as <currentAltLabel; format="cap">Context)._<label>.push(_prevctx);
 <else>
-(_localctx as <currentAltLabel; format="cap">Context).<label> = _prevctx;
+(_localctx as <currentAltLabel; format="cap">Context)._<label> = _prevctx;
 <endif>
 <endif>
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
