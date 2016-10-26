@@ -883,12 +883,17 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 	constructor(parent: ParserRuleContext, invokingState: number);
 <endif>
 	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>);
+<if(struct.provideCopyFrom)>
 	constructor(parent?: ParserRuleContext, invokingState?: number<ctorAttrs:{a | , <a>}>) {
 		if (parent !== undefined && invokingState !== undefined) {
 			super(parent, invokingState);
 		} else {
 			super();
 		}
+<else>
+	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>) {
+		super(parent, invokingState);
+<endif>
 
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
