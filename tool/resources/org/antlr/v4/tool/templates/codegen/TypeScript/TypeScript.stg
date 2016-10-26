@@ -68,6 +68,8 @@ ListenerFile(file, header) ::= <<
 import { Token } from '<basePath()>/Token';
 import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 
+<file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
 /**
  * This interface defines a complete listener for a parse tree produced by
  * `<file.parserName>`.
@@ -83,7 +85,7 @@ export interface <file.grammarName>Listener extends ParseTreeListener {
 <endif>
  * @param ctx the parse tree
  */
-enter<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): void;
+enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
 /**
 <if(file.listenerLabelRuleNames.(lname))>
  * Exit a parse tree produced by the `<lname>`
@@ -93,7 +95,7 @@ enter<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context):
 <endif>
  * @param ctx the parse tree
  */
-exit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): void;}; separator="\n">
+exit<lname; format="cap">(ctx: <lname; format="cap">Context): void;}; separator="\n">
 }
 >>
 
@@ -109,6 +111,8 @@ import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
 import { TerminalNode } from '<basePath()>/tree/TerminalNode';
 import { Token } from '<basePath()>/Token';
 
+<file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
 /**
  * This class provides an empty implementation of `<file.grammarName>Listener`,
  * which can be extended to create a listener which only needs to handle a subset
@@ -121,13 +125,13 @@ export class <file.grammarName>BaseListener implements <file.grammarName>Listene
  *
  * The default implementation does nothing.
  */
-@Override enter<lname; format="cap">(@NotNull ctx: <file.parserName>.<lname; format="cap">Context): void { \}
+@Override enter<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}
 /**
  * {@inheritDoc\}
  *
  * The default implementation does nothing.
  */
-@Override exit<lname; format="cap">(@NotNull ctx: <file.parserName>.<lname; format="cap">Context): void { \}}; separator="\n">
+@Override exit<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}}; separator="\n">
 
 	/**
 	 * {@inheritDoc\}
@@ -164,6 +168,8 @@ VisitorFile(file, header) ::= <<
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
 import { Token } from '<basePath()>/Token';
 
+<file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
 /**
  * This interface defines a complete generic visitor for a parse tree produced
  * by `<file.parserName>`.
@@ -183,7 +189,7 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  * @param ctx the parse tree
  * @return the visitor result
  */
-visit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): Result;}; separator="\n">
+visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result;}; separator="\n">
 }
 >>
 
@@ -194,6 +200,8 @@ BaseVisitorFile(file, header) ::= <<
 
 import { AbstractParseTreeVisitor } from '<basePath()>/tree/AbstractParseTreeVisitor';
 import { Token } from '<basePath()>/Token';
+
+<file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
  * This class provides an empty implementation of `<file.grammarName>Visitor`,
@@ -211,7 +219,7 @@ export class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVis
  * The default implementation returns the result of calling
  * `visitChildren` on `ctx`.
  */
-@Override visit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): Result { return this.visitChildren(ctx); \}}; separator="\n">
+@Override visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result { return this.visitChildren(ctx); \}}; separator="\n">
 }
 >>
 
@@ -262,6 +270,16 @@ case <f.ruleIndex>:
 
 	<atn>
 }
+
+<! The argument must be called currentRule because AltLabelStructDecl looks it up by name. !>
+<funcs:{currentRule |
+<if(currentRule.ruleCtx)>
+<currentRule.ruleCtx>
+<endif>
+<if(currentRule.altLabelCtxs)>
+<currentRule.altLabelCtxs:{l | <currentRule.altLabelCtxs.(l)>}; separator="\n">
+<endif>
+}; separator="\n\n">
 >>
 
 vocabulary(className, literalNames, symbolicNames) ::= <<
@@ -343,11 +361,6 @@ case <index>:
 >>
 
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
-
-<if(ruleCtx)>
-<ruleCtx>
-<endif>
-<altLabelCtxs:{l | <altLabelCtxs.(l)>}; separator="\n">
 
 @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.ctxType> <currentRule.name>(<args; separator=",">) {
@@ -456,8 +469,6 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	namedActions,finallyAction,postamble) ::=
 <<
 
-<ruleCtx>
-<altLabelCtxs:{l | <altLabelCtxs.(l)>}; separator="\n">
 
 @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType> {
@@ -837,10 +848,10 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 >>
 
 AltLabelStructDecl(struct,attrs,getters,dispatchMethods) ::= <<
-export class <struct.name> extends <currentRule.name; format="cap">Context {
+export class <struct.name> extends <currentRule.currentRule.name; format="cap">Context {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	constructor(ctx: <currentRule.name; format="cap">Context) { this.copyFrom(ctx); }
+	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) { this.copyFrom(ctx); }
 	<dispatchMethods; separator="\n">
 }
 >>
