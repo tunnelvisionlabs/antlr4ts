@@ -64,6 +64,7 @@ import org.apache.commons.io.FileUtils;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public abstract class BaseTest {
 	public static final String newline = System.getProperty("line.separator");
@@ -278,7 +279,7 @@ public abstract class BaseTest {
 		writeLexerTestFile(lexerName, showDFA);
 		addSourceFiles("Test.ts");
 		if(!compile()) {
-			System.err.println("Failed to compile!");
+			fail("Failed to compile!");
 			return stderrDuringParse;
 		}
 		String output = execTest();
@@ -380,7 +381,7 @@ public abstract class BaseTest {
 	}
 
 	public String execRecognizer() {
-		compile();
+		assertTrue(compile());
 		return execTest();
 	}
 
