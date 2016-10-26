@@ -169,15 +169,15 @@ Append(a,b) ::= "<a> + <b>"
 
 Concat(a,b) ::= "<a><b>"
 
-DeclareLocal(s,v) ::= "Object <s> = <v>;"
+DeclareLocal(s,v) ::= "let <s> = <v>;"
 
-AssertIsList(v) ::= "System.Collections.IList __ttt__ = <v>;" // just use static type system
+AssertIsList(v) ::= "let __ttt__: Array\<any> = <v>;" // just use static type system
 
 AssignLocal(s,v) ::= "<s> = <v>;"
 
-InitIntMember(n,v) ::= <%int <n> = <v>;%>
+InitIntMember(n,v) ::= <%<n>: number = <v>;%>
 
-InitBooleanMember(n,v) ::= <%bool <n> = <v>;%>
+InitBooleanMember(n,v) ::= <%<n>: boolean = <v>;%>
 
 GetMember(n) ::= <%this.<n>%>
 
@@ -193,19 +193,19 @@ ModMemberEquals(n,m,v) ::= <%this.<n> % <m> == <v>%>
 
 ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> != <v>%>
 
-DumpDFA() ::= "this.DumpDFA();"
+DumpDFA() ::= "this.dumpDFA();"
 
 Pass() ::= ""
 
-StringList() ::= "List\<string>"
+StringList() ::= "string[]"
 
-BuildParseTrees() ::= "BuildParseTree = true;"
+BuildParseTrees() ::= "this.setBuildParseTree(true);"
 
-BailErrorStrategy() ::= <%ErrorHandler = new BailErrorStrategy();%>
+BailErrorStrategy() ::= <%this.setErrorHandler(new BailErrorStrategy());%>
 
-ToStringTree(s) ::= <%<s>.ToStringTree(this)%>
+ToStringTree(s) ::= <%<s>.toStringTree(this)%>
 
-Column() ::= "this.Column"
+Column() ::= "this.getCharPositionInLine()"
 
 Text() ::= "this.getText()"
 
@@ -225,15 +225,15 @@ TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
 ImportListener(X) ::= ""
 
-GetExpectedTokenNames() ::= "this.getExpectedTokens().toString(Vocabulary)"
+GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.getVocabulary())"
 
-RuleInvocationStack() ::= "getRuleInvocationStack()"
+RuleInvocationStack() ::= "this.getRuleInvocationStack()"
 
-LL_EXACT_AMBIG_DETECTION() ::= <<getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
+LL_EXACT_AMBIG_DETECTION() ::= <<this.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
 
 ParserPropertyMember() ::= <<
 @members {
-get property(): boolean {
+Property(): boolean {
   return true;
 }
 }
@@ -241,77 +241,76 @@ get property(): boolean {
 
 PositionAdjustingLexer() ::= <<
 
-public override IToken NextToken() {
-	if (!(_interp is PositionAdjustingLexerATNSimulator)) {
-		_interp = new PositionAdjustingLexerATNSimulator(this, _ATN);
+nextToken(): Token {
+	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
+		this._interp = new PositionAdjustingLexerATNSimulator(_ATN, this);
 	}
 
-	return base.NextToken();
+	return super.nextToken();
 }
 
-public override IToken Emit() {
-	switch (_type) {
+emit(): Token {
+	switch (this._type) {
 	case TOKENS:
-		HandleAcceptPositionForKeyword("tokens");
+		this.handleAcceptPositionForKeyword("tokens");
 		break;
 
 	case LABEL:
-		HandleAcceptPositionForIdentifier();
+		this.handleAcceptPositionForIdentifier();
 		break;
 
 	default:
 		break;
 	}
 
-	return base.Emit();
+	return super.emit();
 }
 
-private bool HandleAcceptPositionForIdentifier() {
-	string tokenText = Text;
-	int identifierLength = 0;
-	while (identifierLength \< tokenText.Length && IsIdentifierChar(tokenText[identifierLength])) {
+private handleAcceptPositionForIdentifier(): boolean {
+	let tokenText = Text;
+	let identifierLength = 0;
+	while (identifierLength \< tokenText.length && this.isIdentifierChar(tokenText[identifierLength])) {
 		identifierLength++;
 	}
 
-	if (InputStream.Index > _tokenStartCharIndex + identifierLength) {
-		int offset = identifierLength - 1;
-		Interpreter.ResetAcceptPosition(_input, _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
+	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + identifierLength) {
+		let offset = identifierLength - 1;
+		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
 	}
 
 	return false;
 }
 
-private bool HandleAcceptPositionForKeyword(string keyword) {
-	if (InputStream.Index > _tokenStartCharIndex + keyword.Length) {
-		int offset = keyword.Length - 1;
-		Interpreter.ResetAcceptPosition(_input, _tokenStartCharIndex + offset, _tokenStartLine, _tokenStartCharPositionInLine + offset);
+private handleAcceptPositionForKeyword(keyword: string): boolean {
+	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + keyword.length) {
+		let offset = keyword.length - 1;
+		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
 	}
 
 	return false;
 }
 
-public new PositionAdjustingLexerATNSimulator Interpreter {
-	get { return (PositionAdjustingLexerATNSimulator)base.Interpreter; }
+getInterpreter(): PositionAdjustingLexerATNSimulator {
+	return super.getInterpreter() as PositionAdjustingLexerATNSimulator;
 }
 
-private static bool IsIdentifierChar(char c) {
+private static isIdentifierChar(c: string): boolean {
 	return char.IsLetterOrDigit(c) || c == '_';
 }
 
-public class PositionAdjustingLexerATNSimulator : LexerATNSimulator {
+export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
-	public PositionAdjustingLexerATNSimulator(Lexer recog, ATN atn)
-		: base(recog, atn)
-	{
+	constructor(atn: ATN, recog: Lexer) {
+		super(atn, recog);
 	}
 
-	public void ResetAcceptPosition(ICharStream input, int index, int line, int charPositionInLine) {
-		input.Seek(index);
+	resetAcceptPosition(input: CharStream, index: number, line: number, charPositionInLine: number): void {
+		input.seek(index);
 		this.line = line;
 		this.charPositionInLine = charPositionInLine;
-		Consume(input);
+		this.consume(input);
 	}
 
 }
@@ -319,9 +318,9 @@ public class PositionAdjustingLexerATNSimulator : LexerATNSimulator {
 >>
 
 BasicListener(X) ::= <<
-public class LeafListener : TBaseListener {
-	public override void VisitTerminal(ITerminalNode node) {
-		System.Console.WriteLine(node.Symbol.Text);
+export class LeafListener extends TBaseListener {
+	visitTerminal(node: TerminalNode): void {
+		console.log(node.getSymbol().getText());
 	}
 }
 >>
@@ -331,87 +330,92 @@ ParseTreeWalker.Default.Walk(new LeafListener(), <s>);
 >>
 
 TreeNodeWithAltNumField(X) ::= <<
-@parser::members {
-public class MyRuleNode : ParserRuleContext {
-	public int altNum;
-	public MyRuleNode(ParserRuleContext parent, int invokingStateNumber)
-		: base(parent, invokingStateNumber)
-	{
+@parser::beforeParser {
+import { ParserRuleContext as PRC } from 'antlr4ts/ParserRuleContext';
+
+export class MyRuleNode extends PRC {
+	altNum: number;
+	constructor(parent: PRC, invokingStateNumber: number) {
+		super(parent, invokingStateNumber);
 	}
-	public override int OuterAlternative { get { return altNum; } set { this.altNum = value; } }
+
+	get OuterAlternative(): number { return this.altNum; }
+	set OuterAlternative(value: number) { this.altNum = value; }
 }
 }
 >>
 
 TokenGetterListener(X) ::= <<
-public class LeafListener : TBaseListener {
-	public override void ExitA(TParser.AContext ctx) {
-		if (ctx.ChildCount==2 && ctx.INT().Length == 2)
-			System.Console.Write("{0} {1} [{2}, {3}]",ctx.INT(0).Symbol.Text,
-				ctx.INT(1).Symbol.Text, ctx.INT()[0], ctx.INT()[1]);
-		else
-			System.Console.WriteLine(ctx.ID().Symbol);
+export class LeafListener extends TBaseListener {
+	exitA(ctx: TParser.AContext): void {
+		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
+			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().getText(),
+				ctx.INT(1).getSymbol().getText(), ctx.INT()[0], ctx.INT()[1]);
+		} else {
+			console.log(ctx.ID().getSymbol());
+		}
 	}
 }
 >>
 
 RuleGetterListener(X) ::= <<
-public class LeafListener : TBaseListener {
-	public override void ExitA(TParser.AContext ctx) {
-		if (ctx.ChildCount==2) {
-			System.Console.Write("{0} {1} {2}",ctx.b(0).Start.Text,
-				ctx.b(1).Start.Text,ctx.b()[0].Start.Text);
-		} else
-			System.Console.WriteLine(ctx.b(0).Start.Text);
+export class LeafListener extends TBaseListener {
+	exitA(ctx: TParser.AContext): void {
+		if (ctx.getChildCount() === 2) {
+			console.log("{0} {1} {2}",ctx.b(0).getStart().getText(),
+				ctx.b(1).getStart().getText(),ctx.b()[0].getStart().getText());
+		} else {
+			console.log(ctx.b(0).getStart().getText());
+		}
 	}
 }
 >>
 
 
 LRListener(X) ::= <<
-public class LeafListener : TBaseListener {
-	public override void ExitE(TParser.EContext ctx) {
-		if (ctx.ChildCount==3) {
-			System.Console.Write("{0} {1} {2}\n",ctx.e(0).Start.Text,
-				ctx.e(1).Start.Text, ctx.e()[0].Start.Text);
-		} else
-			System.Console.WriteLine(ctx.INT().Symbol.Text);
+export class LeafListener extends TBaseListener {
+	exitE(ctx: TParser.EContext): void {
+		if (ctx.getChildCount() === 3) {
+			console.log("{0} {1} {2}\n",ctx.e(0).getStart().getText(),
+				ctx.e(1).getStart().getText(), ctx.e()[0].getStart().getText());
+		} else {
+			console.log(ctx.INT().getSymbol().getText());
+		}
 	}
 }
 >>
 
 LRWithLabelsListener(X) ::= <<
-public class LeafListener : TBaseListener {
-	public override void ExitCall(TParser.CallContext ctx) {
-		System.Console.Write("{0} {1}",ctx.e().Start.Text,ctx.eList());
+export class LeafListener extends TBaseListener {
+	exitCall(ctx: TParser.CallContext): void {
+		console.log("{0} {1}",ctx.e().getStart().getText(),ctx.eList());
 	}
-	public override void ExitInt(TParser.IntContext ctx) {
-		System.Console.WriteLine(ctx.INT().Symbol.Text);
+	exitInt(ctx: TParser.IntContext): void {
+		console.log(ctx.INT().getSymbol().getText());
 	}
 }
 >>
 
 DeclareContextListGettersFunction() ::= <<
-void Foo() {
-	SContext s = null;
-	AContext[] a = s.a();
-	BContext[] b = s.b();
+foo(s: SContext): void {
+	let a: AContext[] = s.a();
+	let b: BContext[] = s.b();
 }
 >>
 
 Declare_foo() ::= <<
-	public void Foo() {System.Console.WriteLine("foo");}
+	foo(): void {console.log("foo");}
 >>
 
-Invoke_foo() ::= "Foo();"
+Invoke_foo() ::= "this.foo();"
 
-Declare_pred() ::= <<bool Pred(bool v) {
-	System.Console.WriteLine("eval="+v.ToString().ToLowerInvariant());
+Declare_pred() ::= <<pred(v: boolean): boolean {
+	console.log("eval="+v.toString().toLowerCase());
 	return v;
 }
 >>
 
-Invoke_pred(v) ::= <<this.Pred(<v>)>>
+Invoke_pred(v) ::= <<this.pred(<v>)>>
 
 IgnoredTests ::= [
 	default: false

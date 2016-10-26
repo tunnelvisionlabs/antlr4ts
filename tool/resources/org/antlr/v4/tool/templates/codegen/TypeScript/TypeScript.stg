@@ -59,7 +59,10 @@ import { ParserATNSimulator } from '<basePath()>/atn/ParserATNSimulator';
 import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
 import { RecognitionException } from '<basePath()>/RecognitionException';
+import { RuleContext } from '<basePath()>/RuleContext';
 import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
+import { TokenStream } from '<basePath()>/TokenStream';
 import { Vocabulary } from '<basePath()>/Vocabulary';
 import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
 
