@@ -199,7 +199,9 @@ public abstract class BaseTest {
 	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
 		Collections.addAll(options, extraOptions);
-//		options.add("-DbaseImportPath=src");
+		// Uncomment the following lines to show the StringTemplate visualizer when running tests
+		//options.add("-XdbgST");
+		//options.add("-XdbgSTWait");
 		if ( !options.contains("-o") ) {
 			options.add("-o");
 			options.add(tmpdir);
