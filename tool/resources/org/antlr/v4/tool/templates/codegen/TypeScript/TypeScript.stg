@@ -72,7 +72,11 @@ import { <file.grammarName>Listener } from './<file.grammarName>Listener';
 import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
 <endif>
 
+<namedActions.beforeParser>
+
 <parser>
+
+<namedActions.afterParser>
 >>
 
 ListenerFile(file, header) ::= <<
