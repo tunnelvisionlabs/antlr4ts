@@ -47,15 +47,30 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-<! TODO: imports !>
-// import org.antlr.v4.runtime.atn.*;
-// import org.antlr.v4.runtime.dfa.DFA;
-// import org.antlr.v4.runtime.*;
-// import org.antlr.v4.runtime.misc.*;
-// import org.antlr.v4.runtime.tree.*;
-// import java.util.List;
-// import java.util.Iterator;
-// import java.util.ArrayList;
+import { ATN } from '<basePath()>/atn/ATN';
+import { ATNDeserializer } from '<basePath()>/atn/ATNDeserializer';
+import { FailedPredicateException } from '<basePath()>/FailedPredicateException';
+import { NotNull } from '<basePath()>/Decorators';
+import { NoViableAltException } from '<basePath()>/NoViableAltException';
+import { Override } from '<basePath()>/Decorators';
+import { Parser } from '<basePath()>/Parser';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
+import { ParserATNSimulator } from '<basePath()>/atn/ParserATNSimulator';
+import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
+import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
+import { RecognitionException } from '<basePath()>/RecognitionException';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Vocabulary } from '<basePath()>/Vocabulary';
+import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
+
+import * as Utils from '<basePath()>/misc/Utils';
+
+<if(file.genListener)>
+import { <file.grammarName>Listener } from './<file.grammarName>Listener';
+<endif>
+<if(file.genVisitor)>
+import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
+<endif>
 
 <parser>
 >>
