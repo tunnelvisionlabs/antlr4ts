@@ -153,7 +153,7 @@ writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
 writeln(s) ::= <<console.log(<s>);>>
 
-write(s) ::= <<console.log(<s>);>>
+write(s) ::= <<process.stdout.write(String(<s>));>>
 
 False() ::= "false"
 
