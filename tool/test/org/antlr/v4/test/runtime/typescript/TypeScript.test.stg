@@ -339,8 +339,8 @@ export class MyRuleNode extends PRC {
 		super(parent, invokingStateNumber);
 	}
 
-	get OuterAlternative(): number { return this.altNum; }
-	set OuterAlternative(value: number) { this.altNum = value; }
+	getAltNumber(): number { return this.altNum; }
+	setAltNumber(value: number) { this.altNum = value; }
 }
 }
 >>
