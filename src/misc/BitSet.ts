@@ -59,16 +59,16 @@ function findLSBSet(word: number) {
 	let bit = 1;
 	for (let i = 0; i < 16; i++) {
 		if ((word & bit) !== 0) return i;
-		bit = bit << 1;
+		bit = (bit << 1) >>> 0;
 	}
 	throw new RangeError("No specified bit found");
 }
 
 function findMSBSet(word: number) {
-	let bit = 1<<15;;
+	let bit = (1 << 15) >>> 0;
 	for (let i = 15; i >= 0; i--) {
 		if ((word & bit) !== 0) return i;
-		bit = bit >> 1;
+		bit = bit >>> 1;
 	}
 	throw new RangeError("No specified bit found");
 }
@@ -80,8 +80,8 @@ function findMSBSet(word: number) {
 function bitsFor(fromBit: number, toBit: number ): number {
 	fromBit &= 0xF;
 	toBit &= 0xF
-	if (fromBit === toBit) return 1 << fromBit;
-	return ((0xFFFF >> (15-toBit)) ^ (0xFFFF >> (16-fromBit)));
+	if (fromBit === toBit) return (1 << fromBit) >>> 0;
+	return ((0xFFFF >>> (15-toBit)) ^ (0xFFFF >>> (16-fromBit)));
 }
 
 /**
@@ -89,7 +89,7 @@ function bitsFor(fromBit: number, toBit: number ): number {
  */
 const POP_CNT: Uint8Array = new Uint8Array(65536);
 for (let i = 0; i < 16; i++) {
-	const stride = 1 << i;
+	const stride = (1 << i) >>> 0;
 	let index = 0;
 	while (index < POP_CNT.length) {
 		// skip the numbers where the bit isn't set

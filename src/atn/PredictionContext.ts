@@ -340,11 +340,11 @@ export abstract class PredictionContext implements Equatable {
 				let index: number = 0;
 				if (p.size() > 0) {
 					let bits: number = 1;
-					while ((1 << bits) < p.size()) {
+					while (((1 << bits) >>> 0) < p.size()) {
 						bits++;
 					}
 
-					let mask: number = (1 << bits) - 1;
+					let mask: number = ((1 << bits) >>> 0) - 1;
 					index = (perm >> offset) & mask;
 					last = last && index >= p.size() - 1;
 					if (index >= p.size()) {
@@ -752,8 +752,8 @@ export class SingletonPredictionContext extends PredictionContext {
 export namespace PredictionContext {
 	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false)
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
-	export const EMPTY_LOCAL_STATE_KEY: number =  -(1 << 31);
-	export const EMPTY_FULL_STATE_KEY: number =  (1 << 31) - 1;
+	export const EMPTY_LOCAL_STATE_KEY: number =  -((1 << 31) >>> 0);
+	export const EMPTY_FULL_STATE_KEY: number =  ((1 << 31) >>> 0) - 1;
 
 	export class IdentityHashMap extends Array2DHashMap<PredictionContext, PredictionContext> {
 		constructor() {

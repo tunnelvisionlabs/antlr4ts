@@ -37,7 +37,7 @@ import { JavaCollection } from './Stubs';
 const EMPTY_DATA: Int32Array = new Int32Array(0);
 
 const INITIAL_SIZE: number = 4;
-const MAX_ARRAY_SIZE: number = ((1 << 31) - 1) - 8;
+const MAX_ARRAY_SIZE: number = (((1 << 31) >>> 0) - 1) - 8;
 
 /**
  *
