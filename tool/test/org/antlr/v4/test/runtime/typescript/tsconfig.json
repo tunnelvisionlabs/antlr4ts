@@ -20,7 +20,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "antlr4ts/*": [
+      "src/*": [
         "$$ANTLR4TS$$/*"
       ]
     }

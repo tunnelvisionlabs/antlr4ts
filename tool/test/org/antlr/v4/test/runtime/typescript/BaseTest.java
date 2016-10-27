@@ -60,7 +60,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
-import org.junit.Assume;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -199,6 +198,7 @@ public abstract class BaseTest {
 	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
 		Collections.addAll(options, extraOptions);
+		options.add("-DbaseImportPath=src");
 		// Uncomment the following lines to show the StringTemplate visualizer when running tests
 		//options.add("-XdbgST");
 		//options.add("-XdbgSTWait");
@@ -489,11 +489,20 @@ public abstract class BaseTest {
 	}
 
 	public String execTest() {
-		Assume.assumeTrue("Assuming we can run code...", false);
 		try {
 			String node = locateNode();
 			String[] args = new String[] { node, "./Test.js", new File(tmpdir, "input").getAbsolutePath() };
 			ProcessBuilder pb = new ProcessBuilder(args);
+
+			// Get the location of the compiled TypeScript runtime for use as the NODE_PATH
+			String pack = BaseTest.class.getPackage().getName().replace(".", "/") + "/";
+			String tsconfigName = "tsconfig.json";
+			final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
+			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
+			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target").getAbsolutePath();
+
+			pb.environment().put("NODE_PATH", antlr4ts);
 			pb.directory(new File(tmpdir));
 			Process process = pb.start();
 			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
@@ -659,15 +668,15 @@ public abstract class BaseTest {
 	{
 		ST outputFileST = new ST(
 			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';\n" +
-			"import { ErrorNode } from 'antlr4ts/tree/ErrorNode';\n" +
-			"import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';\n" +
-			"import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';\n" +
-			"import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';\n" +
-			"import { RuleNode } from 'antlr4ts/tree/RuleNode';\n" +
-			"import { TerminalNode } from 'antlr4ts/tree/TerminalNode';\n" +
+			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
+			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
+			"import { DiagnosticErrorListener } from 'src/DiagnosticErrorListener';\n" +
+			"import { ErrorNode } from 'src/tree/ErrorNode';\n" +
+			"import { ParserRuleContext } from 'src/ParserRuleContext';\n" +
+			"import { ParseTreeListener } from 'src/tree/ParseTreeListener';\n" +
+			"import { ParseTreeWalker } from 'src/tree/ParseTreeWalker';\n" +
+			"import { RuleNode } from 'src/tree/RuleNode';\n" +
+			"import { TerminalNode } from 'src/tree/TerminalNode';\n" +
 			"\n" +
 			"import * as fs from 'fs';\n" +
 			"\n" +
@@ -712,10 +721,10 @@ public abstract class BaseTest {
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
 			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CharStream } from 'antlr4ts/CharStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { Lexer } from 'antlr4ts/Lexer';\n" +
+			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
+			"import { CharStream } from 'src/CharStream';\n" +
+			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
+			"import { Lexer } from 'src/Lexer';\n" +
 			"import * as fs from 'fs';\n" +
 			"\n" +
 			"import { <lexerName> } from './<lexerName>';\n" +

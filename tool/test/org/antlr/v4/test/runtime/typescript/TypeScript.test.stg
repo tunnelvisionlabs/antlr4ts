@@ -331,7 +331,7 @@ ParseTreeWalker.Default.Walk(new LeafListener(), <s>);
 
 TreeNodeWithAltNumField(X) ::= <<
 @parser::beforeParser {
-import { ParserRuleContext as PRC } from 'antlr4ts/ParserRuleContext';
+import { ParserRuleContext as PRC } from 'src/ParserRuleContext';
 
 export class MyRuleNode extends PRC {
 	altNum: number;
