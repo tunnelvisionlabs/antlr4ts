@@ -37,7 +37,7 @@ import { CommonTokenStream } from "../../CommonTokenStream";
 import { Lexer } from '../../Lexer';
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
-import { Nullable, NotNull } from "../../Decorators";
+import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
 import { Parser } from '../../Parser';
 import { ParserInterpreter } from "../../Stub_ParserInterpreter";
