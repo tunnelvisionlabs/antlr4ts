@@ -157,7 +157,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 			return this;
 		}
 
-		let result: SparseEdgeMap<T> = new SparseEdgeMap<T>(this.minIndex, this.maxIndex, 0);
+		let result: SparseEdgeMap<T> = new SparseEdgeMap<T>(this.minIndex, this.maxIndex, this.maxSparseSize);
 		result.keys = this.keys.slice(0);
 		result.values = this.values.slice(0);
 
