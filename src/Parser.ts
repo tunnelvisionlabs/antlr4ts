@@ -899,7 +899,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			if ( !dfa.isEmpty() ) {
 				if ( seenOne ) console.log();
 				console.log("Decision " + dfa.decision + ":");
-				console.log(dfa.toString(this.getVocabulary(), this.getRuleNames()));
+				process.stdout.write(dfa.toString(this.getVocabulary(), this.getRuleNames()));
 				seenOne = true;
 			}
 		}
