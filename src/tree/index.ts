@@ -1,3 +1,5 @@
+export * from './pattern/index';
+export * from './xpath/index';
 export * from './AbstractParseTreeVisitor';
 export * from './ErrorNode';
 export * from './ParseTree';
