@@ -608,7 +608,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		if ( expectedTokenType === Token.EOF ) tokenText = "<missing EOF>";
 		else tokenText = "<missing "+recognizer.getVocabulary().getDisplayName(expectedTokenType)+">";
 		let current: Token =  currentSymbol;
-		let lookback = recognizer.getInputStream().LT(-1);
+		let lookback = recognizer.getInputStream().tryLT(-1);
 		if ( current.getType() === Token.EOF && lookback != null ) {
 			current = lookback;
 		}

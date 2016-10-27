@@ -41,16 +41,28 @@ import {TokenSource} from './TokenSource';
  */
 export interface TokenStream extends IntStream {
 	/**
-	 * Get the {@link Token} instance associated with the value returned by
-	 * {@link #LA LA(k)}. This method has the same pre- and post-conditions as
-	 * {@link IntStream#LA}. In addition, when the preconditions of this method
-	 * are met, the return value is non-null and the value of
-	 * {@code LT(k).getType()==LA(k)}.
+	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
+	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
+	 * is non-null and the value of `LT(k).getType() === LA(k)`.
 	 *
-	 * @see IntStream#LA
+	 * A `RangeError` is thrown if `k<0` and fewer than `-k` calls to `consume()` have occurred from the beginning of
+	 * the stream before calling this method.
+	 *
+	 * See `IntStream.LA`
 	 */
-	//@NotNull
 	LT(k: number): Token;
+
+	/**
+	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
+	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
+	 * is non-null and the value of `tryLT(k).getType() === LA(k)`.
+	 *
+	 * The return value is `undefined` if `k<0` and fewer than `-k` calls to `consume()` have occurred from the
+	 * beginning of the stream before calling this method.
+	 *
+	 * See `IntStream.LA`
+	 */
+	tryLT(k: number): Token | undefined;
 
 	/**
 	 * Gets the {@link Token} at the specified {@code index} in the stream. When
