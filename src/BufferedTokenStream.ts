@@ -65,7 +65,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * considered a complete view of the input once {@link #fetchedEOF} is set
 	 * to {@code true}.
 	 */
-	protected tokens: Token[] = new Array<Token>(100);
+	protected tokens: Token[] = [];
 
 	/**
 	 * The index into {@link #tokens} of the current token (next token to
