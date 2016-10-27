@@ -937,9 +937,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *  events as well as token matches. This is for quick and dirty debugging.
 	 */
 	setTrace(trace: boolean): void {
-		if ( !trace && this._tracer) {
-			this.removeParseListener(this._tracer);
-			this._tracer = undefined;
+		if (!trace) {
+			if (this._tracer) {
+				this.removeParseListener(this._tracer);
+				this._tracer = undefined;
+			}
 		}
 		else {
 			if ( this._tracer ) {
