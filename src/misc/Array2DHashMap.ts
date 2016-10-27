@@ -353,7 +353,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	contains(o: any): boolean {
-		for (let bucket of this.backingStore) {
+		for (let bucket of asIterable(this.backingStore)) {
 			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
 				return true;
 			}
@@ -418,6 +418,15 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	toArray(): V[];
 	toArray(a: V[]): V[];
 	toArray(a?: V[]): V[] {
-		throw new Error("Not implemented");
+		if (a === undefined || a.length < this.backingStore.size()) {
+			a = new Array<V>(this.backingStore.size());
+		}
+
+		let i = 0;
+		for (let bucket of asIterable(this.backingStore)) {
+			a[i++] = bucket.value!;
+		}
+
+		return a;
 	}
 }
