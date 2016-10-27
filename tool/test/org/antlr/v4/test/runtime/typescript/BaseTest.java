@@ -658,6 +658,7 @@ public abstract class BaseTest {
 								 boolean debug)
 	{
 		ST outputFileST = new ST(
+			"require('source-map-support').install();\n" +
 			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
 			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
 			"import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';\n" +
@@ -710,6 +711,7 @@ public abstract class BaseTest {
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
+			"require('source-map-support').install();\n" +
 			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
 			"import { CharStream } from 'antlr4ts/CharStream';\n" +
 			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
