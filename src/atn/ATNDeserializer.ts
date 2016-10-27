@@ -339,10 +339,7 @@ export class ATNDeserializer {
 			let arg2: number =  ATNDeserializer.toInt(data[p+4]);
 			let arg3: number =  ATNDeserializer.toInt(data[p+5]);
 			let trans: Transition =  this.edgeFactory(atn, ttype, src, trg, arg1, arg2, arg3, sets);
-//			System.out.println("EDGE "+trans.getClass().getSimpleName()+" "+
-//							   src+"->"+trg+
-//					   " "+Transition.serializationNames[ttype]+
-//					   " "+arg1+","+arg2+","+arg3);
+			// console.log(`EDGE ${trans.constructor.name} ${src}->${trg} ${Transition.serializationNames[ttype]} ${arg1},${arg2},${arg3}`);
 			let srcState: ATNState =  atn.states[src];
 			srcState.addTransition(trans);
 			p += 6;
