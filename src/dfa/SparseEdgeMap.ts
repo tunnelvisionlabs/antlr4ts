@@ -125,7 +125,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 
 		assert(index < 0 && value != null);
 		let insertIndex: number = -index - 1;
-		if (this.size() < this.getMaxSparseSize() && insertIndex == this.size()) {
+		if (this.size() < this.getMaxSparseSize() && insertIndex === this.size()) {
 			// stay sparse and add new entry
 			this.keys.push(key);
 			this.values.push(value);
