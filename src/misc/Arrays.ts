@@ -38,7 +38,7 @@ export namespace Arrays {
 	 * that this guarantees that the return value will be >= 0 if and only if the key is found.
 	 */
 	export function binarySearch(array: ArrayLike<number>, key: number, fromIndex?: number, toIndex?: number): number {
-		return binarySearch0(array, fromIndex || 0, toIndex || array.length, key);
+		return binarySearch0(array, fromIndex !== undefined ? fromIndex : 0, toIndex !== undefined ? toIndex : array.length, key);
 	}
 
 	function binarySearch0(array: ArrayLike<number>, fromIndex: number, toIndex: number, key: number): number {
