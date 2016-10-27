@@ -265,9 +265,9 @@ export class CommonToken implements WritableToken {
 
 		let txt: string | undefined = this.getText();
 		if (txt != null) {
-			txt = txt.replace("\n", "\\n");
-			txt = txt.replace("\r", "\\r");
-			txt = txt.replace("\t", "\\t");
+			txt = txt.replace(/\n/g, "\\n");
+			txt = txt.replace(/\r/g, "\\r");
+			txt = txt.replace(/\t/g, "\\t");
 		} else {
 			txt = "<no text>";
 		}
