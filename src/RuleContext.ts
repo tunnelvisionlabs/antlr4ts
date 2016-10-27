@@ -91,13 +91,14 @@ import { Trees } from "./tree/Trees";
 import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
-export class RuleContext implements RuleNode {
+export class RuleContext extends RuleNode {
 	parent: RuleContext | undefined;
 	invokingState: number;
 
 	constructor();
 	constructor(parent: RuleContext | undefined, invokingState: number);
 	constructor(parent?: RuleContext, invokingState?: number) {
+		super();
 		this.parent = parent;
 		this.invokingState = invokingState != null ? invokingState : -1;
 	}
