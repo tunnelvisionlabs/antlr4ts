@@ -754,7 +754,7 @@ RulePropertyRef_parser(r)	 ::= "this"
 
 ThisRulePropertyRef_start(r) ::= "_localctx.start"
 ThisRulePropertyRef_stop(r)	 ::= "_localctx.stop"
-ThisRulePropertyRef_text(r)	 ::= "this._input.getText(_localctx.start, this._input.LT(-1))"
+ThisRulePropertyRef_text(r)	 ::= "this._input.getText(_localctx.start, this._input.tryLT(-1))"
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
@@ -871,7 +871,7 @@ typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(\<<ctx.name>\>_localctx)<else>_
 // used for left-recursive rules
 recRuleAltPredicate(ruleName,opPrec)  ::= "this.precpred(this._ctx, <opPrec>)"
 recRuleSetReturnAction(src,name)	  ::= "$<name>=$<src>.<name>;"
-recRuleSetStopToken()                 ::= "this._ctx.stop = this._input.LT(-1);"
+recRuleSetStopToken()                 ::= "this._ctx.stop = this._input.tryLT(-1);"
 
 recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
 _localctx = new <ctxName>Context(_parentctx, _parentState);
