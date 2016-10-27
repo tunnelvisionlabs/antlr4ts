@@ -46,7 +46,7 @@ import { VocabularyImpl } from "./VocabularyImpl";
 import * as Utils from './misc/Utils';
 
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
-	static EOF: number = -1;
+	static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
 	 	new WeakMap<Vocabulary, Map<string, number>>();
@@ -55,7 +55,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	@SuppressWarnings("serial")
 	@NotNull
-	private _listeners: ANTLRErrorListener<Symbol>[] = [ConsoleErrorListener.INSTANCE];
+	private readonly _listeners: ANTLRErrorListener<Symbol>[] = [ConsoleErrorListener.INSTANCE];
 
 	protected  _interp: ATNInterpreter;
 
