@@ -98,7 +98,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 		// Special property of this collection: values are only even added to
 		// the end, else a new object is returned from put(). Therefore no lock
 		// is required in this method.
-		let index: number = Arrays.binarySearch(this.keys, 0, this.size(), key);
+		let index: number = Arrays.binarySearch(this.keys, key, 0, this.size());
 		if (index < 0) {
 			return undefined;
 		}
@@ -116,7 +116,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 			return this.remove(key);
 		}
 
-		let index: number = Arrays.binarySearch(this.keys, 0, this.size(), key);
+		let index: number = Arrays.binarySearch(this.keys, key, 0, this.size());
 		if (index >= 0) {
 			// replace existing entry
 			this.values[index] = value;
@@ -125,7 +125,7 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 
 		assert(index < 0 && value != null);
 		let insertIndex: number = -index - 1;
-		if (this.size() < this.getMaxSparseSize() && insertIndex == this.size()) {
+		if (this.size() < this.getMaxSparseSize() && insertIndex === this.size()) {
 			// stay sparse and add new entry
 			this.keys.push(key);
 			this.values.push(value);
@@ -152,12 +152,12 @@ export class SparseEdgeMap<T> extends AbstractEdgeMap<T> {
 
 	@Override
 	remove(key: number): SparseEdgeMap<T> {
-		let index: number = Arrays.binarySearch(this.keys, 0, this.size(), key);
+		let index: number = Arrays.binarySearch(this.keys, key, 0, this.size());
 		if (index < 0) {
 			return this;
 		}
 
-		let result: SparseEdgeMap<T> = new SparseEdgeMap<T>(this.minIndex, this.maxIndex, 0);
+		let result: SparseEdgeMap<T> = new SparseEdgeMap<T>(this.minIndex, this.maxIndex, this.maxSparseSize);
 		result.keys = this.keys.slice(0);
 		result.values = this.values.slice(0);
 

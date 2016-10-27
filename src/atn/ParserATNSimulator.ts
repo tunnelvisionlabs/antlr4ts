@@ -78,7 +78,7 @@ import { VocabularyImpl } from '../VocabularyImpl';
 import * as assert from 'assert';
 
 const MAX_SHORT_VALUE = 0xFFFF;
-const MIN_INTEGER_VALUE = -(1 << 31);
+const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
 
 /**
  * The embodiment of the adaptive LL(*), ALL(*), parsing strategy.
@@ -396,7 +396,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (this.optimize_ll1 && !dfa.isPrecedenceDfa() && !dfa.isEmpty()) {
 			let ll_1: number =  input.LA(1);
 			if (ll_1 >= 0 && ll_1 <= 0xFFFF) {
-				let key: number =  (decision << 16) + ll_1;
+				let key: number =  ((decision << 16) >>> 0) + ll_1;
 				let alt: number | undefined =  this.atn.LL1Table.get(key);
 				if (alt != null) {
 					return alt;
@@ -801,7 +801,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						&& !D.configs.hasSemanticContext())
 					{
 						if (t >= 0 && t <= MAX_SHORT_VALUE) {
-							let key: number =  (dfa.decision << 16) + t;
+							let key: number = ((dfa.decision << 16) >>> 0) + t;
 							this.atn.LL1Table.set(key, predictedAlt);
 						}
 					}

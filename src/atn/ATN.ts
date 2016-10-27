@@ -54,7 +54,7 @@ import * as assert from 'assert';
 /** */
 export class ATN {
 	@NotNull
-	states: ATNState[] = [];
+	readonly states: ATNState[] = [];
 
 	/** Each subrule/rule is a decision point and we must track them so we
 	 *  can go back later and build DFA predictors for them.  This includes

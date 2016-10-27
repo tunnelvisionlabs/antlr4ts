@@ -93,7 +93,7 @@ export class ParserRuleContext extends RuleContext {
 //	public Array<number> states;
 
 	public start: Token;
-	public stop: Token;
+	public stop: Token | undefined;
 
 	/**
 	 * The exception that forced this rule to return. If the rule successfully
@@ -310,7 +310,7 @@ export class ParserRuleContext extends RuleContext {
 	 * Note that the range from start to stop is inclusive, so for rules that do not consume anything
 	 * (for example, zero length or error productions) this token may precede start.
 	 */
-	getStop(): Token { return this.stop; }
+	getStop(): Token | undefined { return this.stop; }
 
     /** Used for rule context info debugging during parse-time, not so much for ATN debugging */
     toInfoString(recognizer: Parser): string {

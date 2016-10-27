@@ -76,21 +76,28 @@ export class NoViableAltException extends RecognitionException {
 		deadEndConfigs?: ATNConfigSet,
 		ctx?: ParserRuleContext)
 	{
-
 		if (recognizer instanceof Parser) {
-			super(
-				recognizer,
-				recognizer.getInputStream(),
-				recognizer.getContext()
-			);
-			super.setOffendingToken(recognizer, recognizer.getCurrentToken())
+			if (input === undefined) {
+				input = recognizer.getInputStream();
+			}
 
-		} else {
-			super(recognizer, input, ctx);
-			this.deadEndConfigs = deadEndConfigs;
-			this.startToken = startToken as Token;
-			super.setOffendingToken(recognizer, offendingToken);
+			if (startToken === undefined) {
+				startToken = recognizer.getCurrentToken();
+			}
+
+			if (offendingToken === undefined) {
+				offendingToken = recognizer.getCurrentToken();
+			}
+
+			if (ctx === undefined) {
+				ctx = recognizer.getContext();
+			}
 		}
+
+		super(recognizer, input, ctx);
+		this.deadEndConfigs = deadEndConfigs;
+		this.startToken = startToken as Token;
+		this.setOffendingToken(recognizer, offendingToken);
 	}
 
 	getStartToken(): Token {

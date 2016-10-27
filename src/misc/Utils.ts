@@ -187,7 +187,7 @@ export function toMap(keys: string[]): Map<string, number> {
 export function toCharArray(str: string): Uint16Array {
 	let result = new Uint16Array(str.length);
 	for (let i = 0; i < str.length; i++) {
-		result[i] = str.charCodeAt(0);
+		result[i] = str.charCodeAt(i);
 	}
 
 	return result;

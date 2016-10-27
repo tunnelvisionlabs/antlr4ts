@@ -807,7 +807,7 @@ RulePropertyRef_parser(r)	 ::= "this"
 
 ThisRulePropertyRef_start(r) ::= "_localctx.start"
 ThisRulePropertyRef_stop(r)	 ::= "_localctx.stop"
-ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx.start, this._input.LT(-1))"
+ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx.start, this._input.tryLT(-1))"
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
@@ -947,7 +947,7 @@ typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(_localctx as <ctx.name>)<else>_
 // used for left-recursive rules
 recRuleAltPredicate(ruleName,opPrec)  ::= "this.precpred(this._ctx, <opPrec>)"
 recRuleSetReturnAction(src,name)	  ::= "$<name>=$<src>.<name>;"
-recRuleSetStopToken()                 ::= "this._ctx.stop = this._input.LT(-1);"
+recRuleSetStopToken()                 ::= "this._ctx.stop = this._input.tryLT(-1);"
 
 recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
 _localctx = new <ctxName>Context(_parentctx, _parentState);
@@ -1051,8 +1051,14 @@ SerializedATN(model, className={<if(lexer)><lexer.name><else><parser.name><endif
 <! only one segment, can be inlined !>
 public static readonly _serializedATN: string =
 	"<model.serialized; wrap={"+<\n><\t>"}>";
-public static readonly _ATN: ATN =
-	new ATNDeserializer().deserialize(Utils.toCharArray(<className>._serializedATN));
+public static __ATN: ATN;
+public static get _ATN(): ATN {
+	if (!<className>.__ATN) {
+		<className>.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(<className>._serializedATN));
+	}
+
+	return <className>.__ATN;
+}
 <!static {
 	org.antlr.v4.tool.DOTGenerator dot = new org.antlr.v4.tool.DOTGenerator(null);
 	System.out.println(dot.getDOT(_ATN.decisionToState.get(0), ruleNames, false));

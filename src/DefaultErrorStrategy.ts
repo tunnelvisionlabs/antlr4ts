@@ -366,7 +366,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 								 @NotNull e: FailedPredicateException): void
 	{
 		let ruleName: string =  recognizer.getRuleNames()[recognizer.getContext().getRuleIndex()];
-		let msg: string =  "rule "+ruleName+" "+e.toString();
+		let msg: string =  "rule "+ruleName+" "+e.message;
 		this.notifyErrorListeners(recognizer, msg, e);
 	}
 
@@ -608,7 +608,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		if ( expectedTokenType === Token.EOF ) tokenText = "<missing EOF>";
 		else tokenText = "<missing "+recognizer.getVocabulary().getDisplayName(expectedTokenType)+">";
 		let current: Token =  currentSymbol;
-		let lookback = recognizer.getInputStream().LT(-1);
+		let lookback = recognizer.getInputStream().tryLT(-1);
 		if ( current.getType() === Token.EOF && lookback != null ) {
 			current = lookback;
 		}

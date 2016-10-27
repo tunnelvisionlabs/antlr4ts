@@ -179,7 +179,7 @@ export class ATNDeserializer {
 
 		let uuid: UUID = ATNDeserializer.toUUID(data, p);
 		p += 8;
-		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) >= 0) {
+		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) < 0) {
 			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer.SERIALIZED_UUID} or a legacy UUID).`;
 			throw new Error(reason);
 		}
@@ -339,10 +339,7 @@ export class ATNDeserializer {
 			let arg2: number =  ATNDeserializer.toInt(data[p+4]);
 			let arg3: number =  ATNDeserializer.toInt(data[p+5]);
 			let trans: Transition =  this.edgeFactory(atn, ttype, src, trg, arg1, arg2, arg3, sets);
-//			System.out.println("EDGE "+trans.getClass().getSimpleName()+" "+
-//							   src+"->"+trg+
-//					   " "+Transition.serializationNames[ttype]+
-//					   " "+arg1+","+arg2+","+arg3);
+			// console.log(`EDGE ${trans.constructor.name} ${src}->${trg} ${Transition.serializationNames[ttype]} ${arg1},${arg2},${arg3}`);
 			let srcState: ATNState =  atn.states[src];
 			srcState.addTransition(trans);
 			p += 6;
@@ -1063,7 +1060,7 @@ export class ATNDeserializer {
 	}
 
 	protected static toInt32(data: Uint16Array, offset: number): number {
-		return data[offset] | (data[offset + 1] << 16);
+		return (data[offset] | (data[offset + 1] << 16)) >>> 0;
 	}
 
 	protected static toUUID(data: Uint16Array, offset: number): UUID {

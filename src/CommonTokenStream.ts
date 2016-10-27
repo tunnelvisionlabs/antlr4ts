@@ -90,9 +90,9 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	@Override
-	protected LB(k: number): Token {
-		if (k === 0 || (this.p - k) < 0) {
-			throw new RangeError("requested lookback index is not valid");
+	protected tryLB(k: number): Token | undefined {
+		if ((this.p - k) < 0) {
+			return undefined;
 		}
 
 		let i: number = this.p;
@@ -105,14 +105,14 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		if (i < 0) {
-			throw new RangeError("requested lookback index is not valid");
+			return undefined;
 		}
 
 		return this.tokens[i];
 	}
 
 	@Override
-	LT(k: number): Token {
+	tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();
 		if (k === 0) {
@@ -120,7 +120,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		if (k < 0) {
-			return this.LB(-k);
+			return this.tryLB(-k);
 		}
 
 		let i: number = this.p;

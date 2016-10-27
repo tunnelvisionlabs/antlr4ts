@@ -70,7 +70,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	_input: CharStream;
 
-	protected _tokenFactorySourcePair: [TokenSource, CharStream];
+	protected _tokenFactorySourcePair: { source: TokenSource, stream: CharStream };
 
 	/** How to create token objects */
 	protected _factory: TokenFactory = CommonTokenFactory.DEFAULT;
@@ -119,7 +119,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	constructor(input: CharStream)  {
 		super();
 		this._input = input;
-		this._tokenFactorySourcePair = [this, input];
+		this._tokenFactorySourcePair = { source: this, stream: input };
 	}
 
 	reset(): void;
@@ -252,7 +252,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	setInputStream(input: CharStream): void {
 		this.reset(false);
 		this._input = input;
-		this._tokenFactorySourcePair = [this, this._input];
+		this._tokenFactorySourcePair = { source: this, stream: this._input };
 	}
 
 	@Override
