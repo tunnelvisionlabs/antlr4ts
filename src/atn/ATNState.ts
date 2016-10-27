@@ -192,7 +192,7 @@ export abstract class ATNState {
 			throw new Error("ATN state " + this.stateNumber + " has both epsilon and non-epsilon transitions.");
 		}
 
-		this.transitions.splice(index || this.transitions.length, 0, e);
+		this.transitions.splice(index !== undefined ? index : this.transitions.length, 0, e);
 	}
 
 	transition(i: number): Transition {

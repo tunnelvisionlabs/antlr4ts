@@ -179,7 +179,7 @@ export class ATNDeserializer {
 
 		let uuid: UUID = ATNDeserializer.toUUID(data, p);
 		p += 8;
-		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) >= 0) {
+		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) < 0) {
 			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer.SERIALIZED_UUID} or a legacy UUID).`;
 			throw new Error(reason);
 		}
@@ -1063,7 +1063,7 @@ export class ATNDeserializer {
 	}
 
 	protected static toInt32(data: Uint16Array, offset: number): number {
-		return data[offset] | (data[offset + 1] << 16);
+		return (data[offset] | (data[offset + 1] << 16)) >>> 0;
 	}
 
 	protected static toUUID(data: Uint16Array, offset: number): UUID {
