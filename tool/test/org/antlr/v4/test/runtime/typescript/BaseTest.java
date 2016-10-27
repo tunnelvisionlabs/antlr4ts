@@ -725,7 +725,7 @@ public abstract class BaseTest {
 			"let tokens = new CommonTokenStream(lex);\n" +
 			"tokens.fill();\n" +
 			"for (let t of tokens.getTokens()) {\n" +
-			"	console.log(t);\n" +
+			"	console.log(t.toString());\n" +
 			"}\n" +
 			(showDFA?"	console.log(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")
 			);
