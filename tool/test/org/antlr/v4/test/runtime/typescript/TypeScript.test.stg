@@ -227,7 +227,7 @@ ImportListener(X) ::= ""
 
 GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.getVocabulary())"
 
-RuleInvocationStack() ::= "this.getRuleInvocationStack()"
+RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
 
 LL_EXACT_AMBIG_DETECTION() ::= <<this.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
 
