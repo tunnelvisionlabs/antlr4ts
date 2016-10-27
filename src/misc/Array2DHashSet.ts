@@ -189,7 +189,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		this.currentPrime += 4;
 		let newCapacity: number =  this.buckets.length * 2;
 		let newTable: T[][] =  this.createBuckets(newCapacity);
-		let newBucketLengths: number[] =  new Array<number>(newTable.length);
+		let newBucketLengths: Uint32Array = new Uint32Array(newTable.length);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
