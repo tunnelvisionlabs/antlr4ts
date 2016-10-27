@@ -75,11 +75,11 @@ export namespace MurmurHash {
 
 		let k: number = value as number;
 		k = k * c1;
-		k = (k << r1) | (k >>> (32 - r1));
+		k = ((k << r1) | (k >>> (32 - r1))) >>> 0;
 		k = k * c2;
 
 		hash = hash ^ k;
-		hash = (hash << r2) | (hash >>> (32 - r2));
+		hash = ((hash << r2) | (hash >>> (32 - r2))) >>> 0;
 		hash = hash * m + n;
 
 		return hash;
@@ -138,7 +138,7 @@ export namespace MurmurHash {
 		let hash = 0;
 		for (let i = 0; i < len; i++) {
 			let c = str.charCodeAt(i);
-			hash = ((hash << 5) - hash) + c;
+			hash = (((hash << 5) >>> 0) - hash) + c;
 			hash |= 0;
 		}
 

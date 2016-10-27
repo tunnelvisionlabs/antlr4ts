@@ -165,7 +165,7 @@ export class ATNConfig implements Equatable {
 		assert(outerContextDepth >= 0);
 		// saturate at 0x7F - everything but zero/positive is only used for debug information anyway
 		outerContextDepth = Math.min(outerContextDepth, 0x7F);
-		this.altAndOuterContextDepth = (outerContextDepth << 24) | (this.altAndOuterContextDepth & ~0x7F000000);
+		this.altAndOuterContextDepth = ((outerContextDepth << 24) | (this.altAndOuterContextDepth & ~0x7F000000) >>> 0);
 	}
 
 	getLexerActionExecutor(): LexerActionExecutor | undefined {
