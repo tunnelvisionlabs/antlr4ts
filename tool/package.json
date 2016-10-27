@@ -1,0 +1,26 @@
+{
+  "name": "antlr4ts-cli",
+  "version": "0.1.10-SNAPSHOT",
+  "preferGlobal": true,
+  "description": "Antlr4 command line toolfor TypeScript",
+  "files": ["target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar", "antlr4ts", "index.js"],
+  "bin": {"antlr4ts": "./antlr4ts"},
+  "scripts": {
+    "prepublish": "mvn -f pom.xml verify -DskipTests=true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharwell/antlr4ts.git"
+  },
+  "keywords": [
+    "ANTLR4",
+    "typescript",
+    "tool"
+  ],
+  "author": "Terence Parr, Sam Harwell and Burt Harris",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/sharwell/antlr4ts/issues"
+  },
+  "homepage": "https://github.com/sharwell/antlr4ts#readme"
+}

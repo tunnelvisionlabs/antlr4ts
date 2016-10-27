@@ -54,3 +54,6 @@ bin/
 
 # ALM IDE
 .alm/
+
+# NPM pack output
+*.tgz
