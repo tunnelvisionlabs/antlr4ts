@@ -241,7 +241,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	LA(i: number) {
+	LA(i: number): number {
 		let token = this.LT(i);
 		if (!token) {
 			return Token.INVALID_TYPE;
@@ -250,9 +250,9 @@ export class BufferedTokenStream implements TokenStream {
 		return token.getType();
 	}
 
-	protected LB(k: number): Token {
+	protected tryLB(k: number): Token | undefined {
 		if ((this.p - k) < 0) {
-			throw new RangeError("requested lookback index out of range");
+			return undefined;
 		}
 
 		return this.tokens[this.p - k];
@@ -261,13 +261,22 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	LT(k: number): Token {
+		let result = this.tryLT(k);
+		if (result === undefined) {
+			throw new RangeError("requested lookback index out of range");
+		}
+
+		return result;
+	}
+
+	tryLT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
 			throw new RangeError("0 is not a valid lookahead index")
 		}
 
 		if (k < 0) {
-			return this.LB(-k);
+			return this.tryLB(-k);
 		}
 
 		let i: number = this.p + k - 1;

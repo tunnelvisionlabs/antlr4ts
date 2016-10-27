@@ -222,8 +222,9 @@ export class Trees {
 			if ( r ) return r;
 		}
 		if ( t instanceof ParserRuleContext ) {
+			let stopToken = t.getStop();
 			if ( startTokenIndex>=t.getStart().getTokenIndex() && // is range fully contained in t?
-				 (t.getStop()==null || stopTokenIndex<=t.getStop().getTokenIndex()) )
+				 (stopToken==null || stopTokenIndex <= stopToken.getTokenIndex()) )
 			{
 				// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
 				return t;
