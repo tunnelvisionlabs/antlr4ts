@@ -119,8 +119,13 @@ export class DFASerializer {
 				}
 			}
 		}
+
 		let output: string =  buf;
-		if ( output.length===0 ) return "";
+		if (output.endsWith("\n")) {
+			// trim the final newline
+			output = output.substr(0, output.length - 1);
+		}
+
 		//return Utils.sortLinesInString(output);
 		return output;
 	}
