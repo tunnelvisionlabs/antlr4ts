@@ -726,8 +726,8 @@ public abstract class BaseTest {
 			"tokens.fill();\n" +
 			"for (let t of tokens.getTokens()) {\n" +
 			"	console.log(t);\n" +
-			(showDFA?"	console.log(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"") +
-			"}\n"
+			"}\n" +
+			(showDFA?"	console.log(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")
 			);
 
 		outputFileST.add("lexerName", lexerName);
