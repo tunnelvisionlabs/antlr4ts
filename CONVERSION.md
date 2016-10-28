@@ -54,7 +54,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] RecognitionException.java
 * [x] Recognizer.java
 * [x] RuleContext.java
-* [ ] RuleContextWithAltNum.java
+* [x] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
 * [ ] RuleVersion.java

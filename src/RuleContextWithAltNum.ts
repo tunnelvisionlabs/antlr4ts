@@ -1,5 +1,9 @@
 ﻿// ConvertTo-TS run at 2016-10-04T11:26:57.4741196-07:00
 
+import { ATN } from './atn/ATN';
+import { Override } from './Decorators';
+import { ParserRuleContext } from './ParserRuleContext';
+
 /** A handy class for use with
  *
  *  options {contextSuperClass=org.antlr.v4.runtime.RuleContextWithAltNum;}
@@ -11,19 +15,23 @@
  *  will really every use this.
  */
 export class RuleContextWithAltNum extends ParserRuleContext {
-	private altNumber: number; 
+	private altNumber: number;
 
-	 constructor()  {
-		altNumber = ATN.INVALID_ALT_NUMBER;
-	}
+	constructor();
+	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);
+	constructor(parent?: ParserRuleContext, invokingStateNumber?: number) {
+		if (invokingStateNumber !== undefined) {
+			super(parent, invokingStateNumber);
+		} else {
+			super();
+		}
 
-	 constructor1(parent: ParserRuleContext, invokingStateNumber: number)  {
-		super(parent, invokingStateNumber);
+		this.altNumber = ATN.INVALID_ALT_NUMBER;
 	}
 
 	@Override
 	getAltNumber(): number {
-		return altNumber;
+		return this.altNumber;
 	}
 
 	@Override
