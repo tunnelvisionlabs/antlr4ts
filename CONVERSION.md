@@ -23,13 +23,13 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] ANTLRInputStream.constructor(InputStream, number, number)
   * [ ] ANTLRInputStream.load(Reader, number, number)
 * [x] BailErrorStrategy.java
-* [ ] BaseErrorListener.java
+* [x] BaseErrorListener.java
 * [x] BufferedTokenStream.java
 * [x] CharStream.java
 * [x] CommonToken.java
 * [x] CommonTokenFactory.java
 * [x] CommonTokenStream.java
-* [ ] ConsoleErrorListener.java
+* [x] ConsoleErrorListener.java
 * [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
 * [x] DiagnosticErrorListener.java
@@ -77,7 +77,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ATNConfig.java
 * [x] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java
-* [ ] atn\ATNDeserializer.java
+* [x] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
 * [x] atn\ATNSimulator.java
 * [x] atn\ATNState.java
@@ -135,7 +135,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\RuleTransition.java
 * [x] atn\SemanticContext.java
 * [x] atn\SetTransition.java
-* [ ] atn\SimulatorState.java
+* [x] atn\SimulatorState.java
 * [x] atn\SingletonPredictionContext.java
 * [x] atn\StarBlockStartState.java
 * [x] atn\StarLoopbackState.java
