@@ -39,7 +39,11 @@ import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.DefaultToolListener;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -59,7 +63,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -83,46 +86,31 @@ public abstract class BaseTest {
 	 */
 	public static final boolean PRESERVE_TEST_DIR = Boolean.parseBoolean(System.getProperty("antlr-preserve-typescript-test-dir"));
 
-	/**
-	 * The base test directory is the directory where generated files get placed
-	 * during unit test execution.
-	 *
-	 * <p>
-	 * The default value for this property is the {@code java.io.tmpdir} system
-	 * property, and can be overridden by setting the
-	 * {@code antlr.java-test-dir} property to a custom location. Note that the
-	 * {@code antlr.java-test-dir} property directly affects the
-	 * {@link #CREATE_PER_TEST_DIRECTORIES} value as well.</p>
-	 */
-	public static final String BASE_TEST_DIR;
+	private static boolean REMOVE_BASE_FOLDER = true;
 
-	/**
-	 * When {@code true}, a temporary directory will be created for each test
-	 * executed during the test run.
-	 *
-	 * <p>
-	 * This value is {@code true} when the {@code antlr.java-test-dir} system
-	 * property is set, and otherwise {@code false}.</p>
-	 */
-	public static final boolean CREATE_PER_TEST_DIRECTORIES;
-
-	static {
-		String baseTestDir = System.getProperty("antlr-typescript-test-dir");
-		boolean perTestDirectories = false;
-		if (baseTestDir == null || baseTestDir.isEmpty()) {
-			baseTestDir = System.getProperty("java.io.tmpdir");
-			perTestDirectories = true;
+	@ClassRule
+	public static final TemporaryFolder BASE_TEST_FOLDER = new TemporaryFolder() {
+		@Override
+		public void delete() {
+			if (REMOVE_BASE_FOLDER) {
+				super.delete();
+			}
 		}
+	};
 
-		if (!new File(baseTestDir).isDirectory()) {
-			throw new UnsupportedOperationException("The specified base test directory does not exist: " + baseTestDir);
+	private boolean removeTestFolder = true;
+
+	@Rule
+	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
+		@Override
+		public void delete() {
+			if (removeTestFolder) {
+				super.delete();
+			}
 		}
+	};
 
-		BASE_TEST_DIR = baseTestDir;
-		CREATE_PER_TEST_DIRECTORIES = perTestDirectories;
-	}
-
-	public String tmpdir = null;
+	public String tmpdir;
 
 	/** If error during parser execution, store stderr here; can't return
      *  stdout and stderr.  This doesn't trap errors from running antlr.
@@ -131,31 +119,26 @@ public abstract class BaseTest {
 
 	@org.junit.Rule
 	public final TestRule testWatcher = new TestWatcher() {
+		@Override
+		protected void failed(Throwable e, Description description) {
+			REMOVE_BASE_FOLDER = false;
+			removeTestFolder = false;
+		}
 
 		@Override
 		protected void succeeded(Description description) {
 			// remove tmpdir if no error.
-			if (!PRESERVE_TEST_DIR) {
-				eraseTempDir();
+			if (PRESERVE_TEST_DIR) {
+				REMOVE_BASE_FOLDER = false;
+				removeTestFolder = false;
 			}
 		}
-
 	};
 
-    @Before
+	@Before
 	public void setUp() throws Exception {
-		if (CREATE_PER_TEST_DIRECTORIES) {
-			// new output dir for each test
-			String testDirectory = getClass().getSimpleName() + "-" + System.currentTimeMillis();
-			tmpdir = new File(BASE_TEST_DIR, testDirectory).getAbsolutePath();
-		}
-		else {
-			tmpdir = new File(BASE_TEST_DIR).getAbsolutePath();
-			if (!PRESERVE_TEST_DIR && new File(tmpdir).exists()) {
-				eraseFiles();
-			}
-		}
-    }
+		tmpdir = TEST_SRC_FOLDER.getRoot().getAbsolutePath();
+	}
 
     protected org.antlr.v4.Tool newTool(String[] args) {
 		Tool tool = new TypeScriptTool(args);
@@ -193,7 +176,6 @@ public abstract class BaseTest {
 			isr.close();
 		}
 	}
-
 
 	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
@@ -406,10 +388,11 @@ public abstract class BaseTest {
 
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
-		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", "install" };
+		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
+		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", script };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
-		pb.directory(new File(tmpdir));
+		pb.directory(BASE_TEST_FOLDER.getRoot());
 		Process process = pb.start();
 		StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
 		StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
@@ -474,11 +457,18 @@ public abstract class BaseTest {
 			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
 			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
 			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target\\src").getAbsolutePath().replace('\\', '/');
-			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$ANTLR4TS$$", antlr4ts), "UTF-8");
+			tsconfigText = tsconfigText.replace("$$ANTLR4TS$$", antlr4ts);
+
+			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", "."), "UTF-8");
+			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "tsconfig.json");
+			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", TEST_SRC_FOLDER.getRoot().getName()), "UTF-8");
 
 			String packageName = "package.json";
 			input = loader.getResourceAsStream(pack + packageName);
-			outputFile = new File(tmpdir, "package.json");
+			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "package.json");
+			FileUtils.copyInputStreamToFile(input, outputFile);
+			input = loader.getResourceAsStream(pack + packageName);
+			outputFile = new File(TEST_SRC_FOLDER.getRoot(), "package.json");
 			FileUtils.copyInputStreamToFile(input, outputFile);
 
 			return true;
@@ -491,7 +481,7 @@ public abstract class BaseTest {
 	public String execTest() {
 		try {
 			String node = locateNode();
-			String[] args = new String[] { node, "./Test.js", new File(tmpdir, "input").getAbsolutePath() };
+			String[] args = new String[] { node, "./" + TEST_SRC_FOLDER.getRoot().getName() + "/Test.js", new File(tmpdir, "input").getAbsolutePath() };
 			ProcessBuilder pb = new ProcessBuilder(args);
 
 			// Get the location of the compiled TypeScript runtime for use as the NODE_PATH
@@ -503,7 +493,7 @@ public abstract class BaseTest {
 			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target").getAbsolutePath();
 
 			pb.environment().put("NODE_PATH", antlr4ts);
-			pb.directory(new File(tmpdir));
+			pb.directory(BASE_TEST_FOLDER.getRoot());
 			Process process = pb.start();
 			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
 			StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());

@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "prepublish": "tsc"
+    "prepublish": "tsc",
+    "test": "tsc"
   },
   "devDependencies": {
     "@types/node": "^6.0.41",
