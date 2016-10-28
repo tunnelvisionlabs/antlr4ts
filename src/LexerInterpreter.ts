@@ -30,74 +30,63 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.9954566-07:00
 
+import { ATN } from './atn/ATN';
+import { ATNType } from './atn/ATNType';
+import { CharStream } from './CharStream';
+import { Collection } from './misc/Stubs';
+import { Lexer } from './Lexer';
+import { LexerATNSimulator } from './atn/LexerATNSimulator';
+import { NotNull } from './Decorators';
+import { Override } from './Decorators';
+import { Vocabulary } from './Vocabulary';
+
 export class LexerInterpreter extends Lexer {
-	protected grammarFileName: string; 
-	protected atn: ATN; 
+	protected grammarFileName: string;
+	protected atn: ATN;
 
-	@Deprecated
-	protected tokenNames: string[]; 
-	protected ruleNames: string[]; 
-	protected modeNames: string[]; 
+	protected ruleNames: string[];
+	protected modeNames: string[];
 	@NotNull
-	private vocabulary: Vocabulary; 
+	private vocabulary: Vocabulary;
 
-	@Deprecated
-	 constructor(grammarFileName: string, ruleNames: Collection<string> tokenNames,Collection<string>, modeNames: Collection<string>, atn: ATN, input: CharStream)  {
-		this(grammarFileName, VocabularyImpl.fromTokenNames(tokenNames.toArray(new String[tokenNames.size()])), ruleNames, modeNames, atn, input);
-	}
-
-	 constructor1(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: Collection<string> ruleNames,Collection<string>, atn: ATN, input: CharStream)  {
+	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
 		super(input);
 
 		if (atn.grammarType != ATNType.LEXER) {
-			throw new IllegalArgumentException("The ATN must be a lexer ATN.");
+			throw new Error("IllegalArgumentException: The ATN must be a lexer ATN.");
 		}
 
 		this.grammarFileName = grammarFileName;
 		this.atn = atn;
-		this.tokenNames = new String[atn.maxTokenType];
-		for (let i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = vocabulary.getDisplayName(i);
-		}
 
-		this.ruleNames = ruleNames.toArray(new String[ruleNames.size()]);
-		this.modeNames = modeNames.toArray(new String[modeNames.size()]);
+		this.ruleNames = ruleNames.slice(0);
+		this.modeNames = modeNames.slice(0);
 		this.vocabulary = vocabulary;
-		this._interp = new LexerATNSimulator(this,atn);
+		this._interp = new LexerATNSimulator(atn, this);
 	}
 
 	@Override
 	getATN(): ATN {
-		return atn;
+		return this.atn;
 	}
 
 	@Override
 	getGrammarFileName(): string {
-		return grammarFileName;
-	}
-
-	@Override
-	@Deprecated
-	getTokenNames(): string[] {
-		return tokenNames;
+		return this.grammarFileName;
 	}
 
 	@Override
 	getRuleNames(): string[] {
-		return ruleNames;
+		return this.ruleNames;
 	}
 
 	@Override
 	getModeNames(): string[] {
-		return modeNames;
+		return this.modeNames;
 	}
 
 	@Override
 	getVocabulary(): Vocabulary {
-		if (vocabulary != null) {
-			return vocabulary;
-		}
-
-		return super.getVocabulary();
+		return this.vocabulary;
 	}
 }

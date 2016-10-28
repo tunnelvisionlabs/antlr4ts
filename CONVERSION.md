@@ -38,7 +38,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] InterpreterRuleContext.java
 * [x] IntStream.java
 * [x] Lexer.java
-* [ ] LexerInterpreter.java
+* [x] LexerInterpreter.java
 * [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
 * [x] NoViableAltException.java

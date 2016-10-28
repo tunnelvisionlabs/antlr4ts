@@ -18,7 +18,7 @@ export * from './InputMismatchException';
 export * from './InterpreterRuleContext';
 export * from './IntStream';
 export * from './Lexer';
-// export * from './LexerInterpreter';
+export * from './LexerInterpreter';
 export * from './LexerNoViableAltException';
 export * from './ListTokenSource';
 export * from './NoViableAltException';
