@@ -136,6 +136,11 @@ public class TypeScriptTarget extends Target {
 	}
 
 	@Override
+	public int getInlineTestSetWordSize() {
+		return 32;
+	}
+
+	@Override
 	protected boolean visibleGrammarSymbolCausesIssueInGeneratedCode(GrammarAST idNode) {
 		return false;
 	}

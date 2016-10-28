@@ -42,13 +42,21 @@ import org.antlr.v4.tool.Grammar;
  */
 public class TypeScriptTool extends Tool {
 
+	static {
+		Grammar.parserOptions.add("baseImportPath");
+		Grammar.lexerOptions.add("baseImportPath");
+	}
+
 	public TypeScriptTool() {
 		this(null);
 	}
 
 	public TypeScriptTool(String[] args) {
 		super(args);
-		grammarOptions = new HashMap<String, String>();
+		if (grammarOptions == null) {
+			grammarOptions = new HashMap<String, String>();
+		}
+
 		grammarOptions.put("language", "TypeScript");
 	}
 
