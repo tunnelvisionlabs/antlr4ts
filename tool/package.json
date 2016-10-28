@@ -11,7 +11,8 @@
   "bin": {"antlr4ts": "./antlr4ts"},
   "scripts": {
     "prepublish": "mvn -f pom.xml verify -DskipTests=true",
-    "pretest": "npm pack && cd .. && npm un %npm_package_name% & npm install tool/%npm_package_name%-%npm_package_version%.tgz",
+    "postpack": "mv %npm_package_name%-%npm_package_version%.tgz ../%npm_package_name%.tgz",
+    "pretest": "npm pack && npm run postpack && cd .. && npm install %npm_package_name%.tgz",
     "test": "antlr4ts",
     "set": "set"
   },
