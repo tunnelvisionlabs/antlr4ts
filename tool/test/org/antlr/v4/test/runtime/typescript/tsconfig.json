@@ -9,7 +9,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "declaration": true,
+    "declaration": false,
     "preserveConstEnums": true,
     "typeRoots": [
       "./node_modules/@types"
