@@ -54,8 +54,8 @@ import { ParserErrorListener } from './ParserErrorListener';
 import { ParserRuleContext } from './ParserRuleContext';
 import { ParseTreeListener } from './tree/ParseTreeListener';
 import { ParseTreePattern } from './tree/pattern/ParseTreePattern';
-import { ParseTreePatternMatcher } from './tree/pattern/ParseTreePatternMatcher';
-import { ProfilingATNSimulator } from './atn/ProfilingATNSimulator';
+// import { ParseTreePatternMatcher } from './tree/pattern/ParseTreePatternMatcher';
+// import { ProfilingATNSimulator } from './atn/ProfilingATNSimulator';
 import { ProxyParserErrorListener } from './ProxyParserErrorListener';
 import { RecognitionException } from './RecognitionException';
 import { Recognizer } from './Recognizer';
@@ -519,8 +519,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			}
 		}
 
-		let m: ParseTreePatternMatcher =  new ParseTreePatternMatcher(lexer, this);
-		return m.compile(pattern, patternRuleIndex);
+		throw new Error("Not implemented");
+		// let m: ParseTreePatternMatcher =  new ParseTreePatternMatcher(lexer, this);
+		// return m.compile(pattern, patternRuleIndex);
 	}
 
 	@NotNull
@@ -898,7 +899,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			if ( !dfa.isEmpty() ) {
 				if ( seenOne ) console.log();
 				console.log("Decision " + dfa.decision + ":");
-				console.log(dfa.toString(this.getVocabulary(), this.getRuleNames()));
+				process.stdout.write(dfa.toString(this.getVocabulary(), this.getRuleNames()));
 				seenOne = true;
 			}
 		}
@@ -910,27 +911,29 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	@Override
 	getParseInfo(): ParseInfo | undefined {
-		let interp: ParserATNSimulator = this.getInterpreter();
-		if (interp instanceof ProfilingATNSimulator) {
-			return new ParseInfo(interp);
-		}
-		return undefined;
+		throw new Error("Not implemented");
+		// let interp: ParserATNSimulator = this.getInterpreter();
+		// if (interp instanceof ProfilingATNSimulator) {
+		// 	return new ParseInfo(interp);
+		// }
+		// return undefined;
 	}
 
 	/**
 	 * @since 4.3
 	 */
 	setProfile(profile: boolean): void {
-		let interp: ParserATNSimulator = this.getInterpreter();
-		if ( profile ) {
-			if (!(interp instanceof ProfilingATNSimulator)) {
-				this.setInterpreter(new ProfilingATNSimulator(this));
-			}
-		}
-		else if (interp instanceof ProfilingATNSimulator) {
-			this.setInterpreter(new ParserATNSimulator(this.getATN(), this));
-		}
-		this.getInterpreter().setPredictionMode(interp.getPredictionMode());
+		throw new Error("Not implemented");
+		// let interp: ParserATNSimulator = this.getInterpreter();
+		// if ( profile ) {
+		// 	if (!(interp instanceof ProfilingATNSimulator)) {
+		// 		this.setInterpreter(new ProfilingATNSimulator(this));
+		// 	}
+		// }
+		// else if (interp instanceof ProfilingATNSimulator) {
+		// 	this.setInterpreter(new ParserATNSimulator(this.getATN(), this));
+		// }
+		// this.getInterpreter().setPredictionMode(interp.getPredictionMode());
 	}
 
 	/** During a parse is sometimes useful to listen in on the rule entry and exit

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "lib": [
+      "es6"
+    ],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "declaration": false,
+    "preserveConstEnums": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [
+        "$$ANTLR4TS$$/*"
+      ]
+    }
+  },
+  "include": [
+    "$$src$$/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

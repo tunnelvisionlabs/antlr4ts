@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build-tool": "mvn -f tool/pom.xml verify -DskipTests=true",
-    "prepublish": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
-    "pretest": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
+    "prepublish": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
+    "pretest": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
     "test": "mocha",
     "set": "set",
-    "precover": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -o src/tree/xpath && tsc",
+    "precover": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch"

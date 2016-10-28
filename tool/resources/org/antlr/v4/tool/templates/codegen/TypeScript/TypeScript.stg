@@ -47,17 +47,39 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-<! TODO: imports !>
-// import org.antlr.v4.runtime.atn.*;
-// import org.antlr.v4.runtime.dfa.DFA;
-// import org.antlr.v4.runtime.*;
-// import org.antlr.v4.runtime.misc.*;
-// import org.antlr.v4.runtime.tree.*;
-// import java.util.List;
-// import java.util.Iterator;
-// import java.util.ArrayList;
+import { ATN } from '<basePath()>/atn/ATN';
+import { ATNDeserializer } from '<basePath()>/atn/ATNDeserializer';
+import { FailedPredicateException } from '<basePath()>/FailedPredicateException';
+import { NotNull } from '<basePath()>/Decorators';
+import { NoViableAltException } from '<basePath()>/NoViableAltException';
+import { Override } from '<basePath()>/Decorators';
+import { Parser } from '<basePath()>/Parser';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
+import { ParserATNSimulator } from '<basePath()>/atn/ParserATNSimulator';
+import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
+import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
+import { RecognitionException } from '<basePath()>/RecognitionException';
+import { RuleContext } from '<basePath()>/RuleContext';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
+import { TokenStream } from '<basePath()>/TokenStream';
+import { Vocabulary } from '<basePath()>/Vocabulary';
+import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
+
+import * as Utils from '<basePath()>/misc/Utils';
+
+<if(file.genListener)>
+import { <file.grammarName>Listener } from './<file.grammarName>Listener';
+<endif>
+<if(file.genVisitor)>
+import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
+<endif>
+
+<namedActions.beforeParser>
 
 <parser>
+
+<namedActions.afterParser>
 >>
 
 ListenerFile(file, header) ::= <<
@@ -65,14 +87,19 @@ ListenerFile(file, header) ::= <<
 
 <header>
 
-import { Token } from '../../Token';
-import { ParseTreeListener } from '../../tree/ParseTreeListener';
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
+import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
+
+<file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
  * This interface defines a complete listener for a parse tree produced by
  * `<file.parserName>`.
  */
-export interface <file.grammarName>Listener extends ParseTreeListener {
+export abstract class <file.grammarName>Listener implements ParseTreeListener {
 	<file.listenerNames:{lname |
 /**
 <if(file.listenerLabelRuleNames.(lname))>
@@ -83,7 +110,7 @@ export interface <file.grammarName>Listener extends ParseTreeListener {
 <endif>
  * @param ctx the parse tree
  */
-enter<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): void;
+abstract enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
 /**
 <if(file.listenerLabelRuleNames.(lname))>
  * Exit a parse tree produced by the `<lname>`
@@ -93,7 +120,12 @@ enter<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context):
 <endif>
  * @param ctx the parse tree
  */
-exit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): void;}; separator="\n">
+abstract exit<lname; format="cap">(ctx: <lname; format="cap">Context): void;}; separator="\n">
+
+	abstract visitTerminal(node: TerminalNode): void;
+	abstract visitErrorNode(node: ErrorNode): void;
+	abstract enterEveryRule(ctx: ParserRuleContext): void;
+	abstract exitEveryRule( ctx: ParserRuleContext): void;
 }
 >>
 
@@ -102,12 +134,15 @@ BaseListenerFile(file, header) ::= <<
 
 <header>
 
-import { ErrorNode } from '../../tree/ErrorNode';
-import { NotNull } from '../../Decorators';
-import { Override } from '../../Decorators';
-import { ParserRuleContext } from '../../ParserRuleContext';
-import { TerminalNode } from '../../tree/TerminalNode';
-import { Token } from '../../Token';
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { NotNull } from '<basePath()>/Decorators';
+import { Override } from '<basePath()>/Decorators';
+import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
+
+import { <file.grammarName>Listener } from './<file.grammarName>Listener';
+<file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
  * This class provides an empty implementation of `<file.grammarName>Listener`,
@@ -121,13 +156,13 @@ export class <file.grammarName>BaseListener implements <file.grammarName>Listene
  *
  * The default implementation does nothing.
  */
-@Override enter<lname; format="cap">(@NotNull ctx: <file.parserName>.<lname; format="cap">Context): void { \}
+@Override enter<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}
 /**
  * {@inheritDoc\}
  *
  * The default implementation does nothing.
  */
-@Override exit<lname; format="cap">(@NotNull ctx: <file.parserName>.<lname; format="cap">Context): void { \}}; separator="\n">
+@Override exit<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}}; separator="\n">
 
 	/**
 	 * {@inheritDoc\}
@@ -161,8 +196,14 @@ VisitorFile(file, header) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from '../../tree/ParseTreeVisitor';
-import { Token } from '../../Token';
+import { ErrorNode } from '<basePath()>/tree/ErrorNode';
+import { ParseTree } from '<basePath()>/tree/ParseTree';
+import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
+import { RuleNode } from '<basePath()>/tree/RuleNode';
+import { TerminalNode } from '<basePath()>/tree/TerminalNode';
+import { Token } from '<basePath()>/Token';
+
+<file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -171,7 +212,7 @@ import { Token } from '../../Token';
  * @param \<Result> The return type of the visit operation. Use `void` for
  * operations with no return type.
  */
-export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Result> {
+export abstract class <file.grammarName>Visitor\<Result> implements ParseTreeVisitor\<Result> {
 	<file.visitorNames:{lname |
 /**
 <if(file.visitorLabelRuleNames.(lname))>
@@ -183,7 +224,12 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  * @param ctx the parse tree
  * @return the visitor result
  */
-visit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): Result;}; separator="\n">
+abstract visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result;}; separator="\n">
+
+abstract visit(tree: ParseTree): Result;
+abstract visitChildren(node: RuleNode): Result;
+abstract visitTerminal(node: TerminalNode): Result;
+abstract visitErrorNode(node: ErrorNode): Result;
 }
 >>
 
@@ -192,8 +238,12 @@ BaseVisitorFile(file, header) ::= <<
 
 <header>
 
-import { AbstractParseTreeVisitor } from '../../tree/AbstractParseTreeVisitor';
-import { Token } from '../../Token';
+import { AbstractParseTreeVisitor } from '<basePath()>/tree/AbstractParseTreeVisitor';
+import { Override } from '<basePath()>/Decorators';
+import { Token } from '<basePath()>/Token';
+
+import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
+<file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
 /**
  * This class provides an empty implementation of `<file.grammarName>Visitor`,
@@ -203,7 +253,7 @@ import { Token } from '../../Token';
  * @param \<Result> The return type of the visit operation. Use `void` for
  * operations with no return type.
  */
-export class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVisitor\<Result> implements <file.grammarName>Visitor\<Result> {
+export abstract class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVisitor\<Result> implements <file.grammarName>Visitor\<Result> {
 	<file.visitorNames:{lname |
 /**
  * {@inheritDoc\}
@@ -211,7 +261,7 @@ export class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVis
  * The default implementation returns the result of calling
  * `visitChildren` on `ctx`.
  */
-@Override visit<lname; format="cap">(ctx: <file.parserName>.<lname; format="cap">Context): Result { return this.visitChildren(ctx); \}}; separator="\n">
+@Override visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result { return this.visitChildren(ctx); \}}; separator="\n">
 }
 >>
 
@@ -253,7 +303,7 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 		switch (ruleIndex) {
 		<parser.sempredFuncs.values:{f|
 case <f.ruleIndex>:
-	return this.<f.name>_sempred(\<<f.ctxType>\>_localctx, predIndex);}; separator="\n">
+	return this.<f.name>_sempred(_localctx as <f.ctxType>, predIndex);}; separator="\n">
 		}
 		return true;
 	}
@@ -262,6 +312,16 @@ case <f.ruleIndex>:
 
 	<atn>
 }
+
+<! The argument must be called currentRule because AltLabelStructDecl looks it up by name. !>
+<funcs:{currentRule |
+<if(currentRule.ruleCtx)>
+<currentRule.ruleCtx>
+<endif>
+<if(currentRule.altLabelCtxs)>
+<currentRule.altLabelCtxs:{l | <currentRule.altLabelCtxs.(l)>}; separator="\n">
+<endif>
+}; separator="\n\n">
 >>
 
 vocabulary(className, literalNames, symbolicNames) ::= <<
@@ -299,7 +359,7 @@ public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): bo
 	switch (ruleIndex) {
 	<recog.sempredFuncs.values:{f|
 case <f.ruleIndex>:
-	return this.<f.name>_sempred(<if(!recog.modes)>\<<f.ctxType>\><endif>_localctx, predIndex);}; separator="\n">
+	return this.<f.name>_sempred(_localctx<if(!recog.modes)> as <f.ctxType><endif>, predIndex);}; separator="\n">
 	}
 	return true;
 }
@@ -310,7 +370,7 @@ case <f.ruleIndex>:
 parser_ctor(p) ::= <<
 constructor(input: TokenStream) {
 	super(input);
-	this._interp = new ParserATNSimulator(this, <p.name>._ATN);
+	this._interp = new ParserATNSimulator(<p.name>._ATN, this);
 }
 >>
 
@@ -343,14 +403,8 @@ case <index>:
 >>
 
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
-
-<if(ruleCtx)>
-<ruleCtx>
-<endif>
-<altLabelCtxs:{l | <altLabelCtxs.(l)>}; separator="\n">
-
-@RuleVersion(<namedActions.version; null="0">)
-<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.ctxType> <currentRule.name>(<args; separator=",">) {
+//@RuleVersion(<namedActions.version; null="0">)
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.getState()<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
 	<namedActions.init>
@@ -456,15 +510,14 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	namedActions,finallyAction,postamble) ::=
 <<
 
-<ruleCtx>
-<altLabelCtxs:{l | <altLabelCtxs.(l)>}; separator="\n">
+//@RuleVersion(<namedActions.version; null="0">)
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType>;
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p: number): <currentRule.ctxType>;
+<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p?: number): <currentRule.ctxType> {
+	if (_p === undefined) {
+		_p = 0;
+	}
 
-@RuleVersion(<namedActions.version; null="0">)
-<if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType> {
-	return this.<currentRule.name>(0<currentRule.args:{a | , <a.name>}>);
-}
-
-private <currentRule.name>(_p: number<args:{a | , <a>}>): <currentRule.ctxType> {
 	let _parentctx: ParserRuleContext = this._ctx;
 	let _parentState: number = this.getState();
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
@@ -644,7 +697,7 @@ testShiftInRange(shiftAmount) ::= <<
 
 // produces smaller bytecode only when bits.ttypes contains more than two items
 bitsetBitfieldComparison(s, bits) ::= <%
-(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1L \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1L \<\< <offsetShift(ttype, bits.shift)>)}; separator=" | ">)) != 0)
+(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1 \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1 \<\< <offsetShift({<parser.name>.<ttype>}, bits.shift)>)}; separator=" | ">)) != 0)
 %>
 
 isZero ::= [
@@ -658,21 +711,21 @@ offsetShift(shiftAmount, offset) ::= <%
 
 // produces more efficient bytecode when bits.ttypes contains at most two items
 bitsetInlineComparison(s, bits) ::= <%
-<bits.ttypes:{ttype | <s.varName>===<ttype>}; separator=" || ">
+<bits.ttypes:{ttype | <s.varName>===<parser.name>.<ttype>}; separator=" || ">
 %>
 
 cases(ttypes) ::= <<
-<ttypes:{t | case <t>:}; separator="\n">
+<ttypes:{t | case <parser.name>.<t>:}; separator="\n">
 >>
 
 InvokeRule(r, argExprsChunks) ::= <<
 this.setState(<r.stateNumber>);
-<if(r.labels)><r.labels:{l | <labelref(l)> = }><endif><r.name>(<if(r.ast.options.p)><r.ast.options.p><if(argExprsChunks)>,<endif><endif><argExprsChunks>);
+<if(r.labels)><r.labels:{l | <labelref(l)> = }><endif>this.<r.name>(<argExprsChunks><if(r.ast.options.p)><if(argExprsChunks)>,<endif><r.ast.options.p><endif>);
 >>
 
 MatchToken(m) ::= <<
 this.setState(<m.stateNumber>);
-<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this.match(<m.name>);
+<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this.match(<parser.name>.<m.name>);
 >>
 
 MatchSet(m, expr, capture) ::= "<CommonSetStuff(m, expr, capture, false)>"
@@ -728,70 +781,78 @@ ActionTemplate(t) ::= "<t.st>"
 ArgRef(a) ::= "_localctx.<a.name>"
 LocalRef(a) ::= "_localctx.<a.name>"
 RetValueRef(a) ::= "_localctx.<a.name>"
-QRetValueRef(a) ::= "<ctx(a)>.<a.dict>.<a.name>"
+QRetValueRef(a) ::= "<ctx(a)>._<a.dict>.<a.name>"
 /** How to translate $tokenLabel */
-TokenRef(t) ::= "<ctx(t)>.<t.name>"
-LabelRef(t) ::= "<ctx(t)>.<t.name>"
+TokenRef(t) ::= "<ctx(t)>._<t.name>"
+LabelRef(t) ::= "<ctx(t)>._<t.name>"
 ListLabelRef(t) ::= "<ctx(t)>.<ListLabelName(t.name)>"
 SetAttr(s,rhsChunks) ::= "<ctx(s)>.<s.name> = <rhsChunks>;"
 
 TokenLabelType() ::= "<file.TokenLabelType; null={Token}>"
 InputSymbolType() ::= "<file.InputSymbolType; null={Token}>"
 
-TokenPropertyRef_text(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getText():null)"
-TokenPropertyRef_type(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getType():0)"
-TokenPropertyRef_line(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getLine():0)"
-TokenPropertyRef_pos(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getCharPositionInLine():0)"
-TokenPropertyRef_channel(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getChannel():0)"
-TokenPropertyRef_index(t) ::= "(<ctx(t)>.<t.label>!=null?<ctx(t)>.<t.label>.getTokenIndex():0)"
-TokenPropertyRef_int(t) ::= "(<ctx(t)>.<t.label>!=null?Integer.valueOf(<ctx(t)>.<t.label>.getText()):0)"
+TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():undefined)"
+TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getType():0)"
+TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getLine():0)"
+TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getCharPositionInLine():0)"
+TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getChannel():0)"
+TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getTokenIndex():0)"
+TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Number(<ctx(t)>._<t.label>.getText()):0)"
 
-RulePropertyRef_start(r) ::= "(<ctx(r)>.<r.label>!=null?(<ctx(r)>.<r.label>.start):null)"
-RulePropertyRef_stop(r)	 ::= "(<ctx(r)>.<r.label>!=null?(<ctx(r)>.<r.label>.stop):null)"
-RulePropertyRef_text(r)	 ::= "(<ctx(r)>.<r.label>!=null?this._input.getText(<ctx(r)>.<r.label>.start,<ctx(r)>.<r.label>.stop):null)"
-RulePropertyRef_ctx(r)	 ::= "<ctx(r)>.<r.label>"
+RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):undefined)"
+RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):undefined)"
+RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getTextFromRange(<ctx(r)>._<r.label>.start,<ctx(r)>._<r.label>.stop):undefined)"
+RulePropertyRef_ctx(r)	 ::= "<ctx(r)>._<r.label>"
 RulePropertyRef_parser(r)	 ::= "this"
 
 ThisRulePropertyRef_start(r) ::= "_localctx.start"
 ThisRulePropertyRef_stop(r)	 ::= "_localctx.stop"
-ThisRulePropertyRef_text(r)	 ::= "this._input.getText(_localctx.start, this._input.tryLT(-1))"
+ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx.start, this._input.tryLT(-1))"
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
-NonLocalAttrRef(s)		 ::= "(\<<s.ruleName; format=\"cap\">Context>getInvokingContext(<s.ruleIndex>)).<s.name>"
+NonLocalAttrRef(s)		 ::= "(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name>"
 SetNonLocalAttr(s, rhsChunks)	  ::=
-	"(\<<s.ruleName; format=\"cap\">Context>getInvokingContext(<s.ruleIndex>)).<s.name> = <rhsChunks>;"
+	"(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name> = <rhsChunks>;"
 
-AddToLabelList(a) ::= "<ctx(a.label)>.<a.listName>.push(<labelref(a.label)>);"
+AddToLabelList(a) ::= "<ctx(a.label)>._<a.listName>.push(<labelref(a.label)>);"
 
-TokenDecl(t) ::= "<t.name>: <TokenLabelType()>"
-TokenTypeDecl(t) ::= "<t.name>: number;"
-TokenListDecl(t) ::= "<t.name>: Token[] = []"
-RuleContextDecl(r) ::= "<r.name>: <r.ctxName>"
-RuleContextListDecl(rdecl) ::= "<rdecl.name>: <rdecl.ctxName>[] = []"
+TokenDecl(t) ::= "_<t.name>: <TokenLabelType()>"
+TokenTypeDecl(t) ::= "let <t.name>: number;"
+TokenListDecl(t) ::= "_<t.name>: Token[] = []"
+RuleContextDecl(r) ::= "_<r.name>: <r.ctxName>"
+RuleContextListDecl(rdecl) ::= "_<rdecl.name>: <rdecl.ctxName>[] = []"
 
 ContextTokenGetterDecl(t)      ::=
     "public <t.name>(): TerminalNode { return this.getToken(<parser.name>.<t.name>, 0); }"
 ContextTokenListGetterDecl(t)  ::=
-    "public <t.name>(): TerminalNode[] { return this.getTokens(<parser.name>.<t.name>); }"
+    "public <t.name>(): TerminalNode[];"
 ContextTokenListIndexedGetterDecl(t)  ::= <<
-public <t.name>(i: number): TerminalNode {
-	return this.getToken(<parser.name>.<t.name>, i);
+public <t.name>(i: number): TerminalNode;
+public <t.name>(i?: number): TerminalNode | TerminalNode[] {
+	if (i === undefined) {
+		return this.getTokens(<parser.name>.<t.name>);
+	} else {
+		return this.getToken(<parser.name>.<t.name>, i);
+	}
 }
 >>
 ContextRuleGetterDecl(r)       ::= <<
 public <r.name>(): <r.ctxName> {
-	return this.getRuleContext(0, <r.ctxName>.class);
+	return this.getRuleContext(0, <r.ctxName>);
 }
 >>
 ContextRuleListGetterDecl(r)   ::= <<
-public <r.name>(): <r.ctxName>[] {
-	return this.getRuleContexts(<r.ctxName>.class);
-}
+public <r.name>(): <r.ctxName>[];
 >>
 ContextRuleListIndexedGetterDecl(r)   ::= <<
-public <r.name>(i: number): <r.ctxName> {
-	return getRuleContext(i, <r.ctxName>.class);
+public <r.name>(i: number): <r.ctxName>;
+public <r.name>(i?: number): <r.ctxName> | <r.ctxName>[] {
+	if (i === undefined) {
+		return this.getRuleContexts(<r.ctxName>);
+	} else {
+		return this.getRuleContext(i, <r.ctxName>);
+	}
 }
 >>
 
@@ -815,14 +876,29 @@ StructDecl(struct,ctorAttrs,attrs,getters,dispatchMethods,interfaces,extensionMe
 export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>ParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	<if(ctorAttrs)>constructor(ParserRuleContext parent, int invokingState) { super(parent, invokingState); }<endif>
+<if(struct.provideCopyFrom)>
+	constructor();
+<endif>
+<if(ctorAttrs)>
+	constructor(parent: ParserRuleContext, invokingState: number);
+<endif>
+	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>);
+<if(struct.provideCopyFrom)>
+	constructor(parent?: ParserRuleContext, invokingState?: number<ctorAttrs:{a | , <a>}>) {
+		if (parent !== undefined && invokingState !== undefined) {
+			super(parent, invokingState);
+		} else {
+			super();
+		}
+<else>
 	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>) {
 		super(parent, invokingState);
+<endif>
+
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
 	@Override public getRuleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
 <if(struct.provideCopyFrom)> <! don't need copy unless we have subclasses !>
-	constructor() { }
 	public copyFrom(ctx: <struct.name>): void {
 		super.copyFrom(ctx);
 		<struct.attrs:{a | this.<a.name> = ctx.<a.name>;}; separator="\n">
@@ -834,10 +910,10 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 >>
 
 AltLabelStructDecl(struct,attrs,getters,dispatchMethods) ::= <<
-export class <struct.name> extends <currentRule.name; format="cap">Context {
+export class <struct.name> extends <currentRule.currentRule.name; format="cap">Context {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	constructor(ctx: <currentRule.name; format="cap">Context) { this.copyFrom(ctx); }
+	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) { super(); this.copyFrom(ctx); }
 	<dispatchMethods; separator="\n">
 }
 >>
@@ -845,14 +921,14 @@ export class <struct.name> extends <currentRule.name; format="cap">Context {
 ListenerDispatchMethod(method) ::= <<
 @Override
 public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: ParseTreeListener): void {
-	if ( listener instanceof <parser.grammarName>Listener ) (\<<parser.grammarName>Listener>listener).<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
+	if ( listener instanceof <parser.grammarName>Listener ) (listener as <parser.grammarName>Listener).<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
 }
 >>
 
 VisitorDispatchMethod(method) ::= <<
 @Override
 public accept\<Result>(visitor: ParseTreeVisitor\<Result>): Result {
-	if ( visitor instanceof <parser.grammarName>Visitor ) return (\<<parser.grammarName>Visitor\<Result>\>visitor).visit<struct.derivedFromName; format="cap">(this);
+	if ( visitor instanceof <parser.grammarName>Visitor ) return (visitor as <parser.grammarName>Visitor\<Result>).visit<struct.derivedFromName; format="cap">(this);
 	else return visitor.visitChildren(this);
 }
 >>
@@ -860,13 +936,13 @@ public accept\<Result>(visitor: ParseTreeVisitor\<Result>): Result {
 AttributeDecl(d) ::= "<d.name>: <d.type><if(d.initValue)> = <d.initValue><endif>"
 
 /** If we don't know location of label def x, use this template */
-labelref(x) ::= "<if(!x.isLocal)><typedContext(x.ctx)>.<endif><x.name>"
+labelref(x) ::= "<if(!x.isLocal)><typedContext(x.ctx)>.<endif>_<x.name>"
 
 /** For any action chunk, what is correctly-typed context struct ptr? */
 ctx(actionChunk) ::= "<typedContext(actionChunk.ctx)>"
 
 // only casts _localctx to the type when the cast isn't redundant (i.e. to a sub-context for a labeled alt)
-typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(\<<ctx.name>\>_localctx)<else>_localctx<endif>"
+typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(_localctx as <ctx.name>)<else>_localctx<endif>"
 
 // used for left-recursive rules
 recRuleAltPredicate(ruleName,opPrec)  ::= "this.precpred(this._ctx, <opPrec>)"
@@ -877,9 +953,9 @@ recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
 _localctx = new <ctxName>Context(_parentctx, _parentState);
 <if(label)>
 <if(isListLabel)>
-_localctx.<label>.push(_prevctx);
+_localctx._<label>.push(_prevctx);
 <else>
-_localctx.<label> = _prevctx;
+_localctx._<label> = _prevctx;
 <endif>
 <endif>
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
@@ -889,9 +965,9 @@ recRuleLabeledAltStartAction(ruleName, currentAltLabel, label, isListLabel) ::= 
 _localctx = new <currentAltLabel; format="cap">Context(new <ruleName; format="cap">Context(_parentctx, _parentState));
 <if(label)>
 <if(isListLabel)>
-(\<<currentAltLabel; format="cap">Context>_localctx).<label>.push(_prevctx);
+(_localctx as <currentAltLabel; format="cap">Context)._<label>.push(_prevctx);
 <else>
-(\<<currentAltLabel; format="cap">Context>_localctx).<label> = _prevctx;
+(_localctx as <currentAltLabel; format="cap">Context)._<label> = _prevctx;
 <endif>
 <endif>
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
@@ -914,18 +990,18 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from '../../atn/ATN';
-import { ATNDeserializer } from '../../atn/ATNDeserializer';
-import { CharStream } from '../../CharStream';
-import { Lexer } from '../../Lexer';
-import { LexerATNSimulator } from '../../atn/LexerATNSimulator';
-import { NotNull } from '../../Decorators';
-import { Override } from '../../Decorators';
-import { RuleContext } from '../../RuleContext';
-import { Vocabulary } from '../../Vocabulary';
-import { VocabularyImpl } from '../../VocabularyImpl';
+import { ATN } from '<basePath()>/atn/ATN';
+import { ATNDeserializer } from '<basePath()>/atn/ATNDeserializer';
+import { CharStream } from '<basePath()>/CharStream';
+import { Lexer } from '<basePath()>/Lexer';
+import { LexerATNSimulator } from '<basePath()>/atn/LexerATNSimulator';
+import { NotNull } from '<basePath()>/Decorators';
+import { Override } from '<basePath()>/Decorators';
+import { RuleContext } from '<basePath()>/RuleContext';
+import { Vocabulary } from '<basePath()>/Vocabulary';
+import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
 
-import * as Utils from '../../misc/Utils';
+import * as Utils from '<basePath()>/misc/Utils';
 
 <lexer>
 >>
@@ -989,6 +1065,14 @@ public static get _ATN(): ATN {
 	System.out.println(dot.getDOT(_ATN.ruleToStartState[2], ruleNames, false));
 }!>
 >>
+
+basePath() ::= <%
+<if(file.factory.grammar.ast.cmdLineOptions.("baseImportPath"))>
+<file.factory.grammar.ast.cmdLineOptions.("baseImportPath")>
+<else>
+antlr4ts
+<endif>
+%>
 
 /** Using a type to init value map, try to init a type; if not in table
  *	must be an object, default value is "null".
