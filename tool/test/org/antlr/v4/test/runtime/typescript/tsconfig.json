@@ -15,8 +15,7 @@
       "./node_modules/@types"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ],
     "baseUrl": ".",
     "paths": {
