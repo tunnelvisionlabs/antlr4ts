@@ -15,7 +15,7 @@ export * from './DefaultErrorStrategy';
 export * from './DiagnosticErrorListener';
 export * from './FailedPredicateException';
 export * from './InputMismatchException';
-// export * from './InterpreterRuleContext';
+export * from './InterpreterRuleContext';
 export * from './IntStream';
 export * from './Lexer';
 // export * from './LexerInterpreter';

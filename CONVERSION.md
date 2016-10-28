@@ -35,7 +35,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
 * [x] InputMismatchException.java
-* [ ] InterpreterRuleContext.java
+* [x] InterpreterRuleContext.java
 * [x] IntStream.java
 * [x] Lexer.java
 * [ ] LexerInterpreter.java
