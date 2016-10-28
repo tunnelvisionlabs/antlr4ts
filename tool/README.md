@@ -1,6 +1,6 @@
 # antlr4ts-cli -- TypeScript/JavaScript target code generator for ANTLR 4
 
-## This is pre-relesae software
+:warning: This is pre-release software
 
 `npm install -g antlr4ts-cli`
 

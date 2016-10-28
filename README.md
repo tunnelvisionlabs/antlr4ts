@@ -4,6 +4,27 @@ TypeScript/JavaScript target for ANTLR 4
 
 [![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
 
+
+## Dev setup - for develping ANTLR4 code targeting TypeScript/JavaScript/CoffeeScript from 
+    - [Nodejs Version 6.x or greater](https://nodejs.org/en/)
+    - After installing Nodejs, be sure you have the latest node package manager to the latest with the command `npm i -g npm`
+    - You may install the latest stable antlr4ts command globally with the command `npm install -g antlr4ts-cli`.
+    - You may install a antlr4ts command into your project with `npm install --save-dev antlr4ts-cli`.   
+    - You may install the antlr4ts runtime into your project with `npm install --save antlr4ts`.  
+
+Note: this package has a development time dependency on the [Java Runtime Environment (JRE)](https://java.com/en/download/), or a [Java Development Kit (JDK)](http://www.oracle.com/technetwork/java/javase/downloads/index.html).   These are only required on your development machine, there is no dependency on Java at runtime. 
+
+## Dev setup - for contributors (to build it from sources)
+
+In addition to the above, building the design-time tool requires:
+
+      - A Java development kit, 1.8x or greater (see above.)  
+      - The [Maven](https://maven.apache.org/download.cgi) project system after downloading, [set it up according to these instructions](https://maven.apache.org/install.html). 
+
+After you clone the project, run `npm install` from the root directory, this will install other runtime- and development-time dependencies.  
+
+The first time you run `npm install`, it will build and install the current version of the **antlr4ts** tool locally.   After that, if you update the tool, you will need to execute the command `npm install tool`.   This includes if you pull any updates that change the tool. 
+
 ## Dev setup with Visual Studio
 Any edition of [Visual Studio 2015](https://www.visualstudio.com/vs/) (or greater) should work, including Communitity Edition.
 You'll want to be sure you have the following VS extensions installed:
@@ -12,26 +33,6 @@ You'll want to be sure you have the following VS extensions installed:
 
 You ***should*** be able to run tests from the Test Explorer, etc... but there seems to be an unresolved problem making this work, for now use the command-line method below to be sure you run them all.
 
-## Dev setup with NPM
-
-### Creating the TypeScript code generator
-
-The ANTLR 4 code generator is written in Java. A minimal developer setup needs Maven and a JDK installed on the local
-system. The first time you check out the code, and after any changes are made to the **TypeScript.stg** template file,
-the following command should be run from the project root directory (the directory containing this readme file).
-
-```
-npm run build-tool
-```
-
-Of course, you'll need to install Node.js for your platform.   https://nodejs.org/en/
-After cloning the repository, you can install dependencies by changing into the cloned directory and typing:
-
-```
-npm install
-```
-
-You will need to do this again as we take on new dependencies or updates. 
 
 ### Running basic tests should be as simple as...
 ```
