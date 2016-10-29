@@ -45,3 +45,11 @@ How we integrate with runtime-testsuite is TBD.
 npm run cover 
 ```
 This executes a code-coverage test run, then generates an interactive HTML report in `coverage/lcov-report/index.html`.
+
+### Java Reference code
+To view the Java code this project was derived from, use the following commands in the project root directory.   This *isn't* strictly needed for building the project, and the reference implementation is expected to be fairly stable.
+
+```
+git submodule init
+git submodule update
+```
