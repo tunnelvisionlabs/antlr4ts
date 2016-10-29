@@ -4,8 +4,11 @@
   "description": "Antlr4 runtime for JavaScript written in Typescript",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm i --save-dev tool && antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
+    "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
+    "tsc": "tsc",
+    "prepublish": "npm i tool && npm run antlr4ts && npm run tsc",
     "pretest": "npm run prepubish",
+
     "test": "mocha",
     "precover": "npm run prepubish",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
@@ -29,7 +32,6 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
-    "antlr4ts-cli": "file:tool",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
