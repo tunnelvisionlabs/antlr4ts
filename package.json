@@ -7,7 +7,7 @@
     "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
     "tsc": "tsc",
     "prepublish": "npm i tool && npm run antlr4ts && npm run tsc",
-    "pretest": "npm run prepubish",
+    "pretest": "npm run prepublish",
 
     "test": "mocha",
     "precover": "npm run prepubish",
