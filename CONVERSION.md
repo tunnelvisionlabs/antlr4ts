@@ -47,7 +47,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] `Parser.getParseInfo`
   * [ ] `Parser.setProfile`
 * [x] ParserErrorListener.java
-* [ ] ParserInterpreter.java
+* [x] ParserInterpreter.java
 * [x] ParserRuleContext.java
 * [x] ProxyErrorListener.java
 * [x] ProxyParserErrorListener.java

@@ -24,7 +24,7 @@ export * from './ListTokenSource';
 export * from './NoViableAltException';
 export * from './Parser';
 export * from './ParserErrorListener';
-// export * from './ParserInterpreter';
+export * from './ParserInterpreter';
 export * from './ParserRuleContext';
 export * from './ProxyErrorListener';
 export * from './ProxyParserErrorListener';
