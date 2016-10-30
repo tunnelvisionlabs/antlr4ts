@@ -4,9 +4,8 @@
 >
 > Licensed under the BSD-3-clause license. See [LICENSE](./LICENSE) file in the project root for license information.
 
-:warning: This is pre-release software - Stability 0.
-<div class="api_stability api_stability_1">Stability 1 - Experimental.  <br> This feature was introduced recently, and may change
-or be removed in the future. </div>
+<div class="api_stability api_stability_1">Stability 1 - Experimental. :warning:<br>
+This feature was introduced recently, and may change or be removed in the future. </div>
 
 #Installation
 
