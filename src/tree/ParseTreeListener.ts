@@ -46,8 +46,8 @@ import { TerminalNode } from './TerminalNode';
  * 		https://github.com/antlr/antlr4/issues/841
  */
 export interface ParseTreeListener {
-	visitTerminal(/*@NotNull*/ node: TerminalNode): void;
-	visitErrorNode(/*@NotNull*/ node: ErrorNode): void;
-	enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
-	exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void;
+	visitTerminal?: (/*@NotNull*/ node: TerminalNode) => void;
+	visitErrorNode?: (/*@NotNull*/ node: ErrorNode) => void;
+	enterEveryRule?: (/*@NotNull*/ ctx: ParserRuleContext) => void;
+	exitEveryRule?: (/*@NotNull*/ ctx: ParserRuleContext) => void;
 }
