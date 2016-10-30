@@ -87,11 +87,7 @@ ListenerFile(file, header) ::= <<
 
 <header>
 
-import { ErrorNode } from '<basePath()>/tree/ErrorNode';
-import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
 import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
-import { TerminalNode } from '<basePath()>/tree/TerminalNode';
-import { Token } from '<basePath()>/Token';
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
@@ -99,7 +95,7 @@ import { Token } from '<basePath()>/Token';
  * This interface defines a complete listener for a parse tree produced by
  * `<file.parserName>`.
  */
-export abstract class <file.grammarName>Listener implements ParseTreeListener {
+export interface <file.grammarName>Listener extends ParseTreeListener {
 	<file.listenerNames:{lname |
 /**
 <if(file.listenerLabelRuleNames.(lname))>
@@ -110,7 +106,7 @@ export abstract class <file.grammarName>Listener implements ParseTreeListener {
 <endif>
  * @param ctx the parse tree
  */
-abstract enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
+enter<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;
 /**
 <if(file.listenerLabelRuleNames.(lname))>
  * Exit a parse tree produced by the `<lname>`
@@ -120,74 +116,7 @@ abstract enter<lname; format="cap">(ctx: <lname; format="cap">Context): void;
 <endif>
  * @param ctx the parse tree
  */
-abstract exit<lname; format="cap">(ctx: <lname; format="cap">Context): void;}; separator="\n">
-
-	abstract visitTerminal(node: TerminalNode): void;
-	abstract visitErrorNode(node: ErrorNode): void;
-	abstract enterEveryRule(ctx: ParserRuleContext): void;
-	abstract exitEveryRule( ctx: ParserRuleContext): void;
-}
->>
-
-BaseListenerFile(file, header) ::= <<
-<fileHeader(file.grammarFileName, file.ANTLRVersion)>
-
-<header>
-
-import { ErrorNode } from '<basePath()>/tree/ErrorNode';
-import { NotNull } from '<basePath()>/Decorators';
-import { Override } from '<basePath()>/Decorators';
-import { ParserRuleContext } from '<basePath()>/ParserRuleContext';
-import { TerminalNode } from '<basePath()>/tree/TerminalNode';
-import { Token } from '<basePath()>/Token';
-
-import { <file.grammarName>Listener } from './<file.grammarName>Listener';
-<file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
-
-/**
- * This class provides an empty implementation of `<file.grammarName>Listener`,
- * which can be extended to create a listener which only needs to handle a subset
- * of the available methods.
- */
-export class <file.grammarName>BaseListener implements <file.grammarName>Listener {
-	<file.listenerNames:{lname |
-/**
- * {@inheritDoc\}
- *
- * The default implementation does nothing.
- */
-@Override enter<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}
-/**
- * {@inheritDoc\}
- *
- * The default implementation does nothing.
- */
-@Override exit<lname; format="cap">(@NotNull ctx: <lname; format="cap">Context): void { \}}; separator="\n">
-
-	/**
-	 * {@inheritDoc\}
-	 *
-	 * The default implementation does nothing.
-	 */
-	@Override enterEveryRule(@NotNull ctx: ParserRuleContext): void { }
-	/**
-	 * {@inheritDoc\}
-	 *
-	 * The default implementation does nothing.
-	 */
-	@Override exitEveryRule(@NotNull ctx: ParserRuleContext): void { }
-	/**
-	 * {@inheritDoc\}
-	 *
-	 * The default implementation does nothing.
-	 */
-	@Override visitTerminal(@NotNull node: TerminalNode): void { }
-	/**
-	 * {@inheritDoc\}
-	 *
-	 * The default implementation does nothing.
-	 */
-	@Override visitErrorNode(@NotNull node: ErrorNode): void { }
+exit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;}; separator="\n">
 }
 >>
 
@@ -920,8 +849,8 @@ export class <struct.name> extends <currentRule.currentRule.name; format="cap">C
 
 ListenerDispatchMethod(method) ::= <<
 @Override
-public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: ParseTreeListener): void {
-	if ( listener instanceof <parser.grammarName>Listener ) (listener as <parser.grammarName>Listener).<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
+public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: <parser.grammarName>Listener): void {
+	if (listener.<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">) listener.<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
 }
 >>
 
