@@ -1,4 +1,9 @@
-﻿// ConvertTo-TS run at 2016-10-04T11:26:52.1916955-07:00
+﻿/*
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
+ */
+/// ConvertTo-TS run at 2016-10-04T11:26:52.1916955-07:00
 
 import { CharStream } from './CharStream';
 import { CommonTokenFactory } from './CommonTokenFactory';

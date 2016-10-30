@@ -1,5 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+# All rights reserved.
+# Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1

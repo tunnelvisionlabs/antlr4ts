@@ -1,3 +1,8 @@
+/*
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
+ */
 require('source-map-support').install();
 import {Equatable} from '../src/misc/Stubs';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
@@ -8,7 +13,7 @@ import * as assert from "assert";
 class EquatableTest implements Equatable {
 
     constructor( public a: string, public b: string ){}
-    
+
     equals(o: any) {
         if (this === o) return true;
         if (o instanceof EquatableTest) {
@@ -55,7 +60,7 @@ describe('EquatableTest', function() {
 
 describe('Array2DHashSet', function() {
     let set: Array2DHashSet<EquatableTest>;
-    
+
     beforeEach(function() { set = new Array2DHashSet<EquatableTest>()});
 
     it('shoud count entities', function() {
@@ -77,7 +82,7 @@ describe('Array2DHashSet', function() {
     });
 });
 
-// 
+//
 // This exercises the mocha-typescript package's ability to
 // use more object-oriented test structure using decorators.
 //

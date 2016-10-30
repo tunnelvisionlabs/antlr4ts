@@ -1,8 +1,8 @@
-# antlr4ts
-
-TypeScript/JavaScript target for ANTLR 4
-
+# antlr4ts - TypeScript/JavaScript target for ANTLR 4
 [![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
+## Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+### All rights reserved.
+> Licensed under the BSD-3-clause license. See [LICENSE](./LICENSE) file in the project root for license information.
 
 
 ## Dev setup - for develping ANTLR4 code targeting TypeScript/JavaScript/CoffeeScript from 
