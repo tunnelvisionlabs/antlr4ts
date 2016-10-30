@@ -674,9 +674,6 @@ public abstract class BaseTest {
 			"import { <parserName> } from './<parserName>';\n" +
 			"\n" +
 			"class TreeShapeListener implements ParseTreeListener {\n" +
-			"	visitTerminal(node: TerminalNode): void { }\n" +
-			"	visitErrorNode(node: ErrorNode): void { }\n" +
-			"	exitEveryRule(ctx: ParserRuleContext): void { }\n" +
 			"	enterEveryRule(ctx: ParserRuleContext): void {\n" +
 			"		for (let i = 0; i \\< ctx.getChildCount(); i++) {\n" +
 			"			let parent = ctx.getChild(i).getParent();\n" +
