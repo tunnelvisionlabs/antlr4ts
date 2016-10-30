@@ -35,10 +35,10 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
 * [x] InputMismatchException.java
-* [ ] InterpreterRuleContext.java
+* [x] InterpreterRuleContext.java
 * [x] IntStream.java
 * [x] Lexer.java
-* [ ] LexerInterpreter.java
+* [x] LexerInterpreter.java
 * [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
 * [x] NoViableAltException.java
@@ -47,14 +47,14 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] `Parser.getParseInfo`
   * [ ] `Parser.setProfile`
 * [x] ParserErrorListener.java
-* [ ] ParserInterpreter.java
+* [x] ParserInterpreter.java
 * [x] ParserRuleContext.java
 * [x] ProxyErrorListener.java
 * [x] ProxyParserErrorListener.java
 * [x] RecognitionException.java
 * [x] Recognizer.java
 * [x] RuleContext.java
-* [ ] RuleContextWithAltNum.java
+* [x] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
 * [ ] RuleVersion.java

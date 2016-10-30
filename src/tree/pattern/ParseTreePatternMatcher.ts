@@ -40,7 +40,7 @@ import { MultiMap } from "../../misc/MultiMap";
 import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
 import { Parser } from '../../Parser';
-import { ParserInterpreter } from "../../Stub_ParserInterpreter";
+import { ParserInterpreter } from "../../ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";

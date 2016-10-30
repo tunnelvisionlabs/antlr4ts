@@ -27,7 +27,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 // ConvertTo-TS run at 2016-10-04T11:26:51.5898546-07:00
+
+import { Override } from './Decorators';
+import { ParserRuleContext } from './ParserRuleContext';
 
 /**
  * This class extends {@link ParserRuleContext} by allowing the value of
@@ -45,30 +49,32 @@ export class InterpreterRuleContext extends ParserRuleContext {
 	/**
 	 * This is the backing field for {@link #getRuleIndex}.
 	 */
-	private ruleIndex: number; 
+	private ruleIndex: number;
+
+	constructor(ruleIndex: number);
 
 	/**
 	 * Constructs a new {@link InterpreterRuleContext} with the specified
 	 * parent, invoking state, and rule index.
 	 *
+	 * @param ruleIndex The rule index for the current context.
 	 * @param parent The parent context.
 	 * @param invokingStateNumber The invoking state number.
-	 * @param ruleIndex The rule index for the current context.
 	 */
-	 constructor(@Nullable parent: ParserRuleContext, 
-								  invokingStateNumber: number,
-								  ruleIndex: number) 
-	{
-		super(parent, invokingStateNumber);
-		this.ruleIndex = ruleIndex;
-	}
+	constructor(ruleIndex: number, parent: ParserRuleContext | undefined, invokingStateNumber: number);
 
-	 constructor1(ruleIndex: number)  {
+	constructor(ruleIndex: number, parent?: ParserRuleContext, invokingStateNumber?: number) {
+		if (invokingStateNumber !== undefined) {
+			super(parent, invokingStateNumber);
+		} else {
+			super();
+		}
+
 		this.ruleIndex = ruleIndex;
 	}
 
 	@Override
 	getRuleIndex(): number {
-		return ruleIndex;
+		return this.ruleIndex;
 	}
 }
