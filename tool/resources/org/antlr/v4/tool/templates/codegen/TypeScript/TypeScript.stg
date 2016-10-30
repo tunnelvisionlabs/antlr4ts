@@ -125,12 +125,7 @@ VisitorFile(file, header) ::= <<
 
 <header>
 
-import { ErrorNode } from '<basePath()>/tree/ErrorNode';
-import { ParseTree } from '<basePath()>/tree/ParseTree';
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
-import { RuleNode } from '<basePath()>/tree/RuleNode';
-import { TerminalNode } from '<basePath()>/tree/TerminalNode';
-import { Token } from '<basePath()>/Token';
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
@@ -141,7 +136,7 @@ import { Token } from '<basePath()>/Token';
  * @param \<Result> The return type of the visit operation. Use `void` for
  * operations with no return type.
  */
-export abstract class <file.grammarName>Visitor\<Result> implements ParseTreeVisitor\<Result> {
+export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Result> {
 	<file.visitorNames:{lname |
 /**
 <if(file.visitorLabelRuleNames.(lname))>
@@ -153,44 +148,7 @@ export abstract class <file.grammarName>Visitor\<Result> implements ParseTreeVis
  * @param ctx the parse tree
  * @return the visitor result
  */
-abstract visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result;}; separator="\n">
-
-abstract visit(tree: ParseTree): Result;
-abstract visitChildren(node: RuleNode): Result;
-abstract visitTerminal(node: TerminalNode): Result;
-abstract visitErrorNode(node: ErrorNode): Result;
-}
->>
-
-BaseVisitorFile(file, header) ::= <<
-<fileHeader(file.grammarFileName, file.ANTLRVersion)>
-
-<header>
-
-import { AbstractParseTreeVisitor } from '<basePath()>/tree/AbstractParseTreeVisitor';
-import { Override } from '<basePath()>/Decorators';
-import { Token } from '<basePath()>/Token';
-
-import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
-<file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
-
-/**
- * This class provides an empty implementation of `<file.grammarName>Visitor`,
- * which can be extended to create a visitor which only needs to handle a subset
- * of the available methods.
- *
- * @param \<Result> The return type of the visit operation. Use `void` for
- * operations with no return type.
- */
-export abstract class <file.grammarName>BaseVisitor\<Result> extends AbstractParseTreeVisitor\<Result> implements <file.grammarName>Visitor\<Result> {
-	<file.visitorNames:{lname |
-/**
- * {@inheritDoc\}
- *
- * The default implementation returns the result of calling
- * `visitChildren` on `ctx`.
- */
-@Override visit<lname; format="cap">(ctx: <lname; format="cap">Context): Result { return this.visitChildren(ctx); \}}; separator="\n">
+visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; separator="\n">
 }
 >>
 
@@ -856,8 +814,8 @@ public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: <parser.grammarN
 
 VisitorDispatchMethod(method) ::= <<
 @Override
-public accept\<Result>(visitor: ParseTreeVisitor\<Result>): Result {
-	if ( visitor instanceof <parser.grammarName>Visitor ) return (visitor as <parser.grammarName>Visitor\<Result>).visit<struct.derivedFromName; format="cap">(this);
+public accept\<Result>(visitor: <parser.grammarName>Visitor\<Result>): Result {
+	if (visitor.visit<struct.derivedFromName; format="cap">) return visitor.visit<struct.derivedFromName; format="cap">(this);
 	else return visitor.visitChildren(this);
 }
 >>

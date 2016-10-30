@@ -141,6 +141,11 @@ public class TypeScriptTarget extends Target {
 	}
 
 	@Override
+	public boolean wantsBaseVisitor() {
+		return false;
+	}
+
+	@Override
 	public int getInlineTestSetWordSize() {
 		return 32;
 	}
