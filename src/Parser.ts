@@ -428,7 +428,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	protected triggerEnterRuleEvent(): void {
 		for (let listener of this._parseListeners) {
-			listener.enterEveryRule(this._ctx);
+			if (listener.enterEveryRule) {
+				listener.enterEveryRule(this._ctx);
+			}
+
 			this._ctx.enterRule(listener);
 		}
 	}
@@ -443,7 +446,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		for (let i = this._parseListeners.length-1; i >= 0; i--) {
 			let listener: ParseTreeListener = this._parseListeners[i];
 			this._ctx.exitRule(listener);
-			listener.exitEveryRule(this._ctx);
+			if (listener.exitEveryRule) {
+				listener.exitEveryRule(this._ctx);
+			}
 		}
 	}
 
@@ -606,7 +611,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				let node: ErrorNode = this._ctx.addErrorNode(o);
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
-						listener.visitErrorNode(node);
+						if (listener.visitErrorNode) {
+							listener.visitErrorNode(node);
+						}
 					}
 				}
 			}
@@ -614,7 +621,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				let node: TerminalNode =  this._ctx.addChild(o);
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
-						listener.visitTerminal(node);
+						if (listener.visitTerminal) {
+							listener.visitTerminal(node);
+						}
 					}
 				}
 			}

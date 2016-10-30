@@ -39,11 +39,17 @@ import { ParserRuleContext } from "../ParserRuleContext";
 export class ParseTreeWalker {
     walk(listener: ParseTreeListener, t: ParseTree): void {
 		if ( t instanceof ErrorNode ) {
-			listener.visitErrorNode(t);
+			if (listener.visitErrorNode) {
+				listener.visitErrorNode(t);
+			}
+
 			return;
 		}
 		else if ( t instanceof TerminalNode ) {
-			listener.visitTerminal(t);
+			if (listener.visitTerminal) {
+				listener.visitTerminal(t);
+			}
+
 			return;
 		}
 
@@ -64,14 +70,19 @@ export class ParseTreeWalker {
 	 */
     protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
         let ctx  = r.getRuleContext() as ParserRuleContext;
-		listener.enterEveryRule(ctx);
+		if (listener.enterEveryRule) {
+			listener.enterEveryRule(ctx);
+		}
+
 		ctx.enterRule(listener);
     }
 
     protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
         let ctx = r.getRuleContext() as ParserRuleContext;
 		ctx.exitRule(listener);
-		listener.exitEveryRule(ctx);
+		if (listener.exitEveryRule) {
+			listener.exitEveryRule(ctx);
+		}
     }
 }
 
