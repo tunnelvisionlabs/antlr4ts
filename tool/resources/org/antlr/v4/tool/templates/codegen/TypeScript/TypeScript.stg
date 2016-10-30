@@ -269,7 +269,7 @@ fileHeader(grammarFileName, ANTLRVersion) ::= <<
 // Generated from <grammarFileName> by ANTLR <ANTLRVersion>
 >>
 
-Parser(parser, funcs, atn, sempredFuncs, superClass) ::= <<
+Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
 <Parser_(ctor="parser_ctor", ...)>
 >>
 
@@ -1006,7 +1006,7 @@ import * as Utils from '<basePath()>/misc/Utils';
 <lexer>
 >>
 
-Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass) ::= <<
+Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass, isLexer=true) ::= <<
 export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends <superClass; null="Lexer"> {
 	<lexer.tokens:{k | public static readonly <k>=<lexer.tokens.(k)>;}; separator="\n", wrap, anchor>
 	<if(lexer.channels)>
@@ -1047,7 +1047,7 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 }
 >>
 
-SerializedATN(model, className={<if(lexer)><lexer.name><else><parser.name><endif>}) ::= <<
+SerializedATN(model, className={<if(isLexer)><lexer.name><else><parser.name><endif>}) ::= <<
 <! only one segment, can be inlined !>
 public static readonly _serializedATN: string =
 	"<model.serialized; wrap={"+<\n><\t>"}>";
