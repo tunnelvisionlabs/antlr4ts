@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -19,25 +19,25 @@ export class ParseTreePattern {
 	/**
 	 * This is the backing field for {@link #getPatternRuleIndex()}.
 	 */
-	private patternRuleIndex: number; 
+	private patternRuleIndex: number;
 
 	/**
 	 * This is the backing field for {@link #getPattern()}.
 	 */
 	@NotNull
-	private pattern: string; 
+	private pattern: string;
 
 	/**
 	 * This is the backing field for {@link #getPatternTree()}.
 	 */
 	@NotNull
-	private patternTree: ParseTree; 
+	private patternTree: ParseTree;
 
 	/**
 	 * This is the backing field for {@link #getMatcher()}.
 	 */
 	@NotNull
-	private matcher: ParseTreePatternMatcher; 
+	private matcher: ParseTreePatternMatcher;
 
 	/**
 	 * Construct a new instance of the {@link ParseTreePattern} class.
@@ -50,10 +50,10 @@ export class ParseTreePattern {
 	 * @param patternTree The tree pattern in {@link ParseTree} form.
 	 */
 	constructor(
-		@NotNull matcher: ParseTreePatternMatcher, 
+		@NotNull matcher: ParseTreePatternMatcher,
 		@NotNull pattern: string,
 		patternRuleIndex: number,
-		@NotNull patternTree: ParseTree) 
+		@NotNull patternTree: ParseTree)
 	{
 		this.matcher = matcher;
 		this.patternRuleIndex = patternRuleIndex;

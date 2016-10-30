@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -17,7 +17,7 @@ import { SparseEdgeMap } from './SparseEdgeMap';
  */
 export class SingletonEdgeMap<T> extends AbstractEdgeMap<T> {
 
-	private key: number; 
+	private key: number;
 	private value: T | undefined;
 
 	 constructor(minIndex: number, maxIndex: number, key: number, value: T)  {

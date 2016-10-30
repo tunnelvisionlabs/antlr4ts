@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -15,7 +15,7 @@ import { XPathElement } from "./XPathElement";
  * Either {@code ID} at start of path or {@code ...//ID} in middle of path.
  */
 export class XPathRuleAnywhereElement extends XPathElement {
-	protected ruleIndex: number; 
+	protected ruleIndex: number;
 	 constructor(ruleName: string, ruleIndex: number)  {
 		super(ruleName);
 		this.ruleIndex = ruleIndex;

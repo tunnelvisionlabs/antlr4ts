@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -22,14 +22,14 @@ import * as assert from 'assert';
 export class PredictionContextCache {
     static UNCACHED: PredictionContextCache =  new PredictionContextCache(false);
 
-    private contexts: JavaMap<PredictionContext, PredictionContext> = 
+    private contexts: JavaMap<PredictionContext, PredictionContext> =
         new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> = 
+    private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> =
         new Array2DHashMap<PredictionContextCache.PredictionContextAndInt, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> = 
+    private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> =
         new Array2DHashMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
-    private enableCache: boolean; 
+    private enableCache: boolean;
 
      constructor(enableCache: boolean = true)  {
         this.enableCache = enableCache;
@@ -85,8 +85,8 @@ export class PredictionContextCache {
 
 export namespace PredictionContextCache {
     export class PredictionContextAndInt {
-        private obj: PredictionContext; 
-        private value: number; 
+        private obj: PredictionContext;
+        private value: number;
 
         constructor(obj: PredictionContext, value: number) {
             this.obj = obj;
@@ -116,8 +116,8 @@ export namespace PredictionContextCache {
     }
 
     export class IdentityCommutativePredictionContextOperands {
-        private x: PredictionContext; 
-        private y: PredictionContext; 
+        private x: PredictionContext;
+        private y: PredictionContext;
 
         constructor(x: PredictionContext, y: PredictionContext) {
             assert(x != null);

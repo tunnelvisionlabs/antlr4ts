@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -18,7 +18,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;
 
 	/** Matching attempted at what input index? */
-	private startIndex: number; 
+	private startIndex: number;
 
 	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
 	private deadEndConfigs?: ATNConfigSet;

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -17,7 +17,7 @@ import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
 
 @suite
 export class TestGraphNodes {
-	private contextCache: PredictionContextCache = new PredictionContextCache(); 
+	private contextCache: PredictionContextCache = new PredictionContextCache();
 
 	rootIsWildcard(): boolean { return true; }
 	fullCtx(): boolean { return false; }
@@ -34,7 +34,7 @@ export class TestGraphNodes {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_LOCAL,
 													  PredictionContext.EMPTY_LOCAL);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"*\"];\n" +
@@ -46,7 +46,7 @@ export class TestGraphNodes {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL,
 													  PredictionContext.EMPTY_FULL);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"$\"];\n" +
@@ -57,7 +57,7 @@ export class TestGraphNodes {
 	@Test test_x_$(): void {
 		let r: PredictionContext =  this.contextCache.join(this.x(false), PredictionContext.EMPTY_LOCAL);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"*\"];\n" +
@@ -68,7 +68,7 @@ export class TestGraphNodes {
 	@Test test_x_$_fullctx(): void {
 		let r: PredictionContext =  this.contextCache.join(this.x(true), PredictionContext.EMPTY_FULL);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>$\"];\n" +
@@ -81,7 +81,7 @@ export class TestGraphNodes {
 	@Test test_$_x(): void {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_LOCAL, this.x(false));
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"*\"];\n" +
@@ -92,7 +92,7 @@ export class TestGraphNodes {
 	@Test test_$_x_fullctx(): void {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL, this.x(true));
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>$\"];\n" +
@@ -105,7 +105,7 @@ export class TestGraphNodes {
 	@Test test_a_a(): void {
 		let r: PredictionContext =  this.contextCache.join(this.a(false), this.a(false));
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -121,7 +121,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(xx, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -137,7 +137,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(xx, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -155,7 +155,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.a(false);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -173,7 +173,7 @@ export class TestGraphNodes {
 		let merged: PredictionContext =  this.contextCache.join(left, right);
 		let actual: string =  toDOTString(merged);
 		// console.log(actual);
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>$\"];\n" +
@@ -191,7 +191,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.a(true);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -206,7 +206,7 @@ export class TestGraphNodes {
 	@Test test_a_b(): void {
 		let r: PredictionContext =  this.contextCache.join(this.a(false), this.b(false));
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -223,7 +223,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(xx, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -242,7 +242,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(x2, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -263,7 +263,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(b2, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -286,7 +286,7 @@ export class TestGraphNodes {
 		let a2: PredictionContext =  this.createSingleton(c, 1);
 		let r: PredictionContext =  this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -307,7 +307,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(xx, 2);
 		let r: PredictionContext =  this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -327,7 +327,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(x2, 2);
 		let r: PredictionContext =  this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -345,7 +345,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(this.y(false), 2);
 		let r: PredictionContext =  this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -366,7 +366,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(x2, 2);
 		let r: PredictionContext =  this.contextCache.join(aa, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -385,7 +385,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(x2, 2);
 		let r: PredictionContext =  this.contextCache.join(aa, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -407,7 +407,7 @@ export class TestGraphNodes {
 		let b: PredictionContext =  this.createSingleton(f, 2);
 		let r: PredictionContext =  this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -431,7 +431,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(PredictionContext.EMPTY_FULL);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"$\"];\n" +
@@ -447,7 +447,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(cc);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -466,7 +466,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(a2);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -484,7 +484,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(bb, cc);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -504,7 +504,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(bb);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -521,7 +521,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext = this. array(this.a(false));
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -537,7 +537,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(this.b(false));
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -555,7 +555,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(b);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>\"];\n" +
@@ -577,7 +577,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(a2);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[label=\"0\"];\n" +
@@ -597,7 +597,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(a2, this.d(false));
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -621,7 +621,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(c, d);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>|<p3>\"];\n" +
@@ -651,7 +651,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(b2, d);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -678,7 +678,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(b2, d);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -706,7 +706,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(b2, d);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>\"];\n" +
@@ -731,7 +731,7 @@ export class TestGraphNodes {
 		let A2: PredictionContext =  this.array(c, d);
 		let r: PredictionContext =  this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
-		let expecting: string = 
+		let expecting: string =
 			"digraph G {\n" +
 			"rankdir=LR;\n" +
 			"  s0[shape=record, label=\"<p0>|<p1>|<p2>|<p3>\"];\n" +

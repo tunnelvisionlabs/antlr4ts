@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -26,7 +26,7 @@ const LOAD_FACTOR: number =  0.75;
 
 export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
-	protected comparator: EqualityComparator<T>; 
+	protected comparator: EqualityComparator<T>;
 
 	protected buckets: (T | undefined)[][];
 
@@ -182,7 +182,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 				let b: number =  this.getBucket(o);
 				let bucketLength: number =  newBucketLengths[b];
-				let newBucket: T[]; 
+				let newBucket: T[];
 				if (bucketLength === 0) {
 					// new bucket
 					newBucket = this.createBucket(this.initialBucketCapacity);
@@ -192,7 +192,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 					newBucket = newTable[b];
 					if (bucketLength === newBucket.length) {
 						// expand
-						newBucket.length *= 2; 
+						newBucket.length *= 2;
 					}
 				}
 
@@ -289,7 +289,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 			if ( this.comparator.equals(e, obj) ) {          // found it
 				// shift all elements to the right down one
-				bucket.copyWithin(i, i+1)				
+				bucket.copyWithin(i, i+1)
 				bucket[bucket.length - 1] = undefined;
 				this.n--;
 				return true;
@@ -339,8 +339,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				continue;
 			}
 
-			let i: number; 
-			let j: number; 
+			let i: number;
+			let j: number;
 			for (i = 0, j = 0; i < bucket.length; i++) {
 				if (bucket[i] == null) {
 					break;
@@ -455,7 +455,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected createBuckets(capacity: number): T[][] {
-		return new Array<T[]>(capacity); 
+		return new Array<T[]>(capacity);
 	}
 
 	/**

@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -39,7 +39,7 @@ export abstract class Transition {
 	];
 
 	// @SuppressWarnings("serial")
-	// static serializationTypes: Map<Class<? extends Transition>, number> = 
+	// static serializationTypes: Map<Class<? extends Transition>, number> =
 	// 	Collections.unmodifiableMap(new HashMap<Class<? extends Transition>, Integer>() {{
 	// 		put(EpsilonTransition.class, EPSILON);
 	// 		put(RangeTransition.class, RANGE);

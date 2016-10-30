@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -47,7 +47,7 @@ export abstract class PredictionContext implements Equatable {
 	 *  }
 	 * </pre>
 	 */
-	private readonly cachedHashCode: number; 
+	private readonly cachedHashCode: number;
 
 	 constructor(cachedHashCode: number)  {
 		this.cachedHashCode = cachedHashCode;
@@ -260,7 +260,7 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		// We know parents.length>0 because context.isEmpty() is checked at the beginning of the method.
-		let updated: PredictionContext; 
+		let updated: PredictionContext;
 		if (parents.length === 1) {
 			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
 		} else {
@@ -368,7 +368,7 @@ export abstract class PredictionContext implements Equatable {
 }
 
 class EmptyPredictionContext extends PredictionContext {
-	private fullContext: boolean; 
+	private fullContext: boolean;
 
 	 constructor(fullContext: boolean)  {
 		super(PredictionContext.calculateEmptyHashCode());
@@ -648,8 +648,8 @@ class ArrayPredictionContext extends PredictionContext {
 export class SingletonPredictionContext extends PredictionContext {
 
 	@NotNull
-	parent: PredictionContext; 
-	returnState: number; 
+	parent: PredictionContext;
+	returnState: number;
 
 	constructor(@NotNull parent: PredictionContext, returnState: number) {
 		super(PredictionContext.calculateSingleHashCode(parent, returnState));

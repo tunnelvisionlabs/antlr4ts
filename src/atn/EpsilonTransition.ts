@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -25,7 +25,7 @@ export class EpsilonTransition extends Transition {
 	 * returning from, where the precedence value is 0; otherwise, -1.
 	 *
 	 * @see ATNConfig#isPrecedenceFilterSuppressed()
-	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache) 
+	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache)
 	 * @since 4.4.1
 	 */
 	outermostPrecedenceReturn(): number {

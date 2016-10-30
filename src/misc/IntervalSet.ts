@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -406,7 +406,7 @@ export class IntervalSet implements IntSet {
 			}
 		}
 		return false;
-		/*
+		/*!
 				for (ListIterator iter = intervals.listIterator(); iter.hasNext();) {
 					let I: Interval =  (Interval) iter.next();
 					if ( el<I.a ) {

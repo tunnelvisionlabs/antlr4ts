@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -17,22 +17,22 @@ export class ParseTreeMatch {
 	/**
 	 * This is the backing field for {@link #getTree()}.
 	 */
-	private tree: ParseTree; 
+	private tree: ParseTree;
 
 	/**
 	 * This is the backing field for {@link #getPattern()}.
 	 */
-	private pattern: ParseTreePattern; 
+	private pattern: ParseTreePattern;
 
 	/**
 	 * This is the backing field for {@link #getLabels()}.
 	 */
-	private labels: MultiMap<string, ParseTree>; 
+	private labels: MultiMap<string, ParseTree>;
 
 	/**
 	 * This is the backing field for {@link #getMismatchedNode()}.
 	 */
-	private mismatchedNode?: ParseTree; 
+	private mismatchedNode?: ParseTree;
 
 	/**
 	 * Constructs a new instance of {@link ParseTreeMatch} from the specified

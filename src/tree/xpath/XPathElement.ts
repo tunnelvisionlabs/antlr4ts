@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
@@ -9,8 +9,8 @@ import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 
 export abstract class XPathElement {
-	protected nodeName: string; 
-	public invert: boolean; 
+	protected nodeName: string;
+	public invert: boolean;
 
 	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
 	 *  op is null if just node
