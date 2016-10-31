@@ -1,31 +1,7 @@
-/*
- * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/*!
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 import * as assert from "assert";
 import * as util from "util";
@@ -59,16 +35,16 @@ function findLSBSet(word: number) {
 	let bit = 1;
 	for (let i = 0; i < 16; i++) {
 		if ((word & bit) !== 0) return i;
-		bit = bit << 1;
+		bit = (bit << 1) >>> 0;
 	}
 	throw new RangeError("No specified bit found");
 }
 
 function findMSBSet(word: number) {
-	let bit = 1<<15;;
+	let bit = (1 << 15) >>> 0;
 	for (let i = 15; i >= 0; i--) {
 		if ((word & bit) !== 0) return i;
-		bit = bit >> 1;
+		bit = bit >>> 1;
 	}
 	throw new RangeError("No specified bit found");
 }
@@ -80,8 +56,8 @@ function findMSBSet(word: number) {
 function bitsFor(fromBit: number, toBit: number ): number {
 	fromBit &= 0xF;
 	toBit &= 0xF
-	if (fromBit === toBit) return 1 << fromBit;
-	return ((0xFFFF >> (15-toBit)) ^ (0xFFFF >> (16-fromBit)));
+	if (fromBit === toBit) return (1 << fromBit) >>> 0;
+	return ((0xFFFF >>> (15-toBit)) ^ (0xFFFF >>> (16-fromBit)));
 }
 
 /**
@@ -89,7 +65,7 @@ function bitsFor(fromBit: number, toBit: number ): number {
  */
 const POP_CNT: Uint8Array = new Uint8Array(65536);
 for (let i = 0; i < 16; i++) {
-	const stride = 1 << i;
+	const stride = (1 << i) >>> 0;
 	let index = 0;
 	while (index < POP_CNT.length) {
 		// skip the numbers where the bit isn't set

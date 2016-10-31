@@ -1,31 +1,7 @@
-﻿/*
- * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/*!
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3953157-07:00
@@ -90,9 +66,9 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	@Override
-	protected LB(k: number): Token {
-		if (k === 0 || (this.p - k) < 0) {
-			throw new RangeError("requested lookback index is not valid");
+	protected tryLB(k: number): Token | undefined {
+		if ((this.p - k) < 0) {
+			return undefined;
 		}
 
 		let i: number = this.p;
@@ -105,14 +81,14 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		if (i < 0) {
-			throw new RangeError("requested lookback index is not valid");
+			return undefined;
 		}
 
 		return this.tokens[i];
 	}
 
 	@Override
-	LT(k: number): Token {
+	tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();
 		if (k === 0) {
@@ -120,7 +96,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		if (k < 0) {
-			return this.LB(-k);
+			return this.tryLB(-k);
 		}
 
 		let i: number = this.p;

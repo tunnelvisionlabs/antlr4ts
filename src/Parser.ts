@@ -1,31 +1,7 @@
-﻿/*
- * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/*!
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.4399193-07:00
@@ -54,8 +30,8 @@ import { ParserErrorListener } from './ParserErrorListener';
 import { ParserRuleContext } from './ParserRuleContext';
 import { ParseTreeListener } from './tree/ParseTreeListener';
 import { ParseTreePattern } from './tree/pattern/ParseTreePattern';
-import { ParseTreePatternMatcher } from './tree/pattern/ParseTreePatternMatcher';
-import { ProfilingATNSimulator } from './atn/ProfilingATNSimulator';
+// import { ParseTreePatternMatcher } from './tree/pattern/ParseTreePatternMatcher';
+// import { ProfilingATNSimulator } from './atn/ProfilingATNSimulator';
 import { ProxyParserErrorListener } from './ProxyParserErrorListener';
 import { RecognitionException } from './RecognitionException';
 import { Recognizer } from './Recognizer';
@@ -428,7 +404,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	protected triggerEnterRuleEvent(): void {
 		for (let listener of this._parseListeners) {
-			listener.enterEveryRule(this._ctx);
+			if (listener.enterEveryRule) {
+				listener.enterEveryRule(this._ctx);
+			}
+
 			this._ctx.enterRule(listener);
 		}
 	}
@@ -443,7 +422,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		for (let i = this._parseListeners.length-1; i >= 0; i--) {
 			let listener: ParseTreeListener = this._parseListeners[i];
 			this._ctx.exitRule(listener);
-			listener.exitEveryRule(this._ctx);
+			if (listener.exitEveryRule) {
+				listener.exitEveryRule(this._ctx);
+			}
 		}
 	}
 
@@ -519,8 +500,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			}
 		}
 
-		let m: ParseTreePatternMatcher =  new ParseTreePatternMatcher(lexer, this);
-		return m.compile(pattern, patternRuleIndex);
+		throw new Error("Not implemented");
+		// let m: ParseTreePatternMatcher =  new ParseTreePatternMatcher(lexer, this);
+		// return m.compile(pattern, patternRuleIndex);
 	}
 
 	@NotNull
@@ -605,7 +587,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				let node: ErrorNode = this._ctx.addErrorNode(o);
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
-						listener.visitErrorNode(node);
+						if (listener.visitErrorNode) {
+							listener.visitErrorNode(node);
+						}
 					}
 				}
 			}
@@ -613,7 +597,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				let node: TerminalNode =  this._ctx.addChild(o);
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
-						listener.visitTerminal(node);
+						if (listener.visitTerminal) {
+							listener.visitTerminal(node);
+						}
 					}
 				}
 			}
@@ -665,7 +651,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			this._ctx.stop = this._input.LT(1); // LT(1) will be end of file
 		}
 		else {
-			this._ctx.stop = this._input.LT(-1); // stop node is what we just matched
+			this._ctx.stop = this._input.tryLT(-1); // stop node is what we just matched
 		}
         // trigger event on _ctx, before it reverts to parent
         this.triggerExitRuleEvent();
@@ -716,7 +702,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let previous: ParserRuleContext = this._ctx;
 		previous.parent = localctx;
 		previous.invokingState = state;
-		previous.stop = this._input.LT(-1);
+		previous.stop = this._input.tryLT(-1);
 
 		this._ctx = localctx;
 		this._ctx.start = previous.start;
@@ -729,7 +715,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	unrollRecursionContexts(_parentctx: ParserRuleContext ): void {
 		this._precedenceStack.pop();
-		this._ctx.stop = this._input.LT(-1);
+		this._ctx.stop = this._input.tryLT(-1);
 		let retctx: ParserRuleContext =  this._ctx; // save current ctx (return value)
 
 		// unroll so _ctx is as it was before call to recursive method
@@ -898,7 +884,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			if ( !dfa.isEmpty() ) {
 				if ( seenOne ) console.log();
 				console.log("Decision " + dfa.decision + ":");
-				console.log(dfa.toString(this.getVocabulary(), this.getRuleNames()));
+				process.stdout.write(dfa.toString(this.getVocabulary(), this.getRuleNames()));
 				seenOne = true;
 			}
 		}
@@ -910,36 +896,40 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	@Override
 	getParseInfo(): ParseInfo | undefined {
-		let interp: ParserATNSimulator = this.getInterpreter();
-		if (interp instanceof ProfilingATNSimulator) {
-			return new ParseInfo(interp);
-		}
-		return undefined;
+		throw new Error("Not implemented");
+		// let interp: ParserATNSimulator = this.getInterpreter();
+		// if (interp instanceof ProfilingATNSimulator) {
+		// 	return new ParseInfo(interp);
+		// }
+		// return undefined;
 	}
 
 	/**
 	 * @since 4.3
 	 */
 	setProfile(profile: boolean): void {
-		let interp: ParserATNSimulator = this.getInterpreter();
-		if ( profile ) {
-			if (!(interp instanceof ProfilingATNSimulator)) {
-				this.setInterpreter(new ProfilingATNSimulator(this));
-			}
-		}
-		else if (interp instanceof ProfilingATNSimulator) {
-			this.setInterpreter(new ParserATNSimulator(this.getATN(), this));
-		}
-		this.getInterpreter().setPredictionMode(interp.getPredictionMode());
+		throw new Error("Not implemented");
+		// let interp: ParserATNSimulator = this.getInterpreter();
+		// if ( profile ) {
+		// 	if (!(interp instanceof ProfilingATNSimulator)) {
+		// 		this.setInterpreter(new ProfilingATNSimulator(this));
+		// 	}
+		// }
+		// else if (interp instanceof ProfilingATNSimulator) {
+		// 	this.setInterpreter(new ParserATNSimulator(this.getATN(), this));
+		// }
+		// this.getInterpreter().setPredictionMode(interp.getPredictionMode());
 	}
 
 	/** During a parse is sometimes useful to listen in on the rule entry and exit
 	 *  events as well as token matches. This is for quick and dirty debugging.
 	 */
 	setTrace(trace: boolean): void {
-		if ( !trace && this._tracer) {
-			this.removeParseListener(this._tracer);
-			this._tracer = undefined;
+		if (!trace) {
+			if (this._tracer) {
+				this.removeParseListener(this._tracer);
+				this._tracer = undefined;
+			}
 		}
 		else {
 			if ( this._tracer ) {

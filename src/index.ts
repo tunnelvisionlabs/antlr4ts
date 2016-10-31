@@ -1,3 +1,8 @@
+/*!
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
+ */
 export * from './atn/index';
 export * from './dfa/index';
 export * from './misc/index';
@@ -20,23 +25,23 @@ export * from './DefaultErrorStrategy';
 export * from './DiagnosticErrorListener';
 export * from './FailedPredicateException';
 export * from './InputMismatchException';
-// export * from './InterpreterRuleContext';
+export * from './InterpreterRuleContext';
 export * from './IntStream';
 export * from './Lexer';
-// export * from './LexerInterpreter';
+export * from './LexerInterpreter';
 export * from './LexerNoViableAltException';
 export * from './ListTokenSource';
 export * from './NoViableAltException';
 export * from './Parser';
 export * from './ParserErrorListener';
-// export * from './ParserInterpreter';
+export * from './ParserInterpreter';
 export * from './ParserRuleContext';
 export * from './ProxyErrorListener';
 export * from './ProxyParserErrorListener';
 export * from './RecognitionException';
 export * from './Recognizer';
 export * from './RuleContext';
-// export * from './RuleContextWithAltNum';
+export * from './RuleContextWithAltNum';
 // export * from './RuleDependencies';
 // export * from './RuleDependency';
 // export * from './RuleVersion';

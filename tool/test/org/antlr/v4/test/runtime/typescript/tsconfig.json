@@ -9,22 +9,24 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "declaration": true,
+    "declaration": false,
     "preserveConstEnums": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ],
     "baseUrl": ".",
     "paths": {
-      "antlr4ts/*": [
+      "src/*": [
         "$$ANTLR4TS$$/*"
       ]
     }
   },
+  "include": [
+    "$$src$$/**/*"
+  ],
   "exclude": [
     "node_modules"
   ]

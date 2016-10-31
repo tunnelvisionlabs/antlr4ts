@@ -23,35 +23,38 @@ in individual files can be removed and the antlr4 submodule commit will track th
   * [ ] ANTLRInputStream.constructor(InputStream, number, number)
   * [ ] ANTLRInputStream.load(Reader, number, number)
 * [x] BailErrorStrategy.java
-* [ ] BaseErrorListener.java
+* [x] BaseErrorListener.java
 * [x] BufferedTokenStream.java
 * [x] CharStream.java
 * [x] CommonToken.java
 * [x] CommonTokenFactory.java
 * [x] CommonTokenStream.java
-* [ ] ConsoleErrorListener.java
+* [x] ConsoleErrorListener.java
 * [x] DefaultErrorStrategy.java
 * [ ] Dependents.java
 * [x] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
 * [x] InputMismatchException.java
-* [ ] InterpreterRuleContext.java
+* [x] InterpreterRuleContext.java
 * [x] IntStream.java
 * [x] Lexer.java
-* [ ] LexerInterpreter.java
+* [x] LexerInterpreter.java
 * [x] LexerNoViableAltException.java
 * [x] ListTokenSource.java
 * [x] NoViableAltException.java
 * [x] Parser.java
+  * [ ] `Parser.compileParseTreePattern`
+  * [ ] `Parser.getParseInfo`
+  * [ ] `Parser.setProfile`
 * [x] ParserErrorListener.java
-* [ ] ParserInterpreter.java
+* [x] ParserInterpreter.java
 * [x] ParserRuleContext.java
 * [x] ProxyErrorListener.java
 * [x] ProxyParserErrorListener.java
 * [x] RecognitionException.java
 * [x] Recognizer.java
 * [x] RuleContext.java
-* [ ] RuleContextWithAltNum.java
+* [x] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
 * [ ] RuleVersion.java
@@ -74,7 +77,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\ATNConfig.java
 * [x] atn\ATNConfigSet.java
 * [x] atn\ATNDeserializationOptions.java
-* [ ] atn\ATNDeserializer.java
+* [x] atn\ATNDeserializer.java
 * [ ] atn\ATNSerializer.java
 * [x] atn\ATNSimulator.java
 * [x] atn\ATNState.java
@@ -132,7 +135,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] atn\RuleTransition.java
 * [x] atn\SemanticContext.java
 * [x] atn\SetTransition.java
-* [ ] atn\SimulatorState.java
+* [x] atn\SimulatorState.java
 * [x] atn\SingletonPredictionContext.java
 * [x] atn\StarBlockStartState.java
 * [x] atn\StarLoopbackState.java

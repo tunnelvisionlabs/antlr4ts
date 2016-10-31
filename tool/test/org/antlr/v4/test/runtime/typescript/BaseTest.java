@@ -1,31 +1,7 @@
 /*
- * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 package org.antlr.v4.test.runtime.typescript;
 
@@ -39,7 +15,11 @@ import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.DefaultToolListener;
 import org.antlr.v4.tool.GrammarSemanticsMessage;
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -59,8 +39,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
-import org.junit.Assume;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -84,46 +62,31 @@ public abstract class BaseTest {
 	 */
 	public static final boolean PRESERVE_TEST_DIR = Boolean.parseBoolean(System.getProperty("antlr-preserve-typescript-test-dir"));
 
-	/**
-	 * The base test directory is the directory where generated files get placed
-	 * during unit test execution.
-	 *
-	 * <p>
-	 * The default value for this property is the {@code java.io.tmpdir} system
-	 * property, and can be overridden by setting the
-	 * {@code antlr.java-test-dir} property to a custom location. Note that the
-	 * {@code antlr.java-test-dir} property directly affects the
-	 * {@link #CREATE_PER_TEST_DIRECTORIES} value as well.</p>
-	 */
-	public static final String BASE_TEST_DIR;
+	private static boolean REMOVE_BASE_FOLDER = true;
 
-	/**
-	 * When {@code true}, a temporary directory will be created for each test
-	 * executed during the test run.
-	 *
-	 * <p>
-	 * This value is {@code true} when the {@code antlr.java-test-dir} system
-	 * property is set, and otherwise {@code false}.</p>
-	 */
-	public static final boolean CREATE_PER_TEST_DIRECTORIES;
-
-	static {
-		String baseTestDir = System.getProperty("antlr-typescript-test-dir");
-		boolean perTestDirectories = false;
-		if (baseTestDir == null || baseTestDir.isEmpty()) {
-			baseTestDir = System.getProperty("java.io.tmpdir");
-			perTestDirectories = true;
+	@ClassRule
+	public static final TemporaryFolder BASE_TEST_FOLDER = new TemporaryFolder() {
+		@Override
+		public void delete() {
+			if (REMOVE_BASE_FOLDER) {
+				super.delete();
+			}
 		}
+	};
 
-		if (!new File(baseTestDir).isDirectory()) {
-			throw new UnsupportedOperationException("The specified base test directory does not exist: " + baseTestDir);
+	private boolean removeTestFolder = true;
+
+	@Rule
+	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
+		@Override
+		public void delete() {
+			if (removeTestFolder) {
+				super.delete();
+			}
 		}
+	};
 
-		BASE_TEST_DIR = baseTestDir;
-		CREATE_PER_TEST_DIRECTORIES = perTestDirectories;
-	}
-
-	public String tmpdir = null;
+	public String tmpdir;
 
 	/** If error during parser execution, store stderr here; can't return
      *  stdout and stderr.  This doesn't trap errors from running antlr.
@@ -132,31 +95,26 @@ public abstract class BaseTest {
 
 	@org.junit.Rule
 	public final TestRule testWatcher = new TestWatcher() {
+		@Override
+		protected void failed(Throwable e, Description description) {
+			REMOVE_BASE_FOLDER = false;
+			removeTestFolder = false;
+		}
 
 		@Override
 		protected void succeeded(Description description) {
 			// remove tmpdir if no error.
-			if (!PRESERVE_TEST_DIR) {
-				eraseTempDir();
+			if (PRESERVE_TEST_DIR) {
+				REMOVE_BASE_FOLDER = false;
+				removeTestFolder = false;
 			}
 		}
-
 	};
 
-    @Before
+	@Before
 	public void setUp() throws Exception {
-		if (CREATE_PER_TEST_DIRECTORIES) {
-			// new output dir for each test
-			String testDirectory = getClass().getSimpleName() + "-" + System.currentTimeMillis();
-			tmpdir = new File(BASE_TEST_DIR, testDirectory).getAbsolutePath();
-		}
-		else {
-			tmpdir = new File(BASE_TEST_DIR).getAbsolutePath();
-			if (!PRESERVE_TEST_DIR && new File(tmpdir).exists()) {
-				eraseFiles();
-			}
-		}
-    }
+		tmpdir = TEST_SRC_FOLDER.getRoot().getAbsolutePath();
+	}
 
     protected org.antlr.v4.Tool newTool(String[] args) {
 		Tool tool = new TypeScriptTool(args);
@@ -195,10 +153,10 @@ public abstract class BaseTest {
 		}
 	}
 
-
 	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
 		Collections.addAll(options, extraOptions);
+		options.add("-DbaseImportPath=src");
 		// Uncomment the following lines to show the StringTemplate visualizer when running tests
 		//options.add("-XdbgST");
 		//options.add("-XdbgSTWait");
@@ -406,10 +364,11 @@ public abstract class BaseTest {
 
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
-		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", "install" };
+		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
+		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", script };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
-		pb.directory(new File(tmpdir));
+		pb.directory(BASE_TEST_FOLDER.getRoot());
 		Process process = pb.start();
 		StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
 		StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
@@ -474,11 +433,18 @@ public abstract class BaseTest {
 			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
 			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
 			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target\\src").getAbsolutePath().replace('\\', '/');
-			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$ANTLR4TS$$", antlr4ts), "UTF-8");
+			tsconfigText = tsconfigText.replace("$$ANTLR4TS$$", antlr4ts);
+
+			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", "."), "UTF-8");
+			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "tsconfig.json");
+			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", TEST_SRC_FOLDER.getRoot().getName()), "UTF-8");
 
 			String packageName = "package.json";
 			input = loader.getResourceAsStream(pack + packageName);
-			outputFile = new File(tmpdir, "package.json");
+			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "package.json");
+			FileUtils.copyInputStreamToFile(input, outputFile);
+			input = loader.getResourceAsStream(pack + packageName);
+			outputFile = new File(TEST_SRC_FOLDER.getRoot(), "package.json");
 			FileUtils.copyInputStreamToFile(input, outputFile);
 
 			return true;
@@ -489,12 +455,21 @@ public abstract class BaseTest {
 	}
 
 	public String execTest() {
-		Assume.assumeTrue("Assuming we can run code...", false);
 		try {
 			String node = locateNode();
-			String[] args = new String[] { node, "./Test.js", new File(tmpdir, "input").getAbsolutePath() };
+			String[] args = new String[] { node, "./" + TEST_SRC_FOLDER.getRoot().getName() + "/Test.js", new File(tmpdir, "input").getAbsolutePath() };
 			ProcessBuilder pb = new ProcessBuilder(args);
-			pb.directory(new File(tmpdir));
+
+			// Get the location of the compiled TypeScript runtime for use as the NODE_PATH
+			String pack = BaseTest.class.getPackage().getName().replace(".", "/") + "/";
+			String tsconfigName = "tsconfig.json";
+			final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
+			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
+			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target").getAbsolutePath();
+
+			pb.environment().put("NODE_PATH", antlr4ts);
+			pb.directory(BASE_TEST_FOLDER.getRoot());
 			Process process = pb.start();
 			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
 			StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
@@ -658,15 +633,16 @@ public abstract class BaseTest {
 								 boolean debug)
 	{
 		ST outputFileST = new ST(
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';\n" +
-			"import { ErrorNode } from 'antlr4ts/tree/ErrorNode';\n" +
-			"import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';\n" +
-			"import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';\n" +
-			"import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';\n" +
-			"import { RuleNode } from 'antlr4ts/tree/RuleNode';\n" +
-			"import { TerminalNode } from 'antlr4ts/tree/TerminalNode';\n" +
+			"require('source-map-support').install();\n" +
+			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
+			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
+			"import { DiagnosticErrorListener } from 'src/DiagnosticErrorListener';\n" +
+			"import { ErrorNode } from 'src/tree/ErrorNode';\n" +
+			"import { ParserRuleContext } from 'src/ParserRuleContext';\n" +
+			"import { ParseTreeListener } from 'src/tree/ParseTreeListener';\n" +
+			"import { ParseTreeWalker } from 'src/tree/ParseTreeWalker';\n" +
+			"import { RuleNode } from 'src/tree/RuleNode';\n" +
+			"import { TerminalNode } from 'src/tree/TerminalNode';\n" +
 			"\n" +
 			"import * as fs from 'fs';\n" +
 			"\n" +
@@ -674,9 +650,6 @@ public abstract class BaseTest {
 			"import { <parserName> } from './<parserName>';\n" +
 			"\n" +
 			"class TreeShapeListener implements ParseTreeListener {\n" +
-			"	visitTerminal(node: TerminalNode): void { }\n" +
-			"	visitErrorNode(node: ErrorNode): void { }\n" +
-			"	exitEveryRule(ctx: ParserRuleContext): void { }\n" +
 			"	enterEveryRule(ctx: ParserRuleContext): void {\n" +
 			"		for (let i = 0; i \\< ctx.getChildCount(); i++) {\n" +
 			"			let parent = ctx.getChild(i).getParent();\n" +
@@ -710,10 +683,11 @@ public abstract class BaseTest {
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CharStream } from 'antlr4ts/CharStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { Lexer } from 'antlr4ts/Lexer';\n" +
+			"require('source-map-support').install();\n" +
+			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
+			"import { CharStream } from 'src/CharStream';\n" +
+			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
+			"import { Lexer } from 'src/Lexer';\n" +
 			"import * as fs from 'fs';\n" +
 			"\n" +
 			"import { <lexerName> } from './<lexerName>';\n" +
@@ -723,9 +697,9 @@ public abstract class BaseTest {
 			"let tokens = new CommonTokenStream(lex);\n" +
 			"tokens.fill();\n" +
 			"for (let t of tokens.getTokens()) {\n" +
-			"	console.log(t);\n" +
-			(showDFA?"	console.log(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"") +
-			"}\n"
+			"	console.log(t.toString());\n" +
+			"}\n" +
+			(showDFA?"	process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")
 			);
 
 		outputFileST.add("lexerName", lexerName);

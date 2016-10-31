@@ -7,12 +7,13 @@
   "files": ["target/src/**/*.*",
             "src/**/*.*"],
   "scripts": {
-    "build-tool": "mvn -f tool/pom.xml verify -DskipTests=true",
-    "prepublish": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
-    "pretest": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
+    "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
+    "tsc": "tsc",
+    "prepublish": "npm i tool && npm run antlr4ts && npm run tsc",
+    "pretest": "npm run prepublish",
+
     "test": "mocha",
-    "set": "set",
-    "precover": "java -jar ./tool/target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && tsc",
+    "precover": "npm run prepubish",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch"
@@ -25,7 +26,7 @@
     "ANTLR4",
     "typescript"
   ],
-  "author": "Terence Parr, Sam Harwell and Burt Harris",
+  "author": "Terence Parr, Sam Harwell, and Burt Harris",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/sharwell/antlr4ts/issues"

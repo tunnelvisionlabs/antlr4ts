@@ -1,31 +1,7 @@
-﻿/*
- * [The "BSD license"]
- *  Copyright (c) 2012 Terence Parr
- *  Copyright (c) 2012 Sam Harwell
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. The name of the author may not be used to endorse or promote products
- *     derived from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- *  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- *  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- *  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- *  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/*!
+ * Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+ * All rights reserved.
+ * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.6390614-07:00
@@ -46,14 +22,14 @@ import * as assert from 'assert';
 export class PredictionContextCache {
     static UNCACHED: PredictionContextCache =  new PredictionContextCache(false);
 
-    private contexts: JavaMap<PredictionContext, PredictionContext> = 
+    private contexts: JavaMap<PredictionContext, PredictionContext> =
         new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> = 
+    private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> =
         new Array2DHashMap<PredictionContextCache.PredictionContextAndInt, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> = 
+    private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> =
         new Array2DHashMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
-    private enableCache: boolean; 
+    private enableCache: boolean;
 
      constructor(enableCache: boolean = true)  {
         this.enableCache = enableCache;
@@ -109,8 +85,8 @@ export class PredictionContextCache {
 
 export namespace PredictionContextCache {
     export class PredictionContextAndInt {
-        private obj: PredictionContext; 
-        private value: number; 
+        private obj: PredictionContext;
+        private value: number;
 
         constructor(obj: PredictionContext, value: number) {
             this.obj = obj;
@@ -140,8 +116,8 @@ export namespace PredictionContextCache {
     }
 
     export class IdentityCommutativePredictionContextOperands {
-        private x: PredictionContext; 
-        private y: PredictionContext; 
+        private x: PredictionContext;
+        private y: PredictionContext;
 
         constructor(x: PredictionContext, y: PredictionContext) {
             assert(x != null);
