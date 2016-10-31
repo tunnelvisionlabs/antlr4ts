@@ -1,4 +1,7 @@
 # antlr4ts-cli -- TypeScript/JavaScript target code generator for ANTLR 4
+## Copyright 2016 Terence Parr, Sam Harwell, and Burt Harris
+### All rights reserved.
+> Licensed under the BSD-3-clause license. See [LICENSE](./LICENSE) file in the project root for license information.
 
 :warning: This is pre-release software
 

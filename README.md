@@ -1,9 +1,8 @@
-# antlr4ts
-
-TypeScript/JavaScript target for ANTLR 4
+# antlr4ts - TypeScript/JavaScript target for ANTLR 4
 
 [![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
 
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](./LICENSE)
 
 ## Dev setup - for develping ANTLR4 code targeting TypeScript/JavaScript/CoffeeScript from 
     - [Nodejs Version 6.x or greater](https://nodejs.org/en/)
