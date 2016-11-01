@@ -74,6 +74,24 @@ public abstract class BaseTest {
 		}
 	};
 
+	@Rule
+	public final TestRule testWatcher = new TestWatcher() {
+		@Override
+		protected void failed(Throwable e, Description description) {
+			REMOVE_BASE_FOLDER = false;
+			removeTestFolder = false;
+		}
+
+		@Override
+		protected void succeeded(Description description) {
+			// remove tmpdir if no error.
+			if (PRESERVE_TEST_DIR) {
+				REMOVE_BASE_FOLDER = false;
+				removeTestFolder = false;
+			}
+		}
+	};
+
 	private boolean removeTestFolder = true;
 
 	@Rule
@@ -92,24 +110,6 @@ public abstract class BaseTest {
      *  stdout and stderr.  This doesn't trap errors from running antlr.
      */
 	protected String stderrDuringParse;
-
-	@org.junit.Rule
-	public final TestRule testWatcher = new TestWatcher() {
-		@Override
-		protected void failed(Throwable e, Description description) {
-			REMOVE_BASE_FOLDER = false;
-			removeTestFolder = false;
-		}
-
-		@Override
-		protected void succeeded(Description description) {
-			// remove tmpdir if no error.
-			if (PRESERVE_TEST_DIR) {
-				REMOVE_BASE_FOLDER = false;
-				removeTestFolder = false;
-			}
-		}
-	};
 
 	@Before
 	public void setUp() throws Exception {
