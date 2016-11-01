@@ -92,7 +92,7 @@ public abstract class BaseTest {
 		}
 	};
 
-	private boolean removeTestFolder = true;
+	private boolean removeTestFolder = false;
 
 	@Rule
 	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
@@ -365,7 +365,7 @@ public abstract class BaseTest {
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
 		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
-		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", script };
+		String[] args = { "npm.cmd", script };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.directory(BASE_TEST_FOLDER.getRoot());
@@ -396,7 +396,7 @@ public abstract class BaseTest {
 
 	private String locateNode() {
 		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\node.exe";
+			return "node.exe";
 		} else {
 			return new File(tmpdir, "node").getAbsolutePath();
 		}
@@ -404,7 +404,7 @@ public abstract class BaseTest {
 
 	private String locateNpm() {
 		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\npm.cmd";
+			return "npm.cmd";
 		} else {
 			return new File(tmpdir, "npm").getAbsolutePath();
 		}
