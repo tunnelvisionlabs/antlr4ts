@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.junit.rules.RuleChain;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -67,6 +68,16 @@ public abstract class BaseTest {
 	@ClassRule
 	public static final TemporaryFolder BASE_TEST_FOLDER = new TemporaryFolder() {
 		@Override
+		public void create() throws IOException {
+			File testTmpdir = new File(System.getProperty("java.io.tmpdir"));
+			if (!testTmpdir.mkdirs()) {
+				assertTrue(testTmpdir.isDirectory());
+			}
+
+			super.create();
+		}
+
+		@Override
 		public void delete() {
 			if (REMOVE_BASE_FOLDER) {
 				super.delete();
@@ -74,7 +85,9 @@ public abstract class BaseTest {
 		}
 	};
 
-	@Rule
+	/**
+	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
+	 */
 	public final TestRule testWatcher = new TestWatcher() {
 		@Override
 		protected void failed(Throwable e, Description description) {
@@ -94,7 +107,9 @@ public abstract class BaseTest {
 
 	private boolean removeTestFolder = true;
 
-	@Rule
+	/**
+	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
+	 */
 	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
 		@Override
 		public void delete() {
@@ -105,6 +120,9 @@ public abstract class BaseTest {
 	};
 
 	public String tmpdir;
+
+	@Rule
+	public final RuleChain tmpdirRuleChain = RuleChain.outerRule(TEST_SRC_FOLDER).around(testWatcher);
 
 	/** If error during parser execution, store stderr here; can't return
      *  stdout and stderr.  This doesn't trap errors from running antlr.
@@ -365,7 +383,7 @@ public abstract class BaseTest {
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
 		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
-		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", script };
+		String[] args = { locateNpm(), script };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.directory(BASE_TEST_FOLDER.getRoot());
@@ -390,33 +408,32 @@ public abstract class BaseTest {
 		return "tsc";
 	}
 
-	private boolean isWindows() {
-		return System.getProperty("os.name").toLowerCase().contains("windows");
-	}
-
 	private String locateNode() {
-		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\node.exe";
-		} else {
-			return new File(tmpdir, "node").getAbsolutePath();
+		String programFiles = System.getenv("PROGRAMFILES");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
 		}
+
+		programFiles = System.getenv("PROGRAMFILES(x86)");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
+		}
+
+		return "node";
 	}
 
 	private String locateNpm() {
-		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\npm.cmd";
-		} else {
-			return new File(tmpdir, "npm").getAbsolutePath();
+		String programFiles = System.getenv("PROGRAMFILES");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
 		}
-	}
 
-	private String locateTool(String tool) {
-		String[] roots = { "/usr/bin/", "/usr/local/bin/" };
-		for(String root : roots) {
-			if(new File(root + tool).exists())
-				return root + tool;
+		programFiles = System.getenv("PROGRAMFILES(x86)");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
 		}
-		throw new RuntimeException("Could not locate " + tool);
+
+		return "npm";
 	}
 
 	public boolean createProject() {
