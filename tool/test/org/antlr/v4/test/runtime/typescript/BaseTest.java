@@ -365,7 +365,7 @@ public abstract class BaseTest {
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
 		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
-		String[] args = { "C:\\Program Files (x86)\\nodejs\\npm.cmd", script };
+		String[] args = { locateNpm(), script };
 		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.directory(BASE_TEST_FOLDER.getRoot());
@@ -390,33 +390,32 @@ public abstract class BaseTest {
 		return "tsc";
 	}
 
-	private boolean isWindows() {
-		return System.getProperty("os.name").toLowerCase().contains("windows");
-	}
-
 	private String locateNode() {
-		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\node.exe";
-		} else {
-			return new File(tmpdir, "node").getAbsolutePath();
+		String programFiles = System.getenv("PROGRAMFILES");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
 		}
+
+		programFiles = System.getenv("PROGRAMFILES(x86)");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
+		}
+
+		return "node";
 	}
 
 	private String locateNpm() {
-		if (isWindows()) {
-			return "C:\\Program Files (x86)\\nodejs\\npm.cmd";
-		} else {
-			return new File(tmpdir, "npm").getAbsolutePath();
+		String programFiles = System.getenv("PROGRAMFILES");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
 		}
-	}
 
-	private String locateTool(String tool) {
-		String[] roots = { "/usr/bin/", "/usr/local/bin/" };
-		for(String root : roots) {
-			if(new File(root + tool).exists())
-				return root + tool;
+		programFiles = System.getenv("PROGRAMFILES(x86)");
+		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
+			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
 		}
-		throw new RuntimeException("Could not locate " + tool);
+
+		return "npm";
 	}
 
 	public boolean createProject() {
