@@ -67,6 +67,16 @@ public abstract class BaseTest {
 	@ClassRule
 	public static final TemporaryFolder BASE_TEST_FOLDER = new TemporaryFolder() {
 		@Override
+		public void create() throws IOException {
+			File testTmpdir = new File(System.getProperty("java.io.tmpdir"));
+			if (!testTmpdir.mkdirs()) {
+				assertTrue(testTmpdir.isDirectory());
+			}
+
+			super.create();
+		}
+
+		@Override
 		public void delete() {
 			if (REMOVE_BASE_FOLDER) {
 				super.delete();
