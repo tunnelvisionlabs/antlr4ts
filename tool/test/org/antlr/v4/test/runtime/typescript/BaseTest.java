@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.junit.rules.RuleChain;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -84,7 +85,9 @@ public abstract class BaseTest {
 		}
 	};
 
-	@Rule
+	/**
+	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
+	 */
 	public final TestRule testWatcher = new TestWatcher() {
 		@Override
 		protected void failed(Throwable e, Description description) {
@@ -104,7 +107,9 @@ public abstract class BaseTest {
 
 	private boolean removeTestFolder = true;
 
-	@Rule
+	/**
+	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
+	 */
 	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
 		@Override
 		public void delete() {
@@ -115,6 +120,9 @@ public abstract class BaseTest {
 	};
 
 	public String tmpdir;
+
+	@Rule
+	public final RuleChain tmpdirRuleChain = RuleChain.outerRule(TEST_SRC_FOLDER).around(testWatcher);
 
 	/** If error during parser execution, store stderr here; can't return
      *  stdout and stderr.  This doesn't trap errors from running antlr.
