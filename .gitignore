@@ -42,6 +42,7 @@ jspm_packages/
 /test/tool/gen/
 /target/
 /tool/target/
+doc/
 
 # Visual Studio build output and per-user files
 obj/

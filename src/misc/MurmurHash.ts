@@ -49,16 +49,16 @@ export namespace MurmurHash {
 			value = (value as Equatable).hashCode();
 		}
 
-		let k: number = value as number;
-		k = k * c1;
-		k = ((k << r1) | (k >>> (32 - r1))) >>> 0;
-		k = k * c2;
+		let k: number = value;
+		k = Math.imul(k, c1);
+		k = (k << r1) | (k >>> (32 - r1));
+		k = Math.imul(k, c2);
 
 		hash = hash ^ k;
-		hash = ((hash << r2) | (hash >>> (32 - r2))) >>> 0;
-		hash = hash * m + n;
+		hash = (hash << r2) | (hash >>> (32 - r2));
+		hash = Math.imul(hash, m) + n;
 
-		return hash;
+		return hash & 0xFFFFFFFF;
 	}
 
 
@@ -73,9 +73,9 @@ export namespace MurmurHash {
 	export function finish(hash: number, numberOfWords: number): number {
 		hash = hash ^ (numberOfWords * 4);
 		hash = hash ^ (hash >>> 16);
-		hash = hash * 0x85EBCA6B;
+		hash = Math.imul(hash, 0x85EBCA6B);
 		hash = hash ^ (hash >>> 13);
-		hash = hash * 0xC2B2AE35;
+		hash = Math.imul(hash, 0xC2B2AE35);
 		hash = hash ^ (hash >>> 16);
 		return hash;
 	}

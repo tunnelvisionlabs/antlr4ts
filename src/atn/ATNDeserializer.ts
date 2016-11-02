@@ -76,18 +76,18 @@ export class ATNDeserializer {
 	/**
 	 * This is the earliest supported serialized UUID.
 	 */
-	private static BASE_SERIALIZED_UUID: UUID = UUID.fromString("E4178468-DF95-44D0-AD87-F22A5D5FB6D3");
+	private static readonly BASE_SERIALIZED_UUID: UUID = UUID.fromString("E4178468-DF95-44D0-AD87-F22A5D5FB6D3");
 	/**
 	 * This UUID indicates an extension of {@link #ADDED_PRECEDENCE_TRANSITIONS}
 	 * for the addition of lexer actions encoded as a sequence of
 	 * {@link LexerAction} instances.
 	 */
-	private static ADDED_LEXER_ACTIONS: UUID = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
+	private static readonly ADDED_LEXER_ACTIONS: UUID = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
 	/**
 	 * This list contains all of the currently supported UUIDs, ordered by when
 	 * the feature first appeared in this branch.
 	 */
-	private static SUPPORTED_UUIDS: UUID[] = [
+	private static readonly SUPPORTED_UUIDS: UUID[] = [
 		ATNDeserializer.BASE_SERIALIZED_UUID,
 		ATNDeserializer.ADDED_LEXER_ACTIONS
 	];
@@ -95,10 +95,10 @@ export class ATNDeserializer {
 	/**
 	 * This is the current serialized UUID.
 	 */
-	private static SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_LEXER_ACTIONS;
+	private static readonly SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_LEXER_ACTIONS;
 
 	@NotNull
-	private deserializationOptions: ATNDeserializationOptions;
+	private readonly deserializationOptions: ATNDeserializationOptions;
 
 	 constructor(deserializationOptions?: ATNDeserializationOptions)  {
 		if (deserializationOptions == null) {
@@ -229,7 +229,7 @@ export class ATNDeserializer {
 		//
 		let nrules: number = ATNDeserializer.toInt(data[p++]);
 		if ( atn.grammarType === ATNType.LEXER ) {
-			atn.ruleToTokenType = new Array<number>(nrules);
+			atn.ruleToTokenType = new Int32Array(nrules);
 		}
 
 		atn.ruleToStartState = new Array<RuleStartState>(nrules);
@@ -453,7 +453,7 @@ export class ATNDeserializer {
 		}
 
 		if (this.deserializationOptions.isGenerateRuleBypassTransitions() && atn.grammarType === ATNType.PARSER) {
-			atn.ruleToTokenType = new Array<number>(atn.ruleToStartState.length);
+			atn.ruleToTokenType = new Int32Array(atn.ruleToStartState.length);
 			for (let i = 0; i < atn.ruleToStartState.length; i++) {
 				atn.ruleToTokenType[i] = atn.maxTokenType + i + 1;
 			}

@@ -230,7 +230,7 @@ export class Trees {
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
 				if ( Trees.isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
-					t.children[i] = new TerminalNode(abbrev); // HACK access to private
+					t.children![i] = new TerminalNode(abbrev); // HACK access to private
 				}
 			}
 		}

@@ -46,7 +46,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	children: ParseTree[];
+	children?: ParseTree[];
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -75,7 +75,7 @@ export class ParserRuleContext extends RuleContext {
 	 * The exception that forced this rule to return. If the rule successfully
 	 * completed, this is {@code null}.
 	 */
-	exception: RecognitionException;
+	exception?: RecognitionException;
 
 	constructor();
 	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);

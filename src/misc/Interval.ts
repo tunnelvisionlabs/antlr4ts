@@ -18,7 +18,7 @@ export class Interval implements Equatable {
 		return Interval._INVALID;
 	}
 
-	private static cache: Interval[] = new Array<Interval>(INTERVAL_POOL_MAX_VALUE + 1);
+	private static readonly cache: Interval[] = new Array<Interval>(INTERVAL_POOL_MAX_VALUE + 1);
 
 	/**
 	 * @param a The start of the interval

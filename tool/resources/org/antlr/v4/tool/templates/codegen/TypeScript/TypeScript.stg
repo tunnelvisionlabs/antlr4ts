@@ -552,14 +552,14 @@ TestSetInline(s) ::= <<
 <s.bitsets:{bits | <if(rest(rest(bits.ttypes)))><bitsetBitfieldComparison(s, bits)><else><bitsetInlineComparison(s, bits)><endif>}; separator=" || ">
 >>
 
-// Java language spec 15.19 - shift operators mask operands rather than overflow to 0... need range test
+// Need a range test to make sure the shift amount will result in a testable bitmask
 testShiftInRange(shiftAmount) ::= <<
-((<shiftAmount>) & ~0x3f) === 0
+((<shiftAmount>) & ~0x1F) === 0
 >>
 
 // produces smaller bytecode only when bits.ttypes contains more than two items
 bitsetBitfieldComparison(s, bits) ::= <%
-(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1 \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1 \<\< <offsetShift({<parser.name>.<ttype>}, bits.shift)>)}; separator=" | ">)) != 0)
+(<testShiftInRange({<offsetShift(s.varName, bits.shift)>})> && ((1 \<\< <offsetShift(s.varName, bits.shift)>) & (<bits.ttypes:{ttype | (1 \<\< <offsetShift({<parser.name>.<ttype>}, bits.shift)>)}; separator=" | ">)) !== 0)
 %>
 
 isZero ::= [

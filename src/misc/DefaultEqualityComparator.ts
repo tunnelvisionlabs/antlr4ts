@@ -17,7 +17,7 @@ import { ObjectEqualityComparator } from './ObjectEqualityComparator';
  * @author Sam Harwell
  */
 export class DefaultEqualityComparator implements EqualityComparator<any> {
-	static INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
+	static readonly INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
 
 	/**
 	 * {@inheritDoc}

@@ -98,7 +98,7 @@ export namespace PredictionMode {
 	}
 
 	class AltAndContextConfigEqualityComparator implements EqualityComparator<ATNConfig> {
-		static INSTANCE: AltAndContextConfigEqualityComparator =  new AltAndContextConfigEqualityComparator();
+		static readonly INSTANCE: AltAndContextConfigEqualityComparator =  new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
 		}

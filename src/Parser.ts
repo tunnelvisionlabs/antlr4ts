@@ -72,7 +72,7 @@ class TraceListener implements ParseTreeListener {
 }
 
 class TrimToSizeListener implements ParseTreeListener {
-	static INSTANCE: TrimToSizeListener =  new TrimToSizeListener();
+	static readonly INSTANCE: TrimToSizeListener =  new TrimToSizeListener();
 
 	@Override
 	visitTerminal(node: TerminalNode): void {
@@ -162,10 +162,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * The number of syntax errors reported during parsing. This value is
 	 * incremented each time {@link #notifyErrorListeners} is called.
 	 */
-	protected _syntaxErrors: number;
+	protected _syntaxErrors: number = 0;
 
 	/** Indicates parser has match()ed EOF token. See {@link #exitRule()}. */
-	protected matchedEOF: boolean;
+	protected matchedEOF: boolean = false;
 
 	constructor(input: TokenStream)  {
 		super();

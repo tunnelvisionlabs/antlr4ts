@@ -13,8 +13,8 @@ import { RuleStopState } from './RuleStopState';
 
 export class RuleStartState extends ATNState {
 	stopState: RuleStopState;
-	isPrecedenceRule: boolean;
-	leftFactored: boolean;
+	isPrecedenceRule: boolean = false;
+	leftFactored: boolean = false;
 
 	@Override
 	getStateType(): ATNStateType {
