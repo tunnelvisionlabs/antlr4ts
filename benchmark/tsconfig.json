@@ -16,11 +16,10 @@
       "./node_modules/@types"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ]
   },
   "include": [
-    "src", "test"
+    "TestPerformance.ts"
   ]
 }
