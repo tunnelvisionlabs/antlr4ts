@@ -23,11 +23,11 @@ import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
 
 export class DFA {
-	/** A set of all DFA states. Use {@link Map} so we can get old state back
-	 *  ({@link Set} only allows you to see if it's there).
-     */
-    @NotNull
-	readonly states: Array2DHashSet<DFAState> =  new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
+	/**
+	 * A set of all states in the `DFA`.
+	 */
+	@NotNull
+	readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
 
 	s0: DFAState | undefined;
 
