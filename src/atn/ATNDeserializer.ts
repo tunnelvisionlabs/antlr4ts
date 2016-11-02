@@ -229,7 +229,7 @@ export class ATNDeserializer {
 		//
 		let nrules: number = ATNDeserializer.toInt(data[p++]);
 		if ( atn.grammarType === ATNType.LEXER ) {
-			atn.ruleToTokenType = new Array<number>(nrules);
+			atn.ruleToTokenType = new Int32Array(nrules);
 		}
 
 		atn.ruleToStartState = new Array<RuleStartState>(nrules);
@@ -453,7 +453,7 @@ export class ATNDeserializer {
 		}
 
 		if (this.deserializationOptions.isGenerateRuleBypassTransitions() && atn.grammarType === ATNType.PARSER) {
-			atn.ruleToTokenType = new Array<number>(atn.ruleToStartState.length);
+			atn.ruleToTokenType = new Int32Array(atn.ruleToStartState.length);
 			for (let i = 0; i < atn.ruleToStartState.length; i++) {
 				atn.ruleToTokenType[i] = atn.maxTokenType + i + 1;
 			}

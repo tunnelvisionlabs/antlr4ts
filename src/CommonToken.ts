@@ -28,7 +28,7 @@ export class CommonToken implements WritableToken {
 	/**
 	 * This is the backing field for {@link #getLine} and {@link #setLine}.
 	 */
-	protected line: number;
+	protected line: number = 0;
 	/**
 	 * This is the backing field for {@link #getCharPositionInLine} and
 	 * {@link #setCharPositionInLine}.

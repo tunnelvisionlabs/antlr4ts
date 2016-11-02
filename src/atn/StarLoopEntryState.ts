@@ -24,7 +24,7 @@ export class StarLoopEntryState extends DecisionState {
 	 *
 	 * @see DFA#isPrecedenceDfa()
 	 */
-	precedenceRuleDecision: boolean;
+	precedenceRuleDecision: boolean = false;
 
 	@Override
 	getStateType(): ATNStateType {

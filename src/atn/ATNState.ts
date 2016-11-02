@@ -96,7 +96,7 @@ export abstract class ATNState {
 
 	stateNumber: number = ATNState.INVALID_STATE_NUMBER;
 
-	ruleIndex: number;  // at runtime, we don't have Rule objects
+	ruleIndex: number = 0;  // at runtime, we don't have Rule objects
 
 	epsilonOnlyTransitions: boolean = false;
 
@@ -106,7 +106,7 @@ export abstract class ATNState {
 	protected optimizedTransitions: Transition[] = this.transitions;
 
 	/** Used to cache lookahead during parsing, not used during construction */
-	nextTokenWithinRule: IntervalSet;
+	nextTokenWithinRule?: IntervalSet;
 
 	/**
 	 * Gets the state number.

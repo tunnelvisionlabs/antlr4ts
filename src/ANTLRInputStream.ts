@@ -33,7 +33,7 @@ export class ANTLRInputStream implements CharStream {
 	protected p: number = 0;
 
 	/** What is name or source of this char stream? */
-	name: string;
+	name?: string;
 
 	/** Copy data in string to a local char array */
 	constructor(input: string)  {

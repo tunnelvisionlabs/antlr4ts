@@ -69,7 +69,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * {@link #tokens} is trivial with this field.</li>
 	 * <ul>
 	 */
-	protected fetchedEOF: boolean;
+	protected fetchedEOF: boolean = false;
 
 	constructor(@NotNull tokenSource: TokenSource) {
 		if (tokenSource == null) {

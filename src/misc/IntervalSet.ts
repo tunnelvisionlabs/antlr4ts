@@ -52,7 +52,7 @@ export class IntervalSet implements IntSet {
 	/** The list of sorted, disjoint intervals. */
 	protected intervals: Interval[];
 
-	protected readonly: boolean;
+	protected readonly: boolean = false;
 
 	constructor(intervals?: Interval[]) {
 		if (intervals != null) {

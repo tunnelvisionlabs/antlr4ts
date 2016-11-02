@@ -28,18 +28,22 @@ export class IntegerList {
 	constructor(arg?: number | IntegerList | Iterable<number>) {
 		if (!arg) {
 			this._data = EMPTY_DATA;
+			this._size = 0;
 		} else if (arg instanceof IntegerList) {
 			this._data = arg._data.slice(0);
 			this._size = arg._size;
 		} else if (typeof arg === 'number') {
 			if (arg === 0) {
 				this._data = EMPTY_DATA;
+				this._size = 0;
 			} else {
 				this._data = new Int32Array(arg);
+				this._size = 0;
 			}
 		} else {
 			// arg is Iterable<number>
 			this._data = EMPTY_DATA;
+			this._size = 0;
 			for (let value of arg) {
 				this.add(value);
 			}
