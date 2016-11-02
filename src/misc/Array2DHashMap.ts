@@ -366,7 +366,20 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	iterator(): JavaIterator<V> {
-		throw new Error("Not implemented");
+		let delegate: JavaIterator<Bucket<K, V>> = this.backingStore.iterator();
+		return {
+			hasNext(): boolean {
+				return delegate.hasNext();
+			},
+
+			next(): V {
+				return delegate.next().value!;
+			},
+
+			remove(): void {
+				throw new Error("Not supported");
+			}
+		};
 	}
 
 	remove(o: any): boolean {
