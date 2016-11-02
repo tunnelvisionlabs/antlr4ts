@@ -36,6 +36,7 @@ import { Interval } from '../../src/misc/Interval';
 import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
 import { Lexer } from '../../src/Lexer';
 import { LexerATNSimulator } from '../../src/atn/LexerATNSimulator';
+import { MurmurHash } from '../../src/misc/MurmurHash';
 import { NotNull } from '../../src/Decorators';
 import { ObjectEqualityComparator } from '../../src/misc/ObjectEqualityComparator';
 import { Override } from '../../src/Decorators';
@@ -179,27 +180,35 @@ export class Stopwatch {
 	}
 }
 
-export interface Checksum {
+export interface Hash {
 	getValue(): number;
 
 	reset(): void;
 
-	update(byte: number): void;
+	update(i: number): void;
 }
 
-class CRC32 implements Checksum {
-	private value: number;
+class Murmur implements Hash {
+	private readonly seed?: number;
+	private hash: number;
+	private wordCount: number = 0;
+
+	constructor(seed?: number) {
+		this.reset();
+	}
 
 	getValue(): number {
-		return this.value & 0xFFFFFFFF;
+		return MurmurHash.finish(this.hash, this.wordCount);
 	}
 
 	reset(): void {
-		this.value = 0;
+		this.hash = MurmurHash.initialize(this.seed);
+		this.wordCount = 0;
 	}
 
-	update(byte: number): void {
-		throw new Error("Not implemented");
+	update(i: number): void {
+		this.hash = MurmurHash.update(this.hash, i);
+		this.wordCount++;
 	}
 }
 
@@ -312,7 +321,7 @@ export class TestPerformance {
 	 * {@code true} to compute a checksum for verifying consistency across
 	 * optimizations and multiple passes.
 	 */
-	private static readonly COMPUTE_CHECKSUM: boolean =  false;
+	private static readonly COMPUTE_CHECKSUM: boolean =  true;
     /**
      * This value is passed to {@link Parser#setBuildParseTree}.
      */
@@ -927,7 +936,7 @@ export class TestPerformance {
 			results.push(futureChecksum());
         }
 
-		let checksum: Checksum =  new CRC32();
+		let checksum: Hash =  new Murmur();
 		let currentIndex: number =  -1;
 		for (let future of results) {
 			currentIndex++;
@@ -970,7 +979,7 @@ export class TestPerformance {
 		// executorService.shutdown();
 		// executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-        console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${inputSize / 1024} KB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${checksum.getValue()}` : ''}): ${startTime.elapsedMillis()}ms`);
+        console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${inputSize / 1024} KB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${startTime.elapsedMillis()}ms`);
 
 		if (TestPerformance.sharedLexers.length > 0) {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
@@ -1207,12 +1216,9 @@ export class TestPerformance {
 		return result;
 	}
 
-	public static updateChecksum(checksum: Checksum, value: number | Token | undefined): void {
+	public static updateChecksum(checksum: Hash, value: number | Token | undefined): void {
 		if (typeof value === 'number') {
-			checksum.update((value) & 0xFF);
-			checksum.update((value >>> 8) & 0xFF);
-			checksum.update((value >>> 16) & 0xFF);
-			checksum.update((value >>> 24) & 0xFF);
+			checksum.update(value);
 		} else {
 			let token: Token | undefined = value;
 			if (token == null) {
@@ -1261,7 +1267,7 @@ export class TestPerformance {
                 // @SuppressWarnings("unused")
 				// @Override
                 parseFile(input: CharStream, currentPass: number, thread: number): FileParseResult {
-					let checksum: Checksum =  new CRC32();
+					let checksum: Hash =  new Murmur();
 
 					let startTime: Stopwatch = Stopwatch.startNew();
 					assert(thread >= 0 && thread < TestPerformance.NUMBER_OF_THREADS);
@@ -1945,9 +1951,9 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	private static ENTER_RULE: number =  3;
 	private static EXIT_RULE: number =  4;
 
-	private checksum: Checksum;
+	private checksum: Hash;
 
-	constructor(checksum: Checksum) {
+	constructor(checksum: Hash) {
 		this.checksum = checksum;
 	}
 
