@@ -47,10 +47,6 @@ export class DFA {
 
 	private nextStateNumber: number = 0;
 
-	private minDfaEdge: number;
-
-	private maxDfaEdge: number;
-
 	/**
 	 * {@code true} if this DFA is for a precedence decision; otherwise,
 	 * {@code false}. This is the backing field for {@link #isPrecedenceDfa}.
@@ -66,15 +62,6 @@ export class DFA {
 		this.atn = atnStartState.atn;
 		this.decision = decision;
 
-		if (this.atn.grammarType == ATNType.LEXER) {
-			this.minDfaEdge = LexerATNSimulator.MIN_DFA_EDGE;
-			this.maxDfaEdge = LexerATNSimulator.MAX_DFA_EDGE;
-		}
-		else {
-			this.minDfaEdge = Token.EOF;
-			this.maxDfaEdge = atnStartState.atn.maxTokenType;
-		}
-
 		let isPrecedenceDfa: boolean =  false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
@@ -85,14 +72,6 @@ export class DFA {
 		}
 
 		this.precedenceDfa = isPrecedenceDfa;
-	}
-
-	getMinDfaEdge(): number {
-		return this.minDfaEdge;
-	}
-
-	getMaxDfaEdge(): number {
-		return this.maxDfaEdge;
 	}
 
 	/**
