@@ -71,30 +71,6 @@ class TraceListener implements ParseTreeListener {
 	}
 }
 
-class TrimToSizeListener implements ParseTreeListener {
-	static readonly INSTANCE: TrimToSizeListener =  new TrimToSizeListener();
-
-	@Override
-	visitTerminal(node: TerminalNode): void {
-	}
-
-	@Override
-	visitErrorNode(node: ErrorNode): void {
-	}
-
-	@Override
-	enterEveryRule(ctx: ParserRuleContext): void {
-	}
-
-	@Override
-	exitEveryRule(ctx: ParserRuleContext): void {
-		// Not clear if there is an equivilant in JavaScript...
-		// if (ctx.children instanceof Array) {
-		// 	((Array<?>)ctx.children).trimToSize();
-		// }
-	}
-}
-
 /** This is all the parsing support code essentially; most of it is error recovery stuff. */
 export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
@@ -298,34 +274,6 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	getBuildParseTree(): boolean {
 		return this._buildParseTrees;
-	}
-
-	/**
-	 * Trim the internal lists of the parse tree during parsing to conserve memory.
-	 * This property is set to {@code false} by default for a newly constructed parser.
-	 *
-	 * @param trimParseTrees {@code true} to trim the capacity of the {@link ParserRuleContext#children}
-	 * list to its size after a rule is parsed.
-	 */
-	setTrimParseTree(trimParseTrees: boolean): void {
-		if (trimParseTrees) {
-			if (this.getTrimParseTree()) {
-				return;
-			}
-
-			this.addParseListener(TrimToSizeListener.INSTANCE);
-		}
-		else {
-			this.removeParseListener(TrimToSizeListener.INSTANCE);
-		}
-	}
-
-	/**
-	 * @return {@code true} if the {@link ParserRuleContext#children} list is trimmed
-	 * using the default {@link Parser.TrimToSizeListener} during the parse process.
-	 */
-	getTrimParseTree(): boolean {
-		return !!this._parseListeners.find((i) => i === TrimToSizeListener.INSTANCE);
 	}
 
 	@NotNull
