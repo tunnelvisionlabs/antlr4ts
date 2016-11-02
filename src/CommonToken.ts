@@ -18,7 +18,7 @@ export class CommonToken implements WritableToken {
 	 * An empty {@link Tuple2} which is used as the default value of
 	 * {@link #source} for tokens that do not have a source.
 	 */
-	protected static EMPTY_SOURCE: { source?: TokenSource, stream?: CharStream } =
+	protected static readonly EMPTY_SOURCE: { source?: TokenSource, stream?: CharStream } =
 		{ source: undefined, stream: undefined };
 
 	/**

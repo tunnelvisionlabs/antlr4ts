@@ -18,7 +18,7 @@ import { ObjectEqualityComparator } from './ObjectEqualityComparator';
  * @author Sam Harwell
  */
 export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> {
-	static INSTANCE: ArrayEqualityComparator = new ArrayEqualityComparator();
+	static readonly INSTANCE: ArrayEqualityComparator = new ArrayEqualityComparator();
 
 	/**
 	 * {@inheritDoc}

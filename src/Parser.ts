@@ -72,7 +72,7 @@ class TraceListener implements ParseTreeListener {
 }
 
 class TrimToSizeListener implements ParseTreeListener {
-	static INSTANCE: TrimToSizeListener =  new TrimToSizeListener();
+	static readonly INSTANCE: TrimToSizeListener =  new TrimToSizeListener();
 
 	@Override
 	visitTerminal(node: TerminalNode): void {
