@@ -25,9 +25,9 @@ export class JavaUnicodeInputStream implements CharStream {
 	private escapeCharacters: IntegerList =  new IntegerList();
 	private escapeIndirectionLevels: IntegerList =  new IntegerList();
 
-	private escapeListIndex: number;
-	private range: number;
-	private slashCount: number;
+	private escapeListIndex: number = 0;
+	private range: number = 0;
+	private slashCount: number = 0;
 
 	private la1: number;
 
