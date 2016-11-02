@@ -56,7 +56,7 @@ export class DFASerializer {
 		let buf = "";
 
 		if ( this.dfa.states ) {
-			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.values().toArray());
+			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
