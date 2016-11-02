@@ -24,7 +24,7 @@ import { TransitionType } from './TransitionType';
  *  ATN transitions.</p>
  */
 export abstract class Transition {
-	static serializationNames: string[] = [
+	static readonly serializationNames: string[] = [
 		"INVALID",
 		"EPSILON",
 		"RANGE",

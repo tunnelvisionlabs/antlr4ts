@@ -13,9 +13,9 @@ import { NotNull } from '../Decorators';
  * @author Sam Harwell
  */
 export class ATNDeserializationOptions {
-	private static defaultOptions: ATNDeserializationOptions;
+	private static defaultOptions?: ATNDeserializationOptions;
 
-	private readOnly: boolean;
+	private readOnly: boolean = false;
 	private verifyATN: boolean;
 	private generateRuleBypassTransitions: boolean;
 	private optimize: boolean;

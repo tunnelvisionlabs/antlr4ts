@@ -738,7 +738,7 @@ export namespace PredictionContext {
 	}
 
 	export class IdentityEqualityComparator implements EqualityComparator<PredictionContext> {
-		static INSTANCE: IdentityEqualityComparator =  new IdentityEqualityComparator();
+		static readonly INSTANCE: IdentityEqualityComparator =  new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
 		}

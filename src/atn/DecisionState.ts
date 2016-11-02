@@ -10,6 +10,6 @@ import { ATNState } from './ATNState';
 
 export abstract class DecisionState extends ATNState {
 	decision: number = -1;
-	nonGreedy: boolean;
-	sll: boolean;
+	nonGreedy: boolean = false;
+	sll: boolean = false;
 }

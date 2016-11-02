@@ -26,14 +26,14 @@ export class VocabularyImpl implements Vocabulary {
 	 * except {@link Token#EOF}.</p>
 	 */
 	@NotNull
-	static EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
+	static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
-	private literalNames: (string | undefined)[];
+	private readonly literalNames: (string | undefined)[];
 	@NotNull
-	private symbolicNames: (string | undefined)[];
+	private readonly symbolicNames: (string | undefined)[];
 	@NotNull
-	private displayNames: (string | undefined)[];
+	private readonly displayNames: (string | undefined)[];
 
 	private maxTokenType: number;
 

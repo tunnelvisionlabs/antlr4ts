@@ -17,6 +17,7 @@ export abstract class XPathElement {
 	 */
 	 constructor(nodeName: string)  {
 		this.nodeName = nodeName;
+		this.invert = false;
 	}
 
 	/**

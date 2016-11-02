@@ -8,7 +8,8 @@ import { Equatable } from './Stubs';
 import { MurmurHash } from './MurmurHash';
 
 export class UUID implements Equatable {
-	private data: Uint32Array;
+	private readonly data: Uint32Array;
+
 	constructor(mostSigBits: number, moreSigBits: number, lessSigBits: number, leastSigBits: number) {
 		this.data = new Uint32Array(4);
 		this.data[0] = mostSigBits;
