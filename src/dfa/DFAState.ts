@@ -11,7 +11,6 @@ import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { BitSet } from '../misc/BitSet';
 import { DFA } from './DFA';
-import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerActionExecutor } from '../atn/LexerActionExecutor';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
@@ -70,19 +69,13 @@ export class DFAState {
 	predicates: DFAState.PredPrediction[] | undefined;
 
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ configs: ATNConfigSet);
-	constructor(/*@NotNull*/ emptyEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ emptyContextEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ configs: ATNConfigSet);
-	constructor(arg0: DFA | EmptyEdgeMap<DFAState>, arg1: ATNConfigSet | EmptyEdgeMap<DFAState>, arg2?: ATNConfigSet) {
-		let emptyContextEdges: EmptyEdgeMap<DFAState>;
-		let emptyEdges: EmptyEdgeMap<DFAState>;
+	constructor(/*@NotNull*/ configs: ATNConfigSet);
+	constructor(arg0: DFA | ATNConfigSet, arg1?: ATNConfigSet) {
 		let configs: ATNConfigSet;
 		if (arg0 instanceof DFA) {
-			emptyEdges = arg0.getEmptyEdgeMap();
-			emptyContextEdges = arg0.getEmptyContextEdgeMap();
 			configs = <ATNConfigSet>arg1;
 		} else {
-			emptyEdges = arg0;
-			emptyContextEdges = <EmptyEdgeMap<DFAState>>arg1;
-			configs = <ATNConfigSet>arg2;
+			configs = <ATNConfigSet>arg0;
 		}
 
 		this.configs = configs;

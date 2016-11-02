@@ -13,7 +13,6 @@ import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
 import { DFASerializer } from './DFASerializer';
 import { DFAState } from './DFAState';
-import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerATNSimulator } from '../atn/LexerATNSimulator';
 import { LexerDFASerializer } from './LexerDFASerializer';
 import { NotNull } from '../Decorators';
@@ -52,16 +51,6 @@ export class DFA {
 
 	private maxDfaEdge: number;
 
-	@NotNull
-	private static emptyPrecedenceEdges: EmptyEdgeMap<DFAState> =
-		new EmptyEdgeMap<DFAState>(0, 200);
-
-	@NotNull
-	private emptyEdgeMap: EmptyEdgeMap<DFAState>;
-
-	@NotNull
-	private emptyContextEdgeMap: EmptyEdgeMap<DFAState>;
-
 	/**
 	 * {@code true} if this DFA is for a precedence decision; otherwise,
 	 * {@code false}. This is the backing field for {@link #isPrecedenceDfa}.
@@ -86,15 +75,12 @@ export class DFA {
 			this.maxDfaEdge = atnStartState.atn.maxTokenType;
 		}
 
-		this.emptyEdgeMap = new EmptyEdgeMap<DFAState>(this.minDfaEdge, this.maxDfaEdge);
-		this.emptyContextEdgeMap = new EmptyEdgeMap<DFAState>(-1, atnStartState.atn.states.length - 1);
-
 		let isPrecedenceDfa: boolean =  false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
 				isPrecedenceDfa = true;
-				this.s0 = new DFAState(DFA.emptyPrecedenceEdges, this.getEmptyContextEdgeMap(), new ATNConfigSet());
-				this.s0full = new DFAState(DFA.emptyPrecedenceEdges, this.getEmptyContextEdgeMap(), new ATNConfigSet());
+				this.s0 = new DFAState(new ATNConfigSet());
+				this.s0full = new DFAState(new ATNConfigSet());
 			}
 		}
 
@@ -107,16 +93,6 @@ export class DFA {
 
 	getMaxDfaEdge(): number {
 		return this.maxDfaEdge;
-	}
-
-	@NotNull
-	getEmptyEdgeMap(): EmptyEdgeMap<DFAState> {
-		return this.emptyEdgeMap;
-	}
-
-	@NotNull
-	getEmptyContextEdgeMap(): EmptyEdgeMap<DFAState> {
-		return this.emptyContextEdgeMap;
 	}
 
 	/**
@@ -190,7 +166,7 @@ export class DFA {
 	isEmpty(): boolean {
 		if (this.isPrecedenceDfa()) {
 			// s0 and s0full are never null for a precedence DFA
-			return (<DFAState>this.s0).getEdgeMap().size === 0 && (<DFAState>this.s0full).getEdgeMap().size === 0;
+			return this.s0!.getEdgeMap().size === 0 && this.s0full!.getEdgeMap().size === 0;
 		}
 
 		return this.s0 == null && this.s0full == null;

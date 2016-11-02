@@ -9,7 +9,6 @@
 import { ATN } from './ATN';
 import { ATNConfigSet } from './ATNConfigSet';
 import { DFAState } from '../dfa/DFAState';
-import { EmptyEdgeMap } from '../dfa/EmptyEdgeMap';
 import { NotNull } from '../Decorators';
 import { PredictionContext } from './PredictionContext';
 
@@ -19,7 +18,7 @@ export abstract class ATNSimulator {
 	@NotNull
 	static get ERROR(): DFAState {
 		if (!ATNSimulator._ERROR) {
-			ATNSimulator._ERROR = new DFAState(new EmptyEdgeMap<DFAState>(0, -1), new EmptyEdgeMap<DFAState>(0, -1), new ATNConfigSet());
+			ATNSimulator._ERROR = new DFAState(new ATNConfigSet());
 			ATNSimulator._ERROR.stateNumber = PredictionContext.EMPTY_FULL_STATE_KEY;
 		}
 
