@@ -41,6 +41,7 @@ src/tree/xpath/XPathLexer.tokens
 src/tree/xpath/XPathLexer.ts
 /target/
 /tool/target/
+doc/
 
 # Visual Studio build output and per-user files
 obj/
