@@ -727,9 +727,6 @@ export namespace LexerATNSimulator {
 	export const debug: boolean =  false;
 	export const dfa_debug: boolean =  false;
 
-	export const MIN_DFA_EDGE: number =  0;
-	export const MAX_DFA_EDGE: number =  127; // forces unicode to stay in ATN
-
 	/** When we hit an accept state in either the DFA or the ATN, we
 	 *  have to notify the character stream to start buffering characters
 	 *  via {@link IntStream#mark} and record the current state. The current sim state

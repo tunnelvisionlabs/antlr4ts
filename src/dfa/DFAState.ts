@@ -6,13 +6,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.7771056-07:00
 
-import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { BitSet } from '../misc/BitSet';
 import { DFA } from './DFA';
-import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerActionExecutor } from '../atn/LexerActionExecutor';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
@@ -54,13 +52,13 @@ export class DFAState {
 	/** {@code edges.get(symbol)} points to target of symbol.
 	 */
 	@NotNull
-	private edges: AbstractEdgeMap<DFAState>;
+	private readonly edges: Map<number, DFAState>;
 
 	private acceptStateInfo: AcceptStateInfo | undefined;
 
 	/** These keys for these edges are the top level element of the global context. */
 	@NotNull
-	private contextEdges: AbstractEdgeMap<DFAState>;
+	private readonly contextEdges: Map<number, DFAState>;
 
 	/** Symbols in this set require a global context transition before matching an input symbol. */
 	private contextSymbols: BitSet | undefined;
@@ -71,24 +69,18 @@ export class DFAState {
 	predicates: DFAState.PredPrediction[] | undefined;
 
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ configs: ATNConfigSet);
-	constructor(/*@NotNull*/ emptyEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ emptyContextEdges: EmptyEdgeMap<DFAState>, /*@NotNull*/ configs: ATNConfigSet);
-	constructor(arg0: DFA | EmptyEdgeMap<DFAState>, arg1: ATNConfigSet | EmptyEdgeMap<DFAState>, arg2?: ATNConfigSet) {
-		let emptyContextEdges: EmptyEdgeMap<DFAState>;
-		let emptyEdges: EmptyEdgeMap<DFAState>;
+	constructor(/*@NotNull*/ configs: ATNConfigSet);
+	constructor(arg0: DFA | ATNConfigSet, arg1?: ATNConfigSet) {
 		let configs: ATNConfigSet;
 		if (arg0 instanceof DFA) {
-			emptyEdges = arg0.getEmptyEdgeMap();
-			emptyContextEdges = arg0.getEmptyContextEdgeMap();
 			configs = <ATNConfigSet>arg1;
 		} else {
-			emptyEdges = arg0;
-			emptyContextEdges = <EmptyEdgeMap<DFAState>>arg1;
-			configs = <ATNConfigSet>arg2;
+			configs = <ATNConfigSet>arg0;
 		}
 
 		this.configs = configs;
-		this.edges = emptyEdges;
-		this.contextEdges = emptyContextEdges;
+		this.edges = new Map<number, DFAState>();
+		this.contextEdges = new Map<number, DFAState>();
 	}
 
 	isContextSensitive(): boolean {
@@ -96,20 +88,16 @@ export class DFAState {
 	}
 
 	isContextSymbol(symbol: number): boolean {
-		if (!this.isContextSensitive() || symbol < this.edges.minIndex) {
+		if (!this.isContextSensitive()) {
 			return false;
 		}
 
-		return (<BitSet>this.contextSymbols).get(symbol - this.edges.minIndex);
+		return this.contextSymbols!.get(symbol);
 	}
 
 	setContextSymbol(symbol: number): void {
 		assert(this.isContextSensitive());
-		if (symbol < this.edges.minIndex) {
-			return;
-		}
-
-		(<BitSet>this.contextSymbols).set(symbol - this.edges.minIndex);
+		this.contextSymbols!.set(symbol);
 	}
 
 	setContextSensitive(atn: ATN): void {
@@ -156,11 +144,11 @@ export class DFAState {
 	}
 
 	setTarget(symbol: number, target: DFAState): void {
-		this.edges = this.edges.put(symbol, target);
+		this.edges.set(symbol, target);
 	}
 
 	getEdgeMap(): Map<number, DFAState> {
-		return this.edges.toMap();
+		return this.edges;
 	}
 
 	getContextTarget(invokingState: number): DFAState | undefined {
@@ -180,11 +168,11 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		this.contextEdges = this.contextEdges.put(invokingState, target);
+		this.contextEdges.set(invokingState, target);
 	}
 
 	getContextEdgeMap(): Map<number, DFAState> {
-		let map: Map<number, DFAState> =  this.contextEdges.toMap();
+		let map = new Map<number, DFAState>(this.contextEdges);
 		if (map.has(-1)) {
 			if (map.size === 1) {
 				let result = new Map<number, DFAState>();
