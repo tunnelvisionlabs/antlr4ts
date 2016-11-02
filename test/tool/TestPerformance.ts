@@ -987,7 +987,7 @@ export class TestPerformance {
 		// executorService.shutdown();
 		// executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-        console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${inputSize / 1024} KB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${startTime.elapsedMillis()}ms`);
+        console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${Math.round(startTime.elapsedMillis())}ms`);
 
 		if (TestPerformance.sharedLexers.length > 0) {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
