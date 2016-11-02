@@ -14,6 +14,15 @@ import { Override } from '../../src/Decorators';
 
 import * as assert from 'assert';
 
+const BACKSLASH = '\\'.charCodeAt(0);
+const LOWER_U = 'u'.charCodeAt(0);
+const UPPER_A = 'A'.charCodeAt(0);
+const LOWER_A = 'a'.charCodeAt(0);
+const UPPER_F = 'F'.charCodeAt(0);
+const LOWER_F = 'f'.charCodeAt(0);
+const DIGIT_0 = '0'.charCodeAt(0);
+const DIGIT_9 = '9'.charCodeAt(0);
+
 /**
  *
  * @author Sam Harwell
@@ -62,7 +71,7 @@ export class JavaUnicodeInputStream implements CharStream {
 
 	@Override
 	consume(): void {
-		if (this.la1 != '\\'.charCodeAt(0)) {
+		if (this.la1 !== BACKSLASH) {
 			this.source.consume();
 			this.la1 = this.source.LA(1);
 			this.range = Math.max(this.range, this.source.index());
@@ -93,7 +102,7 @@ export class JavaUnicodeInputStream implements CharStream {
 
 	@Override
 	LA(i: number): number {
-		if (i === 1 && this.la1 !== '\\'.charCodeAt(0)) {
+		if (i === 1 && this.la1 !== BACKSLASH) {
 			return this.la1;
 		}
 
@@ -170,7 +179,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		this.la1 = this.source.LA(1);
 
 		this.slashCount = 0;
-		while (this.source.LA(-this.slashCount - 1) === '\\'.charCodeAt(0)) {
+		while (this.source.LA(-this.slashCount - 1) === BACKSLASH) {
 			this.slashCount++;
 		}
 
@@ -181,22 +190,22 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	private static isHexDigit(c: number): boolean {
-		return c >= '0'.charCodeAt(0) && c <= '9'.charCodeAt(0)
-			|| c >= 'a'.charCodeAt(0) && c <= 'f'.charCodeAt(0)
-			|| c >= 'A'.charCodeAt(0) && c <= 'F'.charCodeAt(0);
+		return c >= DIGIT_0 && c <= DIGIT_9
+			|| c >= LOWER_A && c <= LOWER_F
+			|| c >= UPPER_A && c <= UPPER_F;
 	}
 
 	private static hexValue(c: number): number {
-		if (c >= '0'.charCodeAt(0) && c <= '9'.charCodeAt(0)) {
-			return c - '0'.charCodeAt(0);
+		if (c >= DIGIT_0 && c <= DIGIT_9) {
+			return c - DIGIT_0;
 		}
 
-		if (c >= 'a'.charCodeAt(0) && c <= 'f'.charCodeAt(0)) {
-			return c - 'a'.charCodeAt(0) + 10;
+		if (c >= LOWER_A && c <= LOWER_F) {
+			return c - LOWER_A + 10;
 		}
 
-		if (c >= 'A'.charCodeAt(0) && c <= 'F'.charCodeAt(0)) {
-			return c - 'A'.charCodeAt(0) + 10;
+		if (c >= UPPER_A && c <= UPPER_F) {
+			return c - UPPER_A + 10;
 		}
 
 		throw new Error("IllegalArgumentException: c");
@@ -210,15 +219,15 @@ export class JavaUnicodeInputStream implements CharStream {
 		let blockUnicodeEscape: boolean =  (slashCountPtr[0] % 2) !== 0;
 
 		let c0: number = this.source.LA(nextIndexPtr[0] - this.index() + 1);
-		if (c0 === '\\'.charCodeAt(0)) {
+		if (c0 === BACKSLASH) {
 			slashCountPtr[0]++;
 
 			if (!blockUnicodeEscape) {
 				let c1: number =  this.source.LA(nextIndexPtr[0] - this.index() + 2);
-				if (c1 === 'u'.charCodeAt(0)) {
+				if (c1 === LOWER_U) {
 					let c2: number =  this.source.LA(nextIndexPtr[0] - this.index() + 3);
 					indirectionLevelPtr[0] = 0;
-					while (c2 === 'u'.charCodeAt(0)) {
+					while (c2 === LOWER_U) {
 						indirectionLevelPtr[0]++;
 						c2 = this.source.LA(nextIndexPtr[0] - this.index() + 3 + indirectionLevelPtr[0]);
 					}
