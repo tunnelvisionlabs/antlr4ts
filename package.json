@@ -4,6 +4,7 @@
   "description": "Antlr4 runtime for JavaScript written in Typescript",
   "main": "index.js",
   "scripts": {
+    "clean": "git clean -d -i -x",
     "antlr4ts-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
     "tsc": "tsc",
     "prepublish": "npm i tool && npm run tsc && npm run typedoc",
