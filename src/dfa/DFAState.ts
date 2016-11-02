@@ -6,7 +6,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.7771056-07:00
 
-import { AbstractEdgeMap } from './AbstractEdgeMap';
 import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
@@ -54,13 +53,13 @@ export class DFAState {
 	/** {@code edges.get(symbol)} points to target of symbol.
 	 */
 	@NotNull
-	private edges: AbstractEdgeMap<DFAState>;
+	private readonly edges: Map<number, DFAState>;
 
 	private acceptStateInfo: AcceptStateInfo | undefined;
 
 	/** These keys for these edges are the top level element of the global context. */
 	@NotNull
-	private contextEdges: AbstractEdgeMap<DFAState>;
+	private readonly contextEdges: Map<number, DFAState>;
 
 	/** Symbols in this set require a global context transition before matching an input symbol. */
 	private contextSymbols: BitSet | undefined;
@@ -87,8 +86,8 @@ export class DFAState {
 		}
 
 		this.configs = configs;
-		this.edges = emptyEdges;
-		this.contextEdges = emptyContextEdges;
+		this.edges = new Map<number, DFAState>();
+		this.contextEdges = new Map<number, DFAState>();
 	}
 
 	isContextSensitive(): boolean {
@@ -96,20 +95,16 @@ export class DFAState {
 	}
 
 	isContextSymbol(symbol: number): boolean {
-		if (!this.isContextSensitive() || symbol < this.edges.minIndex) {
+		if (!this.isContextSensitive()) {
 			return false;
 		}
 
-		return (<BitSet>this.contextSymbols).get(symbol - this.edges.minIndex);
+		return this.contextSymbols!.get(symbol);
 	}
 
 	setContextSymbol(symbol: number): void {
 		assert(this.isContextSensitive());
-		if (symbol < this.edges.minIndex) {
-			return;
-		}
-
-		(<BitSet>this.contextSymbols).set(symbol - this.edges.minIndex);
+		this.contextSymbols!.set(symbol);
 	}
 
 	setContextSensitive(atn: ATN): void {
@@ -156,11 +151,11 @@ export class DFAState {
 	}
 
 	setTarget(symbol: number, target: DFAState): void {
-		this.edges = this.edges.put(symbol, target);
+		this.edges.set(symbol, target);
 	}
 
 	getEdgeMap(): Map<number, DFAState> {
-		return this.edges.toMap();
+		return this.edges;
 	}
 
 	getContextTarget(invokingState: number): DFAState | undefined {
@@ -180,11 +175,11 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		this.contextEdges = this.contextEdges.put(invokingState, target);
+		this.contextEdges.set(invokingState, target);
 	}
 
 	getContextEdgeMap(): Map<number, DFAState> {
-		let map: Map<number, DFAState> =  this.contextEdges.toMap();
+		let map = new Map<number, DFAState>(this.contextEdges);
 		if (map.has(-1)) {
 			if (map.size === 1) {
 				let result = new Map<number, DFAState>();
