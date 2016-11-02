@@ -30,7 +30,6 @@ import { DefaultErrorStrategy } from '../../src/DefaultErrorStrategy';
 import { DFA } from '../../src/dfa/DFA';
 import { DFAState } from '../../src/dfa/DFAState';
 import { DiagnosticErrorListener } from '../../src/DiagnosticErrorListener';
-import { EmptyEdgeMap } from '../../src/dfa/EmptyEdgeMap';
 import { ErrorNode } from '../../src/tree/ErrorNode';
 import { Interval } from '../../src/misc/Interval';
 import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
@@ -1939,18 +1938,14 @@ class NonCachingLexerATNSimulator extends StatisticsLexerATNSimulator {
 }
 
 class NonCachingParserATNSimulator extends StatisticsParserATNSimulator {
-	private static emptyMap: EmptyEdgeMap<DFAState> =  new EmptyEdgeMap<DFAState>(-1, -1);
-
 	constructor(atn: ATN, parser: Parser) {
 		super(atn, parser);
 	}
 
-	@NotNull
 	@Override
-	protected createDFAState(@NotNull dfa: DFA, @NotNull configs: ATNConfigSet): DFAState {
-		return new DFAState(NonCachingParserATNSimulator.emptyMap, dfa.getEmptyContextEdgeMap(), configs);
+	protected setDFAEdge(p: DFAState, t: number, q: DFAState): void {
+		// Do not set the edge
 	}
-
 }
 
 class ChecksumParseTreeListener implements ParseTreeListener {
