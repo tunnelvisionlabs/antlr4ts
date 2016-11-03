@@ -35,7 +35,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	protected threshold: number =  Math.floor(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
 
-	protected currentPrime: number =  1; // jump by 4 primes each expand or whatever
 	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
 
 	constructor(comparator?: EqualityComparator<T>, initialCapacity?: number, initialBucketCapacity?: number);
@@ -56,7 +55,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 			this.n = comparatorOrSet.n;
 			this.threshold = comparatorOrSet.threshold;
-			this.currentPrime = comparatorOrSet.currentPrime;
 			this.initialBucketCapacity = comparatorOrSet.initialBucketCapacity;
 		} else {
 			this.comparator = comparatorOrSet || DefaultEqualityComparator.INSTANCE;
@@ -161,7 +159,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	protected expand(): void {
 		let old =  this.buckets;
-		this.currentPrime += 4;
 		let newCapacity: number =  this.buckets.length * 2;
 		let newTable: T[][] =  this.createBuckets(newCapacity);
 		let newBucketLengths: Uint32Array = new Uint32Array(newTable.length);
