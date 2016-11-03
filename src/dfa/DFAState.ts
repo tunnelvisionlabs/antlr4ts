@@ -73,9 +73,9 @@ export class DFAState {
 	constructor(arg0: DFA | ATNConfigSet, arg1?: ATNConfigSet) {
 		let configs: ATNConfigSet;
 		if (arg0 instanceof DFA) {
-			configs = <ATNConfigSet>arg1;
+			configs = arg1!;
 		} else {
-			configs = <ATNConfigSet>arg0;
+			configs = arg0;
 		}
 
 		this.configs = configs;

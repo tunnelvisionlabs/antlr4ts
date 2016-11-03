@@ -56,14 +56,14 @@ export class DFASerializer {
 		let buf = "";
 
 		if ( this.dfa.states ) {
-			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.values().toArray());
+			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
 				let edges: Map<number, DFAState> =  s.getEdgeMap();
-				let edgeKeys = new Array<number>(...edges.keys()).sort();
+				let edgeKeys = [...edges.keys()].sort((a, b) => a - b);
 				let contextEdges: Map<number, DFAState> =  s.getContextEdgeMap();
-				let contextEdgeKeys = new Array<number>(...contextEdges.keys()).sort();
+				let contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
 				for (let entry of edgeKeys) {
 					let value = edges.get(entry);
 					if ((value == null || value === ATNSimulator.ERROR) && !s.isContextSymbol(entry)) {

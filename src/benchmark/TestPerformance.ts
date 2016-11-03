@@ -1001,7 +1001,7 @@ class TestPerformance {
 					}
 
 					states += dfa.states.size();
-					for (let state of asIterable(dfa.states.values())) {
+					for (let state of asIterable<DFAState>(dfa.states)) {
 						configs += state.configs.size();
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -1018,7 +1018,7 @@ class TestPerformance {
 						}
 
 						let modeConfigs: number =  0;
-						for (let state of asIterable(dfa.states.values())) {
+						for (let state of asIterable<DFAState>(dfa.states)) {
 							modeConfigs += state.configs.size();
 						}
 
@@ -1048,7 +1048,7 @@ class TestPerformance {
                     }
 
                     states += dfa.states.size();
-					for (let state of asIterable(dfa.states.values())) {
+					for (let state of asIterable<DFAState>(dfa.states)) {
 						configs += state.configs.size();
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -1071,7 +1071,7 @@ class TestPerformance {
 						}
 
 						let decisionConfigs: number =  0;
-						for (let state of asIterable(dfa.states.values())) {
+						for (let state of asIterable<DFAState>(dfa.states)) {
 							decisionConfigs += state.configs.size();
 						}
 
@@ -1144,7 +1144,7 @@ class TestPerformance {
                 }
 
                 if (TestPerformance.SHOW_CONFIG_STATS) {
-                    for (let state of asIterable(dfa.states.keySet())) {
+                    for (let state of asIterable<DFAState>(dfa.states)) {
                         if (state.configs.size() >= contextsInDFAState.length) {
 							let contextsInDFAState2 = new Int32Array(state.configs.size() + 1);
 							contextsInDFAState2.set(contextsInDFAState);
@@ -1174,7 +1174,7 @@ class TestPerformance {
                 }
 
                 if (TestPerformance.EXPORT_LARGEST_CONFIG_CONTEXTS) {
-                    for (let state of asIterable(dfa.states.keySet())) {
+                    for (let state of asIterable<DFAState>(dfa.states)) {
                         for (let config of asIterable(state.configs)) {
                             let configOutput: string =  config.toDotString();
                             if (configOutput.length <= this.configOutputSize) {
