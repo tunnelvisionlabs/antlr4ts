@@ -1,3 +1,4 @@
 --require source-map-support/register
 --recursive 
-target/test
+--compiler ts=ts-node/register
+test/*.ts

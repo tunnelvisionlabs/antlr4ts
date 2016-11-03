@@ -10,8 +10,8 @@ import * as assert from 'assert';
 import assertEquals = assert.equal;
 import { test as Test, suite } from 'mocha-typescript';
 
-import { PredictionContext } from '../../src/atn/PredictionContext';
-import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
+import { PredictionContext } from '../../atn/PredictionContext';
+import { PredictionContextCache } from '../../atn/PredictionContextCache';
 
 /// Assuming that IdentityHashMap<K, V> == Map<K, V>;
 
