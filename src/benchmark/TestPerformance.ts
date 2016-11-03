@@ -13,51 +13,51 @@
 // import static org.junit.Assert.assertThat;
 // import static org.junit.Assert.assertTrue;
 require('source-map-support').install();
-import { ANTLRErrorListener } from 'antlr4ts/target/ANTLRErrorListener';
-import { ANTLRInputStream } from 'antlr4ts/target/ANTLRInputStream';
-import { Array2DHashSet } from 'antlr4ts/target/misc/Array2DHashSet';
-import { asIterable } from 'antlr4ts/target/misc/Stubs';
-import { ATN } from 'antlr4ts/target/atn/ATN';
-import { ATNConfig } from 'antlr4ts/target/atn/ATNConfig';
-import { ATNConfigSet } from 'antlr4ts/target/atn/ATNConfigSet';
-import { ATNDeserializer } from 'antlr4ts/target/atn/ATNDeserializer';
-import { BailErrorStrategy } from 'antlr4ts/target/BailErrorStrategy';
-import { BaseErrorListener } from 'antlr4ts/target/BaseErrorListener';
-import { BitSet } from 'antlr4ts/target/misc/BitSet';
-import { CharStream } from 'antlr4ts/target/CharStream';
-import { CommonTokenStream } from 'antlr4ts/target/CommonTokenStream';
-import { DefaultErrorStrategy } from 'antlr4ts/target/DefaultErrorStrategy';
-import { DFA } from 'antlr4ts/target/dfa/DFA';
-import { DFAState } from 'antlr4ts/target/dfa/DFAState';
-import { DiagnosticErrorListener } from 'antlr4ts/target/DiagnosticErrorListener';
-import { ErrorNode } from 'antlr4ts/target/tree/ErrorNode';
-import { Interval } from 'antlr4ts/target/misc/Interval';
+import { ANTLRErrorListener } from '../ANTLRErrorListener';
+import { ANTLRInputStream } from '../ANTLRInputStream';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
+import { asIterable } from '../misc/Stubs';
+import { ATN } from '../atn/ATN';
+import { ATNConfig } from '../atn/ATNConfig';
+import { ATNConfigSet } from '../atn/ATNConfigSet';
+import { ATNDeserializer } from '../atn/ATNDeserializer';
+import { BailErrorStrategy } from '../BailErrorStrategy';
+import { BaseErrorListener } from '../BaseErrorListener';
+import { BitSet } from '../misc/BitSet';
+import { CharStream } from '../CharStream';
+import { CommonTokenStream } from '../CommonTokenStream';
+import { DefaultErrorStrategy } from '../DefaultErrorStrategy';
+import { DFA } from '../dfa/DFA';
+import { DFAState } from '../dfa/DFAState';
+import { DiagnosticErrorListener } from '../DiagnosticErrorListener';
+import { ErrorNode } from '../tree/ErrorNode';
+import { Interval } from '../misc/Interval';
 import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
-import { Lexer } from 'antlr4ts/target/Lexer';
-import { LexerATNSimulator } from 'antlr4ts/target/atn/LexerATNSimulator';
-import { MurmurHash } from 'antlr4ts/target/misc/MurmurHash';
-import { NotNull } from 'antlr4ts/target/Decorators';
-import { ObjectEqualityComparator } from 'antlr4ts/target/misc/ObjectEqualityComparator';
-import { Override } from 'antlr4ts/target/Decorators';
-import { ParseCancellationException } from 'antlr4ts/target/misc/ParseCancellationException';
-import { Parser } from 'antlr4ts/target/Parser';
-import { ParserATNSimulator } from 'antlr4ts/target/atn/ParserATNSimulator';
-import { ParserInterpreter } from 'antlr4ts/target/ParserInterpreter';
-import { ParserRuleContext } from 'antlr4ts/target/ParserRuleContext';
-import { ParseTree } from 'antlr4ts/target/tree/ParseTree';
-import { ParseTreeListener } from 'antlr4ts/target/tree/ParseTreeListener';
-import { ParseTreeWalker } from 'antlr4ts/target/tree/ParseTreeWalker';
-import { PredictionContextCache } from 'antlr4ts/target/atn/PredictionContextCache';
-import { PredictionMode } from 'antlr4ts/target/atn/PredictionMode';
-import { RecognitionException } from 'antlr4ts/target/RecognitionException';
-import { Recognizer } from 'antlr4ts/target/Recognizer';
-import { SimulatorState } from 'antlr4ts/target/atn/SimulatorState';
-import { TerminalNode } from 'antlr4ts/target/tree/TerminalNode';
-import { Token } from 'antlr4ts/target/Token';
-import { TokenSource } from 'antlr4ts/target/TokenSource';
-import { TokenStream } from 'antlr4ts/target/TokenStream';
+import { Lexer } from '../Lexer';
+import { LexerATNSimulator } from '../atn/LexerATNSimulator';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull } from '../Decorators';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Override } from '../Decorators';
+import { ParseCancellationException } from '../misc/ParseCancellationException';
+import { Parser } from '../Parser';
+import { ParserATNSimulator } from '../atn/ParserATNSimulator';
+import { ParserInterpreter } from '../ParserInterpreter';
+import { ParserRuleContext } from '../ParserRuleContext';
+import { ParseTree } from '../tree/ParseTree';
+import { ParseTreeListener } from '../tree/ParseTreeListener';
+import { ParseTreeWalker } from '../tree/ParseTreeWalker';
+import { PredictionContextCache } from '../atn/PredictionContextCache';
+import { PredictionMode } from '../atn/PredictionMode';
+import { RecognitionException } from '../RecognitionException';
+import { Recognizer } from '../Recognizer';
+import { SimulatorState } from '../atn/SimulatorState';
+import { TerminalNode } from '../tree/TerminalNode';
+import { Token } from '../Token';
+import { TokenSource } from '../TokenSource';
+import { TokenStream } from '../TokenStream';
 
-import * as Utils from 'antlr4ts/target/misc/Utils';
+import * as Utils from '../misc/Utils';
 
 import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
 import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
@@ -409,7 +409,7 @@ class TestPerformance {
 	private static readonly TIMING_CUMULATIVE: boolean =  false;
 	/**
 	 * If {@code true}, the timing statistics will include the parser only. This
-	 * flag allows for targeted measurements, and helps eliminate variance when
+	 * flag allows for libed measurements, and helps eliminate variance when
 	 * {@link #PRELOAD_SOURCES} is {@code false}.
 	 * <p/>
 	 * This flag has no impact when {@link #RUN_PARSER} is {@code false}.
@@ -1598,15 +1598,15 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 	}
 
 	@Override
-	protected getExistingTargetState(s: DFAState, t: number): DFAState | undefined {
+	protected getExistinglibState(s: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions++;
-		return super.getExistingTargetState(s, t);
+		return super.getExistinglibState(s, t);
 	}
 
 	@Override
-	protected computeTargetState(input: CharStream, s: DFAState, t: number): DFAState {
+	protected computelibState(input: CharStream, s: DFAState, t: number): DFAState {
 		this.computedTransitions++;
-		return super.computeTargetState(input, s, t);
+		return super.computelibState(input, s, t);
 	}
 }
 
@@ -1654,15 +1654,15 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 	}
 
 	@Override
-	protected getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
+	protected getExistinglibState(previousD: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions[this.decision]++;
-		return super.getExistingTargetState(previousD, t);
+		return super.getExistinglibState(previousD, t);
 	}
 
 	@Override
-	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
+	protected computelibState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
 		this.computedTransitions[this.decision]++;
-		return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+		return super.computelibState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 	}
 
 	@Override
