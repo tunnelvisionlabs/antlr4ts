@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "git clean -d -i -x",
-    "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
+    "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath && npm run antlr4ts-benchmark",
     "tsc": "tsc",
     "prepublish": "npm i tool && npm run antlr4ts && npm run tsc",
     "test": "mocha",
@@ -44,7 +44,9 @@
     "typedoc": "^0.5.1",
     "typescript": "^2.0.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "antlr4ts-cli": "file:tool"
+  },
   "files": [
     "lib",
     "src"

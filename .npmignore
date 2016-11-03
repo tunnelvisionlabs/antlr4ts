@@ -1,1 +1,3 @@
-# This file is present to override .gitignore and allow the NPM package to include the target directory
+# This is supposed to exclude child directoriesfrom the NPM package, but doesn't seem to be working
+**/benchmark/
+**/test/
