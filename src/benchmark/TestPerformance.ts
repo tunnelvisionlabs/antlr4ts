@@ -1598,15 +1598,15 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 	}
 
 	@Override
-	protected getExistinglibState(s: DFAState, t: number): DFAState | undefined {
+	protected getExistingTargetState(s: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions++;
-		return super.getExistinglibState(s, t);
+		return super.getExistingTargetState(s, t);
 	}
 
 	@Override
-	protected computelibState(input: CharStream, s: DFAState, t: number): DFAState {
+	protected computeTargetState(input: CharStream, s: DFAState, t: number): DFAState {
 		this.computedTransitions++;
-		return super.computelibState(input, s, t);
+		return super.computeTargetState(input, s, t);
 	}
 }
 
@@ -1654,15 +1654,15 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 	}
 
 	@Override
-	protected getExistinglibState(previousD: DFAState, t: number): DFAState | undefined {
+	protected getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions[this.decision]++;
-		return super.getExistinglibState(previousD, t);
+		return super.getExistingTargetState(previousD, t);
 	}
 
 	@Override
-	protected computelibState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
+	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
 		this.computedTransitions[this.decision]++;
-		return super.computelibState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+		return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 	}
 
 	@Override
