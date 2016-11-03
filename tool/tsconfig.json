@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "target",
+    "outDir": "lib",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es2015",
@@ -22,6 +22,6 @@
   },
   "exclude": [
     "node_modules",
-    "target"
+    "lib"
   ]
 }

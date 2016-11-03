@@ -39,8 +39,10 @@ jspm_packages/
 # Build products
 /src/tree/xpath/XPathLexer.tokens
 /src/tree/xpath/XPathLexer.ts
-gen/
-target/
+/src/benchmark/gen/
+/target/
+/tool/target/
+lib/
 doc/
 
 # Visual Studio build output and per-user files

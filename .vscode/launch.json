@@ -21,7 +21,7 @@
             },
             "console": "integratedTerminal",
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/target"
+            "outDir": "${workspaceRoot}/lib"
         },
         {
             "name": "Attach",
@@ -42,7 +42,7 @@
             "processId": "${command.PickProcess}",
             "port": 5858,
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/target"
+            "outDir": "${workspaceRoot}/lib"
         }
     ]
 }
