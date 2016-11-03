@@ -6,7 +6,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.3567094-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
@@ -23,11 +23,11 @@ import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
 
 export class DFA {
-	/** A set of all DFA states. Use {@link Map} so we can get old state back
-	 *  ({@link Set} only allows you to see if it's there).
-     */
-    @NotNull
-	states: Array2DHashMap<DFAState, DFAState> =  new Array2DHashMap<DFAState, DFAState>(ObjectEqualityComparator.INSTANCE);
+	/**
+	 * A set of all states in the `DFA`.
+	 */
+	@NotNull
+	readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
 
 	s0: DFAState | undefined;
 
@@ -162,12 +162,7 @@ export class DFA {
 
 	addState(state: DFAState): DFAState {
 		state.stateNumber = this.nextStateNumber++;
-		let existing: DFAState | undefined =  this.states.putIfAbsent(state, state);
-		if (existing != null) {
-			return existing;
-		}
-
-		return state;
+		return this.states.getOrAdd(state);
 	}
 
 	toString(): string;
