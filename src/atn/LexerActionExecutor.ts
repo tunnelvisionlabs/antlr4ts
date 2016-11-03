@@ -12,7 +12,7 @@ import { Lexer } from '../Lexer';
 import { LexerAction } from './LexerAction';
 import { LexerIndexedCustomAction } from './LexerIndexedCustomAction';
 import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Nullable, Override } from '../Decorators';
+import { NotNull, Override } from '../Decorators';
 
 /**
  * Represents an executor for a sequence of lexer actions which traversed during
@@ -66,7 +66,7 @@ export class LexerActionExecutor {
 	 * of {@code lexerActionExecutor} and {@code lexerAction}.
 	 */
 	@NotNull
-	static append(@Nullable lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
+	static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
 		if (!lexerActionExecutor) {
 			return new LexerActionExecutor([lexerAction]);
 		}

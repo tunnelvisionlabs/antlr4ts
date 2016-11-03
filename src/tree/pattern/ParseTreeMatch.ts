@@ -6,7 +6,7 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 import { MultiMap } from "../../misc/MultiMap";
-import { NotNull, Nullable, Override } from "../../Decorators";
+import { NotNull, Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { ParseTreePattern } from "./ParseTreePattern";
 

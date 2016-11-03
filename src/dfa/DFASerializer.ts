@@ -12,7 +12,7 @@ import { ATNSimulator } from '../atn/ATNSimulator';
 import { ATNState } from '../atn/ATNState';
 import { DFA } from './DFA';
 import { DFAState } from './DFAState';
-import { NotNull, Nullable, Override } from '../Decorators';
+import { NotNull, Override } from '../Decorators';
 import { PredictionContext } from '../atn/PredictionContext';
 import { Recognizer } from '../Recognizer';
 import { Vocabulary } from '../Vocabulary';

@@ -11,7 +11,7 @@ import { ATN } from '../atn/ATN';
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
-import { NotNull, Nullable } from "../Decorators";
+import { NotNull } from "../Decorators";
 import { Parser } from '../Parser';
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
@@ -185,7 +185,6 @@ export class Trees {
 	*
 	*  @since 4.5
 	*/
-	@Nullable
 	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
 											 startTokenIndex: number, // inclusive
 											stopTokenIndex: number // inclusive

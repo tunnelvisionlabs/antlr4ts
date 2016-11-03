@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
 import { ErrorNode } from "./tree/ErrorNode";
 import { Interval } from "./misc/Interval";
-import { Nullable, Override } from "./Decorators";
+import { Override } from "./Decorators";
 import { Parser } from "./Parser";
 import { ParseTree } from "./tree/ParseTree";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
