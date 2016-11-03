@@ -356,7 +356,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return false;
 		}
 
-		if (leftKey != this.getKey(right)) {
+		if (leftKey.alt !== right.getAlt()) {
 			return false;
 		}
 
