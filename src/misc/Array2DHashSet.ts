@@ -384,6 +384,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	clear(): void {
 		this.buckets = this.createBuckets(INITAL_CAPACITY);
 		this.n = 0;
+		this.threshold = Math.floor(INITAL_CAPACITY * LOAD_FACTOR);
 	}
 
 	@Override
