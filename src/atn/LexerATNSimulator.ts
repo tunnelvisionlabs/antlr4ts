@@ -22,7 +22,7 @@ import { IntStream } from '../IntStream';
 import { Lexer } from '../Lexer';
 import { LexerActionExecutor } from './LexerActionExecutor';
 import { LexerNoViableAltException } from '../LexerNoViableAltException';
-import { NotNull, Nullable, Override } from '../Decorators';
+import { NotNull, Override } from '../Decorators';
 import { OrderedATNConfigSet } from './OrderedATNConfigSet';
 import { PredictionContext } from './PredictionContext';
 import { PredicateTransition } from './PredicateTransition';
