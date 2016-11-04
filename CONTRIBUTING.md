@@ -66,6 +66,12 @@ runtime. The general process for incorporating these changes is the following:
 > features and/or fixes which were part of the optimized ANTLR 4 runtime as of the specific commit referenced by the
 > [reference/antlr4](https://github.com/sharwell/antlr4ts/tree/master/reference) submodule.
 
+### API changes
+
+All pull requests which contain changes to the exposed API must have a corresponding GitHub issue. The issue will be
+labeled with the **ts-flavor** label. In addition to minimizing upgrade problems over time, this approach improves our
+ability to provide meaningful release notes.
+
 ## General practices
 
 ### Labels
