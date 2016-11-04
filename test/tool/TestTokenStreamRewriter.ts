@@ -11,53 +11,56 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertNotNull;
 
-export class TestTokenStreamRewriter extends BaseTest {
+import { ANTLRInputStream } from '../../src/ANTLRInputStream';
+import { CharStream } from '../../src/CharStream';
+import { CommonTokenStream } from '../../src/CommonTokenStream';
+import { Interval } from '../../src/misc/Interval';
+import { Lexer } from '../../src/Lexer';
+import { LexerInterpreter } from '../../src/LexerInterpreter';
+import { TokenStreamRewriter } from '../../src/TokenStreamRewriter';
 
-	/** Public default constructor used by TestRig */
-	 constructor()  {
+import { RewriterLexer1 } from './gen/rewriter/RewriterLexer1';
+import { RewriterLexer2 } from './gen/rewriter/RewriterLexer2';
+import { RewriterLexer3 } from './gen/rewriter/RewriterLexer3';
+
+import * as assert from 'assert';
+import { suite, test as Test, skip as Ignore } from 'mocha-typescript';
+
+@suite
+export class TestTokenStreamRewriter {
+
+	private createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
+		let stream = new ANTLRInputStream(input);
+		let lexer = new lexerCtor(stream);
+		return new LexerInterpreter(lexer.getGrammarFileName(), lexer.getVocabulary(), lexer.getModeNames(), lexer.getRuleNames(), lexer.getATN(), stream);
 	}
 
 	@Test testInsertBeforeIndex0(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream("abc"));
+		let lexEngine: LexerInterpreter =  this.createLexerInterpreter("abc", RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertBefore(0, "0");
 		let result: string =  tokens.getText();
 		let expecting: string =  "0abc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testInsertAfterLastIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertAfter(2, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abcx";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test test2InsertBeforeAfterMiddleIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -65,73 +68,50 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertAfter(1, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "axbxc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceIndex0(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(0, "x");
+		tokens.replaceSingle(0, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "xbc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceLastIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(2, "x");
+		tokens.replaceSingle(2, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abx";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceMiddleIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(1, "x");
+		tokens.replaceSingle(1, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "axc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testToStringStartStop(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "ID : 'a'..'z'+;\n" +
-											 "INT : '0'..'9'+;\n" +
-											 "SEMI : ';';\n" +
-											 "MUL : '*';\n" +
-											 "ASSIGN : '=';\n" +
-											 "WS : ' '+;\n");
 		// Tokens: 0123456789
 		// Input:  x = 3 * 0;
 		let input: string =  "x = 3 * 0;";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer2);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -141,186 +121,152 @@ export class TestTokenStreamRewriter extends BaseTest {
 
 		let result: string =  tokens.getTokenStream().getText();
 		let expecting: string =  "x = 3 * 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText();
 		expecting = "x = 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(0, 9));
 		expecting = "x = 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(4, 8));
 		expecting = "0";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testToStringStartStop2(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "ID : 'a'..'z'+;\n" +
-											 "INT : '0'..'9'+;\n" +
-											 "SEMI : ';';\n" +
-											 "ASSIGN : '=';\n" +
-											 "PLUS : '+';\n" +
-											 "MULT : '*';\n" +
-											 "WS : ' '+;\n");
 		// Tokens: 012345678901234567
 		// Input:  x = 3 * 0 + 2 * 0;
 		let input: string =  "x = 3 * 0 + 2 * 0;";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer3);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 
 		let result: string =  tokens.getTokenStream().getText();
 		let expecting: string =  "x = 3 * 0 + 2 * 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		tokens.replace(4, 8, "0");
 		stream.fill();
 // replace 3 * 0 with 0
 		result = tokens.getText();
 		expecting = "x = 0 + 2 * 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(0, 17));
 		expecting = "x = 0 + 2 * 0;";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(4, 8));
 		expecting = "0";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(0, 8));
 		expecting = "x = 0";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(12, 16));
 		expecting = "2 * 0";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		tokens.insertAfter(17, "// comment");
 		result = tokens.getText(Interval.of(12, 18));
 		expecting = "2 * 0;// comment";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 
 		result = tokens.getText(Interval.of(0, 8));
 		stream.fill();
 // try again after insert at end
 		expecting = "x = 0";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test test2ReplaceMiddleIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(1, "x");
-		tokens.replace(1, "y");
+		tokens.replaceSingle(1, "x");
+		tokens.replaceSingle(1, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "ayc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test test2ReplaceMiddleIndex1InsertBefore(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertBefore(0, "_");
-		tokens.replace(1, "x");
-		tokens.replace(1, "y");
+		tokens.replaceSingle(1, "x");
+		tokens.replaceSingle(1, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "_ayc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceThenDeleteMiddleIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(1, "x");
+		tokens.replaceSingle(1, "x");
 		tokens.delete(1);
 		let result: string =  tokens.getText();
 		let expecting: string =  "ac";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testInsertInPriorReplace(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.replace(0, 2, "x");
 		tokens.insertBefore(1, "0");
-		let exc: Exception =  null;
+		let exc: Error | undefined;
 		try {
 			tokens.getText();
 		}
-		catch (IllegalArgumentException iae) {
+		catch (iae) {
+			if (!(iae instanceof Error)) {
+				throw iae;
+			}
+
 			exc = iae;
 		}
+
 		let expecting: string =  "insert op <InsertBeforeOp@[@1,1:1='b',<2>,1:1]:\"0\"> within boundaries of previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@2,2:2='c',<3>,1:2]:\"x\">";
-		assertNotNull(exc);
-		assertEquals(expecting, exc.getMessage());
+		assert.notEqual(exc, null);
+		assert.strictEqual(exc!.message, expecting);
 	}
 
 	@Test testInsertThenReplaceSameIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertBefore(0, "0");
-		tokens.replace(0, "x");
+		tokens.replaceSingle(0, "x");
 		stream.fill();
 // supercedes insert at 0
 		let result: string =  tokens.getText();
 		let expecting: string =  "0xbc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test test2InsertMiddleIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -328,90 +274,65 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(1, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "ayxbc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test test2InsertThenReplaceIndex0(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertBefore(0, "x");
 		tokens.insertBefore(0, "y");
-		tokens.replace(0, "z");
+		tokens.replaceSingle(0, "z");
 		let result: string =  tokens.getText();
 		let expecting: string =  "yxzbc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceThenInsertBeforeLastIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(2, "x");
+		tokens.replaceSingle(2, "x");
 		tokens.insertBefore(2, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abyx";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testInsertThenReplaceLastIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.insertBefore(2, "y");
-		tokens.replace(2, "x");
+		tokens.replaceSingle(2, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abyx";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceThenInsertAfterLastIndex(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
-		tokens.replace(2, "x");
+		tokens.replaceSingle(2, "x");
 		tokens.insertAfter(2, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abxy";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceRangeThenInsertAtLeftEdge(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -419,43 +340,38 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(2, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abyxba";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceRangeThenInsertAtRightEdge(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.replace(2, 4, "x");
 		tokens.insertBefore(4, "y");
 		stream.fill(); // no effect; within range of a replace
-		let exc: Exception =  null;
+		let exc: Error | undefined;
 		try {
 			tokens.getText();
 		}
-		catch (IllegalArgumentException iae) {
+		catch (iae) {
+			if (!(iae instanceof Error)) {
+				throw iae;
+			}
+
 			exc = iae;
 		}
+
 		let expecting: string =  "insert op <InsertBeforeOp@[@4,4:4='c',<3>,1:4]:\"y\"> within boundaries of previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"x\">";
-		assertNotNull(exc);
-		assertEquals(expecting, exc.getMessage());
+		assert.notEqual(exc, null);
+		assert.strictEqual(exc!.message, expecting);
 	}
 
 	@Test testReplaceRangeThenInsertAfterRightEdge(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -463,51 +379,36 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertAfter(4, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "abxyba";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceAll(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.replace(0, 6, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "x";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceSubsetThenFetch(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
 		tokens.replace(2, 4, "xyz");
 		let result: string =  tokens.getText(Interval.of(0, 6));
 		let expecting: string =  "abxyzba";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testReplaceThenReplaceSuperset(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -515,26 +416,26 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.replace(3, 5, "foo");
 		stream.fill();
 // overlaps, error
-		let exc: Exception =  null;
+		let exc: Error | undefined;
 		try {
 			tokens.getText();
 		}
-		catch (IllegalArgumentException iae) {
+		catch (iae) {
+			if (!(iae instanceof Error)) {
+				throw iae;
+			}
+
 			exc = iae;
 		}
+
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@3,3:3='c',<3>,1:3]..[@5,5:5='b',<2>,1:5]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assertNotNull(exc);
-		assertEquals(expecting, exc.getMessage());
+		assert.notEqual(exc, null);
+		assert.strictEqual(exc!.message, expecting);
 	}
 
 	@Test testReplaceThenReplaceLowerIndexedSuperset(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -542,26 +443,26 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.replace(1, 3, "foo");
 		stream.fill();
 // overlap, error
-		let exc: Exception =  null;
+		let exc: Error | undefined;
 		try {
 			tokens.getText();
 		}
-		catch (IllegalArgumentException iae) {
+		catch (iae) {
+			if (!(iae instanceof Error)) {
+				throw iae;
+			}
+
 			exc = iae;
 		}
+
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@3,3:3='c',<3>,1:3]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assertNotNull(exc);
-		assertEquals(expecting, exc.getMessage());
+		assert.notEqual(exc, null);
+		assert.strictEqual(exc!.message, expecting);
 	}
 
 	@Test testReplaceSingleMiddleThenOverlappingSuperset(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcba";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -569,17 +470,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.replace(0, 3, "foo");
 		let result: string =  tokens.getText();
 		let expecting: string =  "fooa";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testCombineInserts(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -587,17 +483,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(0, "y");
 		let result: string =  tokens.getText();
 		let expecting: string =  "yxabc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testCombine3Inserts(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -606,17 +497,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(1, "z");
 		let result: string =  tokens.getText();
 		let expecting: string =  "yazxbc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testCombineInsertOnLeftWithReplace(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -626,17 +512,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // combine with left edge of rewrite
 		let result: string =  tokens.getText();
 		let expecting: string =  "zfoo";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testCombineInsertOnLeftWithDelete(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -648,17 +529,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		let expecting: string =  "z";
 		stream.fill();
 // make sure combo is not znull
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testDisjointInserts(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -667,17 +543,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(0, "z");
 		let result: string =  tokens.getText();
 		let expecting: string =  "zaxbyc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testOverlappingReplace(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -687,17 +558,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // wipes prior nested replace
 		let result: string =  tokens.getText();
 		let expecting: string =  "bar";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testOverlappingReplace2(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -705,26 +571,26 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.replace(1, 2, "foo");
 		stream.fill();
 // cannot split earlier replace
-		let exc: Exception =  null;
+		let exc: Error | undefined;
 		try {
 			tokens.getText();
 		}
-		catch (IllegalArgumentException iae) {
+		catch (iae) {
+			if (!(iae instanceof Error)) {
+				throw iae;
+			}
+
 			exc = iae;
 		}
+
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@2,2:2='c',<3>,1:2]:\"foo\"> overlap with previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@3,3:3='c',<3>,1:3]:\"bar\">";
-		assertNotNull(exc);
-		assertEquals(expecting, exc.getMessage());
+		assert.notEqual(exc, null);
+		assert.strictEqual(exc!.message, expecting);
 	}
 
 	@Test testOverlappingReplace3(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -734,17 +600,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // wipes prior nested replace
 		let result: string =  tokens.getText();
 		let expecting: string =  "barc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testOverlappingReplace4(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -754,17 +615,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // wipes prior nested replace
 		let result: string =  tokens.getText();
 		let expecting: string =  "abar";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testDropIdenticalReplace(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -774,17 +630,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // drop previous, identical
 		let result: string =  tokens.getText();
 		let expecting: string =  "afooc";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testDropPrevCoveredInsert(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -794,17 +645,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 // kill prev insert
 		let result: string =  tokens.getText();
 		let expecting: string =  "afoofoo";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testLeaveAloneDisjointInsert(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -812,17 +658,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.replace(2, 3, "foo");
 		let result: string =  tokens.getText();
 		let expecting: string =  "axbfoo";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testLeaveAloneDisjointInsert2(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -830,17 +671,12 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertBefore(1, "x");
 		let result: string =  tokens.getText();
 		let expecting: string =  "axbfoo";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	@Test testInsertBeforeTokenThenDeleteThatToken(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -848,20 +684,15 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.delete(2);
 		let result: string =  tokens.getText();
 		let expecting: string =  "aby";
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 	// Test for https://github.com/antlr/antlr4/issues/550
-	@Test 
+	@Test
 	@Ignore
 	testPreservesOrderOfContiguousInserts(): void {
-		let g: LexerGrammar =  new LexerGrammar(
-											 "lexer grammar T;\n"+
-											 "A : 'a';\n" +
-											 "B : 'b';\n" +
-											 "C : 'c';\n");
 		let input: string =  "aa";
-		let lexEngine: LexerInterpreter =  g.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -871,7 +702,7 @@ export class TestTokenStreamRewriter extends BaseTest {
 		tokens.insertAfter(1, "</b>");
 		let result: string =  tokens.getText();
 		let expecting: string =  "<b>a</b><b>a</b>"; // fails with <b>a<b></b>a</b>"
-		assertEquals(expecting, result);
+		assert.strictEqual(result, expecting);
 	}
 
 }
