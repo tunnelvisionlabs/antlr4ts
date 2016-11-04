@@ -28,7 +28,7 @@ export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit
 	 *  a predicate during analysis if {@code seeThruPreds==false}.
 	 */
-	static HIT_PRED: number =  Token.INVALID_TYPE;
+	static readonly HIT_PRED: number =  Token.INVALID_TYPE;
 
 	@NotNull
 	atn: ATN;

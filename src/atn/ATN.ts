@@ -70,7 +70,7 @@ export class ATN {
 	 * {@link ATNDeserializationOptions#isGenerateRuleBypassTransitions}
 	 * deserialization option was specified; otherwise, this is {@code null}.
 	 */
-	ruleToTokenType: number[];
+	ruleToTokenType: Int32Array;
 
 	/**
 	 * For lexer ATNs, this is an array of {@link LexerAction} objects which may

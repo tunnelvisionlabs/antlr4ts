@@ -489,9 +489,6 @@ IgnoredTests ::= [
 	// Skipped due to limitations in the TypeScript target
 	"LexerExec.LargeLexer": "Compiler fails for an unknown reason.",
 
-	"SemPredEvalLexer.DisableRule": "DFA mismatch; could be a legitimate bug in the runtime.",
-	"SemPredEvalLexer.Indent": "DFA mismatch; could be a legitimate bug in the runtime.",
-
 	default: false
 ]
 

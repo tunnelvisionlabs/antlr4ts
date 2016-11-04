@@ -328,7 +328,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	contains(o: any): boolean {
-		for (let bucket of asIterable(this.backingStore)) {
+		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
 			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
 				return true;
 			}
@@ -366,7 +366,20 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	iterator(): JavaIterator<V> {
-		throw new Error("Not implemented");
+		let delegate: JavaIterator<Bucket<K, V>> = this.backingStore.iterator();
+		return {
+			hasNext(): boolean {
+				return delegate.hasNext();
+			},
+
+			next(): V {
+				return delegate.next().value!;
+			},
+
+			remove(): void {
+				throw new Error("Not supported");
+			}
+		};
 	}
 
 	remove(o: any): boolean {
@@ -398,7 +411,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		}
 
 		let i = 0;
-		for (let bucket of asIterable(this.backingStore)) {
+		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
 			a[i++] = bucket.value!;
 		}
 

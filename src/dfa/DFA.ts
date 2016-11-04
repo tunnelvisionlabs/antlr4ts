@@ -6,14 +6,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.3567094-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
 import { DFASerializer } from './DFASerializer';
 import { DFAState } from './DFAState';
-import { EmptyEdgeMap } from './EmptyEdgeMap';
 import { LexerATNSimulator } from '../atn/LexerATNSimulator';
 import { LexerDFASerializer } from './LexerDFASerializer';
 import { NotNull } from '../Decorators';
@@ -24,11 +23,11 @@ import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
 
 export class DFA {
-	/** A set of all DFA states. Use {@link Map} so we can get old state back
-	 *  ({@link Set} only allows you to see if it's there).
-     */
-    @NotNull
-	states: Array2DHashMap<DFAState, DFAState> =  new Array2DHashMap<DFAState, DFAState>(ObjectEqualityComparator.INSTANCE);
+	/**
+	 * A set of all states in the `DFA`.
+	 */
+	@NotNull
+	readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
 
 	s0: DFAState | undefined;
 
@@ -48,20 +47,6 @@ export class DFA {
 
 	private nextStateNumber: number = 0;
 
-	private minDfaEdge: number;
-
-	private maxDfaEdge: number;
-
-	@NotNull
-	private static emptyPrecedenceEdges: EmptyEdgeMap<DFAState> =
-		new EmptyEdgeMap<DFAState>(0, 200);
-
-	@NotNull
-	private emptyEdgeMap: EmptyEdgeMap<DFAState>;
-
-	@NotNull
-	private emptyContextEdgeMap: EmptyEdgeMap<DFAState>;
-
 	/**
 	 * {@code true} if this DFA is for a precedence decision; otherwise,
 	 * {@code false}. This is the backing field for {@link #isPrecedenceDfa}.
@@ -77,46 +62,16 @@ export class DFA {
 		this.atn = atnStartState.atn;
 		this.decision = decision;
 
-		if (this.atn.grammarType == ATNType.LEXER) {
-			this.minDfaEdge = LexerATNSimulator.MIN_DFA_EDGE;
-			this.maxDfaEdge = LexerATNSimulator.MAX_DFA_EDGE;
-		}
-		else {
-			this.minDfaEdge = Token.EOF;
-			this.maxDfaEdge = atnStartState.atn.maxTokenType;
-		}
-
-		this.emptyEdgeMap = new EmptyEdgeMap<DFAState>(this.minDfaEdge, this.maxDfaEdge);
-		this.emptyContextEdgeMap = new EmptyEdgeMap<DFAState>(-1, atnStartState.atn.states.length - 1);
-
 		let isPrecedenceDfa: boolean =  false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
 				isPrecedenceDfa = true;
-				this.s0 = new DFAState(DFA.emptyPrecedenceEdges, this.getEmptyContextEdgeMap(), new ATNConfigSet());
-				this.s0full = new DFAState(DFA.emptyPrecedenceEdges, this.getEmptyContextEdgeMap(), new ATNConfigSet());
+				this.s0 = new DFAState(new ATNConfigSet());
+				this.s0full = new DFAState(new ATNConfigSet());
 			}
 		}
 
 		this.precedenceDfa = isPrecedenceDfa;
-	}
-
-	getMinDfaEdge(): number {
-		return this.minDfaEdge;
-	}
-
-	getMaxDfaEdge(): number {
-		return this.maxDfaEdge;
-	}
-
-	@NotNull
-	getEmptyEdgeMap(): EmptyEdgeMap<DFAState> {
-		return this.emptyEdgeMap;
-	}
-
-	@NotNull
-	getEmptyContextEdgeMap(): EmptyEdgeMap<DFAState> {
-		return this.emptyContextEdgeMap;
 	}
 
 	/**
@@ -190,7 +145,7 @@ export class DFA {
 	isEmpty(): boolean {
 		if (this.isPrecedenceDfa()) {
 			// s0 and s0full are never null for a precedence DFA
-			return (<DFAState>this.s0).getEdgeMap().size === 0 && (<DFAState>this.s0full).getEdgeMap().size === 0;
+			return this.s0!.getEdgeMap().size === 0 && this.s0full!.getEdgeMap().size === 0;
 		}
 
 		return this.s0 == null && this.s0full == null;
@@ -207,12 +162,7 @@ export class DFA {
 
 	addState(state: DFAState): DFAState {
 		state.stateNumber = this.nextStateNumber++;
-		let existing: DFAState | undefined =  this.states.putIfAbsent(state, state);
-		if (existing != null) {
-			return existing;
-		}
-
-		return state;
+		return this.states.getOrAdd(state);
 	}
 
 	toString(): string;

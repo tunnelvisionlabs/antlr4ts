@@ -15,7 +15,7 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 export class ObjectEqualityComparator implements EqualityComparator<Equatable | null | undefined> {
-	static INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
+	static readonly INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
 
 	/**
 	 * {@inheritDoc}

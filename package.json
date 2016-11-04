@@ -7,16 +7,21 @@
   "files": ["target/src/**/*.*",
             "src/**/*.*"],
   "scripts": {
-    "antlr4ts": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
+    "antlr4ts": "npm run antlr4ts-xpath && npm run antlr4ts-test-std && npm run antlr4ts-test-std-atn && npm run antlr4ts-test-lr && npm run antlr4ts-test-lr-atn",
+    "antlr4ts-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
+    "antlr4ts-test-std": "antlr4ts -visitor test/tool/Java.g4 -DbaseImportPath=../../../../src -o test/tool/gen/std",
+    "antlr4ts-test-std-atn": "antlr4ts -visitor -Xforce-atn test/tool/Java.g4 -DbaseImportPath=../../../../src -o test/tool/gen/std-atn",
+    "antlr4ts-test-lr": "antlr4ts -visitor test/tool/JavaLR.g4 -DbaseImportPath=../../../../src -o test/tool/gen/lr",
+    "antlr4ts-test-lr-atn": "antlr4ts -visitor -Xforce-atn test/tool/JavaLR.g4 -DbaseImportPath=../../../../src -o test/tool/gen/lr-atn",
     "tsc": "tsc",
-    "prepublish": "npm i tool && npm run antlr4ts && npm run tsc",
+    "prepublish": "npm i tool && npm run antlr4ts && npm run tsc && npm run typedoc",
     "pretest": "npm run prepublish",
-
     "test": "mocha",
     "precover": "npm run prepubish",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
-    "dev-test-watch": "mocha-typescript-watch"
+    "dev-test-watch": "mocha-typescript-watch",
+    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts"
   },
   "repository": {
     "type": "git",
@@ -39,6 +44,7 @@
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
     "source-map-support": "^0.4.3",
+    "typedoc": "^0.5.1",
     "typescript": "^2.0.3"
   },
   "dependencies": {}

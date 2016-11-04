@@ -35,11 +35,11 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	protected numDecisions: number;
 
 	protected _input: TokenStream | undefined;
-	protected _startIndex: number;
-	protected _sllStopIndex: number;
-	protected _llStopIndex: number;
+	protected _startIndex: number = 0;
+	protected _sllStopIndex: number = 0;
+	protected _llStopIndex: number = 0;
 
-	protected currentDecision: number;
+	protected currentDecision: number = 0;
 	protected currentState: SimulatorState | undefined;
 
  	/** At the point of LL failover, we record how SLL would resolve the conflict so that
@@ -53,7 +53,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	 *  It may in fact still be a context sensitivity but we don't know by looking at the
 	 *  minimum alternatives for the current input.
  	 */
-	protected conflictingAltResolvedBySLL: number;
+	protected conflictingAltResolvedBySLL: number = 0;
 
 	 constructor(parser: Parser)  {
 		super(parser.getInterpreter().atn, parser);

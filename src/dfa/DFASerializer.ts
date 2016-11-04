@@ -56,25 +56,28 @@ export class DFASerializer {
 		let buf = "";
 
 		if ( this.dfa.states ) {
-			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.values().toArray());
+			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
 				let edges: Map<number, DFAState> =  s.getEdgeMap();
+				let edgeKeys = [...edges.keys()].sort((a, b) => a - b);
 				let contextEdges: Map<number, DFAState> =  s.getContextEdgeMap();
-				for (let entry of edges) {
-					if ((entry[1] == null || entry[1] === ATNSimulator.ERROR) && !s.isContextSymbol(entry[0])) {
+				let contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
+				for (let entry of edgeKeys) {
+					let value = edges.get(entry);
+					if ((value == null || value === ATNSimulator.ERROR) && !s.isContextSymbol(entry)) {
 						continue;
 					}
 
 					let contextSymbol: boolean =  false;
-					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry[0])) + ("->");
-					if (s.isContextSymbol(entry[0])) {
+					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry)) + ("->");
+					if (s.isContextSymbol(entry)) {
 						buf += ("!");
 						contextSymbol = true;
 					}
 
-					let t: DFAState =  entry[1];
+					let t: DFAState | undefined = value;
 					if ( t && t.stateNumber !== ATNSimulator.ERROR.stateNumber ) {
 						buf += (this.getStateString(t)) + ('\n');
 					}
@@ -84,12 +87,12 @@ export class DFASerializer {
 				}
 
 				if (s.isContextSensitive()) {
-					for (let entry of contextEdges) {
+					for (let entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
-							+ (this.getContextLabel(entry[0]))
+							+ (this.getContextLabel(entry))
 							+ ("->")
-							+ (this.getStateString(entry[1]))
+							+ (this.getStateString(contextEdges.get(entry)!))
 							+ ("\n");
 					}
 				}

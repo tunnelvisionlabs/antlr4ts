@@ -68,21 +68,21 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	_tokenStartCharIndex: number = -1;
 
 	/** The line on which the first character of the token resides */
-	_tokenStartLine: number;
+	_tokenStartLine: number = 0;
 
 	/** The character position of first character within the line */
-	_tokenStartCharPositionInLine: number;
+	_tokenStartCharPositionInLine: number = 0;
 
 	/** Once we see EOF on char stream, next token will be EOF.
 	 *  If you have DONE : EOF ; then you see DONE EOF.
 	 */
-	_hitEOF: boolean;
+	_hitEOF: boolean = false;
 
 	/** The channel number for the current token */
-	_channel: number;
+	_channel: number = 0;
 
 	/** The token type for the current token */
-	_type: number;
+	_type: number = 0;
 
 	readonly _modeStack: IntegerStack = new IntegerStack();
 	_mode: number = Lexer.DEFAULT_MODE;

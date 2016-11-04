@@ -67,8 +67,8 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * Whitespace is not allowed.</p>
  */
 export class XPath {
-	static WILDCARD: string =  "*"; // word not operator/separator
-	static NOT: string =  "!"; 	   // word for invert operator
+	static readonly WILDCARD: string =  "*"; // word not operator/separator
+	static readonly NOT: string =  "!"; 	   // word for invert operator
 
 	protected path: string;
 	protected elements: XPathElement[];

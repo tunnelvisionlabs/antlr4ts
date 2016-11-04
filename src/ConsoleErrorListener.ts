@@ -17,7 +17,7 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**
 	 * Provides a default instance of {@link ConsoleErrorListener}.
 	 */
-	static INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
+	static readonly INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
 
 	/**
 	 * {@inheritDoc}

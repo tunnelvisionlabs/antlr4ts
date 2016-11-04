@@ -82,12 +82,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 */
 	private configs: ATNConfig[];
 
-	private uniqueAlt: number;
+	private uniqueAlt: number = 0;
 	private conflictInfo?: ConflictInfo;
 	// Used in parser and lexer. In lexer, it indicates we hit a pred
 	// while computing a closure operation.  Don't make a DFA state from this.
-	private _hasSemanticContext: boolean;
-	private dipsIntoOuterContext: boolean;
+	private _hasSemanticContext: boolean = false;
+	private dipsIntoOuterContext: boolean = false;
 	/**
 	 * When {@code true}, this config set represents configurations where the entire
 	 * outer context has been consumed by the ATN interpreter. This prevents the
@@ -97,7 +97,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * Note: {@code outermostConfigSet} and {@link #dipsIntoOuterContext} should never
 	 * be true at the same time.
 	 */
-	private outermostConfigSet: boolean;
+	private outermostConfigSet: boolean = false;
 
 	private cachedHashCode: number = -1;
 
@@ -356,7 +356,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return false;
 		}
 
-		if (leftKey != this.getKey(right)) {
+		if (leftKey.alt !== right.getAlt()) {
 			return false;
 		}
 
