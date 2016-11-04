@@ -1,7 +1,8 @@
 {
-  "name": "antlr4ts",
+  "name": "antlr4ts-root",
   "version": "0.1.1-SNAPSHOT",
-  "description": "Antlr4 runtime for JavaScript written in Typescript",
+  "description": "Root project for ANTLR 4 runtime for Typescript",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "antlr4ts": "npm run antlr4ts-xpath && npm run antlr4ts-test-std && npm run antlr4ts-test-std-atn && npm run antlr4ts-test-lr && npm run antlr4ts-test-lr-atn",
@@ -18,7 +19,8 @@
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch",
-    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts"
+    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts",
+    "pack-runtime": "npm pack target/src"
   },
   "repository": {
     "type": "git",
