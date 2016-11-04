@@ -61,7 +61,7 @@ TypeScript 2.0.
     ```
     "scripts": {
       // ...
-      "antlr4ts": "antlr4ts -visitor -encoding UTF-8 path/to/MyGrammar.g4"
+      "antlr4ts": "antlr4ts -visitor path/to/MyGrammar.g4"
     }
     ```
 

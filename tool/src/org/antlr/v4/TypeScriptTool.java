@@ -29,6 +29,10 @@ public class TypeScriptTool extends Tool {
 
 	public TypeScriptTool(String[] args) {
 		super(args);
+		if (grammarEncoding == null) {
+			grammarEncoding = "UTF-8";
+		}
+
 		if (grammarOptions == null) {
 			grammarOptions = new HashMap<String, String>();
 		}
