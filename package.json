@@ -20,7 +20,8 @@
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch",
     "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts",
-    "pack-runtime": "npm pack target/src"
+    "pack-runtime": "npm pack target/src",
+    "publish-runtime": "npm install && npm publish target/src"
   },
   "repository": {
     "type": "git",
