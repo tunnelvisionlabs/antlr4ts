@@ -1,3 +1,3 @@
 --require source-map-support/register
---recursive 
-target/test
+lib/test/**/*.js 
+

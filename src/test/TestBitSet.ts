@@ -5,7 +5,7 @@
  */
 require('source-map-support').install();
 import * as assert from "assert";
-import { BitSet } from "../src/misc/BitSet";
+import { BitSet } from "../misc/BitSet";
 
 describe("BitSet Tests", function() {
     const empty = new BitSet();

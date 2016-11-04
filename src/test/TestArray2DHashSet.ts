@@ -4,9 +4,9 @@
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 require('source-map-support').install();
-import {Equatable} from '../src/misc/Stubs';
-import {Array2DHashSet} from '../src/misc/Array2DHashSet';
-import {MurmurHash} from '../src/misc/MurmurHash';
+import {Equatable} from '../misc/Stubs';
+import {Array2DHashSet} from '../misc/Array2DHashSet';
+import {MurmurHash} from '../misc/MurmurHash';
 import { suite, test } from 'mocha-typescript';
 import * as assert from "assert";
 

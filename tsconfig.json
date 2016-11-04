@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "target",
+    "outDir": "lib",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es2015",
@@ -18,11 +18,13 @@
     "types": [
       "node",
       "mocha"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+        "lib/*": ["src/*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "target",
-    "tool"
+  "include": [
+    "src/**/*.ts"
   ]
 }

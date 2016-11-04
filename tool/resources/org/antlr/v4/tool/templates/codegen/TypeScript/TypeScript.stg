@@ -932,7 +932,7 @@ basePath() ::= <%
 <if(file.factory.grammar.ast.cmdLineOptions.("baseImportPath"))>
 <file.factory.grammar.ast.cmdLineOptions.("baseImportPath")>
 <else>
-antlr4ts
+antlr4ts/lib
 <endif>
 %>
 

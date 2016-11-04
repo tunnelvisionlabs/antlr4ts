@@ -13,51 +13,51 @@
 // import static org.junit.Assert.assertThat;
 // import static org.junit.Assert.assertTrue;
 require('source-map-support').install();
-import { ANTLRErrorListener } from '../../src/ANTLRErrorListener';
-import { ANTLRInputStream } from '../../src/ANTLRInputStream';
-import { Array2DHashSet } from '../../src/misc/Array2DHashSet';
-import { asIterable } from '../../src/misc/Stubs';
-import { ATN } from '../../src/atn/ATN';
-import { ATNConfig } from '../../src/atn/ATNConfig';
-import { ATNConfigSet } from '../../src/atn/ATNConfigSet';
-import { ATNDeserializer } from '../../src/atn/ATNDeserializer';
-import { BailErrorStrategy } from '../../src/BailErrorStrategy';
-import { BaseErrorListener } from '../../src/BaseErrorListener';
-import { BitSet } from '../../src/misc/BitSet';
-import { CharStream } from '../../src/CharStream';
-import { CommonTokenStream } from '../../src/CommonTokenStream';
-import { DefaultErrorStrategy } from '../../src/DefaultErrorStrategy';
-import { DFA } from '../../src/dfa/DFA';
-import { DFAState } from '../../src/dfa/DFAState';
-import { DiagnosticErrorListener } from '../../src/DiagnosticErrorListener';
-import { ErrorNode } from '../../src/tree/ErrorNode';
-import { Interval } from '../../src/misc/Interval';
+import { ANTLRErrorListener } from '../ANTLRErrorListener';
+import { ANTLRInputStream } from '../ANTLRInputStream';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
+import { asIterable } from '../misc/Stubs';
+import { ATN } from '../atn/ATN';
+import { ATNConfig } from '../atn/ATNConfig';
+import { ATNConfigSet } from '../atn/ATNConfigSet';
+import { ATNDeserializer } from '../atn/ATNDeserializer';
+import { BailErrorStrategy } from '../BailErrorStrategy';
+import { BaseErrorListener } from '../BaseErrorListener';
+import { BitSet } from '../misc/BitSet';
+import { CharStream } from '../CharStream';
+import { CommonTokenStream } from '../CommonTokenStream';
+import { DefaultErrorStrategy } from '../DefaultErrorStrategy';
+import { DFA } from '../dfa/DFA';
+import { DFAState } from '../dfa/DFAState';
+import { DiagnosticErrorListener } from '../DiagnosticErrorListener';
+import { ErrorNode } from '../tree/ErrorNode';
+import { Interval } from '../misc/Interval';
 import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
-import { Lexer } from '../../src/Lexer';
-import { LexerATNSimulator } from '../../src/atn/LexerATNSimulator';
-import { MurmurHash } from '../../src/misc/MurmurHash';
-import { NotNull } from '../../src/Decorators';
-import { ObjectEqualityComparator } from '../../src/misc/ObjectEqualityComparator';
-import { Override } from '../../src/Decorators';
-import { ParseCancellationException } from '../../src/misc/ParseCancellationException';
-import { Parser } from '../../src/Parser';
-import { ParserATNSimulator } from '../../src/atn/ParserATNSimulator';
-import { ParserInterpreter } from '../../src/ParserInterpreter';
-import { ParserRuleContext } from '../../src/ParserRuleContext';
-import { ParseTree } from '../../src/tree/ParseTree';
-import { ParseTreeListener } from '../../src/tree/ParseTreeListener';
-import { ParseTreeWalker } from '../../src/tree/ParseTreeWalker';
-import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
-import { PredictionMode } from '../../src/atn/PredictionMode';
-import { RecognitionException } from '../../src/RecognitionException';
-import { Recognizer } from '../../src/Recognizer';
-import { SimulatorState } from '../../src/atn/SimulatorState';
-import { TerminalNode } from '../../src/tree/TerminalNode';
-import { Token } from '../../src/Token';
-import { TokenSource } from '../../src/TokenSource';
-import { TokenStream } from '../../src/TokenStream';
+import { Lexer } from '../Lexer';
+import { LexerATNSimulator } from '../atn/LexerATNSimulator';
+import { MurmurHash } from '../misc/MurmurHash';
+import { NotNull } from '../Decorators';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Override } from '../Decorators';
+import { ParseCancellationException } from '../misc/ParseCancellationException';
+import { Parser } from '../Parser';
+import { ParserATNSimulator } from '../atn/ParserATNSimulator';
+import { ParserInterpreter } from '../ParserInterpreter';
+import { ParserRuleContext } from '../ParserRuleContext';
+import { ParseTree } from '../tree/ParseTree';
+import { ParseTreeListener } from '../tree/ParseTreeListener';
+import { ParseTreeWalker } from '../tree/ParseTreeWalker';
+import { PredictionContextCache } from '../atn/PredictionContextCache';
+import { PredictionMode } from '../atn/PredictionMode';
+import { RecognitionException } from '../RecognitionException';
+import { Recognizer } from '../Recognizer';
+import { SimulatorState } from '../atn/SimulatorState';
+import { TerminalNode } from '../tree/TerminalNode';
+import { Token } from '../Token';
+import { TokenSource } from '../TokenSource';
+import { TokenStream } from '../TokenStream';
 
-import * as Utils from '../../src/misc/Utils';
+import * as Utils from '../misc/Utils';
 
 import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
 import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
@@ -214,8 +214,7 @@ class Murmur implements Hash {
 class EmptyListener implements ParseTreeListener {
 }
 
-@suite
-export class TestPerformance {
+class TestPerformance {
     /**
      * Parse all java files under this package within the JDK_SOURCE_ROOT
      * (environment variable or property defined on the Java command line).
@@ -410,7 +409,7 @@ export class TestPerformance {
 	private static readonly TIMING_CUMULATIVE: boolean =  false;
 	/**
 	 * If {@code true}, the timing statistics will include the parser only. This
-	 * flag allows for targeted measurements, and helps eliminate variance when
+	 * flag allows for libed measurements, and helps eliminate variance when
 	 * {@link #PRELOAD_SOURCES} is {@code false}.
 	 * <p/>
 	 * This flag has no impact when {@link #RUN_PARSER} is {@code false}.
@@ -502,10 +501,7 @@ export class TestPerformance {
 
     private static readonly tokenCount: Int32Array = new Int32Array(TestPerformance.PASSES);
 
-    @test
-	@skip
-    //@org.junit.Ignore
-    compileJdk(): void {
+    public compileJdk(): void {
         let jdkSourceRoot: string | undefined = this.getSourceRoot("JDK");
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 
@@ -2024,3 +2020,7 @@ class CloneableANTLRFileStream extends ANTLRInputStream {
 		return stream;
 	}
 }
+
+
+// Main program
+new TestPerformance().compileJdk();
