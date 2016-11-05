@@ -57,14 +57,14 @@ After changes are made to the optimized Java runtime, those changes need to be m
 runtime. The general process for incorporating these changes is the following:
 
 1. Changes are made to the optimized ANTLR 4 runtime (written in Java)
-2. The [reference/antlr4](https://github.com/sharwell/antlr4ts/tree/master/reference) submodule is updated to reference
-   the commit containing the changes
+2. The [reference/antlr4](https://github.com/tunnelvisionlabs/antlr4ts/tree/master/reference) submodule is updated to
+   reference the commit containing the changes
 3. Using the diff between the old submodule code and the new submodule code, the relevant changes are applied to the
    **antlr4ts** and/or **antlr4ts-cli** projects
 
 > :bulb: By following this policy, users and developers can clearly communicate that the TypeScript target reflects the
 > features and/or fixes which were part of the optimized ANTLR 4 runtime as of the specific commit referenced by the
-> [reference/antlr4](https://github.com/sharwell/antlr4ts/tree/master/reference) submodule.
+> [reference/antlr4](https://github.com/tunnelvisionlabs/antlr4ts/tree/master/reference) submodule.
 
 ### API changes
 
