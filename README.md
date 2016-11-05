@@ -8,9 +8,9 @@
 
 ## Overview
 
-* **Releases:** See the [GitHub Releases](https://github.com/sharwell/antlr4ts/releases) page for release notes and
+* **Releases:** See the [GitHub Releases](https://github.com/tunnelvisionlabs/antlr4ts/releases) page for release notes and
   links to the distribution
-* **Feedback:** Use [GitHub Issues](https://github.com/sharwell/antlr4ts/issues) for issues (bugs, enhancements,
+* **Feedback:** Use [GitHub Issues](https://github.com/tunnelvisionlabs/antlr4ts/issues) for issues (bugs, enhancements,
   features, and questions)
 
 ## Requirements
