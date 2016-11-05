@@ -193,7 +193,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 			if (target.isAcceptState()) {
 				this.captureSimState(this.prevAccept, input, target);
-				if (t == IntStream.EOF) {
+				if (t === IntStream.EOF) {
 					break;
 				}
 			}
