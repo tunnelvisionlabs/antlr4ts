@@ -3,6 +3,8 @@
  * All rights reserved.
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
+export * from './pattern/index';
+export * from './xpath/index';
 export * from './AbstractParseTreeVisitor';
 export * from './ErrorNode';
 export * from './ParseTree';
