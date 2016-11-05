@@ -1,5 +1,7 @@
 # antlr4ts - TypeScript/JavaScript target for ANTLR 4
 
+[![Join the chat at https://gitter.im/tunnelvisionlabs/antlr4ts](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tunnelvisionlabs/antlr4ts?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](./LICENSE)
