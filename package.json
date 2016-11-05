@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src",
-    "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinktool",
+    "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
+    "unlinkruntime": "cd target/src && npm unlink",
     "buildtool": "cd tool && npm link",
     "unlinktool": "cd tool && npm unlink",
     "clean": "npm run unlink && git clean -idx",
