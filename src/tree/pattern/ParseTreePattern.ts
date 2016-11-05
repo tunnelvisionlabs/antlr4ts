@@ -53,8 +53,7 @@ export class ParseTreePattern {
 		@NotNull matcher: ParseTreePatternMatcher,
 		@NotNull pattern: string,
 		patternRuleIndex: number,
-		@NotNull patternTree: ParseTree)
-	{
+		@NotNull patternTree: ParseTree) {
 		this.matcher = matcher;
 		this.patternRuleIndex = patternRuleIndex;
 		this.pattern = pattern;
@@ -98,7 +97,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
-		let subtrees: ParseTree[] =  XPath.findAll(tree, xpath, this.matcher.getParser());
+		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this.matcher.getParser());
 		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);

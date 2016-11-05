@@ -53,7 +53,7 @@ export class DFA {
 	 */
 	private precedenceDfa: boolean;
 
-	constructor(@NotNull atnStartState: ATNState, decision: number = 0)  {
+	constructor(@NotNull atnStartState: ATNState, decision: number = 0) {
 		if (!atnStartState.atn) {
 			throw new Error("The ATNState must be associated with an ATN");
 		}
@@ -62,7 +62,7 @@ export class DFA {
 		this.atn = atnStartState.atn;
 		this.decision = decision;
 
-		let isPrecedenceDfa: boolean =  false;
+		let isPrecedenceDfa: boolean = false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
 				isPrecedenceDfa = true;
@@ -188,11 +188,11 @@ export class DFA {
 	}
 
 	toLexerString(): string {
-		if ( !this.s0 ) {
+		if (!this.s0) {
 			return "";
 		}
 
-		let serializer: DFASerializer =  new LexerDFASerializer(this);
+		let serializer: DFASerializer = new LexerDFASerializer(this);
 		return serializer.toString();
 	}
 }

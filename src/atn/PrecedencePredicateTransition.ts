@@ -19,7 +19,7 @@ import { TransitionType } from './TransitionType';
 export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	precedence: number;
 
-	constructor(@NotNull target: ATNState, precedence: number) {
+	constructor( @NotNull target: ATNState, precedence: number) {
 		super(target);
 		this.precedence = precedence;
 	}

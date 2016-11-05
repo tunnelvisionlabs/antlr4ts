@@ -22,26 +22,26 @@
  * You would make one decl (values here) in the listener and use lots of times
  * in your event methods.
  */
-import {ParseTree} from "./ParseTree";
+import { ParseTree } from "./ParseTree";
 
 export class ParseTreeProperty<V> {
-    private _symbol: symbol;
+	private _symbol: symbol;
 
-    constructor(name: string = "ParseTreeProperty") {
-        this._symbol = Symbol(name);
-    }
+	constructor(name: string = "ParseTreeProperty") {
+		this._symbol = Symbol(name);
+	}
 
-    get(node: ParseTree ): V {
-        return (node as any)[this._symbol] as V;
-    }
+	get(node: ParseTree): V {
+		return (node as any)[this._symbol] as V;
+	}
 
-    set(node: ParseTree, value: V): void {
-        (node as any)[this._symbol] = value;
-    }
+	set(node: ParseTree, value: V): void {
+		(node as any)[this._symbol] = value;
+	}
 
-    removeFrom(node: ParseTree): V {
-        let result = (node as any)[this._symbol] as V;
-        delete (node as any)[this._symbol];
-        return result;
-    }
+	removeFrom(node: ParseTree): V {
+		let result = (node as any)[this._symbol] as V;
+		delete (node as any)[this._symbol];
+		return result;
+	}
 }

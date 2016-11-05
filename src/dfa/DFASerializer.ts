@@ -30,7 +30,7 @@ export class DFASerializer {
 	atn?: ATN;
 
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary);
-	constructor(/*@NotNull*/ dfa: DFA, /*@Nullable*/ parser: Recognizer<any,any> | undefined);
+	constructor(/*@NotNull*/ dfa: DFA, /*@Nullable*/ parser: Recognizer<any, any> | undefined);
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary, /*@Nullable*/ ruleNames: string[] | undefined, /*@Nullable*/ atn: ATN | undefined);
 	constructor(dfa: DFA, vocabulary: Vocabulary | Recognizer<any, any> | undefined, ruleNames?: string[], atn?: ATN) {
 		if (vocabulary instanceof Recognizer) {
@@ -49,20 +49,20 @@ export class DFASerializer {
 
 	@Override
 	toString(): string {
-		if ( !this.dfa.s0 ) {
+		if (!this.dfa.s0) {
 			return "";
 		}
 
 		let buf = "";
 
-		if ( this.dfa.states ) {
-			let states: DFAState[] =  new Array<DFAState>(...this.dfa.states.toArray());
+		if (this.dfa.states) {
+			let states: DFAState[] = new Array<DFAState>(...this.dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
-				let edges: Map<number, DFAState> =  s.getEdgeMap();
+				let edges: Map<number, DFAState> = s.getEdgeMap();
 				let edgeKeys = [...edges.keys()].sort((a, b) => a - b);
-				let contextEdges: Map<number, DFAState> =  s.getContextEdgeMap();
+				let contextEdges: Map<number, DFAState> = s.getContextEdgeMap();
 				let contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
 				for (let entry of edgeKeys) {
 					let value = edges.get(entry);
@@ -70,7 +70,7 @@ export class DFASerializer {
 						continue;
 					}
 
-					let contextSymbol: boolean =  false;
+					let contextSymbol: boolean = false;
 					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry)) + ("->");
 					if (s.isContextSymbol(entry)) {
 						buf += ("!");
@@ -78,7 +78,7 @@ export class DFASerializer {
 					}
 
 					let t: DFAState | undefined = value;
-					if ( t && t.stateNumber !== ATNSimulator.ERROR.stateNumber ) {
+					if (t && t.stateNumber !== ATNSimulator.ERROR.stateNumber) {
 						buf += (this.getStateString(t)) + ('\n');
 					}
 					else if (contextSymbol) {
@@ -98,8 +98,8 @@ export class DFASerializer {
 				}
 			}
 		}
-		let output: string =  buf;
-		if ( output.length===0 ) return "";
+		let output: string = buf;
+		if (output.length === 0) return "";
 		//return Utils.sortLinesInString(output);
 		return output;
 	}
@@ -113,8 +113,8 @@ export class DFASerializer {
 		}
 
 		if (this.atn && i > 0 && i <= this.atn.states.length) {
-			let state: ATNState =  this.atn.states[i];
-			let ruleIndex: number =  state.ruleIndex;
+			let state: ATNState = this.atn.states[i];
+			let ruleIndex: number = state.ruleIndex;
 			if (this.ruleNames && ruleIndex >= 0 && ruleIndex < this.ruleNames.length) {
 				return "ctx:" + String(i) + "(" + this.ruleNames[ruleIndex] + ")";
 			}
@@ -132,18 +132,18 @@ export class DFASerializer {
 			return "ERROR";
 		}
 
-		let n: number =  s.stateNumber;
-		let stateStr: string =  "s"+n;
-		if ( s.isAcceptState() ) {
-            if ( s.predicates ) {
-                stateStr = ":s"+n+"=>"+s.predicates;
-            }
-            else {
-                stateStr = ":s"+n+"=>"+s.getPrediction();
-            }
+		let n: number = s.stateNumber;
+		let stateStr: string = "s" + n;
+		if (s.isAcceptState()) {
+			if (s.predicates) {
+				stateStr = ":s" + n + "=>" + s.predicates;
+			}
+			else {
+				stateStr = ":s" + n + "=>" + s.getPrediction();
+			}
 		}
 
-		if ( s.isContextSensitive() ) {
+		if (s.isContextSensitive()) {
 			stateStr += "*";
 			for (let config of asIterable(s.configs)) {
 				if (config.getReachesIntoOuterContext()) {

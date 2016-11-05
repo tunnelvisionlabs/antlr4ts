@@ -28,12 +28,12 @@ export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit
 	 *  a predicate during analysis if {@code seeThruPreds==false}.
 	 */
-	static readonly HIT_PRED: number =  Token.INVALID_TYPE;
+	static readonly HIT_PRED: number = Token.INVALID_TYPE;
 
 	@NotNull
 	atn: ATN;
 
-	 constructor(@NotNull atn: ATN)  { this.atn = atn; }
+	constructor(@NotNull atn: ATN) { this.atn = atn; }
 
 	/**
 	 * Calculates the SLL(1) expected lookahead set for each outgoing transition
@@ -47,21 +47,21 @@ export class LL1Analyzer {
 	 */
 	getDecisionLookahead(s: ATNState | undefined): (IntervalSet | undefined)[] | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
-		if ( s==null ) {
+		if (s == null) {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] =  new Array<IntervalSet>(s.getNumberOfTransitions());
+		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.getNumberOfTransitions());
 		for (let alt = 0; alt < s.getNumberOfTransitions(); alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
-			let lookBusy: Array2DHashSet<ATNConfig> =  new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
-			let seeThruPreds: boolean =  false; // fail to get lookahead upon pred
+			let lookBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
+			let seeThruPreds: boolean = false; // fail to get lookahead upon pred
 			this._LOOK(s.transition(alt).target, undefined, PredictionContext.EMPTY_LOCAL,
-				  current, lookBusy, new BitSet(), seeThruPreds, false);
+				current, lookBusy, new BitSet(), seeThruPreds, false);
 			// Wipe out lookahead for this alternative if we found nothing
 			// or we had a predicate when we !seeThruPreds
-			if ( current.size()===0 || current.contains(LL1Analyzer.HIT_PRED) ) {
+			if (current.size() === 0 || current.contains(LL1Analyzer.HIT_PRED)) {
 				current = undefined;
 				look[alt] = current;
 			}
@@ -85,8 +85,8 @@ export class LL1Analyzer {
 	 * @return The set of tokens that can follow {@code s} in the ATN in the
 	 * specified {@code ctx}.
 	 */
-    // @NotNull
-   	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
+	// @NotNull
+	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
 	/**
 	 * Compute set of tokens that can follow {@code s} in the ATN in the
@@ -106,8 +106,8 @@ export class LL1Analyzer {
 	 * @return The set of tokens that can follow {@code s} in the ATN in the
 	 * specified {@code ctx}.
 	 */
-    // @NotNull
-   	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
+	// @NotNull
+	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
 
 	@NotNull
 	LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
@@ -123,9 +123,9 @@ export class LL1Analyzer {
 			stopState = undefined;
 		}
 
-		let r: IntervalSet =  new IntervalSet();
-		let seeThruPreds: boolean =  true; // ignore preds; get all lookahead
-		let addEOF: boolean =  true;
+		let r: IntervalSet = new IntervalSet();
+		let seeThruPreds: boolean = true; // ignore preds; get all lookahead
+		let addEOF: boolean = true;
 		this._LOOK(s, stopState, ctx, r, new Array2DHashSet<ATNConfig>(), new BitSet(), seeThruPreds, addEOF);
 		return r;
 	}
@@ -161,18 +161,17 @@ export class LL1Analyzer {
 	 * outermost context is reached. This parameter has no effect if {@code ctx}
 	 * is {@link PredictionContext#EMPTY_LOCAL}.
 	 */
-    protected _LOOK(@NotNull s: ATNState,
-						 stopState: ATNState | undefined,
-						 @NotNull ctx: PredictionContext,
-						 @NotNull look: IntervalSet,
-                         @NotNull lookBusy: Array2DHashSet<ATNConfig>,
-						 @NotNull calledRuleStack: BitSet,
-						 seeThruPreds: boolean,
-						 addEOF: boolean): void
-	{
+	protected _LOOK(@NotNull s: ATNState,
+		stopState: ATNState | undefined,
+		@NotNull ctx: PredictionContext,
+		@NotNull look: IntervalSet,
+		@NotNull lookBusy: Array2DHashSet<ATNConfig>,
+		@NotNull calledRuleStack: BitSet,
+		seeThruPreds: boolean,
+		addEOF: boolean): void {
 //		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
-        let c: ATNConfig =  ATNConfig.create(s, 0, ctx);
-        if ( !lookBusy.add(c) ) return;
+		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
+		if (!lookBusy.add(c)) return;
 
 		if (s === stopState) {
 			if (PredictionContext.isEmptyLocal(ctx)) {
@@ -187,8 +186,8 @@ export class LL1Analyzer {
 			}
 		}
 
-        if ( s instanceof RuleStopState ) {
-            if (ctx.isEmpty() && !PredictionContext.isEmptyLocal(ctx)) {
+		if (s instanceof RuleStopState) {
+			if (ctx.isEmpty() && !PredictionContext.isEmptyLocal(ctx)) {
 				if (addEOF) {
 					look.add(Token.EOF);
 				}
@@ -196,7 +195,7 @@ export class LL1Analyzer {
 				return;
 			}
 
-			let removed: boolean =  calledRuleStack.get(s.ruleIndex);
+			let removed: boolean = calledRuleStack.get(s.ruleIndex);
 			try {
 				calledRuleStack.clear(s.ruleIndex);
 				for (let i = 0; i < ctx.size(); i++) {
@@ -214,17 +213,17 @@ export class LL1Analyzer {
 					calledRuleStack.set(s.ruleIndex);
 				}
 			}
-        }
+		}
 
-        let n: number =  s.getNumberOfTransitions();
-        for (let i=0; i < n; i++) {
-			let t: Transition =  s.transition(i);
-			if ( t instanceof RuleTransition ) {
+		let n: number = s.getNumberOfTransitions();
+		for (let i = 0; i < n; i++) {
+			let t: Transition = s.transition(i);
+			if (t instanceof RuleTransition) {
 				if (calledRuleStack.get(t.ruleIndex)) {
 					continue;
 				}
 
-				let newContext: PredictionContext =  ctx.getChild(t.followState.stateNumber);
+				let newContext: PredictionContext = ctx.getChild(t.followState.stateNumber);
 
 				try {
 					calledRuleStack.set(t.ruleIndex);
@@ -234,23 +233,23 @@ export class LL1Analyzer {
 					calledRuleStack.clear(t.ruleIndex);
 				}
 			}
-			else if ( t instanceof AbstractPredicateTransition ) {
-				if ( seeThruPreds ) {
+			else if (t instanceof AbstractPredicateTransition) {
+				if (seeThruPreds) {
 					this._LOOK(t.target, stopState, ctx, look, lookBusy, calledRuleStack, seeThruPreds, addEOF);
 				}
 				else {
 					look.add(LL1Analyzer.HIT_PRED);
 				}
 			}
-			else if ( t.isEpsilon() ) {
+			else if (t.isEpsilon()) {
 				this._LOOK(t.target, stopState, ctx, look, lookBusy, calledRuleStack, seeThruPreds, addEOF);
 			}
-			else if ( t instanceof WildcardTransition ) {
-				look.addAll( IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType) );
+			else if (t instanceof WildcardTransition) {
+				look.addAll(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));
 			}
 			else {
 //				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined =  (<Transition>t).label();
+				let set: IntervalSet | undefined = (<Transition>t).label();
 				if (set != null) {
 					if (t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));

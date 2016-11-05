@@ -20,135 +20,135 @@ import * as assert from 'assert';
  * @author Sam Harwell
  */
 export class PredictionContextCache {
-    static UNCACHED: PredictionContextCache =  new PredictionContextCache(false);
+	static UNCACHED: PredictionContextCache = new PredictionContextCache(false);
 
-    private contexts: JavaMap<PredictionContext, PredictionContext> =
-        new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> =
-        new Array2DHashMap<PredictionContextCache.PredictionContextAndInt, PredictionContext>(ObjectEqualityComparator.INSTANCE);
-    private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> =
-        new Array2DHashMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext>(ObjectEqualityComparator.INSTANCE);
+	private contexts: JavaMap<PredictionContext, PredictionContext> =
+		new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
+	private childContexts: JavaMap<PredictionContextCache.PredictionContextAndInt, PredictionContext> =
+		new Array2DHashMap<PredictionContextCache.PredictionContextAndInt, PredictionContext>(ObjectEqualityComparator.INSTANCE);
+	private joinContexts: JavaMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext> =
+		new Array2DHashMap<PredictionContextCache.IdentityCommutativePredictionContextOperands, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
-    private enableCache: boolean;
+	private enableCache: boolean;
 
-     constructor(enableCache: boolean = true)  {
-        this.enableCache = enableCache;
-    }
+	constructor(enableCache: boolean = true) {
+		this.enableCache = enableCache;
+	}
 
-    getAsCached(context: PredictionContext): PredictionContext {
-        if (!this.enableCache) {
-            return context;
-        }
+	getAsCached(context: PredictionContext): PredictionContext {
+		if (!this.enableCache) {
+			return context;
+		}
 
-        let result =  this.contexts.get(context);
-        if (!result) {
-            result = context;
-            this.contexts.put(context, context);
-        }
+		let result = this.contexts.get(context);
+		if (!result) {
+			result = context;
+			this.contexts.put(context, context);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    getChild(context: PredictionContext, invokingState: number): PredictionContext {
-        if (!this.enableCache) {
-            return context.getChild(invokingState);
-        }
+	getChild(context: PredictionContext, invokingState: number): PredictionContext {
+		if (!this.enableCache) {
+			return context.getChild(invokingState);
+		}
 
-        let operands: PredictionContextCache.PredictionContextAndInt =  new PredictionContextCache.PredictionContextAndInt(context, invokingState);
-        let result =  this.childContexts.get(operands);
-        if (!result) {
-            result = context.getChild(invokingState);
-            result = this.getAsCached(result);
-            this.childContexts.put(operands, result);
-        }
+		let operands: PredictionContextCache.PredictionContextAndInt = new PredictionContextCache.PredictionContextAndInt(context, invokingState);
+		let result = this.childContexts.get(operands);
+		if (!result) {
+			result = context.getChild(invokingState);
+			result = this.getAsCached(result);
+			this.childContexts.put(operands, result);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    join(x: PredictionContext, y: PredictionContext): PredictionContext {
-        if (!this.enableCache) {
-            return PredictionContext.join(x, y, this);
-        }
+	join(x: PredictionContext, y: PredictionContext): PredictionContext {
+		if (!this.enableCache) {
+			return PredictionContext.join(x, y, this);
+		}
 
-        let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands =  new PredictionContextCache.IdentityCommutativePredictionContextOperands(x, y);
-        let result =  this.joinContexts.get(operands);
-        if (result) {
-            return result;
-        }
+		let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(x, y);
+		let result = this.joinContexts.get(operands);
+		if (result) {
+			return result;
+		}
 
-        result = PredictionContext.join(x, y, this);
-        result = this.getAsCached(result);
-        this.joinContexts.put(operands, result);
-        return result;
-    }
+		result = PredictionContext.join(x, y, this);
+		result = this.getAsCached(result);
+		this.joinContexts.put(operands, result);
+		return result;
+	}
 }
 
 export namespace PredictionContextCache {
-    export class PredictionContextAndInt {
-        private obj: PredictionContext;
-        private value: number;
+	export class PredictionContextAndInt {
+		private obj: PredictionContext;
+		private value: number;
 
-        constructor(obj: PredictionContext, value: number) {
-            this.obj = obj;
-            this.value = value;
-        }
+		constructor(obj: PredictionContext, value: number) {
+			this.obj = obj;
+			this.value = value;
+		}
 
-        @Override
-        equals(obj: any): boolean {
-            if (!(obj instanceof PredictionContextAndInt)) {
-                return false;
-            } else if (obj == this) {
-                return true;
-            }
+		@Override
+		equals(obj: any): boolean {
+			if (!(obj instanceof PredictionContextAndInt)) {
+				return false;
+			} else if (obj == this) {
+				return true;
+			}
 
-            let other: PredictionContextAndInt = obj;
-            return this.value === other.value
-                && (this.obj === other.obj || (this.obj != null && this.obj.equals(other.obj)));
-        }
+			let other: PredictionContextAndInt = obj;
+			return this.value === other.value
+				&& (this.obj === other.obj || (this.obj != null && this.obj.equals(other.obj)));
+		}
 
-        @Override
-        hashCode(): number {
-            let hashCode: number =  5;
-            hashCode = 7 * hashCode + (this.obj != null ? this.obj.hashCode() : 0);
-            hashCode = 7 * hashCode + this.value;
-            return hashCode;
-        }
-    }
+		@Override
+		hashCode(): number {
+			let hashCode: number = 5;
+			hashCode = 7 * hashCode + (this.obj != null ? this.obj.hashCode() : 0);
+			hashCode = 7 * hashCode + this.value;
+			return hashCode;
+		}
+	}
 
-    export class IdentityCommutativePredictionContextOperands {
-        private x: PredictionContext;
-        private y: PredictionContext;
+	export class IdentityCommutativePredictionContextOperands {
+		private x: PredictionContext;
+		private y: PredictionContext;
 
-        constructor(x: PredictionContext, y: PredictionContext) {
-            assert(x != null);
-            assert(y != null);
-            this.x = x;
-            this.y = y;
-        }
+		constructor(x: PredictionContext, y: PredictionContext) {
+			assert(x != null);
+			assert(y != null);
+			this.x = x;
+			this.y = y;
+		}
 
-        getX(): PredictionContext {
-            return this.x;
-        }
+		getX(): PredictionContext {
+			return this.x;
+		}
 
-        getY(): PredictionContext {
-            return this.y;
-        }
+		getY(): PredictionContext {
+			return this.y;
+		}
 
-        @Override
-        equals(o: any): boolean {
-            if (!(o instanceof IdentityCommutativePredictionContextOperands)) {
-                return false;
-            } else if (this === o) {
-                return true;
-            }
+		@Override
+		equals(o: any): boolean {
+			if (!(o instanceof IdentityCommutativePredictionContextOperands)) {
+				return false;
+			} else if (this === o) {
+				return true;
+			}
 
-            let other: IdentityCommutativePredictionContextOperands =  o;
-            return (this.x === other.x && this.y === other.y) || (this.x === other.y && this.y === other.x);
-        }
+			let other: IdentityCommutativePredictionContextOperands = o;
+			return (this.x === other.x && this.y === other.y) || (this.x === other.y && this.y === other.x);
+		}
 
-        @Override
-        hashCode(): number {
-            return this.x.hashCode() ^ this.y.hashCode();
-        }
-    }
+		@Override
+		hashCode(): number {
+			return this.x.hashCode() ^ this.y.hashCode();
+		}
+	}
 }

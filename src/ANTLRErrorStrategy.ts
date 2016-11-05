@@ -23,9 +23,9 @@
  *
  * <p>TODO: what to do about lexers</p>
  */
-import {Parser} from "./Parser";
-import {Token} from "./Token";
-import {RecognitionException} from "./RecognitionException";
+import { Parser } from "./Parser";
+import { Token } from "./Token";
+import { RecognitionException } from "./RecognitionException";
 
 export interface ANTLRErrorStrategy {
 	/**

@@ -12,7 +12,7 @@ import { XPathElement } from "./XPathElement";
 
 export class XPathTokenAnywhereElement extends XPathElement {
 	protected tokenType: number;
-	constructor(tokenName: string, tokenType: number)  {
+	constructor(tokenName: string, tokenType: number) {
 		super(tokenName);
 		this.tokenType = tokenType;
 	}

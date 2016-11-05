@@ -20,7 +20,7 @@ export class ConflictInfo {
 
 	private exact: boolean;
 
-	 constructor(conflictedAlts: BitSet, exact: boolean)  {
+	constructor(conflictedAlts: BitSet, exact: boolean) {
 		this.conflictedAlts = conflictedAlts;
 		this.exact = exact;
 	}

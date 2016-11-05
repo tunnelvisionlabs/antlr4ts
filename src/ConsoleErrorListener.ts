@@ -9,7 +9,7 @@
  *
  * @author Sam Harwell
  */
-import {ANTLRErrorListener} from "./ANTLRErrorListener";
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Recognizer';
 

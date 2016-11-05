@@ -49,18 +49,18 @@ export abstract class PredictionContext implements Equatable {
 	 */
 	private readonly cachedHashCode: number;
 
-	 constructor(cachedHashCode: number)  {
+	constructor(cachedHashCode: number) {
 		this.cachedHashCode = cachedHashCode;
 	}
 
 	protected static calculateEmptyHashCode(): number {
-		let hash: number =  MurmurHash.initialize(INITIAL_HASH);
+		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 		hash = MurmurHash.finish(hash, 0);
 		return hash;
 	}
 
 	protected static calculateSingleHashCode(parent: PredictionContext, returnState: number): number {
-		let hash: number =  MurmurHash.initialize(INITIAL_HASH);
+		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 		hash = MurmurHash.update(hash, parent);
 		hash = MurmurHash.update(hash, returnState);
 		hash = MurmurHash.finish(hash, 2);
@@ -68,7 +68,7 @@ export abstract class PredictionContext implements Equatable {
 	}
 
 	protected static calculateHashCode(parents: PredictionContext[], returnStates: number[]): number {
-		let hash: number =  MurmurHash.initialize(INITIAL_HASH);
+		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 
 		for (let parent of parents) {
 			hash = MurmurHash.update(hash, parent);
@@ -131,10 +131,10 @@ export abstract class PredictionContext implements Equatable {
 			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
 		}
 
-		let context0size: number =  context0.size();
-		let context1size: number =  context1.size();
+		let context0size: number = context0.size();
+		let context1size: number = context1.size();
 		if (context0size === 1 && context1size === 1 && context0.getReturnState(0) === context1.getReturnState(0)) {
-			let merged: PredictionContext =  contextCache.join(context0.getParent(0), context1.getParent(0));
+			let merged: PredictionContext = contextCache.join(context0.getParent(0), context1.getParent(0));
 			if (merged === context0.getParent(0)) {
 				return context0;
 			} else if (merged === context1.getParent(0)) {
@@ -144,13 +144,13 @@ export abstract class PredictionContext implements Equatable {
 			}
 		}
 
-		let count: number =  0;
-		let parentsList: PredictionContext[] =  new Array<PredictionContext>(context0size + context1size);
-		let returnStatesList: number[] =  new Array<number>(parentsList.length);
-		let leftIndex: number =  0;
-		let rightIndex: number =  0;
-		let canReturnLeft: boolean =  true;
-		let canReturnRight: boolean =  true;
+		let count: number = 0;
+		let parentsList: PredictionContext[] = new Array<PredictionContext>(context0size + context1size);
+		let returnStatesList: number[] = new Array<number>(parentsList.length);
+		let leftIndex: number = 0;
+		let rightIndex: number = 0;
+		let canReturnLeft: boolean = true;
+		let canReturnRight: boolean = true;
 		while (leftIndex < context0size && rightIndex < context1size) {
 			if (context0.getReturnState(leftIndex) === context1.getReturnState(rightIndex)) {
 				parentsList[count] = contextCache.join(context0.getParent(leftIndex), context1.getParent(rightIndex));
@@ -218,7 +218,7 @@ export abstract class PredictionContext implements Equatable {
 
 	static getCachedContext(
 		@NotNull context: PredictionContext,
-		@NotNull contextCache: Array2DHashMap<PredictionContext,PredictionContext>,
+		@NotNull contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
 		@NotNull visited: PredictionContext.IdentityHashMap): PredictionContext {
 		if (context.isEmpty()) {
 			return context;
@@ -235,10 +235,10 @@ export abstract class PredictionContext implements Equatable {
 			return existing;
 		}
 
-		let changed: boolean =  false;
-		let parents: PredictionContext[] =  new Array<PredictionContext>(context.size());
+		let changed: boolean = false;
+		let parents: PredictionContext[] = new Array<PredictionContext>(context.size());
 		for (let i = 0; i < parents.length; i++) {
-			let parent: PredictionContext =  PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
+			let parent: PredictionContext = PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
 			if (changed || parent !== context.getParent(i)) {
 				if (!changed) {
 					parents = new Array<PredictionContext>(context.size());
@@ -370,7 +370,7 @@ export abstract class PredictionContext implements Equatable {
 class EmptyPredictionContext extends PredictionContext {
 	private fullContext: boolean;
 
-	 constructor(fullContext: boolean)  {
+	constructor(fullContext: boolean) {
 		super(PredictionContext.calculateEmptyHashCode());
 		this.fullContext = fullContext;
 	}
@@ -436,7 +436,7 @@ class EmptyPredictionContext extends PredictionContext {
 
 	@Override
 	toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
-		return [ "[]" ];
+		return ["[]"];
 	}
 
 }
@@ -697,8 +697,8 @@ export class SingletonPredictionContext extends PredictionContext {
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		let parents: PredictionContext[] =  [ this.parent, PredictionContext.EMPTY_FULL ];
-		let returnStates: number[] = [ this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY ];
+		let parents: PredictionContext[] = [this.parent, PredictionContext.EMPTY_FULL];
+		let returnStates: number[] = [this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY];
 		return new ArrayPredictionContext(parents, returnStates);
 	}
 
@@ -715,7 +715,7 @@ export class SingletonPredictionContext extends PredictionContext {
 			return false;
 		}
 
-		let other: SingletonPredictionContext =  o;
+		let other: SingletonPredictionContext = o;
 		if (this.hashCode() !== other.hashCode()) {
 			return false;
 		}
@@ -728,8 +728,8 @@ export class SingletonPredictionContext extends PredictionContext {
 export namespace PredictionContext {
 	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false)
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
-	export const EMPTY_LOCAL_STATE_KEY: number =  -((1 << 31) >>> 0);
-	export const EMPTY_FULL_STATE_KEY: number =  ((1 << 31) >>> 0) - 1;
+	export const EMPTY_LOCAL_STATE_KEY: number = -((1 << 31) >>> 0);
+	export const EMPTY_FULL_STATE_KEY: number = ((1 << 31) >>> 0) - 1;
 
 	export class IdentityHashMap extends Array2DHashMap<PredictionContext, PredictionContext> {
 		constructor() {
@@ -738,7 +738,7 @@ export namespace PredictionContext {
 	}
 
 	export class IdentityEqualityComparator implements EqualityComparator<PredictionContext> {
-		static readonly INSTANCE: IdentityEqualityComparator =  new IdentityEqualityComparator();
+		static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
 		}

@@ -14,7 +14,7 @@ import { ParseTreeVisitor } from './ParseTreeVisitor';
 import { RuleNode } from './RuleNode';
 import { Token } from '../Token';
 
-export class TerminalNode implements ParseTree  {
+export class TerminalNode implements ParseTree {
 	symbol: Token;
 	parent: RuleNode | undefined;
 

@@ -25,7 +25,7 @@ export class LexerMoreAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
-	constructor()  {
+	constructor() {
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class LexerMoreAction implements LexerAction {
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
+		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.getActionType());
 		return MurmurHash.finish(hash, 1);
 	}

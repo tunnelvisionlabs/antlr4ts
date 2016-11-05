@@ -60,11 +60,13 @@ export class AmbiguityInfo extends DecisionEventInfo {
 	 * @param stopIndex The index at which the ambiguity was identified during
 	 * prediction
 	 */
-	 constructor(decision: number,
-						 @NotNull state: SimulatorState,
-						 @NotNull ambigAlts: BitSet,
-						 @NotNull input: TokenStream, startIndex: number, stopIndex: number)
-	{
+	constructor(
+		decision: number,
+		@NotNull state: SimulatorState,
+		@NotNull ambigAlts: BitSet,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number) {
 		super(decision, state, input, startIndex, stopIndex, state.useContext);
 		this.ambigAlts = ambigAlts;
 	}
