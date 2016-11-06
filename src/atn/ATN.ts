@@ -89,10 +89,10 @@ export class ATN {
 	@NotNull
 	modeToDFA: DFA[] = [];
 
-	LL1Table: Map<number, number> =  new Map<number, number>();
+	LL1Table: Map<number, number> = new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
-	 constructor(@NotNull grammarType: ATNType, maxTokenType: number)  {
+	constructor(@NotNull grammarType: ATNType, maxTokenType: number) {
 		this.grammarType = grammarType;
 		this.maxTokenType = maxTokenType;
 	}
@@ -139,16 +139,16 @@ export class ATN {
 	 * rule.
      */
 	// @NotNull
-    nextTokens(/*@NotNull*/ s: ATNState): IntervalSet;
+	nextTokens(/*@NotNull*/ s: ATNState): IntervalSet;
 
 	@NotNull
 	nextTokens(s: ATNState, ctx?: PredictionContext): IntervalSet {
 		if (ctx) {
-			let anal: LL1Analyzer =  new LL1Analyzer(this);
-			let next: IntervalSet =  anal.LOOK(s, ctx);
+			let anal: LL1Analyzer = new LL1Analyzer(this);
+			let next: IntervalSet = anal.LOOK(s, ctx);
 			return next;
 		} else {
-			if ( s.nextTokenWithinRule ) {
+			if (s.nextTokenWithinRule) {
 				return s.nextTokenWithinRule;
 			}
 
@@ -181,17 +181,17 @@ export class ATN {
 
 	defineDecisionState(@NotNull s: DecisionState): number {
 		this.decisionToState.push(s);
-		s.decision = this.decisionToState.length-1;
+		s.decision = this.decisionToState.length - 1;
 		this.decisionToDFA.push(new DFA(s, s.decision));
 		return s.decision;
 	}
 
-    getDecisionState(decision: number): DecisionState | undefined {
-        if ( this.decisionToState.length > 0 ) {
-            return this.decisionToState[decision];
-        }
-        return undefined;
-    }
+	getDecisionState(decision: number): DecisionState | undefined {
+		if (this.decisionToState.length > 0) {
+			return this.decisionToState[decision];
+		}
+		return undefined;
+	}
 
 	getNumberOfDecisions(): number {
 		return this.decisionToState.length;
@@ -222,19 +222,19 @@ export class ATN {
 			throw new RangeError("Invalid state number.");
 		}
 
-		let ctx: RuleContext | undefined =  context;
-		let s: ATNState =  this.states[stateNumber];
-		let following: IntervalSet =  this.nextTokens(s);
+		let ctx: RuleContext | undefined = context;
+		let s: ATNState = this.states[stateNumber];
+		let following: IntervalSet = this.nextTokens(s);
 		if (!following.contains(Token.EPSILON)) {
 			return following;
 		}
 
-		let expected: IntervalSet =  new IntervalSet();
+		let expected: IntervalSet = new IntervalSet();
 		expected.addAll(following);
 		expected.remove(Token.EPSILON);
 		while (ctx != null && ctx.invokingState >= 0 && following.contains(Token.EPSILON)) {
-			let invokingState: ATNState =  this.states[ctx.invokingState];
-			let rt: RuleTransition =  invokingState.transition(0) as RuleTransition;
+			let invokingState: ATNState = this.states[ctx.invokingState];
+			let rt: RuleTransition = invokingState.transition(0) as RuleTransition;
 			following = this.nextTokens(rt.followState);
 			expected.addAll(following);
 			expected.remove(Token.EPSILON);

@@ -27,11 +27,10 @@ import { TokenSource } from './TokenSource';
  *  of speed.
  */
 export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
-	implements TokenSource
-{
-	static readonly DEFAULT_MODE: number =  0;
-	static readonly MORE: number =  -2;
-	static readonly SKIP: number =  -3;
+	implements TokenSource {
+	static readonly DEFAULT_MODE: number = 0;
+	static readonly MORE: number = -2;
+	static readonly SKIP: number = -3;
 
 	static get DEFAULT_TOKEN_CHANNEL(): number {
 		return Token.DEFAULT_CHANNEL;
@@ -41,8 +40,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return Token.HIDDEN_CHANNEL;
 	}
 
-	static readonly MIN_CHAR_VALUE: number =  0x0000;
-	static readonly MAX_CHAR_VALUE: number =  0xFFFF;
+	static readonly MIN_CHAR_VALUE: number = 0x0000;
+	static readonly MAX_CHAR_VALUE: number = 0xFFFF;
 
 	_input: CharStream;
 
@@ -92,7 +91,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 */
 	_text: string | undefined;
 
-	constructor(input: CharStream)  {
+	constructor(input: CharStream) {
 		super();
 		this._input = input;
 		this._tokenFactorySourcePair = { source: this, stream: input };
@@ -102,7 +101,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	reset(resetInput: boolean): void;
 	reset(resetInput?: boolean): void {
 		// wack Lexer state variables
-		if ( resetInput === undefined || resetInput === true ) {
+		if (resetInput === undefined || resetInput === true) {
 			this._input.seek(0); // rewind the input
 		}
 
@@ -133,7 +132,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		// Mark start location in char stream so unbuffered streams are
 		// guaranteed at least have text of current token
 		let tokenStartMarker: number = this._input.mark();
-		try{
+		try {
 			outer:
 			while (true) {
 				if (this._hitEOF) {
@@ -164,15 +163,15 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 							throw e;
 						}
 					}
-					if ( this._input.LA(1)===IntStream.EOF ) {
+					if (this._input.LA(1) === IntStream.EOF) {
 						this._hitEOF = true;
 					}
-					if ( this._type === Token.INVALID_TYPE ) this._type = ttype;
-					if ( this._type === Lexer.SKIP ) {
+					if (this._type === Token.INVALID_TYPE) this._type = ttype;
+					if (this._type === Lexer.SKIP) {
 						continue outer;
 					}
-				} while ( this._type === Lexer.MORE );
-				if ( this._token == null ) return this.emit();
+				} while (this._type === Lexer.MORE);
+				if (this._token == null) return this.emit();
 				return this._token;
 			}
 		}
@@ -202,15 +201,15 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	pushMode(m: number): void {
-		if ( LexerATNSimulator.debug ) console.log("pushMode "+m);
+		if (LexerATNSimulator.debug) console.log("pushMode " + m);
 		this._modeStack.push(this._mode);
 		this.mode(m);
 	}
 
 	popMode(): number {
-		if ( this._modeStack.isEmpty() ) throw new Error("EmptyStackException");
-		if ( LexerATNSimulator.debug ) console.log("popMode back to "+ this._modeStack.peek());
-		this.mode( this._modeStack.pop() );
+		if (this._modeStack.isEmpty()) throw new Error("EmptyStackException");
+		if (LexerATNSimulator.debug) console.log("popMode back to " + this._modeStack.peek());
+		this.mode(this._modeStack.pop());
 		return this._mode;
 	}
 
@@ -257,10 +256,10 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 */
 	emit(): Token;
 
-	emit(token?: Token): Token  {
+	emit(token?: Token): Token {
 		if (!token) token = this._factory.create(
 			this._tokenFactorySourcePair, this._type, this._text, this._channel,
-			this._tokenStartCharIndex, this.getCharIndex()-1, this._tokenStartLine,
+			this._tokenStartCharIndex, this.getCharIndex() - 1, this._tokenStartLine,
 			this._tokenStartCharPositionInLine);
 		this._token = token;
 		return token;
@@ -271,7 +270,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		let line: number = this.getLine();
 		let eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
-			Token.DEFAULT_CHANNEL, this._input.index(), this._input.index()-1,
+			Token.DEFAULT_CHANNEL, this._input.index(), this._input.index() - 1,
 			line, cpos);
 		this.emit(eof);
 		return eof;
@@ -304,7 +303,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  text override.
 	 */
 	getText(): string {
-		if ( this._text !=null ) {
+		if (this._text != null) {
 			return this._text;
 		}
 		return this.getInterpreter().getText(this._input);
@@ -348,7 +347,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	getAllTokens(): Token[] {
 		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
-		while ( t.getType()!=Token.EOF ) {
+		while (t.getType() != Token.EOF) {
 			tokens.push(t);
 			t = this.nextToken();
 		}
@@ -356,7 +355,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	notifyListeners(e: LexerNoViableAltException): void {
-		let text: string =  this._input.getText(
+		let text: string = this._input.getText(
 			Interval.of(this._tokenStartCharIndex, this._input.index()));
 		let msg: string = "token recognition error at: '" +
 			this.getErrorDisplay(text) + "'";
@@ -367,26 +366,26 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	getErrorDisplay(s: string | number): string {
 		if (typeof s === "number") {
-			switch(s) {
-			case Token.EOF :
+			switch (s) {
+			case Token.EOF:
 				return "<EOF>";
-			case 0x0a :
+			case 0x0a:
 				return "\\n";
-			case 0x09 :
+			case 0x09:
 				return "\\t";
-			case 0x0d :
+			case 0x0d:
 				return "\\r";
 			}
 			return String.fromCharCode(s);
 		}
-		return s.replace(/\n/g, "\\n" )
-		        .replace(/\t/g, "\\t")
-				.replace(/\r/g, "\\r");
+		return s.replace(/\n/g, "\\n")
+			.replace(/\t/g, "\\t")
+			.replace(/\r/g, "\\r");
 	}
 
 	getCharErrorDisplay(c: number): string {
-		let s: string =  this.getErrorDisplay(c);
-		return "'"+s+"'";
+		let s: string = this.getErrorDisplay(c);
+		return "'" + s + "'";
 	}
 
 	/** Lexers can normally match any char in it's vocabulary after matching

@@ -13,7 +13,7 @@ import { XPathElement } from "./XPathElement";
 
 export class XPathTokenElement extends XPathElement {
 	protected tokenType: number;
-	 constructor(tokenName: string, tokenType: number)  {
+	constructor(tokenName: string, tokenType: number) {
 		super(tokenName);
 		this.tokenType = tokenType;
 	}
@@ -23,10 +23,9 @@ export class XPathTokenElement extends XPathElement {
 		// return all children of t that match nodeName
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
-			if ( c instanceof TerminalNode ) {
+			if (c instanceof TerminalNode) {
 				if ((c.getSymbol().getType() == this.tokenType && !this.invert) ||
-					(c.getSymbol().getType() != this.tokenType && this.invert) )
-				{
+					(c.getSymbol().getType() != this.tokenType && this.invert)) {
 					nodes.push(c);
 				}
 			}

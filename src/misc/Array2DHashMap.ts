@@ -27,7 +27,7 @@ class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>>
 		return this.keyComparator.hashCode(obj.key);
 	}
 
-	equals(a: Bucket<K, V>, b:Bucket<K, V>): boolean {
+	equals(a: Bucket<K, V>, b: Bucket<K, V>): boolean {
 		return this.keyComparator.equals(a.key, b.key);
 	}
 }
@@ -171,7 +171,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return true;
 	}
 
-	equals(o:any): boolean {
+	equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof EntrySet)) {
@@ -230,7 +230,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		this.backingStore = backingStore;
 	}
 
-	add(e:K): boolean {
+	add(e: K): boolean {
 		throw new Error("Not supported");
 	}
 
@@ -242,7 +242,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		this.map.clear();
 	}
 
-	contains(o:any): boolean {
+	contains(o: any): boolean {
 		return this.backingStore.contains({ key: o });
 	}
 
@@ -256,7 +256,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return true;
 	}
 
-	equals(o:any): boolean {
+	equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof KeySet)) {
@@ -279,7 +279,7 @@ class KeySet<K, V> implements JavaSet<K> {
 	}
 
 	remove(o: any): boolean {
-		return this.backingStore.remove({key: o});
+		return this.backingStore.remove({ key: o });
 	}
 
 	removeAll(collection: Collection<any>): boolean {
@@ -347,7 +347,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return true;
 	}
 
-	equals(o:any): boolean {
+	equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof ValueCollection)) {

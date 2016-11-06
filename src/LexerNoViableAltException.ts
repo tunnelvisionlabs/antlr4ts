@@ -23,10 +23,10 @@ export class LexerNoViableAltException extends RecognitionException {
 	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
 	private deadEndConfigs?: ATNConfigSet;
 
-	 constructor(lexer: Lexer | undefined,
-									 @NotNull input: CharStream,
-									 startIndex: number,
-									 deadEndConfigs: ATNConfigSet | undefined)  {
+	constructor(lexer: Lexer | undefined,
+		@NotNull input: CharStream,
+		startIndex: number,
+		deadEndConfigs: ATNConfigSet | undefined) {
 		super(lexer, input);
 		this.startIndex = startIndex;
 		this.deadEndConfigs = deadEndConfigs;

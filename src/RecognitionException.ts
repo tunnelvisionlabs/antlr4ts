@@ -38,31 +38,31 @@ export class RecognitionException extends Error {
 	 */
 	private offendingToken?: Token;
 
-	private offendingState: number =  -1;
+	private offendingState: number = -1;
 
-	 constructor(lexer: Lexer | undefined,
-				 input: CharStream);
+	constructor(lexer: Lexer | undefined,
+		input: CharStream);
 
-	 constructor(recognizer: Recognizer<Token,any> | undefined,
-				input: IntStream | undefined,
-				ctx: ParserRuleContext | undefined);
+	constructor(recognizer: Recognizer<Token, any> | undefined,
+		input: IntStream | undefined,
+		ctx: ParserRuleContext | undefined);
 
-	 constructor(recognizer: Recognizer<Token,any> | undefined,
-				input: IntStream | undefined,
-				ctx: ParserRuleContext | undefined,
-				message: string);
+	constructor(recognizer: Recognizer<Token, any> | undefined,
+		input: IntStream | undefined,
+		ctx: ParserRuleContext | undefined,
+		message: string);
 
-	 constructor(
-		 recognizer: Lexer | Recognizer<Token, any> | undefined,
-		 input: CharStream | IntStream | undefined,
-		 ctx?: ParserRuleContext,
-		 message?: string) {
-		 super(message);
+	constructor(
+		recognizer: Lexer | Recognizer<Token, any> | undefined,
+		input: CharStream | IntStream | undefined,
+		ctx?: ParserRuleContext,
+		message?: string) {
+		super(message);
 
 		this.recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if ( recognizer ) this.offendingState = recognizer.getState();
+		if (recognizer) this.offendingState = recognizer.getState();
 	}
 
 	/**
@@ -92,7 +92,7 @@ export class RecognitionException extends Error {
 	 * @return The set of token types that could potentially follow the current
 	 * state in the ATN, or {@code null} if the information is not available.
 	 */
-	getExpectedTokens(): IntervalSet | undefined{
+	getExpectedTokens(): IntervalSet | undefined {
 		if (this.recognizer) {
 			return this.recognizer.getATN().getExpectedTokens(this.offendingState, this.ctx);
 		}
@@ -126,7 +126,7 @@ export class RecognitionException extends Error {
 		return this.input;
 	}
 
-	getOffendingToken(recognizer?: Recognizer<Token,any>): Token | undefined {
+	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
 		if (recognizer && recognizer !== this.recognizer) return undefined;
 		return this.offendingToken;
 	}

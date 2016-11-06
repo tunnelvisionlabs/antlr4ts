@@ -84,9 +84,9 @@ export class RuleContext extends RuleNode {
 	}
 
 	depth(): number {
-		let n =  0;
+		let n = 0;
 		let p: RuleContext | undefined = this;
-		while ( p ) {
+		while (p) {
 			p = p.parent;
 			n++;
 		}
@@ -205,8 +205,7 @@ export class RuleContext extends RuleNode {
 	toString(
 		arg1?: Recognizer<any, any> | string[],
 		stop?: RuleContext)
-		: string
-	{
+		: string {
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
@@ -219,7 +218,7 @@ export class RuleContext extends RuleNode {
 					buf += (p.invokingState);
 				}
 			} else {
-				let ruleIndex: number =  p.getRuleIndex();
+				let ruleIndex: number = p.getRuleIndex();
 				let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
 					? ruleNames[ruleIndex] : ruleIndex.toString();
 				buf += (ruleName);

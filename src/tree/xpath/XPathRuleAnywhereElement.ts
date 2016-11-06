@@ -16,7 +16,7 @@ import { XPathElement } from "./XPathElement";
  */
 export class XPathRuleAnywhereElement extends XPathElement {
 	protected ruleIndex: number;
-	 constructor(ruleName: string, ruleIndex: number)  {
+	constructor(ruleName: string, ruleIndex: number) {
 		super(ruleName);
 		this.ruleIndex = ruleIndex;
 	}

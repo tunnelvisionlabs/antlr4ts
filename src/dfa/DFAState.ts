@@ -44,7 +44,7 @@ import * as assert from 'assert';
  *  meaning that state was reached via a different set of rule invocations.</p>
  */
 export class DFAState {
-	stateNumber: number =  -1;
+	stateNumber: number = -1;
 
 	@NotNull
 	configs: ATNConfigSet;
@@ -191,7 +191,7 @@ export class DFAState {
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize(7);
+		let hash: number = MurmurHash.initialize(7);
 		hash = MurmurHash.update(hash, this.configs.hashCode());
 		hash = MurmurHash.finish(hash, 1);
 		return hash;
@@ -213,31 +213,31 @@ export class DFAState {
 	@Override
 	equals(o: any): boolean {
 		// compare set of ATN configurations in this set with other
-		if ( this===o ) return true;
+		if (this === o) return true;
 
 		if (!(o instanceof DFAState)) {
 			return false;
 		}
 
-		let other: DFAState =  o;
-		let sameSet: boolean =  this.configs.equals(other.configs);
+		let other: DFAState = o;
+		let sameSet: boolean = this.configs.equals(other.configs);
 //		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
 	}
 
 	@Override
 	toString(): string {
-        let buf = "";
-        buf += (this.stateNumber) + (":") + (this.configs);
-        if ( this.isAcceptState() ) {
-            buf += ("=>");
-            if ( this.predicates ) {
-                buf += this.predicates;
-            }
-            else {
-                buf += (this.getPrediction());
-            }
-        }
+		let buf = "";
+		buf += (this.stateNumber) + (":") + (this.configs);
+		if (this.isAcceptState()) {
+			buf += ("=>");
+			if (this.predicates) {
+				buf += this.predicates;
+			}
+			else {
+				buf += (this.getPrediction());
+			}
+		}
 		return buf.toString();
 	}
 }
@@ -255,7 +255,7 @@ export namespace DFAState {
 
 		@Override
 		toString(): string {
-			return "("+this.pred+", "+this.alt+ ")";
+			return "(" + this.pred + ", " + this.alt + ")";
 		}
 	}
 }

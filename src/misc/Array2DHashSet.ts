@@ -8,11 +8,11 @@
 
 import * as assert from "assert";
 import { DefaultEqualityComparator } from './DefaultEqualityComparator';
-import {EqualityComparator} from './EqualityComparator';
-import {NotNull, Nullable, Override,SuppressWarnings} from '../Decorators';
-import {Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet}  from './Stubs';
-import {ObjectEqualityComparator} from './ObjectEqualityComparator';
-import {MurmurHash} from './MurmurHash';
+import { EqualityComparator } from './EqualityComparator';
+import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
+import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from './Stubs';
+import { ObjectEqualityComparator } from './ObjectEqualityComparator';
+import { MurmurHash } from './MurmurHash';
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 
@@ -20,9 +20,9 @@ import {MurmurHash} from './MurmurHash';
 // 		  e.g. the return type of add() differs!
 //        For this reason I've commented tweaked the implements clause
 
-const INITAL_CAPACITY: number =  16; // must be power of 2
-const INITAL_BUCKET_CAPACITY: number =  8;
-const LOAD_FACTOR: number =  0.75;
+const INITAL_CAPACITY: number = 16; // must be power of 2
+const INITAL_BUCKET_CAPACITY: number = 8;
+const LOAD_FACTOR: number = 0.75;
 
 export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
@@ -31,11 +31,11 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected buckets: (T | undefined)[][];
 
 	/** How many elements in set */
-	protected n: number =  0;
+	protected n: number = 0;
 
-	protected threshold: number =  Math.floor(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
+	protected threshold: number = Math.floor(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
 
-	protected initialBucketCapacity: number =  INITAL_BUCKET_CAPACITY;
+	protected initialBucketCapacity: number = INITAL_BUCKET_CAPACITY;
 
 	constructor(comparator?: EqualityComparator<T>, initialCapacity?: number, initialBucketCapacity?: number);
 	constructor(set: Array2DHashSet<T>);
@@ -69,13 +69,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * the return value.
 	 */
 	getOrAdd(o: T): T {
-		if ( this.n > this.threshold ) this.expand();
+		if (this.n > this.threshold) this.expand();
 		return this.getOrAddImpl(o);
 	}
 
 	protected getOrAddImpl(o: T): T {
-		let b: number =  this.getBucket(o);
-		let bucket =  this.buckets[b];
+		let b: number = this.getBucket(o);
+		let bucket = this.buckets[b];
 
 		// NEW BUCKET
 		if (!bucket) {
@@ -87,19 +87,19 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		// LOOK FOR IT IN BUCKET
-		for (let i=0; i<bucket.length; i++) {
-			let existing =  bucket[i];
+		for (let i = 0; i < bucket.length; i++) {
+			let existing = bucket[i];
 			if (!existing) {
 				// empty slot; not there, add.
 				bucket[i] = o;
 				this.n++;
 				return o;
 			}
-			if ( this.comparator.equals(existing, o) ) return existing; // found existing, quit
+			if (this.comparator.equals(existing, o)) return existing; // found existing, quit
 		}
 
 		// FULL BUCKET, expand and add to end
-		let oldLength: number =  bucket.length;
+		let oldLength: number = bucket.length;
 		bucket.length *= 2;
 		bucket[oldLength] = o; // add to end
 		this.n++;
@@ -107,9 +107,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	get(o: T): T | undefined {
-		if ( o==null ) return o;
-		let b: number =  this.getBucket(o);
-		let bucket =  this.buckets[b];
+		if (o == null) return o;
+		let b: number = this.getBucket(o);
+		let bucket = this.buckets[b];
 		if (!bucket) {
 			// no bucket
 			return undefined;
@@ -121,25 +121,25 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				return undefined;
 			}
 
-			if ( this.comparator.equals(e, o) ) return e;
+			if (this.comparator.equals(e, o)) return e;
 		}
 
 		return undefined;
 	}
 
 	protected getBucket(o: T): number {
-		let hash: number =  this.comparator.hashCode(o);
-		let b: number =  hash & (this.buckets.length-1); // assumes len is power of 2
+		let hash: number = this.comparator.hashCode(o);
+		let b: number = hash & (this.buckets.length - 1); // assumes len is power of 2
 		return b;
 	}
 
 	@Override
 	hashCode(): number {
-		let hash: number =  MurmurHash.initialize();
+		let hash: number = MurmurHash.initialize();
 		for (let bucket of this.buckets) {
-			if ( bucket==null ) continue;
+			if (bucket == null) continue;
 			for (let o of bucket) {
-				if ( o==null ) break;
+				if (o == null) break;
 				hash = MurmurHash.update(hash, this.comparator.hashCode(o));
 			}
 		}
@@ -151,34 +151,34 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@Override
 	equals(o: any): boolean {
 		if (o === this) return true;
-		if ( !(o instanceof Array2DHashSet) ) return false;
-		if ( o.size() !== this.size() ) return false;
-		let same: boolean =  this.containsAll(o);
+		if (!(o instanceof Array2DHashSet)) return false;
+		if (o.size() !== this.size()) return false;
+		let same: boolean = this.containsAll(o);
 		return same;
 	}
 
 	protected expand(): void {
-		let old =  this.buckets;
-		let newCapacity: number =  this.buckets.length * 2;
-		let newTable: T[][] =  this.createBuckets(newCapacity);
+		let old = this.buckets;
+		let newCapacity: number = this.buckets.length * 2;
+		let newTable: T[][] = this.createBuckets(newCapacity);
 		let newBucketLengths: Uint32Array = new Uint32Array(newTable.length);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
-		let oldSize: number =  this.size();
+		let oldSize: number = this.size();
 		for (let bucket of old) {
-			if ( bucket==null ) {
+			if (bucket == null) {
 				continue;
 			}
 
 			for (let o of bucket) {
-				if ( o==null ) {
+				if (o == null) {
 					break;
 				}
 
-				let b: number =  this.getBucket(o);
-				let bucketLength: number =  newBucketLengths[b];
+				let b: number = this.getBucket(o);
+				let bucketLength: number = newBucketLengths[b];
 				let newBucket: T[];
 				if (bucketLength === 0) {
 					// new bucket
@@ -203,8 +203,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	add(t: T): boolean {
-		let existing: T =  this.getOrAdd(t);
-		return existing===t;
+		let existing: T = this.getOrAdd(t);
+		return existing === t;
 	}
 
 	@Override
@@ -214,7 +214,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	isEmpty(): boolean {
-		return this.n===0;
+		return this.n === 0;
 	}
 
 	@Override
@@ -244,14 +244,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		// Copy elements from the nested arrays into the destination array
-		let i: number =  0; // Position within destination array
+		let i: number = 0; // Position within destination array
 		for (let bucket of this.buckets) {
-			if ( bucket==null ) {
+			if (bucket == null) {
 				continue;
 			}
 
 			for (let o of bucket) {
-				if ( o==null ) {
+				if (o == null) {
 					break;
 				}
 				a[i++] = o;
@@ -270,23 +270,23 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			return false;
 		}
 
-		let b: number =  this.getBucket(obj);
-		let bucket =  this.buckets[b];
+		let b: number = this.getBucket(obj);
+		let bucket = this.buckets[b];
 		if (!bucket) {
 			// no bucket
 			return false;
 		}
 
-		for (let i=0; i<bucket.length; i++) {
-			let e =  bucket[i];
+		for (let i = 0; i < bucket.length; i++) {
+			let e = bucket[i];
 			if (!e) {
 				// empty slot; not there
 				return false;
 			}
 
-			if ( this.comparator.equals(e, obj) ) {          // found it
+			if (this.comparator.equals(e, obj)) {          // found it
 				// shift all elements to the right down one
-				bucket.copyWithin(i, i+1)
+				bucket.copyWithin(i, i + 1)
 				bucket[bucket.length - 1] = undefined;
 				this.n--;
 				return true;
@@ -298,21 +298,20 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	containsAll(collection: JavaCollection<T>): boolean {
-		if ( collection instanceof Array2DHashSet ) {
+		if (collection instanceof Array2DHashSet) {
 			let s = collection as any as Array2DHashSet<T>;
 			for (let bucket of s.buckets) {
-				if ( bucket==null ) continue;
+				if (bucket == null) continue;
 				for (let o of bucket) {
-					if ( o==null ) break;
-					if ( !this.containsFast(this.asElementType(o)) ) return false;
+					if (o == null) break;
+					if (!this.containsFast(this.asElementType(o))) return false;
 				}
 			}
 		}
 		else {
-			for (let o of asIterable(collection))
-				{
-					if ( !this.containsFast(this.asElementType(o)) ) return false;
-				}
+			for (let o of asIterable(collection)) {
+				if (!this.containsFast(this.asElementType(o))) return false;
+			}
 		}
 		return true;
 	}
@@ -322,15 +321,15 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		let changed: boolean = false;
 
 		for (let o of asIterable(c)) {
-			let existing: T =  this.getOrAdd(o);
-			if ( existing !== o ) changed = true;
+			let existing: T = this.getOrAdd(o);
+			if (existing !== o) changed = true;
 		}
 		return changed;
 	}
 
 	@Override
 	retainAll(c: JavaCollection<T>): boolean {
-		let newsize: number =  0;
+		let newsize: number = 0;
 		for (let bucket of this.buckets) {
 			if (bucket == null) {
 				continue;
@@ -365,7 +364,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 		}
 
-		let changed: boolean =  newsize != this.n;
+		let changed: boolean = newsize != this.n;
 		this.n = newsize;
 		return changed;
 	}
@@ -389,15 +388,15 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	toString(): string {
-		if ( this.size()==0 ) return "{}";
+		if (this.size() == 0) return "{}";
 
 		let buf = '{';
-		let first: boolean =  true;
+		let first: boolean = true;
 		for (let bucket of this.buckets) {
-			if ( bucket==null ) continue;
+			if (bucket == null) continue;
 			for (let o of bucket) {
-				if ( o==null ) break;
-				if ( first ) first=false;
+				if (o == null) break;
+				if (first) first = false;
 				else buf += ", ";
 				buf += o.toString();
 			}
@@ -409,16 +408,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	toTableString(): string {
 		let buf = "";
 		for (let bucket of this.buckets) {
-			if ( bucket==null ) {
+			if (bucket == null) {
 				buf += "null\n";
 				continue;
 			}
 			buf += '[';
-			let first: boolean =  true;
+			let first: boolean = true;
 			for (let o of bucket) {
-				if ( first ) first=false;
+				if (first) first = false;
 				else buf += " ";
-				if ( o==null ) buf += "_";
+				if (o == null) buf += "_";
 				else buf += o.toString();
 			}
 			buf += "]\n";
@@ -469,16 +468,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 }
 
 class SetIterator<T> implements JavaIterator<T>  {
-	nextIndex: number =  0;
-	removed: boolean =  true;
+	nextIndex: number = 0;
+	removed: boolean = true;
 
-	constructor(private data: T[], private set: Array2DHashSet<T>) {}
+	constructor(private data: T[], private set: Array2DHashSet<T>) { }
 
 	public hasNext(): boolean {
 		return this.nextIndex < this.data.length;
 	}
 
-	next():  T {
+	next(): T {
 		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
 		this.removed = false;
 		return this.data[this.nextIndex++];
