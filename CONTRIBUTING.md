@@ -41,6 +41,24 @@ set of functionality. The runtime test suite can be generated and executed using
 mvn -f tool/pom.xml test
 ```
 
+### Performance testing
+
+To run the benchmark suite with profiling enabled, run this command:
+
+```
+npm run profile
+```
+
+This will create a file of with a file name like `isolate-000001C4B0FF38A0-v8.log`, where the digits will vary with each
+run. After collecting this data, you can summarize the results with the following command after modifying it to match
+the actual file name produced by the profiler.
+
+```
+node --prof-process isolate-000001C4B0FF38A0-v8.log >profile.txt
+```
+
+The resulting file, `profile.txt` will contain a summary of the results from running a sampling profiler. 
+
 ## Versioning
 
 The TypeScript target for ANTLR 4 is based on the Optimized ANTLR 4 runtime maintained by [Sam Harwell](@sharwell).
