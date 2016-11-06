@@ -118,7 +118,7 @@ export namespace PredictionMode {
 
 		@Override
 		equals(a: ATNConfig, b: ATNConfig): boolean {
-			if (a == b) return true;
+			if (a === b) return true;
 			if (a == null || b == null) return false;
 			return a.getState().stateNumber == b.getState().stateNumber
 				&& a.getContext().equals(b.getContext());
