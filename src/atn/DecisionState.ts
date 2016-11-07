@@ -8,6 +8,9 @@
 
 import { ATNState } from './ATNState';
 
+/**
+ * DecisionStates are an important subset of ATNStates, which represent places where a choice among alternatives is required.
+ */
 export abstract class DecisionState extends ATNState {
 	decision: number = -1;
 	nonGreedy: boolean = false;
