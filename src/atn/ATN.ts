@@ -140,20 +140,13 @@ export class ATN {
 	@NotNull
 	modeToDFA: DFA[] = [];
 
-<<<<<<< 349fcddba4bcad149b0192276637e87e91111f44
+	/**
+	 * For simple decisions, a LL1 style map is sufficent and efficent.
+	 */
 	LL1Table: Map<number, number> = new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
 	constructor(@NotNull grammarType: ATNType, maxTokenType: number) {
-=======
-	/**
-	 * For simple decisions, a LL1 style map is sufficent and efficent.
-	 */
-	LL1Table: Map<number, number> =  new Map<number, number>();
-
-	/** Used for runtime deserialization of ATNs from strings */
-	constructor(@NotNull grammarType: ATNType, maxTokenType: number)  {
->>>>>>> Some doc comments on ATN
 		this.grammarType = grammarType;
 		this.maxTokenType = maxTokenType;
 	}
