@@ -160,7 +160,7 @@ public abstract class BaseTest {
 	}
 
 	protected ErrorQueue antlr(String grammarFileName, String grammarStr, boolean defaultListener, String... extraOptions) {
-		System.out.println("dir "+tmpdir);
+		System.out.println("\nCreating " + tmpdir);
 		mkdir(tmpdir);
 		writeFile(tmpdir, grammarFileName, grammarStr);
 		return antlr(grammarFileName, defaultListener, extraOptions);
@@ -311,8 +311,6 @@ public abstract class BaseTest {
 	private boolean buildProject() throws Exception {
 		String tsc = locateTypeScriptCompiler();
 		String[] args = { tsc };
-
-		System.err.println("Starting build "+ Utils.join(args, " "));
 		ProcessBuilder pb = new ProcessBuilder(args);
 		pb.directory(testDir);
 		Process process = pb.start();

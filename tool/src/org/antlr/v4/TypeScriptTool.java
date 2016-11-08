@@ -17,7 +17,7 @@ import org.antlr.v4.tool.Grammar;
  * @author Sam Harwell
  */
 public class TypeScriptTool extends Tool {
-	protected boolean verbose = false;
+	private boolean verbose = false;
 
 	static {
 		Grammar.parserOptions.add("baseImportPath");
@@ -42,7 +42,7 @@ public class TypeScriptTool extends Tool {
 	}
 
 	public static void main(String[] args) {
-		Tool antlr = new TypeScriptTool(args);
+		TypeScriptTool antlr = new TypeScriptTool(args);
 		antlr.verbose = true;
 		if (args.length == 0) {
 			antlr.help();
