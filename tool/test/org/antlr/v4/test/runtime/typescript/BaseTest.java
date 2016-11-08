@@ -333,7 +333,7 @@ public abstract class BaseTest {
 	}
 
 	private String locateTypeScriptCompiler() {
-		return "tsc.cmd";
+		return new File( baseDir, "node_modules/.bin/tsc.cmd").getAbsolutePath();
 	}
 
 	private String locateNode() {
