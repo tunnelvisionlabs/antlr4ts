@@ -57,7 +57,7 @@ public abstract class BaseTest {
 	public void setUp() throws Exception {
 		File cd = new File(".").getAbsoluteFile();
 		this.baseDir = cd.getParentFile().getParentFile();
-		this.classDir = new File(this.baseDir, "test/gen/" + getClass().getSimpleName() );
+		this.classDir = new File(this.baseDir, "test/runtime/gen/" + getClass().getSimpleName() );
 		this.testDir = new File(this.classDir, name.getMethodName());
 		this.testDir.mkdirs();
 		for (File file : this.testDir.listFiles()) {
