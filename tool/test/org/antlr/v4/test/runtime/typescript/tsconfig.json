@@ -16,16 +16,10 @@
     ],
     "types": [
       "node"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "src/*": [
-        "$$ANTLR4TS$$/*"
-      ]
-    }
+    ]
   },
   "include": [
-    "$$src$$/**/*"
+    "./*.ts"
   ],
   "exclude": [
     "node_modules"
