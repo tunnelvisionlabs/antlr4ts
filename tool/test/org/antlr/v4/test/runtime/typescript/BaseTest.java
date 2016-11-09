@@ -192,13 +192,24 @@ public abstract class BaseTest {
 	}
 
 	protected void generateParserTest(String grammarFileName,
-								String grammarStr,
-								String parserName,
-								String lexerName,
-								String startRuleName,
-								String input, 
-								boolean debug)
-	{
+									  String grammarStr,
+									  String parserName,
+									  String lexerName,
+									  String startRuleName,
+									  String input,
+									  boolean debug) {
+		boolean success = rawGenerateRecognizer(grammarFileName,
+				grammarStr,
+				parserName,
+				lexerName,
+				"-visitor");
+		assertTrue(success);
+		this.stderrDuringParse = null;
+		if (parserName == null) {
+			writeLexerTestFile(lexerName, false);
+		} else {
+			writeParserTestFile(parserName, lexerName, startRuleName, debug);
+		}
 	}
 
 	protected String execLexer(String grammarFileName,
@@ -574,71 +585,57 @@ public abstract class BaseTest {
 								 boolean debug)
 	{
 		ST outputFileST = new ST(
-			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';\n" +
-			"import { ErrorNode } from 'antlr4ts/tree/ErrorNode';\n" +
-			"import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';\n" +
-			"import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';\n" +
-			"import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';\n" +
-			"import { RuleNode } from 'antlr4ts/tree/RuleNode';\n" +
-			"import { TerminalNode } from 'antlr4ts/tree/TerminalNode';\n" +
-			"\n" +
-			"import * as fs from 'fs';\n" +
-			"\n" +
-			"import { <lexerName> } from './<lexerName>';\n" +
-			"import { <parserName> } from './<parserName>';\n" +
-			"\n" +
-			"class TreeShapeListener implements ParseTreeListener {\n" +
-			"	enterEveryRule(ctx: ParserRuleContext): void {\n" +
-			"		for (let i = 0; i \\< ctx.getChildCount(); i++) {\n" +
-			"			let parent = ctx.getChild(i).getParent();\n" +
-			"			if (!(parent instanceof RuleNode) || parent.getRuleContext() !== ctx) {\n" +
-			"				throw new Error(\"Invalid parse tree shape detected.\");\n" +
-			"			}\n" +
-			"		}\n" +
-			"	}\n" +
-			"}\n" +
-			"\n" +
-			"let input = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
-			"let lex = new <lexerName>(input);\n" +
-			"let tokens = new CommonTokenStream(lex);\n" +
-			"<createParser>\n" +
-			"parser.setBuildParseTree(true);\n" +
-			"let tree = parser.<parserStartRuleName>();\n" +
-			"ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);\n");
-		ST createParserST = new ST("let parser = new <parserName>(tokens);\n");
-		if ( debug ) {
-			createParserST = new ST(
-				"let parser = new <parserName>(tokens);\n" +
-				"parser.getInterpreter().reportAmbiguities = true;\n" +
-				"parser.addErrorListener(new DiagnosticErrorListener());\n");
-		}
-		outputFileST.add("createParser", createParserST);
-		outputFileST.add("parserName", parserName);
+				"import 'mocha';\n" +
+						"import * as base from '../../../BaseTest';\n" +
+						"import { <lexerName> } from './<lexerName>';\n" +
+						"import { <parserName> } from './<parserName>';\n" +
+						"\n" +
+						"it(`<className>.<testName>`, ()=> {\n" +
+						"	base.parserTest( {\n" +
+						"		testName: `<testName>`,\n" +
+						"		lexer: <lexerName>, \n" +
+						"		parser: <parserName>, \n" +
+						"		parserStartRuleName: `<parserStartRuleName>`,\n" +
+						"		debug: <debug>,\n" +
+						"		input: `<input>`,\n" +
+						"		expectedOutput: `<expectedOutput>`,\n" +
+						"		expectedErrors: `<expectedErrors>`,\n" +
+						"		showDFA: <showDFA>\n" +
+						"		});\n" +
+						"	});\n" +
+						"\n"
+		);
+
+		outputFileST.add("className", getClass().getSimpleName());
+		outputFileST.add("testName", this.name.getMethodName());
 		outputFileST.add("lexerName", lexerName);
-		outputFileST.add("parserStartRuleName", parserStartRuleName);
+		outputFileST.add("parserName", parserName);
+		outputFileST.add("parserStartRuleName", asTemplateString(parserStartRuleName));
+		outputFileST.add("debug", debug ? "true" : "false");
+		outputFileST.add("input", asTemplateString(this.input));
+		outputFileST.add("expectedOutput", asTemplateString(this.expectedOutput));
+		outputFileST.add("expectedErrors", asTemplateString(this.expectedErrors));
+		outputFileST.add("showDFA", "false");
 		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
 				"import 'mocha';\n" +
-				"import * as base from '../../../BaseTest';\n" +
-				"import { <lexerName> } from './<lexerName>';\n" +
-				"\n" +
-				"it(`<className>.<testName>`, ()=> {\n" +
-				"	base.lexerTest( {\n" +
-				"		testName: `<testName>`,\n" +
-				"		lexer: <lexerName>, \n" +
-				"		input: `<input>`,\n" +
-				"		expectedOutput: `<expectedOutput>`,\n" +
-				"		expectedErrors: `<expectedErrors>`,\n" +
-				"		showDFA: <showDFA>\n" +
-				"		});\n" +
-				"	});\n" +
-				"\n"
+						"import * as base from '../../../BaseTest';\n" +
+						"import { <lexerName> } from './<lexerName>';\n" +
+						"\n" +
+						"it(`<className>.<testName>`, ()=> {\n" +
+						"	base.lexerTest( {\n" +
+						"		testName: `<testName>`,\n" +
+						"		lexer: <lexerName>, \n" +
+						"		input: `<input>`,\n" +
+						"		expectedOutput: `<expectedOutput>`,\n" +
+						"		expectedErrors: `<expectedErrors>`,\n" +
+						"		showDFA: <showDFA>\n" +
+						"		});\n" +
+						"	});\n" +
+						"\n"
 		);
 
 		outputFileST.add("className", getClass().getSimpleName());
@@ -647,7 +644,7 @@ public abstract class BaseTest {
 		outputFileST.add("input", asTemplateString(this.input));
 		outputFileST.add("expectedOutput", asTemplateString(this.expectedOutput));
 		outputFileST.add("expectedErrors", asTemplateString(this.expectedErrors));
-		outputFileST.add("showDFA", showDFA ? "true" : "false" );
+		outputFileST.add("showDFA", showDFA ? "true" : "false");
 		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 

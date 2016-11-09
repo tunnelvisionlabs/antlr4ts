@@ -8,19 +8,35 @@ import * as assert from 'assert';
 import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';
 import { CharStream } from 'antlr4ts/CharStream';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
+import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';
+import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
 import { Lexer } from 'antlr4ts/Lexer';
+import { Parser } from 'antlr4ts/Parser';
+import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';
+import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { RuleNode } from 'antlr4ts/tree/RuleNode';
+import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
+
 const stdMocks = require('std-mocks');
 
-function expectConsole( output: string, errors: string, testFunction: ()=> void ) {
+function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: ()=> void ) {
 	try {
 		stdMocks.use();
 		testFunction();
 	} finally {
 		stdMocks.restore();
-		let streams = stdMocks.flush();
-		assert.equal( streams.stdout.join(''), output);
-		assert.equal( streams.stderr.join(''), errors);
 	}
+	let streams = stdMocks.flush();
+	let output = streams.stdout.join('');
+	let errors = streams.stderr.join('');
+
+	// Fixup for small behavioral difference at EOF...
+	if (output.length === expectedOutput.length - 1 && output[output.length-1] !== "\n")
+		output += "\n";
+
+	assert.equal( output, expectedOutput);
+	assert.equal( errors, expectedErrors);
 }
 
 export interface LexerTestOptions {
@@ -29,7 +45,24 @@ export interface LexerTestOptions {
 	input: string;
 	expectedOutput: string;
 	expectedErrors: string;
-	showDFA?: boolean;
+	showDFA: boolean;
+}
+
+export interface ParserTestOptions extends LexerTestOptions {
+	parser: new(s:CommonTokenStream) => Parser;
+	parserStartRuleName: string;
+	debug: boolean;
+}
+
+class TreeShapeListener implements ParseTreeListener {
+	enterEveryRule(ctx: ParserRuleContext): void {
+		for (let i = 0; i < ctx.getChildCount(); i++) {
+			let parent = ctx.getChild(i).getParent();
+			if (!(parent instanceof RuleNode) || parent.getRuleContext() !== ctx) {
+				throw new Error("Invalid parse tree shape detected.");
+			}
+		}
+	}
 }
 
 export function lexerTest(options: LexerTestOptions) {
@@ -41,6 +74,22 @@ export function lexerTest(options: LexerTestOptions) {
 		tokens.getTokens().forEach(t =>console.log(t.toString()));
 		if (options.showDFA)
 			process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());
+	});
+}
+
+export function parserTest(options: ParserTestOptions) {
+	const inputStream: CharStream = new ANTLRInputStream(options.input);
+	const lex = new options.lexer(inputStream);
+	const tokens = new CommonTokenStream(lex);
+	const parser = new options.parser(tokens);
+	if (options.debug) {
+		parser.getInterpreter().reportAmbiguities = true;
+		parser.addErrorListener(new DiagnosticErrorListener());
+	}
+	parser.setBuildParseTree(true);
+	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
+		const tree = (parser as any)[options.parserStartRuleName]();
+		ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);
 	});
 }
 
