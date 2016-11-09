@@ -41,14 +41,10 @@ public void test<test.name>() throws Exception {
 <if(test.AfterGrammar)>
 	<test.AfterGrammar>
 <endif>
-	String input =<writeStringLiteral(test.Input)>;
-	String found = execLexer("<grammar>.g4", grammar, "<grammar><if(test.Options.("CombinedGrammar"))>Lexer<endif>", input, <writeBoolean(test.Options.("ShowDFA"))>);
-	assertEquals(<writeStringLiteral(test.Output)>, found);
-	<if(!isEmpty.(test.Errors))>
-	assertEquals(<writeStringLiteral(test.Errors)>, this.stderrDuringParse);
-	<else>
-	assertNull(this.stderrDuringParse);
-	<endif>
+	this.input =<writeStringLiteral(test.Input)>;
+	this.expectedOutput = <writeStringLiteral(test.Output)>;
+	this.expectedErrors = <writeStringLiteral(test.Errors)>;
+	generateLexerTest("<grammar>.g4", grammar, "<grammar><if(test.Options.("CombinedGrammar"))>Lexer<endif>", input, <writeBoolean(test.Options.("ShowDFA"))>);
 	}>
 }
 
@@ -76,14 +72,10 @@ public void test<test.name>() throws Exception {
 
 	<test.AfterGrammar>
 
-	String input =<writeStringLiteral(test.Input)>;
-	String found = execParser("<grammar>.g4", grammar, "<grammar>Parser", "<grammar>Lexer", "<test.Rule>", input, <writeBoolean(test.Options.("Debug"))>);
-	assertEquals(<writeStringLiteral(test.Output)>, found);
-	<if(!isEmpty.(test.Errors))>
-	assertEquals(<writeStringLiteral(test.Errors)>, this.stderrDuringParse);
-	<else>
-	assertNull(this.stderrDuringParse);
-	<endif>
+	this.input =<writeStringLiteral(test.Input)>;
+	this.expectedOutput = <writeStringLiteral(test.Output)>;
+	this.expectedErrors = <writeStringLiteral(test.Errors)>;
+	generateParserTest("<grammar>.g4", grammar, "<grammar>Parser", "<grammar>Lexer", "<test.Rule>", input, <writeBoolean(test.Options.("Debug"))>);
 	}>
 }
 
@@ -96,7 +88,7 @@ CompositeParserTestMethod(test) ::= <<
 AbstractParserTestMethod(test) ::= <<
 String test<test.name>(String input) throws Exception {
 	String grammar = <test.grammar.lines:{ line | "<line>};separator="\\n\" +\n", wrap, anchor>";
-	return execParser("<test.grammar.grammarName>.g4", grammar, "<test.grammar.grammarName>Parser", "<test.grammar.grammarName>Lexer", "<test.startRule>", input, <test.debug>);
+	return generateParserTest("<test.grammar.grammarName>.g4", grammar, "<test.grammar.grammarName>Parser", "<test.grammar.grammarName>Lexer", "<test.startRule>", input, <test.debug>);
 }
 
 >>

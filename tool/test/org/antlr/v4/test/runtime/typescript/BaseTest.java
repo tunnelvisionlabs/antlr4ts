@@ -52,6 +52,9 @@ public abstract class BaseTest {
 	protected String stderrDuringParse;
 
 	@Rule public TestName name = new TestName();
+	protected String input;
+	protected String expectedOutput;
+	protected String expectedErrors;
 
 	@Before
 	public void setUp() throws Exception {
@@ -75,6 +78,14 @@ public abstract class BaseTest {
 		org.antlr.v4.Tool tool = new TypeScriptTool(new String[] {"-o", tmpdir});
 		return tool;
 	}
+
+	protected static String asTemplateString( String text ) {
+		String result = text
+			.replaceAll("\\\\","\\\\\\\\")
+			.replaceAll("`", "\\`")
+			.replace("\\$\\{", "$\\{");
+		return result;
+	} 
 
 	protected String load(String fileName, String encoding)
 		throws IOException
@@ -164,6 +175,30 @@ public abstract class BaseTest {
 		mkdir(tmpdir);
 		writeFile(tmpdir, grammarFileName, grammarStr);
 		return antlr(grammarFileName, defaultListener, extraOptions);
+	}
+
+	protected void generateLexerTest(String grammarFileName,
+							   String grammarStr,
+							   String lexerName,
+							   String input,
+							   boolean showDFA)
+	{
+		boolean success = rawGenerateRecognizer(grammarFileName,
+									  grammarStr,
+									  null,
+									  lexerName);
+		assertTrue(success);
+		writeLexerTestFile(lexerName, showDFA);
+	}
+
+	protected void generateParserTest(String grammarFileName,
+								String grammarStr,
+								String parserName,
+								String lexerName,
+								String startRuleName,
+								String input, 
+								boolean debug)
+	{
 	}
 
 	protected String execLexer(String grammarFileName,
@@ -589,26 +624,30 @@ public abstract class BaseTest {
 
 	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';\n" +
-			"import { CharStream } from 'antlr4ts/CharStream';\n" +
-			"import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';\n" +
-			"import { Lexer } from 'antlr4ts/Lexer';\n" +
-			"import * as fs from 'fs';\n" +
-			"\n" +
-			"import { <lexerName> } from './<lexerName>';\n" +
-			"\n" +
-			"let input: CharStream = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
-			"let lex: <lexerName> = new <lexerName>(input);\n" +
-			"let tokens = new CommonTokenStream(lex);\n" +
-			"tokens.fill();\n" +
-			"for (let t of tokens.getTokens()) {\n" +
-			"	console.log(t.toString());\n" +
-			"}\n" +
-			(showDFA?"	process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")
-			);
+				"import 'mocha';\n" +
+				"import * as base from '../../../BaseTest';\n" +
+				"import { <lexerName> } from './<lexerName>';\n" +
+				"\n" +
+				"it(`<className>.<testName>`, ()=> {\n" +
+				"	base.lexerTest( {\n" +
+				"		testName: `<testName>`,\n" +
+				"		lexer: <lexerName>, \n" +
+				"		input: `<input>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		showDFA: <showDFA>\n" +
+				"		});\n" +
+				"	});\n" +
+				"\n"
+		);
 
+		outputFileST.add("className", getClass().getSimpleName());
+		outputFileST.add("testName", this.name.getMethodName());
 		outputFileST.add("lexerName", lexerName);
+		outputFileST.add("input", asTemplateString(this.input));
+		outputFileST.add("expectedOutput", asTemplateString(this.expectedOutput));
+		outputFileST.add("expectedErrors", asTemplateString(this.expectedErrors));
+		outputFileST.add("showDFA", showDFA ? "true" : "false" );
 		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 
