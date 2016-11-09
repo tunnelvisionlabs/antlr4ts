@@ -1,6 +1,6 @@
 {
   "name": "antlr4ts-root",
-  "version": "0.1.1-SNAPSHOT",
+  "version": "0.4.0-SNAPSHOT",
   "description": "Root project for ANTLR 4 runtime for Typescript",
   "private": true,
   "main": "index.js",
@@ -18,7 +18,7 @@
     "antlr4ts-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn benchmark/Java.g4 -DbaseImportPath=../../../src -o benchmark/gen/std-atn",
     "antlr4ts-benchmark-lr": "antlr4ts -visitor benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr",
     "antlr4ts-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr-atn",
-    "tsc": "tsc",
+    "tsc": "tsc && cd test/runtime && tsc",
     "test": "mocha",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
