@@ -30,15 +30,14 @@ public abstract class BaseTest {
 	protected String expectedErrors;
 	private String stderrDuringParse;
 
-	/*
+	/**
 	 * Generates EcmaScript2015 style Template String body (WITHOUTout surrounding back-ticks)
 	 */
-
 	private static String asTemplateString(String text) {
 		return text
 			.replaceAll("\\\\","\\\\\\\\")
 			.replaceAll("`", "\\`")
-			.replace("\\$\\{", "$\\{");
+			.replaceAll("\\$\\{", "$\\{");
 	}
 
 	public static void writeFile(String dir, String fileName, String content) {
