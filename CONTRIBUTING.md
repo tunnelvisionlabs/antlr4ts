@@ -34,12 +34,9 @@ subset of the TypeScript runtime's functionality.
 npm test
 ```
 
-The second set of tests comes from the ANTLR 4 runtime test suite, which provides functional tests of a much larger
-set of functionality. The runtime test suite can be generated and executed using the following command.
-
-```
-mvn -f tool/pom.xml test
-```
+The second set of tests comes from the ANTLR 4 runtime test suite, which provides functional tests of a much larger set
+of functionality. The runtime test suite is generated and compiled as part of the `npm install` command, and executed
+using the previously-described `npm test` command.
 
 ### Performance testing
 

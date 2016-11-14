@@ -1,11 +1,11 @@
 {
   "name": "antlr4ts-root",
-  "version": "0.1.1-SNAPSHOT",
+  "version": "0.4.0-SNAPSHOT",
   "description": "Root project for ANTLR 4 runtime for Typescript",
   "private": true,
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src",
+    "prepublish": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
     "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
     "unlinkruntime": "cd target/src && npm unlink",
     "buildtool": "cd tool && npm link",
@@ -19,6 +19,7 @@
     "antlr4ts-benchmark-lr": "antlr4ts -visitor benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr",
     "antlr4ts-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr-atn",
     "tsc": "tsc",
+    "buildrts": "cd test/runtime && tsc",
     "test": "mocha",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
@@ -54,6 +55,7 @@
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
     "source-map-support": "^0.4.3",
+    "std-mocks": "^1.0.1",
     "typedoc": "^0.5.1",
     "typescript": "^2.0.3"
   },

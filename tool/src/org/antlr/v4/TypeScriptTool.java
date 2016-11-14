@@ -17,6 +17,7 @@ import org.antlr.v4.tool.Grammar;
  * @author Sam Harwell
  */
 public class TypeScriptTool extends Tool {
+	private boolean verbose = false;
 
 	static {
 		Grammar.parserOptions.add("baseImportPath");
@@ -41,7 +42,8 @@ public class TypeScriptTool extends Tool {
 	}
 
 	public static void main(String[] args) {
-		Tool antlr = new TypeScriptTool(args);
+		TypeScriptTool antlr = new TypeScriptTool(args);
+		antlr.verbose = true;
 		if (args.length == 0) {
 			antlr.help();
 			antlr.exit(0);
@@ -79,7 +81,9 @@ public class TypeScriptTool extends Tool {
 			// for subdir/T.g4, you get subdir here.  Well, depends on -o etc...
 			File outputDir = getOutputDirectory(g.fileName);
 			File outputFile = new File(outputDir, fileName);
-			System.out.format("Generating file '%s' for grammar '%s'%n", outputFile.getAbsolutePath(), g.fileName);
+			if (this.verbose) {
+				System.out.format("Generating file '%s' for grammar '%s'%n", outputFile.getAbsolutePath(), g.fileName);
+			}
 		}
 
 		return super.getOutputFileWriter(g, fileName);

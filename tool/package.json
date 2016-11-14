@@ -1,6 +1,6 @@
 {
   "name": "antlr4ts-cli",
-  "version": "0.2.2-0",
+  "version": "0.4.0-SNAPSHOT",
   "preferGlobal": true,
   "description": "Antlr4 command line tool for TypeScript",
   "files": [
@@ -13,12 +13,8 @@
     "antlr4ts": "./antlr4ts"
   },
   "scripts": {
-    "prepublish": "mvn verify -DskipTests=true",
-    "postpack": "mv %npm_package_name%-%npm_package_version%.tgz ../%npm_package_name%.tgz",
-    "pretest": "npm install .",
-    "posttest": "cd .. && npm install tool",
-    "test": "antlr4ts",
-    "set": "set"
+    "prepublish": "mvn verify",
+    "postpack": "mv %npm_package_name%-%npm_package_version%.tgz ../%npm_package_name%.tgz"
   },
   "repository": {
     "type": "git",

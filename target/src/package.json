@@ -1,6 +1,6 @@
 {
   "name": "antlr4ts",
-  "version": "0.1.1-SNAPSHOT",
+  "version": "0.4.0-SNAPSHOT",
   "description": "Antlr4 runtime for JavaScript written in Typescript",
   "main": "index.js",
   "scripts": {
