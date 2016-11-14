@@ -1,14 +1,16 @@
 # antlr4ts - TypeScript/JavaScript target for ANTLR 4
 
+[![Join the chat at https://gitter.im/tunnelvisionlabs/antlr4ts](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tunnelvisionlabs/antlr4ts?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build status](https://ci.appveyor.com/api/projects/status/d4gpmnrkfo3tb2t1/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/antlr4ts/branch/master)
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](./LICENSE)
 
 ## Overview
 
-* **Releases:** See the [GitHub Releases](https://github.com/sharwell/antlr4ts/releases) page for release notes and
+* **Releases:** See the [GitHub Releases](https://github.com/tunnelvisionlabs/antlr4ts/releases) page for release notes and
   links to the distribution
-* **Feedback:** Use [GitHub Issues](https://github.com/sharwell/antlr4ts/issues) for issues (bugs, enhancements,
+* **Feedback:** Use [GitHub Issues](https://github.com/tunnelvisionlabs/antlr4ts/issues) for issues (bugs, enhancements,
   features, and questions)
 
 ## Requirements
@@ -36,11 +38,46 @@ TypeScript 2.0.
 
 ## Getting started
 
-### Dev setup - for develping ANTLR4 code targeting TypeScript/JavaScript/CoffeeScript from 
-    - [Node.js Version 6.x or greater](https://nodejs.org/en/)
-    - After installing Nodejs, be sure you have the latest node package manager to the latest with the command `npm i -g npm`
-    - You may install the latest stable antlr4ts command globally with the command `npm install -g antlr4ts-cli`.
-    - You may install a antlr4ts command into your project with `npm install --save-dev antlr4ts-cli`.   
-    - You may install the antlr4ts runtime into your project with `npm install --save antlr4ts`.  
+1. Add `antlr4ts` to **package.json** as a runtime dependency
 
-Note: this package has a development time dependency on the [Java Runtime Environment (JRE)](https://java.com/en/download/), or a [Java Development Kit (JDK)](http://www.oracle.com/technetwork/java/javase/downloads/index.html).   These are only required on your development machine, there is no dependency on Java at runtime. 
+    ```
+    "dependencies": {
+      // ...
+      "antlr4ts": "^0.2.0"
+    }
+    ```
+
+2. Add `antlr4ts-cli` to **package.json** as a development dependency
+
+    ```
+    "devDependencies": {
+      // ...
+      "antlr4ts-cli": "^0.2.0"
+    }
+    ```
+
+3. Add a grammar to your project, e.g. **path/to/MyGrammar.g4**
+
+4. Add a script to **package.json** for compiling your grammar to TypeScript
+
+    ```
+    "scripts": {
+      // ...
+      "antlr4ts": "antlr4ts -visitor path/to/MyGrammar.g4"
+    }
+    ```
+
+5. Use your grammar in TypeScript
+
+    ```
+    import { ANTLRInputStream, CommonTokenStream } from 'antlr4ts';
+
+    // Create the lexer and parser
+    let inputStream = new ANTLRInputStream("text");
+    let lexer = new MyGrammarLexer(inputStream);
+    let tokenStream = new CommonTokenStream(lexer);
+    let parser = new MyGrammarParser(tokenStream);
+
+    // Parse the input, where `compilationUnit` is whatever entry point you defined
+    let result = parser.compilationUnit();
+    ```

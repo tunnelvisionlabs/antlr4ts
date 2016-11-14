@@ -13,7 +13,7 @@ import { XPath } from "./XPath";
 import { XPathElement } from "./XPathElement";
 
 export class XPathWildcardAnywhereElement extends XPathElement {
-	 constructor()  {
+	constructor() {
 		super(XPath.WILDCARD);
 	}
 

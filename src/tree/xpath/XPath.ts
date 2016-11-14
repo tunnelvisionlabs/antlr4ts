@@ -67,14 +67,14 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * Whitespace is not allowed.</p>
  */
 export class XPath {
-	static readonly WILDCARD: string =  "*"; // word not operator/separator
-	static readonly NOT: string =  "!"; 	   // word for invert operator
+	static readonly WILDCARD: string = "*"; // word not operator/separator
+	static readonly NOT: string = "!"; 	   // word for invert operator
 
 	protected path: string;
 	protected elements: XPathElement[];
 	protected parser: Parser;
 
-	 constructor(parser: Parser, path: string)  {
+	constructor(parser: Parser, path: string) {
 		this.parser = parser;
 		this.path = path;
 		this.elements = this.split(path);
@@ -90,7 +90,7 @@ export class XPath {
 
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(new XPathLexerErrorListener());
-		let tokenStream  = new CommonTokenStream(lexer);
+		let tokenStream = new CommonTokenStream(lexer);
 		try {
 			tokenStream.fill();
 		}
@@ -106,20 +106,20 @@ export class XPath {
 		let tokens: Token[] = tokenStream.getTokens();
 //		System.out.println("path="+path+"=>"+tokens);
 		let elements: XPathElement[] = [];
-		let n: number =  tokens.length;
+		let n: number = tokens.length;
 		let i: number = 0;
-loop:
-		while ( i<n ) {
-			let el: Token =  tokens[i];
+		loop:
+		while (i < n) {
+			let el: Token = tokens[i];
 			let next: Token | undefined;
-			switch ( el.getType() ) {
-				case XPathLexer.ROOT :
-				case XPathLexer.ANYWHERE :
-					let anywhere: boolean =  el.getType() === XPathLexer.ANYWHERE;
+			switch (el.getType()) {
+				case XPathLexer.ROOT:
+				case XPathLexer.ANYWHERE:
+					let anywhere: boolean = el.getType() === XPathLexer.ANYWHERE;
 					i++;
 					next = tokens[i];
 					let invert: boolean = next.getType() === XPathLexer.BANG;
-					if ( invert ) {
+					if (invert) {
 						i++;
 						next = tokens[i];
 					}
@@ -129,18 +129,18 @@ loop:
 					i++;
 					break;
 
-				case XPathLexer.TOKEN_REF :
-				case XPathLexer.RULE_REF :
-				case XPathLexer.WILDCARD :
-					elements.push( this.getXPathElement(el, false) );
+				case XPathLexer.TOKEN_REF:
+				case XPathLexer.RULE_REF:
+				case XPathLexer.WILDCARD:
+					elements.push(this.getXPathElement(el, false));
 					i++;
 					break;
 
-				case Token.EOF :
+				case Token.EOF:
 					break loop;
 
-				default :
-					throw new Error("Unknowth path element "+el);
+				default:
+					throw new Error("Unknowth path element " + el);
 			}
 		}
 		return elements;
@@ -152,7 +152,7 @@ loop:
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
-		if ( wordToken.getType()==Token.EOF ) {
+		if (wordToken.getType() == Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
 
@@ -163,30 +163,30 @@ loop:
 
 		let ttype: number = this.parser.getTokenType(word);
 		let ruleIndex: number = this.parser.getRuleIndex(word);
-		switch ( wordToken.getType() ) {
-			case XPathLexer.WILDCARD :
+		switch (wordToken.getType()) {
+			case XPathLexer.WILDCARD:
 				return anywhere ?
 					new XPathWildcardAnywhereElement() :
 					new XPathWildcardElement();
-			case XPathLexer.TOKEN_REF :
-			case XPathLexer.STRING :
-				if ( ttype===Token.INVALID_TYPE ) {
-					throw new Error( word + " at index " +
-									 wordToken.getStartIndex() +
-									" isn't a valid token name");
+			case XPathLexer.TOKEN_REF:
+			case XPathLexer.STRING:
+				if (ttype === Token.INVALID_TYPE) {
+					throw new Error(word + " at index " +
+						wordToken.getStartIndex() +
+						" isn't a valid token name");
 				}
 				return anywhere ?
-					new XPathTokenAnywhereElement(word,  ttype) :
-					new XPathTokenElement(word,  ttype);
-			default :
-				if ( ruleIndex==-1 ) {
-					throw new Error( word + " at index " +
-									 wordToken.getStartIndex() +
-									" isn't a valid rule name");
+					new XPathTokenAnywhereElement(word, ttype) :
+					new XPathTokenElement(word, ttype);
+			default:
+				if (ruleIndex == -1) {
+					throw new Error(word + " at index " +
+						wordToken.getStartIndex() +
+						" isn't a valid rule name");
 				}
 				return anywhere ?
-					new XPathRuleAnywhereElement(word,  ruleIndex) :
-					new XPathRuleElement(word,  ruleIndex);
+					new XPathRuleAnywhereElement(word, ruleIndex) :
+					new XPathRuleElement(word, ruleIndex);
 		}
 	}
 
@@ -200,17 +200,17 @@ loop:
 	 * path. The root {@code /} is relative to the node passed to
 	 * {@link #evaluate}.
 	 */
-	evaluate(t: ParseTree ): ParseTree[] {
+	evaluate(t: ParseTree): ParseTree[] {
 		let dummyRoot = new ParserRuleContext();
 		dummyRoot.addChild(t as ParserRuleContext);
 
 		let work = [dummyRoot] as ParseTree[];
 
-		let i: number =  0;
-		while ( i < this.elements.length ) {
+		let i: number = 0;
+		while (i < this.elements.length) {
 			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
 			for (let node of work) {
-				if ( node.getChildCount()>0 ) {
+				if (node.getChildCount() > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.

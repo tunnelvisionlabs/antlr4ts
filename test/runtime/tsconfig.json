@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "target",
+    "outDir": "../../target/test/runtime",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es2015",
@@ -10,20 +10,19 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "declaration": true,
+    "declaration": false,
     "preserveConstEnums": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ]
   },
+  "include": [
+    "**/*.ts"
+  ],
   "exclude": [
-    "node_modules",
-    "target",
-    "tool",
-    "test/runtime"
+    "node_modules"
   ]
 }

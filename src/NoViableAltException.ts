@@ -35,7 +35,7 @@ export class NoViableAltException extends RecognitionException {
 	@NotNull
 	private startToken: Token;
 
-	constructor(/*@NotNull*/ recognizer:Parser );
+	constructor(/*@NotNull*/ recognizer: Parser);
 	constructor(
 		/*@NotNull*/ recognizer: Recognizer<Token, any>,
 		/*@NotNull*/ input: TokenStream,
@@ -50,8 +50,7 @@ export class NoViableAltException extends RecognitionException {
 		startToken?: Token,
 		offendingToken?: Token,
 		deadEndConfigs?: ATNConfigSet,
-		ctx?: ParserRuleContext)
-	{
+		ctx?: ParserRuleContext) {
 		if (recognizer instanceof Parser) {
 			if (input === undefined) {
 				input = recognizer.getInputStream();

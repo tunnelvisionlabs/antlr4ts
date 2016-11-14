@@ -13,7 +13,6 @@ build_script:
 - npm install
 test_script:
 - npm test
-- mvn -B -f tool/pom.xml -Dgpg.skip=true -Psonatype-oss-release test
 cache:
 - node_modules -> **\package.json
 - C:\Users\appveyor\.m2 -> **\pom.xml

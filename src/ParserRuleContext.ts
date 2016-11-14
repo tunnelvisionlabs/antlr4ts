@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
 import { ErrorNode } from "./tree/ErrorNode";
 import { Interval } from "./misc/Interval";
-import { Nullable, Override } from "./Decorators";
+import { Override } from "./Decorators";
 import { Parser } from "./Parser";
 import { ParseTree } from "./tree/ParseTree";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
@@ -136,7 +136,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  generic ruleContext object.
  	 */
 	removeLastChild(): void {
-		if ( this.children ) {
+		if (this.children) {
 			this.children.pop();
 		}
 	}
@@ -165,9 +165,9 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	getChild(i: number): ParseTree;
-	getChild<T extends ParseTree>(i: number, ctxType: {new(...args: any[]): T;}): T;
+	getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
 	// Note: in TypeScript, order or arguments reversed
-	getChild<T extends ParseTree>(i: number, ctxType?: {new(...args: any[]): T;}): ParseTree {
+	getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
 		}
@@ -176,11 +176,11 @@ export class ParserRuleContext extends RuleContext {
 			return this.children[i];
 		}
 
-		let j: number =  -1; // what node with ctxType have we found?
+		let j: number = -1; // what node with ctxType have we found?
 		for (let o of this.children) {
 			if (o instanceof ctxType) {
 				j++;
-				if ( j === i ) {
+				if (j === i) {
 					return o;
 				}
 			}
@@ -190,17 +190,17 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	getToken(ttype: number, i: number): TerminalNode {
-		if (!this.children || i < 0 || i >= this.children.length ) {
+		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new Error("The specified token does not exist");
 		}
 
-		let j: number =  -1; // what token with ttype have we found?
+		let j: number = -1; // what token with ttype have we found?
 		for (let o of this.children) {
-			if ( o instanceof TerminalNode ) {
-				let symbol: Token =  o.getSymbol();
-				if ( symbol.getType()===ttype ) {
+			if (o instanceof TerminalNode) {
+				let symbol: Token = o.getSymbol();
+				if (symbol.getType() === ttype) {
 					j++;
-					if ( j === i ) {
+					if (j === i) {
 						return o;
 					}
 				}
@@ -213,14 +213,14 @@ export class ParserRuleContext extends RuleContext {
 	getTokens(ttype: number): TerminalNode[] {
 		let tokens: TerminalNode[] = [];
 
-		if ( !this.children) {
+		if (!this.children) {
 			return tokens;
 		}
 
 		for (let o of this.children) {
-			if ( o instanceof TerminalNode ) {
+			if (o instanceof TerminalNode) {
 				let symbol = o.getSymbol();
-				if ( symbol.getType() === ttype ) {
+				if (symbol.getType() === ttype) {
 					tokens.push(o);
 				}
 			}
@@ -251,7 +251,7 @@ export class ParserRuleContext extends RuleContext {
 		}
 
 		for (let o of this.children) {
-			if ( o instanceof ctxType ) {
+			if (o instanceof ctxType) {
 				contexts.push(o);
 			}
 		}
@@ -266,11 +266,11 @@ export class ParserRuleContext extends RuleContext {
 
 	@Override
 	getSourceInterval(): Interval {
-		if ( !this.start ) {
+		if (!this.start) {
 			return Interval.INVALID;
 		}
-		if (!this.stop || this.stop.getTokenIndex() < this.start.getTokenIndex() ) {
-			return Interval.of(this.start.getTokenIndex(), this.start.getTokenIndex()-1); // empty
+		if (!this.stop || this.stop.getTokenIndex() < this.start.getTokenIndex()) {
+			return Interval.of(this.start.getTokenIndex(), this.start.getTokenIndex() - 1); // empty
 		}
 		return Interval.of(this.start.getTokenIndex(), this.stop.getTokenIndex());
 	}
@@ -288,13 +288,13 @@ export class ParserRuleContext extends RuleContext {
 	 */
 	getStop(): Token | undefined { return this.stop; }
 
-    /** Used for rule context info debugging during parse-time, not so much for ATN debugging */
-    toInfoString(recognizer: Parser): string {
-        let rules: Array<string> =
-            recognizer.getRuleInvocationStack(this).reverse();
-        return "ParserRuleContext"+rules+"{" +
-                "start=" + this.start +
-                ", stop=" + this.stop +
-                '}';
-    }
+	/** Used for rule context info debugging during parse-time, not so much for ATN debugging */
+	toInfoString(recognizer: Parser): string {
+		let rules: Array<string> =
+			recognizer.getRuleInvocationStack(this).reverse();
+		return "ParserRuleContext" + rules + "{" +
+			"start=" + this.start +
+			", stop=" + this.stop +
+			'}';
+	}
 }

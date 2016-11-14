@@ -13,15 +13,15 @@ import { RuleNode } from "./RuleNode";
 import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
-    walk(listener: ParseTreeListener, t: ParseTree): void {
-		if ( t instanceof ErrorNode ) {
+	walk(listener: ParseTreeListener, t: ParseTree): void {
+		if (t instanceof ErrorNode) {
 			if (listener.visitErrorNode) {
 				listener.visitErrorNode(t);
 			}
 
 			return;
 		}
-		else if ( t instanceof TerminalNode ) {
+		else if (t instanceof TerminalNode) {
 			if (listener.visitTerminal) {
 				listener.visitTerminal(t);
 			}
@@ -30,13 +30,13 @@ export class ParseTreeWalker {
 		}
 
 		let r = t as RuleNode;
-        this.enterRule(listener, r);
-        let n: number =  r.getChildCount();
-        for (let i = 0; i<n; i++) {
-            this.walk(listener, r.getChild(i));
-        }
+		this.enterRule(listener, r);
+		let n: number = r.getChildCount();
+		for (let i = 0; i < n; i++) {
+			this.walk(listener, r.getChild(i));
+		}
 		this.exitRule(listener, r);
-    }
+	}
 
 	/**
 	 * The discovery of a rule node, involves sending two events: the generic
@@ -44,22 +44,22 @@ export class ParseTreeWalker {
 	 * {@link RuleContext}-specific event. First we trigger the generic and then
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
-    protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-        let ctx  = r.getRuleContext() as ParserRuleContext;
+	protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
+		let ctx = r.getRuleContext() as ParserRuleContext;
 		if (listener.enterEveryRule) {
 			listener.enterEveryRule(ctx);
 		}
 
 		ctx.enterRule(listener);
-    }
+	}
 
-    protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-        let ctx = r.getRuleContext() as ParserRuleContext;
+	protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
+		let ctx = r.getRuleContext() as ParserRuleContext;
 		ctx.exitRule(listener);
 		if (listener.exitEveryRule) {
 			listener.exitEveryRule(ctx);
 		}
-    }
+	}
 }
 
 export namespace ParseTreeWalker {

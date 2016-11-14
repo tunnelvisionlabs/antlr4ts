@@ -4,7 +4,7 @@
  * Licensed under the BSD-3-clause license. See LICENSE file in the project root for license information.
  */
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
-import {EqualityComparator} from './EqualityComparator';
+import { EqualityComparator } from './EqualityComparator';
 import { Override } from '../Decorators';
 import { Equatable } from './Stubs';
 
@@ -15,7 +15,7 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 export class ObjectEqualityComparator implements EqualityComparator<Equatable | null | undefined> {
-	static readonly INSTANCE: ObjectEqualityComparator =  new ObjectEqualityComparator();
+	static readonly INSTANCE: ObjectEqualityComparator = new ObjectEqualityComparator();
 
 	/**
 	 * {@inheritDoc}

@@ -1,29 +1,43 @@
 {
-  "name": "antlr4ts",
-  "version": "0.1.1-SNAPSHOT",
-  "description": "Antlr4 runtime for JavaScript written in Typescript",
+  "name": "antlr4ts-root",
+  "version": "0.4.0-SNAPSHOT",
+  "description": "Root project for ANTLR 4 runtime for Typescript",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "antlr4ts": "npm run antlr4ts-xpath && npm run antlr4ts-test-std && npm run antlr4ts-test-std-atn && npm run antlr4ts-test-lr && npm run antlr4ts-test-lr-atn && npm run antlr4ts-test-rewriter",
-    "antlr4ts-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
-    "antlr4ts-test-std": "antlr4ts -visitor test/tool/Java.g4 -DbaseImportPath=../../../../src -o test/tool/gen/std",
-    "antlr4ts-test-std-atn": "antlr4ts -visitor -Xforce-atn test/tool/Java.g4 -DbaseImportPath=../../../../src -o test/tool/gen/std-atn",
-    "antlr4ts-test-lr": "antlr4ts -visitor test/tool/JavaLR.g4 -DbaseImportPath=../../../../src -o test/tool/gen/lr",
-    "antlr4ts-test-lr-atn": "antlr4ts -visitor -Xforce-atn test/tool/JavaLR.g4 -DbaseImportPath=../../../../src -o test/tool/gen/lr-atn",
+    "prepublish": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
+    "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
+    "unlinkruntime": "cd target/src && npm unlink",
+    "buildtool": "cd tool && npm link",
+    "unlinktool": "cd tool && npm unlink",
+    "clean": "npm run unlink && git clean -idx",
+    "antlr4ts": "npm run antlr4ts-test-xpath && npm run antlr4ts-test-rewriter && npm run antlr4ts-benchmark",
+    "antlr4ts-test-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
     "antlr4ts-test-rewriter": "antlr4ts test/tool/RewriterLexer1.g4 test/tool/RewriterLexer2.g4 test/tool/RewriterLexer3.g4 -DbaseImportPath=../../../../src -o test/tool/gen/rewriter",
+    "antlr4ts-benchmark": "npm run antlr4ts-benchmark-std && npm run antlr4ts-benchmark-std-atn && npm run antlr4ts-benchmark-lr && npm run antlr4ts-benchmark-lr-atn",
+    "antlr4ts-benchmark-std": "antlr4ts -visitor benchmark/Java.g4 -DbaseImportPath=../../../src -o benchmark/gen/std",
+    "antlr4ts-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn benchmark/Java.g4 -DbaseImportPath=../../../src -o benchmark/gen/std-atn",
+    "antlr4ts-benchmark-lr": "antlr4ts -visitor benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr",
+    "antlr4ts-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr-atn",
     "tsc": "tsc",
-    "prepublish": "npm i tool && npm run antlr4ts && npm run tsc && npm run typedoc",
-    "pretest": "npm run prepublish",
+    "buildrts": "cd test/runtime && tsc",
     "test": "mocha",
-    "precover": "npm run prepubish",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "postcover": "istanbul report",
     "dev-test-watch": "mocha-typescript-watch",
-    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts"
+    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts",
+    "pack-runtime": "npm pack target/src",
+    "publish-runtime": "npm install && npm publish target/src",
+    "prebenchmark": "npm run antlr4ts-benchmark && tsc",
+    "benchmark": "npm run benchmark-core",
+    "benchmark-core": "node target/benchmark/TestPerformance.js",
+    "preprofile": "npm run antlr4ts-benchmark && tsc",
+    "profile": "npm run profile-core",
+    "profile-core": "node --prof target/benchmark/TestPerformance.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sharwell/antlr4ts.git"
+    "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
   },
   "keywords": [
     "ANTLR4",
@@ -32,9 +46,9 @@
   "author": "Terence Parr, Sam Harwell, and Burt Harris",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/sharwell/antlr4ts/issues"
+    "url": "https://github.com/tunnelvisionlabs/antlr4ts/issues"
   },
-  "homepage": "https://github.com/sharwell/antlr4ts#readme",
+  "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
@@ -42,6 +56,7 @@
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
     "source-map-support": "^0.4.3",
+    "std-mocks": "^1.0.1",
     "typedoc": "^0.5.1",
     "typescript": "^2.0.3"
   },

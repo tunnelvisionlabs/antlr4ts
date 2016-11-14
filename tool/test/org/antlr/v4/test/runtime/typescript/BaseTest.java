@@ -7,30 +7,17 @@ package org.antlr.v4.test.runtime.typescript;
 
 import org.antlr.v4.Tool;
 import org.antlr.v4.TypeScriptTool;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.WritableToken;
 import org.antlr.v4.runtime.misc.Utils;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.antlr.v4.tool.DefaultToolListener;
-import org.antlr.v4.tool.GrammarSemanticsMessage;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
+import org.junit.rules.TestName;
 import org.stringtemplate.v4.ST;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,142 +26,65 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.rules.RuleChain;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public abstract class BaseTest {
-	public static final String newline = System.getProperty("line.separator");
-	public static final String pathSep = System.getProperty("path.separator");
-
-	/**
-	 * When the {@code antlr-preserve-typescript-test-dir} runtime property is
-	 * set to {@code true}, the temporary directories created by the test run
-	 * will not be removed at the end of the test run, even for tests that
-	 * completed successfully.
-	 *
-	 * <p>
-	 * The default behavior (used in all other cases) is removing the temporary
-	 * directories for all tests which completed successfully, and preserving
-	 * the directories for tests which failed.</p>
-	 */
-	public static final boolean PRESERVE_TEST_DIR = Boolean.parseBoolean(System.getProperty("antlr-preserve-typescript-test-dir"));
-
-	private static boolean REMOVE_BASE_FOLDER = true;
-
-	@ClassRule
-	public static final TemporaryFolder BASE_TEST_FOLDER = new TemporaryFolder() {
-		@Override
-		public void create() throws IOException {
-			File testTmpdir = new File(System.getProperty("java.io.tmpdir"));
-			if (!testTmpdir.mkdirs()) {
-				assertTrue(testTmpdir.isDirectory());
-			}
-
-			super.create();
-		}
-
-		@Override
-		public void delete() {
-			if (REMOVE_BASE_FOLDER) {
-				super.delete();
-			}
-		}
-	};
-
-	/**
-	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
-	 */
-	public final TestRule testWatcher = new TestWatcher() {
-		@Override
-		protected void failed(Throwable e, Description description) {
-			REMOVE_BASE_FOLDER = false;
-			removeTestFolder = false;
-		}
-
-		@Override
-		protected void succeeded(Description description) {
-			// remove tmpdir if no error.
-			if (PRESERVE_TEST_DIR) {
-				REMOVE_BASE_FOLDER = false;
-				removeTestFolder = false;
-			}
-		}
-	};
-
-	private boolean removeTestFolder = true;
-
-	/**
-	 * This is a JUnit rule which is applied in the correct order by {@link #tmpdirRuleChain}.
-	 */
-	public final TemporaryFolder TEST_SRC_FOLDER = new TemporaryFolder(BASE_TEST_FOLDER.getRoot()) {
-		@Override
-		public void delete() {
-			if (removeTestFolder) {
-				super.delete();
-			}
-		}
-	};
-
 	public String tmpdir;
+	@Rule public TestName name = new TestName();
+	protected String input;
+	protected String expectedOutput;
+	protected String expectedErrors;
+	private String stderrDuringParse;
 
-	@Rule
-	public final RuleChain tmpdirRuleChain = RuleChain.outerRule(TEST_SRC_FOLDER).around(testWatcher);
+	/**
+	 * Generates EcmaScript2015 style Template String body (WITHOUTout surrounding back-ticks)
+	 */
+	private static String asTemplateString(String text) {
+		return text
+			.replaceAll("\\\\","\\\\\\\\")
+			.replaceAll("`", "\\`")
+			.replaceAll("\\$\\{", "$\\{");
+	}
 
-	/** If error during parser execution, store stderr here; can't return
-     *  stdout and stderr.  This doesn't trap errors from running antlr.
-     */
-	protected String stderrDuringParse;
+	public static void writeFile(String dir, String fileName, String content) {
+		try {
+			Utils.writeFile(dir+"/"+fileName, content, "UTF-8");
+		}
+		catch (IOException ioe) {
+			System.err.println("can't write file");
+			ioe.printStackTrace(System.err);
+		}
+	}
+
+	protected static void assertEquals(String msg, int a, int b) {
+		org.junit.Assert.assertEquals(msg, a, b);
+	}
+
+	protected static void assertEquals(String a, String b) {
+		org.junit.Assert.assertEquals(a, b);
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		tmpdir = TEST_SRC_FOLDER.getRoot().getAbsolutePath();
+		File cd = new File(".").getAbsoluteFile();
+		File baseDir = cd.getParentFile().getParentFile();
+		File classDir = new File(baseDir, "test/runtime/gen/" + getClass().getSimpleName());
+		File testDir = new File(classDir, name.getMethodName());
+		testDir.mkdirs();
+		for (File file : testDir.listFiles()) {
+			file.delete();
+		}
+		this.tmpdir = testDir.getAbsolutePath();
 	}
 
-    protected org.antlr.v4.Tool newTool(String[] args) {
-		Tool tool = new TypeScriptTool(args);
-		return tool;
+    private org.antlr.v4.Tool newTool(String[] args) {
+		return new TypeScriptTool(args);
 	}
 
-	protected Tool newTool() {
-		org.antlr.v4.Tool tool = new TypeScriptTool(new String[] {"-o", tmpdir});
-		return tool;
-	}
-
-	protected String load(String fileName, String encoding)
-		throws IOException
-	{
-		if ( fileName==null ) {
-			return null;
-		}
-
-		String fullFileName = getClass().getPackage().getName().replace('.', '/') + '/' + fileName;
-		int size = 65000;
-		InputStreamReader isr;
-		InputStream fis = getClass().getClassLoader().getResourceAsStream(fullFileName);
-		if ( encoding!=null ) {
-			isr = new InputStreamReader(fis, encoding);
-		}
-		else {
-			isr = new InputStreamReader(fis);
-		}
-		try {
-			char[] data = new char[size];
-			int n = isr.read(data);
-			return new String(data, 0, n);
-		}
-		finally {
-			isr.close();
-		}
-	}
-
-	protected ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
+	private ErrorQueue antlr(String grammarFileName, boolean defaultListener, String... extraOptions) {
 		final List<String> options = new ArrayList<String>();
 		Collections.addAll(options, extraOptions);
-		options.add("-DbaseImportPath=src");
 		// Uncomment the following lines to show the StringTemplate visualizer when running tests
 		//options.add("-XdbgST");
 		//options.add("-XdbgSTWait");
@@ -228,25 +138,15 @@ public abstract class BaseTest {
 		return equeue;
 	}
 
-	protected ErrorQueue antlr(String grammarFileName, String grammarStr, boolean defaultListener, String... extraOptions) {
-		System.out.println("dir "+tmpdir);
+	private ErrorQueue antlr(String grammarFileName, String grammarStr, boolean defaultListener, String... extraOptions) {
 		mkdir(tmpdir);
 		writeFile(tmpdir, grammarFileName, grammarStr);
 		return antlr(grammarFileName, defaultListener, extraOptions);
 	}
 
-	protected String execLexer(String grammarFileName,
+	protected void generateLexerTest(String grammarFileName,
 							   String grammarStr,
 							   String lexerName,
-							   String input)
-	{
-		return execLexer(grammarFileName, grammarStr, lexerName, input, false);
-	}
-
-	protected String execLexer(String grammarFileName,
-							   String grammarStr,
-							   String lexerName,
-							   String input,
 							   boolean showDFA)
 	{
 		boolean success = rawGenerateRecognizer(grammarFileName,
@@ -254,64 +154,47 @@ public abstract class BaseTest {
 									  null,
 									  lexerName);
 		assertTrue(success);
-		writeFile(tmpdir, "input", input);
 		writeLexerTestFile(lexerName, showDFA);
-		addSourceFiles("Test.ts");
-		if(!compile()) {
-			fail("Failed to compile!");
-			return stderrDuringParse;
-		}
-		String output = execTest();
-		if ( stderrDuringParse!=null && stderrDuringParse.length()>0 ) {
-			System.err.println(stderrDuringParse);
-		}
-		return output;
 	}
 
-	Set<String> sourceFiles = new HashSet<String>();
-
-	private void addSourceFiles(String ... files) {
-		for(String file : files)
-			this.sourceFiles.add(file);
-	}
-
-	protected String execParser(String grammarFileName,
-								String grammarStr,
-								String parserName,
-								String lexerName,
-								String startRuleName,
-								String input, boolean debug)
-	{
+	protected void generateParserTest(String grammarFileName,
+									  String grammarStr,
+									  String parserName,
+									  String lexerName,
+									  String startRuleName,
+									  boolean debug) {
 		boolean success = rawGenerateRecognizer(grammarFileName,
-														grammarStr,
-														parserName,
-														lexerName,
-														"-visitor");
+				grammarStr,
+				parserName,
+				lexerName,
+				"-visitor");
 		assertTrue(success);
-		writeFile(tmpdir, "input", input);
-		return rawExecRecognizer(parserName,
-								 lexerName,
-								 startRuleName,
-								 debug);
+		this.stderrDuringParse = null;
+		if (parserName == null) {
+			writeLexerTestFile(lexerName, false);
+		}
+		else {
+			writeParserTestFile(parserName, lexerName, startRuleName, debug);
+		}
 	}
 
 	/** Return true if all is well */
-	protected boolean rawGenerateRecognizer(String grammarFileName,
-													String grammarStr,
-													String parserName,
-													String lexerName,
-													String... extraOptions)
+	private boolean rawGenerateRecognizer(String grammarFileName,
+										  String grammarStr,
+										  String parserName,
+										  String lexerName,
+										  String... extraOptions)
 	{
 		return rawGenerateRecognizer(grammarFileName, grammarStr, parserName, lexerName, false, extraOptions);
 	}
 
 	/** Return true if all is well */
-	protected boolean rawGenerateRecognizer(String grammarFileName,
-													String grammarStr,
-													String parserName,
-													String lexerName,
-													boolean defaultListener,
-													String... extraOptions)
+	private boolean rawGenerateRecognizer(String grammarFileName,
+										  String grammarStr,
+										  String parserName,
+										  String lexerName,
+										  boolean defaultListener,
+										  String... extraOptions)
 	{
 		ErrorQueue equeue = antlr(grammarFileName, grammarStr, defaultListener, extraOptions);
 		if (!equeue.errors.isEmpty()) {
@@ -335,308 +218,7 @@ public abstract class BaseTest {
 				files.add(grammarName+"BaseVisitor.ts");
 			}
 		}
-		addSourceFiles(files.toArray(new String[files.size()]));
 		return true;
-	}
-
-	protected String rawExecRecognizer(String parserName,
-									   String lexerName,
-									   String parserStartRuleName,
-									   boolean debug)
-	{
-        this.stderrDuringParse = null;
-		if ( parserName==null ) {
-			writeLexerTestFile(lexerName, false);
-		}
-		else {
-			writeParserTestFile(parserName,
-						  lexerName,
-						  parserStartRuleName,
-						  debug);
-		}
-
-		addSourceFiles("Test.ts");
-		return execRecognizer();
-	}
-
-	public String execRecognizer() {
-		assertTrue(compile());
-		return execTest();
-	}
-
-	public boolean compile() {
-		try {
-			if(!createProject()) {
-				return false;
-			}
-
-			if(!buildProject()) {
-				return false;
-			}
-
-			return true;
-		} catch(Exception e) {
-			return false;
-		}
-	}
-
-	private boolean buildProject() throws Exception {
-		String tsc = locateTypeScriptCompiler();
-		String script = new File(BASE_TEST_FOLDER.getRoot(), "node_modules").isDirectory() ? "test" : "install";
-		String[] args = { locateNpm(), script };
-		System.err.println("Starting build "+ Utils.join(args, " "));
-		ProcessBuilder pb = new ProcessBuilder(args);
-		pb.directory(BASE_TEST_FOLDER.getRoot());
-		Process process = pb.start();
-		StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
-		StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
-		stdoutVacuum.start();
-		stderrVacuum.start();
-		process.waitFor();
-		stdoutVacuum.join();
-		stderrVacuum.join();
-		// xbuild sends errors to output, so check exit code
-		boolean success = process.exitValue()==0;
-		if ( !success ) {
-			this.stderrDuringParse = stdoutVacuum.toString();
-			System.err.println("buildProject stderrVacuum: "+ this.stderrDuringParse);
-		}
-		return success;
-	}
-
-	private String locateTypeScriptCompiler() {
-		return "tsc";
-	}
-
-	private String locateNode() {
-		String programFiles = System.getenv("PROGRAMFILES");
-		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
-			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
-		}
-
-		programFiles = System.getenv("PROGRAMFILES(x86)");
-		if (programFiles != null && new File(new File(programFiles, "nodejs"), "node.exe").isFile()) {
-			return new File(new File(programFiles, "nodejs"), "node.exe").getAbsolutePath();
-		}
-
-		return "node";
-	}
-
-	private String locateNpm() {
-		String programFiles = System.getenv("PROGRAMFILES");
-		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
-			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
-		}
-
-		programFiles = System.getenv("PROGRAMFILES(x86)");
-		if (programFiles != null && new File(new File(programFiles, "nodejs"), "npm.cmd").isFile()) {
-			return new File(new File(programFiles, "nodejs"), "npm.cmd").getAbsolutePath();
-		}
-
-		return "npm";
-	}
-
-	public boolean createProject() {
-		try {
-			String pack = BaseTest.class.getPackage().getName().replace(".", "/") + "/";
-
-			String tsconfigName = "tsconfig.json";
-			final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			InputStream input = loader.getResourceAsStream(pack + tsconfigName);
-			File outputFile = new File(tmpdir, "tsconfig.json");
-			FileUtils.copyInputStreamToFile(input, outputFile);
-			String tsconfigText = FileUtils.readFileToString(outputFile, "UTF-8");
-
-			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
-			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
-			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target\\src").getAbsolutePath().replace('\\', '/');
-			tsconfigText = tsconfigText.replace("$$ANTLR4TS$$", antlr4ts);
-
-			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", "."), "UTF-8");
-			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "tsconfig.json");
-			FileUtils.writeStringToFile(outputFile, tsconfigText.replace("$$src$$", TEST_SRC_FOLDER.getRoot().getName()), "UTF-8");
-
-			String packageName = "package.json";
-			input = loader.getResourceAsStream(pack + packageName);
-			outputFile = new File(BASE_TEST_FOLDER.getRoot(), "package.json");
-			FileUtils.copyInputStreamToFile(input, outputFile);
-			input = loader.getResourceAsStream(pack + packageName);
-			outputFile = new File(TEST_SRC_FOLDER.getRoot(), "package.json");
-			FileUtils.copyInputStreamToFile(input, outputFile);
-
-			return true;
-		} catch(Exception e) {
-			e.printStackTrace(System.err);
-			return false;
-		}
-	}
-
-	public String execTest() {
-		try {
-			String node = locateNode();
-			String[] args = new String[] { node, "./" + TEST_SRC_FOLDER.getRoot().getName() + "/Test.js", new File(tmpdir, "input").getAbsolutePath() };
-			ProcessBuilder pb = new ProcessBuilder(args);
-
-			// Get the location of the compiled TypeScript runtime for use as the NODE_PATH
-			String pack = BaseTest.class.getPackage().getName().replace(".", "/") + "/";
-			String tsconfigName = "tsconfig.json";
-			final ClassLoader loader = Thread.currentThread().getContextClassLoader();
-			String externalForm = loader.getResource(pack + tsconfigName).toExternalForm();
-			externalForm = externalForm.substring(0, externalForm.indexOf("tool/target"));
-			String antlr4ts = new File(new File(new URL(externalForm).toURI()).getAbsoluteFile(), "target").getAbsolutePath();
-
-			pb.environment().put("NODE_PATH", antlr4ts);
-			pb.directory(BASE_TEST_FOLDER.getRoot());
-			Process process = pb.start();
-			StreamVacuum stdoutVacuum = new StreamVacuum(process.getInputStream());
-			StreamVacuum stderrVacuum = new StreamVacuum(process.getErrorStream());
-			stdoutVacuum.start();
-			stderrVacuum.start();
-			process.waitFor();
-			stdoutVacuum.join();
-			stderrVacuum.join();
-			String output = stdoutVacuum.toString();
-			if ( stderrVacuum.toString().length()>0 ) {
-				this.stderrDuringParse = stderrVacuum.toString();
-				System.err.println("exec stderrVacuum: "+ stderrVacuum);
-			}
-			return output;
-		}
-		catch (Exception e) {
-			System.err.println("can't exec recognizer");
-			e.printStackTrace(System.err);
-		}
-		return null;
-	}
-
-	public void testErrors(String[] pairs, boolean printTree) {
-        for (int i = 0; i < pairs.length; i+=2) {
-            String input = pairs[i];
-            String expect = pairs[i+1];
-
-			String[] lines = input.split("\n");
-			String fileName = getFilenameFromFirstLineOfGrammar(lines[0]);
-			ErrorQueue equeue = antlr(fileName, input, false);
-
-			String actual = equeue.toString(true);
-			actual = actual.replace(tmpdir + File.separator, "");
-			System.err.println(actual);
-			String msg = input;
-			msg = msg.replace("\n","\\n");
-			msg = msg.replace("\r","\\r");
-			msg = msg.replace("\t","\\t");
-
-			org.junit.Assert.assertEquals("error in: "+msg,expect,actual);
-        }
-    }
-
-	public String getFilenameFromFirstLineOfGrammar(String line) {
-		String fileName = "A" + Tool.GRAMMAR_EXTENSION;
-		int grIndex = line.lastIndexOf("grammar");
-		int semi = line.lastIndexOf(';');
-		if ( grIndex>=0 && semi>=0 ) {
-			int space = line.indexOf(' ', grIndex);
-			fileName = line.substring(space+1, semi)+Tool.GRAMMAR_EXTENSION;
-		}
-		if ( fileName.length()==Tool.GRAMMAR_EXTENSION.length() ) fileName = "A" + Tool.GRAMMAR_EXTENSION;
-		return fileName;
-	}
-
-
-	List<ANTLRMessage> getMessagesOfType(List<ANTLRMessage> msgs, Class<? extends ANTLRMessage> c) {
-		List<ANTLRMessage> filtered = new ArrayList<ANTLRMessage>();
-		for (ANTLRMessage m : msgs) {
-			if ( m.getClass() == c ) filtered.add(m);
-		}
-		return filtered;
-	}
-
-
-	public static class StreamVacuum implements Runnable {
-		StringBuilder buf = new StringBuilder();
-		BufferedReader in;
-		Thread sucker;
-		public StreamVacuum(InputStream in) {
-			this.in = new BufferedReader( new InputStreamReader(in) );
-		}
-		public void start() {
-			sucker = new Thread(this);
-			sucker.start();
-		}
-		@Override
-		public void run() {
-			try {
-				String line = in.readLine();
-				while (line!=null) {
-					buf.append(line);
-					buf.append('\n');
-					line = in.readLine();
-				}
-			}
-			catch (IOException ioe) {
-				System.err.println("can't read output from process");
-			}
-		}
-		/** wait for the thread to finish */
-		public void join() throws InterruptedException {
-			sucker.join();
-		}
-		@Override
-		public String toString() {
-			return buf.toString();
-		}
-	}
-
-	protected void checkGrammarSemanticsError(ErrorQueue equeue,
-											  GrammarSemanticsMessage expectedMessage)
-		throws Exception
-	{
-		ANTLRMessage foundMsg = null;
-		for (int i = 0; i < equeue.errors.size(); i++) {
-			ANTLRMessage m = equeue.errors.get(i);
-			if (m.getErrorType()==expectedMessage.getErrorType() ) {
-				foundMsg = m;
-			}
-		}
-		assertNotNull("no error; "+expectedMessage.getErrorType()+" expected", foundMsg);
-		assertTrue("error is not a GrammarSemanticsMessage",
-				   foundMsg instanceof GrammarSemanticsMessage);
-		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
-		if ( equeue.size()!=1 ) {
-			System.err.println(equeue);
-		}
-	}
-
-
-    public static class FilteringTokenStream extends CommonTokenStream {
-        public FilteringTokenStream(TokenSource src) { super(src); }
-        Set<Integer> hide = new HashSet<Integer>();
-        @Override
-        protected boolean sync(int i) {
-            if (!super.sync(i)) {
-				return false;
-			}
-
-			Token t = get(i);
-			if ( hide.contains(t.getType()) ) {
-				((WritableToken)t).setChannel(Token.HIDDEN_CHANNEL);
-			}
-
-			return true;
-        }
-        public void setTokenTypeChannel(int ttype, int channel) {
-            hide.add(ttype);
-        }
-    }
-
-	public static void writeFile(String dir, String fileName, String content) {
-		try {
-			Utils.writeFile(dir+"/"+fileName, content, "UTF-8");
-		}
-		catch (IOException ioe) {
-			System.err.println("can't write file");
-			ioe.printStackTrace(System.err);
-		}
 	}
 
 	protected void mkdir(String dir) {
@@ -644,155 +226,76 @@ public abstract class BaseTest {
 		f.mkdirs();
 	}
 
-	protected void writeParserTestFile(String parserName,
-								 String lexerName,
-								 String parserStartRuleName,
-								 boolean debug)
+	private void writeParserTestFile(String parserName,
+									 String lexerName,
+									 String parserStartRuleName,
+									 boolean debug)
 	{
 		ST outputFileST = new ST(
-			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
-			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
-			"import { DiagnosticErrorListener } from 'src/DiagnosticErrorListener';\n" +
-			"import { ErrorNode } from 'src/tree/ErrorNode';\n" +
-			"import { ParserRuleContext } from 'src/ParserRuleContext';\n" +
-			"import { ParseTreeListener } from 'src/tree/ParseTreeListener';\n" +
-			"import { ParseTreeWalker } from 'src/tree/ParseTreeWalker';\n" +
-			"import { RuleNode } from 'src/tree/RuleNode';\n" +
-			"import { TerminalNode } from 'src/tree/TerminalNode';\n" +
-			"\n" +
-			"import * as fs from 'fs';\n" +
-			"\n" +
-			"import { <lexerName> } from './<lexerName>';\n" +
-			"import { <parserName> } from './<parserName>';\n" +
-			"\n" +
-			"class TreeShapeListener implements ParseTreeListener {\n" +
-			"	enterEveryRule(ctx: ParserRuleContext): void {\n" +
-			"		for (let i = 0; i \\< ctx.getChildCount(); i++) {\n" +
-			"			let parent = ctx.getChild(i).getParent();\n" +
-			"			if (!(parent instanceof RuleNode) || parent.getRuleContext() !== ctx) {\n" +
-			"				throw new Error(\"Invalid parse tree shape detected.\");\n" +
-			"			}\n" +
-			"		}\n" +
-			"	}\n" +
-			"}\n" +
-			"\n" +
-			"let input = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
-			"let lex = new <lexerName>(input);\n" +
-			"let tokens = new CommonTokenStream(lex);\n" +
-			"<createParser>\n" +
-			"parser.setBuildParseTree(true);\n" +
-			"let tree = parser.<parserStartRuleName>();\n" +
-			"ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);\n");
-		ST createParserST = new ST("let parser = new <parserName>(tokens);\n");
-		if ( debug ) {
-			createParserST = new ST(
-				"let parser = new <parserName>(tokens);\n" +
-				"parser.getInterpreter().reportAmbiguities = true;\n" +
-				"parser.addErrorListener(new DiagnosticErrorListener());\n");
-		}
-		outputFileST.add("createParser", createParserST);
+				"import 'mocha';\n" +
+				"import * as base from '../../../BaseTest';\n" +
+				"import { <lexerName> } from './<lexerName>';\n" +
+				"import { <parserName> } from './<parserName>';\n" +
+				"\n" +
+				"it(`<className>.<testName>`, ()=> {\n" +
+				"	base.parserTest( {\n" +
+				"		testName: `<testName>`,\n" +
+				"		lexer: <lexerName>, \n" +
+				"		parser: <parserName>, \n" +
+				"		parserStartRule: parser => parser.<parserStartRuleName>(),\n" +
+				"		debug: <debug>,\n" +
+				"		input: `<input>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		showDFA: <showDFA>\n" +
+				"		});\n" +
+				"	});\n" +
+				"\n");
+
+		outputFileST.add("className", getClass().getSimpleName());
+		outputFileST.add("testName", this.name.getMethodName());
+		outputFileST.add("lexerName", lexerName);
 		outputFileST.add("parserName", parserName);
-		outputFileST.add("lexerName", lexerName);
-		outputFileST.add("parserStartRuleName", parserStartRuleName);
+		outputFileST.add("parserStartRuleName", asTemplateString(parserStartRuleName));
+		outputFileST.add("debug", debug ? "true" : "false");
+		outputFileST.add("input", asTemplateString(this.input));
+		outputFileST.add("expectedOutput", asTemplateString(this.expectedOutput));
+		outputFileST.add("expectedErrors", asTemplateString(this.expectedErrors));
+		outputFileST.add("showDFA", "false");
 		writeFile(tmpdir, "Test.ts", outputFileST.render());
 	}
 
-	protected void writeLexerTestFile(String lexerName, boolean showDFA) {
+	private void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-			"require('source-map-support').install();\n" +
-			"import { ANTLRInputStream } from 'src/ANTLRInputStream';\n" +
-			"import { CharStream } from 'src/CharStream';\n" +
-			"import { CommonTokenStream } from 'src/CommonTokenStream';\n" +
-			"import { Lexer } from 'src/Lexer';\n" +
-			"import * as fs from 'fs';\n" +
-			"\n" +
-			"import { <lexerName> } from './<lexerName>';\n" +
-			"\n" +
-			"let input: CharStream = new ANTLRInputStream(fs.readFileSync(process.argv[2], 'utf8'));\n" +
-			"let lex: <lexerName> = new <lexerName>(input);\n" +
-			"let tokens = new CommonTokenStream(lex);\n" +
-			"tokens.fill();\n" +
-			"for (let t of tokens.getTokens()) {\n" +
-			"	console.log(t.toString());\n" +
-			"}\n" +
-			(showDFA?"	process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")
-			);
+				"import 'mocha';\n" +
+				"import * as base from '../../../BaseTest';\n" +
+				"import { <lexerName> } from './<lexerName>';\n" +
+				"\n" +
+				"it(`<className>.<testName>`, ()=> {\n" +
+				"	base.lexerTest( {\n" +
+				"		testName: `<testName>`,\n" +
+				"		lexer: <lexerName>, \n" +
+				"		input: `<input>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		showDFA: <showDFA>\n" +
+				"		});\n" +
+				"	});\n" +
+				"\n");
 
+		outputFileST.add("className", getClass().getSimpleName());
+		outputFileST.add("testName", this.name.getMethodName());
 		outputFileST.add("lexerName", lexerName);
+		outputFileST.add("input", asTemplateString(this.input));
+		outputFileST.add("expectedOutput", asTemplateString(this.expectedOutput));
+		outputFileST.add("expectedErrors", asTemplateString(this.expectedErrors));
+		outputFileST.add("showDFA", showDFA ? "true" : "false");
 		writeFile(tmpdir, "Test.ts", outputFileST.render());
-	}
-
-	public void writeRecognizerAndCompile(String parserName, String lexerName,
-										  String parserStartRuleName,
-										  boolean debug) {
-		if ( parserName==null ) {
-			writeLexerTestFile(lexerName, debug);
-		}
-		else {
-			writeParserTestFile(parserName,
-						  lexerName,
-						  parserStartRuleName,
-						  debug);
-		}
-
-		addSourceFiles("Test.ts");
-	}
-
-
-    protected void eraseFiles(final String filesEndingWith) {
-        File tmpdirF = new File(tmpdir);
-        String[] files = tmpdirF.list();
-        for(int i = 0; files!=null && i < files.length; i++) {
-            if ( files[i].endsWith(filesEndingWith) ) {
-                new File(tmpdir+"/"+files[i]).delete();
-            }
-        }
-    }
-
-    protected void eraseFiles() {
-		if (tmpdir == null) {
-			return;
-		}
-
-        File tmpdirF = new File(tmpdir);
-        String[] files = tmpdirF.list();
-        if(files!=null) for(String file : files) {
-        	new File(tmpdir+"/"+file).delete();
-        }
-    }
-
-    protected void eraseTempDir() {
-        File tmpdirF = new File(tmpdir);
-        if ( tmpdirF.exists() ) {
-            eraseFiles();
-            tmpdirF.delete();
-        }
-    }
-
-	public String getFirstLineOfException() {
-		if ( this.stderrDuringParse ==null ) {
-			return null;
-		}
-		String[] lines = this.stderrDuringParse.split("\n");
-		String prefix="Exception in thread \"main\" ";
-		return lines[0].substring(prefix.length(),lines[0].length());
 	}
 
 	public List<String> realElements(List<String> elements) {
 		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size());
 	}
-
-	public void assertNotNullOrEmpty(String message, String text) {
-		assertNotNull(message, text);
-		assertFalse(message, text.isEmpty());
-	}
-
-	public void assertNotNullOrEmpty(String text) {
-		assertNotNull(text);
-		assertFalse(text.isEmpty());
-	}
-
 
 	/** Return map sorted by key */
 	public <K extends Comparable<? super K>,V> LinkedHashMap<K,V> sort(Map<K,V> data) {
@@ -805,17 +308,4 @@ public abstract class BaseTest {
 		}
 		return dup;
 	}
-
-	protected static void assertEquals(String msg, int a, int b) {
-		org.junit.Assert.assertEquals(msg, a, b);
-	}
-
-	protected static void assertEquals(String a, String b) {
-		org.junit.Assert.assertEquals(a, b);
-	}
-
-	protected static void assertNull(String a) {
-		org.junit.Assert.assertNull(a);
-	}
-
 }

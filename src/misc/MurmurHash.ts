@@ -5,7 +5,7 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.1239660-07:00
-import {Equatable} from './Stubs';
+import { Equatable } from './Stubs';
 
 /**
  *
@@ -14,7 +14,7 @@ import {Equatable} from './Stubs';
 
 export namespace MurmurHash {
 
-	const DEFAULT_SEED: number =  0;
+	const DEFAULT_SEED: number = 0;
 
 	/**
 	 * Initialize the hash using the specified {@code seed}.
@@ -34,12 +34,12 @@ export namespace MurmurHash {
 	 * @return the updated intermediate hash value
 	 */
 	export function update(hash: number, value: number | string | Equatable | null | undefined): number {
-		const c1: number =  0xCC9E2D51;
-		const c2: number =  0x1B873593;
-		const r1: number =  15;
-		const r2: number =  13;
-		const m: number =  5;
-		const n: number =  0xE6546B64;
+		const c1: number = 0xCC9E2D51;
+		const c2: number = 0x1B873593;
+		const r1: number = 15;
+		const r2: number = 13;
+		const m: number = 5;
+		const n: number = 0xE6546B64;
 
 		if (value == null) {
 			value = 0;
@@ -90,7 +90,7 @@ export namespace MurmurHash {
 	 * @return the hash code of the data
 	 */
 	export function hashCode<T extends number | string | Equatable>(data: Iterable<T>, seed: number = DEFAULT_SEED): number {
-		let hash: number =  initialize(seed);
+		let hash: number = initialize(seed);
 		let length = 0;
 		for (let value of data) {
 			hash = update(hash, value);

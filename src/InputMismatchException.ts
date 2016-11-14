@@ -15,7 +15,7 @@ import { Parser } from "./Parser";
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;
 
-	 constructor(@NotNull recognizer: Parser)  {
+	constructor(@NotNull recognizer: Parser) {
 		super(recognizer, recognizer.getInputStream(), recognizer.getContext());
 		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
 	}

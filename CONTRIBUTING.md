@@ -34,12 +34,27 @@ subset of the TypeScript runtime's functionality.
 npm test
 ```
 
-The second set of tests comes from the ANTLR 4 runtime test suite, which provides functional tests of a much larger
-set of functionality. The runtime test suite can be generated and executed using the following command.
+The second set of tests comes from the ANTLR 4 runtime test suite, which provides functional tests of a much larger set
+of functionality. The runtime test suite is generated and compiled as part of the `npm install` command, and executed
+using the previously-described `npm test` command.
+
+### Performance testing
+
+To run the benchmark suite with profiling enabled, run this command:
 
 ```
-mvn -f tool/pom.xml test
+npm run profile
 ```
+
+This will create a file of with a file name like `isolate-000001C4B0FF38A0-v8.log`, where the digits will vary with each
+run. After collecting this data, you can summarize the results with the following command after modifying it to match
+the actual file name produced by the profiler.
+
+```
+node --prof-process isolate-000001C4B0FF38A0-v8.log >profile.txt
+```
+
+The resulting file, `profile.txt` will contain a summary of the results from running a sampling profiler. 
 
 ## Versioning
 
@@ -57,14 +72,20 @@ After changes are made to the optimized Java runtime, those changes need to be m
 runtime. The general process for incorporating these changes is the following:
 
 1. Changes are made to the optimized ANTLR 4 runtime (written in Java)
-2. The [reference/antlr4](https://github.com/sharwell/antlr4ts/tree/master/reference) submodule is updated to reference
-   the commit containing the changes
+2. The [reference/antlr4](https://github.com/tunnelvisionlabs/antlr4ts/tree/master/reference) submodule is updated to
+   reference the commit containing the changes
 3. Using the diff between the old submodule code and the new submodule code, the relevant changes are applied to the
    **antlr4ts** and/or **antlr4ts-cli** projects
 
 > :bulb: By following this policy, users and developers can clearly communicate that the TypeScript target reflects the
 > features and/or fixes which were part of the optimized ANTLR 4 runtime as of the specific commit referenced by the
-> [reference/antlr4](https://github.com/sharwell/antlr4ts/tree/master/reference) submodule.
+> [reference/antlr4](https://github.com/tunnelvisionlabs/antlr4ts/tree/master/reference) submodule.
+
+### API changes
+
+All pull requests which contain changes to the exposed API must have a corresponding GitHub issue. The issue will be
+labeled with the **ts-flavor** label. In addition to minimizing upgrade problems over time, this approach improves our
+ability to provide meaningful release notes.
 
 ## General practices
 

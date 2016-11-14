@@ -8,7 +8,7 @@
 
 import { ATNState } from './ATNState';
 import { IntervalSet } from '../misc/IntervalSet';
-import { NotNull, Nullable } from '../Decorators';
+import { NotNull } from '../Decorators';
 import { TransitionType } from './TransitionType';
 
 /** An ATN transition between any two ATN states.  Subclasses define

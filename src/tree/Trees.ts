@@ -11,7 +11,7 @@ import { ATN } from '../atn/ATN';
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
-import { NotNull, Nullable } from "../Decorators";
+import { NotNull } from "../Decorators";
 import { Parser } from '../Parser';
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
@@ -36,67 +36,67 @@ export class Trees {
     /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
      *  node payloads to get the text for the nodes.
      */
-    static toStringTree( @NotNull t: ParseTree, arg2?: Parser | string[] ): string {
-        let ruleNames: string[];
-        if (arg2 instanceof Parser) {ruleNames = arg2.getRuleNames();}
-        else {ruleNames = arg2 as string[];}
+	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
+		let ruleNames: string[];
+		if (arg2 instanceof Parser) { ruleNames = arg2.getRuleNames(); }
+		else { ruleNames = arg2 as string[]; }
 
-        let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-        if (t.getChildCount() == 0) return s;
-        let buf = "";
-        buf += ("(");
-        s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-        buf += (s);
-        buf += (' ');
-        for (let i = 0; i < t.getChildCount(); i++) {
-            if (i > 0) buf += (' ');
-            buf += (this.toStringTree(t.getChild(i), ruleNames));
-        }
-        buf += (")");
-        return buf;
-    }
+		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
+		if (t.getChildCount() == 0) return s;
+		let buf = "";
+		buf += ("(");
+		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
+		buf += (s);
+		buf += (' ');
+		for (let i = 0; i < t.getChildCount(); i++) {
+			if (i > 0) buf += (' ');
+			buf += (this.toStringTree(t.getChild(i), ruleNames));
+		}
+		buf += (")");
+		return buf;
+	}
 
-    static getNodeText(t: ParseTree, arg2: Parser | string[] ): string {
-        let ruleNames: string[] | undefined;
-        if (arg2 instanceof Parser) {
-            ruleNames = arg2.getRuleNames();
-        } else if (arg2) {
-            ruleNames = arg2;
-        } else {
-            // no recog or rule names
-            let payload = t.getPayload();
-            if (typeof payload.getText === 'function') {
-                return payload.getText();
-            }
-            return t.getPayload().toString();;
-        }
+	static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
+		let ruleNames: string[] | undefined;
+		if (arg2 instanceof Parser) {
+			ruleNames = arg2.getRuleNames();
+		} else if (arg2) {
+			ruleNames = arg2;
+		} else {
+			// no recog or rule names
+			let payload = t.getPayload();
+			if (typeof payload.getText === 'function') {
+				return payload.getText();
+			}
+			return t.getPayload().toString();;
+		}
 
-		if ( t instanceof RuleNode ) {
-			let ruleContext: RuleContext =  t.getRuleContext();
-			let ruleIndex: number =  ruleContext.getRuleIndex();
-			let ruleName: string =  ruleNames[ruleIndex];
-			let altNumber: number =  ruleContext.getAltNumber();
-			if ( altNumber !== ATN.INVALID_ALT_NUMBER ) {
+		if (t instanceof RuleNode) {
+			let ruleContext: RuleContext = t.getRuleContext();
+			let ruleIndex: number = ruleContext.getRuleIndex();
+			let ruleName: string = ruleNames[ruleIndex];
+			let altNumber: number = ruleContext.getAltNumber();
+			if (altNumber !== ATN.INVALID_ALT_NUMBER) {
 				return ruleName + ":" + altNumber;
 			}
 			return ruleName;
 		}
-		else if ( t instanceof ErrorNode ) {
+		else if (t instanceof ErrorNode) {
 			return t.toString();
 		}
-		else if ( t instanceof TerminalNode) {
+		else if (t instanceof TerminalNode) {
 			let symbol = t.getSymbol() as any;
-		    return symbol.getText();
-        }
-        throw new TypeError("Unexpected node type");
-    }
+			return symbol.getText();
+		}
+		throw new TypeError("Unexpected node type");
+	}
 
 
 
 	/** Return ordered list of all children of this node */
 	static getChildren(t: ParseTree): ParseTree[] {
-	    let kids = [] as ParseTree[];
-		for (let i=0; i<t.getChildCount(); i++) {
+		let kids = [] as ParseTree[];
+		for (let i = 0; i < t.getChildCount(); i++) {
 			kids.push(t.getChild(i));
 		}
 		return kids;
@@ -107,16 +107,16 @@ export class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-    @NotNull
-    static getAncestors(@NotNull t: ParseTree): ParseTree[] {
-        let ancestors = [] as ParseTree[];
-        let p = t.getParent();
-        while (p) {
-            ancestors.unshift(p); // insert at start
-            p = p.getParent();
-        }
-        return ancestors;
-    }
+	@NotNull
+	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
+		let ancestors = [] as ParseTree[];
+		let p = t.getParent();
+		while (p) {
+			ancestors.unshift(p); // insert at start
+			p = p.getParent();
+		}
+		return ancestors;
+	}
 
     /** Return true if t is u's parent or a node on path to root from u.
      *  Use == not equals().
@@ -124,10 +124,10 @@ export class Trees {
      *  @since 4.5.1
      */
 	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
-		if ( !t || !u || !t.getParent() ) return false;
+		if (!t || !u || !t.getParent()) return false;
 		let p = u.getParent();
-		while ( p ) {
-			if ( t === p ) return true;
+		while (p) {
+			if (t === p) return true;
 			p = p.getParent();
 		}
 		return false;
@@ -138,22 +138,22 @@ export class Trees {
 	}
 
 	static findAllRuleNodes(t: ParseTree, ruleIndex: number): Array<ParseTree> {
-        return Trees.findAllNodes(t, ruleIndex, false);
+		return Trees.findAllNodes(t, ruleIndex, false);
 	}
 
 	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): Array<ParseTree> {
-		let nodes =  [] as ParseTree[];
-        Trees._findAllNodes(t, index, findTokens, nodes);
+		let nodes = [] as ParseTree[];
+		Trees._findAllNodes(t, index, findTokens, nodes);
 		return nodes;
 	}
 
-    static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree> ) {
+	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
 		// check this node (the root) first
-		if ( findTokens && t instanceof TerminalNode ) {
-			if ( t.getSymbol().getType()===index ) nodes.push(t);
+		if (findTokens && t instanceof TerminalNode) {
+			if (t.getSymbol().getType() === index) nodes.push(t);
 		}
-		else if ( !findTokens && t instanceof ParserRuleContext ) {
-			if ( t.getRuleIndex() === index ) nodes.push(t);
+		else if (!findTokens && t instanceof ParserRuleContext) {
+			if (t.getRuleIndex() === index) nodes.push(t);
 		}
 		// check children
 		for (let i = 0; i < t.getChildCount(); i++) {
@@ -185,23 +185,20 @@ export class Trees {
 	*
 	*  @since 4.5
 	*/
-	@Nullable
 	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
-											 startTokenIndex: number, // inclusive
-											stopTokenIndex: number // inclusive
-											): ParserRuleContext | undefined
-	{
-		let n: number =  t.getChildCount();
-		for (let i = 0; i<n; i++) {
-			let child: ParseTree =  t.getChild(i);
+		startTokenIndex: number, // inclusive
+		stopTokenIndex: number // inclusive
+	): ParserRuleContext | undefined {
+		let n: number = t.getChildCount();
+		for (let i = 0; i < n; i++) {
+			let child: ParseTree = t.getChild(i);
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
-			if ( r ) return r;
+			if (r) return r;
 		}
-		if ( t instanceof ParserRuleContext ) {
+		if (t instanceof ParserRuleContext) {
 			let stopToken = t.getStop();
-			if ( startTokenIndex>=t.getStart().getTokenIndex() && // is range fully contained in t?
-				 (stopToken==null || stopTokenIndex <= stopToken.getTokenIndex()) )
-			{
+			if (startTokenIndex >= t.getStart().getTokenIndex() && // is range fully contained in t?
+				(stopToken == null || stopTokenIndex <= stopToken.getTokenIndex())) {
 				// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
 				return t;
 			}
@@ -218,18 +215,17 @@ export class Trees {
 	*  @since 4.5.1
 	*/
 	static stripChildrenOutOfRange(t: ParserRuleContext,
-											   root: ParserRuleContext,
-											   startIndex: number,
-											   stopIndex: number): void
-	{
-        if (!t) return;
-	    let count = t.getChildCount();
+		root: ParserRuleContext,
+		startIndex: number,
+		stopIndex: number): void {
+		if (!t) return;
+		let count = t.getChildCount();
 		for (let i = 0; i < count; i++) {
 			let child = t.getChild(i);
-			let range: Interval =  child.getSourceInterval();
-			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
-				if ( Trees.isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
-					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");
+			let range: Interval = child.getSourceInterval();
+			if (child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex)) {
+				if (Trees.isAncestorOf(child, root)) { // replace only if subtree doesn't have displayed root
+					let abbrev: CommonToken = new CommonToken(Token.INVALID_TYPE, "...");
 					t.children![i] = new TerminalNode(abbrev); // HACK access to private
 				}
 			}
@@ -238,7 +234,7 @@ export class Trees {
 
 	///** Return first node satisfying the pred
 	// *
- //	 *  @since 4.5.1
+	//	 *  @since 4.5.1
 	// */
 	//static findNodeSuchThat(t: ParseTree, pred: Predicate<ParseTree>): ParseTree {
 	//	if ( pred.eval(t) ) return t;

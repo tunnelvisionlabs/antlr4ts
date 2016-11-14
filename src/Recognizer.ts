@@ -33,7 +33,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	@NotNull
 	private readonly _listeners: ANTLRErrorListener<Symbol>[] = [ConsoleErrorListener.INSTANCE];
 
-	protected  _interp: ATNInterpreter;
+	protected _interp: ATNInterpreter;
 
 	private _stateNumber = -1;
 
@@ -101,7 +101,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	getTokenType(tokenName: string): number {
 		let ttype = this.getTokenTypeMap().get(tokenName);
-		if ( ttype!=null ) return ttype;
+		if (ttype != null) return ttype;
 		return Token.INVALID_TYPE;
 	}
 
@@ -167,8 +167,8 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 		let token = e.getOffendingToken()
 		if (!token) return ""
 		let line = token.getLine();
-		let charPositionInLine: number =  token.getCharPositionInLine();
-		return "line "+line+":"+charPositionInLine;
+		let charPositionInLine: number = token.getCharPositionInLine();
+		return "line " + line + ":" + charPositionInLine;
 	}
 
 	/**
@@ -180,7 +180,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
-		let position = this._listeners.indexOf( listener );
+		let position = this._listeners.indexOf(listener);
 		if (position !== -1) {
 			this._listeners.splice(position, 1);
 		}
@@ -203,24 +203,21 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	// that the ATN interp needs to execute
 	sempred(
 		_localctx: RuleContext | undefined,
-	 	ruleIndex: number,
-		actionIndex: number): boolean
-	{
+		ruleIndex: number,
+		actionIndex: number): boolean {
 		return true;
 	}
 
 	precpred(
 		localctx: RuleContext | undefined,
-		precedence: number): boolean
-	{
+		precedence: number): boolean {
 		return true;
 	}
 
 	action(
 		_localctx: RuleContext | undefined,
 		ruleIndex: number,
-		actionIndex: number): void
-	{
+		actionIndex: number): void {
 	}
 
 	getState(): number {

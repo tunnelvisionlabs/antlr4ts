@@ -13,14 +13,14 @@
  * <p>If you need encoding, pass in stream/reader with correct encoding.</p>
  */
 import * as assert from "assert";
-import {CharStream} from "./CharStream";
-import {Arrays} from "./misc/Arrays";
-import {Override} from "./Decorators";
-import {IntStream} from "./IntStream";
-import {Interval} from "./misc/Interval";
+import { CharStream } from "./CharStream";
+import { Arrays } from "./misc/Arrays";
+import { Override } from "./Decorators";
+import { IntStream } from "./IntStream";
+import { Interval } from "./misc/Interval";
 
-const READ_BUFFER_SIZE: number =  1024;
-const INITIAL_BUFFER_SIZE: number =  1024;
+const READ_BUFFER_SIZE: number = 1024;
+const INITIAL_BUFFER_SIZE: number = 1024;
 
 export class ANTLRInputStream implements CharStream {
 	/** The data being scanned */
@@ -36,7 +36,7 @@ export class ANTLRInputStream implements CharStream {
 	name?: string;
 
 	/** Copy data in string to a local char array */
-	constructor(input: string)  {
+	constructor(input: string) {
 		this.data = input;
 		this.n = input.length;
 	}
@@ -49,40 +49,40 @@ export class ANTLRInputStream implements CharStream {
 		this.p = 0;
 	}
 
-    @Override
-    consume(): void {
+	@Override
+	consume(): void {
 		if (this.p >= this.n) {
 			assert(this.LA(1) === IntStream.EOF);
 			throw new Error("cannot consume EOF");
 		}
 
 		//System.out.println("prev p="+p+", c="+(char)data[p]);
-        if (this.p < this.n ) {
-            this.p++;
+		if (this.p < this.n) {
+			this.p++;
 			//System.out.println("p moves to "+p+" (c='"+(char)data[p]+"')");
-        }
-    }
+		}
+	}
 
-    @Override
-    LA(i: number): number {
-		if ( i === 0 ) {
+	@Override
+	LA(i: number): number {
+		if (i === 0) {
 			return 0; // undefined
 		}
-		if ( i<0 ) {
+		if (i < 0) {
 			i++; // e.g., translate LA(-1) to use offset i=0; then data[p+0-1]
-			if ((this.p+i-1) < 0 ) {
+			if ((this.p + i - 1) < 0) {
 				return IntStream.EOF; // invalid; no char before first char
 			}
 		}
 
-		if ((this.p + i - 1) >= this.n ) {
-            //System.out.println("char LA("+i+")=EOF; p="+p);
-            return IntStream.EOF;
-        }
-        //System.out.println("char LA("+i+")="+(char)data[p+i-1]+"; p="+p);
+		if ((this.p + i - 1) >= this.n) {
+			//System.out.println("char LA("+i+")=EOF; p="+p);
+			return IntStream.EOF;
+		}
+		//System.out.println("char LA("+i+")="+(char)data[p+i-1]+"; p="+p);
 		//System.out.println("LA("+i+"); p="+p+" n="+n+" data.length="+data.length);
 		return this.data.charCodeAt(this.p + i - 1);
-    }
+	}
 
 	LT(i: number): number {
 		return this.LA(i);
@@ -92,21 +92,21 @@ export class ANTLRInputStream implements CharStream {
      *  last symbol has been read.  The index is the index of char to
 	 *  be returned from LA(1).
      */
-    @Override
-    index(): number {
-        return this.p;
-    }
+	@Override
+	index(): number {
+		return this.p;
+	}
 
 	@Override
 	size(): number {
 		return this.n;
 	}
 
-    /** mark/release do nothing; we have entire buffer */
+	/** mark/release do nothing; we have entire buffer */
 	@Override
 	mark(): number {
 		return -1;
-    }
+	}
 
 	@Override
 	release(marker: number): void {
@@ -117,27 +117,27 @@ export class ANTLRInputStream implements CharStream {
 	 */
 	@Override
 	seek(index: number): void {
-		if (index <= this.p ) {
+		if (index <= this.p) {
 			this.p = index; // just jump; don't update stream state (line, ...)
 			return;
 		}
 		// seek forward, consume until p hits index or n (whichever comes first)
 		index = Math.min(index, this.n);
-		while (this.p<index ) {
+		while (this.p < index) {
 			this.consume();
 		}
 	}
 
 	@Override
 	getText(interval: Interval): string {
-		let start: number =  interval.a;
-		let stop: number =  interval.b;
+		let start: number = interval.a;
+		let stop: number = interval.b;
 		if (stop >= this.n) stop = this.n - 1;
 		let count: number = stop - start + 1;
-		if (start >= this.n ) return "";
-//		System.err.println("data: "+Arrays.toString(data)+", n="+n+
-//						   ", start="+start+
-//						   ", stop="+stop);
+		if (start >= this.n) return "";
+		// System.err.println("data: "+Arrays.toString(data)+", n="+n+
+		// 				   ", start="+start+
+		// 				   ", stop="+stop);
 		return this.data.substr(start, count);
 	}
 
@@ -149,6 +149,6 @@ export class ANTLRInputStream implements CharStream {
 		return this.name;
 	}
 
-    @Override
-    toString() { return this.data; }
+	@Override
+	toString() { return this.data; }
 }

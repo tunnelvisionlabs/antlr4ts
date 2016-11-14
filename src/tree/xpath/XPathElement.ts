@@ -15,7 +15,7 @@ export abstract class XPathElement {
 	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
 	 *  op is null if just node
 	 */
-	 constructor(nodeName: string)  {
+	constructor(nodeName: string) {
 		this.nodeName = nodeName;
 		this.invert = false;
 	}
@@ -30,6 +30,6 @@ export abstract class XPathElement {
 	toString(): string {
 		let inv: string = this.invert ? "!" : "";
 		let className: string = Object.constructor.name;
-		return className+"["+inv+this.nodeName+"]";
+		return className + "[" + inv + this.nodeName + "]";
 	}
 }
