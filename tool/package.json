@@ -15,7 +15,7 @@
   "scripts": {
     "prepublish": "mvn verify",
     "postpack": "mv %npm_package_name%-%npm_package_version%.tgz ../%npm_package_name%.tgz"
-    },
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
