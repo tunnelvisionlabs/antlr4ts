@@ -73,8 +73,9 @@ export function lexerTest(options: LexerTestOptions) {
 	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
 		tokens.fill();
 		tokens.getTokens().forEach(t =>console.log(t.toString()));
-		if (options.showDFA)
+		if (options.showDFA) {
 			process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());
+		}
 	});
 }
 

@@ -18,7 +18,14 @@ import org.stringtemplate.v4.ST;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -165,7 +172,8 @@ public abstract class BaseTest {
 		this.stderrDuringParse = null;
 		if (parserName == null) {
 			writeLexerTestFile(lexerName, false);
-		} else {
+		}
+		else {
 			writeParserTestFile(parserName, lexerName, startRuleName, debug);
 		}
 	}
@@ -225,25 +233,24 @@ public abstract class BaseTest {
 	{
 		ST outputFileST = new ST(
 				"import 'mocha';\n" +
-						"import * as base from '../../../BaseTest';\n" +
-						"import { <lexerName> } from './<lexerName>';\n" +
-						"import { <parserName> } from './<parserName>';\n" +
-						"\n" +
-						"it(`<className>.<testName>`, ()=> {\n" +
-						"	base.parserTest( {\n" +
-						"		testName: `<testName>`,\n" +
-						"		lexer: <lexerName>, \n" +
-						"		parser: <parserName>, \n" +
-						"		parserStartRule: parser => parser.<parserStartRuleName>(),\n" +
-						"		debug: <debug>,\n" +
-						"		input: `<input>`,\n" +
-						"		expectedOutput: `<expectedOutput>`,\n" +
-						"		expectedErrors: `<expectedErrors>`,\n" +
-						"		showDFA: <showDFA>\n" +
-						"		});\n" +
-						"	});\n" +
-						"\n"
-		);
+				"import * as base from '../../../BaseTest';\n" +
+				"import { <lexerName> } from './<lexerName>';\n" +
+				"import { <parserName> } from './<parserName>';\n" +
+				"\n" +
+				"it(`<className>.<testName>`, ()=> {\n" +
+				"	base.parserTest( {\n" +
+				"		testName: `<testName>`,\n" +
+				"		lexer: <lexerName>, \n" +
+				"		parser: <parserName>, \n" +
+				"		parserStartRule: parser => parser.<parserStartRuleName>(),\n" +
+				"		debug: <debug>,\n" +
+				"		input: `<input>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		showDFA: <showDFA>\n" +
+				"		});\n" +
+				"	});\n" +
+				"\n");
 
 		outputFileST.add("className", getClass().getSimpleName());
 		outputFileST.add("testName", this.name.getMethodName());
@@ -261,21 +268,20 @@ public abstract class BaseTest {
 	private void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
 				"import 'mocha';\n" +
-						"import * as base from '../../../BaseTest';\n" +
-						"import { <lexerName> } from './<lexerName>';\n" +
-						"\n" +
-						"it(`<className>.<testName>`, ()=> {\n" +
-						"	base.lexerTest( {\n" +
-						"		testName: `<testName>`,\n" +
-						"		lexer: <lexerName>, \n" +
-						"		input: `<input>`,\n" +
-						"		expectedOutput: `<expectedOutput>`,\n" +
-						"		expectedErrors: `<expectedErrors>`,\n" +
-						"		showDFA: <showDFA>\n" +
-						"		});\n" +
-						"	});\n" +
-						"\n"
-		);
+				"import * as base from '../../../BaseTest';\n" +
+				"import { <lexerName> } from './<lexerName>';\n" +
+				"\n" +
+				"it(`<className>.<testName>`, ()=> {\n" +
+				"	base.lexerTest( {\n" +
+				"		testName: `<testName>`,\n" +
+				"		lexer: <lexerName>, \n" +
+				"		input: `<input>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		showDFA: <showDFA>\n" +
+				"		});\n" +
+				"	});\n" +
+				"\n");
 
 		outputFileST.add("className", getClass().getSimpleName());
 		outputFileST.add("testName", this.name.getMethodName());
