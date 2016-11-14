@@ -13,6 +13,7 @@ import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
 import { Lexer } from 'antlr4ts/Lexer';
 import { Parser } from 'antlr4ts/Parser';
 import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';
+import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
@@ -48,9 +49,9 @@ export interface LexerTestOptions {
 	showDFA: boolean;
 }
 
-export interface ParserTestOptions extends LexerTestOptions {
-	parser: new(s:CommonTokenStream) => Parser;
-	parserStartRuleName: string;
+export interface ParserTestOptions<TParser extends Parser> extends LexerTestOptions {
+	parser: new(s: CommonTokenStream) => TParser;
+	parserStartRule: (parser: TParser) => ParseTree;
 	debug: boolean;
 }
 
@@ -77,7 +78,7 @@ export function lexerTest(options: LexerTestOptions) {
 	});
 }
 
-export function parserTest(options: ParserTestOptions) {
+export function parserTest<TParser extends Parser>(options: ParserTestOptions<TParser>) {
 	const inputStream: CharStream = new ANTLRInputStream(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
@@ -86,9 +87,10 @@ export function parserTest(options: ParserTestOptions) {
 		parser.getInterpreter().reportAmbiguities = true;
 		parser.addErrorListener(new DiagnosticErrorListener());
 	}
+
 	parser.setBuildParseTree(true);
 	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
-		const tree = (parser as any)[options.parserStartRuleName]();
+		const tree = options.parserStartRule(parser);
 		ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);
 	});
 }

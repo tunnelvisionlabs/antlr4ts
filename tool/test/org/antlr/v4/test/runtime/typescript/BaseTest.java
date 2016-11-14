@@ -234,7 +234,7 @@ public abstract class BaseTest {
 						"		testName: `<testName>`,\n" +
 						"		lexer: <lexerName>, \n" +
 						"		parser: <parserName>, \n" +
-						"		parserStartRuleName: `<parserStartRuleName>`,\n" +
+						"		parserStartRule: parser => parser.<parserStartRuleName>(),\n" +
 						"		debug: <debug>,\n" +
 						"		input: `<input>`,\n" +
 						"		expectedOutput: `<expectedOutput>`,\n" +
