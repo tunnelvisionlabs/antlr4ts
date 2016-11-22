@@ -2,7 +2,7 @@
   "name": "antlr4ts-cli",
   "version": "0.4.0-SNAPSHOT",
   "preferGlobal": true,
-  "description": "Antlr4 command line tool for TypeScript",
+  "description": "ANTLR 4 command line tool for TypeScript",
   "files": [
     "../LICENSE",
     "target/antlr4-typescript-4.5.4-SNAPSHOT-complete.jar",
