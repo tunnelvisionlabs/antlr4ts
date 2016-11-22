@@ -1,6 +1,6 @@
 {
   "name": "antlr4ts-cli",
-  "version": "0.4.0-SNAPSHOT",
+  "version": "0.4.0-alpha.1",
   "preferGlobal": true,
   "description": "ANTLR 4 command line tool for TypeScript",
   "files": [
