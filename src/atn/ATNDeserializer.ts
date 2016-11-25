@@ -574,6 +574,9 @@ export class ATNDeserializer {
 	 * @param atn The ATN.
 	 */
 	protected markPrecedenceDecisions(@NotNull atn: ATN): void {
+		// Map rule index -> precedence decision for that rule
+		let rulePrecedenceDecisions = new Map<number, StarLoopEntryState>();
+
 		for (let state of atn.states) {
 			if (!(state instanceof StarLoopEntryState)) {
 				continue;
@@ -587,9 +590,27 @@ export class ATNDeserializer {
 				let maybeLoopEndState: ATNState = state.transition(state.getNumberOfTransitions() - 1).target;
 				if (maybeLoopEndState instanceof LoopEndState) {
 					if (maybeLoopEndState.epsilonOnlyTransitions && maybeLoopEndState.transition(0).target instanceof RuleStopState) {
+						rulePrecedenceDecisions.set(state.ruleIndex, state);
 						state.precedenceRuleDecision = true;
 					}
 				}
+			}
+		}
+
+		// After marking precedence decisions, we go back through and fill in
+		// StarLoopEntryState.precedenceLoopbackStates.
+		for (let precedenceDecision of rulePrecedenceDecisions.entries()) {
+			for (let transition of atn.ruleToStopState[precedenceDecision[0]].getTransitions()) {
+				if (transition.getSerializationType() !== TransitionType.EPSILON) {
+					continue;
+				}
+
+				let epsilonTransition: EpsilonTransition = transition as EpsilonTransition;
+				if (epsilonTransition.outermostPrecedenceReturn() !== -1) {
+					continue;
+				}
+
+				precedenceDecision[1].precedenceLoopbackStates.set(transition.target.stateNumber);
 			}
 		}
 	}

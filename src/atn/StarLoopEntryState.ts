@@ -7,6 +7,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:37.7099201-07:00
 
 import { ATNStateType } from './ATNStateType';
+import { BitSet } from '../misc/BitSet';
 import { DecisionState } from './DecisionState';
 import { Override } from '../Decorators';
 import { StarLoopbackState } from './StarLoopbackState';
@@ -25,6 +26,15 @@ export class StarLoopEntryState extends DecisionState {
 	 * @see DFA#isPrecedenceDfa()
 	 */
 	precedenceRuleDecision: boolean = false;
+
+	/**
+	 * For precedence decisions, this set marks states *S* which have all of the following characteristics:
+	 *
+	 * * One or more invocation sites of the current rule returns to *S*.
+	 * * The closure from *S* includes the current decision without passing through any rule invocations or stepping out
+	 *   of the current rule.
+	 */
+	precedenceLoopbackStates: BitSet = new BitSet();
 
 	@Override
 	getStateType(): ATNStateType {
