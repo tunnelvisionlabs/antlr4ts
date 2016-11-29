@@ -910,9 +910,22 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 >>
 
 SerializedATN(model, className={<if(isLexer)><lexer.name><else><parser.name><endif>}) ::= <<
+<if(rest(model.segments))>
+<! requires segmented representation !>
+private static readonly _serializedATNSegments: number = <length(model.segments)>;
+<model.segments:{segment|private static readonly _serializedATNSegment<i0>: string =
+	"<segment; wrap={"+<\n><\t>"}>";}; separator="\n">
+public static readonly _serializedATN: string = Utils.join(
+	[
+		<model.segments:{segment | <className>._serializedATNSegment<i0>}; separator=",\n">
+	],
+	""
+);
+<else>
 <! only one segment, can be inlined !>
 public static readonly _serializedATN: string =
 	"<model.serialized; wrap={"+<\n><\t>"}>";
+<endif>
 public static __ATN: ATN;
 public static get _ATN(): ATN {
 	if (!<className>.__ATN) {
