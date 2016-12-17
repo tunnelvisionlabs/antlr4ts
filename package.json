@@ -12,13 +12,13 @@
     "unlinktool": "cd tool && npm unlink",
     "clean": "npm run unlink && git clean -idx",
     "antlr4ts": "npm run antlr4ts-test-xpath && npm run antlr4ts-test-rewriter && npm run antlr4ts-benchmark",
-    "antlr4ts-test-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../.. -o src/tree/xpath",
-    "antlr4ts-test-rewriter": "antlr4ts test/tool/RewriterLexer1.g4 test/tool/RewriterLexer2.g4 test/tool/RewriterLexer3.g4 -DbaseImportPath=../../../../src -o test/tool/gen/rewriter",
+    "antlr4ts-test-xpath": "antlr4ts src/tree/xpath/XPathLexer.g4 -DbaseImportPath=../..",
+    "antlr4ts-test-rewriter": "antlr4ts test/tool/RewriterLexer1.g4 test/tool/RewriterLexer2.g4 test/tool/RewriterLexer3.g4 -DbaseImportPath=../../src",
     "antlr4ts-benchmark": "npm run antlr4ts-benchmark-std && npm run antlr4ts-benchmark-std-atn && npm run antlr4ts-benchmark-lr && npm run antlr4ts-benchmark-lr-atn",
-    "antlr4ts-benchmark-std": "antlr4ts -visitor benchmark/Java.g4 -DbaseImportPath=../../../src -o benchmark/gen/std",
-    "antlr4ts-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn benchmark/Java.g4 -DbaseImportPath=../../../src -o benchmark/gen/std-atn",
-    "antlr4ts-benchmark-lr": "antlr4ts -visitor benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr",
-    "antlr4ts-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn benchmark/JavaLR.g4 -DbaseImportPath=../../../src -o benchmark/gen/lr-atn",
+    "antlr4ts-benchmark-std": "antlr4ts -visitor benchmark/Java.g4 -DbaseImportPath=../../../../src -o benchmark/gen/std",
+    "antlr4ts-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn benchmark/Java.g4 -DbaseImportPath=../../../../src -o benchmark/gen/std-atn",
+    "antlr4ts-benchmark-lr": "antlr4ts -visitor benchmark/JavaLR.g4 -DbaseImportPath=../../../../src -o benchmark/gen/lr",
+    "antlr4ts-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn benchmark/JavaLR.g4 -DbaseImportPath=../../../../src -o benchmark/gen/lr-atn",
     "tsc": "tsc",
     "buildrts": "cd test/runtime && tsc",
     "test": "mocha",
@@ -58,7 +58,7 @@
     "source-map-support": "^0.4.3",
     "std-mocks": "^1.0.1",
     "typedoc": "^0.5.1",
-    "typescript": "^2.0.3"
+    "typescript": "2.0.8"
   },
   "dependencies": {}
 }

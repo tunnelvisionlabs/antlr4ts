@@ -19,9 +19,9 @@ import { Lexer } from '../../src/Lexer';
 import { LexerInterpreter } from '../../src/LexerInterpreter';
 import { TokenStreamRewriter } from '../../src/TokenStreamRewriter';
 
-import { RewriterLexer1 } from './gen/rewriter/RewriterLexer1';
-import { RewriterLexer2 } from './gen/rewriter/RewriterLexer2';
-import { RewriterLexer3 } from './gen/rewriter/RewriterLexer3';
+import { RewriterLexer1 } from './RewriterLexer1';
+import { RewriterLexer2 } from './RewriterLexer2';
+import { RewriterLexer3 } from './RewriterLexer3';
 
 import * as assert from 'assert';
 import { suite, test as Test, skip as Ignore } from 'mocha-typescript';
