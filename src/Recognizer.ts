@@ -92,7 +92,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 		let result: Map<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
 		if (result == null) {
-			result = Object.freeze(Utils.toMap(ruleNames));
+			result = Object.freeze(Utils.toMap(ruleNames)) as Map<string, number>;
 			Recognizer.ruleIndexMapCache.set(ruleNames, result);
 		}
 
