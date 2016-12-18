@@ -59,15 +59,15 @@ import { TokenStream } from '../src/TokenStream';
 
 import * as Utils from '../src/misc/Utils';
 
-import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
-import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
-import { JavaLRLexer as JavaLRLexer } from './gen/lr/JavaLRLexer';
-import { JavaLRLexer as JavaLRLexerAtn } from './gen/lr-atn/JavaLRLexer';
+import { JavaLexer as JavaLexer } from './gen/std/benchmark/JavaLexer';
+import { JavaLexer as JavaLexerAtn } from './gen/std-atn/benchmark/JavaLexer';
+import { JavaLRLexer as JavaLRLexer } from './gen/lr/benchmark/JavaLRLexer';
+import { JavaLRLexer as JavaLRLexerAtn } from './gen/lr-atn/benchmark/JavaLRLexer';
 
-import { JavaParser as JavaParser } from './gen/std/JavaParser';
-import { JavaParser as JavaParserAtn } from './gen/std-atn/JavaParser';
-import { JavaLRParser as JavaLRParser } from './gen/lr/JavaLRParser';
-import { JavaLRParser as JavaLRParserAtn } from './gen/lr-atn/JavaLRParser';
+import { JavaParser as JavaParser } from './gen/std/benchmark/JavaParser';
+import { JavaParser as JavaParserAtn } from './gen/std-atn/benchmark/JavaParser';
+import { JavaLRParser as JavaLRParser } from './gen/lr/benchmark/JavaLRParser';
+import { JavaLRParser as JavaLRParserAtn } from './gen/lr-atn/benchmark/JavaLRParser';
 
 import * as assert from "assert";
 import * as fs from 'fs';
