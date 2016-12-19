@@ -14,7 +14,7 @@ import { ParseInfo } from "./atn/ParseInfo";
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { SuppressWarnings, NotNull } from "./decorators";
+import { SuppressWarnings, NotNull } from "./Decorators";
 import { Token } from "./Token";
 import { Vocabulary } from "./Vocabulary";
 import { VocabularyImpl } from "./VocabularyImpl";
