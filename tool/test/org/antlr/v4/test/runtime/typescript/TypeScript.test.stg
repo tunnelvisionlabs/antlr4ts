@@ -479,7 +479,6 @@ IgnoredTests ::= [
 	"SemPredEvalParser.2UnpredicatedAltsAndOneOrthogonalAlt": "Test does not support importing PredictionMode.",
 
 	// Skipped due to limitations in the TypeScript target
-	"LexerExec.LargeLexer": "Compiler fails for an unknown reason.",
 
 	default: false
 ]
