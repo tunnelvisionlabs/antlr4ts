@@ -129,7 +129,7 @@ public class TypeScriptTarget extends Target {
 	@Override
 	public int getSerializedATNSegmentLimit() {
 		// This number was arbitrarily chosen as a "large-ish number for which TestLargeLexer still passes"
-		return 10000;
+		return 5000;
 	}
 
 	@Override
