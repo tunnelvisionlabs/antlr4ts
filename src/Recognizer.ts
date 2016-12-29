@@ -25,9 +25,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
-	 	new WeakMap<Vocabulary, Map<string, number>>();
+	 	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
 	private static ruleIndexMapCache =
-	 	new WeakMap<string[], Map<string, number>>();
+	 	new WeakMap<string[], ReadonlyMap<string, number>>();
 
 	@SuppressWarnings("serial")
 	@NotNull
@@ -53,25 +53,25 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * <p>Used for XPath and tree pattern compilation.</p>
 	 */
 	@NotNull
-	getTokenTypeMap(): Map<string, number> {
+	getTokenTypeMap(): ReadonlyMap<string, number> {
 		let vocabulary: Vocabulary = this.getVocabulary();
 		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
-			result = new Map<string, number>();
+			let intermediateResult = new Map<string, number>();
 			for (let i = 0; i < this.getATN().maxTokenType; i++) {
 				let literalName = vocabulary.getLiteralName(i);
 				if (literalName != null) {
-					result.set(literalName, i);
+					intermediateResult.set(literalName, i);
 				}
 
 				let symbolicName = vocabulary.getSymbolicName(i);
 				if (symbolicName != null) {
-					result.set(symbolicName, i);
+					intermediateResult.set(symbolicName, i);
 				}
 			}
 
-			result.set("EOF", Token.EOF);
-			Object.freeze(result);
+			intermediateResult.set("EOF", Token.EOF);
+			result = Object.freeze(intermediateResult);
 			Recognizer.tokenTypeMapCache.set(vocabulary, result);
 		}
 
@@ -84,13 +84,13 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * <p>Used for XPath and tree pattern compilation.</p>
 	 */
 	@NotNull
-	getRuleIndexMap(): Map<string, number> {
+	getRuleIndexMap(): ReadonlyMap<string, number> {
 		let ruleNames: string[] = this.getRuleNames();
 		if (ruleNames == null) {
 			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
 
-		let result: Map<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
+		let result: ReadonlyMap<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
 		if (result == null) {
 			result = Object.freeze(Utils.toMap(ruleNames));
 			Recognizer.ruleIndexMapCache.set(ruleNames, result);
