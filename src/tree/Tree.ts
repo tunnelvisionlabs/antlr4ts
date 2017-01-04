@@ -25,14 +25,14 @@ export interface Tree {
 
 	/**
 	 * If there are children, get the `i`th value indexed from 0. Throws a `RangeError` if `i` is less than zero, or
-	 * greater than or equal to `getChildCount()`.
+	 * greater than or equal to `childCount`.
 	 */
 	getChild(i: number): Tree;
 
 	/** How many children are there? If there is none, then this
 	 *  node represents a leaf node.
 	 */
-	getChildCount(): number;
+	readonly childCount: number;
 
 	/** Print out a whole tree, not just a node, in LISP format
 	 *  {@code (root child1 .. childN)}. Print just a node if this is a leaf.

@@ -329,7 +329,7 @@ export class ParseTreePatternMatcher {
 			}
 
 			// (expr ...) and (expr ...)
-			if (tree.getChildCount() !== patternTree.getChildCount()) {
+			if (tree.childCount !== patternTree.childCount) {
 				if (!mismatchedNode) {
 					mismatchedNode = tree;
 				}
@@ -337,7 +337,7 @@ export class ParseTreePatternMatcher {
 				return mismatchedNode;
 			}
 
-			let n: number = tree.getChildCount();
+			let n: number = tree.childCount;
 			for (let i = 0; i < n; i++) {
 				let childMatch = this.matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
 				if (childMatch) {
@@ -355,7 +355,7 @@ export class ParseTreePatternMatcher {
 	/** Is {@code t} {@code (expr <expr>)} subtree? */
 	protected getRuleTagToken(t: ParseTree): RuleTagToken | undefined {
 		if (t instanceof RuleNode) {
-			if (t.getChildCount() === 1 && t.getChild(0) instanceof TerminalNode) {
+			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
 				let c = t.getChild(0) as TerminalNode;
 				if (c.getSymbol() instanceof RuleTagToken) {
 //					System.out.println("rule tag subtree "+t.toStringTree(parser));

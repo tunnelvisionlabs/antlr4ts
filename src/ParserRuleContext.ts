@@ -260,7 +260,7 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	@Override
-	getChildCount() {
+	get childCount() {
 		return this.children ? this.children.length : 0;
 	}
 

@@ -30,13 +30,13 @@ export class Trees {
 	 */
 	static toStringTree(@NotNull final Tree t,  @Nullable final List<String> ruleNames): string {
 		let s: string =  Utils.escapeWhitespace(getNodeText(t, ruleNames), false);
-		if ( t.getChildCount()==0 ) return s;
+		if ( t.childCount==0 ) return s;
 		let buf: StringBuilder =  new StringBuilder();
 		buf.append("(");
 		s = Utils.escapeWhitespace(getNodeText(t, ruleNames), false);
 		buf.append(s);
 		buf.append(' ');
-		for (let i = 0; i<t.getChildCount(); i++) {
+		for (let i = 0; i<t.childCount; i++) {
 			if ( i>0 ) buf.append(' ');
 			buf.append(toStringTree(t.getChild(i), ruleNames));
 		}
@@ -84,7 +84,7 @@ export class Trees {
 	/** Return ordered list of all children of this node */
 	static getChildren(t: Tree): List<Tree> {
 		let kids: List<Tree> =  new ArrayList<Tree>();
-		for (let i=0; i<t.getChildCount(); i++) {
+		for (let i=0; i<t.childCount; i++) {
 			kids.add(t.getChild(i));
 		}
 		return kids;
@@ -149,7 +149,7 @@ export class Trees {
 			if ( ctx.getRuleIndex() == index ) nodes.add(t);
 		}
 		// check children
-		for (let i = 0; i < t.getChildCount(); i++){
+		for (let i = 0; i < t.childCount; i++){
 			_findAllNodes(t.getChild(i), index, findTokens, nodes);
 		}
 	}
@@ -162,7 +162,7 @@ export class Trees {
 		let nodes: List<ParseTree> =  new ArrayList<ParseTree>();
 		nodes.add(t);
 
-		let n: number =  t.getChildCount();
+		let n: number =  t.childCount;
 		for (let i = 0 ; i < n ; i++){
 			nodes.addAll(getDescendants(t.getChild(i)));
 		}
@@ -185,7 +185,7 @@ export class Trees {
 																	int startTokenIndex, // inclusive
 																	stopTokenIndex: number): ParserRuleContext  // inclusive
 	{
-		let n: number =  t.getChildCount();
+		let n: number =  t.childCount;
 		for (let i = 0; i<n; i++) {
 			let child: ParseTree =  t.getChild(i);
 			let r: ParserRuleContext =  getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
@@ -217,7 +217,7 @@ export class Trees {
 											   stopIndex: number): void
 	{
 		if ( t==null ) return;
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			let child: ParseTree =  t.getChild(i);
 			let range: Interval =  child.getSourceInterval();
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
@@ -236,7 +236,7 @@ export class Trees {
 	static findNodeSuchThat(t: Tree, pred: Predicate<Tree>): Tree {
 		if ( pred.eval(t) ) return t;
 
-		let n: number =  t.getChildCount();
+		let n: number =  t.childCount;
 		for (let i = 0 ; i < n ; i++){
 			let u: Tree =  findNodeSuchThat(t.getChild(i), pred);
 			if ( u!=null ) return u;

@@ -343,7 +343,7 @@ export class MyRuleNode extends PRC {
 TokenGetterListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
-		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
+		if (ctx.childCount === 2 && ctx.INT().length === 2) {
 			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().text,
 				ctx.INT(1).getSymbol().text, ctx.INT()[0], ctx.INT()[1]);
 		} else {
@@ -356,7 +356,7 @@ export class LeafListener implements TListener {
 RuleGetterListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
-		if (ctx.getChildCount() === 2) {
+		if (ctx.childCount === 2) {
 			console.log("{0} {1} {2}",ctx.b(0).getStart().text,
 				ctx.b(1).getStart().text,ctx.b()[0].getStart().text);
 		} else {
@@ -370,7 +370,7 @@ export class LeafListener implements TListener {
 LRListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitE(ctx: TParser.EContext): void {
-		if (ctx.getChildCount() === 3) {
+		if (ctx.childCount === 3) {
 			console.log("{0} {1} {2}\n",ctx.e(0).getStart().text,
 				ctx.e(1).getStart().text, ctx.e()[0].getStart().text);
 		} else {

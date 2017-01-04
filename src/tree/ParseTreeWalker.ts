@@ -30,7 +30,7 @@ export class ParseTreeWalker {
 
 		let r = t as RuleNode;
 		this.enterRule(listener, r);
-		let n: number = r.getChildCount();
+		let n: number = r.childCount;
 		for (let i = 0; i < n; i++) {
 			this.walk(listener, r.getChild(i));
 		}

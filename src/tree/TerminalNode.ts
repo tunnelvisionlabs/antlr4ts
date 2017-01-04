@@ -48,7 +48,7 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
-	getChildCount(): number {
+	get childCount(): number {
 		return 0;
 	}
 

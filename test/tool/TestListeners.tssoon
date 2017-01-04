@@ -48,7 +48,7 @@ export class TestListeners extends BaseTest {
 			"@parser::members {\n" +
 			"public static class LeafListener extends TBaseListener {\n" +
 			"    public void exitA(TParser.AContext ctx) {\n" +
-			"      if (ctx.getChildCount()==2) System.out.printf(\"%s %s %s\",ctx.INT(0).getSymbol().text,ctx.INT(1).getSymbol().text,ctx.INT());\n" +
+			"      if (ctx.childCount==2) System.out.printf(\"%s %s %s\",ctx.INT(0).getSymbol().text,ctx.INT(1).getSymbol().text,ctx.INT());\n" +
 			"      else System.out.println(ctx.ID().getSymbol());\n" +
 			"    }\n" +
 			"  }}\n" +
@@ -85,7 +85,7 @@ export class TestListeners extends BaseTest {
 			"@parser::members {\n" +
 			"public static class LeafListener extends TBaseListener {\n" +
 			"    public void exitA(TParser.AContext ctx) {\n" +
-			"      if (ctx.getChildCount()==2) {\n" +
+			"      if (ctx.childCount==2) {\n" +
 			"        System.out.printf(\"%s %s %s\",ctx.b(0).start.text,\n" +
 			"                          ctx.b(1).start.text,ctx.b().get(0).start.text);\n" +
 			"      }\n" +
@@ -125,7 +125,7 @@ export class TestListeners extends BaseTest {
 			"@parser::members {\n" +
 			"public static class LeafListener extends TBaseListener {\n" +
 			"    public void exitE(TParser.EContext ctx) {\n" +
-			"      if (ctx.getChildCount()==3) {\n" +
+			"      if (ctx.childCount==3) {\n" +
 			"        System.out.printf(\"%s %s %s\\n\",ctx.e(0).start.text,\n" +
 			"                          ctx.e(1).start.text," +
 			"                          ctx.e().get(0).start.text);\n" +

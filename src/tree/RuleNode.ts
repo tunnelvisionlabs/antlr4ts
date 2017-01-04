@@ -29,5 +29,5 @@ export abstract class RuleNode implements ParseTree {
 
 	abstract readonly payload: any;
 
-	abstract getChildCount(): number;
+	abstract readonly childCount: number;
 }

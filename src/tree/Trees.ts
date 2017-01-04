@@ -41,13 +41,13 @@ export class Trees {
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.getChildCount() == 0) return s;
+		if (t.childCount == 0) return s;
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
 		buf += (' ');
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			if (i > 0) buf += (' ');
 			buf += (this.toStringTree(t.getChild(i), ruleNames));
 		}
@@ -95,7 +95,7 @@ export class Trees {
 	/** Return ordered list of all children of this node */
 	static getChildren(t: ParseTree): ParseTree[] {
 		let kids = [] as ParseTree[];
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			kids.push(t.getChild(i));
 		}
 		return kids;
@@ -155,7 +155,7 @@ export class Trees {
 			if (t.getRuleIndex() === index) nodes.push(t);
 		}
 		// check children
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			Trees._findAllNodes(t.getChild(i), index, findTokens, nodes);
 		}
 	}
@@ -169,7 +169,7 @@ export class Trees {
 
 		function recurse(e: ParseTree): void {
 			nodes.push(e);
-			const n = e.getChildCount();
+			const n = e.childCount;
 			for (let i = 0; i < n; i++) {
 				recurse(e.getChild(i));
 			}
@@ -188,7 +188,7 @@ export class Trees {
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number // inclusive
 	): ParserRuleContext | undefined {
-		let n: number = t.getChildCount();
+		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {
 			let child: ParseTree = t.getChild(i);
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
@@ -218,7 +218,7 @@ export class Trees {
 		startIndex: number,
 		stopIndex: number): void {
 		if (!t) return;
-		let count = t.getChildCount();
+		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
 			let child = t.getChild(i);
 			let range: Interval = child.getSourceInterval();
@@ -238,7 +238,7 @@ export class Trees {
 	//static findNodeSuchThat(t: ParseTree, pred: Predicate<ParseTree>): ParseTree {
 	//	if ( pred.eval(t) ) return t;
 
-	//	let n: number =  t.getChildCount();
+	//	let n: number =  t.childCount;
 	//	for (let i = 0 ; i < n ; i++){
 	//		let u: ParseTree =  findNodeSuchThat(t.getChild(i), pred);
 	//		if ( u!=null ) return u;
