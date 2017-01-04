@@ -248,7 +248,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let input: string =  "x ;";
 		let pattern: string =  "<id:ID>;";
 		let m: ParseTreeMatch =  checkPatternMatch(grammar, "s", input, pattern, "X8");
-		assertEquals("{ID=[x], id=[x]}", m.getLabels().toString());
+		assertEquals("{ID=[x], id=[x]}", m.labels.toString());
 		assertNotNull(m.get("id"));
 		assertNotNull(m.get("ID"));
 		assertEquals("x", m.get("id").text);
@@ -270,7 +270,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let input: string =  "x y;";
 		let pattern: string =  "<id:ID> <id:ID>;";
 		let m: ParseTreeMatch =  checkPatternMatch(grammar, "s", input, pattern, "X9");
-		assertEquals("{ID=[x, y], id=[x, y]}", m.getLabels().toString());
+		assertEquals("{ID=[x, y], id=[x, y]}", m.labels.toString());
 		assertNotNull(m.get("id"));
 		assertNotNull(m.get("ID"));
 		assertEquals("y", m.get("id").text);
@@ -292,7 +292,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let input: string =  "x y z;";
 		let pattern: string =  "<a:ID> <b:ID> <a:ID>;";
 		let m: ParseTreeMatch =  checkPatternMatch(grammar, "s", input, pattern, "X7");
-		assertEquals("{ID=[x, y, z], a=[x, z], b=[y]}", m.getLabels().toString());
+		assertEquals("{ID=[x, y, z], a=[x, z], b=[y]}", m.labels.toString());
 		assertNotNull(m.get("a")); // get first
 		assertNotNull(m.get("b"));
 		assertNotNull(m.get("ID"));
@@ -303,7 +303,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		assertEquals("[y]", m.getAll("b").toString());
 		assertEquals("[x, y, z]", m.getAll("ID").toString()); // ordered
 
-		assertEquals("xyz;", m.getTree().text); // whitespace stripped by lexer
+		assertEquals("xyz;", m.tree.text); // whitespace stripped by lexer
 
 		assertNull(m.get("undefined"));
 		assertEquals("[]", m.getAll("undefined").toString());
@@ -418,7 +418,7 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let p: ParseTreePattern =  getPattern(grammarName, pattern, startRule);
 		let match: ParseTreeMatch =  p.match(result);
-		let matched: boolean =  match.succeeded();
+		let matched: boolean =  match.succeeded;
 		if ( invertMatch ) assertFalse(matched);
 		else assertTrue(matched);
 		return match;

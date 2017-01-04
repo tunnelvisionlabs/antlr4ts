@@ -64,7 +64,7 @@ export class ParseTreePattern {
 	 *
 	 * @param tree The parse tree to match against this tree pattern.
 	 * @return A {@link ParseTreeMatch} object describing the result of the
-	 * match operation. The {@link ParseTreeMatch#succeeded()} method can be
+	 * match operation. The `ParseTreeMatch.succeeded` method can be
 	 * used to determine whether or not the match was successful.
 	 */
 	@NotNull
@@ -80,7 +80,7 @@ export class ParseTreePattern {
 	 * pattern; otherwise, {@code false}.
 	 */
 	matches(@NotNull tree: ParseTree): boolean {
-		return this.matcher.match(tree, this).succeeded();
+		return this.matcher.match(tree, this).succeeded;
 	}
 
 	/**
@@ -100,7 +100,7 @@ export class ParseTreePattern {
 		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);
-			if (match.succeeded()) {
+			if (match.succeeded) {
 				matches.push(match);
 			}
 		}

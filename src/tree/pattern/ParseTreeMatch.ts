@@ -14,24 +14,24 @@ import { ParseTreePattern } from "./ParseTreePattern";
  */
 export class ParseTreeMatch {
 	/**
-	 * This is the backing field for {@link #getTree()}.
+	 * This is the backing field for `tree`.
 	 */
-	private tree: ParseTree;
+	private _tree: ParseTree;
 
 	/**
-	 * This is the backing field for {@link #getPattern()}.
+	 * This is the backing field for `pattern`.
 	 */
-	private pattern: ParseTreePattern;
+	private _pattern: ParseTreePattern;
 
 	/**
-	 * This is the backing field for {@link #getLabels()}.
+	 * This is the backing field for `labels`.
 	 */
-	private labels: MultiMap<string, ParseTree>;
+	private _labels: MultiMap<string, ParseTree>;
 
 	/**
-	 * This is the backing field for {@link #getMismatchedNode()}.
+	 * This is the backing field for `mismatchedNode`.
 	 */
-	private mismatchedNode?: ParseTree;
+	private _mismatchedNode?: ParseTree;
 
 	/**
 	 * Constructs a new instance of {@link ParseTreeMatch} from the specified
@@ -65,10 +65,10 @@ export class ParseTreeMatch {
 			throw new Error("labels cannot be null");
 		}
 
-		this.tree = tree;
-		this.pattern = pattern;
-		this.labels = labels;
-		this.mismatchedNode = mismatchedNode;
+		this._tree = tree;
+		this._pattern = pattern;
+		this._labels = labels;
+		this._mismatchedNode = mismatchedNode;
 	}
 
 	/**
@@ -88,7 +88,7 @@ export class ParseTreeMatch {
 	 * label, or {@code null} if no parse tree matched a tag with the label.
 	 */
 	get(label: string): ParseTree | undefined {
-		let parseTrees = this.labels.get(label);
+		let parseTrees = this._labels.get(label);
 		if (!parseTrees || parseTrees.length === 0) {
 			return undefined;
 		}
@@ -121,7 +121,7 @@ export class ParseTreeMatch {
 	 */
 	@NotNull
 	getAll(@NotNull label: string): ParseTree[] {
-		const nodes = this.labels.get(label);
+		const nodes = this._labels.get(label);
 		if (!nodes) {
 			return [];
 		}
@@ -139,8 +139,8 @@ export class ParseTreeMatch {
 	 * pattern did not contain any rule or token tags, this map will be empty.
 	 */
 	@NotNull
-	getLabels(): MultiMap<string, ParseTree> {
-		return this.labels;
+	get labels(): MultiMap<string, ParseTree> {
+		return this._labels;
 	}
 
 	/**
@@ -149,8 +149,8 @@ export class ParseTreeMatch {
 	 * @return the node at which we first detected a mismatch, or {@code null}
 	 * if the match was successful.
 	 */
-	getMismatchedNode(): ParseTree | undefined {
-		return this.mismatchedNode;
+	get mismatchedNode(): ParseTree | undefined {
+		return this._mismatchedNode;
 	}
 
 	/**
@@ -159,8 +159,8 @@ export class ParseTreeMatch {
 	 * @return {@code true} if the match operation succeeded; otherwise,
 	 * {@code false}.
 	 */
-	succeeded(): boolean {
-		return !this.mismatchedNode;
+	get succeeded(): boolean {
+		return !this._mismatchedNode;
 	}
 
 	/**
@@ -169,8 +169,8 @@ export class ParseTreeMatch {
 	 * @return The tree pattern we are matching against.
 	 */
 	@NotNull
-	getPattern(): ParseTreePattern {
-		return this.pattern;
+	get pattern(): ParseTreePattern {
+		return this._pattern;
 	}
 
 	/**
@@ -179,8 +179,8 @@ export class ParseTreeMatch {
 	 * @return The {@link ParseTree} we are trying to match to a pattern.
 	 */
 	@NotNull
-	getTree(): ParseTree {
-		return this.tree;
+	get tree(): ParseTree {
+		return this._tree;
 	}
 
 	/**
@@ -189,7 +189,7 @@ export class ParseTreeMatch {
 	@Override
 	toString(): string {
 		return `Match ${
-			this.succeeded() ? "succeeded" : "failed"}; found ${
-			this.getLabels().size} labels`;
+			this.succeeded ? "succeeded" : "failed"}; found ${
+			this.labels.size} labels`;
 	}
 }
