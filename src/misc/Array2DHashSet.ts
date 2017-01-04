@@ -387,7 +387,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	toString(): string {
-		if (this.size == 0) return "{}";
+		if (this.size === 0) return "{}";
 
 		let buf = '{';
 		let first: boolean = true;
