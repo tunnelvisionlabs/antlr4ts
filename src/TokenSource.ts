@@ -71,19 +71,9 @@ export interface TokenSource {
 	readonly sourceName: string;
 
 	/**
-	 * Set the {@link TokenFactory} this token source should use for creating
-	 * {@link Token} objects from the input.
-	 *
-	 * @param factory The {@link TokenFactory} to use for creating tokens.
-	 */
-	setTokenFactory(/*@NotNull*/ factory: TokenFactory): void;
-
-	/**
-	 * Gets the {@link TokenFactory} this token source is currently using for
-	 * creating {@link Token} objects from the input.
-	 *
-	 * @return The {@link TokenFactory} currently used by this token source.
+	 * Gets or sets the `TokenFactory` this token source is currently using for
+	 * creating `Token` objects from the input.
 	 */
 	//@NotNull
-	getTokenFactory(): TokenFactory;
+	tokenFactory: TokenFactory;
 }

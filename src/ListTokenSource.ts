@@ -204,8 +204,8 @@ export class ListTokenSource implements TokenSource {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	setTokenFactory(@NotNull factory: TokenFactory): void {
+	// @Override
+	set tokenFactory(@NotNull factory: TokenFactory) {
 		this._factory = factory;
 	}
 
@@ -214,7 +214,7 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	@NotNull
-	getTokenFactory(): TokenFactory {
+	get tokenFactory(): TokenFactory {
 		return this._factory;
 	}
 }

@@ -385,8 +385,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		return this._syntaxErrors;
 	}
 
-	getTokenFactory(): TokenFactory {
-		return this._input.tokenSource.getTokenFactory();
+	get tokenFactory(): TokenFactory {
+		return this._input.tokenSource.tokenFactory;
 	}
 
 	/**

@@ -591,7 +591,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		expectedTokenType: number,
 		tokenText: string,
 		current: Token): Token {
-		let factory: TokenFactory = tokenSource.getTokenFactory();
+		let factory: TokenFactory = tokenSource.tokenFactory;
 		let x = current.tokenSource;
 		let stream = x ? x.getInputStream() : undefined;
 

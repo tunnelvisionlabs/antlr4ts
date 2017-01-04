@@ -53,12 +53,12 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 				}
 
 				@Override
-				getTokenFactory(): TokenFactory {
+				get tokenFactory(): TokenFactory {
 					return CommonTokenFactory.DEFAULT;
 				}
 
-				@Override
-				setTokenFactory(factory: TokenFactory): void {
+				// @Override
+				set tokenFactory(factory: TokenFactory) {
 				}
 			};
 
@@ -125,12 +125,12 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 				}
 
 				@Override
-				getTokenFactory(): TokenFactory {
+				get tokenFactory(): TokenFactory {
 					return CommonTokenFactory.DEFAULT;
 				}
 
-				@Override
-				setTokenFactory(factory: TokenFactory): void {
+				// @Override
+				set tokenFactory(factory: TokenFactory) {
 				}
 			};
 
@@ -207,12 +207,12 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getTokenFactory(): TokenFactory {
+			get tokenFactory(): TokenFactory {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
-			@Override
-			setTokenFactory(factory: TokenFactory): void {
+			// @Override
+			set tokenFactory(factory: TokenFactory) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};
@@ -255,12 +255,12 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getTokenFactory(): TokenFactory {
+			get tokenFactory(): TokenFactory {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
-			@Override
-			setTokenFactory(factory: TokenFactory): void {
+			// @Override
+			set tokenFactory(factory: TokenFactory) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};

@@ -213,12 +213,12 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	getTokenFactory(): TokenFactory {
+	get tokenFactory(): TokenFactory {
 		return this._factory;
 	}
 
-	@Override
-	setTokenFactory(factory: TokenFactory): void {
+	// @Override
+	set tokenFactory(factory: TokenFactory) {
 		this._factory = factory;
 	}
 
