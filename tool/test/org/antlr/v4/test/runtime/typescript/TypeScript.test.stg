@@ -463,7 +463,6 @@ ContextMember(ctx, subctx, member) ::= "<ctx>.<subctx>.<member>"
 IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
 	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Test does not support replacing the 'int' type.",
-	"CompositeParsers.ImportedRuleWithAction": "Test suite cannot distinguish between field and local variable declaration, but the syntax in TypeScript differs for these (the latter requires a 'let').",
 
 	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Test does not support replacing the 'int' type.",
 	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Test does not support replacing the 'int' type.",
@@ -471,47 +470,10 @@ IgnoredTests ::= [
 	"SemPredEvalParser.PredicateDependentOnArg": "Test does not support replacing the 'int' type.",
 	"SemPredEvalParser.PredicateDependentOnArg2": "Test does not support replacing the 'int' type.",
 
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_1": "Test does not support replacing the 'String' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_2": "Test does not support replacing the 'String' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_3": "Test does not support replacing the 'String' type.",
-
-	"FullContextParsing.AmbiguityNoLoop": "Test does not support importing PredictionMode.",
-	"FullContextParsing.AmbigYieldsCtxSensitiveDFA": "Test does not support importing PredictionMode.",
 	"FullContextParsing.ExprAmbiguity_1": "Test does not support replacing the 'int' type.",
 	"FullContextParsing.ExprAmbiguity_2": "Test does not support replacing the 'int' type.",
-	"FullContextParsing.CtxSensitiveDFATwoDiffInputWithDFA": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.CtxSensitiveWithDFA_1": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.CtxSensitiveWithDFA_2": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_1": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_2": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_3": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_4": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_5": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_6": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_1": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_2": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_3": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_4": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_5": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_6": "Test does not support importing PredictionMode.",
-	"FullContextParsing.SLLSeesEOFInLLGrammarWithDFA": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.LoopsSimulateTailRecursion": "Test does not support importing PredictionMode.",
 
 	"LexerExec.PositionAdjustingLexer": "Test does not support using '@beforeParser' instead of '@members'.",
-
-	"ParserExec.PredictionIssue334": "Test does not support importing 'BailErrorStrategy'.",
 
 	"Listeners.Basic": "Test does not support using '@beforeParser' instead of '@members'.",
 	"Listeners.LR": "Test does not support using '@beforeParser' instead of '@members'.",
@@ -520,9 +482,6 @@ IgnoredTests ::= [
 	"Listeners.RuleGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
 	"Listeners.TokenGetters_1": "Test does not support using '@beforeParser' instead of '@members'.",
 	"Listeners.TokenGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
-
-	"SemPredEvalParser.2UnpredicatedAlts": "Test does not support importing PredictionMode.",
-	"SemPredEvalParser.2UnpredicatedAltsAndOneOrthogonalAlt": "Test does not support importing PredictionMode.",
 
 	// Skipped due to limitations in the TypeScript target
 	"Visitors.Basic": "Test not implemented by this target.",
