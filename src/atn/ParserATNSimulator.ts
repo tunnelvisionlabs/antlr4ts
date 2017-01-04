@@ -15,6 +15,7 @@ import { ATNConfig } from './ATNConfig';
 import { ATNConfigSet } from './ATNConfigSet';
 import { ATNSimulator } from './ATNSimulator';
 import { ATNState } from './ATNState';
+import { ATNStateType } from './ATNStateType';
 import { AtomTransition } from './AtomTransition';
 import { BitSet } from '../misc/BitSet';
 import { Collection } from '../misc/Stubs';
@@ -43,6 +44,7 @@ import { RuleTransition } from './RuleTransition';
 import { SemanticContext } from './SemanticContext';
 import { SetTransition } from './SetTransition';
 import { SimulatorState } from './SimulatorState';
+import { StarLoopEntryState } from './StarLoopEntryState';
 import { Token } from '../Token';
 import { TokenStream } from '../TokenStream';
 import { Transition } from './Transition';
@@ -1766,6 +1768,33 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		for (let i = 0; i < p.getNumberOfOptimizedTransitions(); i++) {
+			// This block implements first-edge elimination of ambiguous LR
+			// alternatives as part of dynamic disambiguation during prediction.
+			// See antlr/antlr4#1398.
+			if (i === 0
+				&& p.getStateType() === ATNStateType.STAR_LOOP_ENTRY
+				&& (p as StarLoopEntryState).precedenceRuleDecision
+				&& !config.getContext().hasEmpty()) {
+
+				let precedenceDecision = p as StarLoopEntryState;
+
+				// When suppress is true, it means the outgoing edge i==0 is
+				// ambiguous with the outgoing edge i==1, and thus the closure
+				// operation can dynamically disambiguate by suppressing this
+				// edge during the closure operation.
+				let suppress: boolean = true;
+				for (let j: number = 0; j < config.getContext().size(); j++) {
+					if (!precedenceDecision.precedenceLoopbackStates.get(config.getContext().getReturnState(j))) {
+						suppress = false;
+						break;
+					}
+				}
+
+				if (suppress) {
+					continue;
+				}
+			}
+
 			let t: Transition = p.getOptimizedTransition(i);
 			let continueCollecting: boolean =
 				!(t instanceof ActionTransition) && collectPredicates;

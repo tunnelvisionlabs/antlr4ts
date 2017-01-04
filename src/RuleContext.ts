@@ -16,7 +16,7 @@
  *  The root node always has a null pointer and invokingState of -1.
  *
  *  Upon entry to parsing, the first invoked rule function creates a
- *  context object (asubclass specialized for that rule such as
+ *  context object (a subclass specialized for that rule such as
  *  SContext) and makes it the root of a parse tree, recorded by field
  *  Parser._ctx.
  *

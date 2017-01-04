@@ -321,6 +321,7 @@ export class ATNDeserializer {
 		}
 
 		// edges for rule stop states can be derived, so they aren't serialized
+		let returnTransitions = new Set<{ stopState: number, returnState: number, outermostPrecedenceReturn: number }>();
 		for (let state of atn.states) {
 			let returningToLeftFactored: boolean = state.ruleIndex >= 0 && atn.ruleToStartState[state.ruleIndex].leftFactored;
 			for (let i = 0; i < state.getNumberOfTransitions(); i++) {
@@ -342,9 +343,14 @@ export class ATNDeserializer {
 					}
 				}
 
-				let returnTransition: EpsilonTransition = new EpsilonTransition(ruleTransition.followState, outermostPrecedenceReturn);
-				atn.ruleToStopState[ruleTransition.target.ruleIndex].addTransition(returnTransition);
+				returnTransitions.add({ stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn: outermostPrecedenceReturn });
 			}
+		}
+
+		// Add all elements from returnTransitions to the ATN
+		for (let returnTransition of returnTransitions) {
+			let transition = new EpsilonTransition(atn.states[returnTransition.returnState], returnTransition.outermostPrecedenceReturn);
+			atn.ruleToStopState[returnTransition.stopState].addTransition(transition);
 		}
 
 		for (let state of atn.states) {
@@ -573,6 +579,9 @@ export class ATNDeserializer {
 	 * @param atn The ATN.
 	 */
 	protected markPrecedenceDecisions(@NotNull atn: ATN): void {
+		// Map rule index -> precedence decision for that rule
+		let rulePrecedenceDecisions = new Map<number, StarLoopEntryState>();
+
 		for (let state of atn.states) {
 			if (!(state instanceof StarLoopEntryState)) {
 				continue;
@@ -586,9 +595,28 @@ export class ATNDeserializer {
 				let maybeLoopEndState: ATNState = state.transition(state.getNumberOfTransitions() - 1).target;
 				if (maybeLoopEndState instanceof LoopEndState) {
 					if (maybeLoopEndState.epsilonOnlyTransitions && maybeLoopEndState.transition(0).target instanceof RuleStopState) {
+						rulePrecedenceDecisions.set(state.ruleIndex, state);
 						state.precedenceRuleDecision = true;
+						state.precedenceLoopbackStates = new BitSet(atn.states.length);
 					}
 				}
+			}
+		}
+
+		// After marking precedence decisions, we go back through and fill in
+		// StarLoopEntryState.precedenceLoopbackStates.
+		for (let precedenceDecision of rulePrecedenceDecisions) {
+			for (let transition of atn.ruleToStopState[precedenceDecision[0]].getTransitions()) {
+				if (transition.getSerializationType() != TransitionType.EPSILON) {
+					continue;
+				}
+
+				let epsilonTransition = transition as EpsilonTransition;
+				if (epsilonTransition.outermostPrecedenceReturn() != -1) {
+					continue;
+				}
+
+				precedenceDecision[1].precedenceLoopbackStates.set(transition.target.stateNumber);
 			}
 		}
 	}

@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.1614404-07:00
 
+import { ATNSimulator } from './atn/ATNSimulator';
 import { CharStream } from './CharStream';
 import { Interval } from './misc/Interval';
 import { NotNull, Override } from './Decorators';
+import { Recognizer } from './Recognizer';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
 import { WritableToken } from './WritableToken';
@@ -231,8 +233,11 @@ export class CommonToken implements WritableToken {
 		return this.source.stream;
 	}
 
+	toString(): string;
+	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
+
 	@Override
-	toString(): string {
+	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
 		let channelStr: string = "";
 		if (this.channel > 0) {
 			channelStr = ",channel=" + this.channel;
@@ -247,6 +252,11 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this.line + ":" + this.getCharPositionInLine() + "]";
+		let typeString = String(this.type);
+		if (recognizer) {
+			typeString = recognizer.getVocabulary().getDisplayName(this.type);
+		}
+
+		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + typeString + ">" + channelStr + "," + this.line + ":" + this.getCharPositionInLine() + "]";
 	}
 }

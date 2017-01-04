@@ -147,8 +147,8 @@ string(text) ::= <<
 writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
 writeln(s) ::= <<console.log(<s>);>>
-
 write(s) ::= <<process.stdout.write(String(<s>));>>
+writeList(s) ::= <<console.log(<s; separator="+">);>>
 
 False() ::= "false"
 
@@ -171,6 +171,7 @@ AssertIsList(v) ::= "let __ttt__: Array\<any> = <v>;" // just use static type sy
 AssignLocal(s,v) ::= "<s> = <v>;"
 
 InitIntMember(n,v) ::= <%<n>: number = <v>;%>
+InitLocalIntMember(n, v) ::= <%let <n>: number = <v>;%>
 
 InitBooleanMember(n,v) ::= <%<n>: boolean = <v>;%>
 
@@ -220,11 +221,30 @@ TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
 ImportListener(X) ::= ""
 
+ImportPredictionMode() ::= <<
+@beforeParser {
+import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
+}
+>>
+
+ImportBailErrorStrategy() ::= <<
+@beforeParser {
+import { BailErrorStrategy } from 'antlr4ts/BailErrorStrategy';
+}
+>>
+
 GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.getVocabulary())"
 
 RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
 
+FULL_CONTEXT_DFA() ::= "this.getInterpreter().enable_global_context_dfa = true;"
 LL_EXACT_AMBIG_DETECTION() ::= <<this.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
+
+ParserToken(parser, token) ::= <%<parser>.<token>%>
+
+Production(p) ::= <%<p>%>
+
+Result(r) ::= <%<r>%>
 
 ParserPropertyMember() ::= <<
 @members {
@@ -234,8 +254,10 @@ Property(): boolean {
 }
 >>
 
-PositionAdjustingLexer() ::= <<
+ParserPropertyCall(p, call) ::= "<p>.<call>"
 
+PositionAdjustingLexer() ::= <<
+@members {
 nextToken(): Token {
 	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
 		this._interp = new PositionAdjustingLexerATNSimulator(_ATN, this);
@@ -294,7 +316,9 @@ getInterpreter(): PositionAdjustingLexerATNSimulator {
 private static isIdentifierChar(c: string): boolean {
 	return char.IsLetterOrDigit(c) || c == '_';
 }
+}
 
+@afterLexer {
 export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
 	constructor(atn: ATN, recog: Lexer) {
@@ -309,14 +333,16 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 	}
 
 }
-
+}
 >>
 
 BasicListener(X) ::= <<
+@parser::afterParser {
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
 		console.log(node.getSymbol().getText());
 	}
+}
 }
 >>
 
@@ -341,6 +367,7 @@ export class MyRuleNode extends PRC {
 >>
 
 TokenGetterListener(X) ::= <<
+@parser::afterParser {
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
 		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
@@ -351,9 +378,11 @@ export class LeafListener implements TListener {
 		}
 	}
 }
+}
 >>
 
 RuleGetterListener(X) ::= <<
+@parser::afterParser {
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
 		if (ctx.getChildCount() === 2) {
@@ -364,10 +393,11 @@ export class LeafListener implements TListener {
 		}
 	}
 }
+}
 >>
 
-
 LRListener(X) ::= <<
+@parser::afterParser {
 export class LeafListener implements TListener {
 	exitE(ctx: TParser.EContext): void {
 		if (ctx.getChildCount() === 3) {
@@ -378,9 +408,11 @@ export class LeafListener implements TListener {
 		}
 	}
 }
+}
 >>
 
 LRWithLabelsListener(X) ::= <<
+@parser::afterParser {
 export class LeafListener implements TListener {
 	exitCall(ctx: TParser.CallContext): void {
 		console.log("{0} {1}",ctx.e().getStart().getText(),ctx.eList());
@@ -389,7 +421,16 @@ export class LeafListener implements TListener {
 		console.log(ctx.INT().getSymbol().getText());
 	}
 }
+}
 >>
+
+ImportVisitor(X) ::= ""
+BasicVisitor(X) ::= ""
+WalkVisitor(s) ::= ""
+LRWithLabelsVisitor(X) ::= ""
+RuleGetterVisitor(X) ::= ""
+LRVisitor(x) ::= ""
+TokenGetterVisitor(x) ::= ""
 
 DeclareContextListGettersFunction() ::= <<
 foo(s: SContext): void {
@@ -411,6 +452,13 @@ Declare_pred() ::= <<pred(v: boolean): boolean {
 >>
 
 Invoke_pred(v) ::= <<this.pred(<v>)>>
+
+ParserTokenType(t) ::= "Parser.<t>"
+ContextRuleFunction(ctx, rule) ::= "<ctx>.<rule>"
+ContextLabel(ctx, label) ::= "<ctx>._<label>"
+StringType() ::= "string | undefined"
+IntType() ::= "number"
+ContextMember(ctx, subctx, member) ::= "<ctx>.<subctx>.<member>"
 
 IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
@@ -477,6 +525,13 @@ IgnoredTests ::= [
 	"SemPredEvalParser.2UnpredicatedAltsAndOneOrthogonalAlt": "Test does not support importing PredictionMode.",
 
 	// Skipped due to limitations in the TypeScript target
+	"Visitors.Basic": "Test not implemented by this target.",
+	"Visitors.LR": "Test not implemented by this target.",
+	"Visitors.LRWithLabels": "Test not implemented by this target.",
+	"Visitors.RuleGetters_1": "Test not implemented by this target.",
+	"Visitors.RuleGetters_2": "Test not implemented by this target.",
+	"Visitors.TokenGetters_1": "Test not implemented by this target.",
+	"Visitors.TokenGetters_2": "Test not implemented by this target.",
 
 	default: false
 ]

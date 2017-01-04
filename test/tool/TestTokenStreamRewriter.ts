@@ -689,8 +689,7 @@ export class TestTokenStreamRewriter {
 
 	// Test for https://github.com/antlr/antlr4/issues/550
 	@Test
-	@Ignore
-	testPreservesOrderOfContiguousInserts(): void {
+	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder(): void {
 		let input: string =  "aa";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -705,4 +704,41 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
+	@Test
+	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2(): void {
+		let input: string = "aa";
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
+		stream.fill();
+		let tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
+		tokens.insertBefore(0, "<p>");
+		tokens.insertBefore(0, "<b>");
+		tokens.insertAfter(0, "</p>");
+		tokens.insertAfter(0, "</b>");
+		tokens.insertBefore(1, "<b>");
+		tokens.insertAfter(1, "</b>");
+		let result: string = tokens.getText();
+		let expecting: string = "<b><p>a</p></b><b>a</b>";
+		assert.strictEqual(result, expecting);
+	}
+
+	// Test for https://github.com/antlr/antlr4/issues/550
+	@Test
+	testPreservesOrderOfContiguousInserts(): void {
+		let input: string = "ab";
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
+		stream.fill();
+		let tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
+		tokens.insertBefore(0, "<p>");
+		tokens.insertBefore(0, "<b>");
+		tokens.insertBefore(0, "<div>");
+		tokens.insertAfter(0, "</p>");
+		tokens.insertAfter(0, "</b>");
+		tokens.insertAfter(0, "</div>");
+		tokens.insertBefore(1, "!");
+		let result: string = tokens.getText();
+		let expecting: string = "<div><b><p>a</p></b></div>!b";
+		assert.strictEqual(result, expecting);
+	}
 }
