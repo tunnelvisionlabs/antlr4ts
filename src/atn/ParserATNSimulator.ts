@@ -466,7 +466,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				assert(s0 == null || !s0.isContextSensitive());
 			}
 			else {
-				remainingContext = remainingContext.getParent();
+				remainingContext = remainingContext.parent;
 			}
 		}
 
@@ -507,7 +507,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					assert(remainingOuterContext != null);
-					remainingOuterContext = (<ParserRuleContext>remainingOuterContext).getParent();
+					remainingOuterContext = (<ParserRuleContext>remainingOuterContext).parent;
 					s = next;
 				}
 			}
@@ -1002,7 +1002,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				assert(remainingGlobalContext != null);
-				remainingGlobalContext = (<ParserRuleContext>remainingGlobalContext).getParent();
+				remainingGlobalContext = (<ParserRuleContext>remainingGlobalContext).parent;
 				s = next;
 			}
 		}
@@ -1180,7 +1180,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (remainingGlobalContext.isEmpty()) {
 					remainingGlobalContext = undefined;
 				} else {
-					remainingGlobalContext = remainingGlobalContext.getParent();
+					remainingGlobalContext = remainingGlobalContext.parent;
 				}
 
 				contextElements.add(nextContextElement);
@@ -1267,7 +1267,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					else {
 						previousContext = this.getReturnState(remainingGlobalContext);
 						initialContext = initialContext.appendSingleContext(previousContext, contextCache);
-						remainingGlobalContext = remainingGlobalContext.getParent();
+						remainingGlobalContext = remainingGlobalContext.parent;
 					}
 				}
 			}
@@ -1284,7 +1284,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					previousContext = this.getReturnState(remainingGlobalContext);
 					next = s0.getContextTarget(previousContext);
 					initialContext = initialContext.appendSingleContext(previousContext, contextCache);
-					remainingGlobalContext = remainingGlobalContext.getParent();
+					remainingGlobalContext = remainingGlobalContext.parent;
 				}
 
 				if (next == null) {
@@ -1380,7 +1380,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			if (remainingGlobalContext.isEmpty()) {
 				remainingGlobalContext = undefined;
 			} else {
-				remainingGlobalContext = remainingGlobalContext.getParent();
+				remainingGlobalContext = remainingGlobalContext.parent;
 			}
 
 			if (nextContextElement !== PredictionContext.EMPTY_FULL_STATE_KEY) {
@@ -2399,7 +2399,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 			// This method requires that the root ancestor of the ParserRuleContext be empty. If we make it to this
 			// line, we know the current node is not empty, which means it does have a parent.
-			context = <ParserRuleContext>context.getParent();
+			context = <ParserRuleContext>context.parent;
 		}
 
 		return context;

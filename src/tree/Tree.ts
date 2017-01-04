@@ -12,7 +12,7 @@ export interface Tree {
 	/** The parent of this node. If the return value is `undefined`, then this
 	 *  node is the root of the tree.
 	 */
-	getParent(): Tree | undefined;
+	readonly parent: Tree | undefined;
 
 	/**
 	 * This method returns whatever object represents the data at this note. For

@@ -68,14 +68,14 @@ import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext extends RuleNode {
-	parent: RuleContext | undefined;
+	_parent: RuleContext | undefined;
 	invokingState: number;
 
 	constructor();
 	constructor(parent: RuleContext | undefined, invokingState: number);
 	constructor(parent?: RuleContext, invokingState?: number) {
 		super();
-		this.parent = parent;
+		this._parent = parent;
 		this.invokingState = invokingState != null ? invokingState : -1;
 	}
 
@@ -87,7 +87,7 @@ export class RuleContext extends RuleNode {
 		let n = 0;
 		let p: RuleContext | undefined = this;
 		while (p) {
-			p = p.parent;
+			p = p._parent;
 			n++;
 		}
 		return n;
@@ -111,7 +111,7 @@ export class RuleContext extends RuleNode {
 	getRuleContext(): RuleContext { return this; }
 
 	@Override
-	getParent(): RuleContext | undefined { return this.parent; }
+	get parent(): RuleContext | undefined { return this._parent; }
 
 	@Override
 	get payload(): RuleContext { return this; }
@@ -224,11 +224,11 @@ export class RuleContext extends RuleNode {
 				buf += (ruleName);
 			}
 
-			if (p.parent && (ruleNames || !p.parent.isEmpty())) {
+			if (p._parent && (ruleNames || !p._parent.isEmpty())) {
 				buf += (" ");
 			}
 
-			p = p.parent;
+			p = p._parent;
 		}
 
 		buf += ("]");

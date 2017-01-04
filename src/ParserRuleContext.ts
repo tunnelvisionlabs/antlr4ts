@@ -95,7 +95,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  confusion with creating node with parent. Does not copy children.
 	 */
 	copyFrom(ctx: ParserRuleContext): void {
-		this.parent = ctx.parent;
+		this._parent = ctx._parent;
 		this.invokingState = ctx.invokingState;
 
 		this.start = ctx.start;
@@ -118,7 +118,7 @@ export class ParserRuleContext extends RuleContext {
 			// Does not set parent link
 		} else {
 			t = new TerminalNode(t);
-			t.parent = this;
+			t._parent = this;
 			result = t;
 		}
 
@@ -149,14 +149,14 @@ export class ParserRuleContext extends RuleContext {
 	addErrorNode(badToken: Token): ErrorNode {
 		let t = new ErrorNode(badToken);
 		this.addChild(t);
-		t.parent = this;
+		t._parent = this;
 		return t;
 	}
 
 	@Override
 	/** Override to make type more specific */
-	getParent(): ParserRuleContext | undefined {
-		let parent = super.getParent();
+	get parent(): ParserRuleContext | undefined {
+		let parent = super.parent;
 		if (parent === undefined || parent instanceof ParserRuleContext) {
 			return parent;
 		}

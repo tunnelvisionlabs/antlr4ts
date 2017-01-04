@@ -97,12 +97,12 @@ export class Trees {
 	 */
 	@NotNull
 	static getAncestors(@NotNull t: Tree): List<? extends Tree> {
-		if ( t.getParent()==null ) return Collections.emptyList();
+		if ( t.parent==null ) return Collections.emptyList();
 		let ancestors: List<Tree> =  new ArrayList<Tree>();
-		t = t.getParent();
+		t = t.parent;
 		while ( t!=null ) {
 			ancestors.add(0, t); // insert at start
-			t = t.getParent();
+			t = t.parent;
 		}
 		return ancestors;
 	}
@@ -113,11 +113,11 @@ export class Trees {
 	 *  @since 4.5.1
 	 */
 	static isAncestorOf(t: Tree, u: Tree): boolean {
-		if ( t==null || u==null || t.getParent()==null ) return false;
-		let p: Tree =  u.getParent();
+		if ( t==null || u==null || t.parent==null ) return false;
+		let p: Tree =  u.parent;
 		while ( p!=null ) {
 			if ( t==p ) return true;
-			p = p.getParent();
+			p = p.parent;
 		}
 		return false;
 	}

@@ -100,8 +100,8 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		let parent: PredictionContext;
-		if (outerContext.parent) {
-			parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
+		if (outerContext._parent) {
+			parent = PredictionContext.fromRuleContext(atn, outerContext._parent, fullContext);
 		} else {
 			parent = fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}

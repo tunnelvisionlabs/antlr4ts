@@ -64,7 +64,7 @@ class TraceListener implements ParseTreeListener {
 
 	@Override
 	visitTerminal(node: TerminalNode): void {
-		let parent = node.getParent()!.getRuleContext();
+		let parent = node.parent!.getRuleContext();
 		let token: Token = node.getSymbol();
 		console.log("consume " + token + " rule " + this.ruleNames[parent.getRuleIndex()]);
 	}
@@ -555,7 +555,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	protected addContextToParseTree(): void {
-		let parent = this._ctx.parent as ParserRuleContext | undefined;
+		let parent = this._ctx._parent as ParserRuleContext | undefined;
 		// add current context to parent if we have a parent
 		if (parent != null) {
 			parent.addChild(this._ctx);
@@ -579,7 +579,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		if (this._buildParseTrees) {
 			let factoredContext = this._ctx.getChild(this._ctx.getChildCount() - 1) as ParserRuleContext;
 			this._ctx.removeLastChild();
-			factoredContext.parent = localctx;
+			factoredContext._parent = localctx;
 			localctx.addChild(factoredContext);
 		}
 
@@ -603,7 +603,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		// trigger event on _ctx, before it reverts to parent
 		this.triggerExitRuleEvent();
 		this.setState(this._ctx.invokingState);
-		this._ctx = this._ctx.parent as ParserRuleContext;
+		this._ctx = this._ctx._parent as ParserRuleContext;
 	}
 
 	enterOuterAlt(localctx: ParserRuleContext, altNum: number): void {
@@ -611,7 +611,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		// if we have new localctx, make sure we replace existing ctx
 		// that is previous child of parse tree
 		if (this._buildParseTrees && this._ctx !== localctx) {
-			let parent = this._ctx.parent as ParserRuleContext | undefined;
+			let parent = this._ctx._parent as ParserRuleContext | undefined;
 			if (parent != null) {
 				parent.removeLastChild();
 				parent.addChild(localctx);
@@ -647,7 +647,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	pushNewRecursionContext(localctx: ParserRuleContext, state: number, ruleIndex: number): void {
 		let previous: ParserRuleContext = this._ctx;
-		previous.parent = localctx;
+		previous._parent = localctx;
 		previous.invokingState = state;
 		previous.stop = this._input.tryLT(-1);
 
@@ -669,7 +669,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		if (this._parseListeners.length > 0) {
 			while (this._ctx !== _parentctx) {
 				this.triggerExitRuleEvent();
-				this._ctx = this._ctx.parent as ParserRuleContext;
+				this._ctx = this._ctx._parent as ParserRuleContext;
 			}
 		}
 		else {
@@ -677,7 +677,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		// hook into tree
-		retctx.parent = _parentctx;
+		retctx._parent = _parentctx;
 
 		if (this._buildParseTrees && _parentctx != null) {
 			// add return ctx into invoking rule's tree
@@ -688,7 +688,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	getInvokingContext(ruleIndex: number): ParserRuleContext | undefined {
 		let p = this._ctx;
 		while (p && p.getRuleIndex() !== ruleIndex) {
-			p = p.parent as ParserRuleContext;
+			p = p._parent as ParserRuleContext;
 		}
 		return p;
 	}
@@ -750,7 +750,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				return true;
 			}
 
-			ctx = ctx.parent as ParserRuleContext;
+			ctx = ctx._parent as ParserRuleContext;
 		}
 
 		if (following.contains(Token.EPSILON) && symbol == Token.EOF) {
@@ -808,7 +808,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			let ruleIndex: number = p.getRuleIndex();
 			if (ruleIndex < 0) stack.push("n/a");
 			else stack.push(ruleNames[ruleIndex]);
-			p = p.parent;
+			p = p._parent;
 		}
 		return stack;
 	}

@@ -749,7 +749,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			let rt = invokingState.transition(0) as RuleTransition;
 			let follow: IntervalSet = atn.nextTokens(rt.followState);
 			recoverSet.addAll(follow);
-			ctx = ctx.parent;
+			ctx = ctx._parent;
 		}
 		recoverSet.remove(Token.EPSILON);
 //		System.out.println("recover set "+recoverSet.toString(recognizer.getTokenNames()));

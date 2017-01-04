@@ -57,7 +57,7 @@ export interface ParserTestOptions<TParser extends Parser> extends LexerTestOpti
 class TreeShapeListener implements ParseTreeListener {
 	enterEveryRule(ctx: ParserRuleContext): void {
 		for (let i = 0; i < ctx.getChildCount(); i++) {
-			let parent = ctx.getChild(i).getParent();
+			let parent = ctx.getChild(i).parent;
 			if (!(parent instanceof RuleNode) || parent.getRuleContext() !== ctx) {
 				throw new Error("Invalid parse tree shape detected.");
 			}

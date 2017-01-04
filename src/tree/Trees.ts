@@ -109,10 +109,10 @@ export class Trees {
 	@NotNull
 	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
 		let ancestors = [] as ParseTree[];
-		let p = t.getParent();
+		let p = t.parent;
 		while (p) {
 			ancestors.unshift(p); // insert at start
-			p = p.getParent();
+			p = p.parent;
 		}
 		return ancestors;
 	}
@@ -123,11 +123,11 @@ export class Trees {
      *  @since 4.5.1
      */
 	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
-		if (!t || !u || !t.getParent()) return false;
-		let p = u.getParent();
+		if (!t || !u || !t.parent) return false;
+		let p = u.parent;
 		while (p) {
 			if (t === p) return true;
-			p = p.getParent();
+			p = p.parent;
 		}
 		return false;
 	}
