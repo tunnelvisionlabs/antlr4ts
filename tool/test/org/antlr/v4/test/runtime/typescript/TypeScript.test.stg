@@ -533,6 +533,8 @@ IgnoredTests ::= [
 	"Visitors.TokenGetters_1": "Test not implemented by this target.",
 	"Visitors.TokenGetters_2": "Test not implemented by this target.",
 
+	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass."
+
 	default: false
 ]
 
