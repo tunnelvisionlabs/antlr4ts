@@ -37,7 +37,7 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
-	getPayload(): Token {
+	get payload(): Token {
 		return this.symbol;
 	}
 

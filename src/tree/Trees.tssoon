@@ -74,11 +74,11 @@ export class Trees {
 			}
 		}
 		// no recog for rule names
-		let payload: any =  t.getPayload();
+		let payload: any =  t.payload;
 		if ( payload instanceof Token ) {
 			return ((Token)payload).text;
 		}
-		return t.getPayload().toString();
+		return t.payload.toString();
 	}
 
 	/** Return ordered list of all children of this node */

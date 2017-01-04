@@ -63,11 +63,11 @@ export class Trees {
 			ruleNames = arg2;
 		} else {
 			// no recog or rule names
-			let payload = t.getPayload();
+			let payload = t.payload;
 			if (typeof payload.text === 'string') {
 				return payload.text;
 			}
-			return t.getPayload().toString();;
+			return t.payload.toString();;
 		}
 
 		if (t instanceof RuleNode) {

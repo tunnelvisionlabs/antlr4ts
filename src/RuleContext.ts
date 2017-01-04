@@ -114,7 +114,7 @@ export class RuleContext extends RuleNode {
 	getParent(): RuleContext | undefined { return this.parent; }
 
 	@Override
-	getPayload(): RuleContext { return this; }
+	get payload(): RuleContext { return this; }
 
 	/** Return the combined text of all child nodes. This method only considers
 	 *  tokens which have been added to the parse tree.

@@ -21,7 +21,7 @@ export interface Tree {
 	 * invocation. For abstract syntax trees (ASTs), this is a {@link Token}
 	 * object.
 	 */
-	getPayload(): any;
+	readonly payload: any;
 
 	/**
 	 * If there are children, get the `i`th value indexed from 0. Throws a `RangeError` if `i` is less than zero, or
