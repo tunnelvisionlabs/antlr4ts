@@ -1284,11 +1284,11 @@ export abstract class BaseTest {
 
 		@Override
 		mark(): number {
-			return index();
+			return index;
 		}
 
 		@Override
-		index(): number { return p; }
+		get index(): number { return p; }
 
 		@Override
 		release(marker: number): void {

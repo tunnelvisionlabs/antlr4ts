@@ -30,7 +30,7 @@ import * as Utils from './misc/Utils';
  * <p>
  * This rewriter makes no modifications to the token stream. It does not ask the
  * stream to fill itself up nor does it advance the input cursor. The token
- * stream {@link TokenStream#index()} will return the same value before and
+ * stream `TokenStream.index` will return the same value before and
  * after any {@link #getText()} call.</p>
  *
  * <p>

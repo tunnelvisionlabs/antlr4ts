@@ -92,7 +92,7 @@ export class ANTLRInputStream implements CharStream {
 	 *  be returned from LA(1).
      */
 	@Override
-	index(): number {
+	get index(): number {
 		return this.p;
 	}
 

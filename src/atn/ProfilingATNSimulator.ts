@@ -69,7 +69,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number {
 		try {
 			this._input = input;
-			this._startIndex = input.index();
+			this._startIndex = input.index;
 			// it's possible for SLL to reach a conflict state without consuming any input
 			this._sllStopIndex = this._startIndex - 1;
 			this._llStopIndex = -1;
@@ -143,7 +143,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		if (reachState == null) {
 			// no reach on current lookahead symbol. ERROR.
 			this.decisions[this.currentDecision].errors.push(
-				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index())
+				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index)
 			);
 		}
 
@@ -159,10 +159,10 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 		// this method is called after each time the input position advances
 		if (this.currentState.useContext) {
-			this._llStopIndex = this._input.index();
+			this._llStopIndex = this._input.index;
 		}
 		else {
-			this._sllStopIndex = this._input.index();
+			this._sllStopIndex = this._input.index;
 		}
 
 		let existingTargetState: DFAState | undefined = super.getExistingTargetState(previousD, t);
@@ -181,7 +181,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			if (existingTargetState === ATNSimulator.ERROR) {
 				let state: SimulatorState = new SimulatorState(this.currentState.outerContext, previousD, this.currentState.useContext, this.currentState.remainingOuterContext);
 				this.decisions[this.currentDecision].errors.push(
-					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index())
+					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index)
 				);
 			}
 		}

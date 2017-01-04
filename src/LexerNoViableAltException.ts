@@ -19,7 +19,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	/** Matching attempted at what input index? */
 	private startIndex: number;
 
-	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
+	/** Which configurations did we try at input.index that couldn't match input.LA(1)? */
 	private deadEndConfigs?: ATNConfigSet;
 
 	constructor(lexer: Lexer | undefined,

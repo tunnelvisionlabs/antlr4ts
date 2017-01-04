@@ -320,7 +320,7 @@ export class ParserInterpreter extends Parser {
 		let predictedAlt: number;
 		this.getErrorHandler().sync(this);
 		let decision: number = p.decision;
-		if (decision === this.overrideDecision && this._input.index() === this.overrideDecisionInputIndex && !this.overrideDecisionReached) {
+		if (decision === this.overrideDecision && this._input.index === this.overrideDecisionInputIndex && !this.overrideDecisionReached) {
 			predictedAlt = this.overrideDecisionAlt;
 			this.overrideDecisionReached = true;
 		}
@@ -410,9 +410,9 @@ export class ParserInterpreter extends Parser {
 	 *  tree.
 	 */
 	protected recover(e: RecognitionException): void {
-		let i: number = this._input.index();
+		let i: number = this._input.index;
 		this.getErrorHandler().recover(this, e);
-		if (this._input.index() === i) {
+		if (this._input.index === i) {
 			// no input consumed, better add an error node
 			let tok: Token | undefined = e.getOffendingToken();
 			if (!tok) {

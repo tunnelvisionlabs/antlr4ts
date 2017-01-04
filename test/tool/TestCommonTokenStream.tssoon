@@ -221,7 +221,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 		tokens.fill();
 
 		assertEquals(Token.EOF, tokens.LA(1));
-		assertEquals(0, tokens.index());
+		assertEquals(0, tokens.index);
 		assertEquals(1, tokens.size());
 	}
 
@@ -269,7 +269,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 		tokens.fill();
 
 		assertEquals(Token.EOF, tokens.LA(1));
-		assertEquals(0, tokens.index());
+		assertEquals(0, tokens.index);
 		assertEquals(1, tokens.size());
 		tokens.consume();
 	}

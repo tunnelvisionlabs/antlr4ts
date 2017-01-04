@@ -78,7 +78,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		this.mode = mode;
 		let mark: number = input.mark();
 		try {
-			this.startIndex = input.index();
+			this.startIndex = input.index;
 			this.prevAccept.reset();
 			let s0: DFAState | undefined = this.atn.modeToDFA[mode].s0;
 			if (s0 == null) {
@@ -137,7 +137,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	protected execATN(@NotNull input: CharStream, @NotNull ds0: DFAState): number {
-		//System.out.println("enter exec index "+input.index()+" from "+ds0.configs);
+		// console.log("enter exec index "+input.index+" from "+ds0.configs);
 		if (LexerATNSimulator.debug) {
 			console.log(`start state closure=${ds0.configs}`);
 		}
@@ -270,7 +270,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 		else {
 			// if no accept and EOF is first char, return EOF
-			if (t === IntStream.EOF && input.index() === this.startIndex) {
+			if (t === IntStream.EOF && input.index === this.startIndex) {
 				return Token.EOF;
 			}
 
@@ -304,7 +304,7 @@ export class LexerATNSimulator extends ATNSimulator {
 					let lexerActionExecutor: LexerActionExecutor | undefined = c.getLexerActionExecutor();
 					let config: ATNConfig;
 					if (lexerActionExecutor != null) {
-						lexerActionExecutor = lexerActionExecutor.fixOffsetBeforeMatch(input.index() - this.startIndex);
+						lexerActionExecutor = lexerActionExecutor.fixOffsetBeforeMatch(input.index - this.startIndex);
 						config = c.transform(target, true, lexerActionExecutor);
 					} else {
 						assert(c.getLexerActionExecutor() == null);
@@ -569,7 +569,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		let savedCharPositionInLine: number = this.charPositionInLine;
 		let savedLine: number = this.line;
-		let index: number = input.index();
+		let index: number = input.index;
 		let marker: number = input.mark();
 		try {
 			this.consume(input);
@@ -586,7 +586,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	protected captureSimState(@NotNull settings: LexerATNSimulator.SimState,
 		@NotNull input: CharStream,
 		@NotNull dfaState: DFAState): void {
-		settings.index = input.index();
+		settings.index = input.index;
 		settings.line = this.line;
 		settings.charPos = this.charPositionInLine;
 		settings.dfaState = dfaState;
@@ -679,7 +679,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	@NotNull
 	getText(@NotNull input: CharStream): string {
 		// index is first lookahead char, don't include.
-		return input.getText(Interval.of(this.startIndex, input.index() - 1));
+		return input.getText(Interval.of(this.startIndex, input.index - 1));
 	}
 
 	getLine(): number {

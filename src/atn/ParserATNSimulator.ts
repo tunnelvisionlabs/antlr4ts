@@ -407,7 +407,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		let m: number = input.mark();
-		let index: number = input.index();
+		let index: number = input.index;
 		try {
 			let alt: number = this.execDFA(dfa, input, index, state);
 			if (ParserATNSimulator.debug) console.log("DFA after predictATN: " + dfa.toString(this.parser.getVocabulary(), this.parser.getRuleNames()));
@@ -536,7 +536,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (ParserATNSimulator.dfa_debug && t >= 0) console.log("no edge for " + this.parser.getVocabulary().getDisplayName(t));
 				let alt: number;
 				if (ParserATNSimulator.dfa_debug) {
-					let interval: Interval = Interval.of(startIndex, this.parser.getInputStream().index());
+					let interval: Interval = Interval.of(startIndex, this.parser.getInputStream().index);
 					console.log("ATN exec upon " +
 						this.parser.getInputStream().getTextFromInterval(interval) +
 						" at DFA state " + s.stateNumber);
@@ -572,10 +572,10 @@ export class ParserATNSimulator extends ATNSimulator {
 			if (dfa.atnStartState instanceof DecisionState) {
 				if (!this.userWantsCtxSensitive ||
 					(!s.configs.getDipsIntoOuterContext() && s.configs.isExactConflict()) ||
-					(this.treat_sllk1_conflict_as_ambiguity && input.index() === startIndex)) {
+					(this.treat_sllk1_conflict_as_ambiguity && input.index === startIndex)) {
 					// we don't report the ambiguity again
 					//if ( !this.acceptState.configset.hasSemanticContext() ) {
-					// 	this.reportAmbiguity(dfa, acceptState, startIndex, input.index(), acceptState.configset.getConflictingAlts(), acceptState.configset);
+					// 	this.reportAmbiguity(dfa, acceptState, startIndex, input.index, acceptState.configset.getConflictingAlts(), acceptState.configset);
 					//}
 				}
 				else {
@@ -587,7 +587,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					let conflictingAlts: BitSet | undefined;
 					let predicates: DFAState.PredPrediction[] | undefined = s.predicates;
 					if (predicates != null) {
-						let conflictIndex: number = input.index();
+						let conflictIndex: number = input.index;
 						if (conflictIndex !== startIndex) {
 							input.seek(startIndex);
 						}
@@ -606,7 +606,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 					if (this.reportAmbiguities) {
 						let conflictState: SimulatorState = new SimulatorState(outerContext, s, state.useContext, remainingOuterContext);
-						this.reportAttemptingFullContext(dfa, conflictingAlts, conflictState, startIndex, input.index());
+						this.reportAttemptingFullContext(dfa, conflictingAlts, conflictState, startIndex, input.index);
 					}
 
 					input.seek(startIndex);
@@ -619,7 +619,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		// disambiguating or validating predicates to evaluate
 		let predicates: DFAState.PredPrediction[] | undefined = s.predicates;
 		if (predicates != null) {
-			let stopIndex: number = input.index();
+			let stopIndex: number = input.index;
 			if (startIndex !== stopIndex) {
 				input.seek(startIndex);
 			}
@@ -765,7 +765,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				let predictedAlt: number = conflictingAlts == null ? D.getPrediction() : ATN.INVALID_ALT_NUMBER;
 				if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 					if (this.optimize_ll1
-						&& input.index() === startIndex
+						&& input.index === startIndex
 						&& !dfa.isPrecedenceDfa()
 						&& nextState.outerContext === nextState.remainingOuterContext
 						&& dfa.decision >= 0
@@ -777,12 +777,12 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					if (useContext && this.always_try_local_context) {
-						this.reportContextSensitivity(dfa, predictedAlt, nextState, startIndex, input.index());
+						this.reportContextSensitivity(dfa, predictedAlt, nextState, startIndex, input.index);
 					}
 				}
 
 				predictedAlt = D.getPrediction();
-//				int k = input.index() - startIndex + 1; // how much input we used
+//				int k = input.index - startIndex + 1; // how much input we used
 //				System.out.println("used k="+k);
 				let attemptFullContext: boolean = conflictingAlts != null && this.userWantsCtxSensitive;
 				if (attemptFullContext) {
@@ -790,13 +790,13 @@ export class ParserATNSimulator extends ATNSimulator {
 					// prediction does not step out of the decision rule.
 					attemptFullContext = !useContext
 						&& (D.configs.getDipsIntoOuterContext() || !D.configs.isExactConflict())
-						&& (!this.treat_sllk1_conflict_as_ambiguity || input.index() !== startIndex);
+						&& (!this.treat_sllk1_conflict_as_ambiguity || input.index !== startIndex);
 				}
 
 				if (D.configs.hasSemanticContext()) {
 					let predPredictions: DFAState.PredPrediction[] | undefined = D.predicates;
 					if (predPredictions != null) {
-						let conflictIndex: number = input.index();
+						let conflictIndex: number = input.index;
 						if (conflictIndex !== startIndex) {
 							input.seek(startIndex);
 						}
@@ -825,7 +825,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (!attemptFullContext) {
 					if (conflictingAlts != null) {
 						if (this.reportAmbiguities && conflictingAlts.cardinality() > 1) {
-							this.reportAmbiguity(dfa, D, startIndex, input.index(), D.configs.isExactConflict(), conflictingAlts, D.configs);
+							this.reportAmbiguity(dfa, D, startIndex, input.index, D.configs.isExactConflict(), conflictingAlts, D.configs);
 						}
 
 						predictedAlt = conflictingAlts.nextSetBit(0);
@@ -840,7 +840,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					if (ParserATNSimulator.debug) console.log("RETRY with outerContext=" + outerContext);
 					let fullContextState: SimulatorState = this.computeStartState(dfa, outerContext, true);
 					if (this.reportAmbiguities) {
-						this.reportAttemptingFullContext(dfa, conflictingAlts, nextState, startIndex, input.index());
+						this.reportAttemptingFullContext(dfa, conflictingAlts, nextState, startIndex, input.index);
 					}
 
 					input.seek(startIndex);
@@ -963,7 +963,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (altToPred != null) {
 					let predicates: DFAState.PredPrediction[] | undefined = this.getPredicatePredictions(alts, altToPred);
 					if (predicates != null) {
-						let stopIndex: number = input.index();
+						let stopIndex: number = input.index;
 						try {
 							input.seek(startIndex);
 							let filteredAlts: BitSet = this.evalSemanticContext(predicates, previous.outerContext, false);

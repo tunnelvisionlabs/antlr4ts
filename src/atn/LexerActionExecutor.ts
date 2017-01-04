@@ -153,7 +153,7 @@ export class LexerActionExecutor {
 	 */
 	execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
 		let requiresSeek: boolean = false;
-		let stopIndex: number = input.index();
+		let stopIndex: number = input.index;
 		try {
 			for (let lexerAction of this.lexerActions) {
 				if (lexerAction instanceof LexerIndexedCustomAction) {

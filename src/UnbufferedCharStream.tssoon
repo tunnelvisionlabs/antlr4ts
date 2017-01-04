@@ -219,7 +219,7 @@ export class UnbufferedCharStream implements CharStream {
     }
 
     @Override
-    index(): number {
+    get index(): number {
 		return currentCharIndex;
     }
 

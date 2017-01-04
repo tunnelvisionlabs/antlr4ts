@@ -140,7 +140,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 				this._token = undefined;
 				this._channel = Token.DEFAULT_CHANNEL;
-				this._tokenStartCharIndex = this._input.index();
+				this._tokenStartCharIndex = this._input.index;
 				this._tokenStartCharPositionInLine = this.getInterpreter().getCharPositionInLine();
 				this._tokenStartLine = this.getInterpreter().getLine();
 				this._text = undefined;
@@ -148,7 +148,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 					this._type = Token.INVALID_TYPE;
 //				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
 //								   " in mode "+mode+
-//								   " at index "+input.index());
+//								   " at index "+input.index);
 					let ttype: number;
 					try {
 						ttype = this.getInterpreter().match(this._input, this._mode);
@@ -269,7 +269,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		let line: number = this.getLine();
 		let eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
-			Token.DEFAULT_CHANNEL, this._input.index(), this._input.index() - 1,
+			Token.DEFAULT_CHANNEL, this._input.index, this._input.index - 1,
 			line, cpos);
 		this.emit(eof);
 		return eof;
@@ -295,7 +295,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	/** What is the index of the current character of lookahead? */
 	getCharIndex(): number {
-		return this._input.index();
+		return this._input.index;
 	}
 
 	/** Return the text matched so far for the current token or any
@@ -355,7 +355,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	notifyListeners(e: LexerNoViableAltException): void {
 		let text: string = this._input.getText(
-			Interval.of(this._tokenStartCharIndex, this._input.index()));
+			Interval.of(this._tokenStartCharIndex, this._input.index));
 		let msg: string = "token recognition error at: '" +
 			this.getErrorDisplay(text) + "'";
 

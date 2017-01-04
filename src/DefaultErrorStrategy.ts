@@ -167,11 +167,11 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@Override
 	recover(recognizer: Parser, e: RecognitionException): void {
 //		System.out.println("recover in "+recognizer.getRuleInvocationStack()+
-//						   " index="+recognizer.getInputStream().index()+
+//						   " index="+recognizer.getInputStream().index+
 //						   ", lastErrorIndex="+
 //						   lastErrorIndex+
 //						   ", states="+lastErrorStates);
-		if (this.lastErrorIndex === recognizer.getInputStream().index() &&
+		if (this.lastErrorIndex === recognizer.getInputStream().index &&
 			this.lastErrorStates &&
 			this.lastErrorStates.contains(recognizer.getState())) {
 			// uh oh, another error at same token index and previously-visited
@@ -183,7 +183,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 //			System.err.println("FAILSAFE consumes "+recognizer.getTokenNames()[recognizer.getInputStream().LA(1)]);
 			recognizer.consume();
 		}
-		this.lastErrorIndex = recognizer.getInputStream().index();
+		this.lastErrorIndex = recognizer.getInputStream().index;
 		if (!this.lastErrorStates) this.lastErrorStates = new IntervalSet();
 		this.lastErrorStates.add(recognizer.getState());
 		let followSet: IntervalSet = this.getErrorRecoverySet(recognizer);

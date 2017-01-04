@@ -84,7 +84,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	index(): number {
+	get index(): number {
 		return this.p;
 	}
 
