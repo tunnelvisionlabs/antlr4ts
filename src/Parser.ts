@@ -191,7 +191,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	@NotNull
 	match(ttype: number): Token {
 		let t: Token = this.getCurrentToken();
-		if (t.getType() === ttype) {
+		if (t.type === ttype) {
 			if (ttype === Token.EOF) {
 				this.matchedEOF = true;
 			}
@@ -229,7 +229,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	@NotNull
 	matchWildcard(): Token {
 		let t: Token = this.getCurrentToken();
-		if (t.getType() > 0) {
+		if (t.type > 0) {
 			this._errHandler.reportMatch(this);
 			this.consume();
 		}
@@ -525,7 +525,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	consume(): Token {
 		let o: Token = this.getCurrentToken();
-		if (o.getType() != Parser.EOF) {
+		if (o.type != Parser.EOF) {
 			this.inputStream.consume();
 		}
 		let hasListener: boolean = this._parseListeners.length !== 0;

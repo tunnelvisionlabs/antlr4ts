@@ -142,7 +142,7 @@ export class Trees {
 		// check this node (the root) first
 		if ( findTokens && t instanceof TerminalNode ) {
 			let tnode: TerminalNode =  (TerminalNode)t;
-			if ( tnode.getSymbol().getType()==index ) nodes.add(t);
+			if ( tnode.getSymbol().type==index ) nodes.add(t);
 		}
 		else if ( !findTokens && t instanceof ParserRuleContext ) {
 			let ctx: ParserRuleContext =  (ParserRuleContext)t;

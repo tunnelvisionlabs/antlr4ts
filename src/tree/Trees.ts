@@ -149,7 +149,7 @@ export class Trees {
 	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
-			if (t.getSymbol().getType() === index) nodes.push(t);
+			if (t.getSymbol().type === index) nodes.push(t);
 		}
 		else if (!findTokens && t instanceof ParserRuleContext) {
 			if (t.getRuleIndex() === index) nodes.push(t);

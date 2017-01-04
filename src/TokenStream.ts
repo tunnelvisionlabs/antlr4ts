@@ -18,7 +18,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `LT(k).getType() === LA(k)`.
+	 * is non-null and the value of `LT(k).type === LA(k)`.
 	 *
 	 * A `RangeError` is thrown if `k<0` and fewer than `-k` calls to `consume()` have occurred from the beginning of
 	 * the stream before calling this method.
@@ -30,7 +30,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `tryLT(k).getType() === LA(k)`.
+	 * is non-null and the value of `tryLT(k).type === LA(k)`.
 	 *
 	 * The return value is `undefined` if `k<0` and fewer than `-k` calls to `consume()` have occurred from the
 	 * beginning of the stream before calling this method.

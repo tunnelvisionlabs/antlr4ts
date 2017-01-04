@@ -89,7 +89,7 @@ export class TestATNInterpreter extends BaseTest {
 		}
 		catch (NoViableAltException re) {
 			assertEquals(1, re.getOffendingToken().tokenIndex);
-			assertEquals(3, re.getOffendingToken().getType());
+			assertEquals(3, re.getOffendingToken().type);
 			throw re;
 		}
 	}
@@ -135,7 +135,7 @@ export class TestATNInterpreter extends BaseTest {
 		}
 		catch (NoViableAltException re) {
 			assertEquals(2, re.getOffendingToken().tokenIndex);
-			assertEquals(4, re.getOffendingToken().getType());
+			assertEquals(4, re.getOffendingToken().type);
 			throw re;
 		}
 	}
@@ -181,7 +181,7 @@ export class TestATNInterpreter extends BaseTest {
 		}
 		catch (NoViableAltException re) {
 			assertEquals(2, re.getOffendingToken().tokenIndex);
-			assertEquals(4, re.getOffendingToken().getType());
+			assertEquals(4, re.getOffendingToken().type);
 			throw re;
 		}
 	}
@@ -267,7 +267,7 @@ export class TestATNInterpreter extends BaseTest {
 		}
 		catch (NoViableAltException re) {
 			assertEquals(2, re.getOffendingToken().tokenIndex);
-			assertEquals(4, re.getOffendingToken().getType());
+			assertEquals(4, re.getOffendingToken().type);
 			throw re;
 		}
 	}

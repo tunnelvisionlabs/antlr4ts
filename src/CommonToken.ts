@@ -21,9 +21,9 @@ export class CommonToken implements WritableToken {
 		{ source: undefined, stream: undefined };
 
 	/**
-	 * This is the backing field for {@link #getType} and {@link #setType}.
+	 * This is the backing field for `type`.
 	 */
-	protected type: number;
+	private _type: number;
 	/**
 	 * This is the backing field for {@link #getLine} and {@link #setLine}.
 	 */
@@ -76,7 +76,7 @@ export class CommonToken implements WritableToken {
 
 	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this.text = text;
-		this.type = type;
+		this._type = type;
 		this.source = source;
 		this._channel = channel;
 		this.start = start;
@@ -101,7 +101,7 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
+		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.tokenIndex;
 		result._charPositionInLine = oldToken.charPositionInLine;
@@ -118,8 +118,8 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getType(): number {
-		return this.type;
+	get type(): number {
+		return this._type;
 	}
 
 	// @Override
@@ -185,9 +185,9 @@ export class CommonToken implements WritableToken {
 		this._channel = channel;
 	}
 
-	@Override
-	setType(type: number): void {
-		this.type = type;
+	// @Override
+	set type(type: number) {
+		this._type = type;
 	}
 
 	@Override
@@ -244,6 +244,6 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		return "[@" + this.tokenIndex + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
+		return "[@" + this.tokenIndex + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this._type + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
 	}
 }

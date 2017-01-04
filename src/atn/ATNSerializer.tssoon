@@ -332,7 +332,7 @@ export class ATNSerializer {
 					break;
 
 				case TYPE:
-					let type: number =  ((LexerTypeAction)action).getType();
+					let type: number =  ((LexerTypeAction)action).type;
 					data.add(type != -1 ? type : 0xFFFF);
 					data.add(0);
 					break;

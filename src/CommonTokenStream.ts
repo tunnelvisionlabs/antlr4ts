@@ -48,7 +48,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 * Constructs a new {@link CommonTokenStream} using the specified token
 	 * source and filtering tokens to the specified channel. Only tokens whose
 	 * {@link Token#getChannel} matches {@code channel} or have the
-	 * {@link Token#getType} equal to {@link Token#EOF} will be returned by the
+	 * `Token.type` equal to {@link Token#EOF} will be returned by the
 	 * token stream lookahead methods.
 	 *
 	 * @param tokenSource The token source.
@@ -123,7 +123,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 				n++;
 			}
 
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				break;
 			}
 		}

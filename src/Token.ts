@@ -21,7 +21,7 @@ export interface Token {
 	getText(): string | undefined;
 
 	/** Get the token type of the token */
-	getType(): number;
+	readonly type: number;
 
 	/** The line number on which the 1st character of this token was matched,
 	 *  line=1..n

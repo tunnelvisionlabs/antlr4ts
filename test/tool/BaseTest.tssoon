@@ -1061,7 +1061,7 @@ export abstract class BaseTest {
 			}
 
 			let t: Token =  get(i);
-			if ( hide.contains(t.getType()) ) {
+			if ( hide.contains(t.type) ) {
 				((WritableToken)t).channel = Token.HIDDEN_CHANNEL;
 			}
 
@@ -1280,7 +1280,7 @@ export abstract class BaseTest {
 		consume(): void { p++; }
 
 		@Override
-		LA(int i) { return LT(i).getType(): number; }
+		LA(int i) { return LT(i).type: number; }
 
 		@Override
 		mark(): number {

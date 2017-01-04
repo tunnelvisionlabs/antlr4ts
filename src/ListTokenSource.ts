@@ -126,7 +126,7 @@ export class ListTokenSource implements TokenSource {
 		}
 
 		let t: Token = this.tokens[this.i];
-		if (this.i === this.tokens.length - 1 && t.getType() === Token.EOF) {
+		if (this.i === this.tokens.length - 1 && t.type === Token.EOF) {
 			this.eofToken = t;
 		}
 

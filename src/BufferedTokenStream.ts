@@ -173,7 +173,7 @@ export class BufferedTokenStream implements TokenStream {
 			}
 
 			this.tokens.push(t);
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				this.fetchedEOF = true;
 				return i + 1;
 			}
@@ -205,7 +205,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		for (let i = start; i <= stop; i++) {
 			let t: Token = this.tokens[i];
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				break;
 			}
 
@@ -222,7 +222,7 @@ export class BufferedTokenStream implements TokenStream {
 			return Token.INVALID_TYPE;
 		}
 
-		return token.getType();
+		return token.type;
 	}
 
 	protected tryLB(k: number): Token | undefined {
@@ -330,9 +330,9 @@ export class BufferedTokenStream implements TokenStream {
 
 		let typesSet = types;
 
-		// list = tokens[start:stop]:{T t, t.getType() in types}
+		// list = tokens[start:stop]:{T t, t.type in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
-		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.getType()); });
+		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.type); });
 
 		return filteredTokens;
 	}
@@ -351,7 +351,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		let token: Token = this.tokens[i];
 		while (token.channel !== channel) {
-			if (token.getType() === Token.EOF) {
+			if (token.type === Token.EOF) {
 				return i;
 			}
 
@@ -382,7 +382,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		while (i >= 0) {
 			let token: Token = this.tokens[i];
-			if (token.getType() === Token.EOF || token.channel === channel) {
+			if (token.type === Token.EOF || token.channel === channel) {
 				return i;
 			}
 
@@ -494,7 +494,7 @@ export class BufferedTokenStream implements TokenStream {
 		let buf: string = "";
 		for (let i = start; i <= stop; i++) {
 			let t: Token = this.tokens[i];
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				break;
 			}
 

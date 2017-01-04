@@ -69,7 +69,7 @@ export class TerminalNode implements ParseTree {
 
 	@Override
 	toString(): string {
-		if (this.symbol.getType() === Token.EOF) {
+		if (this.symbol.type === Token.EOF) {
 			return "<EOF>";
 		}
 

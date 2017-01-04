@@ -275,7 +275,7 @@ export class ParseTreePatternMatcher {
 		if (tree instanceof TerminalNode && patternTree instanceof TerminalNode) {
 			let mismatchedNode: ParseTree | undefined = undefined;
 			// both are tokens and they have same type
-			if (tree.getSymbol().getType() === patternTree.getSymbol().getType()) {
+			if (tree.getSymbol().type === patternTree.getSymbol().type) {
 				if (patternTree.getSymbol() instanceof TokenTagToken) { // x and <ID>
 					let tokenTagToken = patternTree.getSymbol() as TokenTagToken;
 					// track label->list-of-nodes for both token name and label (if any)
@@ -403,7 +403,7 @@ export class ParseTreePatternMatcher {
 				let input = new ANTLRInputStream(textChunk.getText());
 				this.lexer.inputStream = input;
 				let t: Token = this.lexer.nextToken();
-				while (t.getType() !== Token.EOF) {
+				while (t.type !== Token.EOF) {
 					tokens.push(t);
 					t = this.lexer.nextToken();
 				}

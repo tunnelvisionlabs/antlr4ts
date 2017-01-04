@@ -43,8 +43,8 @@ export class TestActionSplitter extends BaseTest {
         let splitter: ActionSplitter =  new ActionSplitter(new ANTLRStringStream(a),
 													 BlankActionSplitterListener()): new;
         let t: Token =  splitter.nextToken();
-        while ( t.getType()!=Token.EOF ) {
-            chunks.add("'"+t.getText()+"'<"+t.getType()+">");
+        while ( t.type!=Token.EOF ) {
+            chunks.add("'"+t.getText()+"'<"+t.type+">");
             t = splitter.nextToken();
         }
         return chunks;

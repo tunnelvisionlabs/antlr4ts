@@ -32,8 +32,8 @@ BANG	 : '!' ;
 ID			:	NameStartChar NameChar*
 				{
 				let text = this.getText();
-				if (text.charAt(0) === text.charAt(0).toUpperCase()) this.setType(XPathLexer.TOKEN_REF);
-				else this.setType(XPathLexer.RULE_REF);
+				if (text.charAt(0) === text.charAt(0).toUpperCase()) this.type = XPathLexer.TOKEN_REF;
+				else this.type = XPathLexer.RULE_REF;
 				}
 			;
 

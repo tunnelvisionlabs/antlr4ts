@@ -322,11 +322,11 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._token = _token;
 	}
 
-	setType(ttype: number): void {
+	set type(ttype: number) {
 		this._type = ttype;
 	}
 
-	getType(): number {
+	get type(): number {
 		return this._type;
 	}
 
@@ -346,7 +346,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	getAllTokens(): Token[] {
 		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
-		while (t.getType() != Token.EOF) {
+		while (t.type != Token.EOF) {
 			tokens.push(t);
 			t = this.nextToken();
 		}

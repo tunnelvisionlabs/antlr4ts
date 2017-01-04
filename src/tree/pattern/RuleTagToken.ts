@@ -104,7 +104,7 @@ export class RuleTagToken implements Token {
 	 * transitions created during ATN deserialization.</p>
 	 */
 	@Override
-	getType(): number {
+	get type(): number {
 		return this.bypassTokenType;
 	}
 

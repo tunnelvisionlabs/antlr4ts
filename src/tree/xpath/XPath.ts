@@ -112,13 +112,13 @@ export class XPath {
 		while (i < n) {
 			let el: Token = tokens[i];
 			let next: Token | undefined;
-			switch (el.getType()) {
+			switch (el.type) {
 				case XPathLexer.ROOT:
 				case XPathLexer.ANYWHERE:
-					let anywhere: boolean = el.getType() === XPathLexer.ANYWHERE;
+					let anywhere: boolean = el.type === XPathLexer.ANYWHERE;
 					i++;
 					next = tokens[i];
-					let invert: boolean = next.getType() === XPathLexer.BANG;
+					let invert: boolean = next.type === XPathLexer.BANG;
 					if (invert) {
 						i++;
 						next = tokens[i];
@@ -152,7 +152,7 @@ export class XPath {
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
-		if (wordToken.getType() == Token.EOF) {
+		if (wordToken.type == Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
 
@@ -163,7 +163,7 @@ export class XPath {
 
 		let ttype: number = this.parser.getTokenType(word);
 		let ruleIndex: number = this.parser.getRuleIndex(word);
-		switch (wordToken.getType()) {
+		switch (wordToken.type) {
 			case XPathLexer.WILDCARD:
 				return anywhere ?
 					new XPathWildcardAnywhereElement() :

@@ -93,7 +93,7 @@ export class UnbufferedTokenStream implements TokenStream {
 		}
 
 		if ( index >= n ) {
-			assert(n > 0 && tokens[n-1].getType() == Token.EOF);
+			assert(n > 0 && tokens[n-1].type == Token.EOF);
 			return tokens[n-1];
 		}
 
@@ -102,7 +102,7 @@ export class UnbufferedTokenStream implements TokenStream {
 
 	@Override
 	LA(i: number): number {
-		return LT(i).getType();
+		return LT(i).type;
 	}
 
 	@Override
@@ -171,7 +171,7 @@ export class UnbufferedTokenStream implements TokenStream {
 	 */
 	protected fill(n: number): number {
 		for (let i=0; i<n; i++) {
-			if (this.n > 0 && tokens[this.n-1].getType() == Token.EOF) {
+			if (this.n > 0 && tokens[this.n-1].type == Token.EOF) {
 				return i;
 			}
 

@@ -298,7 +298,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
-			if (e.getStartToken().getType() === Token.EOF) input = "<EOF>";
+			if (e.getStartToken().type === Token.EOF) input = "<EOF>";
 			else input = tokens.getTextFromRange(e.getStartToken(), e.getOffendingToken());
 		}
 		else {
@@ -579,7 +579,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		else tokenText = "<missing " + recognizer.getVocabulary().getDisplayName(expectedTokenType) + ">";
 		let current: Token = currentSymbol;
 		let lookback = recognizer.inputStream.tryLT(-1);
-		if (current.getType() === Token.EOF && lookback != null) {
+		if (current.type === Token.EOF && lookback != null) {
 			current = lookback;
 		}
 
@@ -634,7 +634,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	}
 
 	protected getSymbolType(@NotNull symbol: Token): number {
-		return symbol.getType();
+		return symbol.type;
 	}
 
 	@NotNull
