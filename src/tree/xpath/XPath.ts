@@ -172,7 +172,7 @@ export class XPath {
 			case XPathLexer.STRING:
 				if (ttype === Token.INVALID_TYPE) {
 					throw new Error(word + " at index " +
-						wordToken.getStartIndex() +
+						wordToken.startIndex +
 						" isn't a valid token name");
 				}
 				return anywhere ?
@@ -181,7 +181,7 @@ export class XPath {
 			default:
 				if (ruleIndex == -1) {
 					throw new Error(word + " at index " +
-						wordToken.getStartIndex() +
+						wordToken.startIndex +
 						" isn't a valid rule name");
 				}
 				return anywhere ?

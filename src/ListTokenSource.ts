@@ -95,7 +95,7 @@ export class ListTokenSource implements TokenSource {
 				}
 			}
 
-			return lastToken.charPositionInLine + lastToken.stopIndex - lastToken.getStartIndex() + 1;
+			return lastToken.charPositionInLine + lastToken.stopIndex - lastToken.startIndex + 1;
 		}
 
 		// only reach this if tokens is empty, meaning EOF occurs at the first

@@ -51,7 +51,7 @@ export interface Token {
 	/** The starting character index of the token
 	 *  This method is optional; return -1 if not implemented.
 	 */
-	getStartIndex(): number;
+	readonly startIndex: number;
 
 	/** The last character index of the token.
 	 *  This method is optional; return -1 if not implemented.

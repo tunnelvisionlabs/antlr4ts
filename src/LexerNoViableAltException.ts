@@ -17,7 +17,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;
 
 	/** Matching attempted at what input index? */
-	private startIndex: number;
+	private _startIndex: number;
 
 	/** Which configurations did we try at input.index that couldn't match input.LA(1)? */
 	private deadEndConfigs?: ATNConfigSet;
@@ -27,12 +27,12 @@ export class LexerNoViableAltException extends RecognitionException {
 		startIndex: number,
 		deadEndConfigs: ATNConfigSet | undefined) {
 		super(lexer, input);
-		this.startIndex = startIndex;
+		this._startIndex = startIndex;
 		this.deadEndConfigs = deadEndConfigs;
 	}
 
-	getStartIndex(): number {
-		return this.startIndex;
+	get startIndex(): number {
+		return this._startIndex;
 	}
 
 	getDeadEndConfigs(): ATNConfigSet | undefined {
@@ -47,8 +47,8 @@ export class LexerNoViableAltException extends RecognitionException {
 	@Override
 	toString(): string {
 		let symbol = "";
-		if (this.startIndex >= 0 && this.startIndex < this.inputStream.size) {
-			symbol = this.inputStream.getText(Interval.of(this.startIndex, this.startIndex));
+		if (this._startIndex >= 0 && this._startIndex < this.inputStream.size) {
+			symbol = this.inputStream.getText(Interval.of(this._startIndex, this._startIndex));
 			symbol = Utils.escapeWhitespace(symbol, false);
 		}
 

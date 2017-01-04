@@ -144,7 +144,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getStartIndex(): number {
+	get startIndex(): number {
 		return -1;
 	}
 

@@ -1226,7 +1226,7 @@ export class TestPerformance {
 				return;
 			}
 
-			TestPerformance.updateChecksum(checksum, token.getStartIndex());
+			TestPerformance.updateChecksum(checksum, token.startIndex);
 			TestPerformance.updateChecksum(checksum, token.stopIndex);
 			TestPerformance.updateChecksum(checksum, token.line);
 			TestPerformance.updateChecksum(checksum, token.charPositionInLine);
