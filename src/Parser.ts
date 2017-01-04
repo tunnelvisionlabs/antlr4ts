@@ -145,7 +145,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	constructor(input: TokenStream) {
 		super();
 		this._precedenceStack.push(0);
-		this.setInputStream(input);
+		this.inputStream = input;
 	}
 
 	/** reset the parser's state */
@@ -154,7 +154,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	reset(resetInput?: boolean): void {
 		// Note: this method executes when not parsing, so _ctx can be undefined
 		if (resetInput === undefined || resetInput === true) {
-			this.getInputStream().seek(0);
+			this.inputStream.seek(0);
 		}
 
 		this._errHandler.reset(this);
@@ -435,8 +435,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern {
 		if (!lexer) {
-			if (this.getInputStream()) {
-				let tokenSource = this.getInputStream().tokenSource;
+			if (this.inputStream) {
+				let tokenSource = this.inputStream.tokenSource;
 				if (tokenSource instanceof Lexer) {
 					lexer = tokenSource;
 				}
@@ -462,12 +462,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	@Override
-	getInputStream(): TokenStream {
+	get inputStream(): TokenStream {
 		return this._input;
 	}
 
 	/** Set the token stream and reset the parser. */
-	setInputStream(input: TokenStream): void {
+	set inputStream(input: TokenStream) {
 		this.reset(false);
 		this._input = input;
 	}
@@ -526,7 +526,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	consume(): Token {
 		let o: Token = this.getCurrentToken();
 		if (o.getType() != Parser.EOF) {
-			this.getInputStream().consume();
+			this.inputStream.consume();
 		}
 		let hasListener: boolean = this._parseListeners.length !== 0;
 		if (this._buildParseTrees || hasListener) {

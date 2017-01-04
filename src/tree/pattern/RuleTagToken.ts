@@ -174,7 +174,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getInputStream(): CharStream | undefined {
+	get inputStream(): CharStream | undefined {
 		return undefined;
 	}
 

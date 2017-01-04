@@ -30,7 +30,7 @@ export class FailedPredicateException extends RecognitionException {
 	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
 		super(
 			recognizer,
-			recognizer.getInputStream(),
+			recognizer.inputStream,
 			recognizer.getContext(),
 			FailedPredicateException.formatMessage(predicate, message));
 		let s: ATNState = recognizer.getInterpreter().atn.states[recognizer.getState()];

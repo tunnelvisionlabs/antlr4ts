@@ -60,7 +60,7 @@ export interface TokenSource {
 	 * the input, or {@code null} if no input stream is available for the token
 	 * source.
 	 */
-	getInputStream(): CharStream | undefined;
+	readonly inputStream: CharStream | undefined;
 
 	/**
 	 * Gets the name of the underlying input source. This method returns a

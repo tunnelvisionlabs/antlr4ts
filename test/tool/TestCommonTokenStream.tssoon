@@ -48,7 +48,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return 0;
 				}
 				@Override
-				getInputStream(): CharStream {
+				get inputStream(): CharStream {
 					return null;
 				}
 
@@ -120,7 +120,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return 0;
 				}
 				@Override
-				getInputStream(): CharStream {
+				get inputStream(): CharStream {
 					return null;
 				}
 
@@ -197,7 +197,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getInputStream(): CharStream {
+			get inputStream(): CharStream {
 				return null;
 			}
 
@@ -245,7 +245,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getInputStream(): CharStream {
+			get inputStream(): CharStream {
 				return null;
 			}
 

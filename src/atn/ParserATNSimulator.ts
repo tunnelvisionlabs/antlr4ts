@@ -536,9 +536,9 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (ParserATNSimulator.dfa_debug && t >= 0) console.log("no edge for " + this.parser.getVocabulary().getDisplayName(t));
 				let alt: number;
 				if (ParserATNSimulator.dfa_debug) {
-					let interval: Interval = Interval.of(startIndex, this.parser.getInputStream().index);
+					let interval: Interval = Interval.of(startIndex, this.parser.inputStream.index);
 					console.log("ATN exec upon " +
-						this.parser.getInputStream().getText(interval) +
+						this.parser.inputStream.getText(interval) +
 						" at DFA state " + s.stateNumber);
 				}
 
@@ -2341,7 +2341,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (ParserATNSimulator.debug || ParserATNSimulator.retry_debug) {
 			let interval: Interval = Interval.of(startIndex, stopIndex);
 			console.log("reportAttemptingFullContext decision=" + dfa.decision + ":" + conflictState.s0.configs +
-				", input=" + this.parser.getInputStream().getText(interval));
+				", input=" + this.parser.inputStream.getText(interval));
 		}
 		if (this.parser != null) this.parser.getErrorListenerDispatch().reportAttemptingFullContext(this.parser, dfa, startIndex, stopIndex, conflictingAlts, conflictState);
 	}
@@ -2350,7 +2350,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (ParserATNSimulator.debug || ParserATNSimulator.retry_debug) {
 			let interval: Interval = Interval.of(startIndex, stopIndex);
 			console.log("reportContextSensitivity decision=" + dfa.decision + ":" + acceptState.s0.configs +
-				", input=" + this.parser.getInputStream().getText(interval));
+				", input=" + this.parser.inputStream.getText(interval));
 		}
 		if (this.parser != null) this.parser.getErrorListenerDispatch().reportContextSensitivity(this.parser, dfa, startIndex, stopIndex, prediction, acceptState);
 	}
@@ -2368,7 +2368,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			let interval: Interval = Interval.of(startIndex, stopIndex);
 			console.log("reportAmbiguity " +
 				ambigAlts + ":" + configs +
-				", input=" + this.parser.getInputStream().getText(interval));
+				", input=" + this.parser.inputStream.getText(interval));
 		}
 		if (this.parser != null) this.parser.getErrorListenerDispatch().reportAmbiguity(this.parser, dfa, startIndex, stopIndex,
 			exact, ambigAlts, configs);

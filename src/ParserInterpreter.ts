@@ -101,7 +101,7 @@ export class ParserInterpreter extends Parser {
 							 ruleNames: string[], atn: ATN, input: TokenStream);
 	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
 							 ruleNames?: string[], atn?: ATN, input?: TokenStream) {
-		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.getInputStream() : input!);
+		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;
 			this.grammarFileName = old.grammarFileName;
@@ -420,7 +420,7 @@ export class ParserInterpreter extends Parser {
 			}
 
 			let source = tok.tokenSource;
-			let stream = source !== undefined ? source.getInputStream() : undefined;
+			let stream = source !== undefined ? source.inputStream : undefined;
 			let sourcePair = { source: source, stream: stream };
 
 			if (e instanceof InputMismatchException) {

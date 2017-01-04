@@ -401,7 +401,7 @@ export class ParseTreePatternMatcher {
 			else {
 				let textChunk = chunk as TextChunk;
 				let input = new ANTLRInputStream(textChunk.getText());
-				this.lexer.setInputStream(input);
+				this.lexer.inputStream = input;
 				let t: Token = this.lexer.nextToken();
 				while (t.getType() !== Token.EOF) {
 					tokens.push(t);

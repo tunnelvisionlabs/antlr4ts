@@ -122,7 +122,7 @@ export class RecognitionException extends Error {
 	 * available.
 	 */
 
-	getInputStream(): IntStream | undefined {
+	get inputStream(): IntStream | undefined {
 		return this.input;
 	}
 

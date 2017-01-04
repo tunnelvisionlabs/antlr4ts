@@ -223,7 +223,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	/** Set the char stream and reset the lexer */
-	setInputStream(input: CharStream): void {
+	set inputStream(input: CharStream) {
 		this.reset(false);
 		this._input = input;
 		this._tokenFactorySourcePair = { source: this, stream: this._input };
@@ -235,7 +235,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	getInputStream(): CharStream {
+	get inputStream(): CharStream {
 		return this._input;
 	}
 

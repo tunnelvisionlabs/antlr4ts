@@ -167,11 +167,11 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@Override
 	recover(recognizer: Parser, e: RecognitionException): void {
 //		System.out.println("recover in "+recognizer.getRuleInvocationStack()+
-//						   " index="+recognizer.getInputStream().index+
+//						   " index="+recognizer.inputStream.index+
 //						   ", lastErrorIndex="+
 //						   lastErrorIndex+
 //						   ", states="+lastErrorStates);
-		if (this.lastErrorIndex === recognizer.getInputStream().index &&
+		if (this.lastErrorIndex === recognizer.inputStream.index &&
 			this.lastErrorStates &&
 			this.lastErrorStates.contains(recognizer.getState())) {
 			// uh oh, another error at same token index and previously-visited
@@ -180,10 +180,10 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			// at least to prevent an infinite loop; this is a failsafe.
 //			System.err.println("seen error condition before index="+
 //							   lastErrorIndex+", states="+lastErrorStates);
-//			System.err.println("FAILSAFE consumes "+recognizer.getTokenNames()[recognizer.getInputStream().LA(1)]);
+//			System.err.println("FAILSAFE consumes "+recognizer.getTokenNames()[recognizer.inputStream.LA(1)]);
 			recognizer.consume();
 		}
-		this.lastErrorIndex = recognizer.getInputStream().index;
+		this.lastErrorIndex = recognizer.inputStream.index;
 		if (!this.lastErrorStates) this.lastErrorStates = new IntervalSet();
 		this.lastErrorStates.add(recognizer.getState());
 		let followSet: IntervalSet = this.getErrorRecoverySet(recognizer);
@@ -245,7 +245,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			return;
 		}
 
-		let tokens: TokenStream = recognizer.getInputStream();
+		let tokens: TokenStream = recognizer.inputStream;
 		let la: number = tokens.LA(1);
 
 		// try cheaper subset first; might get lucky. seems to shave a wee bit off
@@ -295,7 +295,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	protected reportNoViableAlternative(@NotNull recognizer: Parser,
 		@NotNull e: NoViableAltException): void {
-		let tokens: TokenStream = recognizer.getInputStream();
+		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
 			if (e.getStartToken().getType() === Token.EOF) input = "<EOF>";
@@ -495,7 +495,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * strategy for the current mismatched input, otherwise {@code false}
 	 */
 	protected singleTokenInsertion(@NotNull recognizer: Parser): boolean {
-		let currentSymbolType: number = recognizer.getInputStream().LA(1);
+		let currentSymbolType: number = recognizer.inputStream.LA(1);
 		// if current token is consistent with what could come after current
 		// ATN state, then we know we're missing a token; error recovery
 		// is free to conjure up and insert the missing token
@@ -531,14 +531,14 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * {@code null}
 	 */
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
-		let nextTokenType: number = recognizer.getInputStream().LA(2);
+		let nextTokenType: number = recognizer.inputStream.LA(2);
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		if (expecting.contains(nextTokenType)) {
 			this.reportUnwantedToken(recognizer);
 			/*
 			System.err.println("recoverFromMismatchedToken deleting "+
-							   ((TokenStream)recognizer.getInputStream()).LT(1)+
-							   " since "+((TokenStream)recognizer.getInputStream()).LT(2)+
+							   ((TokenStream)recognizer.inputStream).LT(1)+
+							   " since "+((TokenStream)recognizer.inputStream).LT(2)+
 							   " is what we want");
 			*/
 			recognizer.consume(); // simply delete extra token
@@ -578,12 +578,12 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		if (expectedTokenType === Token.EOF) tokenText = "<missing EOF>";
 		else tokenText = "<missing " + recognizer.getVocabulary().getDisplayName(expectedTokenType) + ">";
 		let current: Token = currentSymbol;
-		let lookback = recognizer.getInputStream().tryLT(-1);
+		let lookback = recognizer.inputStream.tryLT(-1);
 		if (current.getType() === Token.EOF && lookback != null) {
 			current = lookback;
 		}
 
-		return this.constructToken(recognizer.getInputStream().tokenSource, expectedTokenType, tokenText, current);
+		return this.constructToken(recognizer.inputStream.tokenSource, expectedTokenType, tokenText, current);
 	}
 
 	protected constructToken(
@@ -593,7 +593,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		current: Token): Token {
 		let factory: TokenFactory = tokenSource.tokenFactory;
 		let x = current.tokenSource;
-		let stream = x ? x.getInputStream() : undefined;
+		let stream = x ? x.inputStream : undefined;
 
 		return factory.create(
 			{ source: tokenSource, stream: stream },
@@ -759,12 +759,12 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/** Consume tokens until one matches the given token set. */
 	protected consumeUntil(@NotNull recognizer: Parser, @NotNull set: IntervalSet): void {
 //		System.err.println("consumeUntil("+set.toString(recognizer.getTokenNames())+")");
-		let ttype: number = recognizer.getInputStream().LA(1);
+		let ttype: number = recognizer.inputStream.LA(1);
 		while (ttype !== Token.EOF && !set.contains(ttype)) {
 			//System.out.println("consume during recover LA(1)="+getTokenNames()[input.LA(1)]);
-//			recognizer.getInputStream().consume();
+//			recognizer.inputStream.consume();
 			recognizer.consume();
-			ttype = recognizer.getInputStream().LA(1);
+			ttype = recognizer.inputStream.LA(1);
 		}
 	}
 }

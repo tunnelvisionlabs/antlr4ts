@@ -236,5 +236,5 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 //		if ( traceATNStates ) _ctx.trace(atnState);
 	}
 
-	abstract getInputStream(): IntStream | undefined;
+	abstract readonly inputStream: IntStream | undefined;
 }

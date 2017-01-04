@@ -40,15 +40,15 @@ export class LexerNoViableAltException extends RecognitionException {
 	}
 
 	@Override
-	getInputStream(): CharStream {
-		return super.getInputStream() as CharStream;
+	get inputStream(): CharStream {
+		return super.inputStream as CharStream;
 	}
 
 	@Override
 	toString(): string {
 		let symbol = "";
-		if (this.startIndex >= 0 && this.startIndex < this.getInputStream().size) {
-			symbol = this.getInputStream().getText(Interval.of(this.startIndex, this.startIndex));
+		if (this.startIndex >= 0 && this.startIndex < this.inputStream.size) {
+			symbol = this.inputStream.getText(Interval.of(this.startIndex, this.startIndex));
 			symbol = Utils.escapeWhitespace(symbol, false);
 		}
 

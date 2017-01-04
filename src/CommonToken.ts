@@ -114,7 +114,7 @@ export class CommonToken implements WritableToken {
 			result.source = oldToken.source;
 		} else {
 			result.text = oldToken.getText();
-			result.source = { source: oldToken.tokenSource, stream: oldToken.getInputStream() };
+			result.source = { source: oldToken.tokenSource, stream: oldToken.inputStream };
 		}
 
 		return result;
@@ -136,7 +136,7 @@ export class CommonToken implements WritableToken {
 			return this.text;
 		}
 
-		let input: CharStream | undefined = this.getInputStream();
+		let input: CharStream | undefined = this.inputStream;
 		if (input == null) {
 			return undefined;
 		}
@@ -227,7 +227,7 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getInputStream(): CharStream | undefined {
+	get inputStream(): CharStream | undefined {
 		return this.source.stream;
 	}
 

@@ -53,7 +53,7 @@ export class NoViableAltException extends RecognitionException {
 		ctx?: ParserRuleContext) {
 		if (recognizer instanceof Parser) {
 			if (input === undefined) {
-				input = recognizer.getInputStream();
+				input = recognizer.inputStream;
 			}
 
 			if (startToken === undefined) {

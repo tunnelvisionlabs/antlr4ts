@@ -65,7 +65,7 @@ export interface Token {
 	/**
 	 * Gets the {@link CharStream} from which this token was derived.
 	 */
-	getInputStream(): CharStream | undefined;
+	readonly inputStream: CharStream | undefined;
 }
 
 export namespace Token {

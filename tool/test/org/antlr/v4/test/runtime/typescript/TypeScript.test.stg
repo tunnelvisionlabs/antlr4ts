@@ -268,7 +268,7 @@ private handleAcceptPositionForIdentifier(): boolean {
 		identifierLength++;
 	}
 
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + identifierLength) {
+	if (this.inputStream.getIndex() > this._tokenStartCharIndex + identifierLength) {
 		let offset = identifierLength - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
@@ -278,7 +278,7 @@ private handleAcceptPositionForIdentifier(): boolean {
 }
 
 private handleAcceptPositionForKeyword(keyword: string): boolean {
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + keyword.length) {
+	if (this.inputStream.getIndex() > this._tokenStartCharIndex + keyword.length) {
 		let offset = keyword.length - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;

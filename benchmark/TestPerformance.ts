@@ -1281,7 +1281,7 @@ export class TestPerformance {
 
 						let lexer: Lexer | undefined = TestPerformance.sharedLexers[thread];
                         if (TestPerformance.REUSE_LEXER && lexer != null) {
-                            lexer.setInputStream(input);
+                            lexer.inputStream = input;
                         } else {
 							let previousLexer: Lexer | undefined =  lexer;
                             lexer = new lexerCtor(input);
@@ -1323,7 +1323,7 @@ export class TestPerformance {
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
 						let parser: AnyJavaParser | undefined = TestPerformance.sharedParsers[thread];
                         if (TestPerformance.REUSE_PARSER && parser != null) {
-                            parser.setInputStream(tokens);
+                            parser.inputStream = tokens;
                         } else {
 							let previousParser: Parser | undefined =  parser;
 
@@ -1408,7 +1408,7 @@ export class TestPerformance {
 
 							tokens.reset();
 							if (TestPerformance.REUSE_PARSER && TestPerformance.sharedParsers[thread] != null) {
-								parser.setInputStream(tokens);
+								parser.inputStream = tokens;
 							} else {
 								if (TestPerformance.USE_PARSER_INTERPRETER) {
 									let referenceParser: Parser = new parserCtor(tokens);
@@ -1683,7 +1683,7 @@ class DescriptiveErrorListener extends BaseErrorListener {
 			return;
 		}
 
-		let inputStream = recognizer.getInputStream();
+		let inputStream = recognizer.inputStream;
 		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
@@ -1703,7 +1703,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 			return;
 		}
 
-		let inputStream = recognizer.getInputStream();
+		let inputStream = recognizer.inputStream;
 		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
@@ -1737,7 +1737,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name along with the decision
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportAmbiguity d=${decision} (${rule}): ambigAlts=${ambigAlts}, input='${input}'`);
 	}
 
@@ -1752,7 +1752,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let representedAlts: BitSet =  this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
@@ -1774,7 +1774,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportContextSensitivity d=${decision} (${rule}), input='${input}', viable={${prediction}}`);
 	}
 }
