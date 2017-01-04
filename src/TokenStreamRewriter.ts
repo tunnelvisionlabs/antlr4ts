@@ -557,7 +557,7 @@ class InsertBeforeOp extends RewriteOperation {
 	@Override
 	execute(buf: string[]): number {
 		buf.push(this.text);
-		if ( this.tokens.get(this.index).type!=Token.EOF ) {
+		if ( this.tokens.get(this.index).type !== Token.EOF ) {
 			buf.push(String(this.tokens.get(this.index).getText()));
 		}
 		return this.index+1;
