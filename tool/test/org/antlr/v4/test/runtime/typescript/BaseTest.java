@@ -41,9 +41,9 @@ public abstract class BaseTest {
 	 */
 	private static String asTemplateString(String text) {
 		return text
-			.replaceAll("\\\\","\\\\\\\\")
-			.replaceAll("`", "\\`")
-			.replaceAll("\\$\\{", "$\\{");
+			.replace("\\","\\\\")
+			.replace("`", "\\`")
+			.replace("${", "$\\{");
 	}
 
 	public static void writeFile(String dir, String fileName, String content) {
