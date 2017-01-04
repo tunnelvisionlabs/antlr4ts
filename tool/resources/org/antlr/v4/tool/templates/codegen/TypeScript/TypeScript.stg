@@ -64,6 +64,8 @@ import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
 
+<namedActions.beforeListener>
+
 /**
  * This interface defines a complete listener for a parse tree produced by
  * `<file.parserName>`.
@@ -91,6 +93,8 @@ enter<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;
  */
 exit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;}; separator="\n">
 }
+
+<namedActions.afterListener>
 >>
 
 VisitorFile(file, header, namedActions) ::= <<
@@ -101,6 +105,8 @@ VisitorFile(file, header, namedActions) ::= <<
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
+<namedActions.beforeVisitor>
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -123,6 +129,8 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  */
 visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; separator="\n">
 }
+
+<namedActions.afterVisitor>
 >>
 
 fileHeader(grammarFileName, ANTLRVersion) ::= <<
@@ -871,7 +879,11 @@ import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
 
 import * as Utils from '<basePath()>/misc/Utils';
 
+<namedActions.beforeLexer>
+
 <lexer>
+
+<namedActions.afterLexer>
 >>
 
 Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass, isLexer=true) ::= <<
