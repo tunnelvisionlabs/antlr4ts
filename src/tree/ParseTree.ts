@@ -24,6 +24,9 @@ export interface ParseTree extends SyntaxTree {
 	//@Override
 	getChild(i: number): ParseTree;
 
+	//@Override
+	readonly children: Iterable<ParseTree>;
+
 	/** The {@link ParseTreeVisitor} needs a double dispatch method. */
 	accept<T>(visitor: ParseTreeVisitor<T>): T;
 

@@ -34,6 +34,11 @@ export interface Tree {
 	 */
 	readonly childCount: number;
 
+	/**
+	 * Gets the children of the current `Tree`.
+	 */
+	readonly children: Iterable<Tree>;
+
 	/** Print out a whole tree, not just a node, in LISP format
 	 *  {@code (root child1 .. childN)}. Print just a node if this is a leaf.
 	 */

@@ -13,6 +13,23 @@ import { ParseTreeVisitor } from './ParseTreeVisitor';
 import { RuleNode } from './RuleNode';
 import { Token } from '../Token';
 
+const DoneResult = {
+	done: true,
+	value: undefined as any as ParseTree
+}
+
+const EmptyIterator = {
+	next(value?: any): IteratorResult<ParseTree> {
+		return DoneResult;
+	}
+};
+
+const EmptyIterable = {
+	[Symbol.iterator](): Iterator<ParseTree> {
+		return EmptyIterator;
+	}
+};
+
 export class TerminalNode implements ParseTree {
 	_symbol: Token;
 	_parent: RuleNode | undefined;
@@ -24,6 +41,10 @@ export class TerminalNode implements ParseTree {
 	@Override
 	getChild(i: number): never {
 		throw new RangeError("Terminal Node has no children.");
+	}
+
+	get children(): Iterable<ParseTree> {
+		return EmptyIterable;
 	}
 
 	get symbol(): Token {
