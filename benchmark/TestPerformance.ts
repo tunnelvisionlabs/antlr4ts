@@ -922,7 +922,7 @@ export class TestPerformance {
 				// @Override
 				// call(): FileParseResult {
 					// this incurred a great deal of overhead and was causing significant variations in performance results.
-					// console.log(`Parsing file ${input.getSourceName()}`);
+					// console.log(`Parsing file ${input.sourceName}`);
 					try {
 						return factory.parseFile(input, currentPass, 0);
 					} catch (ex) {
@@ -1317,7 +1317,7 @@ export class TestPerformance {
 						}
 
                         if (!TestPerformance.RUN_PARSER) {
-                            return new FileParseResult(input.getSourceName(), checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
+                            return new FileParseResult(input.sourceName, checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
                         }
 
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
@@ -1396,7 +1396,7 @@ export class TestPerformance {
 								throw ex;
 							}
 
-							let sourceName: string =  tokens.getSourceName();
+							let sourceName: string =  tokens.sourceName;
 							sourceName = sourceName != null && sourceName.length > 0 ? sourceName+": " : "";
 							if (TestPerformance.REPORT_SECOND_STAGE_RETRY) {
 								console.error(sourceName+"Forced to retry with full context.");
@@ -1466,7 +1466,7 @@ export class TestPerformance {
                             ParseTreeWalker.DEFAULT.walk(listener, parseResult);
                         }
 
-						return new FileParseResult(input.getSourceName(), checksum.getValue(), parseResult, tokens.size, TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
+						return new FileParseResult(input.sourceName, checksum.getValue(), parseResult, tokens.size, TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
                     } catch (e) {
 						if (!TestPerformance.REPORT_SYNTAX_ERRORS && e instanceof ParseCancellationException) {
 							return new FileParseResult("unknown", checksum.getValue(), undefined, 0, startTime, undefined, undefined);
@@ -1684,7 +1684,7 @@ class DescriptiveErrorListener extends BaseErrorListener {
 		}
 
 		let inputStream = recognizer.getInputStream();
-		let sourceName: string =  inputStream != null ? inputStream.getSourceName() : "";
+		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
@@ -1704,7 +1704,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 		}
 
 		let inputStream = recognizer.getInputStream();
-		let sourceName: string =  inputStream != null ? inputStream.getSourceName() : "";
+		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
@@ -2013,7 +2013,7 @@ class CloneableANTLRFileStream extends ANTLRInputStream {
 
 	createCopy(): ANTLRInputStream {
 		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
-		stream.name = this.getSourceName();
+		stream.name = this.sourceName;
 		return stream;
 	}
 }

@@ -837,8 +837,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 	}
 
-	getSourceName(): string {
-		return this._input.getSourceName();
+	get sourceName(): string {
+		return this._input.sourceName;
 	}
 
 	@Override

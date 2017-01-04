@@ -28,7 +28,7 @@ export class ANTLRFileStream extends ANTLRInputStream {
 	}
 
 	@Override
-	getSourceName(): string {
+	get sourceName(): string {
 		return fileName;
 	}
 }

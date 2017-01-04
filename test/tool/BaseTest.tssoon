@@ -1306,7 +1306,7 @@ export abstract class BaseTest {
 		}
 
 		@Override
-		getSourceName(): string {
+		get sourceName(): string {
 			return UNKNOWN_SOURCE_NAME;
 		}
 

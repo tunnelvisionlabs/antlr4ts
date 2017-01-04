@@ -213,5 +213,5 @@ export interface IntStream {
 	 * returns {@link #UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull
-	getSourceName(): string;
+	readonly sourceName: string;
 }

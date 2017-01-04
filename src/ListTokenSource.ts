@@ -32,7 +32,7 @@ export class ListTokenSource implements TokenSource {
 	 * the next token in {@link #tokens} (or the previous token if the end of
 	 * the input has been reached).
 	 */
-	private sourceName?: string;
+	private _sourceName?: string;
 
 	/**
 	 * The index into {@link #tokens} of token to return by the next call to
@@ -71,7 +71,7 @@ export class ListTokenSource implements TokenSource {
 		}
 
 		this.tokens = tokens;
-		this.sourceName = sourceName;
+		this._sourceName = sourceName;
 	}
 
 	/**
@@ -188,14 +188,14 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getSourceName(): string {
-		if (this.sourceName) {
-			return this.sourceName;
+	get sourceName(): string {
+		if (this._sourceName) {
+			return this._sourceName;
 		}
 
 		let inputStream: CharStream | undefined = this.getInputStream();
 		if (inputStream != null) {
-			return inputStream.getSourceName();
+			return inputStream.sourceName;
 		}
 
 		return "List";

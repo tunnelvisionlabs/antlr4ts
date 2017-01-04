@@ -15,7 +15,7 @@ export class TestDollarParser extends BaseTest {
 	@Test
 	testSimpleCall(): void {
 		let grammar: string =  "grammar T;\n" +
-	                  "a : ID  { System.out.println( $parser.getSourceName() ); }\n" +
+	                  "a : ID  { System.out.println( $parser.sourceName ); }\n" +
 	                  "  ;\n" +
 	                  "ID : 'a'..'z'+ ;\n";
 		let found: string =  execParser("T.g4", grammar, "TParser", "TLexer", "a", "x", true);

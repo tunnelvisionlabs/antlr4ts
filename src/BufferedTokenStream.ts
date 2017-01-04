@@ -461,8 +461,8 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	getSourceName(): string {
-		return this.tokenSource.getSourceName();
+	get sourceName(): string {
+		return this.tokenSource.sourceName;
 	}
 
 	/** Get the text of all tokens in this buffer. */

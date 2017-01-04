@@ -38,7 +38,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
                     return tokens[i++];
                 }
                 @Override
-                getSourceName(): string { return "test"; }
+                get sourceName(): string { return "test"; }
 				@Override
 				getCharPositionInLine(): number {
 					return 0;
@@ -110,7 +110,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return tokens[i++];
 				}
 				@Override
-				getSourceName(): string { return "test"; }
+				get sourceName(): string { return "test"; }
 				@Override
 				getCharPositionInLine(): number {
 					return 0;
@@ -202,7 +202,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getSourceName(): string {
+			get sourceName(): string {
 				return IntStream.UNKNOWN_SOURCE_NAME;
 			}
 
@@ -250,7 +250,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getSourceName(): string {
+			get sourceName(): string {
 				return IntStream.UNKNOWN_SOURCE_NAME;
 			}
 

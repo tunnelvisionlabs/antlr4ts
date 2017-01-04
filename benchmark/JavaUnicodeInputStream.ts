@@ -59,8 +59,8 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	getSourceName(): string {
-		return this.source.getSourceName();
+	get sourceName(): string {
+		return this.source.sourceName;
 	}
 
 	@Override

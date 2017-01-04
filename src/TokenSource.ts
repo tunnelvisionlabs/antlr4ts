@@ -68,7 +68,7 @@ export interface TokenSource {
 	 * returns {@link IntStream#UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull
-	getSourceName(): string;
+	readonly sourceName: string;
 
 	/**
 	 * Set the {@link TokenFactory} this token source should use for creating

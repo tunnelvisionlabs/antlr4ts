@@ -230,8 +230,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	getSourceName(): string {
-		return this._input.getSourceName();
+	get sourceName(): string {
+		return this._input.sourceName;
 	}
 
 	@Override

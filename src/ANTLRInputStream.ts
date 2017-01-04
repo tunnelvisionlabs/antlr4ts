@@ -141,7 +141,7 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	getSourceName(): string {
+	get sourceName(): string {
 		if (!this.name) {
 			return IntStream.UNKNOWN_SOURCE_NAME;
 		}
