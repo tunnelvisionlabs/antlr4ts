@@ -341,6 +341,10 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 >>
 
 BasicListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
 @parser::afterParser {
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
@@ -351,7 +355,7 @@ export class LeafListener implements TListener {
 >>
 
 WalkListener(s) ::= <<
-ParseTreeWalker.Default.Walk(new LeafListener(), <s>);
+ParseTreeWalker.DEFAULT.walk(new LeafListener(), <s>);
 >>
 
 TreeNodeWithAltNumField(X) ::= <<
@@ -371,14 +375,18 @@ export class MyRuleNode extends PRC {
 >>
 
 TokenGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: TParser.AContext): void {
+	exitA(ctx: AContext): void {
 		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
-			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().getText(),
-				ctx.INT(1).getSymbol().getText(), ctx.INT()[0], ctx.INT()[1]);
+			console.log(ctx.INT(0).getSymbol().getText() + " " +
+				ctx.INT(1).getSymbol().getText() + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
 		} else {
-			console.log(ctx.ID().getSymbol());
+			console.log(ctx.ID().getSymbol().toString());
 		}
 	}
 }
@@ -386,12 +394,16 @@ export class LeafListener implements TListener {
 >>
 
 RuleGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: TParser.AContext): void {
+	exitA(ctx: AContext): void {
 		if (ctx.getChildCount() === 2) {
-			console.log("{0} {1} {2}",ctx.b(0).getStart().getText(),
-				ctx.b(1).getStart().getText(),ctx.b()[0].getStart().getText());
+			console.log(ctx.b(0).getStart().getText() + " " +
+				ctx.b(1).getStart().getText() + " " + ctx.b()[0].getStart().getText());
 		} else {
 			console.log(ctx.b(0).getStart().getText());
 		}
@@ -401,12 +413,16 @@ export class LeafListener implements TListener {
 >>
 
 LRListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitE(ctx: TParser.EContext): void {
+	exitE(ctx: EContext): void {
 		if (ctx.getChildCount() === 3) {
-			console.log("{0} {1} {2}\n",ctx.e(0).getStart().getText(),
-				ctx.e(1).getStart().getText(), ctx.e()[0].getStart().getText());
+			console.log(ctx.e(0).getStart().getText() + " " +
+				ctx.e(1).getStart().getText() + " " + ctx.e()[0].getStart().getText());
 		} else {
 			console.log(ctx.INT().getSymbol().getText());
 		}
@@ -416,12 +432,16 @@ export class LeafListener implements TListener {
 >>
 
 LRWithLabelsListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitCall(ctx: TParser.CallContext): void {
-		console.log("{0} {1}",ctx.e().getStart().getText(),ctx.eList());
+	exitCall(ctx: CallContext): void {
+		console.log(ctx.e().getStart().getText() + " " + ctx.eList());
 	}
-	exitInt(ctx: TParser.IntContext): void {
+	exitInt(ctx: IntContext): void {
 		console.log(ctx.INT().getSymbol().getText());
 	}
 }
@@ -476,14 +496,6 @@ IgnoredTests ::= [
 
 	"FullContextParsing.ExprAmbiguity_1": "Test does not support replacing the 'int' type.",
 	"FullContextParsing.ExprAmbiguity_2": "Test does not support replacing the 'int' type.",
-
-	"Listeners.Basic": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.LR": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.LRWithLabels": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.RuleGetters_1": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.RuleGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.TokenGetters_1": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.TokenGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
 
 	// Skipped due to limitations in the TypeScript target
 	"Visitors.Basic": "Test not implemented by this target.",
