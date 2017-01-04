@@ -466,16 +466,16 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Get the text of all tokens in this buffer. */
+	getText(): string;
+	getText(interval: Interval): string;
 	@NotNull
 	@Override
-	getText(): string {
-		this.fill();
-		return this.getTextFromInterval(Interval.of(0, this.size - 1));
-	}
+	getText(interval?: Interval): string {
+		if (interval === undefined) {
+			this.fill();
+			interval = Interval.of(0, this.size - 1);
+		}
 
-	@NotNull
-	@Override
-	getTextFromInterval(interval: Interval): string {
 		let start: number = interval.a;
 		let stop: number = interval.b;
 		if (start < 0 || stop < 0) {
@@ -503,14 +503,14 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	getTextFromContext(ctx: RuleContext): string {
-		return this.getTextFromInterval(ctx.getSourceInterval());
+		return this.getText(ctx.getSourceInterval());
 	}
 
 	@NotNull
 	@Override
 	getTextFromRange(start: any, stop: any): string {
 		if (this.isToken(start) && this.isToken(stop)) {
-			return this.getTextFromInterval(Interval.of(start.getTokenIndex(), stop.getTokenIndex()));
+			return this.getText(Interval.of(start.getTokenIndex(), stop.getTokenIndex()));
 		}
 
 		return "";

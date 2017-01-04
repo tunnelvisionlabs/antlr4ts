@@ -310,7 +310,7 @@ export class TokenStreamRewriter {
 		if ( start<0 ) start = 0;
 
 		if ( rewrites==null || rewrites.length === 0 ) {
-			return this.tokens.getTextFromInterval(interval); // no instructions to execute
+			return this.tokens.getText(interval); // no instructions to execute
 		}
 
 		let buf: string[] = [];

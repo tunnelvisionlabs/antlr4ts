@@ -89,7 +89,7 @@ export interface TokenStream extends IntStream {
 	 * @throws NullPointerException if {@code interval} is {@code null}
 	 */
 	//@NotNull
-	getTextFromInterval(/*@NotNull*/ interval: Interval): string;
+	getText(/*@NotNull*/ interval: Interval): string;
 
 	/**
 	 * Return the text of all tokens in the stream. This method behaves like the

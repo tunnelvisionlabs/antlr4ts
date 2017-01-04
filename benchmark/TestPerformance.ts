@@ -1737,7 +1737,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name along with the decision
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportAmbiguity d=${decision} (${rule}): ambigAlts=${ambigAlts}, input='${input}'`);
 	}
 
@@ -1752,7 +1752,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
 		let representedAlts: BitSet =  this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
@@ -1774,7 +1774,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let input: string =  recognizer.getInputStream().getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportContextSensitivity d=${decision} (${rule}), input='${input}', viable={${prediction}}`);
 	}
 }
