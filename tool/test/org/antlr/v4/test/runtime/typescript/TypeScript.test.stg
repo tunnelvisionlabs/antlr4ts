@@ -507,7 +507,7 @@ IgnoredTests ::= [
 	"FullContextParsing.ExprAmbiguity_1": "Arguments are not supported with labeled outer alternatives.",
 	"FullContextParsing.ExprAmbiguity_2": "Arguments are not supported with labeled outer alternatives.",
 
-	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass."
+	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass.",
 
 	default: false
 ]
