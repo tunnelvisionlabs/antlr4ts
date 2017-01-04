@@ -95,7 +95,7 @@ export class ListTokenSource implements TokenSource {
 				}
 			}
 
-			return lastToken.charPositionInLine + lastToken.getStopIndex() - lastToken.getStartIndex() + 1;
+			return lastToken.charPositionInLine + lastToken.stopIndex - lastToken.getStartIndex() + 1;
 		}
 
 		// only reach this if tokens is empty, meaning EOF occurs at the first
@@ -112,7 +112,7 @@ export class ListTokenSource implements TokenSource {
 			if (this.eofToken == null) {
 				let start: number = -1;
 				if (this.tokens.length > 0) {
-					let previousStop: number = this.tokens[this.tokens.length - 1].getStopIndex();
+					let previousStop: number = this.tokens[this.tokens.length - 1].stopIndex;
 					if (previousStop !== -1) {
 						start = previousStop + 1;
 					}

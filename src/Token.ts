@@ -56,7 +56,7 @@ export interface Token {
 	/** The last character index of the token.
 	 *  This method is optional; return -1 if not implemented.
 	 */
-	getStopIndex(): number;
+	readonly stopIndex: number;
 
 	/** Gets the {@link TokenSource} which created this token.
 	 */

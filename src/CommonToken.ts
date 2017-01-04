@@ -72,10 +72,9 @@ export class CommonToken implements WritableToken {
 	protected start: number;
 
 	/**
-	 * This is the backing field for {@link #getStopIndex} and
-	 * {@link #setStopIndex}.
+	 * This is the backing field for `stopIndex`.
 	 */
-	protected stop: number;
+	private stop: number;
 
 	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this.text = text;
@@ -104,7 +103,7 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.getStartIndex(), oldToken.getStopIndex());
+		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.getStartIndex(), oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.getTokenIndex();
 		result._charPositionInLine = oldToken.charPositionInLine;
@@ -203,11 +202,11 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getStopIndex(): number {
+	get stopIndex(): number {
 		return this.stop;
 	}
 
-	setStopIndex(stop: number): void {
+	set stopIndex(stop: number) {
 		this.stop = stop;
 	}
 
