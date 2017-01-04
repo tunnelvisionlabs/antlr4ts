@@ -148,7 +148,7 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	getAltNumber(): number { return ATN.INVALID_ALT_NUMBER; }
+	get altNumber(): number { return ATN.INVALID_ALT_NUMBER; }
 
 	/** Set the outer alternative number for this context node. Default
 	 *  implementation does nothing to avoid backing field overhead for
@@ -158,7 +158,7 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	setAltNumber(altNumber: number): void { }
+	set altNumber(altNumber: number) { }
 
 	@Override
 	getChild(i: number): ParseTree {

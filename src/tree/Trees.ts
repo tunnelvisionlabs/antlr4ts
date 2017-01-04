@@ -74,7 +74,7 @@ export class Trees {
 			let ruleContext: RuleContext = t.getRuleContext();
 			let ruleIndex: number = ruleContext.getRuleIndex();
 			let ruleName: string = ruleNames[ruleIndex];
-			let altNumber: number = ruleContext.getAltNumber();
+			let altNumber: number = ruleContext.altNumber;
 			if (altNumber !== ATN.INVALID_ALT_NUMBER) {
 				return ruleName + ":" + altNumber;
 			}

@@ -607,7 +607,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	enterOuterAlt(localctx: ParserRuleContext, altNum: number): void {
-		localctx.setAltNumber(altNum);
+		localctx.altNumber = altNum;
 		// if we have new localctx, make sure we replace existing ctx
 		// that is previous child of parse tree
 		if (this._buildParseTrees && this._ctx !== localctx) {

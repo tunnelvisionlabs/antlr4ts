@@ -20,7 +20,7 @@ import { ParserRuleContext } from './ParserRuleContext';
  *  will really every use this.
  */
 export class RuleContextWithAltNum extends ParserRuleContext {
-	private altNumber: number;
+	private _altNumber: number;
 
 	constructor();
 	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);
@@ -31,16 +31,16 @@ export class RuleContextWithAltNum extends ParserRuleContext {
 			super();
 		}
 
-		this.altNumber = ATN.INVALID_ALT_NUMBER;
+		this._altNumber = ATN.INVALID_ALT_NUMBER;
 	}
 
 	@Override
-	getAltNumber(): number {
-		return this.altNumber;
+	get altNumber(): number {
+		return this._altNumber;
 	}
 
-	@Override
-	setAltNumber(altNum: number): void {
-		this.altNumber = altNum;
+	// @Override
+	set altNumber(altNum: number) {
+		this._altNumber = altNum;
 	}
 }
