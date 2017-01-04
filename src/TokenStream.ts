@@ -113,12 +113,12 @@ export interface TokenStream extends IntStream {
 	 * exceptions from the call to {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <p>If {@code ctx.getSourceInterval()} does not return a valid interval of
+	 * <p>If {@code ctx.sourceInterval} does not return a valid interval of
 	 * tokens provided by this stream, the behavior is unspecified.</p>
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;
-	 * String text = stream.getText(ctx.getSourceInterval());
+	 * String text = stream.getText(ctx.sourceInterval);
 	 * </pre>
 	 *
 	 * @param ctx The context providing the source interval of tokens to get

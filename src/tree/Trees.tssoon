@@ -219,7 +219,7 @@ export class Trees {
 		if ( t==null ) return;
 		for (let i = 0; i < t.childCount; i++) {
 			let child: ParseTree =  t.getChild(i);
-			let range: Interval =  child.getSourceInterval();
+			let range: Interval =  child.sourceInterval;
 			if ( child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex) ) {
 				if ( isAncestorOf(child, root) ) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken =  new CommonToken(Token.INVALID_TYPE, "...");

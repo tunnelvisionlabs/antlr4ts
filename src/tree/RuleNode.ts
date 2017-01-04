@@ -25,7 +25,7 @@ export abstract class RuleNode implements ParseTree {
 
 	abstract toStringTree(parser?: Parser | undefined): string;
 
-	abstract getSourceInterval(): Interval;
+	abstract readonly sourceInterval: Interval;
 
 	abstract readonly payload: any;
 

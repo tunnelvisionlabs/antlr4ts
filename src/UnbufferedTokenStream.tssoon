@@ -119,7 +119,7 @@ export class UnbufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	getText(ctx: RuleContext): string {
-		return getText(ctx.getSourceInterval());
+		return getText(ctx.sourceInterval);
 	}
 
 	@NotNull

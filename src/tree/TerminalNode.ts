@@ -42,7 +42,7 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
-	getSourceInterval(): Interval {
+	get sourceInterval(): Interval {
 		let tokenIndex: number = this.symbol.tokenIndex;
 		return new Interval(tokenIndex, tokenIndex);
 	}

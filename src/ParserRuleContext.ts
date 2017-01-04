@@ -265,7 +265,7 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	@Override
-	getSourceInterval(): Interval {
+	get sourceInterval(): Interval {
 		if (!this.start) {
 			return Interval.INVALID;
 		}

@@ -103,7 +103,7 @@ export class RuleContext extends RuleNode {
 	// satisfy the ParseTree / SyntaxTree interface
 
 	@Override
-	getSourceInterval(): Interval {
+	get sourceInterval(): Interval {
 		return Interval.INVALID;
 	}
 

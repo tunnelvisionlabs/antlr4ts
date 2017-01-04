@@ -477,7 +477,7 @@ export class BufferedTokenStream implements TokenStream {
 			interval = Interval.of(0, this.size - 1);
 		} else if (!(interval instanceof Interval)) {
 			// Note: the more obvious check for 'instanceof RuleContext' results in a circular dependency problem
-			interval = interval.getSourceInterval();
+			interval = interval.sourceInterval;
 		}
 
 		let start: number = interval.a;

@@ -30,5 +30,5 @@ export interface SyntaxTree extends Tree {
 	 * EOF is unspecified.</p>
 	 */
 	//@NotNull
-	getSourceInterval(): Interval;
+	readonly sourceInterval: Interval;
 }
