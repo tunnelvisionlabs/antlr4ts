@@ -200,7 +200,7 @@ BailErrorStrategy() ::= <%this.setErrorHandler(new BailErrorStrategy());%>
 
 ToStringTree(s) ::= <%<s>.toStringTree(this)%>
 
-Column() ::= "this.getCharPositionInLine()"
+Column() ::= "this.charPositionInLine"
 
 Text() ::= "this.getText()"
 

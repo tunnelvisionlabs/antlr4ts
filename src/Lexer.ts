@@ -141,7 +141,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 				this._token = undefined;
 				this._channel = Token.DEFAULT_CHANNEL;
 				this._tokenStartCharIndex = this._input.index;
-				this._tokenStartCharPositionInLine = this.getInterpreter().getCharPositionInLine();
+				this._tokenStartCharPositionInLine = this.getInterpreter().charPositionInLine;
 				this._tokenStartLine = this.getInterpreter().getLine();
 				this._text = undefined;
 				do {
@@ -265,7 +265,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	emitEOF(): Token {
-		let cpos: number = this.getCharPositionInLine();
+		let cpos: number = this.charPositionInLine;
 		let line: number = this.getLine();
 		let eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
@@ -281,16 +281,16 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	getCharPositionInLine(): number {
-		return this.getInterpreter().getCharPositionInLine();
+	get charPositionInLine(): number {
+		return this.getInterpreter().charPositionInLine;
 	}
 
 	setLine(line: number): void {
 		this.getInterpreter().setLine(line);
 	}
 
-	setCharPositionInLine(charPositionInLine: number): void {
-		this.getInterpreter().setCharPositionInLine(charPositionInLine);
+	set charPositionInLine(charPositionInLine: number) {
+		this.getInterpreter().charPositionInLine = charPositionInLine;
 	}
 
 	/** What is the index of the current character of lookahead? */

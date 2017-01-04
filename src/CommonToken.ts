@@ -32,7 +32,7 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getCharPositionInLine} and
 	 * {@link #setCharPositionInLine}.
 	 */
-	protected charPositionInLine: number = -1; // set to invalid position
+	private _charPositionInLine: number = -1; // set to invalid position
 	/**
 	 * This is the backing field for {@link #getChannel} and
 	 * {@link #setChannel}.
@@ -86,7 +86,7 @@ export class CommonToken implements WritableToken {
 		this.stop = stop;
 		if (source.source != null) {
 			this.line = source.source.getLine();
-			this.charPositionInLine = source.source.getCharPositionInLine();
+			this._charPositionInLine = source.source.charPositionInLine;
 		}
 	}
 
@@ -107,7 +107,7 @@ export class CommonToken implements WritableToken {
 		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
 		result.line = oldToken.getLine();
 		result.index = oldToken.getTokenIndex();
-		result.charPositionInLine = oldToken.getCharPositionInLine();
+		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
 			result.text = oldToken.text;
@@ -169,13 +169,13 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getCharPositionInLine(): number {
-		return this.charPositionInLine;
+	get charPositionInLine(): number {
+		return this._charPositionInLine;
 	}
 
-	@Override
-	setCharPositionInLine(charPositionInLine: number): void {
-		this.charPositionInLine = charPositionInLine;
+	// @Override
+	set charPositionInLine(charPositionInLine: number) {
+		this._charPositionInLine = charPositionInLine;
 	}
 
 	@Override
@@ -247,6 +247,6 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this.line + ":" + this.getCharPositionInLine() + "]";
+		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this.line + ":" + this.charPositionInLine + "]";
 	}
 }

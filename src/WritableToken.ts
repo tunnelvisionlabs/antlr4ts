@@ -14,7 +14,7 @@ export interface WritableToken extends Token {
 
 	setLine(line: number): void;
 
-	setCharPositionInLine(pos: number): void;
+	charPositionInLine: number;
 
 	setChannel(channel: number): void;
 

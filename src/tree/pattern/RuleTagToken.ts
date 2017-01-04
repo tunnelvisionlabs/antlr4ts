@@ -124,7 +124,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getCharPositionInLine(): number {
+	get charPositionInLine(): number {
 		return -1;
 	}
 

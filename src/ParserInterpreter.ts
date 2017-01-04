@@ -435,7 +435,7 @@ export class ParserInterpreter extends Parser {
 						expectedTokenType, tok.getText(),
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
-						tok.getLine(), tok.getCharPositionInLine());
+						tok.getLine(), tok.charPositionInLine);
 				this._ctx.addErrorNode(errToken);
 			}
 			else { // NoViableAlt
@@ -445,7 +445,7 @@ export class ParserInterpreter extends Parser {
 						Token.INVALID_TYPE, tok.getText(),
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
-						tok.getLine(), tok.getCharPositionInLine());
+						tok.getLine(), tok.charPositionInLine);
 				this._ctx.addErrorNode(errToken);
 			}
 		}
