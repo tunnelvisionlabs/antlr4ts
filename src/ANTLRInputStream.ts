@@ -97,7 +97,7 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.n;
 	}
 

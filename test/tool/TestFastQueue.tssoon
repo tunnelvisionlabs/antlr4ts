@@ -31,12 +31,12 @@ export class TestFastQueue {
         q.add("d");
         q.add("e");
         let buf: StringBuilder =  new StringBuilder();
-        while ( q.size()>0 ) {
+        while ( q.size>0 ) {
             let o: string =  q.remove();
             buf.append(o);
-            if ( q.size()>0 ) buf.append(" ");
+            if ( q.size>0 ) buf.append(" ");
         }
-        assertEquals("queue should be empty", 0, q.size());
+        assertEquals("queue should be empty", 0, q.size);
         let expecting: string =  "a b c d e";
         let found: string =  buf.toString();
         assertEquals(expecting, found);
@@ -55,7 +55,7 @@ export class TestFastQueue {
         buf.append(q.remove());
         q.add("e");
         buf.append(q.remove());
-        assertEquals("queue should be empty", 0, q.size());
+        assertEquals("queue should be empty", 0, q.size);
         let expecting: string =  "abcde";
         let found: string =  buf.toString();
         assertEquals(expecting, found);

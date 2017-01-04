@@ -173,8 +173,8 @@ export class TestTokenTypeAssignment extends BaseTest {
 		}
 		//System.out.println("rules="+rules);
 		// make sure there are no extra rules
-		assertEquals("number of rules mismatch; expecting "+n+"; found "+g.rules.size(),
-					 n, g.rules.size());
+		assertEquals("number of rules mismatch; expecting "+n+"; found "+g.rules.size,
+					 n, g.rules.size);
 
 	}
 

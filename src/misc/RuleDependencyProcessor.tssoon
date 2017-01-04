@@ -58,7 +58,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 		}
 
 		for (Map.Entry<TypeMirror, List<Tuple2<RuleDependency, Element>>> entry : recognizerDependencies.entrySet()) {
-			processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("ANTLR 4: Validating %d dependencies on rules in %s.", entry.getValue().size(), entry.getKey().toString()));
+			processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, String.format("ANTLR 4: Validating %d dependencies on rules in %s.", entry.getValue().size, entry.getKey().toString()));
 			checkDependencies(entry.getValue(), entry.getKey());
 		}
 
@@ -380,7 +380,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 						continue;
 					}
 
-					while (result.size() <= index) {
+					while (result.size <= index) {
 						result.add("");
 					}
 
@@ -391,7 +391,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 			}
 		}
 
-		return result.toArray(new String[result.size()]);
+		return result.toArray(new String[result.size]);
 	}
 
 	static getDependencies(roundEnv: RoundEnvironment): List<Tuple2<RuleDependency, Element>> {

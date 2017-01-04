@@ -205,7 +205,7 @@ export interface IntStream {
 	 * @throws UnsupportedOperationException if the size of the stream is
 	 * unknown.
 	 */
-	size(): number;
+	readonly size: number;
 
 	/**
 	 * Gets the name of the underlying symbol source. This method returns a

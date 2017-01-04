@@ -224,16 +224,16 @@ export class TestActionTranslation extends BaseTest {
     @Test testArgReturnValueMismatch(): void {
     }
     @Test testSimplePlusEqualLabel(): void {
-        let action: string =  "$ids.size();"; // must be qualified
+        let action: string =  "$ids.size;"; // must be qualified
     }
     @Test testPlusEqualStringLabel(): void {
-        let action: string =  "$ids.size();"; // must be qualified
+        let action: string =  "$ids.size;"; // must be qualified
     }
     @Test testPlusEqualSetLabel(): void {
-        let action: string =  "$ids.size();"; // must be qualified
+        let action: string =  "$ids.size;"; // must be qualified
     }
     @Test testPlusEqualWildcardLabel(): void {
-        let action: string =  "$ids.size();"; // must be qualified
+        let action: string =  "$ids.size;"; // must be qualified
     }
     @Test testImplicitTokenLabel(): void {
         let action: string =  "$ID; $ID.text; $ID.getText()";

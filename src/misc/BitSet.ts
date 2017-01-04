@@ -614,7 +614,7 @@ export class BitSet implements Iterable<number>{
 	 * Returns the number of bits of space actually in use by this `BitSet` to represent bit values. The maximum element
 	 * in the set is the size - 1st element.
 	 */
-	size(): number {
+	get size(): number {
 		return this.data.byteLength * 8;
 	}
 

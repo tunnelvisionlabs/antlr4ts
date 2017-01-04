@@ -236,14 +236,14 @@ export class ATNConfig implements Equatable {
 				return true;
 			}
 
-			if (left.size() < right.size()) {
+			if (left.size < right.size) {
 				return false;
 			}
 
 			if (right.isEmpty()) {
 				return left.hasEmpty();
 			} else {
-				for (let i = 0; i < right.size(); i++) {
+				for (let i = 0; i < right.size; i++) {
 					let index: number = left.findReturnState(right.getReturnState(i));
 					if (index < 0) {
 						// assumes invokingStates has no duplicate entries
@@ -316,7 +316,7 @@ export class ATNConfig implements Equatable {
 		let visited = new Array2DHashMap<PredictionContext, number>(PredictionContext.IdentityEqualityComparator.INSTANCE);
 		let workList: PredictionContext[] = [];
 		function getOrAddContext(context: PredictionContext): number {
-			let newNumber = visited.size();
+			let newNumber = visited.size;
 			let result = visited.putIfAbsent(context, newNumber);
 			if (result != null) {
 				// Already saw this context
@@ -335,7 +335,7 @@ export class ATNConfig implements Equatable {
 				break;
 			}
 
-			for (let i = 0; i < current.size(); i++) {
+			for (let i = 0; i < current.size; i++) {
 				builder += ("  s") + (getOrAddContext(current));
 				builder += ("->");
 				builder += ("s") + (getOrAddContext(current.getParent(i)));

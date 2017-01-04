@@ -401,11 +401,11 @@ export class TestATNConstruction extends BaseTest {
 			let tool: Tool =  new Tool();
 			tool.removeListeners();
 			tool.addListener(errorQueue);
-			assertEquals(0, errorQueue.size());
+			assertEquals(0, errorQueue.size);
 			let grammarRootAST: GrammarRootAST =  tool.parseGrammarFromString(gstr);
-			assertEquals(0, errorQueue.size());
+			assertEquals(0, errorQueue.size);
 			let g: Grammar =  tool.createGrammar(grammarRootAST);
-			assertEquals(0, errorQueue.size());
+			assertEquals(0, errorQueue.size);
 			g.fileName = "<string>";
 			tool.process(g, false);
 		}
@@ -414,7 +414,7 @@ export class TestATNConstruction extends BaseTest {
 			e.printStackTrace();
 		}
 		console.log(errorQueue);
-		assertEquals(1, errorQueue.errors.size());
+		assertEquals(1, errorQueue.errors.size);
 		assertEquals(ErrorType.PARSER_RULE_REF_IN_LEXER_RULE, errorQueue.errors.get(0).getErrorType());
 		assertEquals("[a, A]", Arrays.toString(errorQueue.errors.get(0).getArgs()));
 		assertTrue(!threwException);

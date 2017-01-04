@@ -395,7 +395,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				currentAltReachedAcceptState = true;
 			}
 
-			for (let i = 0; i < context.size(); i++) {
+			for (let i = 0; i < context.size; i++) {
 				let returnStateNumber: number = context.getReturnState(i);
 				if (returnStateNumber == PredictionContext.EMPTY_FULL_STATE_KEY) {
 					continue;

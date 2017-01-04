@@ -222,7 +222,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 
 		assertEquals(Token.EOF, tokens.LA(1));
 		assertEquals(0, tokens.index);
-		assertEquals(1, tokens.size());
+		assertEquals(1, tokens.size);
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -270,7 +270,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 
 		assertEquals(Token.EOF, tokens.LA(1));
 		assertEquals(0, tokens.index);
-		assertEquals(1, tokens.size());
+		assertEquals(1, tokens.size);
 		tokens.consume();
 	}
 }

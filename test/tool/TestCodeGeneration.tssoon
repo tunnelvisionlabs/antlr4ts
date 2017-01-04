@@ -26,7 +26,7 @@ export class TestCodeGeneration extends BaseTest {
 				"a[int xyz] : 'a' ;\n";
 		let evals: List<string> =  getEvalInfoForString(g, "int xyz");
 		console.log(evals);
-		for (let i = 0; i < evals.size(); i++) {
+		for (let i = 0; i < evals.size; i++) {
 			let eval: string =  evals.get(i);
 			assertFalse("eval should not be POJO: "+eval, eval.startsWith("<pojo:"));
 		}
@@ -118,7 +118,7 @@ export class TestCodeGeneration extends BaseTest {
 				}
 			}
 		}
-		if ( equeue.size()>0 ) {
+		if ( equeue.size>0 ) {
 			System.err.println(equeue.toString());
 		}
 		return evals;

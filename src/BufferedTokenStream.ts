@@ -109,7 +109,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.tokens.length;
 	}
 
@@ -345,8 +345,8 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected nextTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);
-		if (i >= this.size()) {
-			return this.size() - 1;
+		if (i >= this.size) {
+			return this.size - 1;
 		}
 
 		let token: Token = this.tokens[i];
@@ -375,9 +375,9 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected previousTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);
-		if (i >= this.size()) {
+		if (i >= this.size) {
 			// the EOF token is on every channel
-			return this.size() - 1;
+			return this.size - 1;
 		}
 
 		while (i >= 0) {
@@ -407,7 +407,7 @@ export class BufferedTokenStream implements TokenStream {
 		let from: number = tokenIndex + 1;
 		// if none onchannel to right, nextOnChannel=-1 so set to = last token
 		if (nextOnChannel === -1) {
-			to = this.size() - 1;
+			to = this.size - 1;
 		} else {
 			to = nextOnChannel;
 		}
@@ -470,7 +470,7 @@ export class BufferedTokenStream implements TokenStream {
 	@Override
 	getText(): string {
 		this.fill();
-		return this.getTextFromInterval(Interval.of(0, this.size() - 1));
+		return this.getTextFromInterval(Interval.of(0, this.size - 1));
 	}
 
 	@NotNull

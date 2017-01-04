@@ -65,12 +65,12 @@ describe('Array2DHashSet', function() {
 
     it('shoud count entities', function() {
         assert( set.isEmpty() );
-        assert.equal( set.size(), 0 );
+        assert.equal( set.size, 0 );
         set.add(alpha);
         assert( !set.isEmpty());
-        assert.equal(set.size(), 1);
+        assert.equal(set.size, 1);
         set.add(beta);
-        assert.equal(set.size(), 2);
+        assert.equal(set.size, 2);
     });
 
     it('should check entries by value', function() {

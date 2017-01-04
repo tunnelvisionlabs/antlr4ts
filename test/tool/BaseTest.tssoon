@@ -385,7 +385,7 @@ export abstract class BaseTest {
 //				String.valueOf(diagnostic.getLineNumber())+
 //				": " + diagnostic.getMessage(null));
 //		}
-//		if ( errors.size()>0 ) {
+//		if ( errors.size>0 ) {
 //			System.err.println("compile stderr from: "+cmdLine);
 //			System.err.println(errors);
 //			return false;
@@ -484,7 +484,7 @@ export abstract class BaseTest {
 		}
 		options.add(new File(tmpdir,grammarFileName).toString());
 
-		optionsA: string[] =  new String[options.size()];
+		optionsA: string[] =  new String[options.size];
 		options.toArray(optionsA);
 		let antlr: Tool =  newTool(optionsA);
 		let equeue: ErrorQueue =  new ErrorQueue(antlr);
@@ -496,7 +496,7 @@ export abstract class BaseTest {
 
 		if ( !defaultListener && !equeue.errors.isEmpty() ) {
 			System.err.println("antlr reports errors from "+options);
-			for (let i = 0; i < equeue.errors.size(); i++) {
+			for (let i = 0; i < equeue.errors.size; i++) {
 				let msg: ANTLRMessage =  equeue.errors.get(i);
 				System.err.println(msg);
 			}
@@ -511,7 +511,7 @@ export abstract class BaseTest {
 		}
 		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
 			System.err.println("antlr reports warnings from "+options);
-			for (let i = 0; i < equeue.warnings.size(); i++) {
+			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
 				System.err.println(msg);
 			}
@@ -519,7 +519,7 @@ export abstract class BaseTest {
 
 		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
 			System.err.println("antlr reports warnings from "+options);
-			for (let i = 0; i < equeue.warnings.size(); i++) {
+			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
 				System.err.println(msg);
 			}
@@ -701,7 +701,7 @@ export abstract class BaseTest {
 				files.add(grammarName+"BaseVisitor.java");
 			}
 		}
-		let allIsWell: boolean =  compile(files.toArray(new String[files.size()]));
+		let allIsWell: boolean =  compile(files.toArray(new String[files.size]));
 		return allIsWell;
 	}
 
@@ -949,7 +949,7 @@ export abstract class BaseTest {
 			let snippet: string =  output.substring(start+b.length(),end);
 			assertEquals(expected, snippet);
 		}
-		if ( equeue.size()>0 ) {
+		if ( equeue.size>0 ) {
 			System.err.println(equeue.toString());
 		}
 	}
@@ -994,7 +994,7 @@ export abstract class BaseTest {
 
 	{
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.errors.size(); i++) {
+		for (let i = 0; i < equeue.errors.size; i++) {
 			let m: ANTLRMessage =  equeue.errors.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
@@ -1004,7 +1004,7 @@ export abstract class BaseTest {
 		assertTrue("error is not a GrammarSemanticsMessage",
 				   foundMsg instanceof GrammarSemanticsMessage);
 		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
-		if ( equeue.size()!=1 ) {
+		if ( equeue.size!=1 ) {
 			System.err.println(equeue);
 		}
 	}
@@ -1014,7 +1014,7 @@ export abstract class BaseTest {
 
 	{
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.warnings.size(); i++) {
+		for (let i = 0; i < equeue.warnings.size; i++) {
 			let m: ANTLRMessage =  equeue.warnings.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
@@ -1024,7 +1024,7 @@ export abstract class BaseTest {
 		assertTrue("error is not a GrammarSemanticsMessage",
 				   foundMsg instanceof GrammarSemanticsMessage);
 		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
-		if ( equeue.size()!=1 ) {
+		if ( equeue.size!=1 ) {
 			System.err.println(equeue);
 		}
 	}
@@ -1035,14 +1035,14 @@ export abstract class BaseTest {
 	{
 		//System.out.println("errors="+equeue);
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.errors.size(); i++) {
+		for (let i = 0; i < equeue.errors.size; i++) {
 			let m: ANTLRMessage =  equeue.errors.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
 			}
 		}
 		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty());
-		assertTrue("too many errors; "+equeue.errors, equeue.errors.size()<=1);
+		assertTrue("too many errors; "+equeue.errors, equeue.errors.size<=1);
 		assertNotNull("couldn't find expected error: "+expectedMessage.getErrorType(), foundMsg);
 		/*
 		assertTrue("error is not a GrammarSemanticsMessage",
@@ -1258,7 +1258,7 @@ export abstract class BaseTest {
     }
 
 	realElements(elements: List<string>): List<string> {
-		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size());
+		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size);
 	}
 
 	assertNotNullOrEmpty(message: string, text: string): void {
@@ -1301,8 +1301,8 @@ export abstract class BaseTest {
 		}
 
 		@Override
-		size(): number {
-			return types.size();
+		get size(): number {
+			return types.size;
 		}
 
 		@Override
@@ -1314,7 +1314,7 @@ export abstract class BaseTest {
 		LT(i: number): Token {
 			let t: CommonToken; 
 			let rawIndex: number =  p + i - 1;
-			if ( rawIndex>=types.size() ) t = new CommonToken(Token.EOF);
+			if ( rawIndex>=types.size ) t = new CommonToken(Token.EOF);
 			else t = new CommonToken(types.get(rawIndex));
 			else t = new CommonToken(types.get(rawIndex));
 			t.setTokenIndex(rawIndex);

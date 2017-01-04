@@ -916,7 +916,7 @@ export class TestPerformance {
 
 			let input: CharStream =  inputDescriptor.getInputStream();
             input.seek(0);
-            inputSize += input.size();
+            inputSize += input.size;
 			inputCount++;
 			let futureChecksum: () => FileParseResult | undefined = () => {
 				// @Override
@@ -997,14 +997,14 @@ export class TestPerformance {
 						continue;
 					}
 
-					states += dfa.states.size();
+					states += dfa.states.size;
 					for (let state of asIterable<DFAState>(dfa.states)) {
-						configs += state.configs.size();
+						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
 				}
 
-				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size()} unique), ${lexerInterpreter.atn.getContextCacheSize()} prediction contexts.`);
+				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${lexerInterpreter.atn.getContextCacheSize()} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					console.log("\tMode\tStates\tConfigs\tMode");
@@ -1016,11 +1016,11 @@ export class TestPerformance {
 
 						let modeConfigs: number =  0;
 						for (let state of asIterable<DFAState>(dfa.states)) {
-							modeConfigs += state.configs.size();
+							modeConfigs += state.configs.size;
 						}
 
 						let modeName: string =  lexer.getModeNames()[i];
-						console.log(`\t${dfa.decision}\t${dfa.states.size()}\t${modeConfigs}\t${modeName}`);
+						console.log(`\t${dfa.decision}\t${dfa.states.size}\t${modeConfigs}\t${modeName}`);
 					}
 				}
 			}
@@ -1044,14 +1044,14 @@ export class TestPerformance {
                         continue;
                     }
 
-                    states += dfa.states.size();
+                    states += dfa.states.size;
 					for (let state of asIterable<DFAState>(dfa.states)) {
-						configs += state.configs.size();
+						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
                 }
 
-                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size()} unique), ${interpreter.atn.getContextCacheSize()} prediction contexts.`);
+                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${interpreter.atn.getContextCacheSize()} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					if (TestPerformance.COMPUTE_TRANSITION_STATS) {
@@ -1069,7 +1069,7 @@ export class TestPerformance {
 
 						let decisionConfigs: number =  0;
 						for (let state of asIterable<DFAState>(dfa.states)) {
-							decisionConfigs += state.configs.size();
+							decisionConfigs += state.configs.size;
 						}
 
 						let ruleName: string =  parser.getRuleNames()[parser.getATN().decisionToState[dfa.decision].ruleIndex];
@@ -1116,11 +1116,11 @@ export class TestPerformance {
 								fullContextLookahead = fullContextTransitions / fullContextCalls;
 							}
 
-							formatString = `\t${dfa.decision}\t${dfa.states.size()}\t${decisionConfigs}\t${calls}\t${fullContextCalls}\t${nonSllCalls}\t${transitions}\t${computedTransitions}\t${fullContextTransitions}\t${lookahead}\t${fullContextLookahead}\t${ruleName}`;
+							formatString = `\t${dfa.decision}\t${dfa.states.size}\t${decisionConfigs}\t${calls}\t${fullContextCalls}\t${nonSllCalls}\t${transitions}\t${computedTransitions}\t${fullContextTransitions}\t${lookahead}\t${fullContextLookahead}\t${ruleName}`;
 						}
 						else {
 							calls = 0;
-							formatString = `\t${dfa.decision}\t${dfa.states.size()}\t${decisionConfigs}\t${ruleName}`;
+							formatString = `\t${dfa.decision}\t${dfa.states.size}\t${decisionConfigs}\t${ruleName}`;
 						}
 
 						console.log(formatString);
@@ -1142,8 +1142,8 @@ export class TestPerformance {
 
                 if (TestPerformance.SHOW_CONFIG_STATS) {
                     for (let state of asIterable<DFAState>(dfa.states)) {
-                        if (state.configs.size() >= contextsInDFAState.length) {
-							let contextsInDFAState2 = new Int32Array(state.configs.size() + 1);
+                        if (state.configs.size >= contextsInDFAState.length) {
+							let contextsInDFAState2 = new Int32Array(state.configs.size + 1);
 							contextsInDFAState2.set(contextsInDFAState);
                             contextsInDFAState = contextsInDFAState2;
                         }
@@ -1166,7 +1166,7 @@ export class TestPerformance {
                             }
                         }
 
-                        contextsInDFAState[state.configs.size()]++;
+                        contextsInDFAState[state.configs.size]++;
                     }
                 }
 
@@ -1308,7 +1308,7 @@ export class TestPerformance {
 
                         let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
                         tokens.fill();
-                        TestPerformance.tokenCount[currentPass] += tokens.size();
+                        TestPerformance.tokenCount[currentPass] += tokens.size;
 
 						if (TestPerformance.COMPUTE_CHECKSUM) {
 							for (let token of tokens.getTokens()) {
@@ -1317,7 +1317,7 @@ export class TestPerformance {
 						}
 
                         if (!TestPerformance.RUN_PARSER) {
-                            return new FileParseResult(input.getSourceName(), checksum.getValue(), undefined, tokens.size(), startTime, lexer, undefined);
+                            return new FileParseResult(input.getSourceName(), checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
                         }
 
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
@@ -1466,7 +1466,7 @@ export class TestPerformance {
                             ParseTreeWalker.DEFAULT.walk(listener, parseResult);
                         }
 
-						return new FileParseResult(input.getSourceName(), checksum.getValue(), parseResult, tokens.size(), TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
+						return new FileParseResult(input.getSourceName(), checksum.getValue(), parseResult, tokens.size, TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
                     } catch (e) {
 						if (!TestPerformance.REPORT_SYNTAX_ERRORS && e instanceof ParseCancellationException) {
 							return new FileParseResult("unknown", checksum.getValue(), undefined, 0, startTime, undefined, undefined);
@@ -1531,7 +1531,7 @@ export class FileParseResult {
 			let dfaSize: number =  0;
 			for (let dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
-					dfaSize += dfa.states.size();
+					dfaSize += dfa.states.size;
 				}
 			}
 
@@ -1563,7 +1563,7 @@ export class FileParseResult {
 			let dfaSize: number =  0;
 			for (let dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
-					dfaSize += dfa.states.size();
+					dfaSize += dfa.states.size;
 				}
 			}
 

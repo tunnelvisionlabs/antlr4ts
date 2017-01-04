@@ -99,7 +99,7 @@ export interface TokenStream extends IntStream {
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;
-	 * String text = stream.getText(new Interval(0, stream.size()));
+	 * String text = stream.getText(new Interval(0, stream.size));
 	 * </pre>
 	 *
 	 * @return The text of all tokens in the stream.

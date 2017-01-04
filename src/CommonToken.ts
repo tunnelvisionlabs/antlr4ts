@@ -141,7 +141,7 @@ export class CommonToken implements WritableToken {
 			return undefined;
 		}
 
-		let n: number = input.size();
+		let n: number = input.size;
 		if (this.start < n && this.stop < n) {
 			return input.getText(Interval.of(this.start, this.stop));
 		} else {

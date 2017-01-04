@@ -258,7 +258,7 @@ export class UnbufferedCharStream implements CharStream {
     }
 
     @Override
-    size(): number {
+    get size(): number {
         throw new UnsupportedOperationException("Unbuffered stream cannot know its size");
     }
 

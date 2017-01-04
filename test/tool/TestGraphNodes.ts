@@ -810,7 +810,7 @@ function toDOTString(context: PredictionContext): string {
 	for (let current = workList.pop(); !!current; current = workList.pop()) {
 		nodes += ("  s") + (contextIds.get(current)) + ('[');
 
-		if (current.size() > 1) {
+		if (current.size > 1) {
 			nodes += ("shape=record, ");
 		}
 
@@ -818,8 +818,8 @@ function toDOTString(context: PredictionContext): string {
 
 		if (current.isEmpty()) {
 			nodes += (PredictionContext.isEmptyLocal(current) ? '*' : '$');
-		} else if (current.size() > 1) {
-			for (let i = 0; i < current.size(); i++) {
+		} else if (current.size > 1) {
+			for (let i = 0; i < current.size; i++) {
 				if (i > 0) {
 					nodes += ('|');
 				}
@@ -838,7 +838,7 @@ function toDOTString(context: PredictionContext): string {
 
 		nodes += ("\"];\n");
 
-		for (let i = 0; i < current.size(); i++) {
+		for (let i = 0; i < current.size; i++) {
 			if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY
 				|| current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
 				continue;
@@ -852,7 +852,7 @@ function toDOTString(context: PredictionContext): string {
 			}
 
 			edges += ("  s") + (contextIds.get(current));
-			if (current.size() > 1) {
+			if (current.size > 1) {
 				edges += (":p") + (i);
 			}
 

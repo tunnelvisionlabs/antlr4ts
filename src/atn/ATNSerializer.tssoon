@@ -61,7 +61,7 @@ export class ATNSerializer {
 		let nonGreedyStates: IntegerList =  new IntegerList();
 		let sllStates: IntegerList =  new IntegerList();
 		let precedenceStates: IntegerList =  new IntegerList();
-		data.add(atn.states.size());
+		data.add(atn.states.size);
 		for (let s of atn.states) {
 			if ( s==null ) { // might be optimized away
 				data.add(ATNState.INVALID_TYPE);
@@ -112,27 +112,27 @@ export class ATNSerializer {
 					let st: SetTransition =  (SetTransition)t;
 					if (!setIndices.containsKey(st.set)) {
 						sets.add(st.set);
-						setIndices.put(st.set, sets.size() - 1);
+						setIndices.put(st.set, sets.size - 1);
 					}
 				}
 			}
 		}
 
 		// non-greedy states
-		data.add(nonGreedyStates.size());
-		for (let i = 0; i < nonGreedyStates.size(); i++) {
+		data.add(nonGreedyStates.size);
+		for (let i = 0; i < nonGreedyStates.size; i++) {
 			data.add(nonGreedyStates.get(i));
 		}
 
 		// SLL decisions
-		data.add(sllStates.size());
-		for (let i = 0; i < sllStates.size(); i++) {
+		data.add(sllStates.size);
+		for (let i = 0; i < sllStates.size; i++) {
 			data.add(sllStates.get(i));
 		}
 
 		// precedence states
-		data.add(precedenceStates.size());
-		for (let i = 0; i < precedenceStates.size(); i++) {
+		data.add(precedenceStates.size);
+		for (let i = 0; i < precedenceStates.size; i++) {
 			data.add(precedenceStates.get(i));
 		}
 
@@ -153,7 +153,7 @@ export class ATNSerializer {
 			}
 		}
 
-		let nmodes: number =  atn.modeToStartState.size();
+		let nmodes: number =  atn.modeToStartState.size;
 		data.add(nmodes);
 		if ( nmodes>0 ) {
 			for (let modeStartState of atn.modeToStartState) {
@@ -161,15 +161,15 @@ export class ATNSerializer {
 			}
 		}
 
-		let nsets: number =  sets.size();
+		let nsets: number =  sets.size;
 		data.add(nsets);
 		for (let set of sets) {
 			let containsEof: boolean =  set.contains(Token.EOF);
 			if (containsEof && set.getIntervals().get(0).b == Token.EOF) {
-				data.add(set.getIntervals().size() - 1);
+				data.add(set.getIntervals().size - 1);
 			}
 			else {
-				data.add(set.getIntervals().size());
+				data.add(set.getIntervals().size);
 			}
 
 			data.add(containsEof ? 1 : 0);
@@ -277,7 +277,7 @@ export class ATNSerializer {
 			}
 		}
 
-		let ndecisions: number =  atn.decisionToState.size();
+		let ndecisions: number =  atn.decisionToState.size;
 		data.add(ndecisions);
 		for (let decStartState of atn.decisionToState) {
 			data.add(decStartState.stateNumber);
@@ -345,7 +345,7 @@ export class ATNSerializer {
 		}
 
 		// don't adjust the first value since that's the version number
-		for (let i = 1; i < data.size(); i++) {
+		for (let i = 1; i < data.size; i++) {
 			if (data.get(i) < Character.MIN_VALUE || data.get(i) > Character.MAX_VALUE) {
 				throw new UnsupportedOperationException("Serialized ATN data element out of range.");
 			}
@@ -533,7 +533,7 @@ export class ATNSerializer {
 			}
 		}
 
-		if (tokenNames != null && t >= 0 && t < tokenNames.size()) {
+		if (tokenNames != null && t >= 0 && t < tokenNames.size) {
 			return tokenNames.get(t);
 		}
 

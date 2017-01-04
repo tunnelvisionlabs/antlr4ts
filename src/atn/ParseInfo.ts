@@ -164,7 +164,7 @@ export class ParseInfo {
 	getDFASize(decision?: number): number {
 		if (decision) {
 			let decisionToDFA: DFA = this.atnSimulator.atn.decisionToDFA[decision];
-			return decisionToDFA.states.size();
+			return decisionToDFA.states.size;
 		} else {
 			let n: number = 0;
 			let decisionToDFA: DFA[] = this.atnSimulator.atn.decisionToDFA;

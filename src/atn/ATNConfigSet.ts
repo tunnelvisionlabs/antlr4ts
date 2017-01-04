@@ -202,7 +202,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.configs.length;
 	}
 

@@ -366,7 +366,7 @@ export class TestIntervalSet {
 		s.add(50,55);
 		s.add(5,19);
 		let expecting: string =  "32";
-		let result: string =  String(s.size());
+		let result: string =  String(s.size);
 		assertEquals(expecting, result);
 	}
 

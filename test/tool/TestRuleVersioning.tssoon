@@ -270,7 +270,7 @@ export class TestRuleVersioning extends BaseTest {
 
 			subkeyValues: Map<string, any> =  new HashMap<String, Object>();
 			subkeyPrefixes: Map<string, List<Tuple2<string, number>>> =  new HashMap<String, List<Tuple2<String, Integer>>>();
-			for (let i = 0; i < prefixes.size(); i++) {
+			for (let i = 0; i < prefixes.size; i++) {
 				let prefix: Tuple2<string, number> =  prefixes.get(i);
 				for (let entry of entries) {
 					let key: string =  entry.getKey().toString();
@@ -375,7 +375,7 @@ export class TestRuleVersioning extends BaseTest {
 				}
 
 				@Override
-				size(): number {
+				get size(): number {
 					throw new UnsupportedOperationException("Not supported yet.");
 				}
 			};

@@ -1691,7 +1691,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let currentConfigs: ATNConfigSet = sourceConfigs;
 		let closureBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
-		while (currentConfigs.size() > 0) {
+		while (currentConfigs.size > 0) {
 			let intermediate: ATNConfigSet = new ATNConfigSet();
 			for (let config of asIterable(currentConfigs)) {
 				this.closureImpl(config, configs, intermediate, closureBusy, collectPredicates, hasMoreContext, contextCache, 0, treatEofAsEpsilon);
@@ -1716,7 +1716,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			// We hit rule end. If we have context info, use it
 			if (!config.getContext().isEmpty()) {
 				let hasEmpty: boolean = config.getContext().hasEmpty();
-				let nonEmptySize: number = config.getContext().size() - (hasEmpty ? 1 : 0);
+				let nonEmptySize: number = config.getContext().size - (hasEmpty ? 1 : 0);
 				for (let i = 0; i < nonEmptySize; i++) {
 					let newContext: PredictionContext = config.getContext().getParent(i); // "pop" return state
 					let returnState: ATNState = this.atn.states[config.getContext().getReturnState(i)];
@@ -1978,7 +1978,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		};
 
 	private isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
-		if (configset.getUniqueAlt() !== ATN.INVALID_ALT_NUMBER || configset.size() <= 1) {
+		if (configset.getUniqueAlt() !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
 			return undefined;
 		}
 

@@ -60,7 +60,7 @@ export class LL1Analyzer {
 				current, lookBusy, new BitSet(), seeThruPreds, false);
 			// Wipe out lookahead for this alternative if we found nothing
 			// or we had a predicate when we !seeThruPreds
-			if (current.size() === 0 || current.contains(LL1Analyzer.HIT_PRED)) {
+			if (current.size === 0 || current.contains(LL1Analyzer.HIT_PRED)) {
 				current = undefined;
 				look[alt] = current;
 			}
@@ -197,7 +197,7 @@ export class LL1Analyzer {
 			let removed: boolean = calledRuleStack.get(s.ruleIndex);
 			try {
 				calledRuleStack.clear(s.ruleIndex);
-				for (let i = 0; i < ctx.size(); i++) {
+				for (let i = 0; i < ctx.size; i++) {
 					if (ctx.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY) {
 						continue;
 					}

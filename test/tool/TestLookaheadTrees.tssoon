@@ -128,8 +128,8 @@ export class TestLookaheadTrees {
 			GrammarParserInterpreter.getLookaheadParseTrees(g, parser, tokens, startRuleIndex, lookaheadEventInfo.decision,
 															lookaheadEventInfo.startIndex, lookaheadEventInfo.stopIndex);
 
-		assertEquals(expectedTrees.length, lookaheadParseTrees.size());
-		for (let i = 0; i < lookaheadParseTrees.size(); i++) {
+		assertEquals(expectedTrees.length, lookaheadParseTrees.size);
+		for (let i = 0; i < lookaheadParseTrees.size; i++) {
 			let lt: ParserRuleContext =  lookaheadParseTrees.get(i);
 			assertEquals(expectedTrees[i], Trees.toStringTree(lt, nodeTextProvider));
 		}

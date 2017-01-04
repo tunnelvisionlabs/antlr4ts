@@ -103,7 +103,7 @@ export interface IntSet {
 	 * @return the total number of elements represented by the current set,
 	 * regardless of the manner in which the elements are stored.
 	 */
-	size(): number;
+	readonly size: number;
 
 	/**
 	 * Returns {@code true} if this set contains no elements.

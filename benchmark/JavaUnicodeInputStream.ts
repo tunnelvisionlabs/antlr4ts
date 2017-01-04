@@ -49,8 +49,8 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	size(): number {
-		return this.source.size();
+	get size(): number {
+		return this.source.size;
 	}
 
 	@Override
@@ -81,7 +81,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		// make sure the next character has been processed
 		this.LA(1);
 
-		if (this.escapeListIndex >= this.escapeIndexes.size() || this.escapeIndexes.get(this.escapeListIndex) !== this.index) {
+		if (this.escapeListIndex >= this.escapeIndexes.size || this.escapeIndexes.get(this.escapeListIndex) !== this.index) {
 			this.source.consume();
 			this.slashCount++;
 		}
@@ -121,7 +121,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		}
 		else {
 			let desiredIndex: number =  this.index + i - 1;
-			for (let j = this.escapeListIndex; j < this.escapeIndexes.size(); j++) {
+			for (let j = this.escapeListIndex; j < this.escapeIndexes.size; j++) {
 				if (this.escapeIndexes.get(j) === desiredIndex) {
 					return this.escapeCharacters.get(j);
 				}

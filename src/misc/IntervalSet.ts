@@ -297,8 +297,8 @@ export class IntervalSet implements IntSet {
 			}
 		}
 
-		// If rightI reached right.intervals.size(), no more intervals to subtract from result.
-		// If resultI reached result.intervals.size(), we would be subtracting from an empty set.
+		// If rightI reached right.intervals.size, no more intervals to subtract from result.
+		// If resultI reached result.intervals.size, we would be subtracting from an empty set.
 		// Either way, we are done.
 		return result;
 	}
@@ -504,7 +504,7 @@ export class IntervalSet implements IntSet {
 			return "{}";
 		}
 
-		if (this.size() > 1) {
+		if (this.size > 1) {
 			buf += "{";
 		}
 
@@ -535,7 +535,7 @@ export class IntervalSet implements IntSet {
 			}
 		}
 
-		if (this.size() > 1) {
+		if (this.size > 1) {
 			buf += "}";
 		}
 
@@ -548,7 +548,7 @@ export class IntervalSet implements IntSet {
 		}
 
 		let buf: string = "";
-		if (this.size() > 1) {
+		if (this.size > 1) {
 			buf += "{";
 		}
 
@@ -575,7 +575,7 @@ export class IntervalSet implements IntSet {
 			}
 		}
 
-		if (this.size() > 1) {
+		if (this.size > 1) {
 			buf += "}";
 		}
 
@@ -594,7 +594,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		let n: number = 0;
 		let numIntervals: number = this.intervals.length;
 		if (numIntervals == 1) {
@@ -611,7 +611,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	toIntegerList(): IntegerList {
-		let values: IntegerList = new IntegerList(this.size());
+		let values: IntegerList = new IntegerList(this.size);
 		let n: number = this.intervals.length;
 		for (let i = 0; i < n; i++) {
 			let I: Interval = this.intervals[i];

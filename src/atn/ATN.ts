@@ -112,7 +112,7 @@ export class ATN {
 	}
 
 	getContextCacheSize(): number {
-		return this.contextCache.size();
+		return this.contextCache.size;
 	}
 
 	getCachedContext(context: PredictionContext): PredictionContext {

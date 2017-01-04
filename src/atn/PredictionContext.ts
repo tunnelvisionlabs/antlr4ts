@@ -33,15 +33,15 @@ export abstract class PredictionContext implements Equatable {
 	 *  private int referenceHashCode() {
 	 *      int hash = {@link MurmurHash#initialize MurmurHash.initialize}({@link #INITIAL_HASH});
 	 *
-	 *      for (int i = 0; i &lt; {@link #size()}; i++) {
+	 *      for (int i = 0; i &lt; this.size; i++) {
 	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getParent getParent}(i));
 	 *      }
 	 *
-	 *      for (int i = 0; i &lt; {@link #size()}; i++) {
+	 *      for (int i = 0; i &lt; this.size; i++) {
 	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getReturnState getReturnState}(i));
 	 *      }
 	 *
-	 *      hash = {@link MurmurHash#finish MurmurHash.finish}(hash, 2 * {@link #size()});
+	 *      hash = {@link MurmurHash#finish MurmurHash.finish}(hash, 2 * this.size);
 	 *      return hash;
 	 *  }
 	 * </pre>
@@ -81,7 +81,7 @@ export abstract class PredictionContext implements Equatable {
 		return hash;
 	}
 
-	abstract size(): number;
+	abstract readonly size: number;
 
 	abstract getReturnState(index: number): number;
 
@@ -130,8 +130,8 @@ export abstract class PredictionContext implements Equatable {
 			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
 		}
 
-		let context0size: number = context0.size();
-		let context1size: number = context1.size();
+		let context0size: number = context0.size;
+		let context1size: number = context1.size;
 		if (context0size === 1 && context1size === 1 && context0.getReturnState(0) === context1.getReturnState(0)) {
 			let merged: PredictionContext = contextCache.join(context0.getParent(0), context1.getParent(0));
 			if (merged === context0.getParent(0)) {
@@ -235,13 +235,13 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		let changed: boolean = false;
-		let parents: PredictionContext[] = new Array<PredictionContext>(context.size());
+		let parents: PredictionContext[] = new Array<PredictionContext>(context.size);
 		for (let i = 0; i < parents.length; i++) {
 			let parent: PredictionContext = PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
 			if (changed || parent !== context.getParent(i)) {
 				if (!changed) {
-					parents = new Array<PredictionContext>(context.size());
-					for (let j = 0; j < context.size(); j++) {
+					parents = new Array<PredictionContext>(context.size);
+					for (let j = 0; j < context.size; j++) {
 						parents[j] = context.getParent(j);
 					}
 
@@ -263,8 +263,8 @@ export abstract class PredictionContext implements Equatable {
 		if (parents.length === 1) {
 			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
 		} else {
-			let returnStates: number[] = new Array<number>(context.size());
-			for (let i = 0; i < context.size(); i++) {
+			let returnStates: number[] = new Array<number>(context.size);
+			for (let i = 0; i < context.size; i++) {
 				returnStates[i] = context.getReturnState(i);
 			}
 
@@ -313,16 +313,16 @@ export abstract class PredictionContext implements Equatable {
 			localBuffer += "[";
 			while (!p.isEmpty() && p !== stop) {
 				let index: number = 0;
-				if (p.size() > 0) {
+				if (p.size > 0) {
 					let bits: number = 1;
-					while (((1 << bits) >>> 0) < p.size()) {
+					while (((1 << bits) >>> 0) < p.size) {
 						bits++;
 					}
 
 					let mask: number = ((1 << bits) >>> 0) - 1;
 					index = (perm >> offset) & mask;
-					last = last && index >= p.size() - 1;
-					if (index >= p.size()) {
+					last = last && index >= p.size - 1;
+					if (index >= p.size) {
 						continue outer;
 					}
 
@@ -404,7 +404,7 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return 0;
 	}
 
@@ -472,7 +472,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.returnStates.length;
 	}
 
@@ -532,7 +532,7 @@ class ArrayPredictionContext extends PredictionContext {
 			return context;
 		}
 
-		if (suffix.size() !== 1) {
+		if (suffix.size !== 1) {
 			throw "Appending a tree suffix is not yet supported.";
 		}
 
@@ -541,7 +541,7 @@ class ArrayPredictionContext extends PredictionContext {
 			if (context.isEmpty()) {
 				result = suffix;
 			} else {
-				let parentCount: number = context.size();
+				let parentCount: number = context.size;
 				if (context.hasEmpty()) {
 					parentCount--;
 				}
@@ -608,7 +608,7 @@ class ArrayPredictionContext extends PredictionContext {
 				continue;
 			}
 
-			let selfSize: number = operands.getX().size();
+			let selfSize: number = operands.getX().size;
 			if (selfSize === 0) {
 				if (!operands.getX().equals(operands.getY())) {
 					return false;
@@ -617,7 +617,7 @@ class ArrayPredictionContext extends PredictionContext {
 				continue;
 			}
 
-			let otherSize: number = operands.getY().size();
+			let otherSize: number = operands.getY().size;
 			if (selfSize !== otherSize) {
 				return false;
 			}
@@ -675,7 +675,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return 1;
 	}
 

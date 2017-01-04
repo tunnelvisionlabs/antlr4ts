@@ -890,7 +890,7 @@ export class ATNDeserializer {
 				}
 			}
 
-			if (setTransitions.size() <= 1) {
+			if (setTransitions.size <= 1) {
 				continue;
 			}
 
@@ -917,7 +917,7 @@ export class ATNDeserializer {
 
 			let newTransition: Transition;
 			if (matchSet.getIntervals().length === 1) {
-				if (matchSet.size() === 1) {
+				if (matchSet.size === 1) {
 					newTransition = new AtomTransition(blockEndState, matchSet.getMinElement());
 				} else {
 					let matchInterval: Interval = matchSet.getIntervals()[0];
