@@ -350,7 +350,7 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		let token: Token = this.tokens[i];
-		while (token.getChannel() !== channel) {
+		while (token.channel !== channel) {
 			if (token.getType() === Token.EOF) {
 				return i;
 			}
@@ -382,7 +382,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		while (i >= 0) {
 			let token: Token = this.tokens[i];
-			if (token.getType() === Token.EOF || token.getChannel() === channel) {
+			if (token.getType() === Token.EOF || token.channel === channel) {
 				return i;
 			}
 
@@ -447,11 +447,11 @@ export class BufferedTokenStream implements TokenStream {
 		for (let i = from; i <= to; i++) {
 			let t: Token = this.tokens[i];
 			if (channel === -1) {
-				if (t.getChannel() !== Lexer.DEFAULT_TOKEN_CHANNEL) {
+				if (t.channel !== Lexer.DEFAULT_TOKEN_CHANNEL) {
 					hidden.push(t);
 				}
 			} else {
-				if (t.getChannel() === channel) {
+				if (t.channel === channel) {
 					hidden.push(t);
 				}
 			}

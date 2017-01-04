@@ -292,7 +292,7 @@ export class ATNSerializer {
 				data.add(action.getActionType().ordinal());
 				switch (action.getActionType()) {
 				case CHANNEL:
-					let channel: number =  ((LexerChannelAction)action).getChannel();
+					let channel: number =  ((LexerChannelAction)action).channel;
 					data.add(channel != -1 ? channel : 0xFFFF);
 					data.add(0);
 					break;

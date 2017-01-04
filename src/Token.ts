@@ -37,7 +37,7 @@ export interface Token {
 	 *  on a different channel, but the parser only "tunes" to a single channel.
 	 *  The parser ignores everything not on DEFAULT_CHANNEL.
 	 */
-	getChannel(): number;
+	readonly channel: number;
 
 	/** An index from 0..n-1 of the token object in the input stream.
 	 *  This must be valid in order to print token streams and
@@ -100,7 +100,7 @@ export namespace Token {
 	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
 	 * {@link #HIDDEN_CHANNEL}.</p>
 	 *
-	 * @see Token#getChannel()
+	 * @see `Token.channel`
 	 */
 	export const MIN_USER_CHANNEL_VALUE: number = 2;
 }

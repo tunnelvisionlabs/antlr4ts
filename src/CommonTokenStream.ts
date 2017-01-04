@@ -119,7 +119,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		this.fill();
 		for (let i = 0; i < this.tokens.length; i++) {
 			let t: Token = this.tokens[i];
-			if (t.getChannel() === this.channel) {
+			if (t.channel === this.channel) {
 				n++;
 			}
 

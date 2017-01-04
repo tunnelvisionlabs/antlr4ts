@@ -16,7 +16,7 @@ export interface WritableToken extends Token {
 
 	charPositionInLine: number;
 
-	setChannel(channel: number): void;
+	channel: number;
 
 	setTokenIndex(index: number): void;
 }

@@ -37,7 +37,7 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getChannel} and
 	 * {@link #setChannel}.
 	 */
-	protected channel: number = Token.DEFAULT_CHANNEL;
+	private _channel: number = Token.DEFAULT_CHANNEL;
 	/**
 	 * This is the backing field for {@link #getTokenSource} and
 	 * {@link #getInputStream}.
@@ -81,7 +81,7 @@ export class CommonToken implements WritableToken {
 		this.text = text;
 		this.type = type;
 		this.source = source;
-		this.channel = channel;
+		this._channel = channel;
 		this.start = start;
 		this.stop = stop;
 		if (source.source != null) {
@@ -104,7 +104,7 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
+		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.getStartIndex(), oldToken.getStopIndex());
 		result._line = oldToken.line;
 		result.index = oldToken.getTokenIndex();
 		result._charPositionInLine = oldToken.charPositionInLine;
@@ -179,13 +179,13 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getChannel(): number {
-		return this.channel;
+	get channel(): number {
+		return this._channel;
 	}
 
-	@Override
-	setChannel(channel: number): void {
-		this.channel = channel;
+	// @Override
+	set channel(channel: number) {
+		this._channel = channel;
 	}
 
 	@Override
@@ -234,8 +234,8 @@ export class CommonToken implements WritableToken {
 	@Override
 	toString(): string {
 		let channelStr: string = "";
-		if (this.channel > 0) {
-			channelStr = ",channel=" + this.channel;
+		if (this._channel > 0) {
+			channelStr = ",channel=" + this._channel;
 		}
 
 		let txt: string | undefined = this.getText();

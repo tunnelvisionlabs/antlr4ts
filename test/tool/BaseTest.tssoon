@@ -1062,7 +1062,7 @@ export abstract class BaseTest {
 
 			let t: Token =  get(i);
 			if ( hide.contains(t.getType()) ) {
-				((WritableToken)t).setChannel(Token.HIDDEN_CHANNEL);
+				((WritableToken)t).channel = Token.HIDDEN_CHANNEL;
 			}
 
 			return true;

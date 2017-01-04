@@ -78,7 +78,7 @@ export class RuleTagToken implements Token {
 	 * <p>Rule tag tokens are always placed on the {@link #DEFAULT_CHANNEL}.</p>
 	 */
 	@Override
-	getChannel(): number {
+	get channel(): number {
 		return Token.DEFAULT_CHANNEL;
 	}
 

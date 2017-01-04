@@ -330,11 +330,11 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this._type;
 	}
 
-	setChannel(channel: number): void {
+	set channel(channel: number) {
 		this._channel = channel;
 	}
 
-	getChannel(): number {
+	get channel(): number {
 		return this._channel;
 	}
 
