@@ -44,7 +44,7 @@ export class ParseTreeWalker {
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
 	protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.getRuleContext() as ParserRuleContext;
+		let ctx = r.ruleContext as ParserRuleContext;
 		if (listener.enterEveryRule) {
 			listener.enterEveryRule(ctx);
 		}
@@ -53,7 +53,7 @@ export class ParseTreeWalker {
 	}
 
 	protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.getRuleContext() as ParserRuleContext;
+		let ctx = r.ruleContext as ParserRuleContext;
 		ctx.exitRule(listener);
 		if (listener.exitEveryRule) {
 			listener.exitEveryRule(ctx);

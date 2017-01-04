@@ -12,7 +12,7 @@ import { Parser } from "../Parser";
 import { Interval } from "../misc/Interval";
 
 export abstract class RuleNode implements ParseTree {
-	abstract getRuleContext(): RuleContext;
+	abstract readonly ruleContext: RuleContext;
 
 	//@Override
 	abstract readonly parent: RuleNode | undefined;

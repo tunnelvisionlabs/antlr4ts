@@ -229,19 +229,13 @@ export class ParserRuleContext extends RuleContext {
 		return tokens;
 	}
 
+	get ruleContext(): this {
+		return this;
+	}
+
 	// NOTE: argument order change from Java version
-	getRuleContext(): this;
-	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T;
-	getRuleContext<T extends ParserRuleContext>(i?: number, ctxType?: { new (...args: any[]): T; }): this | T {
-		if (i === undefined) {
-			return this;
-		}
-
-		if (ctxType) {
-			return this.getChild(i, ctxType);
-		}
-
-		throw new Error("Required ctxType was not provided");
+	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
+		return this.getChild(i, ctxType);
 	}
 
 	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {

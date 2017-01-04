@@ -64,7 +64,7 @@ class TraceListener implements ParseTreeListener {
 
 	@Override
 	visitTerminal(node: TerminalNode): void {
-		let parent = node.parent!.getRuleContext();
+		let parent = node.parent!.ruleContext;
 		let token: Token = node.getSymbol();
 		console.log("consume " + token + " rule " + this.ruleNames[parent.getRuleIndex()]);
 	}
@@ -790,7 +790,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		return -1;
 	}
 
-	getRuleContext(): ParserRuleContext { return this._ctx; }
+	get ruleContext(): ParserRuleContext { return this._ctx; }
 
 	/** Return List&lt;String&gt; of the rule names in your parser instance
 	 *  leading up to a call to the current rule.  You could override if

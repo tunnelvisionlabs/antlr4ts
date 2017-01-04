@@ -108,7 +108,7 @@ export class RuleContext extends RuleNode {
 	}
 
 	@Override
-	getRuleContext(): RuleContext { return this; }
+	get ruleContext(): RuleContext { return this; }
 
 	@Override
 	get parent(): RuleContext | undefined { return this._parent; }

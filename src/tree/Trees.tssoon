@@ -53,7 +53,7 @@ export class Trees {
 	static getNodeText(@NotNull t: Tree, @Nullable ruleNames: List<string>): string {
 		if ( ruleNames!=null ) {
 			if ( t instanceof RuleNode ) {
-				let ruleContext: RuleContext =  ((RuleNode)t).getRuleContext();
+				let ruleContext: RuleContext =  ((RuleNode)t).ruleContext;
 				let ruleIndex: number =  ruleContext.getRuleIndex();
 				let ruleName: string =  ruleNames.get(ruleIndex);
 				let altNumber: number =  ruleContext.altNumber;
