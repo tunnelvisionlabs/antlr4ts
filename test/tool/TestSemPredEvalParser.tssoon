@@ -217,8 +217,8 @@ export class TestSemPredEvalParser extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 				"s : a a;\n" +
-				"a : {_input.LT(1).getText().equals(\"x\")}? ID INT {System.out.println(\"alt 1\");}\n" +
-				"  | {_input.LT(1).getText().equals(\"y\")}? ID INT {System.out.println(\"alt 2\");}\n" +
+				"a : {_input.LT(1).text.equals(\"x\")}? ID INT {System.out.println(\"alt 1\");}\n" +
+				"  | {_input.LT(1).text.equals(\"y\")}? ID INT {System.out.println(\"alt 2\");}\n" +
 				"  ;\n" +
 				"ID : 'a'..'z'+ ;\n" +
 				"INT : '0'..'9'+;\n" +

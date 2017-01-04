@@ -156,7 +156,7 @@ export class XPath {
 			throw new Error("Missing path element at end of path");
 		}
 
-		let word = wordToken.getText();
+		let word = wordToken.text;
 		if (word == null) {
 			throw new Error("Expected wordToken to have text content.");
 		}

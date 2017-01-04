@@ -63,7 +63,7 @@ export class CommonTokenFactory implements TokenFactory {
 		t.line = line;
 		t.charPositionInLine = charPositionInLine;
 		if (text == null && this.copyText && source.stream != null) {
-			t.setText(source.stream.getText(Interval.of(start, stop)));
+			t.text = source.stream.getText(Interval.of(start, stop));
 		}
 
 		return t;

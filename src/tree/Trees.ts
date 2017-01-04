@@ -64,8 +64,8 @@ export class Trees {
 		} else {
 			// no recog or rule names
 			let payload = t.getPayload();
-			if (typeof payload.getText === 'function') {
-				return payload.getText();
+			if (typeof payload.text === 'string') {
+				return payload.text;
 			}
 			return t.getPayload().toString();;
 		}
@@ -84,8 +84,8 @@ export class Trees {
 			return t.toString();
 		}
 		else if (t instanceof TerminalNode) {
-			let symbol = t.getSymbol() as any;
-			return symbol.getText();
+			let symbol = t.getSymbol();
+			return symbol.text || "";
 		}
 		throw new TypeError("Unexpected node type");
 	}

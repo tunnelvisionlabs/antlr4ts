@@ -89,7 +89,7 @@ export class TestActionTranslation extends BaseTest {
 		let action: string =  "x, $ID.text+\"3242\", (*$ID).foo(21,33), 3.2+1, '\\n', "+
 						"\"a,oo\\nick\", {bl, \"fdkj\"eck}";
 		let expected: string = 
-			"x, (_localctx.ID!=null?_localctx.ID.getText():null)+\"3242\", " +
+			"x, (_localctx.ID!=null?_localctx.ID.text:null)+\"3242\", " +
 			"(*_localctx.ID).foo(21,33), 3.2+1, '\\n', \"a,oo\\nick\", {bl, \"fdkj\"eck}";
 		testActions(attributeTemplate, "inline", action, expected);
 	}
@@ -131,8 +131,8 @@ export class TestActionTranslation extends BaseTest {
     }
 
     @Test testTokenRefs(): void {
-		let action: string =  "$id; $ID; $id.text; $id.getText(); $id.line;";
-		let expected: string =  "_localctx.id; _localctx.ID; (_localctx.id!=null?_localctx.id.getText():null); _localctx.id.getText(); (_localctx.id!=null?_localctx.id.line:0);";
+		let action: string =  "$id; $ID; $id.text; $id.text; $id.line;";
+		let expected: string =  "_localctx.id; _localctx.ID; (_localctx.id!=null?_localctx.id.text:null); _localctx.id.text; (_localctx.id!=null?_localctx.id.line:0);";
 		testActions(attributeTemplate, "inline", action, expected);
     }
 
@@ -236,7 +236,7 @@ export class TestActionTranslation extends BaseTest {
         let action: string =  "$ids.size;"; // must be qualified
     }
     @Test testImplicitTokenLabel(): void {
-        let action: string =  "$ID; $ID.text; $ID.getText()";
+        let action: string =  "$ID; $ID.text; $ID.text";
     }
 
     @Test testImplicitRuleLabel(): void {

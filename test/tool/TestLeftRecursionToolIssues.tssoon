@@ -467,8 +467,8 @@ export class TestLeftRecursionToolIssues extends BaseTest {
 			"s : e {System.out.println($e.result);} ;\n" +
 			"\n" +
 			"e returns [String result]\n" +
-			"    :   ID '=' e1=e    { $result = \"(\" + $ID.getText() + \"=\" + $e1.result + \")\"; }\n" +
-			"    |   ID             { $result = $ID.getText(); }\n" +
+			"    :   ID '=' e1=e    { $result = \"(\" + $ID.text + \"=\" + $e1.result + \")\"; }\n" +
+			"    |   ID             { $result = $ID.text; }\n" +
 			"    |   e1=e '+' e2=e  { $result = \"(\" + $e1.result + \"+\" + $e2.result + \")\"; }\n" +
 			"    ;\n" +
 			"ID : 'a'..'z'+ ;\n" +

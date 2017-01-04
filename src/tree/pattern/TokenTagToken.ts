@@ -65,7 +65,7 @@ export class TokenTagToken extends CommonToken {
 	 * formatted with {@code <} and {@code >} delimiters.</p>
 	 */
 	@Override
-	getText(): string {
+	get text(): string {
 		if (this.label != null) {
 			return "<" + this.label + ":" + this.tokenName + ">";
 		}

@@ -64,26 +64,26 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 
         let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
 
-        assertEquals("x", tokens.LT(1).getText()); // must skip first off channel token
+        assertEquals("x", tokens.LT(1).text); // must skip first off channel token
         tokens.consume();
-        assertEquals("=", tokens.LT(1).getText());
-        assertEquals("x", tokens.LT(-1).getText());
+        assertEquals("=", tokens.LT(1).text);
+        assertEquals("x", tokens.LT(-1).text);
 
         tokens.consume();
-        assertEquals("34", tokens.LT(1).getText());
-        assertEquals("=", tokens.LT(-1).getText());
+        assertEquals("34", tokens.LT(1).text);
+        assertEquals("=", tokens.LT(-1).text);
 
         tokens.consume();
-        assertEquals(";", tokens.LT(1).getText());
-        assertEquals("34", tokens.LT(-1).getText());
+        assertEquals(";", tokens.LT(1).text);
+        assertEquals("34", tokens.LT(-1).text);
 
         tokens.consume();
         assertEquals(Token.EOF, tokens.LA(1));
-        assertEquals(";", tokens.LT(-1).getText());
+        assertEquals(";", tokens.LT(-1).text);
 
-        assertEquals("34", tokens.LT(-2).getText());
-        assertEquals("=", tokens.LT(-3).getText());
-        assertEquals("x", tokens.LT(-4).getText());
+        assertEquals("34", tokens.LT(-2).text);
+        assertEquals("=", tokens.LT(-3).text);
+        assertEquals("x", tokens.LT(-4).text);
     }
 
 	@Test testFetchOffChannel(): void {

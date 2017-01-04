@@ -498,7 +498,7 @@ export class BufferedTokenStream implements TokenStream {
 				break;
 			}
 
-			buf += t.getText();
+			buf += t.text;
 		}
 
 		return buf.toString();

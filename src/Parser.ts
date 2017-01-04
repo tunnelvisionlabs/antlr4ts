@@ -49,13 +49,13 @@ class TraceListener implements ParseTreeListener {
 	@Override
 	enterEveryRule(ctx: ParserRuleContext): void {
 		console.log("enter   " + this.ruleNames[ctx.getRuleIndex()] +
-			", LT(1)=" + this.tokenStream.LT(1).getText());
+			", LT(1)=" + this.tokenStream.LT(1).text);
 	}
 
 	@Override
 	exitEveryRule(ctx: ParserRuleContext): void {
 		console.log("exit    " + this.ruleNames[ctx.getRuleIndex()] +
-			", LT(1)=" + this.tokenStream.LT(1).getText());
+			", LT(1)=" + this.tokenStream.LT(1).text);
 	}
 
 	@Override

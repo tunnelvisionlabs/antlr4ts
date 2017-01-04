@@ -8,7 +8,7 @@
 import { Token } from './Token';
 
 export interface WritableToken extends Token {
-	setText(text: string): void;
+	text: string | undefined;
 
 	type: number;
 

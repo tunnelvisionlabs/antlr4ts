@@ -326,7 +326,7 @@ export class TokenStreamRewriter {
 			let t: Token = this.tokens.get(i);
 			if ( op==null ) {
 				// no operation at that index, just dump token
-				if ( t.type!==Token.EOF ) buf.push(String(t.getText()));
+				if ( t.type!==Token.EOF ) buf.push(String(t.text));
 				i++; // move to next token
 			}
 			else {
@@ -558,7 +558,7 @@ class InsertBeforeOp extends RewriteOperation {
 	execute(buf: string[]): number {
 		buf.push(this.text);
 		if ( this.tokens.get(this.index).type !== Token.EOF ) {
-			buf.push(String(this.tokens.get(this.index).getText()));
+			buf.push(String(this.tokens.get(this.index).text));
 		}
 		return this.index+1;
 	}

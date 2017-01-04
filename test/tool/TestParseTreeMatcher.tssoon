@@ -251,8 +251,8 @@ export class TestParseTreeMatcher extends BaseTest {
 		assertEquals("{ID=[x], id=[x]}", m.getLabels().toString());
 		assertNotNull(m.get("id"));
 		assertNotNull(m.get("ID"));
-		assertEquals("x", m.get("id").getText());
-		assertEquals("x", m.get("ID").getText());
+		assertEquals("x", m.get("id").text);
+		assertEquals("x", m.get("ID").text);
 		assertEquals("[x]", m.getAll("id").toString());
 		assertEquals("[x]", m.getAll("ID").toString());
 
@@ -273,8 +273,8 @@ export class TestParseTreeMatcher extends BaseTest {
 		assertEquals("{ID=[x, y], id=[x, y]}", m.getLabels().toString());
 		assertNotNull(m.get("id"));
 		assertNotNull(m.get("ID"));
-		assertEquals("y", m.get("id").getText());
-		assertEquals("y", m.get("ID").getText());
+		assertEquals("y", m.get("id").text);
+		assertEquals("y", m.get("ID").text);
 		assertEquals("[x, y]", m.getAll("id").toString());
 		assertEquals("[x, y]", m.getAll("ID").toString());
 
@@ -296,14 +296,14 @@ export class TestParseTreeMatcher extends BaseTest {
 		assertNotNull(m.get("a")); // get first
 		assertNotNull(m.get("b"));
 		assertNotNull(m.get("ID"));
-		assertEquals("z", m.get("a").getText());
-		assertEquals("y", m.get("b").getText());
-		assertEquals("z", m.get("ID").getText()); // get last
+		assertEquals("z", m.get("a").text);
+		assertEquals("y", m.get("b").text);
+		assertEquals("z", m.get("ID").text); // get last
 		assertEquals("[x, z]", m.getAll("a").toString());
 		assertEquals("[y]", m.getAll("b").toString());
 		assertEquals("[x, y, z]", m.getAll("ID").toString()); // ordered
 
-		assertEquals("xyz;", m.getTree().getText()); // whitespace stripped by lexer
+		assertEquals("xyz;", m.getTree().text); // whitespace stripped by lexer
 
 		assertNull(m.get("undefined"));
 		assertEquals("[]", m.getAll("undefined").toString());

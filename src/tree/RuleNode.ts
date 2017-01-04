@@ -21,7 +21,7 @@ export abstract class RuleNode implements ParseTree {
 
 	abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
 
-	abstract getText(): string;
+	abstract readonly text: string;
 
 	abstract toStringTree(parser?: Parser | undefined): string;
 

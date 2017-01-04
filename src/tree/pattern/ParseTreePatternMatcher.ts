@@ -285,7 +285,7 @@ export class ParseTreePatternMatcher {
 						labels.map(l, tree);
 					}
 				}
-				else if (tree.getText() === patternTree.getText()) {
+				else if (tree.text === patternTree.text) {
 					// x and x
 				}
 				else {
@@ -400,7 +400,7 @@ export class ParseTreePatternMatcher {
 			}
 			else {
 				let textChunk = chunk as TextChunk;
-				let input = new ANTLRInputStream(textChunk.getText());
+				let input = new ANTLRInputStream(textChunk.text);
 				this.lexer.inputStream = input;
 				let t: Token = this.lexer.nextToken();
 				while (t.type !== Token.EOF) {
@@ -500,8 +500,8 @@ export class ParseTreePatternMatcher {
 		for (let i = 0; i < chunks.length; i++) {
 			let c: Chunk = chunks[i];
 			if (c instanceof TextChunk) {
-				let unescaped: string = c.getText().replace(this.escapeRE, "");
-				if (unescaped.length < c.getText().length) {
+				let unescaped: string = c.text.replace(this.escapeRE, "");
+				if (unescaped.length < c.text.length) {
 					chunks[i] = new TextChunk(unescaped);
 				}
 			}

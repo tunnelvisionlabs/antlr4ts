@@ -77,7 +77,7 @@ export interface TokenStream extends IntStream {
 	 * TokenStream stream = ...;
 	 * String text = "";
 	 * for (int i = interval.a; i &lt;= interval.b; i++) {
-	 *   text += stream.get(i).getText();
+	 *   text += stream.get(i).text;
 	 * }
 	 * </pre>
 	 *
@@ -145,7 +145,7 @@ export interface TokenStream extends IntStream {
 	 * TokenStream stream = ...;
 	 * String text = "";
 	 * for (int i = start.tokenIndex; i &lt;= stop.tokenIndex; i++) {
-	 *   text += stream.get(i).getText();
+	 *   text += stream.get(i).text;
 	 * }
 	 * </pre>
 	 *

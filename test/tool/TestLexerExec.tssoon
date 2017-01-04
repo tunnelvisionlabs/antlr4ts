@@ -295,7 +295,7 @@ export class TestLexerExec extends BaseTest {
 	@Test testActionPlacement(): void {
 		let grammar: string = 
 			"lexer grammar L;\n"+
-			"I : ({System.out.println(\"stuff fail: \" + getText());} 'a' | {System.out.println(\"stuff0: \" + getText());} 'a' {System.out.println(\"stuff1: \" + getText());} 'b' {System.out.println(\"stuff2: \" + getText());}) {System.out.println(getText());} ;\n"+
+			"I : ({System.out.println(\"stuff fail: \" + text);} 'a' | {System.out.println(\"stuff0: \" + text);} 'a' {System.out.println(\"stuff1: \" + text);} 'b' {System.out.println(\"stuff2: \" + text);}) {System.out.println(text);} ;\n"+
 			"WS : (' '|'\\n') -> skip ;\n" +
 			"J : .;\n";
 		let found: string =  execLexer("L.g4", grammar, "L", "ab");
@@ -312,7 +312,7 @@ export class TestLexerExec extends BaseTest {
 	@Test testGreedyConfigs(): void {
 		let grammar: string = 
 			"lexer grammar L;\n"+
-			"I : ('a' | 'ab') {System.out.println(getText());} ;\n"+
+			"I : ('a' | 'ab') {System.out.println(text);} ;\n"+
 			"WS : (' '|'\\n') -> skip ;\n" +
 			"J : .;\n";
 		let found: string =  execLexer("L.g4", grammar, "L", "ab");
@@ -326,9 +326,9 @@ export class TestLexerExec extends BaseTest {
 	@Test testNonGreedyConfigs(): void {
 		let grammar: string = 
 			"lexer grammar L;\n"+
-			"I : .*? ('a' | 'ab') {System.out.println(getText());} ;\n"+
+			"I : .*? ('a' | 'ab') {System.out.println(text);} ;\n"+
 			"WS : (' '|'\\n') -> skip ;\n" +
-			"J : . {System.out.println(getText());};\n";
+			"J : . {System.out.println(text);};\n";
 		let found: string =  execLexer("L.g4", grammar, "L", "ab");
 		let expecting: string = 
 			"a\n" +

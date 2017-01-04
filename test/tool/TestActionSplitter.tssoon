@@ -19,7 +19,7 @@ export class TestActionSplitter extends BaseTest {
         "$x.y",		"['$x.y'<" + ActionSplitter.QUALIFIED_ATTR + ">]",
         "$ID.text",		"['$ID.text'<" + ActionSplitter.QUALIFIED_ATTR + ">]",
         "$ID",		"['$ID'<" + ActionSplitter.ATTR + ">]",
-        "$ID.getText()",		"['$ID'<" + ActionSplitter.ATTR + ">, '.getText()'<" + ActionSplitter.TEXT + ">]",
+        "$ID.text",		"['$ID'<" + ActionSplitter.ATTR + ">, '.text'<" + ActionSplitter.TEXT + ">]",
         "$ID.text = \"test\";",		"['$ID.text'<" + ActionSplitter.QUALIFIED_ATTR + ">, ' = \"test\";'<" + ActionSplitter.TEXT + ">]",
         "$a.line == $b.line",		"['$a.line'<" + ActionSplitter.QUALIFIED_ATTR + ">, ' == '<" + ActionSplitter.TEXT + ">, '$b.line'<" + ActionSplitter.QUALIFIED_ATTR + ">]",
         "$r.tree",		"['$r.tree'<" + ActionSplitter.QUALIFIED_ATTR + ">]",
@@ -44,7 +44,7 @@ export class TestActionSplitter extends BaseTest {
 													 BlankActionSplitterListener()): new;
         let t: Token =  splitter.nextToken();
         while ( t.type!=Token.EOF ) {
-            chunks.add("'"+t.getText()+"'<"+t.type+">");
+            chunks.add("'"+t.text+"'<"+t.type+">");
             t = splitter.nextToken();
         }
         return chunks;

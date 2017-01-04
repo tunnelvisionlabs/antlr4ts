@@ -432,7 +432,7 @@ export class ParserInterpreter extends Parser {
 				let expectedTokenType: number = expectedTokens.getMinElement(); // get any element
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
-						expectedTokenType, tok.getText(),
+						expectedTokenType, tok.text,
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
 						tok.line, tok.charPositionInLine);
@@ -442,7 +442,7 @@ export class ParserInterpreter extends Parser {
 				let source = tok.tokenSource;
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
-						Token.INVALID_TYPE, tok.getText(),
+						Token.INVALID_TYPE, tok.text,
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
 						tok.line, tok.charPositionInLine);

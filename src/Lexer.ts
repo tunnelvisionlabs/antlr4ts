@@ -86,7 +86,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	_mode: number = Lexer.DEFAULT_MODE;
 
 	/** You can set the text for the current token to override what is in
-	 *  the input char buffer.  Use setText() or can set this instance var.
+	 *  the input char buffer.  Set `text` or can set this instance var.
 	 */
 	_text: string | undefined;
 
@@ -301,7 +301,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	/** Return the text matched so far for the current token or any
 	 *  text override.
 	 */
-	getText(): string {
+	get text(): string {
 		if (this._text != null) {
 			return this._text;
 		}
@@ -311,7 +311,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	/** Set the complete text of this token; it wipes any previous
 	 *  changes to the text.
 	 */
-	setText(text: string): void {
+	set text(text: string) {
 		this._text = text;
 	}
 

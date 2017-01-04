@@ -31,7 +31,7 @@ export interface ParseTree extends SyntaxTree {
 	 *  off-channel tokens (if any) so won't return whitespace and
 	 *  comments if they are sent to parser on hidden channel.
 	 */
-	getText(): string;
+	readonly text: string;
 
 	/** Specialize toStringTree so that it can print out more information
 	 * 	based upon the parser.

@@ -202,17 +202,17 @@ ToStringTree(s) ::= <%<s>.toStringTree(this)%>
 
 Column() ::= "this.charPositionInLine"
 
-Text() ::= "this.getText()"
+Text() ::= "this.text"
 
 ValEquals(a,b) ::= <%<a>==<b>%>
 
-TextEquals(a) ::= <%this.getText() === "<a>"%>
+TextEquals(a) ::= <%this.text === "<a>"%>
 
-PlusText(a) ::= <%"<a>" + this.getText()%>
+PlusText(a) ::= <%"<a>" + this.text%>
 
 InputText() ::= "this._input.getText()"
 
-LTEquals(i, v) ::= <%this._input.LT(<i>).getText() === <v>%>
+LTEquals(i, v) ::= <%this._input.LT(<i>).text === <v>%>
 
 LANotEquals(i, v) ::= <%this._input.LA(<i>)!==<v>%>
 
@@ -315,7 +315,7 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 BasicListener(X) ::= <<
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
-		console.log(node.getSymbol().getText());
+		console.log(node.getSymbol().text);
 	}
 }
 >>
@@ -344,8 +344,8 @@ TokenGetterListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
 		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
-			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().getText(),
-				ctx.INT(1).getSymbol().getText(), ctx.INT()[0], ctx.INT()[1]);
+			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().text,
+				ctx.INT(1).getSymbol().text, ctx.INT()[0], ctx.INT()[1]);
 		} else {
 			console.log(ctx.ID().getSymbol());
 		}
@@ -357,10 +357,10 @@ RuleGetterListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
 		if (ctx.getChildCount() === 2) {
-			console.log("{0} {1} {2}",ctx.b(0).getStart().getText(),
-				ctx.b(1).getStart().getText(),ctx.b()[0].getStart().getText());
+			console.log("{0} {1} {2}",ctx.b(0).getStart().text,
+				ctx.b(1).getStart().text,ctx.b()[0].getStart().text);
 		} else {
-			console.log(ctx.b(0).getStart().getText());
+			console.log(ctx.b(0).getStart().text);
 		}
 	}
 }
@@ -371,10 +371,10 @@ LRListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitE(ctx: TParser.EContext): void {
 		if (ctx.getChildCount() === 3) {
-			console.log("{0} {1} {2}\n",ctx.e(0).getStart().getText(),
-				ctx.e(1).getStart().getText(), ctx.e()[0].getStart().getText());
+			console.log("{0} {1} {2}\n",ctx.e(0).getStart().text,
+				ctx.e(1).getStart().text, ctx.e()[0].getStart().text);
 		} else {
-			console.log(ctx.INT().getSymbol().getText());
+			console.log(ctx.INT().getSymbol().text);
 		}
 	}
 }
@@ -383,10 +383,10 @@ export class LeafListener implements TListener {
 LRWithLabelsListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitCall(ctx: TParser.CallContext): void {
-		console.log("{0} {1}",ctx.e().getStart().getText(),ctx.eList());
+		console.log("{0} {1}",ctx.e().getStart().text,ctx.eList());
 	}
 	exitInt(ctx: TParser.IntContext): void {
-		console.log(ctx.INT().getSymbol().getText());
+		console.log(ctx.INT().getSymbol().text);
 	}
 }
 >>

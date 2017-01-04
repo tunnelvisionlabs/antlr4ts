@@ -18,7 +18,7 @@ export interface Token {
 	/**
 	 * Get the text of the token.
 	 */
-	getText(): string | undefined;
+	readonly text: string | undefined;
 
 	/** Get the token type of the token */
 	readonly type: number;

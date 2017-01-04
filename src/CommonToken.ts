@@ -55,9 +55,9 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getText} when the token text is
 	 * explicitly set in the constructor or via {@link #setText}.
 	 *
-	 * @see #getText()
+	 * @see `text`
 	 */
-	protected text?: string;
+	private _text?: string;
 
 	/**
 	 * This is the backing field for `tokenIndex`.
@@ -75,7 +75,7 @@ export class CommonToken implements WritableToken {
 	private stop: number;
 
 	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
-		this.text = text;
+		this._text = text;
 		this._type = type;
 		this.source = source;
 		this._channel = channel;
@@ -107,10 +107,10 @@ export class CommonToken implements WritableToken {
 		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
-			result.text = oldToken.text;
+			result._text = oldToken.text;
 			result.source = oldToken.source;
 		} else {
-			result.text = oldToken.getText();
+			result._text = oldToken.text;
 			result.source = { source: oldToken.tokenSource, stream: oldToken.inputStream };
 		}
 
@@ -128,9 +128,9 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getText(): string | undefined {
-		if (this.text != null) {
-			return this.text;
+	get text(): string | undefined {
+		if (this._text != null) {
+			return this._text;
 		}
 
 		let input: CharStream | undefined = this.inputStream;
@@ -155,9 +155,9 @@ export class CommonToken implements WritableToken {
 	 * should be obtained from the input along with the start and stop indexes
 	 * of the token.
 	 */
-	@Override
-	setText(text: string): void {
-		this.text = text;
+	// @Override
+	set text(text: string | undefined) {
+		this._text = text;
 	}
 
 	@Override
@@ -235,7 +235,7 @@ export class CommonToken implements WritableToken {
 			channelStr = ",channel=" + this._channel;
 		}
 
-		let txt: string | undefined = this.getText();
+		let txt: string | undefined = this.text;
 		if (txt != null) {
 			txt = txt.replace(/\n/g, "\\n");
 			txt = txt.replace(/\r/g, "\\r");

@@ -17,7 +17,7 @@ export class TextChunk extends Chunk {
 	 * This is the backing field for {@link #getText}.
 	 */
 	@NotNull
-	private text: string;
+	private _text: string;
 
 	/**
 	 * Constructs a new instance of {@link TextChunk} with the specified text.
@@ -32,7 +32,7 @@ export class TextChunk extends Chunk {
 			throw new Error("text cannot be null");
 		}
 
-		this.text = text;
+		this._text = text;
 	}
 
 	/**
@@ -41,18 +41,18 @@ export class TextChunk extends Chunk {
 	 * @return The text of the chunk.
 	 */
 	@NotNull
-	getText(): string {
-		return this.text;
+	get text(): string {
+		return this._text;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The implementation for {@link TextChunk} returns the result of
-	 * {@link #getText()} in single quotes.</p>
+	 * `text` in single quotes.</p>
 	 */
 	@Override
 	toString(): string {
-		return "'" + this.text + "'";
+		return "'" + this._text + "'";
 	}
 }

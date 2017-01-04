@@ -298,7 +298,7 @@ export class UnbufferedTokenStream implements TokenStream {
 		let buf: StringBuilder =  new StringBuilder();
 		for (let i = a; i <= b; i++) {
 			let t: Token =  tokens[i];
-			buf.append(t.getText());
+			buf.append(t.text);
 		}
 
 		return buf.toString();

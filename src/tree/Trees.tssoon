@@ -68,7 +68,7 @@ export class Trees {
 			else if ( t instanceof TerminalNode) {
 				let symbol: Token =  ((TerminalNode)t).getSymbol();
 				if (symbol != null) {
-					let s: string =  symbol.getText();
+					let s: string =  symbol.text;
 					return s;
 				}
 			}
@@ -76,7 +76,7 @@ export class Trees {
 		// no recog for rule names
 		let payload: any =  t.getPayload();
 		if ( payload instanceof Token ) {
-			return ((Token)payload).getText();
+			return ((Token)payload).text;
 		}
 		return t.getPayload().toString();
 	}

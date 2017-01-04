@@ -124,14 +124,14 @@ export class RuleContext extends RuleNode {
 	 *  method.
 	 */
 	@Override
-	getText(): string {
+	get text(): string {
 		if (this.getChildCount() === 0) {
 			return "";
 		}
 
 		let builder = "";
 		for (let i = 0; i < this.getChildCount(); i++) {
-			builder += this.getChild(i).getText();
+			builder += this.getChild(i).text;
 		}
 
 		return builder.toString();

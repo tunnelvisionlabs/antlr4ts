@@ -278,7 +278,7 @@ export class TestUnbufferedCharStream extends BaseTest {
 		// copy text into tokens from char stream
 		lexEngine.tokenFactory = new CommonTokenFactory(true);
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
-        let result: string =  tokens.LT(1).getText();
+        let result: string =  tokens.LT(1).text;
         let expecting: string =  "x";
         assertEquals(expecting, result);
 		tokens.fill();

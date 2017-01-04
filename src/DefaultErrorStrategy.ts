@@ -629,8 +629,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		return this.escapeWSAndQuote(s);
 	}
 
-	protected getSymbolText(@NotNull symbol: Token) {
-		return symbol.getText();
+	protected getSymbolText(@NotNull symbol: Token): string | undefined {
+		return symbol.text;
 	}
 
 	protected getSymbolType(@NotNull symbol: Token): number {

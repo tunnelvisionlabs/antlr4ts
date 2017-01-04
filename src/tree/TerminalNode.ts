@@ -58,8 +58,8 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
-	getText(): string {
-		return this.symbol.getText() || "";
+	get text(): string {
+		return this.symbol.text || "";
 	}
 
 	@Override
@@ -73,6 +73,6 @@ export class TerminalNode implements ParseTree {
 			return "<EOF>";
 		}
 
-		return this.symbol.getText() || "";
+		return this.symbol.text || "";
 	}
 }

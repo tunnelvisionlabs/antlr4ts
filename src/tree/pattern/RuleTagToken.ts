@@ -89,7 +89,7 @@ export class RuleTagToken implements Token {
 	 * delimiters.</p>
 	 */
 	@Override
-	getText(): string {
+	get text(): string {
 		if (this.label != null) {
 			return "<" + this.label + ":" + this.ruleName + ">";
 		}
