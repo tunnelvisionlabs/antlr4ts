@@ -169,7 +169,7 @@ export class BufferedTokenStream implements TokenStream {
 		for (let i = 0; i < n; i++) {
 			let t: Token = this.tokenSource.nextToken();
 			if (this.isWritableToken(t)) {
-				t.setTokenIndex(this.tokens.length);
+				t.tokenIndex = this.tokens.length;
 			}
 
 			this.tokens.push(t);
@@ -508,7 +508,7 @@ export class BufferedTokenStream implements TokenStream {
 	@Override
 	getTextFromRange(start: any, stop: any): string {
 		if (this.isToken(start) && this.isToken(stop)) {
-			return this.getText(Interval.of(start.getTokenIndex(), stop.getTokenIndex()));
+			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));
 		}
 
 		return "";

@@ -1317,7 +1317,7 @@ export abstract class BaseTest {
 			if ( rawIndex>=types.size ) t = new CommonToken(Token.EOF);
 			else t = new CommonToken(types.get(rawIndex));
 			else t = new CommonToken(types.get(rawIndex));
-			t.setTokenIndex(rawIndex);
+			t.tokenIndex = rawIndex;
 			return t;
 		}
 

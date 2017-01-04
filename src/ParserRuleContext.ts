@@ -269,10 +269,10 @@ export class ParserRuleContext extends RuleContext {
 		if (!this.start) {
 			return Interval.INVALID;
 		}
-		if (!this.stop || this.stop.getTokenIndex() < this.start.getTokenIndex()) {
-			return Interval.of(this.start.getTokenIndex(), this.start.getTokenIndex() - 1); // empty
+		if (!this.stop || this.stop.tokenIndex < this.start.tokenIndex) {
+			return Interval.of(this.start.tokenIndex, this.start.tokenIndex - 1); // empty
 		}
-		return Interval.of(this.start.getTokenIndex(), this.stop.getTokenIndex());
+		return Interval.of(this.start.tokenIndex, this.stop.tokenIndex);
 	}
 
 	/**

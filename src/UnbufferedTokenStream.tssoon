@@ -126,7 +126,7 @@ export class UnbufferedTokenStream implements TokenStream {
 	@Override
 	getText(start: any, stop: any): string {
 		if (start instanceof Token && stop instanceof Token) {
-			return getText(Interval.of(((Token)start).getTokenIndex(), ((Token)stop).getTokenIndex()));
+			return getText(Interval.of(((Token)start).tokenIndex, ((Token)stop).tokenIndex));
 		}
 
 		throw new UnsupportedOperationException("The specified start and stop symbols are not supported.");
@@ -188,7 +188,7 @@ export class UnbufferedTokenStream implements TokenStream {
 		}
 
 		if (t instanceof WritableToken) {
-			((WritableToken)t).setTokenIndex(getBufferStartIndex() + n);
+			((WritableToken)t).tokenIndex = getBufferStartIndex() + n;
 		}
 
 		tokens[n++] = t;

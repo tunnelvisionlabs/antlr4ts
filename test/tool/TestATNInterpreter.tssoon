@@ -88,7 +88,7 @@ export class TestATNInterpreter extends BaseTest {
 			checkMatchedAlt(lg, g, "ac", 1);
 		}
 		catch (NoViableAltException re) {
-			assertEquals(1, re.getOffendingToken().getTokenIndex());
+			assertEquals(1, re.getOffendingToken().tokenIndex);
 			assertEquals(3, re.getOffendingToken().getType());
 			throw re;
 		}
@@ -134,7 +134,7 @@ export class TestATNInterpreter extends BaseTest {
 			checkMatchedAlt(lg, g, "abd", 1);
 		}
 		catch (NoViableAltException re) {
-			assertEquals(2, re.getOffendingToken().getTokenIndex());
+			assertEquals(2, re.getOffendingToken().tokenIndex);
 			assertEquals(4, re.getOffendingToken().getType());
 			throw re;
 		}
@@ -180,7 +180,7 @@ export class TestATNInterpreter extends BaseTest {
 			checkMatchedAlt(lg, g, "abd", 1);
 		}
 		catch (NoViableAltException re) {
-			assertEquals(2, re.getOffendingToken().getTokenIndex());
+			assertEquals(2, re.getOffendingToken().tokenIndex);
 			assertEquals(4, re.getOffendingToken().getType());
 			throw re;
 		}
@@ -266,7 +266,7 @@ export class TestATNInterpreter extends BaseTest {
 			checkMatchedAlt(lg, g, "abd", 1);
 		}
 		catch (NoViableAltException re) {
-			assertEquals(2, re.getOffendingToken().getTokenIndex());
+			assertEquals(2, re.getOffendingToken().tokenIndex);
 			assertEquals(4, re.getOffendingToken().getType());
 			throw re;
 		}

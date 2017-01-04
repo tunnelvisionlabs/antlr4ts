@@ -136,7 +136,7 @@ export interface TokenStream extends IntStream {
 	 * this stream, or if the {@code stop} occurred before the {@code start}
 	 * token, the behavior is unspecified.</p>
 	 *
-	 * <p>For streams which ensure that the {@link Token#getTokenIndex} method is
+	 * <p>For streams which ensure that the `Token.tokenIndex` method is
 	 * accurate for all of its provided tokens, this method behaves like the
 	 * following code. Other streams may implement this method in other ways
 	 * provided the behavior is consistent with this at a high level.</p>
@@ -144,7 +144,7 @@ export interface TokenStream extends IntStream {
 	 * <pre>
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = start.getTokenIndex(); i &lt;= stop.getTokenIndex(); i++) {
+	 * for (int i = start.tokenIndex; i &lt;= stop.tokenIndex; i++) {
 	 *   text += stream.get(i).getText();
 	 * }
 	 * </pre>

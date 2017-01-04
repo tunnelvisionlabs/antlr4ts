@@ -60,8 +60,7 @@ export class CommonToken implements WritableToken {
 	protected text?: string;
 
 	/**
-	 * This is the backing field for {@link #getTokenIndex} and
-	 * {@link #setTokenIndex}.
+	 * This is the backing field for `tokenIndex`.
 	 */
 	protected index: number = -1;
 
@@ -104,7 +103,7 @@ export class CommonToken implements WritableToken {
 	static fromToken(@NotNull oldToken: Token): CommonToken {
 		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
-		result.index = oldToken.getTokenIndex();
+		result.index = oldToken.tokenIndex;
 		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
@@ -210,12 +209,12 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getTokenIndex(): number {
+	get tokenIndex(): number {
 		return this.index;
 	}
 
-	@Override
-	setTokenIndex(index: number): void {
+	// @Override
+	set tokenIndex(index: number) {
 		this.index = index;
 	}
 
@@ -245,6 +244,6 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
+		return "[@" + this.tokenIndex + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
 	}
 }

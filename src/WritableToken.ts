@@ -18,5 +18,5 @@ export interface WritableToken extends Token {
 
 	channel: number;
 
-	setTokenIndex(index: number): void;
+	tokenIndex: number;
 }

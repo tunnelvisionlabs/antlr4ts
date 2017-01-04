@@ -193,8 +193,8 @@ export class Trees {
 		}
 		if ( t instanceof ParserRuleContext ) {
 			let r: ParserRuleContext =  (ParserRuleContext) t;
-			if ( startTokenIndex>=r.getStart().getTokenIndex() && // is range fully contained in t?
-				 (r.getStop()==null || stopTokenIndex<=r.getStop().getTokenIndex()) )
+			if ( startTokenIndex>=r.getStart().tokenIndex && // is range fully contained in t?
+				 (r.getStop()==null || stopTokenIndex<=r.getStop().tokenIndex) )
 			{
 				// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
 				return r;

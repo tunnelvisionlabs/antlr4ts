@@ -146,7 +146,7 @@ export class TokenStreamRewriter {
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
 		} else {
-			index = tokenOrIndex.getTokenIndex();
+			index = tokenOrIndex.tokenIndex;
 		}
 
 		// to insert after, just insert before next index (even if past end)
@@ -162,7 +162,7 @@ export class TokenStreamRewriter {
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
 		} else {
-			index = tokenOrIndex.getTokenIndex();
+			index = tokenOrIndex.tokenIndex;
 		}
 
 		let op: RewriteOperation = new InsertBeforeOp(this.tokens, index, text);
@@ -191,11 +191,11 @@ export class TokenStreamRewriter {
 
 	replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (typeof from !== 'number') {
-			from = from.getTokenIndex();
+			from = from.tokenIndex;
 		}
 
 		if (typeof to !== 'number') {
-			to = to.getTokenIndex();
+			to = to.tokenIndex;
 		}
 
 		if ( from > to || from<0 || to<0 || to >= this.tokens.size ) {

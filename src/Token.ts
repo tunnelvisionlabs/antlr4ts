@@ -46,7 +46,7 @@ export interface Token {
 	 *  Return -1 to indicate that this token was conjured up since
 	 *  it doesn't have a valid index.
 	 */
-	getTokenIndex(): number;
+	readonly tokenIndex: number;
 
 	/** The starting character index of the token
 	 *  This method is optional; return -1 if not implemented.
