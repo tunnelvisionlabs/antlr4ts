@@ -60,7 +60,7 @@ export class CommonTokenFactory implements TokenFactory {
 		charPositionInLine: number): CommonToken {
 
 		let t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
-		t.setLine(line);
+		t.line = line;
 		t.charPositionInLine = charPositionInLine;
 		if (text == null && this.copyText && source.stream != null) {
 			t.setText(source.stream.getText(Interval.of(start, stop)));

@@ -12,7 +12,7 @@ export interface WritableToken extends Token {
 
 	setType(ttype: number): void;
 
-	setLine(line: number): void;
+	line: number;
 
 	charPositionInLine: number;
 

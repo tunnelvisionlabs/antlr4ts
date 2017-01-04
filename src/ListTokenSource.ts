@@ -119,7 +119,7 @@ export class ListTokenSource implements TokenSource {
 				}
 
 				let stop: number = Math.max(-1, start - 1);
-				this.eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.getLine(), this.charPositionInLine);
+				this.eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.line, this.charPositionInLine);
 			}
 
 			return this.eofToken;
@@ -138,16 +138,16 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getLine(): number {
+	get line(): number {
 		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].getLine();
+			return this.tokens[this.i].line;
 		} else if (this.eofToken != null) {
-			return this.eofToken.getLine();
+			return this.eofToken.line;
 		} else if (this.tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
-			let line: number = lastToken.getLine();
+			let line: number = lastToken.line;
 
 			let tokenText: string | undefined = lastToken.getText();
 			if (tokenText != null) {

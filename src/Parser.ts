@@ -494,7 +494,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let line: number = -1;
 		let charPositionInLine: number = -1;
 		if (offendingToken != null) {
-			line = offendingToken.getLine();
+			line = offendingToken.line;
 			charPositionInLine = offendingToken.charPositionInLine;
 		}
 

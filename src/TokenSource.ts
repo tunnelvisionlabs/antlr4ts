@@ -41,7 +41,7 @@ export interface TokenSource {
 	 * @return The line number for the current position in the input stream, or
 	 * 0 if the current token source does not track line numbers.
 	 */
-	getLine(): number;
+	readonly line: number;
 
 	/**
 	 * Get the index into the current line for the current position in the input

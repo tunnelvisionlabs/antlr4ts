@@ -165,7 +165,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	getErrorHeader(@NotNull e: RecognitionException): string {
 		let token = e.getOffendingToken()
 		if (!token) return ""
-		let line = token.getLine();
+		let line = token.line;
 		let charPositionInLine: number = token.charPositionInLine;
 		return "line " + line + ":" + charPositionInLine;
 	}

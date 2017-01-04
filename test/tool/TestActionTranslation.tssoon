@@ -132,7 +132,7 @@ export class TestActionTranslation extends BaseTest {
 
     @Test testTokenRefs(): void {
 		let action: string =  "$id; $ID; $id.text; $id.getText(); $id.line;";
-		let expected: string =  "_localctx.id; _localctx.ID; (_localctx.id!=null?_localctx.id.getText():null); _localctx.id.getText(); (_localctx.id!=null?_localctx.id.getLine():0);";
+		let expected: string =  "_localctx.id; _localctx.ID; (_localctx.id!=null?_localctx.id.getText():null); _localctx.id.getText(); (_localctx.id!=null?_localctx.id.line:0);";
 		testActions(attributeTemplate, "inline", action, expected);
     }
 

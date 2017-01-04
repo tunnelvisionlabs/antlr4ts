@@ -46,7 +46,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	protected startIndex: number = -1;
 
 	/** line number 1..n within the input */
-	protected line: number = 1;
+	private _line: number = 1;
 
 	/** The index of the character relative to the beginning of the line 0..n-1 */
 	private _charPositionInLine: number = 0;
@@ -68,7 +68,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	copyState(@NotNull simulator: LexerATNSimulator): void {
 		this._charPositionInLine = simulator.charPositionInLine;
-		this.line = simulator.line;
+		this._line = simulator._line;
 		this.mode = simulator.mode;
 		this.startIndex = simulator.startIndex;
 	}
@@ -97,7 +97,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	reset(): void {
 		this.prevAccept.reset();
 		this.startIndex = -1;
-		this.line = 1;
+		this._line = 1;
 		this._charPositionInLine = 0;
 		this.mode = Lexer.DEFAULT_MODE;
 	}
@@ -331,7 +331,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		// seek to after last char in token
 		input.seek(index);
-		this.line = line;
+		this._line = line;
 		this._charPositionInLine = charPos;
 
 		if (lexerActionExecutor != null && this.recog != null) {
@@ -568,7 +568,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 
 		let savedCharPositionInLine: number = this._charPositionInLine;
-		let savedLine: number = this.line;
+		let savedLine: number = this._line;
 		let index: number = input.index;
 		let marker: number = input.mark();
 		try {
@@ -577,7 +577,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 		finally {
 			this._charPositionInLine = savedCharPositionInLine;
-			this.line = savedLine;
+			this._line = savedLine;
 			input.seek(index);
 			input.release(marker);
 		}
@@ -587,7 +587,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		@NotNull input: CharStream,
 		@NotNull dfaState: DFAState): void {
 		settings.index = input.index;
-		settings.line = this.line;
+		settings.line = this._line;
 		settings.charPos = this._charPositionInLine;
 		settings.dfaState = dfaState;
 	}
@@ -682,12 +682,12 @@ export class LexerATNSimulator extends ATNSimulator {
 		return input.getText(Interval.of(this.startIndex, input.index - 1));
 	}
 
-	getLine(): number {
-		return this.line;
+	get line(): number {
+		return this._line;
 	}
 
-	setLine(line: number): void {
-		this.line = line;
+	set line(line: number) {
+		this._line = line;
 	}
 
 	get charPositionInLine(): number {
@@ -701,7 +701,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	consume(@NotNull input: CharStream): void {
 		let curChar: number = input.LA(1);
 		if (curChar == '\n'.charCodeAt(0)) {
-			this.line++;
+			this._line++;
 			this._charPositionInLine = 0;
 		} else {
 			this._charPositionInLine++;

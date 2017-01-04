@@ -142,7 +142,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 				this._channel = Token.DEFAULT_CHANNEL;
 				this._tokenStartCharIndex = this._input.index;
 				this._tokenStartCharPositionInLine = this.getInterpreter().charPositionInLine;
-				this._tokenStartLine = this.getInterpreter().getLine();
+				this._tokenStartLine = this.getInterpreter().line;
 				this._text = undefined;
 				do {
 					this._type = Token.INVALID_TYPE;
@@ -266,7 +266,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	emitEOF(): Token {
 		let cpos: number = this.charPositionInLine;
-		let line: number = this.getLine();
+		let line: number = this.line;
 		let eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
 			Token.DEFAULT_CHANNEL, this._input.index, this._input.index - 1,
@@ -276,8 +276,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	getLine(): number {
-		return this.getInterpreter().getLine();
+	get line(): number {
+		return this.getInterpreter().line;
 	}
 
 	@Override
@@ -285,8 +285,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this.getInterpreter().charPositionInLine;
 	}
 
-	setLine(line: number): void {
-		this.getInterpreter().setLine(line);
+	set line(line: number) {
+		this.getInterpreter().line = line;
 	}
 
 	set charPositionInLine(charPositionInLine: number) {

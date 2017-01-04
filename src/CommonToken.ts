@@ -27,7 +27,7 @@ export class CommonToken implements WritableToken {
 	/**
 	 * This is the backing field for {@link #getLine} and {@link #setLine}.
 	 */
-	protected line: number = 0;
+	private _line: number = 0;
 	/**
 	 * This is the backing field for {@link #getCharPositionInLine} and
 	 * {@link #setCharPositionInLine}.
@@ -85,7 +85,7 @@ export class CommonToken implements WritableToken {
 		this.start = start;
 		this.stop = stop;
 		if (source.source != null) {
-			this.line = source.source.getLine();
+			this._line = source.source.line;
 			this._charPositionInLine = source.source.charPositionInLine;
 		}
 	}
@@ -105,7 +105,7 @@ export class CommonToken implements WritableToken {
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
 		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
-		result.line = oldToken.getLine();
+		result._line = oldToken.line;
 		result.index = oldToken.getTokenIndex();
 		result._charPositionInLine = oldToken.charPositionInLine;
 
@@ -125,9 +125,9 @@ export class CommonToken implements WritableToken {
 		return this.type;
 	}
 
-	@Override
-	setLine(line: number): void {
-		this.line = line;
+	// @Override
+	set line(line: number) {
+		this._line = line;
 	}
 
 	@Override
@@ -164,8 +164,8 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	getLine(): number {
-		return this.line;
+	get line(): number {
+		return this._line;
 	}
 
 	@Override
@@ -247,6 +247,6 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this.line + ":" + this.charPositionInLine + "]";
+		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + this.type + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
 	}
 }

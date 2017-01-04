@@ -44,7 +44,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return 0;
 				}
 				@Override
-				getLine(): number {
+				get line(): number {
 					return 0;
 				}
 				@Override
@@ -116,7 +116,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return 0;
 				}
 				@Override
-				getLine(): number {
+				get line(): number {
 					return 0;
 				}
 				@Override
@@ -187,7 +187,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getLine(): number {
+			get line(): number {
 				return 0;
 			}
 
@@ -235,7 +235,7 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getLine(): number {
+			get line(): number {
 				return 0;
 			}
 

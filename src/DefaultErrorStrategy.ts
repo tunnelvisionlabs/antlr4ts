@@ -600,7 +600,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			expectedTokenType, tokenText,
 			Token.DEFAULT_CHANNEL,
 			-1, -1,
-			current.getLine(), current.charPositionInLine);
+			current.line, current.charPositionInLine);
 	}
 
 	@NotNull

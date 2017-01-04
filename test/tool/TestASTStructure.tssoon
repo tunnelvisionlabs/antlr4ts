@@ -36,7 +36,7 @@ export class TestASTStructure {
 		let lexerClass: Class<? extends TokenSource> =  Class.forName(lexerClassName).asSubclass(TokenSource.class);
 		let lexConstructor: Constructor<? extends TokenSource> =  lexerClass.getConstructor(CharStream.class);
 		let lexer: TokenSource =  lexConstructor.newInstance(is);
-		is.setLine(scriptLine);
+		is.line = scriptLine;
 
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
 

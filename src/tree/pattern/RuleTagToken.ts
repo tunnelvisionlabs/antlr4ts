@@ -114,7 +114,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns 0.</p>
 	 */
 	@Override
-	getLine(): number {
+	get line(): number {
 		return 0;
 	}
 

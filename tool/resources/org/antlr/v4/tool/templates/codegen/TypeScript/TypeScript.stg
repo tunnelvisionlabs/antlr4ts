@@ -653,7 +653,7 @@ InputSymbolType() ::= "<file.InputSymbolType; null={Token}>"
 
 TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():undefined)"
 TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getType():0)"
-TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getLine():0)"
+TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.line:0)"
 TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.charPositionInLine:0)"
 TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getChannel():0)"
 TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getTokenIndex():0)"
