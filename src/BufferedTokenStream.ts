@@ -468,12 +468,16 @@ export class BufferedTokenStream implements TokenStream {
 	/** Get the text of all tokens in this buffer. */
 	getText(): string;
 	getText(interval: Interval): string;
+	getText(context: RuleContext): string;
 	@NotNull
 	@Override
-	getText(interval?: Interval): string {
+	getText(interval?: Interval | RuleContext): string {
 		if (interval === undefined) {
 			this.fill();
 			interval = Interval.of(0, this.size - 1);
+		} else if (!(interval instanceof Interval)) {
+			// Note: the more obvious check for 'instanceof RuleContext' results in a circular dependency problem
+			interval = interval.getSourceInterval();
 		}
 
 		let start: number = interval.a;
@@ -498,12 +502,6 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		return buf.toString();
-	}
-
-	@NotNull
-	@Override
-	getTextFromContext(ctx: RuleContext): string {
-		return this.getText(ctx.getSourceInterval());
 	}
 
 	@NotNull

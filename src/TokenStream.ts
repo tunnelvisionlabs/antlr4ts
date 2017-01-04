@@ -126,7 +126,7 @@ export interface TokenStream extends IntStream {
 	 * @return The text of all tokens within the source interval of {@code ctx}.
 	 */
 	//@NotNull
-	getTextFromContext(/*@NotNull*/ ctx: RuleContext): string;
+	getText(/*@NotNull*/ ctx: RuleContext): string;
 
 	/**
 	 * Return the text of all tokens in this stream between {@code start} and
