@@ -260,7 +260,7 @@ PositionAdjustingLexer() ::= <<
 @members {
 nextToken(): Token {
 	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
-		this._interp = new PositionAdjustingLexerATNSimulator(_ATN, this);
+		this._interp = new PositionAdjustingLexerATNSimulator(PositionAdjustingLexer._ATN, this);
 	}
 
 	return super.nextToken();
@@ -268,11 +268,11 @@ nextToken(): Token {
 
 emit(): Token {
 	switch (this._type) {
-	case TOKENS:
+	case PositionAdjustingLexer.TOKENS:
 		this.handleAcceptPositionForKeyword("tokens");
 		break;
 
-	case LABEL:
+	case PositionAdjustingLexer.LABEL:
 		this.handleAcceptPositionForIdentifier();
 		break;
 
@@ -284,13 +284,13 @@ emit(): Token {
 }
 
 private handleAcceptPositionForIdentifier(): boolean {
-	let tokenText = Text;
+	let tokenText = this.getText();
 	let identifierLength = 0;
-	while (identifierLength \< tokenText.length && this.isIdentifierChar(tokenText[identifierLength])) {
+	while (identifierLength \< tokenText.length && PositionAdjustingLexer.isIdentifierChar(tokenText[identifierLength])) {
 		identifierLength++;
 	}
 
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + identifierLength) {
+	if (this.getInputStream().index() > this._tokenStartCharIndex + identifierLength) {
 		let offset = identifierLength - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
@@ -300,7 +300,7 @@ private handleAcceptPositionForIdentifier(): boolean {
 }
 
 private handleAcceptPositionForKeyword(keyword: string): boolean {
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + keyword.length) {
+	if (this.getInputStream().index() > this._tokenStartCharIndex + keyword.length) {
 		let offset = keyword.length - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
@@ -314,8 +314,12 @@ getInterpreter(): PositionAdjustingLexerATNSimulator {
 }
 
 private static isIdentifierChar(c: string): boolean {
-	return char.IsLetterOrDigit(c) || c == '_';
+	return /^[a-zA-Z0-9_]$/.test(c);
 }
+}
+
+@beforeLexer {
+import { Token } from 'antlr4ts';
 }
 
 @afterLexer {
@@ -472,8 +476,6 @@ IgnoredTests ::= [
 
 	"FullContextParsing.ExprAmbiguity_1": "Test does not support replacing the 'int' type.",
 	"FullContextParsing.ExprAmbiguity_2": "Test does not support replacing the 'int' type.",
-
-	"LexerExec.PositionAdjustingLexer": "Test does not support using '@beforeParser' instead of '@members'.",
 
 	"Listeners.Basic": "Test does not support using '@beforeParser' instead of '@members'.",
 	"Listeners.LR": "Test does not support using '@beforeParser' instead of '@members'.",
