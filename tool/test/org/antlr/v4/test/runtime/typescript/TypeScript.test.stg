@@ -486,16 +486,6 @@ ContextMember(ctx, subctx, member) ::= "<ctx>.<subctx>.<member>"
 
 IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
-	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Test does not support replacing the 'int' type.",
-
-	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.DependentPredNotInOuterCtxShouldBeIgnored": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.PredicateDependentOnArg": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.PredicateDependentOnArg2": "Test does not support replacing the 'int' type.",
-
-	"FullContextParsing.ExprAmbiguity_1": "Test does not support replacing the 'int' type.",
-	"FullContextParsing.ExprAmbiguity_2": "Test does not support replacing the 'int' type.",
 
 	// Skipped due to limitations in the TypeScript target
 	"Visitors.Basic": "Test not implemented by this target.",
@@ -505,6 +495,17 @@ IgnoredTests ::= [
 	"Visitors.RuleGetters_2": "Test not implemented by this target.",
 	"Visitors.TokenGetters_1": "Test not implemented by this target.",
 	"Visitors.TokenGetters_2": "Test not implemented by this target.",
+
+	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Arguments are not supported with labeled outer alternatives.",
+
+	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.DependentPredNotInOuterCtxShouldBeIgnored": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.PredicateDependentOnArg": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.PredicateDependentOnArg2": "Arguments are not supported with labeled outer alternatives.",
+
+	"FullContextParsing.ExprAmbiguity_1": "Arguments are not supported with labeled outer alternatives.",
+	"FullContextParsing.ExprAmbiguity_2": "Arguments are not supported with labeled outer alternatives.",
 
 	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass."
 
