@@ -60,7 +60,7 @@ export interface Token {
 
 	/** Gets the {@link TokenSource} which created this token.
 	 */
-	getTokenSource(): TokenSource | undefined;
+	readonly tokenSource: TokenSource | undefined;
 
 	/**
 	 * Gets the {@link CharStream} from which this token was derived.

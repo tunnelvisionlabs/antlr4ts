@@ -386,7 +386,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	getTokenFactory(): TokenFactory {
-		return this._input.getTokenSource().getTokenFactory();
+		return this._input.tokenSource.getTokenFactory();
 	}
 
 	/**
@@ -436,7 +436,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern {
 		if (!lexer) {
 			if (this.getInputStream()) {
-				let tokenSource = this.getInputStream().getTokenSource();
+				let tokenSource = this.getInputStream().tokenSource;
 				if (tokenSource instanceof Lexer) {
 					lexer = tokenSource;
 				}

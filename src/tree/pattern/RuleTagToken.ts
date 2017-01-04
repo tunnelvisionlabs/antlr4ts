@@ -164,7 +164,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getTokenSource(): TokenSource | undefined {
+	get tokenSource(): TokenSource | undefined {
 		return undefined;
 	}
 

@@ -419,7 +419,7 @@ export class ParserInterpreter extends Parser {
 				throw new Error("Expected exception to have an offending token");
 			}
 
-			let source = tok.getTokenSource();
+			let source = tok.tokenSource;
 			let stream = source !== undefined ? source.getInputStream() : undefined;
 			let sourcePair = { source: source, stream: stream };
 
@@ -439,7 +439,7 @@ export class ParserInterpreter extends Parser {
 				this._ctx.addErrorNode(errToken);
 			}
 			else { // NoViableAlt
-				let source = tok.getTokenSource();
+				let source = tok.tokenSource;
 				let errToken: Token =
 					this.getTokenFactory().create(sourcePair,
 						Token.INVALID_TYPE, tok.getText(),

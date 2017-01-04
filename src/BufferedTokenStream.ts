@@ -33,7 +33,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * The {@link TokenSource} from which tokens for this stream are fetched.
 	 */
 	@NotNull
-	protected tokenSource: TokenSource;
+	private _tokenSource: TokenSource;
 
 	/**
 	 * A collection of all tokens fetched from the token source. The list is
@@ -75,12 +75,12 @@ export class BufferedTokenStream implements TokenStream {
 			throw new Error("tokenSource cannot be null");
 		}
 
-		this.tokenSource = tokenSource;
+		this._tokenSource = tokenSource;
 	}
 
 	@Override
-	getTokenSource(): TokenSource {
-		return this.tokenSource;
+	get tokenSource(): TokenSource {
+		return this._tokenSource;
 	}
 
 	@Override
@@ -295,8 +295,8 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Reset this token stream by setting its token source. */
-	setTokenSource(tokenSource: TokenSource): void {
-		this.tokenSource = tokenSource;
+	set tokenSource(tokenSource: TokenSource) {
+		this._tokenSource = tokenSource;
 		this.tokens.length = 0;
 		this.p = -1;
 	}

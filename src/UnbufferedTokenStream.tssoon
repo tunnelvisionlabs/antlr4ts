@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:58.9673509-07:00
 
 export class UnbufferedTokenStream implements TokenStream {
-	protected tokenSource: TokenSource; 
+	private _tokenSource: TokenSource; 
 
 	/**
 	 * A moving window buffer of the data being scanned. While there's a marker,
@@ -64,7 +64,7 @@ export class UnbufferedTokenStream implements TokenStream {
 	}
 
 	 constructor1(tokenSource: TokenSource, bufferSize: number)  {
-		this.tokenSource = tokenSource;
+		this._tokenSource = tokenSource;
 		this.tokens = new Token[bufferSize];
 		n = 0;
 		fill(1); // prime the pump
@@ -106,8 +106,8 @@ export class UnbufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	getTokenSource(): TokenSource {
-		return tokenSource;
+	get tokenSource(): TokenSource {
+		return this._tokenSource;
 	}
 
 	@NotNull

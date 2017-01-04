@@ -65,7 +65,7 @@ export interface TokenStream extends IntStream {
 	 * stream.
 	 */
 	//@NotNull
-	getTokenSource(): TokenSource;
+	readonly tokenSource: TokenSource;
 
 	/**
 	 * Return the text of all tokens within the specified {@code interval}. This

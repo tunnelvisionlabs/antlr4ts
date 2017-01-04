@@ -583,7 +583,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			current = lookback;
 		}
 
-		return this.constructToken(recognizer.getInputStream().getTokenSource(), expectedTokenType, tokenText, current);
+		return this.constructToken(recognizer.getInputStream().tokenSource, expectedTokenType, tokenText, current);
 	}
 
 	protected constructToken(
@@ -592,7 +592,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		tokenText: string,
 		current: Token): Token {
 		let factory: TokenFactory = tokenSource.getTokenFactory();
-		let x = current.getTokenSource();
+		let x = current.tokenSource;
 		let stream = x ? x.getInputStream() : undefined;
 
 		return factory.create(

@@ -1327,7 +1327,7 @@ export abstract class BaseTest {
 		}
 
 		@Override
-		getTokenSource(): TokenSource {
+		get tokenSource(): TokenSource {
 			return null;
 		}
 
