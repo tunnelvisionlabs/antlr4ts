@@ -157,7 +157,7 @@ export class ParseTreePatternMatcher {
 			return this.matches(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.getPatternTree(), labels);
+			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
 			return !mismatchedNode;
 		}
 	}
@@ -185,7 +185,7 @@ export class ParseTreePatternMatcher {
 			return this.match(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.getPatternTree(), labels);
+			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
 			return new ParseTreeMatch(tree, pattern, labels, mismatchedNode);
 		}
 	}

@@ -16,27 +16,27 @@ import { XPath } from "../xpath/XPath";
  */
 export class ParseTreePattern {
 	/**
-	 * This is the backing field for {@link #getPatternRuleIndex()}.
+	 * This is the backing field for `patternRuleIndex`.
 	 */
-	private patternRuleIndex: number;
+	private _patternRuleIndex: number;
 
 	/**
-	 * This is the backing field for {@link #getPattern()}.
+	 * This is the backing field for `pattern`.
 	 */
 	@NotNull
-	private pattern: string;
+	private _pattern: string;
 
 	/**
-	 * This is the backing field for {@link #getPatternTree()}.
+	 * This is the backing field for `patternTree`.
 	 */
 	@NotNull
-	private patternTree: ParseTree;
+	private _patternTree: ParseTree;
 
 	/**
-	 * This is the backing field for {@link #getMatcher()}.
+	 * This is the backing field for `matcher`.
 	 */
 	@NotNull
-	private matcher: ParseTreePatternMatcher;
+	private _matcher: ParseTreePatternMatcher;
 
 	/**
 	 * Construct a new instance of the {@link ParseTreePattern} class.
@@ -53,10 +53,10 @@ export class ParseTreePattern {
 		@NotNull pattern: string,
 		patternRuleIndex: number,
 		@NotNull patternTree: ParseTree) {
-		this.matcher = matcher;
-		this.patternRuleIndex = patternRuleIndex;
-		this.pattern = pattern;
-		this.patternTree = patternTree;
+		this._matcher = matcher;
+		this._patternRuleIndex = patternRuleIndex;
+		this._pattern = pattern;
+		this._patternTree = patternTree;
 	}
 
 	/**
@@ -69,7 +69,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	match(@NotNull tree: ParseTree): ParseTreeMatch {
-		return this.matcher.match(tree, this);
+		return this._matcher.match(tree, this);
 	}
 
 	/**
@@ -80,7 +80,7 @@ export class ParseTreePattern {
 	 * pattern; otherwise, {@code false}.
 	 */
 	matches(@NotNull tree: ParseTree): boolean {
-		return this.matcher.match(tree, this).succeeded;
+		return this._matcher.match(tree, this).succeeded;
 	}
 
 	/**
@@ -96,7 +96,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
-		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this.matcher.getParser());
+		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this._matcher.getParser());
 		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);
@@ -114,8 +114,8 @@ export class ParseTreePattern {
 	 * pattern.
 	 */
 	@NotNull
-	getMatcher(): ParseTreePatternMatcher {
-		return this.matcher;
+	get matcher(): ParseTreePatternMatcher {
+		return this._matcher;
 	}
 
 	/**
@@ -124,8 +124,8 @@ export class ParseTreePattern {
 	 * @return The tree pattern in concrete syntax form.
 	 */
 	@NotNull
-	getPattern(): string {
-		return this.pattern;
+	get pattern(): string {
+		return this._pattern;
 	}
 
 	/**
@@ -135,8 +135,8 @@ export class ParseTreePattern {
 	 * @return The parser rule which serves as the outermost rule for the tree
 	 * pattern.
 	 */
-	getPatternRuleIndex(): number {
-		return this.patternRuleIndex;
+	get patternRuleIndex(): number {
+		return this._patternRuleIndex;
 	}
 
 	/**
@@ -147,7 +147,7 @@ export class ParseTreePattern {
 	 * @return The tree pattern as a {@link ParseTree}.
 	 */
 	@NotNull
-	getPatternTree(): ParseTree {
-		return this.patternTree;
+	get patternTree(): ParseTree {
+		return this._patternTree;
 	}
 }

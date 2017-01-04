@@ -106,7 +106,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let m: ParseTreePatternMatcher =  getPatternMatcher("X2");
 
 		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.getPatternTree().toStringTree(m.getParser());
+		let results: string =  t.patternTree.toStringTree(m.getParser());
 		let expected: string =  "(s <ID> = (expr <expr>) ;)";
 		assertEquals(expected, results);
 	}
@@ -202,7 +202,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let m: ParseTreePatternMatcher =  getPatternMatcher("X2");
 
 		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.getPatternTree().toStringTree(m.getParser());
+		let results: string =  t.patternTree.toStringTree(m.getParser());
 		let expected: string =  "(s <ID> = (expr <expr>) ;)";
 		assertEquals(expected, results);
 	}
@@ -221,7 +221,7 @@ export class TestParseTreeMatcher extends BaseTest {
 		let m: ParseTreePatternMatcher = 	getPatternMatcher("X2");
 
 		let t: ParseTreePattern =  m.compile("<ID> = <ID> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.getPatternTree().toStringTree(m.getParser());
+		let results: string =  t.patternTree.toStringTree(m.getParser());
 		let expected: string =  "(s <ID> = <ID> ;)";
 		assertEquals(expected, results);
 	}
