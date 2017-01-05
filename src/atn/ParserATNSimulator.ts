@@ -568,14 +568,14 @@ export class ParserATNSimulator extends ATNSimulator {
 //			return -1;
 //		}
 
-		if (!state.useContext && s.configs.getConflictInfo() != null) {
+		if (!state.useContext && s.configs.conflictInfo != null) {
 			if (dfa.atnStartState instanceof DecisionState) {
 				if (!this.userWantsCtxSensitive ||
-					(!s.configs.getDipsIntoOuterContext() && s.configs.isExactConflict()) ||
+					(!s.configs.dipsIntoOuterContext && s.configs.isExactConflict) ||
 					(this.treat_sllk1_conflict_as_ambiguity && input.index === startIndex)) {
 					// we don't report the ambiguity again
-					//if ( !this.acceptState.configset.hasSemanticContext() ) {
-					// 	this.reportAmbiguity(dfa, acceptState, startIndex, input.index, acceptState.configset.getConflictingAlts(), acceptState.configset);
+					//if ( !this.acceptState.configset.hasSemanticContext ) {
+					// 	this.reportAmbiguity(dfa, acceptState, startIndex, input.index, acceptState.configset.conflictingAlts, acceptState.configset);
 					//}
 				}
 				else {
@@ -639,7 +639,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					input.seek(stopIndex);
 				}
 
-				this.reportAmbiguity(dfa, s, startIndex, stopIndex, s.configs.isExactConflict(), alts, s.configs);
+				this.reportAmbiguity(dfa, s, startIndex, stopIndex, s.configs.isExactConflict, alts, s.configs);
 				return alts.nextSetBit(0);
 			}
 		}
@@ -660,7 +660,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * `DFAState.isAcceptState` except for conflict states when
 	 * {@code useContext} is {@code true} and {@link #getPredictionMode()} is
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}. In that case, only
-	 * conflict states where {@link ATNConfigSet#isExactConflict()} is
+	 * conflict states where {@link ATNConfigSet#isExactConflict} is
 	 * {@code true} are considered accept states.
 	 * </p>
 	 *
@@ -677,14 +677,14 @@ export class ParserATNSimulator extends ATNSimulator {
 			return false;
 		}
 
-		if (state.configs.getConflictingAlts() == null) {
+		if (state.configs.conflictingAlts == null) {
 			// unambiguous
 			return true;
 		}
 
 		// More picky when we need exact conflicts
 		if (useContext && this.predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION) {
-			return state.configs.isExactConflict();
+			return state.configs.isExactConflict;
 		}
 
 		return true;
@@ -758,10 +758,10 @@ export class ParserATNSimulator extends ATNSimulator {
 			// predicted alt => accept state
 			assert(D.isAcceptState || D.prediction === ATN.INVALID_ALT_NUMBER);
 			// conflicted => accept state
-			assert(D.isAcceptState || D.configs.getConflictInfo() == null);
+			assert(D.isAcceptState || D.configs.conflictInfo == null);
 
 			if (this.isAcceptState(D, useContext)) {
-				let conflictingAlts: BitSet | undefined = D.configs.getConflictingAlts();
+				let conflictingAlts: BitSet | undefined = D.configs.conflictingAlts;
 				let predictedAlt: number = conflictingAlts == null ? D.prediction : ATN.INVALID_ALT_NUMBER;
 				if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 					if (this.optimize_ll1
@@ -769,7 +769,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						&& !dfa.isPrecedenceDfa
 						&& nextState.outerContext === nextState.remainingOuterContext
 						&& dfa.decision >= 0
-						&& !D.configs.hasSemanticContext()) {
+						&& !D.configs.hasSemanticContext) {
 						if (t >= 0 && t <= MAX_SHORT_VALUE) {
 							let key: number = ((dfa.decision << 16) >>> 0) + t;
 							this.atn.LL1Table.set(key, predictedAlt);
@@ -789,11 +789,11 @@ export class ParserATNSimulator extends ATNSimulator {
 					// Only exact conflicts are known to be ambiguous when local
 					// prediction does not step out of the decision rule.
 					attemptFullContext = !useContext
-						&& (D.configs.getDipsIntoOuterContext() || !D.configs.isExactConflict())
+						&& (D.configs.dipsIntoOuterContext || !D.configs.isExactConflict)
 						&& (!this.treat_sllk1_conflict_as_ambiguity || input.index !== startIndex);
 				}
 
-				if (D.configs.hasSemanticContext()) {
+				if (D.configs.hasSemanticContext) {
 					let predPredictions: DFAState.PredPrediction[] | undefined = D.predicates;
 					if (predPredictions != null) {
 						let conflictIndex: number = input.index;
@@ -825,7 +825,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (!attemptFullContext) {
 					if (conflictingAlts != null) {
 						if (this.reportAmbiguities && conflictingAlts.cardinality() > 1) {
-							this.reportAmbiguity(dfa, D, startIndex, input.index, D.configs.isExactConflict(), conflictingAlts, D.configs);
+							this.reportAmbiguity(dfa, D, startIndex, input.index, D.configs.isExactConflict, conflictingAlts, D.configs);
 						}
 
 						predictedAlt = conflictingAlts.nextSetBit(0);
@@ -934,7 +934,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				return alts.nextSetBit(0);
 
 			default:
-				if (!previous.s0.configs.hasSemanticContext()) {
+				if (!previous.s0.configs.hasSemanticContext) {
 					// configs doesn't contain any predicates, so the predicate
 					// filtering code below would be pointless
 					return alts.nextSetBit(0);
@@ -1025,7 +1025,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return undefined;
 		}
 
-		assert(!useContext || !target.configs.getDipsIntoOuterContext());
+		assert(!useContext || !target.configs.dipsIntoOuterContext);
 		return new SimulatorState(previous.outerContext, target, useContext, remainingGlobalContext);
 	}
 
@@ -1068,7 +1068,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		do {
 			let hasMoreContext: boolean = !useContext || remainingGlobalContext != null;
 			if (!hasMoreContext) {
-				reach.setOutermostConfigSet(true);
+				reach.isOutermostConfigSet = true;
 			}
 
 			let reachIntermediate: ATNConfigSet = new ATNConfigSet();
@@ -1120,8 +1120,8 @@ export class ParserATNSimulator extends ATNSimulator {
 			 * condition is not true when one or more configurations have been
 			 * withheld in skippedStopStates, or when the current symbol is EOF.
 			 */
-			if (this.optimize_unique_closure && skippedStopStates == null && t !== Token.EOF && reachIntermediate.getUniqueAlt() !== ATN.INVALID_ALT_NUMBER) {
-				reachIntermediate.setOutermostConfigSet(reach.isOutermostConfigSet());
+			if (this.optimize_unique_closure && skippedStopStates == null && t !== Token.EOF && reachIntermediate.uniqueAlt !== ATN.INVALID_ALT_NUMBER) {
+				reachIntermediate.isOutermostConfigSet = reach.isOutermostConfigSet;
 				reach = reachIntermediate;
 				break;
 			}
@@ -1132,7 +1132,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			let collectPredicates: boolean = false;
 			let treatEofAsEpsilon: boolean = t === Token.EOF;
 			this.closure(reachIntermediate, reach, collectPredicates, hasMoreContext, contextCache, treatEofAsEpsilon);
-			stepIntoGlobal = reach.getDipsIntoOuterContext();
+			stepIntoGlobal = reach.dipsIntoOuterContext;
 
 			if (t === IntStream.EOF) {
 				/* After consuming EOF no additional input is possible, so we are
@@ -1311,12 +1311,12 @@ export class ParserATNSimulator extends ATNSimulator {
 
 			let hasMoreContext: boolean = remainingGlobalContext != null;
 			if (!hasMoreContext) {
-				configs.setOutermostConfigSet(true);
+				configs.isOutermostConfigSet = true;
 			}
 
 			let collectPredicates: boolean = true;
 			this.closure(reachIntermediate, configs, collectPredicates, hasMoreContext, contextCache, false);
-			let stepIntoGlobal: boolean = configs.getDipsIntoOuterContext();
+			let stepIntoGlobal: boolean = configs.dipsIntoOuterContext;
 
 			let next: DFAState;
 			if (useContext && !this.enable_global_context_dfa) {
@@ -1978,14 +1978,14 @@ export class ParserATNSimulator extends ATNSimulator {
 		};
 
 	private isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
-		if (configset.getUniqueAlt() !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
+		if (configset.uniqueAlt !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
 			return undefined;
 		}
 
 		let configs: ATNConfig[] = configset.toArray();
 		configs.sort(ParserATNSimulator.STATE_ALT_SORT_COMPARATOR);
 
-		let exact: boolean = !configset.getDipsIntoOuterContext();
+		let exact: boolean = !configset.dipsIntoOuterContext;
 		let alts: BitSet = new BitSet();
 		let minAlt: number = configs[0].alt;
 		alts.set(minAlt);
@@ -2134,10 +2134,10 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	protected getConflictingAltsFromConfigSet(configs: ATNConfigSet): BitSet | undefined {
-		let conflictingAlts: BitSet | undefined = configs.getConflictingAlts();
-		if (conflictingAlts == null && configs.getUniqueAlt() !== ATN.INVALID_ALT_NUMBER) {
+		let conflictingAlts: BitSet | undefined = configs.conflictingAlts;
+		if (conflictingAlts == null && configs.uniqueAlt !== ATN.INVALID_ALT_NUMBER) {
 			conflictingAlts = new BitSet();
-			conflictingAlts.set(configs.getUniqueAlt());
+			conflictingAlts.set(configs.uniqueAlt);
 		}
 
 		return conflictingAlts;
@@ -2235,7 +2235,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (contextTransitions != null) {
 			for (let context of contextTransitions.toArray()) {
 				if (context === PredictionContext.EMPTY_FULL_STATE_KEY) {
-					if (from.configs.isOutermostConfigSet()) {
+					if (from.configs.isOutermostConfigSet) {
 						continue;
 					}
 				}
@@ -2249,7 +2249,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				next = this.addDFAContextState(dfa, from.configs, context, contextCache);
-				assert(context !== PredictionContext.EMPTY_FULL_STATE_KEY || next.configs.isOutermostConfigSet());
+				assert(context !== PredictionContext.EMPTY_FULL_STATE_KEY || next.configs.isOutermostConfigSet);
 				from.setContextTarget(context, next);
 				from = next;
 			}
@@ -2279,9 +2279,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			return this.addDFAState(dfa, contextConfigs, contextCache);
 		}
 		else {
-			assert(!configs.isOutermostConfigSet(), "Shouldn't be adding a duplicate edge.");
+			assert(!configs.isOutermostConfigSet, "Shouldn't be adding a duplicate edge.");
 			configs = configs.clone(true);
-			configs.setOutermostConfigSet(true);
+			configs.isOutermostConfigSet = true;
 			return this.addDFAState(dfa, configs, contextCache);
 		}
 	}
@@ -2289,9 +2289,9 @@ export class ParserATNSimulator extends ATNSimulator {
 	/** See comment on LexerInterpreter.addDFAState. */
 	@NotNull
 	protected addDFAState(@NotNull dfa: DFA, @NotNull configs: ATNConfigSet, contextCache: PredictionContextCache): DFAState {
-		let enableDfa: boolean = this.enable_global_context_dfa || !configs.isOutermostConfigSet();
+		let enableDfa: boolean = this.enable_global_context_dfa || !configs.isOutermostConfigSet;
 		if (enableDfa) {
-			if (!configs.isReadOnly()) {
+			if (!configs.isReadOnly) {
 				configs.optimizeConfigs(this);
 			}
 
@@ -2300,9 +2300,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			if (existing != null) return existing;
 		}
 
-		if (!configs.isReadOnly()) {
-			if (configs.getConflictInfo() == null) {
-				configs.setConflictInfo(this.isConflicted(configs, contextCache));
+		if (!configs.isReadOnly) {
+			if (configs.conflictInfo == null) {
+				configs.conflictInfo = this.isConflicted(configs, contextCache);
 			}
 		}
 
@@ -2312,14 +2312,14 @@ export class ParserATNSimulator extends ATNSimulator {
 		let predictedAlt: number = this.getUniqueAlt(configs);
 		if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 			newState.acceptStateInfo = new AcceptStateInfo(predictedAlt);
-		} else if (configs.getConflictingAlts() != null) {
-			let conflictingAlts = configs.getConflictingAlts();
+		} else if (configs.conflictingAlts != null) {
+			let conflictingAlts = configs.conflictingAlts;
 			if (conflictingAlts) {
 				newState.acceptStateInfo = new AcceptStateInfo(conflictingAlts.nextSetBit(0));
 			}
 		}
 
-		if (newState.isAcceptState && configs.hasSemanticContext()) {
+		if (newState.isAcceptState && configs.hasSemanticContext) {
 			this.predicateDFAState(newState, configs, decisionState.numberOfTransitions);
 		}
 

@@ -81,12 +81,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 */
 	private configs: ATNConfig[];
 
-	private uniqueAlt: number = 0;
-	private conflictInfo?: ConflictInfo;
+	private _uniqueAlt: number = 0;
+	private _conflictInfo?: ConflictInfo;
 	// Used in parser and lexer. In lexer, it indicates we hit a pred
 	// while computing a closure operation.  Don't make a DFA state from this.
 	private _hasSemanticContext: boolean = false;
-	private dipsIntoOuterContext: boolean = false;
+	private _dipsIntoOuterContext: boolean = false;
 	/**
 	 * When {@code true}, this config set represents configurations where the entire
 	 * outer context has been consumed by the ATN interpreter. This prevents the
@@ -108,13 +108,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			this.unmerged = [];
 			this.configs = [];
 
-			this.uniqueAlt = ATN.INVALID_ALT_NUMBER;
+			this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
 		} else {
 
 			if (readonly) {
 				this.mergedConfigs = undefined;
 				this.unmerged = undefined;
-			} else if (!set.isReadOnly()) {
+			} else if (!set.isReadOnly) {
 				this.mergedConfigs = NewKeyedConfigMap(set.mergedConfigs);
 				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
 			} else {
@@ -124,16 +124,16 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 			this.configs = set.configs.slice(0);
 
-			this.dipsIntoOuterContext = set.dipsIntoOuterContext;
+			this._dipsIntoOuterContext = set._dipsIntoOuterContext;
 			this._hasSemanticContext = set._hasSemanticContext;
 			this.outermostConfigSet = set.outermostConfigSet;
 
-			if (readonly || !set.isReadOnly()) {
-				this.uniqueAlt = set.uniqueAlt;
-				this.conflictInfo = set.conflictInfo;
+			if (readonly || !set.isReadOnly) {
+				this._uniqueAlt = set._uniqueAlt;
+				this._conflictInfo = set._conflictInfo;
 			}
 
-			// if (!readonly && set.isReadOnly()) -> addAll is called from clone()
+			// if (!readonly && set.isReadOnly) -> addAll is called from clone()
 		}
 	}
 
@@ -143,8 +143,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 */
 	@NotNull
 	getRepresentedAlternatives(): BitSet {
-		if (this.conflictInfo != null) {
-			return this.conflictInfo.getConflictedAlts().clone();
+		if (this._conflictInfo != null) {
+			return this._conflictInfo.getConflictedAlts().clone();
 		}
 
 		let alts: BitSet = new BitSet();
@@ -155,20 +155,20 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return alts;
 	}
 
-	isReadOnly(): boolean {
+	get isReadOnly(): boolean {
 		return this.mergedConfigs == null;
 	}
 
-	isOutermostConfigSet(): boolean {
+	get isOutermostConfigSet(): boolean {
 		return this.outermostConfigSet;
 	}
 
-	setOutermostConfigSet(outermostConfigSet: boolean): void {
+	set isOutermostConfigSet(outermostConfigSet: boolean) {
 		if (this.outermostConfigSet && !outermostConfigSet) {
 			throw new Error("IllegalStateException");
 		}
 
-		assert(!outermostConfigSet || !this.dipsIntoOuterContext);
+		assert(!outermostConfigSet || !this._dipsIntoOuterContext);
 		this.outermostConfigSet = outermostConfigSet;
 	}
 
@@ -194,7 +194,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 	clone(readonly: boolean): ATNConfigSet {
 		let copy: ATNConfigSet = new ATNConfigSet(this, readonly);
-		if (!readonly && this.isReadOnly()) {
+		if (!readonly && this.isReadOnly) {
 			copy.addAll(this.configs);
 		}
 
@@ -334,20 +334,20 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 	private updatePropertiesForMergedConfig(config: ATNConfig): void {
 		// merged configs can't change the alt or semantic context
-		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.reachesIntoOuterContext;
-		assert(!this.outermostConfigSet || !this.dipsIntoOuterContext);
+		this._dipsIntoOuterContext = this._dipsIntoOuterContext || config.reachesIntoOuterContext;
+		assert(!this.outermostConfigSet || !this._dipsIntoOuterContext);
 	}
 
 	private updatePropertiesForAddedConfig(config: ATNConfig): void {
 		if (this.configs.length === 1) {
-			this.uniqueAlt = config.alt;
-		} else if (this.uniqueAlt !== config.alt) {
-			this.uniqueAlt = ATN.INVALID_ALT_NUMBER;
+			this._uniqueAlt = config.alt;
+		} else if (this._uniqueAlt !== config.alt) {
+			this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
 		}
 
 		this._hasSemanticContext = this._hasSemanticContext || !SemanticContext.NONE.equals(config.semanticContext);
-		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.reachesIntoOuterContext;
-		assert(!this.outermostConfigSet || !this.dipsIntoOuterContext);
+		this._dipsIntoOuterContext = this._dipsIntoOuterContext || config.reachesIntoOuterContext;
+		assert(!this.outermostConfigSet || !this._dipsIntoOuterContext);
 	}
 
 	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
@@ -419,10 +419,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		this.unmerged.length = 0;
 		this.configs.length = 0;
 
-		this.dipsIntoOuterContext = false;
+		this._dipsIntoOuterContext = false;
 		this._hasSemanticContext = false;
-		this.uniqueAlt = ATN.INVALID_ALT_NUMBER;
-		this.conflictInfo = undefined;
+		this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
+		this._conflictInfo = undefined;
 	}
 
 	@Override
@@ -436,13 +436,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		return this.outermostConfigSet == obj.outermostConfigSet
-			&& Utils.equals(this.conflictInfo, obj.conflictInfo)
+			&& Utils.equals(this._conflictInfo, obj._conflictInfo)
 			&& ArrayEqualityComparator.INSTANCE.equals(this.configs, obj.configs);
 	}
 
 	@Override
 	hashCode(): number {
-		if (this.isReadOnly() && this.cachedHashCode != -1) {
+		if (this.isReadOnly && this.cachedHashCode != -1) {
 			return this.cachedHashCode;
 		}
 
@@ -450,7 +450,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		hashCode = 5 * hashCode ^ (this.outermostConfigSet ? 1 : 0);
 		hashCode = 5 * hashCode ^ ArrayEqualityComparator.INSTANCE.hashCode(this.configs);
 
-		if (this.isReadOnly()) {
+		if (this.isReadOnly) {
 			this.cachedHashCode = hashCode;
 		}
 
@@ -488,62 +488,57 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		buf += ("]");
 
 		if (this._hasSemanticContext) buf += (",hasSemanticContext=") + (this._hasSemanticContext);
-		if (this.uniqueAlt !== ATN.INVALID_ALT_NUMBER) buf += (",uniqueAlt=") + (this.uniqueAlt);
-		if (this.conflictInfo != null) {
-			buf += (",conflictingAlts=") + (this.conflictInfo.getConflictedAlts());
-			if (!this.conflictInfo.isExact()) {
+		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) buf += (",uniqueAlt=") + (this._uniqueAlt);
+		if (this._conflictInfo != null) {
+			buf += (",conflictingAlts=") + (this._conflictInfo.getConflictedAlts());
+			if (!this._conflictInfo.isExact()) {
 				buf += ("*");
 			}
 		}
-		if (this.dipsIntoOuterContext) buf += (",dipsIntoOuterContext");
+		if (this._dipsIntoOuterContext) buf += (",dipsIntoOuterContext");
 		return buf.toString();
 	}
 
-	getUniqueAlt(): number {
-		return this.uniqueAlt;
+	get uniqueAlt(): number {
+		return this._uniqueAlt;
 	}
 
-	hasSemanticContext(): boolean {
+	get hasSemanticContext(): boolean {
 		return this._hasSemanticContext;
 	}
 
-	clearExplicitSemanticContext(): void {
+	set hasSemanticContext(value: boolean) {
 		this.ensureWritable();
-		this._hasSemanticContext = false;
+		this._hasSemanticContext = value;
 	}
 
-	markExplicitSemanticContext(): void {
+	get conflictInfo(): ConflictInfo | undefined {
+		return this._conflictInfo;
+	}
+
+	set conflictInfo(conflictInfo: ConflictInfo | undefined) {
 		this.ensureWritable();
-		this._hasSemanticContext = true;
+		this._conflictInfo = conflictInfo;
 	}
 
-	getConflictInfo(): ConflictInfo | undefined {
-		return this.conflictInfo;
-	}
-
-	setConflictInfo(conflictInfo: ConflictInfo | undefined): void {
-		this.ensureWritable();
-		this.conflictInfo = conflictInfo;
-	}
-
-	getConflictingAlts(): BitSet | undefined {
-		if (this.conflictInfo == null) {
+	get conflictingAlts(): BitSet | undefined {
+		if (this._conflictInfo == null) {
 			return undefined;
 		}
 
-		return this.conflictInfo.getConflictedAlts();
+		return this._conflictInfo.getConflictedAlts();
 	}
 
-	isExactConflict(): boolean {
-		if (this.conflictInfo == null) {
+	get isExactConflict(): boolean {
+		if (this._conflictInfo == null) {
 			return false;
 		}
 
-		return this.conflictInfo.isExact();
+		return this._conflictInfo.isExact();
 	}
 
-	getDipsIntoOuterContext(): boolean {
-		return this.dipsIntoOuterContext;
+	get dipsIntoOuterContext(): boolean {
+		return this._dipsIntoOuterContext;
 	}
 
 	get(index: number): ATNConfig {
@@ -586,7 +581,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	protected ensureWritable(): void {
-		if (this.isReadOnly()) {
+		if (this.isReadOnly) {
 			throw new Error("This ATNConfigSet is read only.");
 		}
 	}

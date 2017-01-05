@@ -100,7 +100,7 @@ export class DFAState {
 	}
 
 	setContextSensitive(atn: ATN): void {
-		assert(!this.configs.isOutermostConfigSet());
+		assert(!this.configs.isOutermostConfigSet);
 		if (this.isContextSensitive) {
 			return;
 		}

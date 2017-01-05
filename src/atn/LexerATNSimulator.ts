@@ -112,9 +112,9 @@ export class LexerATNSimulator extends ATNSimulator {
 		let old_mode: number = this.mode;
 
 		let s0_closure: ATNConfigSet = this.computeStartState(input, startState);
-		let suppressEdge: boolean = s0_closure.hasSemanticContext();
+		let suppressEdge: boolean = s0_closure.hasSemanticContext;
 		if (suppressEdge) {
-			s0_closure.clearExplicitSemanticContext();
+			s0_closure.hasSemanticContext = false;
 		}
 
 		let next: DFAState = this.addDFAState(s0_closure);
@@ -246,7 +246,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		this.getReachableConfigSet(input, s.configs, reach, t);
 
 		if (reach.isEmpty) { // we got nowhere on t from s
-			if (!reach.hasSemanticContext()) {
+			if (!reach.hasSemanticContext) {
 				// we got nowhere on t, don't throw out this knowledge; it'd
 				// cause a failover from DFA later.
 				this.addDFAEdge(s, t, ATNSimulator.ERROR);
@@ -477,7 +477,7 @@ export class LexerATNSimulator extends ATNSimulator {
 			if (LexerATNSimulator.debug) {
 				console.log("EVAL rule " + pt.ruleIndex + ":" + pt.predIndex);
 			}
-			configs.markExplicitSemanticContext();
+			configs.hasSemanticContext = true;
 			if (this.evaluatePredicate(input, pt.ruleIndex, pt.predIndex, speculative)) {
 				c = config.transform(t.target, true);
 			}
@@ -608,9 +608,9 @@ export class LexerATNSimulator extends ATNSimulator {
 			* If that gets us to a previously created (but dangling) DFA
 			* state, we can continue in pure DFA mode from there.
 			*/
-			let suppressEdge: boolean = q.hasSemanticContext();
+			let suppressEdge: boolean = q.hasSemanticContext;
 			if (suppressEdge) {
-				q.clearExplicitSemanticContext();
+				q.hasSemanticContext = false;
 			}
 
 			// @NotNull
@@ -643,7 +643,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		/* the lexer evaluates predicates on-the-fly; by this point configs
 		 * should not contain any configurations with unevaluated predicates.
 		 */
-		assert(!configs.hasSemanticContext());
+		assert(!configs.hasSemanticContext);
 
 		let proposed: DFAState = new DFAState(this.atn.modeToDFA[this.mode], configs);
 		let existing: DFAState | undefined = this.atn.modeToDFA[this.mode].states.get(proposed);
