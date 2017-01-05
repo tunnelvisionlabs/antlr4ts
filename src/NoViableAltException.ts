@@ -25,7 +25,7 @@ export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
 
 	/** Which configurations did we try at input.index that couldn't match input.LT(1)? */
-	private deadEndConfigs?: ATNConfigSet;
+	private _deadEndConfigs?: ATNConfigSet;
 
 	/** The token object at the start index; the input stream might
 	 * 	not be buffering tokens so get a reference to it. (At the
@@ -33,7 +33,7 @@ export class NoViableAltException extends RecognitionException {
 	 *  buffer all of the tokens but later we might not have access to those.)
 	 */
 	@NotNull
-	private startToken: Token;
+	private _startToken: Token;
 
 	constructor(/*@NotNull*/ recognizer: Parser);
 	constructor(
@@ -70,17 +70,17 @@ export class NoViableAltException extends RecognitionException {
 		}
 
 		super(recognizer, input, ctx);
-		this.deadEndConfigs = deadEndConfigs;
-		this.startToken = startToken as Token;
+		this._deadEndConfigs = deadEndConfigs;
+		this._startToken = startToken as Token;
 		this.setOffendingToken(recognizer, offendingToken);
 	}
 
-	getStartToken(): Token {
-		return this.startToken;
+	get startToken(): Token {
+		return this._startToken;
 	}
 
-	getDeadEndConfigs(): ATNConfigSet | undefined {
-		return this.deadEndConfigs;
+	get deadEndConfigs(): ATNConfigSet | undefined {
+		return this._deadEndConfigs;
 	}
 
 }

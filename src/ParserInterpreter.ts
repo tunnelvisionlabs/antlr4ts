@@ -424,7 +424,7 @@ export class ParserInterpreter extends Parser {
 			let sourcePair = { source: source, stream: stream };
 
 			if (e instanceof InputMismatchException) {
-				let expectedTokens = e.getExpectedTokens();
+				let expectedTokens = e.expectedTokens;
 				if (expectedTokens === undefined) {
 					throw new Error("Expected the exception to provide expected tokens");
 				}

@@ -298,8 +298,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
-			if (e.getStartToken().type === Token.EOF) input = "<EOF>";
-			else input = tokens.getTextFromRange(e.getStartToken(), e.getOffendingToken());
+			if (e.startToken.type === Token.EOF) input = "<EOF>";
+			else input = tokens.getTextFromRange(e.startToken, e.getOffendingToken());
 		}
 		else {
 			input = "<unknown input>";
@@ -319,7 +319,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	protected reportInputMismatch(@NotNull recognizer: Parser,
 		@NotNull e: InputMismatchException): void {
-		let expected = e.getExpectedTokens();
+		let expected = e.expectedTokens;
 		let expectedString = expected ? expected.toStringVocabulary(recognizer.getVocabulary()) : "";
 		let msg: string = "mismatched input " + this.getTokenErrorDisplay(e.getOffendingToken(recognizer)) +
 			" expecting " + expectedString;

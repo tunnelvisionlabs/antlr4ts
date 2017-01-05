@@ -2164,7 +2164,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	dumpDeadEndConfigs(@NotNull nvae: NoViableAltException): void {
 		console.log("dead end configs: ");
-		let deadEndConfigs = nvae.getDeadEndConfigs();
+		let deadEndConfigs = nvae.deadEndConfigs;
 		if (!deadEndConfigs) {
 			return;
 		}
