@@ -57,7 +57,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
 * [ ] RuleDependency.java
-* [ ] RuleVersion.java
+* [x] RuleVersion.java
 * [x] Token.java
 * [x] TokenFactory.java
 * [x] TokenSource.java

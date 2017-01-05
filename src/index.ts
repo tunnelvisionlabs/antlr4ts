@@ -39,7 +39,7 @@ export * from './RuleContext';
 export * from './RuleContextWithAltNum';
 // export * from './RuleDependencies';
 // export * from './RuleDependency';
-// export * from './RuleVersion';
+export * from './RuleVersion';
 export * from './Token';
 export * from './TokenFactory';
 export * from './TokenSource';
