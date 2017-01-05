@@ -286,7 +286,7 @@ export namespace SemanticContext {
 		 * @since 4.3
 		 */
 		// @NotNull
-		abstract getOperands(): Iterable<SemanticContext>;
+		abstract readonly operands: Iterable<SemanticContext>;
 	}
 
 	/**
@@ -316,7 +316,7 @@ export namespace SemanticContext {
 		}
 
 		@Override
-		getOperands(): Iterable<SemanticContext> {
+		get operands(): Iterable<SemanticContext> {
 			return this.opnds;
 		}
 
@@ -415,7 +415,7 @@ export namespace SemanticContext {
 		}
 
 		@Override
-		getOperands(): Iterable<SemanticContext> {
+		get operands(): Iterable<SemanticContext> {
 			return this.opnds;
 		}
 
