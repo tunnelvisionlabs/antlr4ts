@@ -184,7 +184,7 @@ export class ParserInterpreter extends Parser {
 
 		while (true) {
 			let p: ATNState = this.getATNState();
-			switch (p.getStateType()) {
+			switch (p.stateType) {
 			case ATNStateType.RULE_STOP:
 				// pop; return from rule
 				if (this._ctx.isEmpty()) {
@@ -235,7 +235,7 @@ export class ParserInterpreter extends Parser {
 
 	protected visitState(p: ATNState): void {
 		let predictedAlt: number = 1;
-		if (p.getNumberOfTransitions() > 1) {
+		if (p.numberOfTransitions > 1) {
 			predictedAlt = this.visitDecisionState(p as DecisionState);
 		}
 

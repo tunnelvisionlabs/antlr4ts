@@ -19,7 +19,7 @@ export class PlusBlockStartState extends BlockStartState {
 	loopBackState: PlusLoopbackState;
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.PLUS_BLOCK_START;
 	}
 }

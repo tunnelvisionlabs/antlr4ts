@@ -256,7 +256,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			return;
 		}
 
-		switch (s.getStateType()) {
+		switch (s.stateType) {
 		case ATNStateType.BLOCK_START:
 		case ATNStateType.STAR_BLOCK_START:
 		case ATNStateType.PLUS_BLOCK_START:

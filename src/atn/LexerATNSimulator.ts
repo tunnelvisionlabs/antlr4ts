@@ -296,7 +296,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				console.log(`testing ${this.getTokenName(t)} at ${c.toString(this.recog, true)}`);
 			}
 
-			let n: number = c.getState().getNumberOfOptimizedTransitions();
+			let n: number = c.getState().numberOfOptimizedTransitions;
 			for (let ti = 0; ti < n; ti++) {               // for each optimized transition
 				let trans: Transition = c.getState().getOptimizedTransition(ti);
 				let target: ATNState | undefined = this.getReachableTarget(trans, t);
@@ -352,7 +352,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		@NotNull p: ATNState): ATNConfigSet {
 		let initialContext: PredictionContext = PredictionContext.EMPTY_FULL;
 		let configs: ATNConfigSet = new OrderedATNConfigSet();
-		for (let i = 0; i < p.getNumberOfTransitions(); i++) {
+		for (let i = 0; i < p.numberOfTransitions; i++) {
 			let target: ATNState = p.transition(i).target;
 			let c: ATNConfig = ATNConfig.create(target, i + 1, initialContext);
 			this.closure(input, c, configs, false, false, false);
@@ -411,14 +411,14 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 
 		// optimization
-		if (!config.getState().onlyHasEpsilonTransitions()) {
+		if (!config.getState().onlyHasEpsilonTransitions) {
 			if (!currentAltReachedAcceptState || !config.hasPassedThroughNonGreedyDecision()) {
 				configs.add(config);
 			}
 		}
 
 		let p: ATNState = config.getState();
-		for (let i = 0; i < p.getNumberOfOptimizedTransitions(); i++) {
+		for (let i = 0; i < p.numberOfOptimizedTransitions; i++) {
 			let t: Transition = p.getOptimizedTransition(i);
 			let c: ATNConfig | undefined = this.getEpsilonTarget(input, config, t, configs, speculative, treatEofAsEpsilon);
 			if (c != null) {

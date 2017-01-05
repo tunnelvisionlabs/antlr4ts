@@ -50,8 +50,8 @@ export class LL1Analyzer {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.getNumberOfTransitions());
-		for (let alt = 0; alt < s.getNumberOfTransitions(); alt++) {
+		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
+		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
 			let lookBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
@@ -214,7 +214,7 @@ export class LL1Analyzer {
 			}
 		}
 
-		let n: number = s.getNumberOfTransitions();
+		let n: number = s.numberOfTransitions;
 		for (let i = 0; i < n; i++) {
 			let t: Transition = s.transition(i);
 			if (t instanceof RuleTransition) {

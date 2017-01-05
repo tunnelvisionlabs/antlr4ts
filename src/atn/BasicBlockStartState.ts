@@ -16,7 +16,7 @@ import { Override } from '../Decorators';
 export class BasicBlockStartState extends BlockStartState {
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.BLOCK_START;
 	}
 

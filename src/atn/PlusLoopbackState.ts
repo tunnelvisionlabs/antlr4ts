@@ -15,7 +15,7 @@ import { Override } from '../Decorators';
 export class PlusLoopbackState extends DecisionState {
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.PLUS_LOOP_BACK;
 	}
 }

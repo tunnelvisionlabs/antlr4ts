@@ -68,7 +68,7 @@ export class ATNSerializer {
 				continue;
 			}
 
-			let stateType: number =  s.getStateType();
+			let stateType: number =  s.stateType;
 			if (s instanceof DecisionState) {
 				let decisionState: DecisionState =  (DecisionState)s;
 				if (decisionState.nonGreedy) {
@@ -93,19 +93,19 @@ export class ATNSerializer {
 				data.add(s.ruleIndex);
 			}
 
-			if ( s.getStateType() == ATNState.LOOP_END ) {
+			if ( s.stateType == ATNState.LOOP_END ) {
 				data.add(((LoopEndState)s).loopBackState.stateNumber);
 			}
 			else if ( s instanceof BlockStartState ) {
 				data.add(((BlockStartState)s).endState.stateNumber);
 			}
 
-			if (s.getStateType() != ATNState.RULE_STOP) {
+			if (s.stateType != ATNState.RULE_STOP) {
 				// the deserializer can trivially derive these edges, so there's no need to serialize them
-				nedges += s.getNumberOfTransitions();
+				nedges += s.numberOfTransitions;
 			}
 
-			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+			for (let i=0; i<s.numberOfTransitions; i++) {
 				let t: Transition =  s.transition(i);
 				let edgeType: number =  Transition.serializationTypes.get(t.getClass());
 				if ( edgeType == Transition.SET || edgeType == Transition.NOT_SET ) {
@@ -197,11 +197,11 @@ export class ATNSerializer {
 				continue;
 			}
 
-			if (s.getStateType() == ATNState.RULE_STOP) {
+			if (s.stateType == ATNState.RULE_STOP) {
 				continue;
 			}
 
-			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+			for (let i=0; i<s.numberOfTransitions; i++) {
 				let t: Transition =  s.transition(i);
 
 				if (atn.states.get(t.target.stateNumber) == null) {

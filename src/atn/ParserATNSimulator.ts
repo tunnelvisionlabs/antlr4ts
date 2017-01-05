@@ -1101,7 +1101,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					continue;
 				}
 
-				let n: number = c.getState().getNumberOfOptimizedTransitions();
+				let n: number = c.getState().numberOfOptimizedTransitions;
 				for (let ti = 0; ti < n; ti++) {               // for each optimized transition
 					let trans: Transition = c.getState().getOptimizedTransition(ti);
 					let target: ATNState | undefined = this.getReachableTarget(c, trans, t);
@@ -1302,7 +1302,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let configs: ATNConfigSet = new ATNConfigSet();
 		while (true) {
 			let reachIntermediate: ATNConfigSet = new ATNConfigSet();
-			let n: number = p.getNumberOfTransitions();
+			let n: number = p.numberOfTransitions;
 			for (let ti = 0; ti < n; ti++) {
 				// for each transition
 				let target: ATNState = p.transition(ti).target;
@@ -1758,14 +1758,14 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let p: ATNState = config.getState();
 		// optimization
-		if (!p.onlyHasEpsilonTransitions()) {
+		if (!p.onlyHasEpsilonTransitions) {
 			configs.add(config, contextCache);
 			// make sure to not return here, because EOF transitions can act as
 			// both epsilon transitions and non-epsilon transitions.
 			if (ParserATNSimulator.debug) console.log("added config " + configs);
 		}
 
-		for (let i = 0; i < p.getNumberOfOptimizedTransitions(); i++) {
+		for (let i = 0; i < p.numberOfOptimizedTransitions; i++) {
 			let t: Transition = p.getOptimizedTransition(i);
 			let continueCollecting: boolean =
 				!(t instanceof ActionTransition) && collectPredicates;
@@ -1964,7 +1964,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	private static STATE_ALT_SORT_COMPARATOR: (o1: ATNConfig, o2: ATNConfig) => number =
 		(o1: ATNConfig, o2: ATNConfig): number => {
-			let diff: number = o1.getState().getNonStopStateNumber() - o2.getState().getNonStopStateNumber();
+			let diff: number = o1.getState().nonStopStateNumber - o2.getState().nonStopStateNumber;
 			if (diff !== 0) {
 				return diff;
 			}
@@ -2002,9 +2002,9 @@ export class ParserATNSimulator extends ATNSimulator {
 		// quick check 1 & 2 => if we assume #1 holds and check #2 against the
 		// minAlt from the first state, #2 will fail if the assumption was
 		// incorrect
-		let currentState: number = configs[0].getState().getNonStopStateNumber();
+		let currentState: number = configs[0].getState().nonStopStateNumber;
 		for (let config of configs) {
-			let stateNumber: number = config.getState().getNonStopStateNumber();
+			let stateNumber: number = config.getState().nonStopStateNumber;
 			if (stateNumber !== currentState) {
 				if (config.getAlt() !== minAlt) {
 					return undefined;
@@ -2016,13 +2016,13 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let representedAlts: BitSet;
 		if (exact) {
-			currentState = configs[0].getState().getNonStopStateNumber();
+			currentState = configs[0].getState().nonStopStateNumber;
 
 			// get the represented alternatives of the first state
 			representedAlts = new BitSet();
 			let maxAlt: number = minAlt;
 			for (let config of configs) {
-				if (config.getState().getNonStopStateNumber() != currentState) {
+				if (config.getState().nonStopStateNumber != currentState) {
 					break;
 				}
 
@@ -2032,10 +2032,10 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 
 			// quick check #3:
-			currentState = configs[0].getState().getNonStopStateNumber();
+			currentState = configs[0].getState().nonStopStateNumber;
 			let currentAlt: number = minAlt;
 			for (let config of configs) {
-				let stateNumber: number = config.getState().getNonStopStateNumber();
+				let stateNumber: number = config.getState().nonStopStateNumber;
 				let alt: number = config.getAlt();
 				if (stateNumber !== currentState) {
 					if (currentAlt !== maxAlt) {
@@ -2057,7 +2057,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		currentState = configs[0].getState().getNonStopStateNumber();
+		currentState = configs[0].getState().nonStopStateNumber;
 		let firstIndexCurrentState: number = 0;
 		let lastIndexCurrentStateMinAlt: number = 0;
 		let joinedCheckContext: PredictionContext = configs[0].getContext();
@@ -2067,7 +2067,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				break;
 			}
 
-			if (config.getState().getNonStopStateNumber() !== currentState) {
+			if (config.getState().nonStopStateNumber !== currentState) {
 				break;
 			}
 
@@ -2079,8 +2079,8 @@ export class ParserATNSimulator extends ATNSimulator {
 			let config: ATNConfig = configs[i];
 			let state: ATNState = config.getState();
 			alts.set(config.getAlt());
-			if (state.getNonStopStateNumber() !== currentState) {
-				currentState = state.getNonStopStateNumber();
+			if (state.nonStopStateNumber !== currentState) {
+				currentState = state.nonStopStateNumber;
 				firstIndexCurrentState = i;
 				lastIndexCurrentStateMinAlt = i;
 				joinedCheckContext = config.getContext();
@@ -2090,7 +2090,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						break;
 					}
 
-					if (config2.getState().getNonStopStateNumber() !== currentState) {
+					if (config2.getState().nonStopStateNumber !== currentState) {
 						break;
 					}
 
@@ -2111,7 +2111,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					break;
 				}
 
-				if (config2.getState().getNonStopStateNumber() !== currentState) {
+				if (config2.getState().nonStopStateNumber !== currentState) {
 					break;
 				}
 
@@ -2171,7 +2171,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		for (let c of asIterable(deadEndConfigs)) {
 			let trans: string = "no edges";
-			if (c.getState().getNumberOfOptimizedTransitions() > 0) {
+			if (c.getState().numberOfOptimizedTransitions > 0) {
 				let t: Transition = c.getState().getOptimizedTransition(0);
 				if (t instanceof AtomTransition) {
 					trans = "Atom " + this.getTokenName(t._label);
@@ -2320,7 +2320,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		if (newState.isAcceptState && configs.hasSemanticContext()) {
-			this.predicateDFAState(newState, configs, decisionState.getNumberOfTransitions());
+			this.predicateDFAState(newState, configs, decisionState.numberOfTransitions);
 		}
 
 		if (!enableDfa) {
@@ -2391,7 +2391,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		while (!context.isEmpty()) {
 			let state: ATNState = this.atn.states[context.invokingState];
-			assert(state.getNumberOfTransitions() === 1 && state.transition(0).serializationType === TransitionType.RULE);
+			assert(state.numberOfTransitions === 1 && state.transition(0).serializationType === TransitionType.RULE);
 			let transition: RuleTransition = <RuleTransition>state.transition(0);
 			if (!transition.tailCall) {
 				break;

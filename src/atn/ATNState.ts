@@ -122,7 +122,7 @@ export abstract class ATNState {
 	 *
 	 * @return -1 for {@link RuleStopState}, otherwise the state number
 	 */
-	getNonStopStateNumber(): number {
+	get nonStopStateNumber(): number {
 		return this.getStateNumber();
 	}
 
@@ -141,7 +141,7 @@ export abstract class ATNState {
 		return false;
 	}
 
-	isNonGreedyExitState(): boolean {
+	get isNonGreedyExitState(): boolean {
 		return false;
 	}
 
@@ -154,7 +154,7 @@ export abstract class ATNState {
 		return this.transitions.slice(0);
 	}
 
-	getNumberOfTransitions(): number {
+	get numberOfTransitions(): number {
 		return this.transitions.length;
 	}
 
@@ -182,9 +182,9 @@ export abstract class ATNState {
 		return this.transitions.splice(index, 1)[0];
 	}
 
-	abstract getStateType(): ATNStateType;
+	abstract readonly stateType: ATNStateType;
 
-	onlyHasEpsilonTransitions(): boolean {
+	get onlyHasEpsilonTransitions(): boolean {
 		return this.epsilonOnlyTransitions;
 	}
 
@@ -192,11 +192,11 @@ export abstract class ATNState {
 		this.ruleIndex = ruleIndex;
 	}
 
-	isOptimized(): boolean {
+	get isOptimized(): boolean {
 		return this.optimizedTransitions !== this.transitions;
 	}
 
-	getNumberOfOptimizedTransitions(): number {
+	get numberOfOptimizedTransitions(): number {
 		return this.optimizedTransitions.length;
 	}
 
@@ -205,7 +205,7 @@ export abstract class ATNState {
 	}
 
 	addOptimizedTransition(e: Transition): void {
-		if (!this.isOptimized()) {
+		if (!this.isOptimized) {
 			this.optimizedTransitions = new Array<Transition>();
 		}
 
@@ -213,7 +213,7 @@ export abstract class ATNState {
 	}
 
 	setOptimizedTransition(i: number, e: Transition): void {
-		if (!this.isOptimized()) {
+		if (!this.isOptimized) {
 			throw new Error("This ATNState is not optimized.");
 		}
 
@@ -221,7 +221,7 @@ export abstract class ATNState {
 	}
 
 	removeOptimizedTransition(i: number): void {
-		if (!this.isOptimized()) {
+		if (!this.isOptimized) {
 			throw new Error("This ATNState is not optimized.");
 		}
 

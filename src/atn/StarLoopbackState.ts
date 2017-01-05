@@ -11,12 +11,12 @@ import { Override } from '../Decorators';
 import { StarLoopEntryState } from './StarLoopEntryState';
 
 export class StarLoopbackState extends ATNState {
-	getLoopEntryState(): StarLoopEntryState {
+	get loopEntryState(): StarLoopEntryState {
 		return <StarLoopEntryState>this.transition(0).target;
 	}
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.STAR_LOOP_BACK;
 	}
 }

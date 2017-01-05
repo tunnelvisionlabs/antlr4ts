@@ -14,7 +14,7 @@ export class LoopEndState extends ATNState {
 	loopBackState: ATNState;
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.LOOP_END;
 	}
 }

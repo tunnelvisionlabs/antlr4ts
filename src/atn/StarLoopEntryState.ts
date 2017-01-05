@@ -26,7 +26,7 @@ export class StarLoopEntryState extends DecisionState {
 	precedenceRuleDecision: boolean = false;
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.STAR_LOOP_ENTRY;
 	}
 }
