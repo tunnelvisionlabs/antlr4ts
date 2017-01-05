@@ -920,9 +920,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			let alts: BitSet = new BitSet();
 			let maxAlt: number = 0;
 			for (let config of asIterable(previous.s0.configs)) {
-				if (config.getReachesIntoOuterContext() || config.getState() instanceof RuleStopState) {
-					alts.set(config.getAlt());
-					maxAlt = Math.max(maxAlt, config.getAlt());
+				if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
+					alts.set(config.alt);
+					maxAlt = Math.max(maxAlt, config.alt);
 				}
 			}
 
@@ -946,7 +946,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				 */
 				let filteredConfigs: ATNConfigSet = new ATNConfigSet();
 				for (let config of asIterable(previous.s0.configs)) {
-					if (config.getReachesIntoOuterContext() || config.getState() instanceof RuleStopState) {
+					if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
 						filteredConfigs.add(config);
 					}
 				}
@@ -1088,9 +1088,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			for (let c of closureConfigs) {
 				if (ParserATNSimulator.debug) console.log("testing " + this.getTokenName(t) + " at " + c.toString());
 
-				if (c.getState() instanceof RuleStopState) {
-					assert(c.getContext().isEmpty());
-					if (useContext && !c.getReachesIntoOuterContext() || t === IntStream.EOF) {
+				if (c.state instanceof RuleStopState) {
+					assert(c.context.isEmpty());
+					if (useContext && !c.reachesIntoOuterContext || t === IntStream.EOF) {
 						if (skippedStopStates == null) {
 							skippedStopStates = [];
 						}
@@ -1101,9 +1101,9 @@ export class ParserATNSimulator extends ATNSimulator {
 					continue;
 				}
 
-				let n: number = c.getState().numberOfOptimizedTransitions;
+				let n: number = c.state.numberOfOptimizedTransitions;
 				for (let ti = 0; ti < n; ti++) {               // for each optimized transition
-					let trans: Transition = c.getState().getOptimizedTransition(ti);
+					let trans: Transition = c.state.getOptimizedTransition(ti);
 					let target: ATNState | undefined = this.getReachableTarget(c, trans, t);
 					if (target != null) {
 						reachIntermediate.add(c.transform(target, false), contextCache);
@@ -1222,7 +1222,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let result: ATNConfigSet = new ATNConfigSet();
 		for (let config of asIterable(configs)) {
-			if (!(config.getState() instanceof RuleStopState)) {
+			if (!(config.state instanceof RuleStopState)) {
 				continue;
 			}
 
@@ -1459,19 +1459,19 @@ export class ParserATNSimulator extends ATNSimulator {
 		let configSet: ATNConfigSet = new ATNConfigSet();
 		for (let config of asIterable(configs)) {
 			// handle alt 1 first
-			if (config.getAlt() !== 1) {
+			if (config.alt !== 1) {
 				continue;
 			}
 
-			let updatedContext: SemanticContext | undefined = config.getSemanticContext().evalPrecedence(this._parser, globalContext);
+			let updatedContext: SemanticContext | undefined = config.semanticContext.evalPrecedence(this._parser, globalContext);
 			if (updatedContext == null) {
 				// the configuration was eliminated
 				continue;
 			}
 
-			statesFromAlt1.set(config.getState().stateNumber, config.getContext());
-			if (updatedContext !== config.getSemanticContext()) {
-				configSet.add(config.transform(config.getState(), false, updatedContext), contextCache);
+			statesFromAlt1.set(config.state.stateNumber, config.context);
+			if (updatedContext !== config.semanticContext) {
+				configSet.add(config.transform(config.state, false, updatedContext), contextCache);
 			}
 			else {
 				configSet.add(config, contextCache);
@@ -1479,18 +1479,18 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		for (let config of asIterable(configs)) {
-			if (config.getAlt() === 1) {
+			if (config.alt === 1) {
 				// already handled
 				continue;
 			}
 
-			if (!config.isPrecedenceFilterSuppressed()) {
+			if (!config.isPrecedenceFilterSuppressed) {
 				/* In the future, this elimination step could be updated to also
 				 * filter the prediction context for alternatives predicting alt>1
 				 * (basically a graph subtraction algorithm).
 				 */
-				let context: PredictionContext | undefined = statesFromAlt1.get(config.getState().stateNumber);
-				if (context != null && context.equals(config.getContext())) {
+				let context: PredictionContext | undefined = statesFromAlt1.get(config.state.stateNumber);
+				if (context != null && context.equals(config.context)) {
 					// eliminated
 					continue;
 				}
@@ -1551,8 +1551,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		let altToPred: (SemanticContext | undefined)[] | undefined = new Array<SemanticContext>(nalts + 1);
 		let n: number = altToPred.length;
 		for (let c of asIterable(configs)) {
-			if (ambigAlts.get(c.getAlt())) {
-				altToPred[c.getAlt()] = SemanticContext.or(altToPred[c.getAlt()], c.getSemanticContext());
+			if (ambigAlts.get(c.alt)) {
+				altToPred[c.alt] = SemanticContext.or(altToPred[c.alt], c.semanticContext);
 			}
 		}
 
@@ -1712,20 +1712,20 @@ export class ParserATNSimulator extends ATNSimulator {
 		treatEofAsEpsilon: boolean): void {
 		if (ParserATNSimulator.debug) console.log("closure(" + config.toString(this._parser, true) + ")");
 
-		if (config.getState() instanceof RuleStopState) {
+		if (config.state instanceof RuleStopState) {
 			// We hit rule end. If we have context info, use it
-			if (!config.getContext().isEmpty()) {
-				let hasEmpty: boolean = config.getContext().hasEmpty();
-				let nonEmptySize: number = config.getContext().size - (hasEmpty ? 1 : 0);
+			if (!config.context.isEmpty()) {
+				let hasEmpty: boolean = config.context.hasEmpty();
+				let nonEmptySize: number = config.context.size - (hasEmpty ? 1 : 0);
 				for (let i = 0; i < nonEmptySize; i++) {
-					let newContext: PredictionContext = config.getContext().getParent(i); // "pop" return state
-					let returnState: ATNState = this.atn.states[config.getContext().getReturnState(i)];
-					let c: ATNConfig = ATNConfig.create(returnState, config.getAlt(), newContext, config.getSemanticContext());
+					let newContext: PredictionContext = config.context.getParent(i); // "pop" return state
+					let returnState: ATNState = this.atn.states[config.context.getReturnState(i)];
+					let c: ATNConfig = ATNConfig.create(returnState, config.alt, newContext, config.semanticContext);
 					// While we have context to pop back from, we may have
 					// gotten that context AFTER having fallen off a rule.
 					// Make sure we track that we are now out of context.
-					c.setOuterContextDepth(config.getOuterContextDepth());
-					c.setPrecedenceFilterSuppressed(config.isPrecedenceFilterSuppressed());
+					c.outerContextDepth = config.outerContextDepth;
+					c.isPrecedenceFilterSuppressed = config.isPrecedenceFilterSuppressed;
 					assert(depth > MIN_INTEGER_VALUE);
 					this.closureImpl(c, configs, intermediate, closureBusy, collectPredicates, hasMoreContexts, contextCache, depth - 1, treatEofAsEpsilon);
 				}
@@ -1734,7 +1734,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					return;
 				}
 
-				config = config.transform(config.getState(), false, PredictionContext.EMPTY_LOCAL);
+				config = config.transform(config.state, false, PredictionContext.EMPTY_LOCAL);
 			}
 			else if (!hasMoreContexts) {
 				configs.add(config, contextCache);
@@ -1743,20 +1743,20 @@ export class ParserATNSimulator extends ATNSimulator {
 			else {
 				// else if we have no context info, just chase follow links (if greedy)
 				if (ParserATNSimulator.debug) console.log("FALLING off rule " +
-					this.getRuleName(config.getState().ruleIndex));
+					this.getRuleName(config.state.ruleIndex));
 
-				if (config.getContext() === PredictionContext.EMPTY_FULL) {
+				if (config.context === PredictionContext.EMPTY_FULL) {
 					// no need to keep full context overhead when we step out
-					config = config.transform(config.getState(), false, PredictionContext.EMPTY_LOCAL);
+					config = config.transform(config.state, false, PredictionContext.EMPTY_LOCAL);
 				}
-				else if (!config.getReachesIntoOuterContext() && PredictionContext.isEmptyLocal(config.getContext())) {
+				else if (!config.reachesIntoOuterContext && PredictionContext.isEmptyLocal(config.context)) {
 					// add stop state when leaving decision rule for the first time
 					configs.add(config, contextCache);
 				}
 			}
 		}
 
-		let p: ATNState = config.getState();
+		let p: ATNState = config.state;
 		// optimization
 		if (!p.onlyHasEpsilonTransitions) {
 			configs.add(config, contextCache);
@@ -1784,7 +1784,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				let newDepth: number = depth;
-				if (config.getState() instanceof RuleStopState) {
+				if (config.state instanceof RuleStopState) {
 					// target fell off end of rule; mark resulting c as having dipped into outer context
 					// We can't get here if incoming config was rule stop and we had context
 					// track how far we dip into outer context.  Might
@@ -1799,26 +1799,26 @@ export class ParserATNSimulator extends ATNSimulator {
 					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
 						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn;
 						if (outermostPrecedenceReturn == this.dfa.atnStartState.ruleIndex) {
-							c.setPrecedenceFilterSuppressed(true);
+							c.isPrecedenceFilterSuppressed = true;
 						}
 					}
 
-					c.setOuterContextDepth(c.getOuterContextDepth() + 1);
+					c.outerContextDepth = c.outerContextDepth + 1;
 
 					assert(newDepth > MIN_INTEGER_VALUE);
 					newDepth--;
 					if (ParserATNSimulator.debug) console.log("dips into outer ctx: " + c);
 				}
 				else if (t instanceof RuleTransition) {
-					if (this.optimize_tail_calls && (<RuleTransition>t).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.getContext()))) {
-						assert(c.getContext() === config.getContext());
+					if (this.optimize_tail_calls && (<RuleTransition>t).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
+						assert(c.context === config.context);
 						if (newDepth === 0) {
 							// the pop/push of a tail call would keep the depth
 							// constant, except we latch if it goes negative
 							newDepth--;
-							if (!this.tail_call_preserves_sll && PredictionContext.isEmptyLocal(config.getContext())) {
+							if (!this.tail_call_preserves_sll && PredictionContext.isEmptyLocal(config.context)) {
 								// make sure the SLL config "dips into the outer context" or prediction may not fall back to LL on conflict
-								c.setOuterContextDepth(c.getOuterContextDepth() + 1);
+								c.outerContextDepth = c.outerContextDepth + 1;
 							}
 						}
 					}
@@ -1899,7 +1899,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let c: ATNConfig;
 		if (collectPredicates && inContext) {
-			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.predicate);
+			let newSemCtx: SemanticContext = SemanticContext.and(config.semanticContext, pt.predicate);
 			c = config.transform(pt.target, false, newSemCtx);
 		}
 		else {
@@ -1928,7 +1928,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let c: ATNConfig;
 		if (collectPredicates &&
 			(!pt.isCtxDependent || (pt.isCtxDependent && inContext))) {
-			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.predicate);
+			let newSemCtx: SemanticContext = SemanticContext.and(config.semanticContext, pt.predicate);
 			c = config.transform(pt.target, false, newSemCtx);
 		}
 		else {
@@ -1943,20 +1943,20 @@ export class ParserATNSimulator extends ATNSimulator {
 	protected ruleTransition(@NotNull config: ATNConfig, @NotNull t: RuleTransition, @Nullable contextCache: PredictionContextCache): ATNConfig {
 		if (ParserATNSimulator.debug) {
 			console.log("CALL rule " + this.getRuleName(t.target.ruleIndex) +
-				", ctx=" + config.getContext());
+				", ctx=" + config.context);
 		}
 
 		let returnState: ATNState = t.followState;
 		let newContext: PredictionContext;
 
-		if (this.optimize_tail_calls && t.optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.getContext()))) {
-			newContext = config.getContext();
+		if (this.optimize_tail_calls && t.optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
+			newContext = config.context;
 		}
 		else if (contextCache != null) {
-			newContext = contextCache.getChild(config.getContext(), returnState.stateNumber);
+			newContext = contextCache.getChild(config.context, returnState.stateNumber);
 		}
 		else {
-			newContext = config.getContext().getChild(returnState.stateNumber);
+			newContext = config.context.getChild(returnState.stateNumber);
 		}
 
 		return config.transform(t.target, false, newContext);
@@ -1964,12 +1964,12 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	private static STATE_ALT_SORT_COMPARATOR: (o1: ATNConfig, o2: ATNConfig) => number =
 		(o1: ATNConfig, o2: ATNConfig): number => {
-			let diff: number = o1.getState().nonStopStateNumber - o2.getState().nonStopStateNumber;
+			let diff: number = o1.state.nonStopStateNumber - o2.state.nonStopStateNumber;
 			if (diff !== 0) {
 				return diff;
 			}
 
-			diff = o1.getAlt() - o2.getAlt();
+			diff = o1.alt - o2.alt;
 			if (diff !== 0) {
 				return diff;
 			}
@@ -1987,7 +1987,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let exact: boolean = !configset.getDipsIntoOuterContext();
 		let alts: BitSet = new BitSet();
-		let minAlt: number = configs[0].getAlt();
+		let minAlt: number = configs[0].alt;
 		alts.set(minAlt);
 
 		/* Quick checks come first (single pass, no context joining):
@@ -2002,11 +2002,11 @@ export class ParserATNSimulator extends ATNSimulator {
 		// quick check 1 & 2 => if we assume #1 holds and check #2 against the
 		// minAlt from the first state, #2 will fail if the assumption was
 		// incorrect
-		let currentState: number = configs[0].getState().nonStopStateNumber;
+		let currentState: number = configs[0].state.nonStopStateNumber;
 		for (let config of configs) {
-			let stateNumber: number = config.getState().nonStopStateNumber;
+			let stateNumber: number = config.state.nonStopStateNumber;
 			if (stateNumber !== currentState) {
-				if (config.getAlt() !== minAlt) {
+				if (config.alt !== minAlt) {
 					return undefined;
 				}
 
@@ -2016,27 +2016,27 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let representedAlts: BitSet;
 		if (exact) {
-			currentState = configs[0].getState().nonStopStateNumber;
+			currentState = configs[0].state.nonStopStateNumber;
 
 			// get the represented alternatives of the first state
 			representedAlts = new BitSet();
 			let maxAlt: number = minAlt;
 			for (let config of configs) {
-				if (config.getState().nonStopStateNumber != currentState) {
+				if (config.state.nonStopStateNumber != currentState) {
 					break;
 				}
 
-				let alt: number = config.getAlt();
+				let alt: number = config.alt;
 				representedAlts.set(alt);
 				maxAlt = alt;
 			}
 
 			// quick check #3:
-			currentState = configs[0].getState().nonStopStateNumber;
+			currentState = configs[0].state.nonStopStateNumber;
 			let currentAlt: number = minAlt;
 			for (let config of configs) {
-				let stateNumber: number = config.getState().nonStopStateNumber;
-				let alt: number = config.getAlt();
+				let stateNumber: number = config.state.nonStopStateNumber;
+				let alt: number = config.alt;
 				if (stateNumber !== currentState) {
 					if (currentAlt !== maxAlt) {
 						exact = false;
@@ -2057,66 +2057,66 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		currentState = configs[0].getState().nonStopStateNumber;
+		currentState = configs[0].state.nonStopStateNumber;
 		let firstIndexCurrentState: number = 0;
 		let lastIndexCurrentStateMinAlt: number = 0;
-		let joinedCheckContext: PredictionContext = configs[0].getContext();
+		let joinedCheckContext: PredictionContext = configs[0].context;
 		for (let i = 1; i < configs.length; i++) {
 			let config: ATNConfig = configs[i];
-			if (config.getAlt() !== minAlt) {
+			if (config.alt !== minAlt) {
 				break;
 			}
 
-			if (config.getState().nonStopStateNumber !== currentState) {
+			if (config.state.nonStopStateNumber !== currentState) {
 				break;
 			}
 
 			lastIndexCurrentStateMinAlt = i;
-			joinedCheckContext = contextCache.join(joinedCheckContext, configs[i].getContext());
+			joinedCheckContext = contextCache.join(joinedCheckContext, configs[i].context);
 		}
 
 		for (let i = lastIndexCurrentStateMinAlt + 1; i < configs.length; i++) {
 			let config: ATNConfig = configs[i];
-			let state: ATNState = config.getState();
-			alts.set(config.getAlt());
+			let state: ATNState = config.state;
+			alts.set(config.alt);
 			if (state.nonStopStateNumber !== currentState) {
 				currentState = state.nonStopStateNumber;
 				firstIndexCurrentState = i;
 				lastIndexCurrentStateMinAlt = i;
-				joinedCheckContext = config.getContext();
+				joinedCheckContext = config.context;
 				for (let j = firstIndexCurrentState + 1; j < configs.length; j++) {
 					let config2: ATNConfig = configs[j];
-					if (config2.getAlt() !== minAlt) {
+					if (config2.alt !== minAlt) {
 						break;
 					}
 
-					if (config2.getState().nonStopStateNumber !== currentState) {
+					if (config2.state.nonStopStateNumber !== currentState) {
 						break;
 					}
 
 					lastIndexCurrentStateMinAlt = j;
-					joinedCheckContext = contextCache.join(joinedCheckContext, config2.getContext());
+					joinedCheckContext = contextCache.join(joinedCheckContext, config2.context);
 				}
 
 				i = lastIndexCurrentStateMinAlt;
 				continue;
 			}
 
-			let joinedCheckContext2: PredictionContext = config.getContext();
-			let currentAlt: number = config.getAlt();
+			let joinedCheckContext2: PredictionContext = config.context;
+			let currentAlt: number = config.alt;
 			let lastIndexCurrentStateCurrentAlt: number = i;
 			for (let j = lastIndexCurrentStateCurrentAlt + 1; j < configs.length; j++) {
 				let config2: ATNConfig = configs[j];
-				if (config2.getAlt() !== currentAlt) {
+				if (config2.alt !== currentAlt) {
 					break;
 				}
 
-				if (config2.getState().nonStopStateNumber !== currentState) {
+				if (config2.state.nonStopStateNumber !== currentState) {
 					break;
 				}
 
 				lastIndexCurrentStateCurrentAlt = j;
-				joinedCheckContext2 = contextCache.join(joinedCheckContext2, config2.getContext());
+				joinedCheckContext2 = contextCache.join(joinedCheckContext2, config2.context);
 			}
 
 			i = lastIndexCurrentStateCurrentAlt;
@@ -2171,8 +2171,8 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		for (let c of asIterable(deadEndConfigs)) {
 			let trans: string = "no edges";
-			if (c.getState().numberOfOptimizedTransitions > 0) {
-				let t: Transition = c.getState().getOptimizedTransition(0);
+			if (c.state.numberOfOptimizedTransitions > 0) {
+				let t: Transition = c.state.getOptimizedTransition(0);
 				if (t instanceof AtomTransition) {
 					trans = "Atom " + this.getTokenName(t._label);
 				}
@@ -2200,9 +2200,9 @@ export class ParserATNSimulator extends ATNSimulator {
 		let alt: number = ATN.INVALID_ALT_NUMBER;
 		for (let c of asIterable(configs)) {
 			if (alt === ATN.INVALID_ALT_NUMBER) {
-				alt = c.getAlt(); // found first alt
+				alt = c.alt; // found first alt
 			}
-			else if (c.getAlt() !== alt) {
+			else if (c.alt !== alt) {
 				return ATN.INVALID_ALT_NUMBER;
 			}
 		}
@@ -2211,8 +2211,8 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	protected configWithAltAtStopState(@NotNull configs: Collection<ATNConfig>, alt: number): boolean {
 		for (let c of asIterable(configs)) {
-			if (c.getAlt() === alt) {
-				if (c.getState() instanceof RuleStopState) {
+			if (c.alt === alt) {
+				if (c.state instanceof RuleStopState) {
 					return true;
 				}
 			}

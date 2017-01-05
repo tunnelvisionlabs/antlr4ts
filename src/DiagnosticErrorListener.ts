@@ -137,7 +137,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 
 		let result: BitSet = new BitSet();
 		for (let config of asIterable(configs)) {
-			result.set(config.getAlt());
+			result.set(config.alt);
 		}
 
 		return result;

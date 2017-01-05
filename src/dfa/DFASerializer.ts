@@ -145,7 +145,7 @@ export class DFASerializer {
 		if (s.isContextSensitive) {
 			stateStr += "*";
 			for (let config of asIterable(s.configs)) {
-				if (config.getReachesIntoOuterContext()) {
+				if (config.reachesIntoOuterContext) {
 					stateStr += "*";
 					break;
 				}

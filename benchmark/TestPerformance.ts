@@ -1151,7 +1151,7 @@ export class TestPerformance {
                         if (state.isAcceptState) {
                             let hasGlobal: boolean =  false;
                             for (let config of asIterable(state.configs)) {
-                                if (config.getReachesIntoOuterContext()) {
+                                if (config.reachesIntoOuterContext) {
                                     globalConfigCount++;
                                     hasGlobal = true;
                                 } else {
@@ -1180,7 +1180,7 @@ export class TestPerformance {
 
                             this.configOutputSize = configOutput.length;
 							throw new Error("Not implemented");
-                            // writeFileSync(tmpdir, "d" + dfa.decision + ".s" + state.stateNumber + ".a" + config.getAlt() + ".config.dot", configOutput);
+                            // writeFileSync(tmpdir, "d" + dfa.decision + ".s" + state.stateNumber + ".a" + config.alt + ".config.dot", configOutput);
                         }
                     }
                 }

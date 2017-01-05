@@ -287,8 +287,8 @@ export class LexerATNSimulator extends ATNSimulator {
 		// than a config that already reached an accept state for the same rule
 		let skipAlt: number = ATN.INVALID_ALT_NUMBER;
 		for (let c of asIterable(closure)) {
-			let currentAltReachedAcceptState: boolean = c.getAlt() === skipAlt;
-			if (currentAltReachedAcceptState && c.hasPassedThroughNonGreedyDecision()) {
+			let currentAltReachedAcceptState: boolean = c.alt === skipAlt;
+			if (currentAltReachedAcceptState && c.hasPassedThroughNonGreedyDecision) {
 				continue;
 			}
 
@@ -296,18 +296,18 @@ export class LexerATNSimulator extends ATNSimulator {
 				console.log(`testing ${this.getTokenName(t)} at ${c.toString(this.recog, true)}`);
 			}
 
-			let n: number = c.getState().numberOfOptimizedTransitions;
+			let n: number = c.state.numberOfOptimizedTransitions;
 			for (let ti = 0; ti < n; ti++) {               // for each optimized transition
-				let trans: Transition = c.getState().getOptimizedTransition(ti);
+				let trans: Transition = c.state.getOptimizedTransition(ti);
 				let target: ATNState | undefined = this.getReachableTarget(trans, t);
 				if (target != null) {
-					let lexerActionExecutor: LexerActionExecutor | undefined = c.getLexerActionExecutor();
+					let lexerActionExecutor: LexerActionExecutor | undefined = c.lexerActionExecutor;
 					let config: ATNConfig;
 					if (lexerActionExecutor != null) {
 						lexerActionExecutor = lexerActionExecutor.fixOffsetBeforeMatch(input.index - this.startIndex);
 						config = c.transform(target, true, lexerActionExecutor);
 					} else {
-						assert(c.getLexerActionExecutor() == null);
+						assert(c.lexerActionExecutor == null);
 						config = c.transform(target, true);
 					}
 
@@ -315,7 +315,7 @@ export class LexerATNSimulator extends ATNSimulator {
 					if (this.closure(input, config, reach, currentAltReachedAcceptState, true, treatEofAsEpsilon)) {
 						// any remaining configs for this alt have a lower priority than
 						// the one that just reached an accept state.
-						skipAlt = c.getAlt();
+						skipAlt = c.alt;
 						break;
 					}
 				}
@@ -375,23 +375,23 @@ export class LexerATNSimulator extends ATNSimulator {
 			console.log("closure(" + config.toString(this.recog, true) + ")");
 		}
 
-		if (config.getState() instanceof RuleStopState) {
+		if (config.state instanceof RuleStopState) {
 			if (LexerATNSimulator.debug) {
 				if (this.recog != null) {
-					console.log(`closure at ${this.recog.getRuleNames()[config.getState().ruleIndex]} rule stop ${config}`);
+					console.log(`closure at ${this.recog.getRuleNames()[config.state.ruleIndex]} rule stop ${config}`);
 				}
 				else {
 					console.log(`closure at rule stop ${config}`);
 				}
 			}
 
-			let context: PredictionContext = config.getContext();
+			let context: PredictionContext = config.context;
 			if (context.isEmpty()) {
 				configs.add(config);
 				return true;
 			}
 			else if (context.hasEmpty()) {
-				configs.add(config.transform(config.getState(), true, PredictionContext.EMPTY_FULL));
+				configs.add(config.transform(config.state, true, PredictionContext.EMPTY_FULL));
 				currentAltReachedAcceptState = true;
 			}
 
@@ -411,13 +411,13 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 
 		// optimization
-		if (!config.getState().onlyHasEpsilonTransitions) {
-			if (!currentAltReachedAcceptState || !config.hasPassedThroughNonGreedyDecision()) {
+		if (!config.state.onlyHasEpsilonTransitions) {
+			if (!currentAltReachedAcceptState || !config.hasPassedThroughNonGreedyDecision) {
 				configs.add(config);
 			}
 		}
 
-		let p: ATNState = config.getState();
+		let p: ATNState = config.state;
 		for (let i = 0; i < p.numberOfOptimizedTransitions; i++) {
 			let t: Transition = p.getOptimizedTransition(i);
 			let c: ATNConfig | undefined = this.getEpsilonTarget(input, config, t, configs, speculative, treatEofAsEpsilon);
@@ -441,11 +441,11 @@ export class LexerATNSimulator extends ATNSimulator {
 		switch (t.serializationType) {
 		case TransitionType.RULE:
 			let ruleTransition: RuleTransition = <RuleTransition>t;
-			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.getContext().hasEmpty()) {
+			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.context.hasEmpty()) {
 				c = config.transform(t.target, true);
 			}
 			else {
-				let newContext: PredictionContext = config.getContext().getChild(ruleTransition.followState.stateNumber);
+				let newContext: PredictionContext = config.context.getChild(ruleTransition.followState.stateNumber);
 				c = config.transform(t.target, true, newContext);
 			}
 
@@ -488,7 +488,7 @@ export class LexerATNSimulator extends ATNSimulator {
 			break;
 
 		case TransitionType.ACTION:
-			if (config.getContext().hasEmpty()) {
+			if (config.context.hasEmpty()) {
 				// execute actions anywhere in the start rule for a token.
 				//
 				// TODO: if the entry rule is invoked recursively, some
@@ -501,7 +501,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				// getEpsilonTarget to return two configurations, so
 				// additional modifications are needed before we can support
 				// the split operation.
-				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.getLexerActionExecutor(), this.atn.lexerActions[(<ActionTransition>t).actionIndex]);
+				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.lexerActionExecutor, this.atn.lexerActions[(<ActionTransition>t).actionIndex]);
 				c = config.transform(t.target, true, lexerActionExecutor);
 				break;
 			}
@@ -654,15 +654,15 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		let firstConfigWithRuleStopState: ATNConfig | undefined = undefined;
 		for (let c of asIterable(configs)) {
-			if (c.getState() instanceof RuleStopState) {
+			if (c.state instanceof RuleStopState) {
 				firstConfigWithRuleStopState = c;
 				break;
 			}
 		}
 
 		if (firstConfigWithRuleStopState != null) {
-			let prediction: number = this.atn.ruleToTokenType[firstConfigWithRuleStopState.getState().ruleIndex];
-			let lexerActionExecutor: LexerActionExecutor | undefined = firstConfigWithRuleStopState.getLexerActionExecutor();
+			let prediction: number = this.atn.ruleToTokenType[firstConfigWithRuleStopState.state.ruleIndex];
+			let lexerActionExecutor: LexerActionExecutor | undefined = firstConfigWithRuleStopState.lexerActionExecutor;
 			newState.acceptStateInfo = new AcceptStateInfo(prediction, lexerActionExecutor);
 		}
 

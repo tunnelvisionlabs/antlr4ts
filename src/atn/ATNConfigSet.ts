@@ -149,7 +149,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		let alts: BitSet = new BitSet();
 		for (let config of asIterable(this)) {
-			alts.set(config.getAlt());
+			alts.set(config.alt);
 		}
 
 		return alts;
@@ -175,7 +175,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	getStates(): Array2DHashSet<ATNState> {
 		let states = new Array2DHashSet<ATNState>(ObjectEqualityComparator.INSTANCE);
 		for (let c of this.configs) {
-			states.add(c.getState());
+			states.add(c.state);
 		}
 
 		return states;
@@ -188,7 +188,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		for (let i = 0; i < this.configs.length; i++) {
 			let config: ATNConfig = this.configs[i];
-			config.setContext(interpreter.atn.getCachedContext(config.getContext()));
+			config.context = interpreter.atn.getCachedContext(config.context);
 		}
 	}
 
@@ -270,7 +270,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
 		}
 
-		assert(!this.outermostConfigSet || !e.getReachesIntoOuterContext());
+		assert(!this.outermostConfigSet || !e.reachesIntoOuterContext);
 
 		if (contextCache == null) {
 			contextCache = PredictionContextCache.UNCACHED;
@@ -281,36 +281,36 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let mergedConfig = this.mergedConfigs.get(key);
 		addKey = (mergedConfig == null);
 		if (mergedConfig != null && this.canMerge(e, key, mergedConfig)) {
-			mergedConfig.setOuterContextDepth(Math.max(mergedConfig.getOuterContextDepth(), e.getOuterContextDepth()));
-			if (e.isPrecedenceFilterSuppressed()) {
-				mergedConfig.setPrecedenceFilterSuppressed(true);
+			mergedConfig.outerContextDepth = Math.max(mergedConfig.outerContextDepth, e.outerContextDepth);
+			if (e.isPrecedenceFilterSuppressed) {
+				mergedConfig.isPrecedenceFilterSuppressed = true;
 			}
 
-			let joined: PredictionContext = PredictionContext.join(mergedConfig.getContext(), e.getContext(), contextCache);
+			let joined: PredictionContext = PredictionContext.join(mergedConfig.context, e.context, contextCache);
 			this.updatePropertiesForMergedConfig(e);
-			if (mergedConfig.getContext() == joined) {
+			if (mergedConfig.context == joined) {
 				return false;
 			}
 
-			mergedConfig.setContext(joined);
+			mergedConfig.context = joined;
 			return true;
 		}
 
 		for (let i = 0; i < this.unmerged.length; i++) {
 			let unmergedConfig: ATNConfig = this.unmerged[i];
 			if (this.canMerge(e, key, unmergedConfig)) {
-				unmergedConfig.setOuterContextDepth(Math.max(unmergedConfig.getOuterContextDepth(), e.getOuterContextDepth()));
-				if (e.isPrecedenceFilterSuppressed()) {
-					unmergedConfig.setPrecedenceFilterSuppressed(true);
+				unmergedConfig.outerContextDepth = Math.max(unmergedConfig.outerContextDepth, e.outerContextDepth);
+				if (e.isPrecedenceFilterSuppressed) {
+					unmergedConfig.isPrecedenceFilterSuppressed = true;
 				}
 
-				let joined: PredictionContext = PredictionContext.join(unmergedConfig.getContext(), e.getContext(), contextCache);
+				let joined: PredictionContext = PredictionContext.join(unmergedConfig.context, e.context, contextCache);
 				this.updatePropertiesForMergedConfig(e);
-				if (unmergedConfig.getContext() == joined) {
+				if (unmergedConfig.context == joined) {
 					return false;
 				}
 
-				unmergedConfig.setContext(joined);
+				unmergedConfig.context = joined;
 
 				if (addKey) {
 					this.mergedConfigs.put(key, unmergedConfig);
@@ -334,36 +334,36 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 	private updatePropertiesForMergedConfig(config: ATNConfig): void {
 		// merged configs can't change the alt or semantic context
-		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.getReachesIntoOuterContext();
+		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.reachesIntoOuterContext;
 		assert(!this.outermostConfigSet || !this.dipsIntoOuterContext);
 	}
 
 	private updatePropertiesForAddedConfig(config: ATNConfig): void {
 		if (this.configs.length === 1) {
-			this.uniqueAlt = config.getAlt();
-		} else if (this.uniqueAlt !== config.getAlt()) {
+			this.uniqueAlt = config.alt;
+		} else if (this.uniqueAlt !== config.alt) {
 			this.uniqueAlt = ATN.INVALID_ALT_NUMBER;
 		}
 
-		this._hasSemanticContext = this._hasSemanticContext || !SemanticContext.NONE.equals(config.getSemanticContext());
-		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.getReachesIntoOuterContext();
+		this._hasSemanticContext = this._hasSemanticContext || !SemanticContext.NONE.equals(config.semanticContext);
+		this.dipsIntoOuterContext = this.dipsIntoOuterContext || config.reachesIntoOuterContext;
 		assert(!this.outermostConfigSet || !this.dipsIntoOuterContext);
 	}
 
 	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
-		if (left.getState().stateNumber != right.getState().stateNumber) {
+		if (left.state.stateNumber != right.state.stateNumber) {
 			return false;
 		}
 
-		if (leftKey.alt !== right.getAlt()) {
+		if (leftKey.alt !== right.alt) {
 			return false;
 		}
 
-		return left.getSemanticContext().equals(right.getSemanticContext());
+		return left.semanticContext.equals(right.semanticContext);
 	}
 
 	protected getKey(e: ATNConfig): { state: number, alt: number } {
-		return { state: e.getState().stateNumber, alt: e.getAlt() };
+		return { state: e.state.stateNumber, alt: e.alt };
 	}
 
 	@Override
@@ -467,14 +467,14 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let buf = "";
 		let sortedConfigs = this.configs.slice(0);
 		sortedConfigs.sort((o1, o2) => {
-			if (o1.getAlt() != o2.getAlt()) {
-				return o1.getAlt() - o2.getAlt();
+			if (o1.alt != o2.alt) {
+				return o1.alt - o2.alt;
 			}
-			else if (o1.getState().stateNumber != o2.getState().stateNumber) {
-				return o1.getState().stateNumber - o2.getState().stateNumber;
+			else if (o1.state.stateNumber != o2.state.stateNumber) {
+				return o1.state.stateNumber - o2.state.stateNumber;
 			}
 			else {
-				return o1.getSemanticContext().toString().localeCompare(o2.getSemanticContext().toString());
+				return o1.semanticContext.toString().localeCompare(o2.semanticContext.toString());
 			}
 		});
 
