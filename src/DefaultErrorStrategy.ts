@@ -573,7 +573,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	protected getMissingSymbol(@NotNull recognizer: Parser): Token {
 		let currentSymbol: Token = recognizer.getCurrentToken();
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
-		let expectedTokenType: number = expecting.getMinElement(); // get any element
+		let expectedTokenType: number = expecting.minElement; // get any element
 		let tokenText: string;
 		if (expectedTokenType === Token.EOF) tokenText = "<missing EOF>";
 		else tokenText = "<missing " + recognizer.getVocabulary().getDisplayName(expectedTokenType) + ">";

@@ -901,10 +901,10 @@ export class ATNDeserializer {
 				}
 			}
 
-			let blockEndState: ATNState = decision.getOptimizedTransition(setTransitions.getMinElement()).target.getOptimizedTransition(0).target;
+			let blockEndState: ATNState = decision.getOptimizedTransition(setTransitions.minElement).target.getOptimizedTransition(0).target;
 			let matchSet: IntervalSet = new IntervalSet();
-			for (let i = 0; i < setTransitions.getIntervals().length; i++) {
-				let interval: Interval = setTransitions.getIntervals()[i];
+			for (let i = 0; i < setTransitions.intervals.length; i++) {
+				let interval: Interval = setTransitions.intervals[i];
 				for (let j = interval.a; j <= interval.b; j++) {
 					let matchTransition: Transition = decision.getOptimizedTransition(j).target.getOptimizedTransition(0);
 					if (matchTransition instanceof NotSetTransition) {
@@ -916,11 +916,11 @@ export class ATNDeserializer {
 			}
 
 			let newTransition: Transition;
-			if (matchSet.getIntervals().length === 1) {
+			if (matchSet.intervals.length === 1) {
 				if (matchSet.size === 1) {
-					newTransition = new AtomTransition(blockEndState, matchSet.getMinElement());
+					newTransition = new AtomTransition(blockEndState, matchSet.minElement);
 				} else {
-					let matchInterval: Interval = matchSet.getIntervals()[0];
+					let matchInterval: Interval = matchSet.intervals[0];
 					newTransition = new RangeTransition(blockEndState, matchInterval.a, matchInterval.b);
 				}
 			} else {

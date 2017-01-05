@@ -165,15 +165,15 @@ export class ATNSerializer {
 		data.add(nsets);
 		for (let set of sets) {
 			let containsEof: boolean =  set.contains(Token.EOF);
-			if (containsEof && set.getIntervals().get(0).b == Token.EOF) {
-				data.add(set.getIntervals().size - 1);
+			if (containsEof && set.intervals.get(0).b == Token.EOF) {
+				data.add(set.intervals.size - 1);
 			}
 			else {
-				data.add(set.getIntervals().size);
+				data.add(set.intervals.size);
 			}
 
 			data.add(containsEof ? 1 : 0);
-			for (let I of set.getIntervals()) {
+			for (let I of set.intervals) {
 				if (I.a == Token.EOF) {
 					if (I.b == Token.EOF) {
 						continue;

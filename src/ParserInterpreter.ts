@@ -429,7 +429,7 @@ export class ParserInterpreter extends Parser {
 					throw new Error("Expected the exception to provide expected tokens");
 				}
 
-				let expectedTokenType: number = expectedTokens.getMinElement(); // get any element
+				let expectedTokenType: number = expectedTokens.minElement; // get any element
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
 						expectedTokenType, tok.text,

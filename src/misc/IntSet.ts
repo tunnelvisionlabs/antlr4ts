@@ -111,7 +111,7 @@ export interface IntSet {
 	 * @return {@code true} if the current set contains no elements; otherwise,
 	 * {@code false}.
 	 */
-	isNil(): boolean;
+	readonly isNil: boolean;
 
 	/**
 	 * {@inheritDoc}
