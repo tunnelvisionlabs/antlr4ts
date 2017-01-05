@@ -101,7 +101,7 @@ export class ATNDeserializer {
 
 	constructor(deserializationOptions?: ATNDeserializationOptions) {
 		if (deserializationOptions == null) {
-			deserializationOptions = ATNDeserializationOptions.getDefaultOptions();
+			deserializationOptions = ATNDeserializationOptions.defaultOptions;
 		}
 
 		this.deserializationOptions = deserializationOptions;
@@ -447,11 +447,11 @@ export class ATNDeserializer {
 			atn.decisionToDFA[i] = new DFA(atn.decisionToState[i], i);
 		}
 
-		if (this.deserializationOptions.isVerifyATN()) {
+		if (this.deserializationOptions.isVerifyATN) {
 			this.verifyATN(atn);
 		}
 
-		if (this.deserializationOptions.isGenerateRuleBypassTransitions() && atn.grammarType === ATNType.PARSER) {
+		if (this.deserializationOptions.isGenerateRuleBypassTransitions && atn.grammarType === ATNType.PARSER) {
 			atn.ruleToTokenType = new Int32Array(atn.ruleToStartState.length);
 			for (let i = 0; i < atn.ruleToStartState.length; i++) {
 				atn.ruleToTokenType[i] = atn.maxTokenType + i + 1;
@@ -536,13 +536,13 @@ export class ATNDeserializer {
 				bypassStart.addTransition(new EpsilonTransition(matchState));
 			}
 
-			if (this.deserializationOptions.isVerifyATN()) {
+			if (this.deserializationOptions.isVerifyATN) {
 				// reverify after modification
 				this.verifyATN(atn);
 			}
 		}
 
-		if (this.deserializationOptions.isOptimize()) {
+		if (this.deserializationOptions.isOptimize) {
 			while (true) {
 				let optimizationCount: number = 0;
 				optimizationCount += ATNDeserializer.inlineSetRules(atn);
@@ -554,7 +554,7 @@ export class ATNDeserializer {
 				}
 			}
 
-			if (this.deserializationOptions.isVerifyATN()) {
+			if (this.deserializationOptions.isVerifyATN) {
 				// reverify after modification
 				this.verifyATN(atn);
 			}

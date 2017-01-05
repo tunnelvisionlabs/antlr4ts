@@ -76,7 +76,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * This field maps from the serialized ATN string to the deserialized {@link ATN} with
 	 * bypass alternatives.
 	 *
-	 * @see ATNDeserializationOptions#isGenerateRuleBypassTransitions()
+	 * @see ATNDeserializationOptions.isGenerateRuleBypassTransitions
 	 */
 	private static readonly bypassAltsAtnCache = new WeakMap<string, ATN>();
 
@@ -406,7 +406,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let result = Parser.bypassAltsAtnCache.get(serializedAtn);
 		if (result == null) {
 			let deserializationOptions: ATNDeserializationOptions = new ATNDeserializationOptions();
-			deserializationOptions.setGenerateRuleBypassTransitions(true);
+			deserializationOptions.isGenerateRuleBypassTransitions = true;
 			result = new ATNDeserializer(deserializationOptions).deserialize(Utils.toCharArray(serializedAtn));
 			Parser.bypassAltsAtnCache.set(serializedAtn, result);
 		}
