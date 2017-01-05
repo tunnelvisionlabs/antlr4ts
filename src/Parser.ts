@@ -828,7 +828,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let seenOne: boolean = false;
 		for (let d = 0; d < this._interp.atn.decisionToDFA.length; d++) {
 			let dfa: DFA = this._interp.atn.decisionToDFA[d];
-			if (!dfa.isEmpty()) {
+			if (!dfa.isEmpty) {
 				if (seenOne) console.log();
 				console.log("Decision " + dfa.decision + ":");
 				process.stdout.write(dfa.toString(this.getVocabulary(), this.getRuleNames()));

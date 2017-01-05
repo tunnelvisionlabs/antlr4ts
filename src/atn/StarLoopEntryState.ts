@@ -21,7 +21,7 @@ export class StarLoopEntryState extends DecisionState {
 	 * and stored for use in {@link ParserATNSimulator} and
 	 * {@link ParserInterpreter}.</p>
 	 *
-	 * @see DFA#isPrecedenceDfa()
+	 * @see `DFA.isPrecedenceDfa`
 	 */
 	precedenceRuleDecision: boolean = false;
 

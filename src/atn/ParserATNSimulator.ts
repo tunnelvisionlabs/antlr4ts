@@ -367,7 +367,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let dfa: DFA = this.atn.decisionToDFA[decision];
 		assert(dfa != null);
-		if (this.optimize_ll1 && !dfa.isPrecedenceDfa() && !dfa.isEmpty()) {
+		if (this.optimize_ll1 && !dfa.isPrecedenceDfa && !dfa.isEmpty) {
 			let ll_1: number = input.LA(1);
 			if (ll_1 >= 0 && ll_1 <= 0xFFFF) {
 				let key: number = ((decision << 16) >>> 0) + ll_1;
@@ -384,7 +384,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			useContext = true;
 		}
 		else if (!this.always_try_local_context) {
-			useContext = useContext || dfa.isContextSensitive();
+			useContext = useContext || dfa.isContextSensitive;
 		}
 
 		this.userWantsCtxSensitive = useContext || (this.predictionMode !== PredictionMode.SLL && outerContext != null && !this.atn.decisionToState[decision].sll);
@@ -393,7 +393,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		let state: SimulatorState | undefined;
-		if (!dfa.isEmpty()) {
+		if (!dfa.isEmpty) {
 			state = this.getStartState(dfa, input, outerContext, useContext);
 		}
 
@@ -426,7 +426,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		useContext: boolean): SimulatorState | undefined {
 
 		if (!useContext) {
-			if (dfa.isPrecedenceDfa()) {
+			if (dfa.isPrecedenceDfa) {
 				// the start state for a precedence DFA depends on the current
 				// parser precedence, and is provided by a DFA method.
 				let state: DFAState | undefined = dfa.getPrecedenceStartState(this._parser.getPrecedence(), false);
@@ -452,7 +452,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let remainingContext: ParserRuleContext | undefined = outerContext;
 		assert(outerContext != null);
 		let s0: DFAState | undefined;
-		if (dfa.isPrecedenceDfa()) {
+		if (dfa.isPrecedenceDfa) {
 			s0 = dfa.getPrecedenceStartState(this._parser.getPrecedence(), true);
 		}
 		else {
@@ -766,7 +766,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 					if (this.optimize_ll1
 						&& input.index === startIndex
-						&& !dfa.isPrecedenceDfa()
+						&& !dfa.isPrecedenceDfa
 						&& nextState.outerContext === nextState.remainingOuterContext
 						&& dfa.decision >= 0
 						&& !D.configs.hasSemanticContext()) {
@@ -1237,7 +1237,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		globalContext: ParserRuleContext,
 		useContext: boolean): SimulatorState {
 		let s0: DFAState | undefined =
-			dfa.isPrecedenceDfa() ? dfa.getPrecedenceStartState(this._parser.getPrecedence(), useContext) :
+			dfa.isPrecedenceDfa ? dfa.getPrecedenceStartState(this._parser.getPrecedence(), useContext) :
 				useContext ? dfa.s0full :
 					dfa.s0;
 
@@ -1324,7 +1324,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				break;
 			}
 			else if (s0 == null) {
-				if (!dfa.isPrecedenceDfa()) {
+				if (!dfa.isPrecedenceDfa) {
 					next = this.addDFAState(dfa, configs, contextCache);
 					if (useContext) {
 						if (!dfa.s0full) {
@@ -1353,7 +1353,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 			}
 			else {
-				if (dfa.isPrecedenceDfa()) {
+				if (dfa.isPrecedenceDfa) {
 					configs = this.applyPrecedenceFilter(configs, globalContext, contextCache);
 				}
 
@@ -1796,7 +1796,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						continue;
 					}
 
-					if (this.dfa != null && this.dfa.isPrecedenceDfa()) {
+					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
 						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn();
 						if (outermostPrecedenceReturn == this.dfa.atnStartState.ruleIndex) {
 							c.setPrecedenceFilterSuppressed(true);
@@ -2227,7 +2227,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		contextTransitions: IntegerList | undefined,
 		@NotNull toConfigs: ATNConfigSet,
 		contextCache: PredictionContextCache): DFAState {
-		assert(contextTransitions == null || contextTransitions.isEmpty() || dfa.isContextSensitive());
+		assert(contextTransitions == null || contextTransitions.isEmpty() || dfa.isContextSensitive);
 
 		let from: DFAState = fromState;
 		let to: DFAState = this.addDFAState(dfa, toConfigs, contextCache);

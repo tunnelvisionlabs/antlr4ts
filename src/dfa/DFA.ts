@@ -84,7 +84,7 @@ export class DFA {
 	 * {@code false}.
 	 * @see Parser#getPrecedence()
 	 */
-	isPrecedenceDfa(): boolean {
+	get isPrecedenceDfa(): boolean {
 		return this.precedenceDfa;
 	}
 
@@ -96,10 +96,10 @@ export class DFA {
 	 * {@code null} if no start state exists for the specified precedence.
 	 *
 	 * @ if this is not a precedence DFA.
-	 * @see #isPrecedenceDfa()
+	 * @see `isPrecedenceDfa`
 	 */
 	getPrecedenceStartState(precedence: number, fullContext: boolean): DFAState | undefined {
-		if (!this.isPrecedenceDfa()) {
+		if (!this.isPrecedenceDfa) {
 			throw new Error("Only precedence DFAs may contain a precedence start state.");
 		}
 
@@ -120,10 +120,10 @@ export class DFA {
 	 * precedence.
 	 *
 	 * @ if this is not a precedence DFA.
-	 * @see #isPrecedenceDfa()
+	 * @see `isPrecedenceDfa`
 	 */
 	setPrecedenceStartState(precedence: number, fullContext: boolean, startState: DFAState): void {
-		if (!this.isPrecedenceDfa()) {
+		if (!this.isPrecedenceDfa) {
 			throw new Error("Only precedence DFAs may contain a precedence start state.");
 		}
 
@@ -141,8 +141,8 @@ export class DFA {
 		}
 	}
 
-	isEmpty(): boolean {
-		if (this.isPrecedenceDfa()) {
+	get isEmpty(): boolean {
+		if (this.isPrecedenceDfa) {
 			// s0 and s0full are never null for a precedence DFA
 			return this.s0!.getEdgeMap().size === 0 && this.s0full!.getEdgeMap().size === 0;
 		}
@@ -150,8 +150,8 @@ export class DFA {
 		return this.s0 == null && this.s0full == null;
 	}
 
-	isContextSensitive(): boolean {
-		if (this.isPrecedenceDfa()) {
+	get isContextSensitive(): boolean {
+		if (this.isPrecedenceDfa) {
 			// s0full is never null for a precedence DFA
 			return (<DFAState>this.s0full).getEdgeMap().size > 0;
 		}
