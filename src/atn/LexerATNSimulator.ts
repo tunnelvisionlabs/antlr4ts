@@ -142,7 +142,7 @@ export class LexerATNSimulator extends ATNSimulator {
 			console.log(`start state closure=${ds0.configs}`);
 		}
 
-		if (ds0.isAcceptState()) {
+		if (ds0.isAcceptState) {
 			// allow zero-length tokens
 			this.captureSimState(this.prevAccept, input, ds0);
 		}
@@ -190,7 +190,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				this.consume(input);
 			}
 
-			if (target.isAcceptState()) {
+			if (target.isAcceptState) {
 				this.captureSimState(this.prevAccept, input, target);
 				if (t === IntStream.EOF) {
 					break;
@@ -263,10 +263,10 @@ export class LexerATNSimulator extends ATNSimulator {
 	protected failOrAccept(prevAccept: LexerATNSimulator.SimState, input: CharStream,
 		reach: ATNConfigSet, t: number): number {
 		if (prevAccept.dfaState != null) {
-			let lexerActionExecutor: LexerActionExecutor | undefined = prevAccept.dfaState.getLexerActionExecutor();
+			let lexerActionExecutor: LexerActionExecutor | undefined = prevAccept.dfaState.lexerActionExecutor;
 			this.accept(input, lexerActionExecutor, this.startIndex,
 				prevAccept.index, prevAccept.line, prevAccept.charPos);
-			return prevAccept.dfaState.getPrediction();
+			return prevAccept.dfaState.prediction;
 		}
 		else {
 			// if no accept and EOF is first char, return EOF
@@ -663,7 +663,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		if (firstConfigWithRuleStopState != null) {
 			let prediction: number = this.atn.ruleToTokenType[firstConfigWithRuleStopState.getState().ruleIndex];
 			let lexerActionExecutor: LexerActionExecutor | undefined = firstConfigWithRuleStopState.getLexerActionExecutor();
-			newState.setAcceptState(new AcceptStateInfo(prediction, lexerActionExecutor));
+			newState.acceptStateInfo = new AcceptStateInfo(prediction, lexerActionExecutor);
 		}
 
 		return this.atn.modeToDFA[this.mode].addState(newState);

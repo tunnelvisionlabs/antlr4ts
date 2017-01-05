@@ -459,11 +459,11 @@ export class ParserATNSimulator extends ATNSimulator {
 			s0 = dfa.s0full;
 		}
 
-		while (remainingContext != null && s0 != null && s0.isContextSensitive()) {
+		while (remainingContext != null && s0 != null && s0.isContextSensitive) {
 			remainingContext = this.skipTailCalls(remainingContext);
 			s0 = s0.getContextTarget(this.getReturnState(remainingContext));
 			if (remainingContext.isEmpty()) {
-				assert(s0 == null || !s0.isContextSensitive());
+				assert(s0 == null || !s0.isContextSensitive);
 			}
 			else {
 				remainingContext = remainingContext.parent;
@@ -517,7 +517,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					if (ParserATNSimulator.dfa_debug) console.log("accept " + s);
 				}
 				else {
-					if (ParserATNSimulator.dfa_debug) console.log("accept; predict " + s.getPrediction() + " in state " + s.stateNumber);
+					if (ParserATNSimulator.dfa_debug) console.log("accept; predict " + s.prediction + " in state " + s.stateNumber);
 				}
 
 				// keep going unless we're at EOF or state only has one alt number
@@ -645,8 +645,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		if (ParserATNSimulator.dfa_debug) console.log("DFA decision " + dfa.decision +
-			" predicts " + s.getPrediction());
-		return s.getPrediction();
+			" predicts " + s.prediction);
+		return s.prediction;
 	}
 
 	/**
@@ -657,7 +657,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * <p>
 	 * The default implementation simply returns the value of
-	 * {@link DFAState#isAcceptState()} except for conflict states when
+	 * `DFAState.isAcceptState` except for conflict states when
 	 * {@code useContext} is {@code true} and {@link #getPredictionMode()} is
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}. In that case, only
 	 * conflict states where {@link ATNConfigSet#isExactConflict()} is
@@ -673,7 +673,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * otherwise, {@code false}.
 	 */
 	protected isAcceptState(state: DFAState, useContext: boolean): boolean {
-		if (!state.isAcceptState()) {
+		if (!state.isAcceptState) {
 			return false;
 		}
 
@@ -756,13 +756,13 @@ export class ParserATNSimulator extends ATNSimulator {
 			let D: DFAState = nextState.s0;
 
 			// predicted alt => accept state
-			assert(D.isAcceptState() || D.getPrediction() === ATN.INVALID_ALT_NUMBER);
+			assert(D.isAcceptState || D.prediction === ATN.INVALID_ALT_NUMBER);
 			// conflicted => accept state
-			assert(D.isAcceptState() || D.configs.getConflictInfo() == null);
+			assert(D.isAcceptState || D.configs.getConflictInfo() == null);
 
 			if (this.isAcceptState(D, useContext)) {
 				let conflictingAlts: BitSet | undefined = D.configs.getConflictingAlts();
-				let predictedAlt: number = conflictingAlts == null ? D.getPrediction() : ATN.INVALID_ALT_NUMBER;
+				let predictedAlt: number = conflictingAlts == null ? D.prediction : ATN.INVALID_ALT_NUMBER;
 				if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 					if (this.optimize_ll1
 						&& input.index === startIndex
@@ -781,7 +781,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 				}
 
-				predictedAlt = D.getPrediction();
+				predictedAlt = D.prediction;
 //				int k = input.index - startIndex + 1; // how much input we used
 //				System.out.println("used k="+k);
 				let attemptFullContext: boolean = conflictingAlts != null && this.userWantsCtxSensitive;
@@ -1272,7 +1272,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 			}
 
-			while (s0 != null && s0.isContextSensitive() && remainingGlobalContext != null) {
+			while (s0 != null && s0.isContextSensitive && remainingGlobalContext != null) {
 				let next: DFAState | undefined;
 				remainingGlobalContext = this.skipTailCalls(remainingGlobalContext);
 				if (remainingGlobalContext.isEmpty()) {
@@ -1295,7 +1295,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		if (s0 != null && !s0.isContextSensitive()) {
+		if (s0 != null && !s0.isContextSensitive) {
 			return new SimulatorState(globalContext, s0, useContext, remainingGlobalContext);
 		}
 
@@ -2311,15 +2311,15 @@ export class ParserATNSimulator extends ATNSimulator {
 		let decisionState: DecisionState = <DecisionState>this.atn.getDecisionState(dfa.decision);
 		let predictedAlt: number = this.getUniqueAlt(configs);
 		if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
-			newState.setAcceptState(new AcceptStateInfo(predictedAlt));
+			newState.acceptStateInfo = new AcceptStateInfo(predictedAlt);
 		} else if (configs.getConflictingAlts() != null) {
 			let conflictingAlts = configs.getConflictingAlts();
 			if (conflictingAlts) {
-				newState.setAcceptState(new AcceptStateInfo(conflictingAlts.nextSetBit(0)));
+				newState.acceptStateInfo = new AcceptStateInfo(conflictingAlts.nextSetBit(0));
 			}
 		}
 
-		if (newState.isAcceptState() && configs.hasSemanticContext()) {
+		if (newState.isAcceptState && configs.hasSemanticContext()) {
 			this.predicateDFAState(newState, configs, decisionState.getNumberOfTransitions());
 		}
 

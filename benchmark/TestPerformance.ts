@@ -1148,7 +1148,7 @@ export class TestPerformance {
                             contextsInDFAState = contextsInDFAState2;
                         }
 
-                        if (state.isAcceptState()) {
+                        if (state.isAcceptState) {
                             let hasGlobal: boolean =  false;
                             for (let config of asIterable(state.configs)) {
                                 if (config.getReachesIntoOuterContext()) {

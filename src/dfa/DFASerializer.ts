@@ -85,7 +85,7 @@ export class DFASerializer {
 					}
 				}
 
-				if (s.isContextSensitive()) {
+				if (s.isContextSensitive) {
 					for (let entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
@@ -133,16 +133,16 @@ export class DFASerializer {
 
 		let n: number = s.stateNumber;
 		let stateStr: string = "s" + n;
-		if (s.isAcceptState()) {
+		if (s.isAcceptState) {
 			if (s.predicates) {
 				stateStr = ":s" + n + "=>" + s.predicates;
 			}
 			else {
-				stateStr = ":s" + n + "=>" + s.getPrediction();
+				stateStr = ":s" + n + "=>" + s.prediction;
 			}
 		}
 
-		if (s.isContextSensitive()) {
+		if (s.isContextSensitive) {
 			stateStr += "*";
 			for (let config of asIterable(s.configs)) {
 				if (config.getReachesIntoOuterContext()) {
