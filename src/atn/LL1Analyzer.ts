@@ -176,7 +176,7 @@ export class LL1Analyzer {
 			if (PredictionContext.isEmptyLocal(ctx)) {
 				look.add(Token.EPSILON);
 				return;
-			} else if (ctx.isEmpty()) {
+			} else if (ctx.isEmpty) {
 				if (addEOF) {
 					look.add(Token.EOF);
 				}
@@ -186,7 +186,7 @@ export class LL1Analyzer {
 		}
 
 		if (s instanceof RuleStopState) {
-			if (ctx.isEmpty() && !PredictionContext.isEmptyLocal(ctx)) {
+			if (ctx.isEmpty && !PredictionContext.isEmptyLocal(ctx)) {
 				if (addEOF) {
 					look.add(Token.EOF);
 				}

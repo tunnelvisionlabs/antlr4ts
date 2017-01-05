@@ -627,7 +627,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * the parser context is not nested within a precedence rule.
 	 */
 	getPrecedence(): number {
-		if (this._precedenceStack.isEmpty()) {
+		if (this._precedenceStack.isEmpty) {
 			return -1;
 		}
 

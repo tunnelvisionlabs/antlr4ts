@@ -816,7 +816,7 @@ function toDOTString(context: PredictionContext): string {
 
 		nodes += ("label=\"");
 
-		if (current.isEmpty()) {
+		if (current.isEmpty) {
 			nodes += (PredictionContext.isEmptyLocal(current) ? '*' : '$');
 		} else if (current.size > 1) {
 			for (let i = 0; i < current.size; i++) {

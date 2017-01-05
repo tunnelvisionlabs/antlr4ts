@@ -462,7 +462,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		while (remainingContext != null && s0 != null && s0.isContextSensitive) {
 			remainingContext = this.skipTailCalls(remainingContext);
 			s0 = s0.getContextTarget(this.getReturnState(remainingContext));
-			if (remainingContext.isEmpty()) {
+			if (remainingContext.isEmpty) {
 				assert(s0 == null || !s0.isContextSensitive);
 			}
 			else {
@@ -967,7 +967,7 @@ export class ParserATNSimulator extends ATNSimulator {
 						try {
 							input.seek(startIndex);
 							let filteredAlts: BitSet = this.evalSemanticContext(predicates, previous.outerContext, false);
-							if (!filteredAlts.isEmpty()) {
+							if (!filteredAlts.isEmpty) {
 								return filteredAlts.nextSetBit(0);
 							}
 						}
@@ -1089,7 +1089,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				if (ParserATNSimulator.debug) console.log("testing " + this.getTokenName(t) + " at " + c.toString());
 
 				if (c.state instanceof RuleStopState) {
-					assert(c.context.isEmpty());
+					assert(c.context.isEmpty);
 					if (useContext && !c.reachesIntoOuterContext || t === IntStream.EOF) {
 						if (skippedStopStates == null) {
 							skippedStopStates = [];
@@ -1177,7 +1177,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					contextElements = new IntegerList();
 				}
 
-				if (remainingGlobalContext.isEmpty()) {
+				if (remainingGlobalContext.isEmpty) {
 					remainingGlobalContext = undefined;
 				} else {
 					remainingGlobalContext = remainingGlobalContext.parent;
@@ -1192,7 +1192,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		} while (useContext && stepIntoGlobal);
 
-		if (reach.isEmpty()) {
+		if (reach.isEmpty) {
 			this.setDFAEdge(s, t, ATNSimulator.ERROR);
 			return [ATNSimulator.ERROR, remainingGlobalContext];
 		}
@@ -1260,7 +1260,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (useContext) {
 			if (!this.enable_global_context_dfa) {
 				while (remainingGlobalContext != null) {
-					if (remainingGlobalContext.isEmpty()) {
+					if (remainingGlobalContext.isEmpty) {
 						previousContext = PredictionContext.EMPTY_FULL_STATE_KEY;
 						remainingGlobalContext = undefined;
 					}
@@ -1275,7 +1275,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			while (s0 != null && s0.isContextSensitive && remainingGlobalContext != null) {
 				let next: DFAState | undefined;
 				remainingGlobalContext = this.skipTailCalls(remainingGlobalContext);
-				if (remainingGlobalContext.isEmpty()) {
+				if (remainingGlobalContext.isEmpty) {
 					next = s0.getContextTarget(PredictionContext.EMPTY_FULL_STATE_KEY);
 					previousContext = PredictionContext.EMPTY_FULL_STATE_KEY;
 					remainingGlobalContext = undefined;
@@ -1377,7 +1377,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			remainingGlobalContext = this.skipTailCalls(remainingGlobalContext);
 			let nextContextElement: number = this.getReturnState(remainingGlobalContext);
 
-			if (remainingGlobalContext.isEmpty()) {
+			if (remainingGlobalContext.isEmpty) {
 				remainingGlobalContext = undefined;
 			} else {
 				remainingGlobalContext = remainingGlobalContext.parent;
@@ -1714,7 +1714,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		if (config.state instanceof RuleStopState) {
 			// We hit rule end. If we have context info, use it
-			if (!config.context.isEmpty()) {
+			if (!config.context.isEmpty) {
 				let hasEmpty: boolean = config.context.hasEmpty();
 				let nonEmptySize: number = config.context.size - (hasEmpty ? 1 : 0);
 				for (let i = 0; i < nonEmptySize; i++) {
@@ -2227,7 +2227,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		contextTransitions: IntegerList | undefined,
 		@NotNull toConfigs: ATNConfigSet,
 		contextCache: PredictionContextCache): DFAState {
-		assert(contextTransitions == null || contextTransitions.isEmpty() || dfa.isContextSensitive);
+		assert(contextTransitions == null || contextTransitions.isEmpty || dfa.isContextSensitive);
 
 		let from: DFAState = fromState;
 		let to: DFAState = this.addDFAState(dfa, toConfigs, contextCache);
@@ -2375,7 +2375,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	protected getReturnState(context: RuleContext): number {
-		if (context.isEmpty()) {
+		if (context.isEmpty) {
 			return PredictionContext.EMPTY_FULL_STATE_KEY;
 		}
 
@@ -2389,7 +2389,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return context;
 		}
 
-		while (!context.isEmpty()) {
+		while (!context.isEmpty) {
 			let state: ATNState = this.atn.states[context.invokingState];
 			assert(state.numberOfTransitions === 1 && state.transition(0).serializationType === TransitionType.RULE);
 			let transition: RuleTransition = <RuleTransition>state.transition(0);

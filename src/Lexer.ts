@@ -206,7 +206,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	popMode(): number {
-		if (this._modeStack.isEmpty()) throw new Error("EmptyStackException");
+		if (this._modeStack.isEmpty) throw new Error("EmptyStackException");
 		if (LexerATNSimulator.debug) console.log("popMode back to " + this._modeStack.peek());
 		this.mode(this._modeStack.pop());
 		return this._mode;

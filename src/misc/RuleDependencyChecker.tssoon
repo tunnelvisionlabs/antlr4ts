@@ -28,7 +28,7 @@ export class RuleDependencyChecker {
 			}
 
 			let dependencies: List<Tuple2<RuleDependency, AnnotatedElement>> =  getDependencies(clazz);
-			if (dependencies.isEmpty()) {
+			if (dependencies.isEmpty) {
 				continue;
 			}
 
@@ -92,7 +92,7 @@ export class RuleDependencyChecker {
 			if (isStatic && isInteger && field.getName().startsWith("RULE_")) {
 				try {
 					let name: string =  field.getName().substring("RULE_".length());
-					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+					if (name.isEmpty || !Character.isLowerCase(name.charAt(0))) {
 						continue;
 					}
 

@@ -195,7 +195,7 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return n==0;
 	}
 

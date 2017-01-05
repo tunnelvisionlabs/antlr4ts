@@ -216,7 +216,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 	private reportUnimplementedDependents(dependency: Tuple2<RuleDependency,Element>, dependents: EnumSet<Dependents>): void {
 		let unimplemented: EnumSet<Dependents> =  dependents.clone();
 		unimplemented.removeAll(IMPLEMENTED_DEPENDENTS);
-		if (!unimplemented.isEmpty()) {
+		if (!unimplemented.isEmpty) {
 			let dependentsElement: Tuple2<AnnotationMirror, AnnotationValue> =  findRuleDependencyProperty(dependency, RuleDependencyProperty.DEPENDENTS);
 			if (dependentsElement == null) {
 				dependentsElement = findRuleDependencyProperty(dependency, RuleDependencyProperty.RULE);
@@ -288,7 +288,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 			if (isStatic && isInteger && name.startsWith("RULE_")) {
 				try {
 					name = name.substring("RULE_".length());
-					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+					if (name.isEmpty || !Character.isLowerCase(name.charAt(0))) {
 						continue;
 					}
 
@@ -371,7 +371,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 			if (isStatic && isInteger && name.startsWith("RULE_")) {
 				try {
 					name = name.substring("RULE_".length());
-					if (name.isEmpty() || !Character.isLowerCase(name.charAt(0))) {
+					if (name.isEmpty || !Character.isLowerCase(name.charAt(0))) {
 						continue;
 					}
 

@@ -95,7 +95,7 @@ export abstract class PredictionContext implements Equatable {
 	protected abstract removeEmptyContext(): PredictionContext;
 
 	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
-		if (outerContext.isEmpty()) {
+		if (outerContext.isEmpty) {
 			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
 
@@ -124,9 +124,9 @@ export abstract class PredictionContext implements Equatable {
 			return context0;
 		}
 
-		if (context0.isEmpty()) {
+		if (context0.isEmpty) {
 			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext.addEmptyContext(context1);
-		} else if (context1.isEmpty()) {
+		} else if (context1.isEmpty) {
 			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
 		}
 
@@ -219,7 +219,7 @@ export abstract class PredictionContext implements Equatable {
 		@NotNull context: PredictionContext,
 		@NotNull contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
 		@NotNull visited: PredictionContext.IdentityHashMap): PredictionContext {
-		if (context.isEmpty()) {
+		if (context.isEmpty) {
 			return context;
 		}
 
@@ -258,7 +258,7 @@ export abstract class PredictionContext implements Equatable {
 			return context;
 		}
 
-		// We know parents.length>0 because context.isEmpty() is checked at the beginning of the method.
+		// We know parents.length>0 because context.isEmpty is checked at the beginning of the method.
 		let updated: PredictionContext;
 		if (parents.length === 1) {
 			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
@@ -288,7 +288,7 @@ export abstract class PredictionContext implements Equatable {
 		return new SingletonPredictionContext(this, returnState);
 	}
 
-	abstract isEmpty(): boolean;
+	abstract readonly isEmpty: boolean;
 
 	abstract hasEmpty(): boolean;
 
@@ -311,7 +311,7 @@ export abstract class PredictionContext implements Equatable {
 			let stateNumber: number = currentState;
 			let localBuffer: string = "";
 			localBuffer += "[";
-			while (!p.isEmpty() && p !== stop) {
+			while (!p.isEmpty && p !== stop) {
 				let index: number = 0;
 				if (p.size > 0) {
 					let bits: number = 1;
@@ -340,7 +340,7 @@ export abstract class PredictionContext implements Equatable {
 					let ruleName: string = recognizer.getRuleNames()[s.ruleIndex];
 					localBuffer += ruleName;
 				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
-					if (!p.isEmpty()) {
+					if (!p.isEmpty) {
 						if (localBuffer.length > 1) {
 							// first char is '[', if more than that this isn't the first rule
 							localBuffer += ' ';
@@ -419,7 +419,7 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return true;
 	}
 
@@ -477,7 +477,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return false;
 	}
 
@@ -520,7 +520,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	private static appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
-		if (suffix.isEmpty()) {
+		if (suffix.isEmpty) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
 				if (context.hasEmpty()) {
 					return PredictionContext.EMPTY_LOCAL;
@@ -538,7 +538,7 @@ class ArrayPredictionContext extends PredictionContext {
 
 		let result = visited.get(context);
 		if (!result) {
-			if (context.isEmpty()) {
+			if (context.isEmpty) {
 				result = suffix;
 			} else {
 				let parentCount: number = context.size;
@@ -680,7 +680,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return false;
 	}
 

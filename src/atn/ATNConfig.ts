@@ -240,7 +240,7 @@ export class ATNConfig implements Equatable {
 				return false;
 			}
 
-			if (right.isEmpty()) {
+			if (right.isEmpty) {
 				return left.hasEmpty();
 			} else {
 				for (let i = 0; i < right.size; i++) {

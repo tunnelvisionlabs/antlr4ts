@@ -264,7 +264,7 @@ export class UnbufferedCharStream implements CharStream {
 
     @Override
     get sourceName(): string {
-		if (name == null || name.isEmpty()) {
+		if (name == null || name.isEmpty) {
 			return UNKNOWN_SOURCE_NAME;
 		}
 

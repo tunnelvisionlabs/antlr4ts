@@ -82,7 +82,7 @@ export abstract class BaseTest {
 	static {
 		let baseTestDir: string =  System.getProperty("antlr.java-test-dir");
 		let perTestDirectories: boolean =  false;
-		if (baseTestDir == null || baseTestDir.isEmpty()) {
+		if (baseTestDir == null || baseTestDir.isEmpty) {
 			baseTestDir = System.getProperty("java.io.tmpdir");
 			perTestDirectories = true;
 		}
@@ -205,7 +205,7 @@ export abstract class BaseTest {
 
 	getTypesFromString(g: Grammar, expecting: string): IntegerList {
 		let expectingTokenTypes: IntegerList =  new IntegerList();
-		if ( expecting!=null && !expecting.trim().isEmpty() ) {
+		if ( expecting!=null && !expecting.trim().isEmpty ) {
 			for (let tname of expecting.replace(" ", "").split(",")) {
 				let ttype: number =  g.getTokenType(tname);
 				expectingTokenTypes.add(ttype);
@@ -494,7 +494,7 @@ export abstract class BaseTest {
 		}
 		antlr.processGrammarsOnCommandLine();
 
-		if ( !defaultListener && !equeue.errors.isEmpty() ) {
+		if ( !defaultListener && !equeue.errors.isEmpty ) {
 			System.err.println("antlr reports errors from "+options);
 			for (let i = 0; i < equeue.errors.size; i++) {
 				let msg: ANTLRMessage =  equeue.errors.get(i);
@@ -509,7 +509,7 @@ export abstract class BaseTest {
 			}
 			console.log("###");
 		}
-		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+		if ( !defaultListener && !equeue.warnings.isEmpty ) {
 			System.err.println("antlr reports warnings from "+options);
 			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
@@ -517,7 +517,7 @@ export abstract class BaseTest {
 			}
 		}
 
-		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+		if ( !defaultListener && !equeue.warnings.isEmpty ) {
 			System.err.println("antlr reports warnings from "+options);
 			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
@@ -680,7 +680,7 @@ export abstract class BaseTest {
 	{
 		let equeue: ErrorQueue = 
 			antlr(grammarFileName, grammarStr, defaultListener, extraOptions);
-		if (!equeue.errors.isEmpty()) {
+		if (!equeue.errors.isEmpty) {
 			return false;
 		}
 
@@ -1041,7 +1041,7 @@ export abstract class BaseTest {
 				foundMsg = m;
 			}
 		}
-		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty());
+		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty);
 		assertTrue("too many errors; "+equeue.errors, equeue.errors.size<=1);
 		assertNotNull("couldn't find expected error: "+expectedMessage.getErrorType(), foundMsg);
 		/*
@@ -1263,12 +1263,12 @@ export abstract class BaseTest {
 
 	assertNotNullOrEmpty(message: string, text: string): void {
 		assertNotNull(message, text);
-		assertFalse(message, text.isEmpty());
+		assertFalse(message, text.isEmpty);
 	}
 
 	assertNotNullOrEmpty(text: string): void {
 		assertNotNull(text);
-		assertFalse(text.isEmpty());
+		assertFalse(text.isEmpty);
 	}
 
 	public static class IntTokenStream implements TokenStream {

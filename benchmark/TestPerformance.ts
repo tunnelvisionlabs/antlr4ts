@@ -1010,7 +1010,7 @@ export class TestPerformance {
 					console.log("\tMode\tStates\tConfigs\tMode");
 					for (let i = 0; i < modeToDFA.length; i++) {
 						let dfa: DFA =  modeToDFA[i];
-						if (dfa == null || dfa.states.isEmpty()) {
+						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 
@@ -1063,7 +1063,7 @@ export class TestPerformance {
 
 					for (let i = 0; i < decisionToDFA.length; i++) {
 						let dfa: DFA =  decisionToDFA[i];
-						if (dfa == null || dfa.states.isEmpty()) {
+						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 

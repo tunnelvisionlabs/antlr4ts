@@ -96,7 +96,7 @@ export class RuleContext extends RuleNode {
 	/** A context is empty if there is no invoking state; meaning nobody called
 	 *  current context.
 	 */
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.invokingState === -1;
 	}
 
@@ -214,7 +214,7 @@ export class RuleContext extends RuleNode {
 		buf += ("[");
 		while (p && p !== stop) {
 			if (!ruleNames) {
-				if (!p.isEmpty()) {
+				if (!p.isEmpty) {
 					buf += (p.invokingState);
 				}
 			} else {
@@ -224,7 +224,7 @@ export class RuleContext extends RuleNode {
 				buf += (ruleName);
 			}
 
-			if (p._parent && (ruleNames || !p._parent.isEmpty())) {
+			if (p._parent && (ruleNames || !p._parent.isEmpty)) {
 				buf += (" ");
 			}
 

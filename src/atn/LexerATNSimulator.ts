@@ -245,7 +245,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		// Fill reach starting from closure, following t transitions
 		this.getReachableConfigSet(input, s.configs, reach, t);
 
-		if (reach.isEmpty()) { // we got nowhere on t from s
+		if (reach.isEmpty) { // we got nowhere on t from s
 			if (!reach.hasSemanticContext()) {
 				// we got nowhere on t, don't throw out this knowledge; it'd
 				// cause a failover from DFA later.
@@ -386,7 +386,7 @@ export class LexerATNSimulator extends ATNSimulator {
 			}
 
 			let context: PredictionContext = config.context;
-			if (context.isEmpty()) {
+			if (context.isEmpty) {
 				configs.add(config);
 				return true;
 			}
@@ -494,7 +494,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				// TODO: if the entry rule is invoked recursively, some
 				// actions may be executed during the recursive call. The
 				// problem can appear when hasEmpty() is true but
-				// isEmpty() is false. In this case, the config needs to be
+				// isEmpty is false. In this case, the config needs to be
 				// split into two contexts - one with just the empty path
 				// and another with everything but the empty path.
 				// Unfortunately, the current algorithm does not allow

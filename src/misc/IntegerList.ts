@@ -130,7 +130,7 @@ export class IntegerList {
 		this._size -= (toIndex - fromIndex);
 	}
 
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this._size === 0;
 	}
 

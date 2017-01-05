@@ -187,7 +187,7 @@ export class ParserInterpreter extends Parser {
 			switch (p.stateType) {
 			case ATNStateType.RULE_STOP:
 				// pop; return from rule
-				if (this._ctx.isEmpty()) {
+				if (this._ctx.isEmpty) {
 					if (startRuleStartState.isPrecedenceRule) {
 						let result: ParserRuleContext = this._ctx;
 						let parentContext: [ParserRuleContext, number] = this._parentContextStack.pop() !;

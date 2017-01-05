@@ -69,8 +69,8 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return bucket.value;
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	keySet(): JavaSet<K> {
@@ -184,8 +184,8 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<JavaMap.Entry<K, V>> {
@@ -269,8 +269,8 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<K> {
@@ -360,8 +360,8 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<V> {

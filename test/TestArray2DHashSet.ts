@@ -64,17 +64,17 @@ describe('Array2DHashSet', function() {
     beforeEach(function() { set = new Array2DHashSet<EquatableTest>()});
 
     it('shoud count entities', function() {
-        assert( set.isEmpty() );
+        assert( set.isEmpty );
         assert.equal( set.size, 0 );
         set.add(alpha);
-        assert( !set.isEmpty());
+        assert( !set.isEmpty);
         assert.equal(set.size, 1);
         set.add(beta);
         assert.equal(set.size, 2);
     });
 
     it('should check entries by value', function() {
-        assert(set.isEmpty());
+        assert(set.isEmpty);
         set.add(alpha);
         assert(set.contains(alpha), "identity match failed");
         assert(set.contains(alpha_again), "value match failed");

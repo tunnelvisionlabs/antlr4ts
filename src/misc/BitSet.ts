@@ -184,7 +184,7 @@ export class BitSet implements Iterable<number>{
 	 * Returns the number of bits set to `true` in this `BitSet`.
 	 */
 	cardinality(): number {
-		if (this.isEmpty()) {
+		if (this.isEmpty) {
 			return 0;
 		}
 		const data = this.data;
@@ -326,7 +326,7 @@ export class BitSet implements Iterable<number>{
 	/**
 	 * Returns true if this `BitSet` contains no bits that are set to `true`.
 	 */
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.length() === 0;
 	}
 

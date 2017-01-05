@@ -212,7 +212,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.n === 0;
 	}
 
