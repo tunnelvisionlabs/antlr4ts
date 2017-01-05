@@ -32,12 +32,12 @@ export class EpsilonTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.EPSILON;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true;
 	}
 

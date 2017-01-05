@@ -240,7 +240,7 @@ export class LL1Analyzer {
 					look.add(LL1Analyzer.HIT_PRED);
 				}
 			}
-			else if (t.isEpsilon()) {
+			else if (t.isEpsilon) {
 				this._LOOK(t.target, stopState, ctx, look, lookBusy, calledRuleStack, seeThruPreds, addEOF);
 			}
 			else if (t instanceof WildcardTransition) {
@@ -248,7 +248,7 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined = (<Transition>t).label();
+				let set: IntervalSet | undefined = (<Transition>t).label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));

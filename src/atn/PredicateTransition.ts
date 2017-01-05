@@ -30,12 +30,12 @@ export class PredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.PREDICATE;
 	}
 
 	@Override
-	isEpsilon(): boolean { return true; }
+	get isEpsilon(): boolean { return true; }
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {

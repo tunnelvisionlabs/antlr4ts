@@ -438,7 +438,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		treatEofAsEpsilon: boolean): ATNConfig | undefined {
 		let c: ATNConfig | undefined;
 
-		switch (t.getSerializationType()) {
+		switch (t.serializationType) {
 		case TransitionType.RULE:
 			let ruleTransition: RuleTransition = <RuleTransition>t;
 			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.getContext().hasEmpty()) {

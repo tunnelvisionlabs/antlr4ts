@@ -24,12 +24,12 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.PRECEDENCE;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true;
 	}
 

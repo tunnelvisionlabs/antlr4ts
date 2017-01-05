@@ -16,7 +16,7 @@ export class WildcardTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.WILDCARD;
 	}
 

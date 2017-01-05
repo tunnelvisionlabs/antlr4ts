@@ -579,7 +579,7 @@ export class RuleDependencyProcessor extends AbstractProcessor {
 			}
 
 			for (let transition of state.getTransitions()) {
-				if (transition.getSerializationType() != Transition.RULE) {
+				if (transition.serializationType != Transition.RULE) {
 					continue;
 				}
 

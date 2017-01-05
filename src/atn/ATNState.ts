@@ -160,9 +160,9 @@ export abstract class ATNState {
 
 	addTransition(e: Transition, index?: number): void {
 		if (this.transitions.length === 0) {
-			this.epsilonOnlyTransitions = e.isEpsilon();
+			this.epsilonOnlyTransitions = e.isEpsilon;
 		}
-		else if (this.epsilonOnlyTransitions !== e.isEpsilon()) {
+		else if (this.epsilonOnlyTransitions !== e.isEpsilon) {
 			this.epsilonOnlyTransitions = false;
 			throw new Error("ATN state " + this.stateNumber + " has both epsilon and non-epsilon transitions.");
 		}

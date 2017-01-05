@@ -1778,7 +1778,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 				}
 
-				if (!t.isEpsilon() && !closureBusy.add(c)) {
+				if (!t.isEpsilon && !closureBusy.add(c)) {
 					// avoid infinite recursion for EOF* and EOF+
 					continue;
 				}
@@ -1842,7 +1842,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	protected getEpsilonTarget(@NotNull config: ATNConfig, @NotNull t: Transition, collectPredicates: boolean, inContext: boolean, contextCache: PredictionContextCache, treatEofAsEpsilon: boolean): ATNConfig | undefined {
-		switch (t.getSerializationType()) {
+		switch (t.serializationType) {
 		case TransitionType.RULE:
 			return this.ruleTransition(config, <RuleTransition>t, contextCache);
 
@@ -2391,7 +2391,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		while (!context.isEmpty()) {
 			let state: ATNState = this.atn.states[context.invokingState];
-			assert(state.getNumberOfTransitions() === 1 && state.transition(0).getSerializationType() === TransitionType.RULE);
+			assert(state.getNumberOfTransitions() === 1 && state.transition(0).serializationType === TransitionType.RULE);
 			let transition: RuleTransition = <RuleTransition>state.transition(0);
 			if (!transition.tailCall) {
 				break;
