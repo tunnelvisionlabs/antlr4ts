@@ -197,7 +197,7 @@ export class ParserRuleContext extends RuleContext {
 		let j: number = -1; // what token with ttype have we found?
 		for (let o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol: Token = o.getSymbol();
+				let symbol: Token = o.symbol;
 				if (symbol.type === ttype) {
 					j++;
 					if (j === i) {
@@ -219,7 +219,7 @@ export class ParserRuleContext extends RuleContext {
 
 		for (let o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol = o.getSymbol();
+				let symbol = o.symbol;
 				if (symbol.type === ttype) {
 					tokens.push(o);
 				}

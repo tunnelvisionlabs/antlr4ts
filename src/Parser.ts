@@ -65,7 +65,7 @@ class TraceListener implements ParseTreeListener {
 	@Override
 	visitTerminal(node: TerminalNode): void {
 		let parent = node.parent!.ruleContext;
-		let token: Token = node.getSymbol();
+		let token: Token = node.symbol;
 		console.log("consume " + token + " rule " + this.ruleNames[parent.getRuleIndex()]);
 	}
 }

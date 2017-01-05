@@ -17,7 +17,7 @@ export class TestListeners extends BaseTest {
 			"@parser::members {\n" +
 			"public static class LeafListener extends TBaseListener {\n" +
 			"    public void visitTerminal(TerminalNode node) {\n" +
-			"      System.out.println(node.getSymbol().text);\n" +
+			"      System.out.println(node.symbol.text);\n" +
 			"    }\n" +
 			"  }}\n" +
 			"s\n" +
@@ -48,8 +48,8 @@ export class TestListeners extends BaseTest {
 			"@parser::members {\n" +
 			"public static class LeafListener extends TBaseListener {\n" +
 			"    public void exitA(TParser.AContext ctx) {\n" +
-			"      if (ctx.childCount==2) System.out.printf(\"%s %s %s\",ctx.INT(0).getSymbol().text,ctx.INT(1).getSymbol().text,ctx.INT());\n" +
-			"      else System.out.println(ctx.ID().getSymbol());\n" +
+			"      if (ctx.childCount==2) System.out.printf(\"%s %s %s\",ctx.INT(0).symbol.text,ctx.INT(1).symbol.text,ctx.INT());\n" +
+			"      else System.out.println(ctx.ID().symbol);\n" +
 			"    }\n" +
 			"  }}\n" +
 			"s\n" +
@@ -130,7 +130,7 @@ export class TestListeners extends BaseTest {
 			"                          ctx.e(1).start.text," +
 			"                          ctx.e().get(0).start.text);\n" +
 			"      }\n" +
-			"      else System.out.println(ctx.INT().getSymbol().text);\n" +
+			"      else System.out.println(ctx.INT().symbol.text);\n" +
 			"    }\n" +
 			"  }" +
 			"}\n" +
@@ -170,7 +170,7 @@ export class TestListeners extends BaseTest {
 			"                ctx.eList());\n" +
 			"    }\n" +
 			"    public void exitInt(TParser.IntContext ctx) {\n" +
-			"      System.out.println(ctx.INT().getSymbol().text);\n" +
+			"      System.out.println(ctx.INT().symbol.text);\n" +
 			"    }\n" +
 			"  }\n" +
 			"}\n" +

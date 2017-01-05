@@ -84,7 +84,7 @@ export class Trees {
 			return t.toString();
 		}
 		else if (t instanceof TerminalNode) {
-			let symbol = t.getSymbol();
+			let symbol = t.symbol;
 			return symbol.text || "";
 		}
 		throw new TypeError("Unexpected node type");
@@ -149,7 +149,7 @@ export class Trees {
 	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
-			if (t.getSymbol().type === index) nodes.push(t);
+			if (t.symbol.type === index) nodes.push(t);
 		}
 		else if (!findTokens && t instanceof ParserRuleContext) {
 			if (t.getRuleIndex() === index) nodes.push(t);

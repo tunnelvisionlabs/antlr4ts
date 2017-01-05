@@ -66,7 +66,7 @@ export class Trees {
 				return t.toString();
 			}
 			else if ( t instanceof TerminalNode) {
-				let symbol: Token =  ((TerminalNode)t).getSymbol();
+				let symbol: Token =  ((TerminalNode)t).symbol;
 				if (symbol != null) {
 					let s: string =  symbol.text;
 					return s;
@@ -142,7 +142,7 @@ export class Trees {
 		// check this node (the root) first
 		if ( findTokens && t instanceof TerminalNode ) {
 			let tnode: TerminalNode =  (TerminalNode)t;
-			if ( tnode.getSymbol().type==index ) nodes.add(t);
+			if ( tnode.symbol.type==index ) nodes.add(t);
 		}
 		else if ( !findTokens && t instanceof ParserRuleContext ) {
 			let ctx: ParserRuleContext =  (ParserRuleContext)t;

@@ -1956,13 +1956,13 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	@Override
 	visitTerminal(node: TerminalNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_TERMINAL);
-		TestPerformance.updateChecksum(this.checksum, node.getSymbol());
+		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override
 	visitErrorNode(node: ErrorNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_ERROR_NODE);
-		TestPerformance.updateChecksum(this.checksum, node.getSymbol());
+		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override

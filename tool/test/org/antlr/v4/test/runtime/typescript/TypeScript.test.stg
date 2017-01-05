@@ -315,7 +315,7 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 BasicListener(X) ::= <<
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
-		console.log(node.getSymbol().text);
+		console.log(node.symbol.text);
 	}
 }
 >>
@@ -344,10 +344,10 @@ TokenGetterListener(X) ::= <<
 export class LeafListener implements TListener {
 	exitA(ctx: TParser.AContext): void {
 		if (ctx.childCount === 2 && ctx.INT().length === 2) {
-			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().text,
-				ctx.INT(1).getSymbol().text, ctx.INT()[0], ctx.INT()[1]);
+			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).symbol.text,
+				ctx.INT(1).symbol.text, ctx.INT()[0], ctx.INT()[1]);
 		} else {
-			console.log(ctx.ID().getSymbol());
+			console.log(ctx.ID().symbol);
 		}
 	}
 }
@@ -374,7 +374,7 @@ export class LeafListener implements TListener {
 			console.log("{0} {1} {2}\n",ctx.e(0).getStart().text,
 				ctx.e(1).getStart().text, ctx.e()[0].getStart().text);
 		} else {
-			console.log(ctx.INT().getSymbol().text);
+			console.log(ctx.INT().symbol.text);
 		}
 	}
 }
@@ -386,7 +386,7 @@ export class LeafListener implements TListener {
 		console.log("{0} {1}",ctx.e().getStart().text,ctx.eList());
 	}
 	exitInt(ctx: TParser.IntContext): void {
-		console.log(ctx.INT().getSymbol().text);
+		console.log(ctx.INT().symbol.text);
 	}
 }
 >>

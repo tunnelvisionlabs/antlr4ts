@@ -275,9 +275,9 @@ export class ParseTreePatternMatcher {
 		if (tree instanceof TerminalNode && patternTree instanceof TerminalNode) {
 			let mismatchedNode: ParseTree | undefined = undefined;
 			// both are tokens and they have same type
-			if (tree.getSymbol().type === patternTree.getSymbol().type) {
-				if (patternTree.getSymbol() instanceof TokenTagToken) { // x and <ID>
-					let tokenTagToken = patternTree.getSymbol() as TokenTagToken;
+			if (tree.symbol.type === patternTree.symbol.type) {
+				if (patternTree.symbol instanceof TokenTagToken) { // x and <ID>
+					let tokenTagToken = patternTree.symbol;
 					// track label->list-of-nodes for both token name and label (if any)
 					labels.map(tokenTagToken.tokenName, tree);
 					const l = tokenTagToken.label;
@@ -357,9 +357,9 @@ export class ParseTreePatternMatcher {
 		if (t instanceof RuleNode) {
 			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
 				let c = t.getChild(0) as TerminalNode;
-				if (c.getSymbol() instanceof RuleTagToken) {
+				if (c.symbol instanceof RuleTagToken) {
 //					System.out.println("rule tag subtree "+t.toStringTree(parser));
-					return c.getSymbol() as RuleTagToken;
+					return c.symbol;
 				}
 			}
 		}
