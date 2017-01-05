@@ -55,7 +55,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] Recognizer.java
 * [x] RuleContext.java
 * [x] RuleContextWithAltNum.java
-* [ ] RuleDependencies.java
+* [x] ~~RuleDependencies.java~~ (Not needed since TypeScript allows multiple decorators on one element)
 * [x] RuleDependency.java
 * [x] RuleVersion.java
 * [x] Token.java

@@ -37,7 +37,6 @@ export * from './RecognitionException';
 export * from './Recognizer';
 export * from './RuleContext';
 export * from './RuleContextWithAltNum';
-// export * from './RuleDependencies';
 export * from './RuleDependency';
 export * from './RuleVersion';
 export * from './Token';
