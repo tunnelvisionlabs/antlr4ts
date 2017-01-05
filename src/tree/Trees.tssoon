@@ -20,7 +20,7 @@ export class Trees {
 	 *  parse trees and extract data appropriately.
 	 */
 	static toStringTree(@NotNull t: Tree, @Nullable recog: Parser): string {
-		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+		let ruleNames: string[] =  recog != null ? recog.ruleNames : null;
 		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
 		return toStringTree(t, ruleNamesList);
 	}
@@ -45,7 +45,7 @@ export class Trees {
 	}
 
 	static getNodeText(@NotNull t: Tree, @Nullable recog: Parser): string {
-		let ruleNames: string[] =  recog != null ? recog.getRuleNames() : null;
+		let ruleNames: string[] =  recog != null ? recog.ruleNames : null;
 		let ruleNamesList: List<string> =  ruleNames != null ? Arrays.asList(ruleNames) : null;
 		return getNodeText(t, ruleNamesList);
 	}

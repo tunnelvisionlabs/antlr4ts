@@ -7,22 +7,22 @@
 
 export class ParserInterpreterForTesting {
 	public static class DummyParser extends Parser {
-		atn: ATN; 
+		_atn: ATN; 
 
 		g: Grammar; 
 		public DummyParser(Grammar g, ATN atn, TokenStream input) {
 			super(input);
 			this.g = g;
-			this.atn = atn;
+			this._atn = atn;
 		}
 
 		@Override
-		getGrammarFileName(): string {
+		get grammarFileName(): string {
 			throw new UnsupportedOperationException("not implemented");
 		}
 
 		@Override
-		getRuleNames(): string[] {
+		get ruleNames(): string[] {
 			return g.rules.keySet().toArray(new String[g.rules.size]);
 		}
 
@@ -33,8 +33,8 @@ export class ParserInterpreterForTesting {
 		}
 
 		@Override
-		getATN(): ATN {
-			return atn;
+		get atn(): ATN {
+			return _atn;
 		}
 	}
 

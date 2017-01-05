@@ -236,7 +236,7 @@ export class TestParserProfiler extends BaseTest {
 			parser.inputStream = tokens;
 			let r: Rule =  g.rules.get(startRule);
 			if ( r==null ) {
-				return parser.getParseInfo().getDecisionInfo();
+				return parser.parseInfo.getDecisionInfo();
 			}
 			let t: ParserRuleContext =  parser.parse(r.index);
 //			try {
@@ -248,6 +248,6 @@ export class TestParserProfiler extends BaseTest {
 //
 //			System.out.println(t.toStringTree(parser));
 		}
-		return parser.getParseInfo().getDecisionInfo();
+		return parser.parseInfo.getDecisionInfo();
 	}
 }

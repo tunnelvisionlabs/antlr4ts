@@ -36,7 +36,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	private _stateNumber = -1;
 
-	abstract getRuleNames(): string[];
+	abstract readonly ruleNames: string[];
 
 	/**
 	 * Get the vocabulary used by the recognizer.
@@ -44,7 +44,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @return A {@link Vocabulary} instance providing information about the
 	 * vocabulary used by the grammar.
 	 */
-	abstract getVocabulary(): Vocabulary;
+	abstract readonly vocabulary: Vocabulary;
 
 	/**
 	 * Get a map from token names to token types.
@@ -53,11 +53,11 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getTokenTypeMap(): ReadonlyMap<string, number> {
-		let vocabulary: Vocabulary = this.getVocabulary();
+		let vocabulary: Vocabulary = this.vocabulary;
 		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
 			let intermediateResult = new Map<string, number>();
-			for (let i = 0; i < this.getATN().maxTokenType; i++) {
+			for (let i = 0; i < this.atn.maxTokenType; i++) {
 				let literalName = vocabulary.getLiteralName(i);
 				if (literalName != null) {
 					intermediateResult.set(literalName, i);
@@ -84,7 +84,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	getRuleIndexMap(): ReadonlyMap<string, number> {
-		let ruleNames: string[] = this.getRuleNames();
+		let ruleNames: string[] = this.ruleNames;
 		if (ruleNames == null) {
 			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
@@ -112,14 +112,14 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * created the interpreter from it.</p>
 	 */
 	@NotNull
-	getSerializedATN(): string {
+	get serializedATN(): string {
 		throw new Error("there is no serialized ATN");
 	}
 
 	/** For debugging and other purposes, might want the grammar name.
 	 *  Have ANTLR generate an implementation for this method.
 	 */
-	abstract getGrammarFileName(): string;
+	abstract readonly grammarFileName: string;
 
 	/**
 	 * Get the {@link ATN} used by the recognizer for prediction.
@@ -127,7 +127,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @return The {@link ATN} used by the recognizer for prediction.
 	 */
 	@NotNull
-	getATN(): ATN {
+	get atn(): ATN {
 		return this._interp.atn;
 	}
 
@@ -137,7 +137,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @return The ATN interpreter used by the recognizer for prediction.
 	 */
 	@NotNull
-	getInterpreter(): ATNInterpreter {
+	get interpreter(): ATNInterpreter {
 		return this._interp;
 	}
 
@@ -146,7 +146,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 *
 	 * @since 4.3
 	 */
-	getParseInfo(): ParseInfo | undefined {
+	get parseInfo(): ParseInfo | undefined {
 		return undefined;
 	}
 
@@ -156,7 +156,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @param interpreter The ATN interpreter used by the recognizer for
 	 * prediction.
 	 */
-	setInterpreter(@NotNull interpreter: ATNInterpreter): void {
+	set interpreter(@NotNull interpreter: ATNInterpreter) {
 		this._interp = interpreter;
 	}
 
@@ -219,7 +219,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 		actionIndex: number): void {
 	}
 
-	getState(): number {
+	get state(): number {
 		return this._stateNumber;
 	}
 
@@ -230,7 +230,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 *  invoking rules. Combine this and we have complete ATN
 	 *  configuration information.
 	 */
-	setState(atnState: number): void {
+	set state(atnState: number) {
 //		System.err.println("setState "+atnState);
 		this._stateNumber = atnState;
 //		if ( traceATNStates ) _ctx.trace(atnState);

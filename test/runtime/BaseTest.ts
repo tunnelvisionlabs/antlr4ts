@@ -73,7 +73,7 @@ export function lexerTest(options: LexerTestOptions) {
 		tokens.fill();
 		tokens.getTokens().forEach(t =>console.log(t.toString()));
 		if (options.showDFA) {
-			process.stdout.write(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());
+			process.stdout.write(lex.interpreter.getDFA(Lexer.DEFAULT_MODE).toLexerString());
 		}
 	});
 }
@@ -84,7 +84,7 @@ export function parserTest<TParser extends Parser>(options: ParserTestOptions<TP
 	const tokens = new CommonTokenStream(lex);
 	const parser = new options.parser(tokens);
 	if (options.debug) {
-		parser.getInterpreter().reportAmbiguities = true;
+		parser.interpreter.reportAmbiguities = true;
 		parser.addErrorListener(new DiagnosticErrorListener());
 	}
 

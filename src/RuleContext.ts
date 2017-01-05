@@ -21,7 +21,7 @@
  *  Parser._ctx.
  *
  *  public final SContext s() throws RecognitionException {
- *      SContext _localctx = new SContext(_ctx, getState()); <-- create new node
+ *      SContext _localctx = new SContext(_ctx, state); <-- create new node
  *      enterRule(_localctx, 0, RULE_s);                     <-- push it
  *      ...
  *      exitRule();                                          <-- pop back to _localctx
@@ -206,7 +206,7 @@ export class RuleContext extends RuleNode {
 		arg1?: Recognizer<any, any> | string[],
 		stop?: RuleContext)
 		: string {
-		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
+		const ruleNames = (arg1 instanceof Recognizer) ? arg1.ruleNames : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
 		let buf = "";

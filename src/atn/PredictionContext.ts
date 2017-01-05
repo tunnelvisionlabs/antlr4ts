@@ -335,9 +335,9 @@ export abstract class PredictionContext implements Equatable {
 						localBuffer += ' ';
 					}
 
-					let atn: ATN = recognizer.getATN();
+					let atn: ATN = recognizer.atn;
 					let s: ATNState = atn.states[stateNumber];
-					let ruleName: string = recognizer.getRuleNames()[s.ruleIndex];
+					let ruleName: string = recognizer.ruleNames[s.ruleIndex];
 					localBuffer += ruleName;
 				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
 					if (!p.isEmpty) {

@@ -61,7 +61,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  for each element in the children list. For example, for a rule
 	 *  invocation there is the invoking state and the following state.
 	 *
-	 *  The parser setState() method updates field s and adds it to this list
+	 *  The parser state property updates field s and adds it to this list
 	 *  if we are debugging/tracing.
      *
      *  This does not trace states visited during prediction.

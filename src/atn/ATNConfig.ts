@@ -363,7 +363,7 @@ export class ATNConfig implements Equatable {
 		let buf = "";
 		// if (this.state.ruleIndex >= 0) {
 		// 	if (recog != null) {
-		// 		buf += (recog.getRuleNames()[this.state.ruleIndex] + ":");
+		// 		buf += (recog.ruleNames[this.state.ruleIndex] + ":");
 		// 	} else {
 		// 		buf += (this.state.ruleIndex + ":");
 		// 	}

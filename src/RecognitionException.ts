@@ -62,7 +62,7 @@ export class RecognitionException extends Error {
 		this._recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if (recognizer) this._offendingState = recognizer.getState();
+		if (recognizer) this._offendingState = recognizer.state;
 	}
 
 	/**
@@ -94,7 +94,7 @@ export class RecognitionException extends Error {
 	 */
 	get expectedTokens(): IntervalSet | undefined {
 		if (this._recognizer) {
-			return this._recognizer.getATN().getExpectedTokens(this._offendingState, this.ctx);
+			return this._recognizer.atn.getExpectedTokens(this._offendingState, this.ctx);
 		}
 		return undefined;
 	}

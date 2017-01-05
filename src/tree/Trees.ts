@@ -37,7 +37,7 @@ export class Trees {
      */
 	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
 		let ruleNames: string[];
-		if (arg2 instanceof Parser) { ruleNames = arg2.getRuleNames(); }
+		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
@@ -58,7 +58,7 @@ export class Trees {
 	static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
 		let ruleNames: string[] | undefined;
 		if (arg2 instanceof Parser) {
-			ruleNames = arg2.getRuleNames();
+			ruleNames = arg2.ruleNames;
 		} else if (arg2) {
 			ruleNames = arg2;
 		} else {

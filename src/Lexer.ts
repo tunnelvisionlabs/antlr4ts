@@ -116,7 +116,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._mode = Lexer.DEFAULT_MODE;
 		this._modeStack.clear();
 
-		this.getInterpreter().reset();
+		this.interpreter.reset();
 	}
 
 	/** Return a token from this source; i.e., match a token on the char
@@ -141,8 +141,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 				this._token = undefined;
 				this._channel = Token.DEFAULT_CHANNEL;
 				this._tokenStartCharIndex = this._input.index;
-				this._tokenStartCharPositionInLine = this.getInterpreter().charPositionInLine;
-				this._tokenStartLine = this.getInterpreter().line;
+				this._tokenStartCharPositionInLine = this.interpreter.charPositionInLine;
+				this._tokenStartLine = this.interpreter.line;
 				this._text = undefined;
 				do {
 					this._type = Token.INVALID_TYPE;
@@ -151,7 +151,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 //								   " at index "+input.index);
 					let ttype: number;
 					try {
-						ttype = this.getInterpreter().match(this._input, this._mode);
+						ttype = this.interpreter.match(this._input, this._mode);
 					}
 					catch (e) {
 						if (e instanceof LexerNoViableAltException) {
@@ -277,20 +277,20 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	@Override
 	get line(): number {
-		return this.getInterpreter().line;
+		return this.interpreter.line;
 	}
 
 	@Override
 	get charPositionInLine(): number {
-		return this.getInterpreter().charPositionInLine;
+		return this.interpreter.charPositionInLine;
 	}
 
 	set line(line: number) {
-		this.getInterpreter().line = line;
+		this.interpreter.line = line;
 	}
 
 	set charPositionInLine(charPositionInLine: number) {
-		this.getInterpreter().charPositionInLine = charPositionInLine;
+		this.interpreter.charPositionInLine = charPositionInLine;
 	}
 
 	/** What is the index of the current character of lookahead? */
@@ -305,7 +305,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		if (this._text != null) {
 			return this._text;
 		}
-		return this.getInterpreter().getText(this._input);
+		return this.interpreter.getText(this._input);
 	}
 
 	/** Set the complete text of this token; it wipes any previous
@@ -398,7 +398,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		if (re instanceof LexerNoViableAltException) {
 			if (this._input.LA(1) != IntStream.EOF) {
 				// skip a char and try again
-				this.getInterpreter().consume(this._input);
+				this.interpreter.consume(this._input);
 			}
 		} else {
 			//System.out.println("consuming char "+(char)input.LA(1)+" during recovery");

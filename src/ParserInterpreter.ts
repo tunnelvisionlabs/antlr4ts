@@ -47,16 +47,16 @@ import { Vocabulary } from './Vocabulary';
  *  See TestParserInterpreter for examples.
  */
 export class ParserInterpreter extends Parser {
-	protected grammarFileName: string;
-	protected atn: ATN;
+	protected _grammarFileName: string;
+	protected _atn: ATN;
 	/** This identifies StarLoopEntryState's that begin the (...)*
 	 *  precedence loops of left recursive rules.
 	 */
 	protected pushRecursionContextStates: BitSet;
 
-	protected ruleNames: string[];
+	protected _ruleNames: string[];
 	@NotNull
-	private vocabulary: Vocabulary;
+	private _vocabulary: Vocabulary;
 
 	/** This stack corresponds to the _parentctx, _parentState pair of locals
 	 *  that would exist on call stack frames with a recursive descent parser;
@@ -64,7 +64,7 @@ export class ParserInterpreter extends Parser {
 	 *
 	 *  private EContext e(int _p) {
 	 *      ParserRuleContext _parentctx = _ctx;    // Pair.a
-	 *      int _parentState = getState();          // Pair.b
+	 *      int _parentState = state;          // Pair.b
 	 *      ...
 	 *  }
 	 *
@@ -104,22 +104,22 @@ export class ParserInterpreter extends Parser {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;
-			this.grammarFileName = old.grammarFileName;
-			this.atn = old.atn;
+			this._grammarFileName = old._grammarFileName;
+			this._atn = old._atn;
 			this.pushRecursionContextStates = old.pushRecursionContextStates;
-			this.ruleNames = old.ruleNames;
-			this.vocabulary = old.vocabulary;
-			this.setInterpreter(new ParserATNSimulator(this.atn, this));
+			this._ruleNames = old._ruleNames;
+			this._vocabulary = old._vocabulary;
+			this.interpreter = new ParserATNSimulator(this._atn, this);
 		} else {
 			// The second constructor requires non-null arguments
 			vocabulary = vocabulary!;
 			ruleNames = ruleNames!;
 			atn = atn!;
 
-			this.grammarFileName = grammarFileName;
-			this.atn = atn;
-			this.ruleNames = ruleNames.slice(0);
-			this.vocabulary = vocabulary;
+			this._grammarFileName = grammarFileName;
+			this._atn = atn;
+			this._ruleNames = ruleNames.slice(0);
+			this._vocabulary = vocabulary;
 
 			// identify the ATN states where pushNewRecursionContext() must be called
 			this.pushRecursionContextStates = new BitSet(atn.states.length);
@@ -134,7 +134,7 @@ export class ParserInterpreter extends Parser {
 			}
 
 			// get atn simulator that knows how to do predictions
-			this.setInterpreter(new ParserATNSimulator(atn, this));
+			this.interpreter = new ParserATNSimulator(atn, this);
 		}
 	}
 
@@ -151,28 +151,28 @@ export class ParserInterpreter extends Parser {
 	}
 
 	@Override
-	getATN(): ATN {
-		return this.atn;
+	get atn(): ATN {
+		return this._atn;
 	}
 
 	@Override
-	getVocabulary(): Vocabulary {
-		return this.vocabulary;
+	get vocabulary(): Vocabulary {
+		return this._vocabulary;
 	}
 
 	@Override
-	getRuleNames(): string[] {
-		return this.ruleNames;
+	get ruleNames(): string[] {
+		return this._ruleNames;
 	}
 
 	@Override
-	getGrammarFileName(): string {
-		return this.grammarFileName;
+	get grammarFileName(): string {
+		return this._grammarFileName;
 	}
 
 	/** Begin parsing at startRuleIndex */
 	parse(startRuleIndex: number): ParserRuleContext {
-		let startRuleStartState: RuleStartState = this.atn.ruleToStartState[startRuleIndex];
+		let startRuleStartState: RuleStartState = this._atn.ruleToStartState[startRuleIndex];
 
 		this.rootContext = this.createInterpreterRuleContext(undefined, ATNState.INVALID_STATE_NUMBER, startRuleIndex);
 		if (startRuleStartState.isPrecedenceRule) {
@@ -209,7 +209,7 @@ export class ParserInterpreter extends Parser {
 				}
 				catch (e) {
 					if (e instanceof RecognitionException) {
-						this.setState(this.atn.ruleToStopState[p.ruleIndex].stateNumber);
+						this.state = this._atn.ruleToStopState[p.ruleIndex].stateNumber;
 						this.getContext().exception = e;
 						this.getErrorHandler().reportError(this, e);
 						this.recover(e);
@@ -230,7 +230,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	protected getATNState(): ATNState {
-		return this.atn.states[this.getState()];
+		return this._atn.states[this.state];
 	}
 
 	protected visitState(p: ATNState): void {
@@ -250,7 +250,7 @@ export class ParserInterpreter extends Parser {
 				let localctx: InterpreterRuleContext =
 					this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
 				this.pushNewRecursionContext(localctx,
-					this.atn.ruleToStartState[p.ruleIndex].stateNumber,
+					this._atn.ruleToStartState[p.ruleIndex].stateNumber,
 					this._ctx.ruleIndex);
 			}
 			break;
@@ -308,7 +308,7 @@ export class ParserInterpreter extends Parser {
 			throw new Error("UnsupportedOperationException: Unrecognized ATN transition type.");
 		}
 
-		this.setState(transition.target.stateNumber);
+		this.state = transition.target.stateNumber;
 	}
 
 	/** Method visitDecisionState() is called when the interpreter reaches
@@ -325,7 +325,7 @@ export class ParserInterpreter extends Parser {
 			this.overrideDecisionReached = true;
 		}
 		else {
-			predictedAlt = this.getInterpreter().adaptivePredict(this._input, decision, this._ctx);
+			predictedAlt = this.interpreter.adaptivePredict(this._input, decision, this._ctx);
 		}
 		return predictedAlt;
 	}
@@ -341,18 +341,18 @@ export class ParserInterpreter extends Parser {
 	}
 
 	protected visitRuleStopState(p: ATNState): void {
-		let ruleStartState: RuleStartState = this.atn.ruleToStartState[p.ruleIndex];
+		let ruleStartState: RuleStartState = this._atn.ruleToStartState[p.ruleIndex];
 		if (ruleStartState.isPrecedenceRule) {
 			let parentContext: [ParserRuleContext, number] = this._parentContextStack.pop()!;
 			this.unrollRecursionContexts(parentContext[0]);
-			this.setState(parentContext[1]);
+			this.state = parentContext[1];
 		}
 		else {
 			this.exitRule();
 		}
 
-		let ruleTransition: RuleTransition = this.atn.states[this.getState()].transition(0) as RuleTransition;
-		this.setState(ruleTransition.followState.stateNumber);
+		let ruleTransition: RuleTransition = this._atn.states[this.state].transition(0) as RuleTransition;
+		this.state = ruleTransition.followState.stateNumber;
 	}
 
 	/** Override this parser interpreters normal decision-making process

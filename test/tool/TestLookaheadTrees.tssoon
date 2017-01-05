@@ -113,7 +113,7 @@ export class TestLookaheadTrees {
 	{
 		let startRuleIndex: number =  g.getRule(startRuleName).index;
 		let nodeTextProvider: InterpreterTreeTextProvider = 
-					InterpreterTreeTextProvider(g.getRuleNames()): new;
+					InterpreterTreeTextProvider(g.ruleNames): new;
 
 		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -121,7 +121,7 @@ export class TestLookaheadTrees {
 		parser.setProfile(true);
 		let t: ParseTree =  parser.parse(startRuleIndex);
 
-		let decisionInfo: DecisionInfo =  parser.getParseInfo().getDecisionInfo()[decision];
+		let decisionInfo: DecisionInfo =  parser.parseInfo.getDecisionInfo()[decision];
 		let lookaheadEventInfo: LookaheadEventInfo =  decisionInfo.SLL_MaxLookEvent;
 
 		let lookaheadParseTrees: List<ParserRuleContext> = 

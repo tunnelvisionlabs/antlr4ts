@@ -55,7 +55,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	protected conflictingAltResolvedBySLL: number = 0;
 
 	constructor(parser: Parser) {
-		super(parser.getInterpreter().atn, parser);
+		super(parser.interpreter.atn, parser);
 		this.optimize_ll1 = false;
 		this.reportAmbiguities = true;
 		this.numDecisions = this.atn.decisionToState.length;

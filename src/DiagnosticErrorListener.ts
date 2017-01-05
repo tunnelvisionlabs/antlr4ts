@@ -105,7 +105,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		let decision: number = dfa.decision;
 		let ruleIndex: number = dfa.atnStartState.ruleIndex;
 
-		let ruleNames: string[] = recognizer.getRuleNames();
+		let ruleNames: string[] = recognizer.ruleNames;
 		if (ruleIndex < 0 || ruleIndex >= ruleNames.length) {
 			return decision.toString();
 		}

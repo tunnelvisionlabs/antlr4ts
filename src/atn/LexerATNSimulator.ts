@@ -378,7 +378,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		if (config.state instanceof RuleStopState) {
 			if (LexerATNSimulator.debug) {
 				if (this.recog != null) {
-					console.log(`closure at ${this.recog.getRuleNames()[config.state.ruleIndex]} rule stop ${config}`);
+					console.log(`closure at ${this.recog.ruleNames[config.state.ruleIndex]} rule stop ${config}`);
 				}
 				else {
 					console.log(`closure at rule stop ${config}`);

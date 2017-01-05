@@ -146,12 +146,12 @@ export class TestATNDeserialization extends BaseTest {
 
 	protected checkDeserializationIsStable(g: Grammar): void {
 		let atn: ATN =  createATN(g, false);
-		let data: char[] =  Utils.toCharArray(ATNSerializer.getSerialized(atn, Arrays.asList(g.getRuleNames())));
-		let atnData: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let data: char[] =  Utils.toCharArray(ATNSerializer.getSerialized(atn, Arrays.asList(g.ruleNames)));
+		let atnData: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		let options: ATNDeserializationOptions =  new ATNDeserializationOptions();
 		options.isOptimize = false;
 		let atn2: ATN =  new ATNDeserializer(options).deserialize(data);
-		let atn2Data: string =  ATNSerializer.getDecoded(atn2, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let atn2Data: string =  ATNSerializer.getDecoded(atn2, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 
 		assertEquals(atnData, atn2Data);
 	}

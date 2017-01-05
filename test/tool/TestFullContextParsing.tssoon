@@ -81,7 +81,7 @@ export class TestFullContextParsing extends BaseTest {
 	testCtxSensitiveWithDFA(input: string): string {
 		let grammar: string = 
 			"grammar T;\n"+
-			"s @init{getInterpreter().enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
+			"s @init{this.interpreter.enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
 			"  : '$' a | '@' b ;\n" +
 			"a : e ID ;\n" +
 			"b : e INT ID ;\n" +
@@ -152,7 +152,7 @@ export class TestFullContextParsing extends BaseTest {
 	@Test testCtxSensitiveDFATwoDiffInputWithDFA(): void {
 		let grammar: string = 
 			"grammar T;\n"+
-			"s @init{getInterpreter().enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
+			"s @init{this.interpreter.enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
 			"  : ('$' a | '@' b)+ ;\n" +
 			"a : e ID ;\n" +
 			"b : e INT ID ;\n" +
@@ -207,7 +207,7 @@ export class TestFullContextParsing extends BaseTest {
 	testSLLSeesEOFInLLGrammarWithDFA(): void {
 		let grammar: string = 
 			"grammar T;\n"+
-			"s @init{getInterpreter().enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
+			"s @init{this.interpreter.enable_global_context_dfa = true;} @after {dumpDFA();}\n" +
 			"  : a ;\n" +
 			"a : e ID ;\n" +
 			"b : e INT ID ;\n" +
@@ -336,7 +336,7 @@ export class TestFullContextParsing extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n"+
 			"s" +
-			"@init {getInterpreter().enable_global_context_dfa = true; _interp.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);}\n" +
+			"@init {this.interpreter.enable_global_context_dfa = true; _interp.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);}\n" +
 			"@after {dumpDFA();}\n" +
 			"    : '{' stat* '}'" +
 			"    ;\n" +

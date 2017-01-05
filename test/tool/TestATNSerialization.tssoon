@@ -28,7 +28,7 @@ export class TestATNSerialization extends BaseTest {
 				"3->4 ATOM 2,0,0\n" +
 				"4->1 EPSILON 0,0,0\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -50,7 +50,7 @@ export class TestATNSerialization extends BaseTest {
 				"3->4 ATOM 0,0,1\n" +
 				"4->1 EPSILON 0,0,0\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -71,7 +71,7 @@ export class TestATNSerialization extends BaseTest {
 				"2->3 SET 0,0,0\n" +
 				"3->1 EPSILON 0,0,0\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -95,7 +95,7 @@ export class TestATNSerialization extends BaseTest {
 		let atn: ATN =  createATN(g, true);
 		let gen: DOTGenerator =  new DOTGenerator(g);
 		console.log(gen.getDOT(atn.ruleToStartState[0]));
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -116,7 +116,7 @@ export class TestATNSerialization extends BaseTest {
 			"2->3 WILDCARD 0,0,0\n" +
 			"3->1 EPSILON 0,0,0\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -144,7 +144,7 @@ export class TestATNSerialization extends BaseTest {
 				"6->1 EPSILON 0,0,0\n" +
 				"0:5\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -179,7 +179,7 @@ export class TestATNSerialization extends BaseTest {
 				"9->1 EPSILON 0,0,0\n" +
 				"0:8\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -211,7 +211,7 @@ export class TestATNSerialization extends BaseTest {
 				"8->1 EPSILON 0,0,0\n" +
 				"0:5\n";
 		let atn: ATN =  createATN(g, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -240,7 +240,7 @@ export class TestATNSerialization extends BaseTest {
 				"6->7 ATOM 1,0,0\n" +
 				"7->3 EPSILON 0,0,0\n";
 		let atn: ATN =  createATN(g, false);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.getRuleNames()), Arrays.asList(g.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(g.ruleNames), Arrays.asList(g.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -273,7 +273,7 @@ export class TestATNSerialization extends BaseTest {
 			"8->4 EPSILON 0,0,0\n" +
 			"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -296,7 +296,7 @@ export class TestATNSerialization extends BaseTest {
 			"4->2 EPSILON 0,0,0\n" +
 			"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -321,7 +321,7 @@ export class TestATNSerialization extends BaseTest {
 				"5->2 EPSILON 0,0,0\n" +
 				"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -350,7 +350,7 @@ export class TestATNSerialization extends BaseTest {
 				"0:0\n" +
 				"1:5\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -381,7 +381,7 @@ export class TestATNSerialization extends BaseTest {
 				"0:0\n" +
 				"1:6\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -428,7 +428,7 @@ export class TestATNSerialization extends BaseTest {
 				"14->6 EPSILON 0,0,0\n" +
 				"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -452,7 +452,7 @@ export class TestATNSerialization extends BaseTest {
 			"4->2 EPSILON 0,0,0\n" +
 			"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -476,7 +476,7 @@ export class TestATNSerialization extends BaseTest {
 			"4->2 EPSILON 0,0,0\n" +
 			"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -500,7 +500,7 @@ export class TestATNSerialization extends BaseTest {
 			"4->2 EPSILON 0,0,0\n" +
 			"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -563,7 +563,7 @@ export class TestATNSerialization extends BaseTest {
 				"1:1\n" +
 				"2:11\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -590,7 +590,7 @@ export class TestATNSerialization extends BaseTest {
 				"5->2 EPSILON 0,0,0\n" +
 				"0:0\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -647,7 +647,7 @@ export class TestATNSerialization extends BaseTest {
 			"0:0\n" +
 			"1:1\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 
@@ -698,7 +698,7 @@ export class TestATNSerialization extends BaseTest {
 			"1:1\n" +
 			"2:2\n";
 		let atn: ATN =  createATN(lg, true);
-		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.getRuleNames()), Arrays.asList(lg.getTokenNames()));
+		let result: string =  ATNSerializer.getDecoded(atn, Arrays.asList(lg.ruleNames), Arrays.asList(lg.getTokenNames()));
 		assertEquals(expecting, result);
 	}
 

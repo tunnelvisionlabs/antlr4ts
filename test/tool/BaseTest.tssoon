@@ -168,7 +168,7 @@ export abstract class BaseTest {
 
 		let atn: ATN =  g.atn;
 		if (useSerializer) {
-			let serialized: char[] =  ATNSerializer.getSerializedAsChars(atn, Arrays.asList(g.getRuleNames()));
+			let serialized: char[] =  ATNSerializer.getSerializedAsChars(atn, Arrays.asList(g.ruleNames));
 			return new ATNDeserializer().deserialize(serialized);
 		}
 
@@ -1106,7 +1106,7 @@ export abstract class BaseTest {
 			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
 			"        <createParser>\n"+
 			"		 parser.setBuildParseTree(true);\n" +
-			"		 parser.getInterpreter().reportAmbiguities = true;\n" +
+			"		 parser.interpreter.reportAmbiguities = true;\n" +
 			"		 <profile>\n"+
 			"        ParserRuleContext tree = parser.<parserStartRuleName>();\n" +
 			"		 <if(profile)>System.out.println(Arrays.toString(profiler.getDecisionInfo()));<endif>\n" +
@@ -1140,7 +1140,7 @@ export abstract class BaseTest {
 		if ( profile ) {
 			outputFileST.add("profile",
 							 "ProfilingATNSimulator profiler = new ProfilingATNSimulator(parser);\n" +
-							 "parser.setInterpreter(profiler);");
+							 "parser.interpreter = profiler;");
 		}
 		else {
 			outputFileST.add("profile", new ArrayList<Object>());
@@ -1163,7 +1163,7 @@ export abstract class BaseTest {
 			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
 			"        tokens.fill();\n" +
 			"        for (Object t : tokens.getTokens()) System.out.println(t);\n" +
-			(showDFA?"System.out.print(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")+
+			(showDFA?"System.out.print(lex.interpreter.getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")+
 			"    }\n" +
 			"}"
 			);

@@ -244,7 +244,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * mode with the {@link BailErrorStrategy}:</p>
  *
  * <pre>
- * parser.{@link Parser#getInterpreter() getInterpreter()}.{@link #setPredictionMode setPredictionMode}{@code (}{@link PredictionMode#SLL}{@code )};
+ * parser.interpreter.{@link #setPredictionMode setPredictionMode}{@code (}{@link PredictionMode#SLL}{@code )};
  * parser.{@link Parser#setErrorHandler setErrorHandler}(new {@link BailErrorStrategy}());
  * </pre>
  *
@@ -410,7 +410,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let index: number = input.index;
 		try {
 			let alt: number = this.execDFA(dfa, input, index, state);
-			if (ParserATNSimulator.debug) console.log("DFA after predictATN: " + dfa.toString(this._parser.getVocabulary(), this._parser.getRuleNames()));
+			if (ParserATNSimulator.debug) console.log("DFA after predictATN: " + dfa.toString(this._parser.vocabulary, this._parser.ruleNames));
 			return alt;
 		}
 		finally {
@@ -484,7 +484,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (ParserATNSimulator.dfa_debug) console.log("DFA decision " + dfa.decision +
 			" exec LA(1)==" + this.getLookaheadName(input) +
 			", outerContext=" + outerContext.toString(this._parser));
-		if (ParserATNSimulator.dfa_debug) console.log(dfa.toString(this._parser.getVocabulary(), this._parser.getRuleNames()));
+		if (ParserATNSimulator.dfa_debug) console.log(dfa.toString(this._parser.vocabulary, this._parser.ruleNames));
 		let s: DFAState = state.s0;
 
 		let t: number = input.LA(1);
@@ -533,7 +533,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			// if no edge, pop over to ATN interpreter, update DFA and return
 			let target: DFAState | undefined = this.getExistingTargetState(s, t);
 			if (target == null) {
-				if (ParserATNSimulator.dfa_debug && t >= 0) console.log("no edge for " + this._parser.getVocabulary().getDisplayName(t));
+				if (ParserATNSimulator.dfa_debug && t >= 0) console.log("no edge for " + this._parser.vocabulary.getDisplayName(t));
 				let alt: number;
 				if (ParserATNSimulator.dfa_debug) {
 					let interval: Interval = Interval.of(startIndex, this._parser.inputStream.index);
@@ -545,7 +545,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				let initialState: SimulatorState = new SimulatorState(outerContext, s, state.useContext, remainingOuterContext);
 				alt = this.execATN(dfa, input, startIndex, initialState);
 				if (ParserATNSimulator.dfa_debug) {
-					console.log("back from DFA update, alt=" + alt + ", dfa=\n" + dfa.toString(this._parser.getVocabulary(), this._parser.getRuleNames()));
+					console.log("back from DFA update, alt=" + alt + ", dfa=\n" + dfa.toString(this._parser.vocabulary, this._parser.ruleNames));
 					//dump(dfa);
 				}
 				// action already executed
@@ -1837,7 +1837,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	@NotNull
 	getRuleName(index: number): string {
-		if (this._parser != null && index >= 0) return this._parser.getRuleNames()[index];
+		if (this._parser != null && index >= 0) return this._parser.ruleNames[index];
 		return "<rule " + index + ">";
 	}
 
@@ -2149,7 +2149,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return "EOF";
 		}
 
-		let vocabulary: Vocabulary = this._parser != null ? this._parser.getVocabulary() : VocabularyImpl.EMPTY_VOCABULARY;
+		let vocabulary: Vocabulary = this._parser != null ? this._parser.vocabulary : VocabularyImpl.EMPTY_VOCABULARY;
 		let displayName: string = vocabulary.getDisplayName(t);
 		if (displayName === String(t)) {
 			return displayName;
@@ -2257,7 +2257,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		if (ParserATNSimulator.debug) console.log("EDGE " + from + " -> " + to + " upon " + this.getTokenName(t));
 		this.setDFAEdge(from, t, to);
-		if (ParserATNSimulator.debug) console.log("DFA=\n" + dfa.toString(this._parser != null ? this._parser.getVocabulary() : VocabularyImpl.EMPTY_VOCABULARY, this._parser != null ? this._parser.getRuleNames() : undefined));
+		if (ParserATNSimulator.debug) console.log("DFA=\n" + dfa.toString(this._parser != null ? this._parser.vocabulary : VocabularyImpl.EMPTY_VOCABULARY, this._parser != null ? this._parser.ruleNames : undefined));
 		return to;
 	}
 

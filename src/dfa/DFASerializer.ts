@@ -33,9 +33,9 @@ export class DFASerializer {
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary, /*@Nullable*/ ruleNames: string[] | undefined, /*@Nullable*/ atn: ATN | undefined);
 	constructor(dfa: DFA, vocabulary: Vocabulary | Recognizer<any, any> | undefined, ruleNames?: string[], atn?: ATN) {
 		if (vocabulary instanceof Recognizer) {
-			ruleNames = vocabulary.getRuleNames();
-			atn = vocabulary.getATN();
-			vocabulary = vocabulary.getVocabulary();
+			ruleNames = vocabulary.ruleNames;
+			atn = vocabulary.atn;
+			vocabulary = vocabulary.vocabulary;
 		} else if (!vocabulary) {
 			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
 		}

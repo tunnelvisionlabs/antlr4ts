@@ -201,9 +201,9 @@ export class ParseTreePatternMatcher {
 		const parser = this._parser;
 
 		let parserInterp = new ParserInterpreter(
-			parser.getGrammarFileName(),
-			parser.getVocabulary(),
-			parser.getRuleNames(),
+			parser.grammarFileName,
+			parser.vocabulary,
+			parser.ruleNames,
 			parser.getATNWithBypassAlts(),
 			tokens);
 
