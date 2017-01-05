@@ -115,22 +115,22 @@ export namespace PredictionContextCache {
 	}
 
 	export class IdentityCommutativePredictionContextOperands {
-		private x: PredictionContext;
-		private y: PredictionContext;
+		private _x: PredictionContext;
+		private _y: PredictionContext;
 
 		constructor(x: PredictionContext, y: PredictionContext) {
 			assert(x != null);
 			assert(y != null);
-			this.x = x;
-			this.y = y;
+			this._x = x;
+			this._y = y;
 		}
 
-		getX(): PredictionContext {
-			return this.x;
+		get x(): PredictionContext {
+			return this._x;
 		}
 
-		getY(): PredictionContext {
-			return this.y;
+		get y(): PredictionContext {
+			return this._y;
 		}
 
 		@Override
@@ -142,12 +142,12 @@ export namespace PredictionContextCache {
 			}
 
 			let other: IdentityCommutativePredictionContextOperands = o;
-			return (this.x === other.x && this.y === other.y) || (this.x === other.y && this.y === other.x);
+			return (this._x === other._x && this._y === other._y) || (this._x === other._y && this._y === other._x);
 		}
 
 		@Override
 		hashCode(): number {
-			return this.x.hashCode() ^ this.y.hashCode();
+			return this._x.hashCode() ^ this._y.hashCode();
 		}
 	}
 }

@@ -608,27 +608,27 @@ class ArrayPredictionContext extends PredictionContext {
 				continue;
 			}
 
-			let selfSize: number = operands.getX().size;
+			let selfSize: number = operands.x.size;
 			if (selfSize === 0) {
-				if (!operands.getX().equals(operands.getY())) {
+				if (!operands.x.equals(operands.y)) {
 					return false;
 				}
 
 				continue;
 			}
 
-			let otherSize: number = operands.getY().size;
+			let otherSize: number = operands.y.size;
 			if (selfSize !== otherSize) {
 				return false;
 			}
 
 			for (let i = 0; i < selfSize; i++) {
-				if (operands.getX().getReturnState(i) !== operands.getY().getReturnState(i)) {
+				if (operands.x.getReturnState(i) !== operands.y.getReturnState(i)) {
 					return false;
 				}
 
-				let selfParent: PredictionContext = operands.getX().getParent(i);
-				let otherParent: PredictionContext = operands.getY().getParent(i);
+				let selfParent: PredictionContext = operands.x.getParent(i);
+				let otherParent: PredictionContext = operands.y.getParent(i);
 				if (selfParent.hashCode() !== otherParent.hashCode()) {
 					return false;
 				}
