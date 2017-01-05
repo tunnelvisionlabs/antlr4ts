@@ -31,7 +31,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] CommonTokenStream.java
 * [x] ConsoleErrorListener.java
 * [x] DefaultErrorStrategy.java
-* [ ] Dependents.java
+* [x] Dependents.java
 * [x] DiagnosticErrorListener.java
 * [x] FailedPredicateException.java
 * [x] InputMismatchException.java
@@ -56,7 +56,7 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] RuleContext.java
 * [x] RuleContextWithAltNum.java
 * [ ] RuleDependencies.java
-* [ ] RuleDependency.java
+* [x] RuleDependency.java
 * [x] RuleVersion.java
 * [x] Token.java
 * [x] TokenFactory.java

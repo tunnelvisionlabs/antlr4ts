@@ -27,28 +27,28 @@ export enum Dependents {
 	CHILDREN,
 	/**
 	 * The element is dependent upon the set of the specified rule's ancestors
-	 * (the transitive closure of {@link #PARENTS} rules).
+	 * (the transitive closure of `PARENTS` rules).
 	 */
 	ANCESTORS,
 	/**
 	 * The element is dependent upon the set of the specified rule's descendants
-	 * (the transitive closure of {@link #CHILDREN} rules).
+	 * (the transitive closure of `CHILDREN` rules).
 	 */
 	DESCENDANTS,
 	/**
 	 * The element is dependent upon the set of the specified rule's siblings
-	 * (the union of {@link #CHILDREN} of its {@link #PARENTS}).
+	 * (the union of `CHILDREN` of its `PARENTS`).
 	 */
 	SIBLINGS,
 	/**
 	 * The element is dependent upon the set of the specified rule's preceeding
-	 * siblings (the union of {@link #CHILDREN} of its {@link #PARENTS} which
+	 * siblings (the union of `CHILDREN` of its `PARENTS` which
 	 * appear before a reference to the rule).
 	 */
 	PRECEEDING_SIBLINGS,
 	/**
 	 * The element is dependent upon the set of the specified rule's following
-	 * siblings (the union of {@link #CHILDREN} of its {@link #PARENTS} which
+	 * siblings (the union of `CHILDREN` of its `PARENTS` which
 	 * appear after a reference to the rule).
 	 */
 	FOLLOWING_SIBLINGS,
@@ -56,8 +56,8 @@ export enum Dependents {
 	 * The element is dependent upon the set of the specified rule's preceeding
 	 * elements (rules which might end before the start of the specified rule
 	 * while parsing). This is calculated by taking the
-	 * {@link #PRECEEDING_SIBLINGS} of the rule and each of its
-	 * {@link #ANCESTORS}, along with the {@link #DESCENDANTS} of those
+	 * `PRECEEDING_SIBLINGS` of the rule and each of its
+	 * `ANCESTORS`, along with the `DESCENDANTS` of those
 	 * elements.
 	 */
 	PRECEEDING,
@@ -65,8 +65,8 @@ export enum Dependents {
 	 * The element is dependent upon the set of the specified rule's following
 	 * elements (rules which might start after the end of the specified rule
 	 * while parsing). This is calculated by taking the
-	 * {@link #FOLLOWING_SIBLINGS} of the rule and each of its
-	 * {@link #ANCESTORS}, along with the {@link #DESCENDANTS} of those
+	 * `FOLLOWING_SIBLINGS` of the rule and each of its
+	 * `ANCESTORS`, along with the `DESCENDANTS` of those
 	 * elements.
 	 */
 	FOLLOWING,
