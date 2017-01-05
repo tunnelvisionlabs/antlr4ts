@@ -228,12 +228,12 @@ export class TestAmbigParseTrees {
 															  parser,
 															  tokens,
 															  decision,
-															  ambiguityInfo.getAmbiguousAlternatives(),
+															  ambiguityInfo.ambiguousAlternatives,
 															  ambiguityInfo.startIndex,
 															  ambiguityInfo.stopIndex,
 															  ruleIndex);
-		assertEquals(expectedAmbigAlts, ambiguityInfo.getAmbiguousAlternatives().toString());
-		assertEquals(ambiguityInfo.getAmbiguousAlternatives().cardinality(), ambiguousParseTrees.size);
+		assertEquals(expectedAmbigAlts, ambiguityInfo.ambiguousAlternatives.toString());
+		assertEquals(ambiguityInfo.ambiguousAlternatives.cardinality(), ambiguousParseTrees.size);
 
 		for (let i = 0; i<ambiguousParseTrees.size; i++) {
 			let t: ParserRuleContext =  ambiguousParseTrees.get(i);

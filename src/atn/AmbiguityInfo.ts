@@ -76,7 +76,7 @@ export class AmbiguityInfo extends DecisionEventInfo {
 	 * @since 4.5
 	 */
 	@NotNull
-	getAmbiguousAlternatives(): BitSet {
+	get ambiguousAlternatives(): BitSet {
 		return this.ambigAlts;
 	}
 }
