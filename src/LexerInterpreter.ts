@@ -20,7 +20,7 @@ export class LexerInterpreter extends Lexer {
 	protected atn: ATN;
 
 	protected ruleNames: string[];
-	protected modeNames: string[];
+	protected _modeNames: string[];
 	@NotNull
 	private vocabulary: Vocabulary;
 
@@ -35,7 +35,7 @@ export class LexerInterpreter extends Lexer {
 		this.atn = atn;
 
 		this.ruleNames = ruleNames.slice(0);
-		this.modeNames = modeNames.slice(0);
+		this._modeNames = modeNames.slice(0);
 		this.vocabulary = vocabulary;
 		this._interp = new LexerATNSimulator(atn, this);
 	}
@@ -56,8 +56,8 @@ export class LexerInterpreter extends Lexer {
 	}
 
 	@Override
-	getModeNames(): string[] {
-		return this.modeNames;
+	get modeNames(): string[] {
+		return this._modeNames;
 	}
 
 	@Override

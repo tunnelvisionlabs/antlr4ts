@@ -1019,7 +1019,7 @@ export class TestPerformance {
 							modeConfigs += state.configs.size;
 						}
 
-						let modeName: string =  lexer.getModeNames()[i];
+						let modeName: string =  lexer.modeNames[i];
 						console.log(`\t${dfa.decision}\t${dfa.states.size}\t${modeConfigs}\t${modeName}`);
 					}
 				}

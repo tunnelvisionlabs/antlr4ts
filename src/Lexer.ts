@@ -258,7 +258,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	emit(token?: Token): Token {
 		if (!token) token = this._factory.create(
 			this._tokenFactorySourcePair, this._type, this._text, this._channel,
-			this._tokenStartCharIndex, this.getCharIndex() - 1, this._tokenStartLine,
+			this._tokenStartCharIndex, this.charIndex - 1, this._tokenStartLine,
 			this._tokenStartCharPositionInLine);
 		this._token = token;
 		return token;
@@ -294,7 +294,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	/** What is the index of the current character of lookahead? */
-	getCharIndex(): number {
+	get charIndex(): number {
 		return this._input.index;
 	}
 
@@ -316,9 +316,9 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	/** Override if emitting multiple tokens. */
-	getToken(): Token | undefined { return this._token; }
+	get token(): Token | undefined { return this._token; }
 
-	setToken(_token: Token): void {
+	set token(_token: Token | undefined) {
 		this._token = _token;
 	}
 
@@ -338,7 +338,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this._channel;
 	}
 
-	abstract getModeNames(): string[];
+	abstract readonly modeNames: string[];
 
 	/** Return a list of all Token objects in input char stream.
 	 *  Forces load of all tokens. Does not include EOF token.

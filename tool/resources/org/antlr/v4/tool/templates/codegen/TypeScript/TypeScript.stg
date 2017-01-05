@@ -900,7 +900,7 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 	public getSerializedATN(): string { return <lexer.name>._serializedATN; }
 
 	@Override
-	public getModeNames(): string[] { return <lexer.name>.modeNames; }
+	public get modeNames(): string[] { return <lexer.name>.modeNames; }
 
 	<dumpActions(lexer, "", actionFuncs, sempredFuncs)>
 	<atn>
