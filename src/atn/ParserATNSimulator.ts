@@ -1715,7 +1715,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (config.state instanceof RuleStopState) {
 			// We hit rule end. If we have context info, use it
 			if (!config.context.isEmpty) {
-				let hasEmpty: boolean = config.context.hasEmpty();
+				let hasEmpty: boolean = config.context.hasEmpty;
 				let nonEmptySize: number = config.context.size - (hasEmpty ? 1 : 0);
 				for (let i = 0; i < nonEmptySize; i++) {
 					let newContext: PredictionContext = config.context.getParent(i); // "pop" return state

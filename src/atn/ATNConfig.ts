@@ -241,7 +241,7 @@ export class ATNConfig implements Equatable {
 			}
 
 			if (right.isEmpty) {
-				return left.hasEmpty();
+				return left.hasEmpty;
 			} else {
 				for (let i = 0; i < right.size; i++) {
 					let index: number = left.findReturnState(right.getReturnState(i));

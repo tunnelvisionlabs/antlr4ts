@@ -290,7 +290,7 @@ export abstract class PredictionContext implements Equatable {
 
 	abstract readonly isEmpty: boolean;
 
-	abstract hasEmpty(): boolean;
+	abstract readonly hasEmpty: boolean;
 
 	@Override
 	hashCode(): number {
@@ -374,7 +374,7 @@ class EmptyPredictionContext extends PredictionContext {
 		this.fullContext = fullContext;
 	}
 
-	isFullContext(): boolean {
+	get isFullContext(): boolean {
 		return this.fullContext;
 	}
 
@@ -424,7 +424,7 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return true;
 	}
 
@@ -482,13 +482,13 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return this.returnStates[this.returnStates.length - 1] === PredictionContext.EMPTY_FULL_STATE_KEY;
 	}
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		if (this.hasEmpty()) {
+		if (this.hasEmpty) {
 			return this;
 		}
 
@@ -501,7 +501,7 @@ class ArrayPredictionContext extends PredictionContext {
 
 	@Override
 	protected removeEmptyContext(): PredictionContext {
-		if (!this.hasEmpty()) {
+		if (!this.hasEmpty) {
 			return this;
 		}
 
@@ -522,7 +522,7 @@ class ArrayPredictionContext extends PredictionContext {
 	private static appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
 		if (suffix.isEmpty) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
-				if (context.hasEmpty()) {
+				if (context.hasEmpty) {
 					return PredictionContext.EMPTY_LOCAL;
 				}
 
@@ -542,7 +542,7 @@ class ArrayPredictionContext extends PredictionContext {
 				result = suffix;
 			} else {
 				let parentCount: number = context.size;
-				if (context.hasEmpty()) {
+				if (context.hasEmpty) {
 					parentCount--;
 				}
 
@@ -563,7 +563,7 @@ class ArrayPredictionContext extends PredictionContext {
 					result = new ArrayPredictionContext(updatedParents, updatedReturnStates);
 				}
 
-				if (context.hasEmpty()) {
+				if (context.hasEmpty) {
 					result = PredictionContext.join(result, suffix);
 				}
 			}
@@ -685,7 +685,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return false;
 	}
 

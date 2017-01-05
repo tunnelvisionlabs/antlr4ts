@@ -390,7 +390,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				configs.add(config);
 				return true;
 			}
-			else if (context.hasEmpty()) {
+			else if (context.hasEmpty) {
 				configs.add(config.transform(config.state, true, PredictionContext.EMPTY_FULL));
 				currentAltReachedAcceptState = true;
 			}
@@ -441,7 +441,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		switch (t.serializationType) {
 		case TransitionType.RULE:
 			let ruleTransition: RuleTransition = <RuleTransition>t;
-			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.context.hasEmpty()) {
+			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.context.hasEmpty) {
 				c = config.transform(t.target, true);
 			}
 			else {
@@ -488,12 +488,12 @@ export class LexerATNSimulator extends ATNSimulator {
 			break;
 
 		case TransitionType.ACTION:
-			if (config.context.hasEmpty()) {
+			if (config.context.hasEmpty) {
 				// execute actions anywhere in the start rule for a token.
 				//
 				// TODO: if the entry rule is invoked recursively, some
 				// actions may be executed during the recursive call. The
-				// problem can appear when hasEmpty() is true but
+				// problem can appear when hasEmpty is true but
 				// isEmpty is false. In this case, the config needs to be
 				// split into two contexts - one with just the empty path
 				// and another with everything but the empty path.
