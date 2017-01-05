@@ -127,7 +127,7 @@ export class DFAState {
 			return ATN.INVALID_ALT_NUMBER;
 		}
 
-		return this.acceptStateInfo.getPrediction();
+		return this.acceptStateInfo.prediction;
 	}
 
 	getLexerActionExecutor(): LexerActionExecutor | undefined {
@@ -135,7 +135,7 @@ export class DFAState {
 			return undefined;
 		}
 
-		return this.acceptStateInfo.getLexerActionExecutor();
+		return this.acceptStateInfo.lexerActionExecutor;
 	}
 
 	getTarget(symbol: number): DFAState | undefined {

@@ -17,14 +17,14 @@ import { LexerActionExecutor } from '../atn/LexerActionExecutor';
  * @author Sam Harwell
  */
 export class AcceptStateInfo {
-	private prediction: number;
-	private lexerActionExecutor?: LexerActionExecutor;
+	private readonly _prediction: number;
+	private readonly _lexerActionExecutor?: LexerActionExecutor;
 
 	constructor(prediction: number);
 	constructor(prediction: number, lexerActionExecutor: LexerActionExecutor | undefined);
 	constructor(prediction: number, lexerActionExecutor?: LexerActionExecutor) {
-		this.prediction = prediction;
-		this.lexerActionExecutor = lexerActionExecutor;
+		this._prediction = prediction;
+		this._lexerActionExecutor = lexerActionExecutor;
 	}
 
 	/**
@@ -34,15 +34,15 @@ export class AcceptStateInfo {
 	 * the accept state will be determined by the result of predicate
 	 * evaluation.
 	 */
-	getPrediction(): number {
-		return this.prediction;
+	get prediction(): number {
+		return this._prediction;
 	}
 
 	/**
 	 * Gets the {@link LexerActionExecutor} which can be used to execute actions
 	 * and/or commands after the lexer matches a token.
 	 */
-	getLexerActionExecutor(): LexerActionExecutor | undefined {
-		return this.lexerActionExecutor;
+	get lexerActionExecutor(): LexerActionExecutor | undefined {
+		return this._lexerActionExecutor;
 	}
 }
