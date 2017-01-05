@@ -149,8 +149,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let offendingToken: Token | null | undefined = e.getOffendingToken(recognizer);
 		if (offendingToken === undefined) {
 			// Pass null to notifyErrorListeners so it in turn calls the error listeners with undefined as the offending
-			// token. If we passed undefined, it would instead call the listeners with getCurrentToken() from the
-			// parser.
+			// token. If we passed undefined, it would instead call the listeners with currentToken from the parser.
 			offendingToken = null;
 		}
 
@@ -337,7 +336,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	protected reportFailedPredicate(@NotNull recognizer: Parser,
 		@NotNull e: FailedPredicateException): void {
-		let ruleName: string = recognizer.ruleNames[recognizer.getContext().ruleIndex];
+		let ruleName: string = recognizer.ruleNames[recognizer.context.ruleIndex];
 		let msg: string = "rule " + ruleName + " " + e.message;
 		this.notifyErrorListeners(recognizer, msg, e);
 	}
@@ -367,7 +366,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 
 		this.beginErrorCondition(recognizer);
 
-		let t: Token = recognizer.getCurrentToken();
+		let t: Token = recognizer.currentToken;
 		let tokenName: string = this.getTokenErrorDisplay(t);
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let msg: string = "extraneous input " + tokenName + " expecting " +
@@ -399,7 +398,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 
 		this.beginErrorCondition(recognizer);
 
-		let t: Token = recognizer.getCurrentToken();
+		let t: Token = recognizer.currentToken;
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let msg: string = "missing " + expecting.toStringVocabulary(recognizer.vocabulary) +
 			" at " + this.getTokenErrorDisplay(t);
@@ -502,7 +501,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let currentState = recognizer.interpreter.atn.states[recognizer.state];
 		let next: ATNState = currentState.transition(0).target;
 		let atn: ATN = recognizer.interpreter.atn;
-		let expectingAtLL2: IntervalSet = atn.nextTokens(next, PredictionContext.fromRuleContext(atn, recognizer.getContext()));
+		let expectingAtLL2: IntervalSet = atn.nextTokens(next, PredictionContext.fromRuleContext(atn, recognizer.context));
 //		console.warn("LT(2) set="+expectingAtLL2.toString(recognizer.getTokenNames()));
 		if (expectingAtLL2.contains(currentSymbolType)) {
 			this.reportMissingToken(recognizer);
@@ -543,7 +542,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			*/
 			recognizer.consume(); // simply delete extra token
 			// we want to return the token we're actually matching
-			let matchedSymbol: Token = recognizer.getCurrentToken();
+			let matchedSymbol: Token = recognizer.currentToken;
 			this.reportMatch(recognizer);  // we know current token is correct
 			return matchedSymbol;
 		}
@@ -571,7 +570,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	@NotNull
 	protected getMissingSymbol(@NotNull recognizer: Parser): Token {
-		let currentSymbol: Token = recognizer.getCurrentToken();
+		let currentSymbol: Token = recognizer.currentToken;
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let expectedTokenType: number = expecting.minElement; // get any element
 		let tokenText: string;
@@ -741,7 +740,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@NotNull
 	protected getErrorRecoverySet(@NotNull recognizer: Parser): IntervalSet {
 		let atn: ATN = recognizer.interpreter.atn;
-		let ctx: RuleContext | undefined = recognizer.getContext();
+		let ctx: RuleContext | undefined = recognizer.context;
 		let recoverSet: IntervalSet = new IntervalSet();
 		while (ctx && ctx.invokingState >= 0) {
 			// compute what follows who invoked us

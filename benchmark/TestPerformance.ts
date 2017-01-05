@@ -1369,12 +1369,12 @@ export class TestPerformance {
 						parser.interpreter.optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
 						parser.interpreter.tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
 						parser.interpreter.treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
-						parser.setBuildParseTree(TestPerformance.BUILD_PARSE_TREES);
+						parser.buildParseTree = TestPerformance.BUILD_PARSE_TREES;
 						if (!TestPerformance.BUILD_PARSE_TREES && TestPerformance.BLANK_LISTENER) {
 							parser.addParseListener(listener);
 						}
 						if (TestPerformance.BAIL_ON_ERROR || TestPerformance.TWO_STAGE_PARSING) {
-							parser.setErrorHandler(new BailErrorStrategy());
+							parser.errorHandler = new BailErrorStrategy();
 						}
 
         //                 let parseMethod: Method =  parserClass.getMethod(entryPoint);
@@ -1441,7 +1441,7 @@ export class TestPerformance {
 							parser.interpreter.optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
 							parser.interpreter.tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
 							parser.interpreter.treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
-							parser.setBuildParseTree(TestPerformance.BUILD_PARSE_TREES);
+							parser.buildParseTree = TestPerformance.BUILD_PARSE_TREES;
 							if (TestPerformance.COMPUTE_CHECKSUM && !TestPerformance.BUILD_PARSE_TREES) {
 								parser.addParseListener(new ChecksumParseTreeListener(checksum));
 							}
@@ -1449,7 +1449,7 @@ export class TestPerformance {
 								parser.addParseListener(listener);
 							}
 							if (TestPerformance.BAIL_ON_ERROR) {
-								parser.setErrorHandler(new BailErrorStrategy());
+								parser.errorHandler = new BailErrorStrategy();
 							}
 
 							if (parser instanceof ParserInterpreter) {

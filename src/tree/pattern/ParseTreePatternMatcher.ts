@@ -209,7 +209,7 @@ export class ParseTreePatternMatcher {
 
 		let tree: ParseTree;
 		try {
-			parserInterp.setErrorHandler(new BailErrorStrategy());
+			parserInterp.errorHandler = new BailErrorStrategy();
 			tree = parserInterp.parse(patternRuleIndex);
 //			System.out.println("pattern tree = "+tree.toStringTree(parserInterp));
 		} catch (e) {

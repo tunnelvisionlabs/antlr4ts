@@ -194,9 +194,9 @@ Pass() ::= ""
 
 StringList() ::= "string[]"
 
-BuildParseTrees() ::= "this.setBuildParseTree(true);"
+BuildParseTrees() ::= "this.buildParseTree = true;"
 
-BailErrorStrategy() ::= <%this.setErrorHandler(new BailErrorStrategy());%>
+BailErrorStrategy() ::= <%this.errorHandler = new BailErrorStrategy();%>
 
 ToStringTree(s) ::= <%<s>.toStringTree(this)%>
 

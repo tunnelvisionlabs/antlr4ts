@@ -82,7 +82,7 @@ export class DFA {
 	 *
 	 * @return {@code true} if this is a precedence DFA; otherwise,
 	 * {@code false}.
-	 * @see Parser#getPrecedence()
+	 * @see Parser.precedence
 	 */
 	get isPrecedenceDfa(): boolean {
 		return this.precedenceDfa;

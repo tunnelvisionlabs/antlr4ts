@@ -31,7 +31,7 @@ export class FailedPredicateException extends RecognitionException {
 		super(
 			recognizer,
 			recognizer.inputStream,
-			recognizer.getContext(),
+			recognizer.context,
 			FailedPredicateException.formatMessage(predicate, message));
 		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 
@@ -46,7 +46,7 @@ export class FailedPredicateException extends RecognitionException {
 		}
 
 		this._predicate = predicate;
-		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
+		super.setOffendingToken(recognizer, recognizer.currentToken);
 	}
 
 	get ruleIndex(): number {

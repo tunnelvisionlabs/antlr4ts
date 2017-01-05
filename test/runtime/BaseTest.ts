@@ -88,7 +88,7 @@ export function parserTest<TParser extends Parser>(options: ParserTestOptions<TP
 		parser.addErrorListener(new DiagnosticErrorListener());
 	}
 
-	parser.setBuildParseTree(true);
+	parser.buildParseTree = true;
 	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
 		const tree = options.parserStartRule(parser);
 		ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);

@@ -29,9 +29,9 @@
  * </ul>
  *
  * <p>
- * {@code myparser.setErrorHandler(new BailErrorStrategy());}</p>
+ * {@code myparser.errorHandler = new BailErrorStrategy();}</p>
  *
- * @see Parser#setErrorHandler(ANTLRErrorStrategy)
+ * @see Parser.errorHandler
  */
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
 import { Parser } from './Parser';
@@ -50,7 +50,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
      */
 	@Override
 	recover(recognizer: Parser, e: RecognitionException): void {
-		for (let context: ParserRuleContext | undefined = recognizer.getContext(); context; context = context.parent) {
+		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
 		}
 
@@ -63,7 +63,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	@Override
 	recoverInline(recognizer: Parser): Token {
 		let e = new InputMismatchException(recognizer);
-		for (let context: ParserRuleContext | undefined = recognizer.getContext(); context; context = context.parent) {
+		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
 		}
 

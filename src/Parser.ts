@@ -109,12 +109,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	/**
 	 * Specifies whether or not the parser should construct a parse tree during
-	 * the parsing process. The default value is {@code true}.
+	 * the parsing process. The default value is `true`.
 	 *
-	 * @see #getBuildParseTree
-	 * @see #setBuildParseTree
+	 * @see `buildParseTree`
 	 */
-	protected _buildParseTrees: boolean = true;
+	private _buildParseTrees: boolean = true;
 
 	/**
 	 * When {@link #setTrace}{@code (true)} is called, a reference to the
@@ -161,7 +160,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		this._ctx = <any>undefined;
 		this._syntaxErrors = 0;
 		this.matchedEOF = false;
-		this.setTrace(false);
+		this.isTrace = false;
 		this._precedenceStack.clear();
 		this._precedenceStack.push(0);
 		let interpreter: ATNSimulator = this.interpreter;
@@ -190,7 +189,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	@NotNull
 	match(ttype: number): Token {
-		let t: Token = this.getCurrentToken();
+		let t: Token = this.currentToken;
 		if (t.type === ttype) {
 			if (ttype === Token.EOF) {
 				this.matchedEOF = true;
@@ -228,7 +227,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	@NotNull
 	matchWildcard(): Token {
-		let t: Token = this.getCurrentToken();
+		let t: Token = this.currentToken;
 		if (t.type > 0) {
 			this._errHandler.reportMatch(this);
 			this.consume();
@@ -260,7 +259,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * {@link ParserRuleContext#children} list. Contexts are then not candidates
 	 * for garbage collection.</p>
 	 */
-	setBuildParseTree(buildParseTrees: boolean): void {
+	set buildParseTree(buildParseTrees: boolean) {
 		this._buildParseTrees = buildParseTrees;
 	}
 
@@ -271,7 +270,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * @return {@code true} if a complete parse tree will be constructed while
 	 * parsing, otherwise {@code false}
 	 */
-	getBuildParseTree(): boolean {
+	get buildParseTree(): boolean {
 		return this._buildParseTrees;
 	}
 
@@ -381,7 +380,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @see #notifyErrorListeners
 	 */
-	getNumberOfSyntaxErrors(): number {
+	get numberOfSyntaxErrors(): number {
 		return this._syntaxErrors;
 	}
 
@@ -453,11 +452,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	@NotNull
-	getErrorHandler(): ANTLRErrorStrategy {
+	get errorHandler(): ANTLRErrorStrategy {
 		return this._errHandler;
 	}
 
-	setErrorHandler(@NotNull handler: ANTLRErrorStrategy): void {
+	set errorHandler(@NotNull handler: ANTLRErrorStrategy) {
 		this._errHandler = handler;
 	}
 
@@ -476,7 +475,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
      *  into the label for the associated token ref; e.g., x=ID.
      */
 	@NotNull
-	getCurrentToken(): Token {
+	get currentToken(): Token {
 		return this._input.LT(1);
 	}
 
@@ -485,7 +484,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	notifyErrorListeners(msg: string, offendingToken?: Token | null, e?: RecognitionException | undefined): void {
 		if (offendingToken === undefined) {
-			offendingToken = this.getCurrentToken();
+			offendingToken = this.currentToken;
 		} else if (offendingToken === null) {
 			offendingToken = undefined;
 		}
@@ -503,7 +502,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	/**
-	 * Consume and return the {@linkplain #getCurrentToken current symbol}.
+	 * Consume and return the [current symbol](`currentToken`).
 	 *
 	 * <p>E.g., given the following input with {@code A} being the current
 	 * lookahead symbol, this function moves the cursor to {@code B} and returns
@@ -524,7 +523,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * listeners.
 	 */
 	consume(): Token {
-		let o: Token = this.getCurrentToken();
+		let o: Token = this.currentToken;
 		if (o.type != Parser.EOF) {
 			this.inputStream.consume();
 		}
@@ -626,7 +625,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * @return The precedence level for the top-most precedence rule, or -1 if
 	 * the parser context is not nested within a precedence rule.
 	 */
-	getPrecedence(): number {
+	get precedence(): number {
 		if (this._precedenceStack.isEmpty) {
 			return -1;
 		}
@@ -693,11 +692,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		return p;
 	}
 
-	getContext(): ParserRuleContext {
+	get context(): ParserRuleContext {
 		return this._ctx;
 	}
 
-	setContext(ctx: ParserRuleContext): void {
+	set context(ctx: ParserRuleContext) {
 		this._ctx = ctx;
 	}
 
@@ -760,7 +759,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		return false;
 	}
 
-	isMatchedEOF(): boolean {
+	get isMatchedEOF(): boolean {
 		return this.matchedEOF;
 	}
 
@@ -773,7 +772,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	@NotNull
 	getExpectedTokens(): IntervalSet {
-		return this.atn.getExpectedTokens(this.state, this.getContext());
+		return this.atn.getExpectedTokens(this.state, this.context);
 	}
 
 	@NotNull
@@ -871,7 +870,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/** During a parse is sometimes useful to listen in on the rule entry and exit
 	 *  events as well as token matches. This is for quick and dirty debugging.
 	 */
-	setTrace(trace: boolean): void {
+	set isTrace(trace: boolean) {
 		if (!trace) {
 			if (this._tracer) {
 				this.removeParseListener(this._tracer);
@@ -892,10 +891,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Gets whether a {@link TraceListener} is registered as a parse listener
 	 * for the parser.
-	 *
-	 * @see #setTrace(boolean)
 	 */
-	isTrace(): boolean {
+	get isTrace(): boolean {
 		return this._tracer != null;
 	}
 }

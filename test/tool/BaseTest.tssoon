@@ -1105,7 +1105,7 @@ export abstract class BaseTest {
 			"        <lexerName> lex = new <lexerName>(input);\n" +
 			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
 			"        <createParser>\n"+
-			"		 parser.setBuildParseTree(true);\n" +
+			"		 parser.buildParseTree = true;\n" +
 			"		 parser.interpreter.reportAmbiguities = true;\n" +
 			"		 <profile>\n"+
 			"        ParserRuleContext tree = parser.<parserStartRuleName>();\n" +

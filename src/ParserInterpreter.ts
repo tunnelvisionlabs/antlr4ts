@@ -210,8 +210,8 @@ export class ParserInterpreter extends Parser {
 				catch (e) {
 					if (e instanceof RecognitionException) {
 						this.state = this._atn.ruleToStopState[p.ruleIndex].stateNumber;
-						this.getContext().exception = e;
-						this.getErrorHandler().reportError(this, e);
+						this.context.exception = e;
+						this.errorHandler.reportError(this, e);
 						this.recover(e);
 					} else {
 						throw e;
@@ -318,7 +318,7 @@ export class ParserInterpreter extends Parser {
 	protected visitDecisionState(p: DecisionState): number {
 		let edge: number = 1;
 		let predictedAlt: number;
-		this.getErrorHandler().sync(this);
+		this.errorHandler.sync(this);
 		let decision: number = p.decision;
 		if (decision === this.overrideDecision && this._input.index === this.overrideDecisionInputIndex && !this.overrideDecisionReached) {
 			predictedAlt = this.overrideDecisionAlt;
@@ -411,7 +411,7 @@ export class ParserInterpreter extends Parser {
 	 */
 	protected recover(e: RecognitionException): void {
 		let i: number = this._input.index;
-		this.getErrorHandler().recover(this, e);
+		this.errorHandler.recover(this, e);
 		if (this._input.index === i) {
 			// no input consumed, better add an error node
 			let tok: Token | undefined = e.getOffendingToken();

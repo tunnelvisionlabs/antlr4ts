@@ -385,7 +385,7 @@ export class TestParserExec extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"\n" +
-			"file @init{setErrorHandler(new BailErrorStrategy());} \n" +
+			"file @init{errorHandler = new BailErrorStrategy();} \n" +
 			"@after {System.out.println($ctx.toStringTree(this));}\n" +
 			"  :   item (SEMICOLON item)* SEMICOLON? EOF ;\n" +
 			"item : A B?;\n" +

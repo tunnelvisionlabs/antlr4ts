@@ -429,7 +429,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			if (dfa.isPrecedenceDfa) {
 				// the start state for a precedence DFA depends on the current
 				// parser precedence, and is provided by a DFA method.
-				let state: DFAState | undefined = dfa.getPrecedenceStartState(this._parser.getPrecedence(), false);
+				let state: DFAState | undefined = dfa.getPrecedenceStartState(this._parser.precedence, false);
 				if (state == null) {
 					return undefined;
 				}
@@ -453,7 +453,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		assert(outerContext != null);
 		let s0: DFAState | undefined;
 		if (dfa.isPrecedenceDfa) {
-			s0 = dfa.getPrecedenceStartState(this._parser.getPrecedence(), true);
+			s0 = dfa.getPrecedenceStartState(this._parser.precedence, true);
 		}
 		else {
 			s0 = dfa.s0full;
@@ -1237,7 +1237,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		globalContext: ParserRuleContext,
 		useContext: boolean): SimulatorState {
 		let s0: DFAState | undefined =
-			dfa.isPrecedenceDfa ? dfa.getPrecedenceStartState(this._parser.getPrecedence(), useContext) :
+			dfa.isPrecedenceDfa ? dfa.getPrecedenceStartState(this._parser.precedence, useContext) :
 				useContext ? dfa.s0full :
 					dfa.s0;
 
@@ -1349,7 +1349,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					 */
 					configs = this.applyPrecedenceFilter(configs, globalContext, contextCache);
 					next = this.addDFAState(dfa, configs, contextCache);
-					dfa.setPrecedenceStartState(this._parser.getPrecedence(), useContext, next);
+					dfa.setPrecedenceStartState(this._parser.precedence, useContext, next);
 				}
 			}
 			else {

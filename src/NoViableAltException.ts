@@ -57,15 +57,15 @@ export class NoViableAltException extends RecognitionException {
 			}
 
 			if (startToken === undefined) {
-				startToken = recognizer.getCurrentToken();
+				startToken = recognizer.currentToken;
 			}
 
 			if (offendingToken === undefined) {
-				offendingToken = recognizer.getCurrentToken();
+				offendingToken = recognizer.currentToken;
 			}
 
 			if (ctx === undefined) {
-				ctx = recognizer.getContext();
+				ctx = recognizer.context;
 			}
 		}
 
