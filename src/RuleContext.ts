@@ -67,23 +67,6 @@ import { Trees } from "./tree/Trees";
 import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
-const DoneResult = {
-	done: true,
-	value: undefined as any as ParseTree
-}
-
-const EmptyIterator = {
-	next(value?: any): IteratorResult<ParseTree> {
-		return DoneResult;
-	}
-};
-
-const EmptyIterable = {
-	[Symbol.iterator](): Iterator<ParseTree> {
-		return EmptyIterator;
-	}
-};
-
 export class RuleContext extends RuleNode {
 	_parent: RuleContext | undefined;
 	invokingState: number;
@@ -187,8 +170,8 @@ export class RuleContext extends RuleNode {
 		return 0;
 	}
 
-	get children(): Iterable<ParseTree> {
-		return EmptyIterable;
+	get children(): ReadonlyArray<ParseTree> {
+		return [];
 	}
 
 	@Override
