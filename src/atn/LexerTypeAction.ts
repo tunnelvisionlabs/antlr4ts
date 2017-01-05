@@ -42,7 +42,7 @@ export class LexerTypeAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#TYPE}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.TYPE;
 	}
 
@@ -51,7 +51,7 @@ export class LexerTypeAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -69,7 +69,7 @@ export class LexerTypeAction implements LexerAction {
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._type);
 		return MurmurHash.finish(hash, 2);
 	}

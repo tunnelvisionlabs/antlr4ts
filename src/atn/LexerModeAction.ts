@@ -19,14 +19,14 @@ import { NotNull, Override } from '../Decorators';
  * @since 4.2
  */
 export class LexerModeAction implements LexerAction {
-	private readonly mode: number;
+	private readonly _mode: number;
 
 	/**
 	 * Constructs a new {@code mode} action with the specified mode value.
 	 * @param mode The mode value to pass to {@link Lexer#mode}.
 	 */
 	constructor(mode: number) {
-		this.mode = mode;
+		this._mode = mode;
 	}
 
 	/**
@@ -34,8 +34,8 @@ export class LexerModeAction implements LexerAction {
 	 *
 	 * @return The lexer mode for this {@code mode} command.
 	 */
-	getMode(): number {
-		return this.mode;
+	get mode(): number {
+		return this._mode;
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class LexerModeAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#MODE}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.MODE;
 	}
 
@@ -52,7 +52,7 @@ export class LexerModeAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -64,14 +64,14 @@ export class LexerModeAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.mode(this.mode);
+		lexer.mode(this._mode);
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
-		hash = MurmurHash.update(hash, this.mode);
+		hash = MurmurHash.update(hash, this.actionType);
+		hash = MurmurHash.update(hash, this._mode);
 		return MurmurHash.finish(hash, 2);
 	}
 
@@ -83,11 +83,11 @@ export class LexerModeAction implements LexerAction {
 			return false;
 		}
 
-		return this.mode === obj.mode;
+		return this._mode === obj._mode;
 	}
 
 	@Override
 	toString(): string {
-		return `mode(${this.mode})`;
+		return `mode(${this._mode})`;
 	}
 }

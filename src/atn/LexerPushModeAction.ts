@@ -19,14 +19,14 @@ import { NotNull, Override } from '../Decorators';
  * @since 4.2
  */
 export class LexerPushModeAction implements LexerAction {
-	private readonly mode: number;
+	private readonly _mode: number;
 
 	/**
 	 * Constructs a new {@code pushMode} action with the specified mode value.
 	 * @param mode The mode value to pass to {@link Lexer#pushMode}.
 	 */
 	constructor(mode: number) {
-		this.mode = mode;
+		this._mode = mode;
 	}
 
 	/**
@@ -34,8 +34,8 @@ export class LexerPushModeAction implements LexerAction {
 	 *
 	 * @return The lexer mode for this {@code pushMode} command.
 	 */
-	getMode(): number {
-		return this.mode;
+	get mode(): number {
+		return this._mode;
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class LexerPushModeAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#PUSH_MODE}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.PUSH_MODE;
 	}
 
@@ -52,7 +52,7 @@ export class LexerPushModeAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -64,14 +64,14 @@ export class LexerPushModeAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.pushMode(this.mode);
+		lexer.pushMode(this._mode);
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
-		hash = MurmurHash.update(hash, this.mode);
+		hash = MurmurHash.update(hash, this.actionType);
+		hash = MurmurHash.update(hash, this._mode);
 		return MurmurHash.finish(hash, 2);
 	}
 
@@ -83,11 +83,11 @@ export class LexerPushModeAction implements LexerAction {
 			return false;
 		}
 
-		return this.mode === obj.mode;
+		return this._mode === obj._mode;
 	}
 
 	@Override
 	toString(): string {
-		return `pushMode(${this.mode})`;
+		return `pushMode(${this._mode})`;
 	}
 }

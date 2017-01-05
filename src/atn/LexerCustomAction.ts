@@ -25,8 +25,8 @@ import { NotNull, Override } from '../Decorators';
  * @since 4.2
  */
 export class LexerCustomAction implements LexerAction {
-	private readonly ruleIndex: number;
-	private readonly actionIndex: number;
+	private readonly _ruleIndex: number;
+	private readonly _actionIndex: number;
 
 	/**
 	 * Constructs a custom lexer action with the specified rule and action
@@ -38,8 +38,8 @@ export class LexerCustomAction implements LexerAction {
 	 * {@link Recognizer#action}.
 	 */
 	constructor(ruleIndex: number, actionIndex: number) {
-		this.ruleIndex = ruleIndex;
-		this.actionIndex = actionIndex;
+		this._ruleIndex = ruleIndex;
+		this._actionIndex = actionIndex;
 	}
 
 	/**
@@ -47,8 +47,8 @@ export class LexerCustomAction implements LexerAction {
 	 *
 	 * @return The rule index for the custom action.
 	 */
-	getRuleIndex(): number {
-		return this.ruleIndex;
+	get ruleIndex(): number {
+		return this._ruleIndex;
 	}
 
 	/**
@@ -56,8 +56,8 @@ export class LexerCustomAction implements LexerAction {
 	 *
 	 * @return The action index for the custom action.
 	 */
-	getActionIndex(): number {
-		return this.actionIndex;
+	get actionIndex(): number {
+		return this._actionIndex;
 	}
 
 	/**
@@ -66,7 +66,7 @@ export class LexerCustomAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#CUSTOM}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.CUSTOM;
 	}
 
@@ -82,7 +82,7 @@ export class LexerCustomAction implements LexerAction {
 	 * @return This method returns {@code true}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return true;
 	}
 
@@ -94,15 +94,15 @@ export class LexerCustomAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.action(undefined, this.ruleIndex, this.actionIndex);
+		lexer.action(undefined, this._ruleIndex, this._actionIndex);
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
-		hash = MurmurHash.update(hash, this.ruleIndex);
-		hash = MurmurHash.update(hash, this.actionIndex);
+		hash = MurmurHash.update(hash, this.actionType);
+		hash = MurmurHash.update(hash, this._ruleIndex);
+		hash = MurmurHash.update(hash, this._actionIndex);
 		return MurmurHash.finish(hash, 3);
 	}
 
@@ -114,7 +114,7 @@ export class LexerCustomAction implements LexerAction {
 			return false;
 		}
 
-		return this.ruleIndex === obj.ruleIndex
-			&& this.actionIndex === obj.actionIndex;
+		return this._ruleIndex === obj._ruleIndex
+			&& this._actionIndex === obj._actionIndex;
 	}
 }

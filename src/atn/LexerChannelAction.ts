@@ -43,7 +43,7 @@ export class LexerChannelAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#CHANNEL}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.CHANNEL;
 	}
 
@@ -52,7 +52,7 @@ export class LexerChannelAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -70,7 +70,7 @@ export class LexerChannelAction implements LexerAction {
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._channel);
 		return MurmurHash.finish(hash, 2);
 	}

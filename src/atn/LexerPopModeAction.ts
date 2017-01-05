@@ -32,7 +32,7 @@ export class LexerPopModeAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#POP_MODE}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.POP_MODE;
 	}
 
@@ -41,7 +41,7 @@ export class LexerPopModeAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ export class LexerPopModeAction implements LexerAction {
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
+		hash = MurmurHash.update(hash, this.actionType);
 		return MurmurHash.finish(hash, 1);
 	}
 

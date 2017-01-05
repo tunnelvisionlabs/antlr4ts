@@ -289,8 +289,8 @@ export class ATNSerializer {
 		if (atn.grammarType == ATNType.LEXER) {
 			data.add(atn.lexerActions.length);
 			for (let action of atn.lexerActions) {
-				data.add(action.getActionType().ordinal());
-				switch (action.getActionType()) {
+				data.add(action.actionType.ordinal());
+				switch (action.actionType) {
 				case CHANNEL:
 					let channel: number =  ((LexerChannelAction)action).channel;
 					data.add(channel != -1 ? channel : 0xFFFF);
@@ -298,14 +298,14 @@ export class ATNSerializer {
 					break;
 
 				case CUSTOM:
-					let ruleIndex: number =  ((LexerCustomAction)action).getRuleIndex();
-					let actionIndex: number =  ((LexerCustomAction)action).getActionIndex();
+					let ruleIndex: number =  ((LexerCustomAction)action).ruleIndex;
+					let actionIndex: number =  ((LexerCustomAction)action).actionIndex;
 					data.add(ruleIndex != -1 ? ruleIndex : 0xFFFF);
 					data.add(actionIndex != -1 ? actionIndex : 0xFFFF);
 					break;
 
 				case MODE:
-					let mode: number =  ((LexerModeAction)action).getMode();
+					let mode: number =  ((LexerModeAction)action).mode;
 					data.add(mode != -1 ? mode : 0xFFFF);
 					data.add(0);
 					break;
@@ -321,7 +321,7 @@ export class ATNSerializer {
 					break;
 
 				case PUSH_MODE:
-					mode = ((LexerPushModeAction)action).getMode();
+					mode = ((LexerPushModeAction)action).mode;
 					data.add(mode != -1 ? mode : 0xFFFF);
 					data.add(0);
 					break;
@@ -338,7 +338,7 @@ export class ATNSerializer {
 					break;
 
 				default:
-					let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %s is not valid.", action.getActionType());
+					let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %s is not valid.", action.actionType);
 					throw new IllegalArgumentException(message);
 				}
 			}
