@@ -11,17 +11,17 @@ in individual files can be removed and the antlr4 submodule commit will track th
 
 * [x] ANTLRErrorListener.java
 * [x] ANTLRErrorStrategy.java
-* [ ] ANTLRFileStream.java
+* [x] ~~ANTLRFileStream.java~~ (Intentionally omitted)
 * [x] ANTLRInputStream.java
-  * [ ] ANTLRInputStream.constructor()
-  * [ ] ANTLRInputStream.constructor(char[], number)
-  * [ ] ANTLRInputStream.constructor(Reader)
-  * [ ] ANTLRInputStream.constructor(Reader, number)
-  * [ ] ANTLRInputStream.constructor(Reader, number, number)
-  * [ ] ANTLRInputStream.constructor(InputStream)
-  * [ ] ANTLRInputStream.constructor(InputStream, number)
-  * [ ] ANTLRInputStream.constructor(InputStream, number, number)
-  * [ ] ANTLRInputStream.load(Reader, number, number)
+  * [x] ~~ANTLRInputStream.constructor()~~ (Not needed after other APIs omitted)
+  * [x] ~~ANTLRInputStream.constructor(char[], number)~~ (No equivalent TypeScript representation)
+  * [x] ~~ANTLRInputStream.constructor(Reader)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.constructor(Reader, number)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.constructor(Reader, number, number)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.constructor(InputStream)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.constructor(InputStream, number)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.constructor(InputStream, number, number)~~ (Intentionally omitted)
+  * [x] ~~ANTLRInputStream.load(Reader, number, number)~~ (Intentionally omitted)
 * [x] BailErrorStrategy.java
 * [x] BaseErrorListener.java
 * [x] BufferedTokenStream.java
