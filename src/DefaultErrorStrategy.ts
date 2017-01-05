@@ -337,7 +337,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	protected reportFailedPredicate(@NotNull recognizer: Parser,
 		@NotNull e: FailedPredicateException): void {
-		let ruleName: string = recognizer.getRuleNames()[recognizer.getContext().getRuleIndex()];
+		let ruleName: string = recognizer.getRuleNames()[recognizer.getContext().ruleIndex];
 		let msg: string = "rule " + ruleName + " " + e.message;
 		this.notifyErrorListeners(recognizer, msg, e);
 	}

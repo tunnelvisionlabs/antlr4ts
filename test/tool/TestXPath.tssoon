@@ -211,7 +211,7 @@ export class TestXPath extends BaseTest {
 		for (let t of XPath.findAll(tree, xpath, parser) ) {
 			if ( t instanceof RuleContext) {
 				let r: RuleContext =  (RuleContext)t;
-				nodes.add(parser.getRuleNames()[r.getRuleIndex()]);
+				nodes.add(parser.getRuleNames()[r.ruleIndex]);
 			}
 			else {
 				let token: TerminalNode =  (TerminalNode)t;

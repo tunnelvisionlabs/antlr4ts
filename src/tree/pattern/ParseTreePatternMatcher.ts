@@ -311,7 +311,7 @@ export class ParseTreePatternMatcher {
 			let ruleTagToken = this.getRuleTagToken(patternTree);
 			if (ruleTagToken) {
 				let m: ParseTreeMatch;
-				if (tree.ruleContext.getRuleIndex() === patternTree.ruleContext.getRuleIndex()) {
+				if (tree.ruleContext.ruleIndex === patternTree.ruleContext.ruleIndex) {
 					// track label->list-of-nodes for both rule name and label (if any)
 					labels.map(ruleTagToken.ruleName, tree);
 					const l = ruleTagToken.label;

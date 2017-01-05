@@ -54,7 +54,7 @@ export class Trees {
 		if ( ruleNames!=null ) {
 			if ( t instanceof RuleNode ) {
 				let ruleContext: RuleContext =  ((RuleNode)t).ruleContext;
-				let ruleIndex: number =  ruleContext.getRuleIndex();
+				let ruleIndex: number =  ruleContext.ruleIndex;
 				let ruleName: string =  ruleNames.get(ruleIndex);
 				let altNumber: number =  ruleContext.altNumber;
 				if ( altNumber!=ATN.INVALID_ALT_NUMBER ) {
@@ -146,7 +146,7 @@ export class Trees {
 		}
 		else if ( !findTokens && t instanceof ParserRuleContext ) {
 			let ctx: ParserRuleContext =  (ParserRuleContext)t;
-			if ( ctx.getRuleIndex() == index ) nodes.add(t);
+			if ( ctx.ruleIndex == index ) nodes.add(t);
 		}
 		// check children
 		for (let i = 0; i < t.childCount; i++){

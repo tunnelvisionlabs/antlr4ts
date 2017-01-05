@@ -23,8 +23,8 @@ export class XPathRuleElement extends XPathElement {
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if (c instanceof ParserRuleContext) {
-				if ((c.getRuleIndex() === this.ruleIndex && !this.invert) ||
-					(c.getRuleIndex() !== this.ruleIndex && this.invert)) {
+				if ((c.ruleIndex === this.ruleIndex && !this.invert) ||
+					(c.ruleIndex !== this.ruleIndex && this.invert)) {
 					nodes.push(c);
 				}
 			}

@@ -137,7 +137,7 @@ export class RuleContext extends RuleNode {
 		return builder.toString();
 	}
 
-	getRuleIndex(): number { return -1; }
+	get ruleIndex(): number { return -1; }
 
 	/** For rule associated with this parse tree internal node, return
 	 *  the outer alternative number used to match the input. Default
@@ -218,7 +218,7 @@ export class RuleContext extends RuleNode {
 					buf += (p.invokingState);
 				}
 			} else {
-				let ruleIndex: number = p.getRuleIndex();
+				let ruleIndex: number = p.ruleIndex;
 				let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
 					? ruleNames[ruleIndex] : ruleIndex.toString();
 				buf += (ruleName);

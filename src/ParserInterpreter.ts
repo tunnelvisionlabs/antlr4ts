@@ -248,10 +248,10 @@ export class ParserInterpreter extends Parser {
 				// and we're not taking the exit branch of loop.
 				let parentContext = this._parentContextStack[this._parentContextStack.length - 1];
 				let localctx: InterpreterRuleContext =
-					this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.getRuleIndex());
+					this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
 				this.pushNewRecursionContext(localctx,
 					this.atn.ruleToStartState[p.ruleIndex].stateNumber,
-					this._ctx.getRuleIndex());
+					this._ctx.ruleIndex);
 			}
 			break;
 

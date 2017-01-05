@@ -48,13 +48,13 @@ class TraceListener implements ParseTreeListener {
 
 	@Override
 	enterEveryRule(ctx: ParserRuleContext): void {
-		console.log("enter   " + this.ruleNames[ctx.getRuleIndex()] +
+		console.log("enter   " + this.ruleNames[ctx.ruleIndex] +
 			", LT(1)=" + this.tokenStream.LT(1).text);
 	}
 
 	@Override
 	exitEveryRule(ctx: ParserRuleContext): void {
-		console.log("exit    " + this.ruleNames[ctx.getRuleIndex()] +
+		console.log("exit    " + this.ruleNames[ctx.ruleIndex] +
 			", LT(1)=" + this.tokenStream.LT(1).text);
 	}
 
@@ -66,7 +66,7 @@ class TraceListener implements ParseTreeListener {
 	visitTerminal(node: TerminalNode): void {
 		let parent = node.parent!.ruleContext;
 		let token: Token = node.symbol;
-		console.log("consume " + token + " rule " + this.ruleNames[parent.getRuleIndex()]);
+		console.log("consume " + token + " rule " + this.ruleNames[parent.ruleIndex]);
 	}
 }
 
@@ -687,7 +687,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	getInvokingContext(ruleIndex: number): ParserRuleContext | undefined {
 		let p = this._ctx;
-		while (p && p.getRuleIndex() !== ruleIndex) {
+		while (p && p.ruleIndex !== ruleIndex) {
 			p = p._parent as ParserRuleContext;
 		}
 		return p;
@@ -805,7 +805,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let stack: string[] = [];
 		while (p != null) {
 			// compute what follows who invoked us
-			let ruleIndex: number = p.getRuleIndex();
+			let ruleIndex: number = p.ruleIndex;
 			if (ruleIndex < 0) stack.push("n/a");
 			else stack.push(ruleNames[ruleIndex]);
 			p = p._parent;
