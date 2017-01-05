@@ -376,26 +376,26 @@ export class ParseTreePatternMatcher {
 		for (let chunk of chunks) {
 			if (chunk instanceof TagChunk) {
 				let tagChunk = chunk;
-				const firstChar = tagChunk.getTag().substr(0, 1);
+				const firstChar = tagChunk.tag.substr(0, 1);
 				// add special rule token or conjure up new token from name
 				if (firstChar === firstChar.toUpperCase()) {
-					let ttype: number = this._parser.getTokenType(tagChunk.getTag());
+					let ttype: number = this._parser.getTokenType(tagChunk.tag);
 					if (ttype === Token.INVALID_TYPE) {
-						throw new Error("Unknown token " + tagChunk.getTag() + " in pattern: " + pattern);
+						throw new Error("Unknown token " + tagChunk.tag + " in pattern: " + pattern);
 					}
-					let t: TokenTagToken = new TokenTagToken(tagChunk.getTag(), ttype, tagChunk.getLabel());
+					let t: TokenTagToken = new TokenTagToken(tagChunk.tag, ttype, tagChunk.label);
 					tokens.push(t);
 				}
 				else if (firstChar === firstChar.toLowerCase()) {
-					let ruleIndex: number = this._parser.getRuleIndex(tagChunk.getTag());
+					let ruleIndex: number = this._parser.getRuleIndex(tagChunk.tag);
 					if (ruleIndex === -1) {
-						throw new Error("Unknown rule " + tagChunk.getTag() + " in pattern: " + pattern);
+						throw new Error("Unknown rule " + tagChunk.tag + " in pattern: " + pattern);
 					}
 					let ruleImaginaryTokenType: number = this._parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
-					tokens.push(new RuleTagToken(tagChunk.getTag(), ruleImaginaryTokenType, tagChunk.getLabel()));
+					tokens.push(new RuleTagToken(tagChunk.tag, ruleImaginaryTokenType, tagChunk.label));
 				}
 				else {
-					throw new Error("invalid tag: " + tagChunk.getTag() + " in pattern: " + pattern);
+					throw new Error("invalid tag: " + tagChunk.tag + " in pattern: " + pattern);
 				}
 			}
 			else {

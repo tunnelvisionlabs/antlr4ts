@@ -24,13 +24,13 @@ import { NotNull, Override } from '../../Decorators';
  */
 export class TagChunk extends Chunk {
 	/**
-	 * This is the backing field for {@link #getTag}.
+	 * This is the backing field for `tag`.
 	 */
-	private tag: string;
+	private _tag: string;
 	/**
-	 * This is the backing field for {@link #getLabel}.
+	 * This is the backing field for `label`.
 	 */
-	private label?: string;
+	private _label?: string;
 
 	/**
 	 * Construct a new instance of {@link TagChunk} using the specified label
@@ -51,8 +51,8 @@ export class TagChunk extends Chunk {
 			throw new Error("tag cannot be null or empty");
 		}
 
-		this.tag = tag;
-		this.label = label;
+		this._tag = tag;
+		this._label = label;
 	}
 
 	/**
@@ -61,8 +61,8 @@ export class TagChunk extends Chunk {
 	 * @return The tag for the chunk.
 	 */
 	@NotNull
-	getTag(): string {
-		return this.tag;
+	get tag(): string {
+		return this._tag;
 	}
 
 	/**
@@ -71,8 +71,8 @@ export class TagChunk extends Chunk {
 	 * @return The label assigned to this chunk, or {@code null} if no label is
 	 * assigned to the chunk.
 	 */
-	getLabel(): string | undefined {
-		return this.label;
+	get label(): string | undefined {
+		return this._label;
 	}
 
 	/**
@@ -82,10 +82,10 @@ export class TagChunk extends Chunk {
 	 */
 	@Override
 	toString(): string {
-		if (this.label != null) {
-			return this.label + ":" + this.tag;
+		if (this._label != null) {
+			return this._label + ":" + this._tag;
 		}
 
-		return this.tag;
+		return this._tag;
 	}
 }
