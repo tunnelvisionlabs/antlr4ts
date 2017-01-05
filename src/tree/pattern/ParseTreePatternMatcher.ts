@@ -279,8 +279,8 @@ export class ParseTreePatternMatcher {
 				if (patternTree.getSymbol() instanceof TokenTagToken) { // x and <ID>
 					let tokenTagToken = patternTree.getSymbol() as TokenTagToken;
 					// track label->list-of-nodes for both token name and label (if any)
-					labels.map(tokenTagToken.getTokenName(), tree);
-					const l = tokenTagToken.getLabel();
+					labels.map(tokenTagToken.tokenName, tree);
+					const l = tokenTagToken.label;
 					if (l) {
 						labels.map(l, tree);
 					}

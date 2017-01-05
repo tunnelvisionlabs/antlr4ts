@@ -15,14 +15,14 @@ import { NotNull, Override } from '../../Decorators';
  */
 export class TokenTagToken extends CommonToken {
 	/**
-	 * This is the backing field for {@link #getTokenName}.
+	 * This is the backing field for `tokenName`.
 	 */
 	@NotNull
-	private tokenName: string;
+	private _tokenName: string;
 	/**
-	 * This is the backing field for {@link #getLabel}.
+	 * This is the backing field for `label`.
 	 */
-	private label: string | undefined;
+	private _label: string | undefined;
 
 	/**
 	 * Constructs a new instance of {@link TokenTagToken} with the specified
@@ -35,8 +35,8 @@ export class TokenTagToken extends CommonToken {
 	 */
 	constructor(@NotNull tokenName: string, type: number, label?: string) {
 		super(type);
-		this.tokenName = tokenName;
-		this.label = label;
+		this._tokenName = tokenName;
+		this._label = label;
 	}
 
 	/**
@@ -44,8 +44,8 @@ export class TokenTagToken extends CommonToken {
 	 * @return The token name.
 	 */
 	@NotNull
-	getTokenName(): string {
-		return this.tokenName;
+	get tokenName(): string {
+		return this._tokenName;
 	}
 
 	/**
@@ -54,8 +54,8 @@ export class TokenTagToken extends CommonToken {
 	 * @return The name of the label associated with the rule tag, or
 	 * {@code null} if this is an unlabeled rule tag.
 	 */
-	getLabel(): string | undefined {
-		return this.label;
+	get label(): string | undefined {
+		return this._label;
 	}
 
 	/**
@@ -66,11 +66,11 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@Override
 	get text(): string {
-		if (this.label != null) {
-			return "<" + this.label + ":" + this.tokenName + ">";
+		if (this._label != null) {
+			return "<" + this._label + ":" + this._tokenName + ">";
 		}
 
-		return "<" + this.tokenName + ">";
+		return "<" + this._tokenName + ">";
 	}
 
 	/**
@@ -81,6 +81,6 @@ export class TokenTagToken extends CommonToken {
 	 */
 	@Override
 	toString(): string {
-		return this.tokenName + ":" + this.type;
+		return this._tokenName + ":" + this.type;
 	}
 }
