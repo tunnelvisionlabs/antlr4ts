@@ -144,7 +144,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	@NotNull
 	getRepresentedAlternatives(): BitSet {
 		if (this._conflictInfo != null) {
-			return this._conflictInfo.getConflictedAlts().clone();
+			return this._conflictInfo.conflictedAlts.clone();
 		}
 
 		let alts: BitSet = new BitSet();
@@ -490,8 +490,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		if (this._hasSemanticContext) buf += (",hasSemanticContext=") + (this._hasSemanticContext);
 		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) buf += (",uniqueAlt=") + (this._uniqueAlt);
 		if (this._conflictInfo != null) {
-			buf += (",conflictingAlts=") + (this._conflictInfo.getConflictedAlts());
-			if (!this._conflictInfo.isExact()) {
+			buf += (",conflictingAlts=") + (this._conflictInfo.conflictedAlts);
+			if (!this._conflictInfo.isExact) {
 				buf += ("*");
 			}
 		}
@@ -526,7 +526,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return undefined;
 		}
 
-		return this._conflictInfo.getConflictedAlts();
+		return this._conflictInfo.conflictedAlts;
 	}
 
 	get isExactConflict(): boolean {
@@ -534,7 +534,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return false;
 		}
 
-		return this._conflictInfo.isExact();
+		return this._conflictInfo.isExact;
 	}
 
 	get dipsIntoOuterContext(): boolean {
