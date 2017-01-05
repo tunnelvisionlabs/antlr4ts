@@ -42,7 +42,7 @@ export class PredicateTransition extends AbstractPredicateTransition {
 		return false;
 	}
 
-	getPredicate(): SemanticContext.Predicate {
+	get predicate(): SemanticContext.Predicate {
 		return new SemanticContext.Predicate(this.ruleIndex, this.predIndex, this.isCtxDependent);
 	}
 

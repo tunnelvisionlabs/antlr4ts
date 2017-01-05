@@ -38,7 +38,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 		return false;
 	}
 
-	getPredicate(): SemanticContext.PrecedencePredicate {
+	get predicate(): SemanticContext.PrecedencePredicate {
 		return new SemanticContext.PrecedencePredicate(this.precedence);
 	}
 

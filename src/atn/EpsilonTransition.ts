@@ -27,7 +27,7 @@ export class EpsilonTransition extends Transition {
 	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache)
 	 * @since 4.4.1
 	 */
-	outermostPrecedenceReturn(): number {
+	get outermostPrecedenceReturn(): number {
 		return this._outermostPrecedenceReturn;
 	}
 

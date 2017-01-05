@@ -25,7 +25,7 @@ export class FailedPredicateException extends RecognitionException {
 
 	private ruleIndex: number;
 	private predicateIndex: number;
-	private predicate?: string;
+	private _predicate?: string;
 
 	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
 		super(
@@ -45,7 +45,7 @@ export class FailedPredicateException extends RecognitionException {
 			this.predicateIndex = 0;
 		}
 
-		this.predicate = predicate;
+		this._predicate = predicate;
 		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
 	}
 
@@ -57,8 +57,8 @@ export class FailedPredicateException extends RecognitionException {
 		return this.predicateIndex;
 	}
 
-	getPredicate(): string | undefined {
-		return this.predicate;
+	get predicate(): string | undefined {
+		return this._predicate;
 	}
 
 	@NotNull

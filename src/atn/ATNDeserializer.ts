@@ -798,7 +798,7 @@ export class ATNDeserializer {
 				let transition: Transition = state.getOptimizedTransition(i);
 				let intermediate: ATNState = transition.target;
 				if (transition.serializationType !== TransitionType.EPSILON
-					|| (<EpsilonTransition>transition).outermostPrecedenceReturn() !== -1
+					|| (<EpsilonTransition>transition).outermostPrecedenceReturn !== -1
 					|| intermediate.getStateType() !== ATNStateType.BASIC
 					|| !intermediate.onlyHasEpsilonTransitions()) {
 					if (optimizedTransitions != null) {
@@ -810,7 +810,7 @@ export class ATNDeserializer {
 
 				for (let j = 0; j < intermediate.getNumberOfOptimizedTransitions(); j++) {
 					if (intermediate.getOptimizedTransition(j).serializationType !== TransitionType.EPSILON
-						|| (<EpsilonTransition>intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn() !== -1) {
+						|| (<EpsilonTransition>intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn !== -1) {
 						if (optimizedTransitions != null) {
 							optimizedTransitions.push(transition);
 						}

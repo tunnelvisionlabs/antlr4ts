@@ -1797,7 +1797,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
-						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn();
+						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn;
 						if (outermostPrecedenceReturn == this.dfa.atnStartState.ruleIndex) {
 							c.setPrecedenceFilterSuppressed(true);
 						}
@@ -1899,7 +1899,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let c: ATNConfig;
 		if (collectPredicates && inContext) {
-			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.getPredicate());
+			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.predicate);
 			c = config.transform(pt.target, false, newSemCtx);
 		}
 		else {
@@ -1928,7 +1928,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let c: ATNConfig;
 		if (collectPredicates &&
 			(!pt.isCtxDependent || (pt.isCtxDependent && inContext))) {
-			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.getPredicate());
+			let newSemCtx: SemanticContext = SemanticContext.and(config.getSemanticContext(), pt.predicate);
 			c = config.transform(pt.target, false, newSemCtx);
 		}
 		else {
