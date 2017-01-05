@@ -279,7 +279,7 @@ export class UnbufferedCharStream implements CharStream {
 
 		let bufferStartIndex: number =  getBufferStartIndex();
 		if (n > 0 && data[n - 1] == Character.MAX_VALUE) {
-			if (interval.a + interval.length() > bufferStartIndex + n) {
+			if (interval.a + interval.length > bufferStartIndex + n) {
 				throw new IllegalArgumentException("the interval extends past the end of the stream");
 			}
 		}
@@ -290,7 +290,7 @@ export class UnbufferedCharStream implements CharStream {
 		}
 		// convert from absolute to local index
 		let i: number =  interval.a - bufferStartIndex;
-		return new String(data, i, interval.length());
+		return new String(data, i, interval.length);
 	}
 
 	protected getBufferStartIndex(): number {
