@@ -96,7 +96,7 @@ export class ParseTreePattern {
 	 */
 	@NotNull
 	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
-		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this._matcher.getParser());
+		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this._matcher.parser);
 		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {
 			let match: ParseTreeMatch = this.match(t);

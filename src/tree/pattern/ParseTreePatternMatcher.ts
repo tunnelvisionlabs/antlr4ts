@@ -88,14 +88,14 @@ import { TokenTagToken } from "./TokenTagToken";
  */
 export class ParseTreePatternMatcher {
 	/**
-	 * This is the backing field for {@link #getLexer()}.
+	 * This is the backing field for `lexer`.
 	 */
-	private lexer: Lexer;
+	private _lexer: Lexer;
 
 	/**
-	 * This is the backing field for {@link #getParser()}.
+	 * This is the backing field for `parser`.
 	 */
-	private parser: Parser;
+	private _parser: Parser;
 
 	protected start = "<";
 	protected stop = ">";
@@ -113,8 +113,8 @@ export class ParseTreePatternMatcher {
 	 * the grammar name, plus token, rule names.
 	 */
 	constructor(lexer: Lexer, parser: Parser) {
-		this.lexer = lexer;
-		this.parser = parser;
+		this._lexer = lexer;
+		this._parser = parser;
 	}
 
 	/**
@@ -198,7 +198,7 @@ export class ParseTreePatternMatcher {
 		let tokenList = this.tokenize(pattern);
 		let tokenSrc = new ListTokenSource(tokenList);
 		let tokens = new CommonTokenStream(tokenSrc);
-		const parser = this.parser;
+		const parser = this._parser;
 
 		let parserInterp = new ParserInterpreter(
 			parser.getGrammarFileName(),
@@ -235,8 +235,8 @@ export class ParseTreePatternMatcher {
 	 * input stream is reset.
 	 */
 	@NotNull
-	getLexer(): Lexer {
-		return this.lexer;
+	get lexer(): Lexer {
+		return this._lexer;
 	}
 
 	/**
@@ -244,8 +244,8 @@ export class ParseTreePatternMatcher {
 	 * used to parse the pattern into a parse tree.
 	 */
 	@NotNull
-	getParser(): Parser {
-		return this.parser;
+	get parser(): Parser {
+		return this._parser;
 	}
 
 	// ---- SUPPORT CODE ----
@@ -379,7 +379,7 @@ export class ParseTreePatternMatcher {
 				const firstChar = tagChunk.getTag().substr(0, 1);
 				// add special rule token or conjure up new token from name
 				if (firstChar === firstChar.toUpperCase()) {
-					let ttype: number = this.parser.getTokenType(tagChunk.getTag());
+					let ttype: number = this._parser.getTokenType(tagChunk.getTag());
 					if (ttype === Token.INVALID_TYPE) {
 						throw new Error("Unknown token " + tagChunk.getTag() + " in pattern: " + pattern);
 					}
@@ -387,11 +387,11 @@ export class ParseTreePatternMatcher {
 					tokens.push(t);
 				}
 				else if (firstChar === firstChar.toLowerCase()) {
-					let ruleIndex: number = this.parser.getRuleIndex(tagChunk.getTag());
+					let ruleIndex: number = this._parser.getRuleIndex(tagChunk.getTag());
 					if (ruleIndex === -1) {
 						throw new Error("Unknown rule " + tagChunk.getTag() + " in pattern: " + pattern);
 					}
-					let ruleImaginaryTokenType: number = this.parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
+					let ruleImaginaryTokenType: number = this._parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
 					tokens.push(new RuleTagToken(tagChunk.getTag(), ruleImaginaryTokenType, tagChunk.getLabel()));
 				}
 				else {
@@ -401,11 +401,11 @@ export class ParseTreePatternMatcher {
 			else {
 				let textChunk = chunk as TextChunk;
 				let input = new ANTLRInputStream(textChunk.text);
-				this.lexer.inputStream = input;
-				let t: Token = this.lexer.nextToken();
+				this._lexer.inputStream = input;
+				let t: Token = this._lexer.nextToken();
 				while (t.type !== Token.EOF) {
 					tokens.push(t);
-					t = this.lexer.nextToken();
+					t = this._lexer.nextToken();
 				}
 			}
 		}

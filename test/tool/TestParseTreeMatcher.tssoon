@@ -105,8 +105,8 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let m: ParseTreePatternMatcher =  getPatternMatcher("X2");
 
-		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.patternTree.toStringTree(m.getParser());
+		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.parser.getRuleIndex("s"));
+		let results: string =  t.patternTree.toStringTree(m.parser);
 		let expected: string =  "(s <ID> = (expr <expr>) ;)";
 		assertEquals(expected, results);
 	}
@@ -128,7 +128,7 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let failed: boolean =  false;
 		try {
-			m.compile("<ID> = <expr> ; extra", m.getParser().getRuleIndex("s"));
+			m.compile("<ID> = <expr> ; extra", m.parser.getRuleIndex("s"));
 		}
 		catch (ParseTreePatternMatcher.StartRuleDoesNotConsumeFullPattern e) {
 			failed = true;
@@ -153,7 +153,7 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let failed: boolean =  false;
 		try {
-			m.compile("<ID> ;", m.getParser().getRuleIndex("s"));
+			m.compile("<ID> ;", m.parser.getRuleIndex("s"));
 		}
 		catch (InputMismatchException e) {
 			failed = true;
@@ -178,7 +178,7 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let failed: boolean =  false;
 		try {
-			m.compile("<ID> <ID> ;", m.getParser().getRuleIndex("s"));
+			m.compile("<ID> <ID> ;", m.parser.getRuleIndex("s"));
 		}
 		catch (NoViableAltException e) {
 			failed = true;
@@ -201,8 +201,8 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let m: ParseTreePatternMatcher =  getPatternMatcher("X2");
 
-		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.patternTree.toStringTree(m.getParser());
+		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", m.parser.getRuleIndex("s"));
+		let results: string =  t.patternTree.toStringTree(m.parser);
 		let expected: string =  "(s <ID> = (expr <expr>) ;)";
 		assertEquals(expected, results);
 	}
@@ -220,8 +220,8 @@ export class TestParseTreeMatcher extends BaseTest {
 
 		let m: ParseTreePatternMatcher = 	getPatternMatcher("X2");
 
-		let t: ParseTreePattern =  m.compile("<ID> = <ID> ;", m.getParser().getRuleIndex("s"));
-		let results: string =  t.patternTree.toStringTree(m.getParser());
+		let t: ParseTreePattern =  m.compile("<ID> = <ID> ;", m.parser.getRuleIndex("s"));
+		let results: string =  t.patternTree.toStringTree(m.parser);
 		let expected: string =  "(s <ID> = <ID> ;)";
 		assertEquals(expected, results);
 	}
