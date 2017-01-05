@@ -123,7 +123,7 @@ export class TestParseErrors extends BaseTest {
 	@Test testSingleTokenDeletionBeforeLoop(): void {
 		let grammar: string = 
 			"grammar T;\n" +
-			"a : 'a' 'b'*;";
+			"a : 'a' 'b'* EOF ;";
 		let found: string =  execParser("T.g4", grammar, "TParser", "TLexer", "a", "aabc", false);
 		let expecting: string =  "line 1:1 extraneous input 'a' expecting {<EOF>, 'b'}\n" +
 			"line 1:3 token recognition error at: 'c'\n";
@@ -170,7 +170,7 @@ export class TestParseErrors extends BaseTest {
 	@Test testSingleTokenDeletionBeforeLoop2(): void {
 		let grammar: string = 
 			"grammar T;\n" +
-			"a : 'a' ('b'|'z'{;})*;";
+			"a : 'a' ('b'|'z'{;})* EOF ;";
 		let found: string =  execParser("T.g4", grammar, "TParser", "TLexer", "a", "aabc", false);
 		let expecting: string =  "line 1:1 extraneous input 'a' expecting {<EOF>, 'b', 'z'}\n" +
 			"line 1:3 token recognition error at: 'c'\n";
@@ -247,7 +247,7 @@ export class TestParseErrors extends BaseTest {
 		let result: string =  execParser("T.g4", grammar, "TParser", "TLexer", "start", "", true);
 		let expecting: string =  "";
 		assertEquals(expecting, result);
-		assertEquals("line 1:0 missing ID at '<EOF>'\n", this.stderrDuringParse);
+		assertEquals("line 1:0 mismatched input '<EOF>' expecting ID\n", this.stderrDuringParse);
 	}
 
 	/**
