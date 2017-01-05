@@ -111,7 +111,7 @@ export class ATN {
 		this.LL1Table.clear();
 	}
 
-	getContextCacheSize(): number {
+	get contextCacheSize(): number {
 		return this.contextCache.size;
 	}
 
@@ -192,7 +192,7 @@ export class ATN {
 		return undefined;
 	}
 
-	getNumberOfDecisions(): number {
+	get numberOfDecisions(): number {
 		return this.decisionToState.length;
 	}
 

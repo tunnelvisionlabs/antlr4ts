@@ -1004,7 +1004,7 @@ export class TestPerformance {
 					}
 				}
 
-				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${lexerInterpreter.atn.getContextCacheSize()} prediction contexts.`);
+				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${lexerInterpreter.atn.contextCacheSize} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					console.log("\tMode\tStates\tConfigs\tMode");
@@ -1051,7 +1051,7 @@ export class TestPerformance {
 					}
                 }
 
-                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${interpreter.atn.getContextCacheSize()} prediction contexts.`);
+                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${interpreter.atn.contextCacheSize} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					if (TestPerformance.COMPUTE_TRANSITION_STATS) {
