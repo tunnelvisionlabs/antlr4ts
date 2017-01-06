@@ -621,12 +621,12 @@ export class ATNDeserializer {
 		// StarLoopEntryState.precedenceLoopbackStates.
 		for (let precedenceDecision of rulePrecedenceDecisions) {
 			for (let transition of atn.ruleToStopState[precedenceDecision[0]].getTransitions()) {
-				if (transition.getSerializationType() != TransitionType.EPSILON) {
+				if (transition.getSerializationType() !== TransitionType.EPSILON) {
 					continue;
 				}
 
 				let epsilonTransition = transition as EpsilonTransition;
-				if (epsilonTransition.outermostPrecedenceReturn() != -1) {
+				if (epsilonTransition.outermostPrecedenceReturn() !== -1) {
 					continue;
 				}
 

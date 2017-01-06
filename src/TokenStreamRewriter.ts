@@ -458,7 +458,7 @@ export class TokenStreamRewriter {
 			// combine current insert with prior if any at same index
 			let prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (let prevIop of prevInserts) {
-				if ( prevIop.index == iop.index ) {
+				if ( prevIop.index === iop.index ) {
 					if (prevIop instanceof InsertAfterOp) {
 						iop.text = this.catOpText(prevIop.text, iop.text);
 						rewrites[prevIop.instructionIndex] = undefined;
