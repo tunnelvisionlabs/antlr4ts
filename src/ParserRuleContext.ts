@@ -68,8 +68,8 @@ export class ParserRuleContext extends RuleContext {
 	 */
 //	public Array<number> states;
 
-	public start: Token;
-	public stop: Token | undefined;
+	public _start: Token;
+	public _stop: Token | undefined;
 
 	/**
 	 * The exception that forced this rule to return. If the rule successfully
@@ -107,8 +107,8 @@ export class ParserRuleContext extends RuleContext {
 		this._parent = ctx._parent;
 		this.invokingState = ctx.invokingState;
 
-		this.start = ctx.start;
-		this.stop = ctx.stop;
+		this._start = ctx._start;
+		this._stop = ctx._stop;
 
 		// copy any error nodes to alt label node
 		if (ctx.children) {
@@ -281,13 +281,13 @@ export class ParserRuleContext extends RuleContext {
 
 	@Override
 	get sourceInterval(): Interval {
-		if (!this.start) {
+		if (!this._start) {
 			return Interval.INVALID;
 		}
-		if (!this.stop || this.stop.tokenIndex < this.start.tokenIndex) {
-			return Interval.of(this.start.tokenIndex, this.start.tokenIndex - 1); // empty
+		if (!this._stop || this._stop.tokenIndex < this._start.tokenIndex) {
+			return Interval.of(this._start.tokenIndex, this._start.tokenIndex - 1); // empty
 		}
-		return Interval.of(this.start.tokenIndex, this.stop.tokenIndex);
+		return Interval.of(this._start.tokenIndex, this._stop.tokenIndex);
 	}
 
 	/**
@@ -295,21 +295,21 @@ export class ParserRuleContext extends RuleContext {
 	 * Note that the range from start to stop is inclusive, so for rules that do not consume anything
 	 * (for example, zero length or error productions) this token may exceed stop.
 	 */
-	getStart(): Token { return this.start; }
+	get start(): Token { return this._start; }
 	/**
 	 * Get the final token in this context.
 	 * Note that the range from start to stop is inclusive, so for rules that do not consume anything
 	 * (for example, zero length or error productions) this token may precede start.
 	 */
-	getStop(): Token | undefined { return this.stop; }
+	get stop(): Token | undefined { return this._stop; }
 
 	/** Used for rule context info debugging during parse-time, not so much for ATN debugging */
 	toInfoString(recognizer: Parser): string {
 		let rules: Array<string> =
 			recognizer.getRuleInvocationStack(this).reverse();
 		return "ParserRuleContext" + rules + "{" +
-			"start=" + this.start +
-			", stop=" + this.stop +
+			"start=" + this._start +
+			", stop=" + this._stop +
 			'}';
 	}
 }

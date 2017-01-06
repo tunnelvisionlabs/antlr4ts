@@ -19,7 +19,7 @@ export interface Vocabulary {
 	 * zero to that number, inclusively, thus querying all stored entries.
 	 * @return the highest token type value
 	 */
-	getMaxTokenType(): number;
+	readonly maxTokenType: number;
 
 	/**
 	 * Gets the string literal associated with a token type. The string returned

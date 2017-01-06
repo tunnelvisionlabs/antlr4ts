@@ -1956,14 +1956,14 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	enterEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.ENTER_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
-		TestPerformance.updateChecksum(this.checksum, ctx.getStart());
+		TestPerformance.updateChecksum(this.checksum, ctx.start);
 	}
 
 	@Override
 	exitEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.EXIT_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
-		TestPerformance.updateChecksum(this.checksum, ctx.getStop());
+		TestPerformance.updateChecksum(this.checksum, ctx.stop);
 	}
 
 }
