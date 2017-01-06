@@ -675,15 +675,15 @@ TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.
 TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.tokenIndex:0)"
 TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Number(<ctx(t)>._<t.label>.text):0)"
 
-RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):undefined)"
-RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):undefined)"
-RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getTextFromRange(<ctx(r)>._<r.label>.start,<ctx(r)>._<r.label>.stop):undefined)"
+RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>._start):undefined)"
+RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>._stop):undefined)"
+RulePropertyRef_text(r)	 ::= "(<ctx(r)>._<r.label>!=null?this._input.getTextFromRange(<ctx(r)>._<r.label>._start,<ctx(r)>._<r.label>._stop):undefined)"
 RulePropertyRef_ctx(r)	 ::= "<ctx(r)>._<r.label>"
 RulePropertyRef_parser(r)	 ::= "this"
 
-ThisRulePropertyRef_start(r) ::= "_localctx.start"
-ThisRulePropertyRef_stop(r)	 ::= "_localctx.stop"
-ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx.start, this._input.tryLT(-1))"
+ThisRulePropertyRef_start(r) ::= "_localctx._start"
+ThisRulePropertyRef_stop(r)	 ::= "_localctx._stop"
+ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx._start, this._input.tryLT(-1))"
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
@@ -823,7 +823,7 @@ typedContext(ctx) ::= "<if(ctx.provideCopyFrom)>(_localctx as <ctx.name>)<else>_
 // used for left-recursive rules
 recRuleAltPredicate(ruleName,opPrec)  ::= "this.precpred(this._ctx, <opPrec>)"
 recRuleSetReturnAction(src,name)	  ::= "$<name>=$<src>.<name>;"
-recRuleSetStopToken()                 ::= "this._ctx.stop = this._input.tryLT(-1);"
+recRuleSetStopToken()                 ::= "this._ctx._stop = this._input.tryLT(-1);"
 
 recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
 _localctx = new <ctxName>Context(_parentctx, _parentState);

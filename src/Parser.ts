@@ -568,7 +568,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	enterRule(@NotNull localctx: ParserRuleContext, state: number, ruleIndex: number): void {
 		this.state = state;
 		this._ctx = localctx;
-		this._ctx.start = this._input.LT(1);
+		this._ctx._start = this._input.LT(1);
 		if (this._buildParseTrees) this.addContextToParseTree();
 		this.triggerEnterRuleEvent();
 	}
@@ -583,7 +583,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		this._ctx = localctx;
-		this._ctx.start = this._input.LT(1);
+		this._ctx._start = this._input.LT(1);
 		if (this._buildParseTrees) {
 			this.addContextToParseTree();
 		}
@@ -594,10 +594,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	exitRule(): void {
 		if (this.matchedEOF) {
 			// if we have matched EOF, it cannot consume past EOF so we use LT(1) here
-			this._ctx.stop = this._input.LT(1); // LT(1) will be end of file
+			this._ctx._stop = this._input.LT(1); // LT(1) will be end of file
 		}
 		else {
-			this._ctx.stop = this._input.tryLT(-1); // stop node is what we just matched
+			this._ctx._stop = this._input.tryLT(-1); // stop node is what we just matched
 		}
 		// trigger event on _ctx, before it reverts to parent
 		this.triggerExitRuleEvent();
@@ -637,7 +637,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		this.state = state;
 		this._precedenceStack.push(precedence);
 		this._ctx = localctx;
-		this._ctx.start = this._input.LT(1);
+		this._ctx._start = this._input.LT(1);
 		this.triggerEnterRuleEvent(); // simulates rule entry for left-recursive rules
 	}
 
@@ -648,10 +648,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let previous: ParserRuleContext = this._ctx;
 		previous._parent = localctx;
 		previous.invokingState = state;
-		previous.stop = this._input.tryLT(-1);
+		previous._stop = this._input.tryLT(-1);
 
 		this._ctx = localctx;
-		this._ctx.start = previous.start;
+		this._ctx._start = previous._start;
 		if (this._buildParseTrees) {
 			this._ctx.addChild(previous);
 		}
@@ -661,7 +661,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	unrollRecursionContexts(_parentctx: ParserRuleContext): void {
 		this._precedenceStack.pop();
-		this._ctx.stop = this._input.tryLT(-1);
+		this._ctx._stop = this._input.tryLT(-1);
 		let retctx: ParserRuleContext = this._ctx; // save current ctx (return value)
 
 		// unroll so _ctx is as it was before call to recursive method

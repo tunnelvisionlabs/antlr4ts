@@ -402,10 +402,10 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 export class LeafListener implements TListener {
 	exitA(ctx: AContext): void {
 		if (ctx.childCount === 2) {
-			console.log(ctx.b(0).getStart().text + " " +
-				ctx.b(1).getStart().text + " " + ctx.b()[0].getStart().text);
+			console.log(ctx.b(0).start.text + " " +
+				ctx.b(1).start.text + " " + ctx.b()[0].start.text);
 		} else {
-			console.log(ctx.b(0).getStart().text);
+			console.log(ctx.b(0).start.text);
 		}
 	}
 }
@@ -421,8 +421,8 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 export class LeafListener implements TListener {
 	exitE(ctx: EContext): void {
 		if (ctx.childCount === 3) {
-			console.log(ctx.e(0).getStart().text + " " +
-				ctx.e(1).getStart().text + " " + ctx.e()[0].getStart().text);
+			console.log(ctx.e(0).start.text + " " +
+				ctx.e(1).start.text + " " + ctx.e()[0].start.text);
 		} else {
 			console.log(ctx.INT().symbol.text);
 		}
@@ -439,7 +439,7 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	exitCall(ctx: CallContext): void {
-		console.log(ctx.e().getStart().text + " " + ctx.eList());
+		console.log(ctx.e().start.text + " " + ctx.eList());
 	}
 	exitInt(ctx: IntContext): void {
 		console.log(ctx.INT().symbol.text);
