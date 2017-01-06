@@ -170,6 +170,10 @@ export class RuleContext extends RuleNode {
 		return 0;
 	}
 
+	get children(): ReadonlyArray<ParseTree> {
+		return [];
+	}
+
 	@Override
 	accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitChildren(this);

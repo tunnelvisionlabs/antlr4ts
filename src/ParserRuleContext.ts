@@ -46,7 +46,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	children?: ParseTree[];
+	private _children?: ParseTree[];
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -111,12 +111,12 @@ export class ParserRuleContext extends RuleContext {
 		this._stop = ctx._stop;
 
 		// copy any error nodes to alt label node
-		if (ctx.children) {
-			this.children = [];
+		if (ctx._children) {
+			this._children = [];
 			// reset parent pointer for any error nodes
-			for (let child of ctx.children) {
+			for (let child of ctx._children) {
 				if (child instanceof ErrorNode) {
-					this.children.push(child);
+					this._children.push(child);
 					child._parent = this;
 				}
 			}
@@ -143,10 +143,10 @@ export class ParserRuleContext extends RuleContext {
 			result = t;
 		}
 
-		if (!this.children) {
-			this.children = [t];
+		if (!this._children) {
+			this._children = [t];
 		} else {
-			this.children.push(t);
+			this._children.push(t);
 		}
 
 		return result;
@@ -157,8 +157,8 @@ export class ParserRuleContext extends RuleContext {
 	 *  generic ruleContext object.
  	 */
 	removeLastChild(): void {
-		if (this.children) {
-			this.children.pop();
+		if (this._children) {
+			this._children.pop();
 		}
 	}
 
@@ -189,16 +189,16 @@ export class ParserRuleContext extends RuleContext {
 	getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
 	// Note: in TypeScript, order or arguments reversed
 	getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
-		if (!this.children || i < 0 || i >= this.children.length) {
+		if (!this._children || i < 0 || i >= this._children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
 		}
 
 		if (ctxType == null) {
-			return this.children[i];
+			return this._children[i];
 		}
 
 		let j: number = -1; // what node with ctxType have we found?
-		for (let o of this.children) {
+		for (let o of this._children) {
 			if (o instanceof ctxType) {
 				j++;
 				if (j === i) {
@@ -210,13 +210,21 @@ export class ParserRuleContext extends RuleContext {
 		throw new Error("The specified node does not exist");
 	}
 
+	get children(): ParseTree[] {
+		if (this._children === undefined) {
+			this._children = [];
+		}
+
+		return this._children;
+	}
+
 	getToken(ttype: number, i: number): TerminalNode {
-		if (!this.children || i < 0 || i >= this.children.length) {
+		if (!this._children || i < 0 || i >= this._children.length) {
 			throw new Error("The specified token does not exist");
 		}
 
 		let j: number = -1; // what token with ttype have we found?
-		for (let o of this.children) {
+		for (let o of this._children) {
 			if (o instanceof TerminalNode) {
 				let symbol: Token = o.symbol;
 				if (symbol.type === ttype) {
@@ -234,11 +242,11 @@ export class ParserRuleContext extends RuleContext {
 	getTokens(ttype: number): TerminalNode[] {
 		let tokens: TerminalNode[] = [];
 
-		if (!this.children) {
+		if (!this._children) {
 			return tokens;
 		}
 
-		for (let o of this.children) {
+		for (let o of this._children) {
 			if (o instanceof TerminalNode) {
 				let symbol = o.symbol;
 				if (symbol.type === ttype) {
@@ -261,11 +269,11 @@ export class ParserRuleContext extends RuleContext {
 
 	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
 		let contexts: T[] = [];
-		if (!this.children) {
+		if (!this._children) {
 			return contexts;
 		}
 
-		for (let o of this.children) {
+		for (let o of this._children) {
 			if (o instanceof ctxType) {
 				contexts.push(o);
 			}
@@ -276,7 +284,7 @@ export class ParserRuleContext extends RuleContext {
 
 	@Override
 	get childCount() {
-		return this.children ? this.children.length : 0;
+		return this._children ? this._children.length : 0;
 	}
 
 	@Override

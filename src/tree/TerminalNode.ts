@@ -26,6 +26,10 @@ export class TerminalNode implements ParseTree {
 		throw new RangeError("Terminal Node has no children.");
 	}
 
+	get children(): ReadonlyArray<ParseTree> {
+		return [];
+	}
+
 	get symbol(): Token {
 		return this._symbol;
 	}
