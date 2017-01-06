@@ -701,7 +701,7 @@ RuleContextDecl(r) ::= "_<r.name>: <r.ctxName>"
 RuleContextListDecl(rdecl) ::= "_<rdecl.name>: <rdecl.ctxName>[] = []"
 
 ContextTokenGetterDecl(t)      ::=
-    "public <t.name>(): TerminalNode { return this.getToken(<parser.name>.<t.name>, 0); }"
+	"public <t.name>(): TerminalNode<if(t.optional)> | undefined<endif> { return this.<if(t.optional)>tryG<else>g<endif>etToken(<parser.name>.<t.name>, 0); }"
 ContextTokenListGetterDecl(t)  ::=
     "public <t.name>(): TerminalNode[];"
 ContextTokenListIndexedGetterDecl(t)  ::= <<
@@ -715,8 +715,8 @@ public <t.name>(i?: number): TerminalNode | TerminalNode[] {
 }
 >>
 ContextRuleGetterDecl(r)       ::= <<
-public <r.name>(): <r.ctxName> {
-	return this.getRuleContext(0, <r.ctxName>);
+public <r.name>(): <r.ctxName><if(r.optional)> | undefined<endif> {
+	return this.<if(r.optional)>tryG<else>g<endif>etRuleContext(0, <r.ctxName>);
 }
 >>
 ContextRuleListGetterDecl(r)   ::= <<

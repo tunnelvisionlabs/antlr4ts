@@ -197,6 +197,19 @@ export class ParserRuleContext extends RuleContext {
 			return this.children[i];
 		}
 
+		let result = this.tryGetChild(i, ctxType);
+		if (result === undefined) {
+			throw new Error("The specified node does not exist");
+		}
+
+		return result;
+	}
+
+	tryGetChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+		if (!this.children || i < 0 || i >= this.children.length) {
+			return undefined;
+		}
+
 		let j: number = -1; // what node with ctxType have we found?
 		for (let o of this.children) {
 			if (o instanceof ctxType) {
@@ -207,12 +220,21 @@ export class ParserRuleContext extends RuleContext {
 			}
 		}
 
-		throw new Error("The specified node does not exist");
+		return undefined;
 	}
 
 	getToken(ttype: number, i: number): TerminalNode {
-		if (!this.children || i < 0 || i >= this.children.length) {
+		let result = this.tryGetToken(ttype, i);
+		if (result === undefined) {
 			throw new Error("The specified token does not exist");
+		}
+
+		return result;
+	}
+
+	tryGetToken(ttype: number, i: number): TerminalNode | undefined {
+		if (!this.children || i < 0 || i >= this.children.length) {
+			return undefined;
 		}
 
 		let j: number = -1; // what token with ttype have we found?
@@ -228,7 +250,7 @@ export class ParserRuleContext extends RuleContext {
 			}
 		}
 
-		throw new Error("The specified token does not exist");
+		return undefined;
 	}
 
 	getTokens(ttype: number): TerminalNode[] {
@@ -257,6 +279,10 @@ export class ParserRuleContext extends RuleContext {
 	// NOTE: argument order change from Java version
 	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
 		return this.getChild(i, ctxType);
+	}
+
+	tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+		return this.tryGetChild(i, ctxType);
 	}
 
 	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
