@@ -34,7 +34,7 @@ export class VocabularyImpl implements Vocabulary {
 	@NotNull
 	private readonly displayNames: (string | undefined)[];
 
-	private maxTokenType: number;
+	private _maxTokenType: number;
 
 	/**
 	 * Constructs a new instance of {@link VocabularyImpl} from the specified
@@ -58,14 +58,14 @@ export class VocabularyImpl implements Vocabulary {
 		this.symbolicNames = symbolicNames;
 		this.displayNames = displayNames;
 		// See note here on -1 part: https://github.com/antlr/antlr4/pull/1146
-		this.maxTokenType =
+		this._maxTokenType =
 			Math.max(this.displayNames.length,
 				Math.max(this.literalNames.length, this.symbolicNames.length)) - 1;
 	}
 
 	@Override
-	getMaxTokenType(): number {
-		return this.maxTokenType;
+	get maxTokenType(): number {
+		return this._maxTokenType;
 	}
 
 	@Override
