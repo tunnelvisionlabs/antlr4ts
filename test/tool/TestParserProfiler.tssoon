@@ -231,12 +231,12 @@ export class TestParserProfiler extends BaseTest {
 		for (let s of input) {
 			lexEngine.reset();
 			parser.reset();
-			lexEngine.setInputStream(new ANTLRInputStream(s));
+			lexEngine.inputStream = new ANTLRInputStream(s);
 			let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
-			parser.setInputStream(tokens);
+			parser.inputStream = tokens;
 			let r: Rule =  g.rules.get(startRule);
 			if ( r==null ) {
-				return parser.getParseInfo().getDecisionInfo();
+				return parser.parseInfo.getDecisionInfo();
 			}
 			let t: ParserRuleContext =  parser.parse(r.index);
 //			try {
@@ -248,6 +248,6 @@ export class TestParserProfiler extends BaseTest {
 //
 //			System.out.println(t.toStringTree(parser));
 		}
-		return parser.getParseInfo().getDecisionInfo();
+		return parser.parseInfo.getDecisionInfo();
 	}
 }

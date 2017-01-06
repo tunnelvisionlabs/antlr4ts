@@ -195,25 +195,25 @@ Pass() ::= ""
 
 StringList() ::= "string[]"
 
-BuildParseTrees() ::= "this.setBuildParseTree(true);"
+BuildParseTrees() ::= "this.buildParseTree = true;"
 
-BailErrorStrategy() ::= <%this.setErrorHandler(new BailErrorStrategy());%>
+BailErrorStrategy() ::= <%this.errorHandler = new BailErrorStrategy();%>
 
 ToStringTree(s) ::= <%<s>.toStringTree(this)%>
 
-Column() ::= "this.getCharPositionInLine()"
+Column() ::= "this.charPositionInLine"
 
-Text() ::= "this.getText()"
+Text() ::= "this.text"
 
 ValEquals(a,b) ::= <%<a>==<b>%>
 
-TextEquals(a) ::= <%this.getText() === "<a>"%>
+TextEquals(a) ::= <%this.text === "<a>"%>
 
-PlusText(a) ::= <%"<a>" + this.getText()%>
+PlusText(a) ::= <%"<a>" + this.text%>
 
 InputText() ::= "this._input.getText()"
 
-LTEquals(i, v) ::= <%this._input.LT(<i>).getText() === <v>%>
+LTEquals(i, v) ::= <%this._input.LT(<i>).text === <v>%>
 
 LANotEquals(i, v) ::= <%this._input.LA(<i>)!==<v>%>
 
@@ -233,12 +233,12 @@ import { BailErrorStrategy } from 'antlr4ts/BailErrorStrategy';
 }
 >>
 
-GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.getVocabulary())"
+GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.vocabulary)"
 
 RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
 
-FULL_CONTEXT_DFA() ::= "this.getInterpreter().enable_global_context_dfa = true;"
-LL_EXACT_AMBIG_DETECTION() ::= <<this.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
+FULL_CONTEXT_DFA() ::= "this.interpreter.enable_global_context_dfa = true;"
+LL_EXACT_AMBIG_DETECTION() ::= <<this.interpreter.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
 
 ParserToken(parser, token) ::= <%<parser>.<token>%>
 
@@ -284,15 +284,15 @@ emit(): Token {
 }
 
 private handleAcceptPositionForIdentifier(): boolean {
-	let tokenText = this.getText();
+	let tokenText = this.text;
 	let identifierLength = 0;
 	while (identifierLength \< tokenText.length && PositionAdjustingLexer.isIdentifierChar(tokenText[identifierLength])) {
 		identifierLength++;
 	}
 
-	if (this.getInputStream().index() > this._tokenStartCharIndex + identifierLength) {
+	if (this.inputStream.index > this._tokenStartCharIndex + identifierLength) {
 		let offset = identifierLength - 1;
-		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
+		this.interpreter.resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
 	}
 
@@ -300,17 +300,17 @@ private handleAcceptPositionForIdentifier(): boolean {
 }
 
 private handleAcceptPositionForKeyword(keyword: string): boolean {
-	if (this.getInputStream().index() > this._tokenStartCharIndex + keyword.length) {
+	if (this.inputStream.index > this._tokenStartCharIndex + keyword.length) {
 		let offset = keyword.length - 1;
-		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
+		this.interpreter.resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
 	}
 
 	return false;
 }
 
-getInterpreter(): PositionAdjustingLexerATNSimulator {
-	return super.getInterpreter() as PositionAdjustingLexerATNSimulator;
+get interpreter(): PositionAdjustingLexerATNSimulator {
+	return super.interpreter as PositionAdjustingLexerATNSimulator;
 }
 
 private static isIdentifierChar(c: string): boolean {
@@ -348,7 +348,7 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
-		console.log(node.getSymbol().getText());
+		console.log(node.symbol.text);
 	}
 }
 }
@@ -368,8 +368,8 @@ export class MyRuleNode extends PRC {
 		super(parent, invokingStateNumber);
 	}
 
-	getAltNumber(): number { return this.altNum; }
-	setAltNumber(value: number) { this.altNum = value; }
+	get altNumber(): number { return this.altNum; }
+	set altNumber(value: number) { this.altNum = value; }
 }
 }
 >>
@@ -382,11 +382,11 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	exitA(ctx: AContext): void {
-		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
-			console.log(ctx.INT(0).getSymbol().getText() + " " +
-				ctx.INT(1).getSymbol().getText() + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
+		if (ctx.childCount === 2 && ctx.INT().length === 2) {
+			console.log(ctx.INT(0).symbol.text + " " +
+				ctx.INT(1).symbol.text + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
 		} else {
-			console.log(ctx.ID().getSymbol().toString());
+			console.log(ctx.ID().symbol.toString());
 		}
 	}
 }
@@ -401,11 +401,11 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	exitA(ctx: AContext): void {
-		if (ctx.getChildCount() === 2) {
-			console.log(ctx.b(0).getStart().getText() + " " +
-				ctx.b(1).getStart().getText() + " " + ctx.b()[0].getStart().getText());
+		if (ctx.childCount === 2) {
+			console.log(ctx.b(0).getStart().text + " " +
+				ctx.b(1).getStart().text + " " + ctx.b()[0].getStart().text);
 		} else {
-			console.log(ctx.b(0).getStart().getText());
+			console.log(ctx.b(0).getStart().text);
 		}
 	}
 }
@@ -420,11 +420,11 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	exitE(ctx: EContext): void {
-		if (ctx.getChildCount() === 3) {
-			console.log(ctx.e(0).getStart().getText() + " " +
-				ctx.e(1).getStart().getText() + " " + ctx.e()[0].getStart().getText());
+		if (ctx.childCount === 3) {
+			console.log(ctx.e(0).getStart().text + " " +
+				ctx.e(1).getStart().text + " " + ctx.e()[0].getStart().text);
 		} else {
-			console.log(ctx.INT().getSymbol().getText());
+			console.log(ctx.INT().symbol.text);
 		}
 	}
 }
@@ -439,10 +439,10 @@ import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 @parser::afterParser {
 export class LeafListener implements TListener {
 	exitCall(ctx: CallContext): void {
-		console.log(ctx.e().getStart().getText() + " " + ctx.eList());
+		console.log(ctx.e().getStart().text + " " + ctx.eList());
 	}
 	exitInt(ctx: IntContext): void {
-		console.log(ctx.INT().getSymbol().getText());
+		console.log(ctx.INT().symbol.text);
 	}
 }
 }

@@ -33,9 +33,9 @@ export class DFASerializer {
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary, /*@Nullable*/ ruleNames: string[] | undefined, /*@Nullable*/ atn: ATN | undefined);
 	constructor(dfa: DFA, vocabulary: Vocabulary | Recognizer<any, any> | undefined, ruleNames?: string[], atn?: ATN) {
 		if (vocabulary instanceof Recognizer) {
-			ruleNames = vocabulary.getRuleNames();
-			atn = vocabulary.getATN();
-			vocabulary = vocabulary.getVocabulary();
+			ruleNames = vocabulary.ruleNames;
+			atn = vocabulary.atn;
+			vocabulary = vocabulary.vocabulary;
 		} else if (!vocabulary) {
 			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
 		}
@@ -85,7 +85,7 @@ export class DFASerializer {
 					}
 				}
 
-				if (s.isContextSensitive()) {
+				if (s.isContextSensitive) {
 					for (let entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
@@ -133,19 +133,19 @@ export class DFASerializer {
 
 		let n: number = s.stateNumber;
 		let stateStr: string = "s" + n;
-		if (s.isAcceptState()) {
+		if (s.isAcceptState) {
 			if (s.predicates) {
 				stateStr = ":s" + n + "=>" + s.predicates;
 			}
 			else {
-				stateStr = ":s" + n + "=>" + s.getPrediction();
+				stateStr = ":s" + n + "=>" + s.prediction;
 			}
 		}
 
-		if (s.isContextSensitive()) {
+		if (s.isContextSensitive) {
 			stateStr += "*";
 			for (let config of asIterable(s.configs)) {
-				if (config.getReachesIntoOuterContext()) {
+				if (config.reachesIntoOuterContext) {
 					stateStr += "*";
 					break;
 				}

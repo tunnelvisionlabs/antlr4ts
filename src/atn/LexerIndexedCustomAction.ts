@@ -25,8 +25,8 @@ import { NotNull, Override } from '../Decorators';
  * @since 4.2
  */
 export class LexerIndexedCustomAction implements LexerAction {
-	private readonly offset: number;
-	private readonly action: LexerAction;
+	private readonly _offset: number;
+	private readonly _action: LexerAction;
 
 	/**
 	 * Constructs a new indexed custom action by associating a character offset
@@ -42,8 +42,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * input {@link CharStream}.
 	 */
 	constructor(offset: number, @NotNull action: LexerAction) {
-		this.offset = offset;
-		this.action = action;
+		this._offset = offset;
+		this._action = action;
 	}
 
 	/**
@@ -54,8 +54,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @return The location in the input {@link CharStream} at which the lexer
 	 * action should be executed.
 	 */
-	getOffset(): number {
-		return this.offset;
+	get offset(): number {
+		return this._offset;
 	}
 
 	/**
@@ -64,8 +64,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @return A {@link LexerAction} object which executes the lexer action.
 	 */
 	@NotNull
-	getAction(): LexerAction {
-		return this.action;
+	get action(): LexerAction {
+		return this._action;
 	}
 
 	/**
@@ -75,8 +75,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * on the {@link LexerAction} returned by {@link #getAction}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
-		return this.action.getActionType();
+	get actionType(): LexerActionType {
+		return this._action.actionType;
 	}
 
 	/**
@@ -84,7 +84,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @return This method returns {@code true}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return true;
 	}
 
@@ -97,14 +97,14 @@ export class LexerIndexedCustomAction implements LexerAction {
 	@Override
 	execute(lexer: Lexer): void {
 		// assume the input stream position was properly set by the calling code
-		this.action.execute(lexer);
+		this._action.execute(lexer);
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.offset);
-		hash = MurmurHash.update(hash, this.action);
+		hash = MurmurHash.update(hash, this._offset);
+		hash = MurmurHash.update(hash, this._action);
 		return MurmurHash.finish(hash, 2);
 	}
 
@@ -116,7 +116,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 			return false;
 		}
 
-		return this.offset === obj.offset
-			&& this.action.equals(obj.action);
+		return this._offset === obj._offset
+			&& this._action.equals(obj._action);
 	}
 }

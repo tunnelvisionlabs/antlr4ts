@@ -143,7 +143,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 		}
 
-		hash = MurmurHash.finish(hash, this.size());
+		hash = MurmurHash.finish(hash, this.size);
 		return hash;
 	}
 
@@ -151,7 +151,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	equals(o: any): boolean {
 		if (o === this) return true;
 		if (!(o instanceof Array2DHashSet)) return false;
-		if (o.size() !== this.size()) return false;
+		if (o.size !== this.size) return false;
 		let same: boolean = this.containsAll(o);
 		return same;
 	}
@@ -165,7 +165,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
-		let oldSize: number = this.size();
+		let oldSize: number = this.size;
 		for (let bucket of old) {
 			if (bucket == null) {
 				continue;
@@ -207,12 +207,12 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.n;
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.n === 0;
 	}
 
@@ -238,8 +238,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	toArray(a?: any[]): T[] {
 
 		// Check if the array argument was provided
-		if (!a || a.length < this.size()) {
-			a = new Array<T>(this.size());
+		if (!a || a.length < this.size) {
+			a = new Array<T>(this.size);
 		}
 
 		// Copy elements from the nested arrays into the destination array
@@ -387,7 +387,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	toString(): string {
-		if (this.size() == 0) return "{}";
+		if (this.size === 0) return "{}";
 
 		let buf = '{';
 		let first: boolean = true;

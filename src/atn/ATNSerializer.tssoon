@@ -61,14 +61,14 @@ export class ATNSerializer {
 		let nonGreedyStates: IntegerList =  new IntegerList();
 		let sllStates: IntegerList =  new IntegerList();
 		let precedenceStates: IntegerList =  new IntegerList();
-		data.add(atn.states.size());
+		data.add(atn.states.size);
 		for (let s of atn.states) {
 			if ( s==null ) { // might be optimized away
 				data.add(ATNState.INVALID_TYPE);
 				continue;
 			}
 
-			let stateType: number =  s.getStateType();
+			let stateType: number =  s.stateType;
 			if (s instanceof DecisionState) {
 				let decisionState: DecisionState =  (DecisionState)s;
 				if (decisionState.nonGreedy) {
@@ -93,46 +93,46 @@ export class ATNSerializer {
 				data.add(s.ruleIndex);
 			}
 
-			if ( s.getStateType() == ATNState.LOOP_END ) {
+			if ( s.stateType == ATNState.LOOP_END ) {
 				data.add(((LoopEndState)s).loopBackState.stateNumber);
 			}
 			else if ( s instanceof BlockStartState ) {
 				data.add(((BlockStartState)s).endState.stateNumber);
 			}
 
-			if (s.getStateType() != ATNState.RULE_STOP) {
+			if (s.stateType != ATNState.RULE_STOP) {
 				// the deserializer can trivially derive these edges, so there's no need to serialize them
-				nedges += s.getNumberOfTransitions();
+				nedges += s.numberOfTransitions;
 			}
 
-			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+			for (let i=0; i<s.numberOfTransitions; i++) {
 				let t: Transition =  s.transition(i);
 				let edgeType: number =  Transition.serializationTypes.get(t.getClass());
 				if ( edgeType == Transition.SET || edgeType == Transition.NOT_SET ) {
 					let st: SetTransition =  (SetTransition)t;
 					if (!setIndices.containsKey(st.set)) {
 						sets.add(st.set);
-						setIndices.put(st.set, sets.size() - 1);
+						setIndices.put(st.set, sets.size - 1);
 					}
 				}
 			}
 		}
 
 		// non-greedy states
-		data.add(nonGreedyStates.size());
-		for (let i = 0; i < nonGreedyStates.size(); i++) {
+		data.add(nonGreedyStates.size);
+		for (let i = 0; i < nonGreedyStates.size; i++) {
 			data.add(nonGreedyStates.get(i));
 		}
 
 		// SLL decisions
-		data.add(sllStates.size());
-		for (let i = 0; i < sllStates.size(); i++) {
+		data.add(sllStates.size);
+		for (let i = 0; i < sllStates.size; i++) {
 			data.add(sllStates.get(i));
 		}
 
 		// precedence states
-		data.add(precedenceStates.size());
-		for (let i = 0; i < precedenceStates.size(); i++) {
+		data.add(precedenceStates.size);
+		for (let i = 0; i < precedenceStates.size; i++) {
 			data.add(precedenceStates.get(i));
 		}
 
@@ -153,7 +153,7 @@ export class ATNSerializer {
 			}
 		}
 
-		let nmodes: number =  atn.modeToStartState.size();
+		let nmodes: number =  atn.modeToStartState.size;
 		data.add(nmodes);
 		if ( nmodes>0 ) {
 			for (let modeStartState of atn.modeToStartState) {
@@ -161,19 +161,19 @@ export class ATNSerializer {
 			}
 		}
 
-		let nsets: number =  sets.size();
+		let nsets: number =  sets.size;
 		data.add(nsets);
 		for (let set of sets) {
 			let containsEof: boolean =  set.contains(Token.EOF);
-			if (containsEof && set.getIntervals().get(0).b == Token.EOF) {
-				data.add(set.getIntervals().size() - 1);
+			if (containsEof && set.intervals.get(0).b == Token.EOF) {
+				data.add(set.intervals.size - 1);
 			}
 			else {
-				data.add(set.getIntervals().size());
+				data.add(set.intervals.size);
 			}
 
 			data.add(containsEof ? 1 : 0);
-			for (let I of set.getIntervals()) {
+			for (let I of set.intervals) {
 				if (I.a == Token.EOF) {
 					if (I.b == Token.EOF) {
 						continue;
@@ -197,11 +197,11 @@ export class ATNSerializer {
 				continue;
 			}
 
-			if (s.getStateType() == ATNState.RULE_STOP) {
+			if (s.stateType == ATNState.RULE_STOP) {
 				continue;
 			}
 
-			for (let i=0; i<s.getNumberOfTransitions(); i++) {
+			for (let i=0; i<s.numberOfTransitions; i++) {
 				let t: Transition =  s.transition(i);
 
 				if (atn.states.get(t.target.stateNumber) == null) {
@@ -277,7 +277,7 @@ export class ATNSerializer {
 			}
 		}
 
-		let ndecisions: number =  atn.decisionToState.size();
+		let ndecisions: number =  atn.decisionToState.size;
 		data.add(ndecisions);
 		for (let decStartState of atn.decisionToState) {
 			data.add(decStartState.stateNumber);
@@ -289,23 +289,23 @@ export class ATNSerializer {
 		if (atn.grammarType == ATNType.LEXER) {
 			data.add(atn.lexerActions.length);
 			for (let action of atn.lexerActions) {
-				data.add(action.getActionType().ordinal());
-				switch (action.getActionType()) {
+				data.add(action.actionType.ordinal());
+				switch (action.actionType) {
 				case CHANNEL:
-					let channel: number =  ((LexerChannelAction)action).getChannel();
+					let channel: number =  ((LexerChannelAction)action).channel;
 					data.add(channel != -1 ? channel : 0xFFFF);
 					data.add(0);
 					break;
 
 				case CUSTOM:
-					let ruleIndex: number =  ((LexerCustomAction)action).getRuleIndex();
-					let actionIndex: number =  ((LexerCustomAction)action).getActionIndex();
+					let ruleIndex: number =  ((LexerCustomAction)action).ruleIndex;
+					let actionIndex: number =  ((LexerCustomAction)action).actionIndex;
 					data.add(ruleIndex != -1 ? ruleIndex : 0xFFFF);
 					data.add(actionIndex != -1 ? actionIndex : 0xFFFF);
 					break;
 
 				case MODE:
-					let mode: number =  ((LexerModeAction)action).getMode();
+					let mode: number =  ((LexerModeAction)action).mode;
 					data.add(mode != -1 ? mode : 0xFFFF);
 					data.add(0);
 					break;
@@ -321,7 +321,7 @@ export class ATNSerializer {
 					break;
 
 				case PUSH_MODE:
-					mode = ((LexerPushModeAction)action).getMode();
+					mode = ((LexerPushModeAction)action).mode;
 					data.add(mode != -1 ? mode : 0xFFFF);
 					data.add(0);
 					break;
@@ -332,20 +332,20 @@ export class ATNSerializer {
 					break;
 
 				case TYPE:
-					let type: number =  ((LexerTypeAction)action).getType();
+					let type: number =  ((LexerTypeAction)action).type;
 					data.add(type != -1 ? type : 0xFFFF);
 					data.add(0);
 					break;
 
 				default:
-					let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %s is not valid.", action.getActionType());
+					let message: string =  String.format(Locale.getDefault(), "The specified lexer action type %s is not valid.", action.actionType);
 					throw new IllegalArgumentException(message);
 				}
 			}
 		}
 
 		// don't adjust the first value since that's the version number
-		for (let i = 1; i < data.size(); i++) {
+		for (let i = 1; i < data.size; i++) {
 			if (data.get(i) < Character.MIN_VALUE || data.get(i) > Character.MAX_VALUE) {
 				throw new UnsupportedOperationException("Serialized ATN data element "+
 					                                        data.get(i)+
@@ -538,7 +538,7 @@ export class ATNSerializer {
 			}
 		}
 
-		if (tokenNames != null && t >= 0 && t < tokenNames.size()) {
+		if (tokenNames != null && t >= 0 && t < tokenNames.size) {
 			return tokenNames.get(t);
 		}
 

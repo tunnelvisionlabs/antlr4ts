@@ -92,12 +92,12 @@ export class ANTLRInputStream implements CharStream {
 	 *  be returned from LA(1).
      */
 	@Override
-	index(): number {
+	get index(): number {
 		return this.p;
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.n;
 	}
 
@@ -141,7 +141,7 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	getSourceName(): string {
+	get sourceName(): string {
 		if (!this.name) {
 			return IntStream.UNKNOWN_SOURCE_NAME;
 		}

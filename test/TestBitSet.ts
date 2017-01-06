@@ -23,7 +23,7 @@ describe("BitSet Tests", function() {
 		it("has zero cardinality", ()=>{
 			assert.equal(empty.cardinality(), 0);
 		});
-		it(".isEmpty()", ()=> {
+		it(".isEmpty", ()=> {
 			assert(empty.isEmpty);
 		});
 		it(".toString()", ()=>{
@@ -59,9 +59,9 @@ describe("BitSet Tests", function() {
 
 		it("equals oversize", ()=>{
 			const o = new BitSet(100);
-			assert(o.size() >= 100);
-			assert(o.size() <= 116);
-			assert(o.isEmpty());
+			assert(o.size >= 100);
+			assert(o.size <= 116);
+			assert(o.isEmpty);
 			assert(o.equals(empty));
 			assert(empty.equals(o));
 		})
@@ -80,48 +80,48 @@ describe("BitSet Tests", function() {
 			const p = new BitSet(200);
 			let a = o.clone()
 			a.and(p);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = p.clone()
 			a.and(o);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = o.clone()
 			a.or(p);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = p.clone()
 			a.or(o);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = o.clone()
 			a.xor(p);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = p.clone()
 			a.xor(o);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = o.clone()
 			a.andNot(p);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = p.clone()
 			a.andNot(o);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 0);
+			assert(a.isEmpty);
+			assert.equal(a.size, 0);
 
 			a = p.clone();
 			a.clear(7,1000);
-			assert(a.isEmpty());
-			assert.equal(a.size(), 208);
+			assert(a.isEmpty);
+			assert.equal(a.size, 208);
 
 			a = p.clone();
 			a.set(75);
@@ -239,7 +239,7 @@ describe("BitSet Tests", function() {
 		it("xor operation", ()=>{
 			const a = evens.clone();
 			a.xor(evens);
-			assert(a.isEmpty());
+			assert(a.isEmpty);
 			const b = evens.clone();
 			b.xor(primes);
 			const c = evens.clone();
@@ -270,7 +270,7 @@ describe("BitSet Tests", function() {
 		it("primes and composites isEmpty", ()=>{
 			let a = primes.clone();
 			a.and(composites);
-			assert(a.isEmpty());
+			assert(a.isEmpty);
 		});
 
 		it ("primes and composites do not intersect", ()=>{

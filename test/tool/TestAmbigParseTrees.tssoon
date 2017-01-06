@@ -204,13 +204,13 @@ export class TestAmbigParseTrees {
 								   overallTree: string,
 								   expectedParseTrees: string[]): void
 	{
-		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.getRuleNames());
+		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.ruleNames);
 
 		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
 		parser.setProfile(true);
-		parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+		parser.interpreter.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
 
 		// PARSE
 		let ruleIndex: number =  g.rules.get(startRule).index;
@@ -218,9 +218,9 @@ export class TestAmbigParseTrees {
 		assertEquals(overallTree, Trees.toStringTree(parseTree, nodeTextProvider));
 		console.log();
 
-		let decisionInfo: DecisionInfo[] =  parser.getParseInfo().getDecisionInfo();
+		let decisionInfo: DecisionInfo[] =  parser.parseInfo.getDecisionInfo();
 		let ambiguities: List<AmbiguityInfo> =  decisionInfo[decision].ambiguities;
-		assertEquals(1, ambiguities.size());
+		assertEquals(1, ambiguities.size);
 		let ambiguityInfo: AmbiguityInfo =  ambiguities.get(0);
 
 		let ambiguousParseTrees: List<ParserRuleContext> = 
@@ -228,14 +228,14 @@ export class TestAmbigParseTrees {
 															  parser,
 															  tokens,
 															  decision,
-															  ambiguityInfo.getAmbiguousAlternatives(),
+															  ambiguityInfo.ambiguousAlternatives,
 															  ambiguityInfo.startIndex,
 															  ambiguityInfo.stopIndex,
 															  ruleIndex);
-		assertEquals(expectedAmbigAlts, ambiguityInfo.getAmbiguousAlternatives().toString());
-		assertEquals(ambiguityInfo.getAmbiguousAlternatives().cardinality(), ambiguousParseTrees.size());
+		assertEquals(expectedAmbigAlts, ambiguityInfo.ambiguousAlternatives.toString());
+		assertEquals(ambiguityInfo.ambiguousAlternatives.cardinality(), ambiguousParseTrees.size);
 
-		for (let i = 0; i<ambiguousParseTrees.size(); i++) {
+		for (let i = 0; i<ambiguousParseTrees.size; i++) {
 			let t: ParserRuleContext =  ambiguousParseTrees.get(i);
 			assertEquals(expectedParseTrees[i], Trees.toStringTree(t, nodeTextProvider));
 		}
@@ -257,7 +257,7 @@ export class TestAmbigParseTrees {
 		}
 		parser.addDecisionOverride(((DecisionState)t2).decision, 0, startAlt);
 		let t: ParseTree =  parser.parse(g.rules.get(startRule).index);
-		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.getRuleNames());
+		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.ruleNames);
 		assertEquals(expectedParseTree, Trees.toStringTree(t, nodeTextProvider));
 	}
 }

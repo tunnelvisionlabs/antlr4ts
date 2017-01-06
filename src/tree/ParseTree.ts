@@ -19,7 +19,7 @@ import { SyntaxTree } from './SyntaxTree';
 export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods
 	//@Override
-	getParent(): ParseTree | undefined;
+	readonly parent: ParseTree | undefined;
 
 	//@Override
 	getChild(i: number): ParseTree;
@@ -31,7 +31,7 @@ export interface ParseTree extends SyntaxTree {
 	 *  off-channel tokens (if any) so won't return whitespace and
 	 *  comments if they are sent to parser on hidden channel.
 	 */
-	getText(): string;
+	readonly text: string;
 
 	/** Specialize toStringTree so that it can print out more information
 	 * 	based upon the parser.

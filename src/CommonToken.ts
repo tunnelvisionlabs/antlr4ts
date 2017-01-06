@@ -23,23 +23,23 @@ export class CommonToken implements WritableToken {
 		{ source: undefined, stream: undefined };
 
 	/**
-	 * This is the backing field for {@link #getType} and {@link #setType}.
+	 * This is the backing field for `type`.
 	 */
-	protected type: number;
+	private _type: number;
 	/**
 	 * This is the backing field for {@link #getLine} and {@link #setLine}.
 	 */
-	protected line: number = 0;
+	private _line: number = 0;
 	/**
 	 * This is the backing field for {@link #getCharPositionInLine} and
 	 * {@link #setCharPositionInLine}.
 	 */
-	protected charPositionInLine: number = -1; // set to invalid position
+	private _charPositionInLine: number = -1; // set to invalid position
 	/**
 	 * This is the backing field for {@link #getChannel} and
 	 * {@link #setChannel}.
 	 */
-	protected channel: number = Token.DEFAULT_CHANNEL;
+	private _channel: number = Token.DEFAULT_CHANNEL;
 	/**
 	 * This is the backing field for {@link #getTokenSource} and
 	 * {@link #getInputStream}.
@@ -57,38 +57,35 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getText} when the token text is
 	 * explicitly set in the constructor or via {@link #setText}.
 	 *
-	 * @see #getText()
+	 * @see `text`
 	 */
-	protected text?: string;
+	private _text?: string;
 
 	/**
-	 * This is the backing field for {@link #getTokenIndex} and
-	 * {@link #setTokenIndex}.
+	 * This is the backing field for `tokenIndex`.
 	 */
 	protected index: number = -1;
 
 	/**
-	 * This is the backing field for {@link #getStartIndex} and
-	 * {@link #setStartIndex}.
+	 * This is the backing field for `startIndex`.
 	 */
 	protected start: number;
 
 	/**
-	 * This is the backing field for {@link #getStopIndex} and
-	 * {@link #setStopIndex}.
+	 * This is the backing field for `stopIndex`.
 	 */
-	protected stop: number;
+	private stop: number;
 
 	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
-		this.text = text;
-		this.type = type;
+		this._text = text;
+		this._type = type;
 		this.source = source;
-		this.channel = channel;
+		this._channel = channel;
 		this.start = start;
 		this.stop = stop;
 		if (source.source != null) {
-			this.line = source.source.getLine();
-			this.charPositionInLine = source.source.getCharPositionInLine();
+			this._line = source.source.line;
+			this._charPositionInLine = source.source.charPositionInLine;
 		}
 	}
 
@@ -106,44 +103,44 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.getType(), undefined, CommonToken.EMPTY_SOURCE, oldToken.getChannel(), oldToken.getStartIndex(), oldToken.getStopIndex());
-		result.line = oldToken.getLine();
-		result.index = oldToken.getTokenIndex();
-		result.charPositionInLine = oldToken.getCharPositionInLine();
+		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
+		result._line = oldToken.line;
+		result.index = oldToken.tokenIndex;
+		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
-			result.text = oldToken.text;
+			result._text = oldToken.text;
 			result.source = oldToken.source;
 		} else {
-			result.text = oldToken.getText();
-			result.source = { source: oldToken.getTokenSource(), stream: oldToken.getInputStream() };
+			result._text = oldToken.text;
+			result.source = { source: oldToken.tokenSource, stream: oldToken.inputStream };
 		}
 
 		return result;
 	}
 
 	@Override
-	getType(): number {
-		return this.type;
+	get type(): number {
+		return this._type;
+	}
+
+	// @Override
+	set line(line: number) {
+		this._line = line;
 	}
 
 	@Override
-	setLine(line: number): void {
-		this.line = line;
-	}
-
-	@Override
-	getText(): string | undefined {
-		if (this.text != null) {
-			return this.text;
+	get text(): string | undefined {
+		if (this._text != null) {
+			return this._text;
 		}
 
-		let input: CharStream | undefined = this.getInputStream();
+		let input: CharStream | undefined = this.inputStream;
 		if (input == null) {
 			return undefined;
 		}
 
-		let n: number = input.size();
+		let n: number = input.size;
 		if (this.start < n && this.stop < n) {
 			return input.getText(Interval.of(this.start, this.stop));
 		} else {
@@ -160,76 +157,76 @@ export class CommonToken implements WritableToken {
 	 * should be obtained from the input along with the start and stop indexes
 	 * of the token.
 	 */
-	@Override
-	setText(text: string): void {
-		this.text = text;
+	// @Override
+	set text(text: string | undefined) {
+		this._text = text;
 	}
 
 	@Override
-	getLine(): number {
-		return this.line;
+	get line(): number {
+		return this._line;
 	}
 
 	@Override
-	getCharPositionInLine(): number {
-		return this.charPositionInLine;
+	get charPositionInLine(): number {
+		return this._charPositionInLine;
+	}
+
+	// @Override
+	set charPositionInLine(charPositionInLine: number) {
+		this._charPositionInLine = charPositionInLine;
 	}
 
 	@Override
-	setCharPositionInLine(charPositionInLine: number): void {
-		this.charPositionInLine = charPositionInLine;
+	get channel(): number {
+		return this._channel;
+	}
+
+	// @Override
+	set channel(channel: number) {
+		this._channel = channel;
+	}
+
+	// @Override
+	set type(type: number) {
+		this._type = type;
 	}
 
 	@Override
-	getChannel(): number {
-		return this.channel;
-	}
-
-	@Override
-	setChannel(channel: number): void {
-		this.channel = channel;
-	}
-
-	@Override
-	setType(type: number): void {
-		this.type = type;
-	}
-
-	@Override
-	getStartIndex(): number {
+	get startIndex(): number {
 		return this.start;
 	}
 
-	setStartIndex(start: number): void {
+	set startIndex(start: number) {
 		this.start = start;
 	}
 
 	@Override
-	getStopIndex(): number {
+	get stopIndex(): number {
 		return this.stop;
 	}
 
-	setStopIndex(stop: number): void {
+	set stopIndex(stop: number) {
 		this.stop = stop;
 	}
 
 	@Override
-	getTokenIndex(): number {
+	get tokenIndex(): number {
 		return this.index;
 	}
 
-	@Override
-	setTokenIndex(index: number): void {
+	// @Override
+	set tokenIndex(index: number) {
 		this.index = index;
 	}
 
 	@Override
-	getTokenSource(): TokenSource | undefined {
+	get tokenSource(): TokenSource | undefined {
 		return this.source.source;
 	}
 
 	@Override
-	getInputStream(): CharStream | undefined {
+	get inputStream(): CharStream | undefined {
 		return this.source.stream;
 	}
 
@@ -239,11 +236,11 @@ export class CommonToken implements WritableToken {
 	@Override
 	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
 		let channelStr: string = "";
-		if (this.channel > 0) {
-			channelStr = ",channel=" + this.channel;
+		if (this._channel > 0) {
+			channelStr = ",channel=" + this._channel;
 		}
 
-		let txt: string | undefined = this.getText();
+		let txt: string | undefined = this.text;
 		if (txt != null) {
 			txt = txt.replace(/\n/g, "\\n");
 			txt = txt.replace(/\r/g, "\\r");
@@ -252,11 +249,11 @@ export class CommonToken implements WritableToken {
 			txt = "<no text>";
 		}
 
-		let typeString = String(this.type);
+		let typeString = String(this._type);
 		if (recognizer) {
-			typeString = recognizer.getVocabulary().getDisplayName(this.type);
+			typeString = recognizer.vocabulary.getDisplayName(this._type);
 		}
 
-		return "[@" + this.getTokenIndex() + "," + this.start + ":" + this.stop + "='" + txt + "',<" + typeString + ">" + channelStr + "," + this.line + ":" + this.getCharPositionInLine() + "]";
+		return "[@" + this.tokenIndex + "," + this.start + ":" + this.stop + "='" + txt + "',<" + typeString + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
 	}
 }

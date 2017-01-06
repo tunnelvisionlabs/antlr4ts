@@ -24,12 +24,12 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.PRECEDENCE;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true;
 	}
 
@@ -38,7 +38,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 		return false;
 	}
 
-	getPredicate(): SemanticContext.PrecedencePredicate {
+	get predicate(): SemanticContext.PrecedencePredicate {
 		return new SemanticContext.PrecedencePredicate(this.precedence);
 	}
 

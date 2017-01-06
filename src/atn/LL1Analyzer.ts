@@ -50,8 +50,8 @@ export class LL1Analyzer {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.getNumberOfTransitions());
-		for (let alt = 0; alt < s.getNumberOfTransitions(); alt++) {
+		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
+		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
 			let lookBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
@@ -60,7 +60,7 @@ export class LL1Analyzer {
 				current, lookBusy, new BitSet(), seeThruPreds, false);
 			// Wipe out lookahead for this alternative if we found nothing
 			// or we had a predicate when we !seeThruPreds
-			if (current.size() === 0 || current.contains(LL1Analyzer.HIT_PRED)) {
+			if (current.size === 0 || current.contains(LL1Analyzer.HIT_PRED)) {
 				current = undefined;
 				look[alt] = current;
 			}
@@ -176,7 +176,7 @@ export class LL1Analyzer {
 			if (PredictionContext.isEmptyLocal(ctx)) {
 				look.add(Token.EPSILON);
 				return;
-			} else if (ctx.isEmpty()) {
+			} else if (ctx.isEmpty) {
 				if (addEOF) {
 					look.add(Token.EOF);
 				}
@@ -186,7 +186,7 @@ export class LL1Analyzer {
 		}
 
 		if (s instanceof RuleStopState) {
-			if (ctx.isEmpty() && !PredictionContext.isEmptyLocal(ctx)) {
+			if (ctx.isEmpty && !PredictionContext.isEmptyLocal(ctx)) {
 				if (addEOF) {
 					look.add(Token.EOF);
 				}
@@ -197,7 +197,7 @@ export class LL1Analyzer {
 			let removed: boolean = calledRuleStack.get(s.ruleIndex);
 			try {
 				calledRuleStack.clear(s.ruleIndex);
-				for (let i = 0; i < ctx.size(); i++) {
+				for (let i = 0; i < ctx.size; i++) {
 					if (ctx.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY) {
 						continue;
 					}
@@ -214,7 +214,7 @@ export class LL1Analyzer {
 			}
 		}
 
-		let n: number = s.getNumberOfTransitions();
+		let n: number = s.numberOfTransitions;
 		for (let i = 0; i < n; i++) {
 			let t: Transition = s.transition(i);
 			if (t instanceof RuleTransition) {
@@ -240,7 +240,7 @@ export class LL1Analyzer {
 					look.add(LL1Analyzer.HIT_PRED);
 				}
 			}
-			else if (t.isEpsilon()) {
+			else if (t.isEpsilon) {
 				this._LOOK(t.target, stopState, ctx, look, lookBusy, calledRuleStack, seeThruPreds, addEOF);
 			}
 			else if (t instanceof WildcardTransition) {
@@ -248,7 +248,7 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined = (<Transition>t).label();
+				let set: IntervalSet | undefined = (<Transition>t).label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));

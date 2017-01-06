@@ -96,7 +96,7 @@ export class XPath {
 		}
 		catch (e) {
 			if (e instanceof LexerNoViableAltException) {
-				let pos: number = lexer.getCharPositionInLine();
+				let pos: number = lexer.charPositionInLine;
 				let msg: string = "Invalid tokens or characters at index " + pos + " in path '" + path + "' -- " + e.message;
 				throw new RangeError(msg);
 			}
@@ -112,13 +112,13 @@ export class XPath {
 		while (i < n) {
 			let el: Token = tokens[i];
 			let next: Token | undefined;
-			switch (el.getType()) {
+			switch (el.type) {
 				case XPathLexer.ROOT:
 				case XPathLexer.ANYWHERE:
-					let anywhere: boolean = el.getType() === XPathLexer.ANYWHERE;
+					let anywhere: boolean = el.type === XPathLexer.ANYWHERE;
 					i++;
 					next = tokens[i];
-					let invert: boolean = next.getType() === XPathLexer.BANG;
+					let invert: boolean = next.type === XPathLexer.BANG;
 					if (invert) {
 						i++;
 						next = tokens[i];
@@ -152,18 +152,18 @@ export class XPath {
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
-		if (wordToken.getType() == Token.EOF) {
+		if (wordToken.type == Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
 
-		let word = wordToken.getText();
+		let word = wordToken.text;
 		if (word == null) {
 			throw new Error("Expected wordToken to have text content.");
 		}
 
 		let ttype: number = this.parser.getTokenType(word);
 		let ruleIndex: number = this.parser.getRuleIndex(word);
-		switch (wordToken.getType()) {
+		switch (wordToken.type) {
 			case XPathLexer.WILDCARD:
 				return anywhere ?
 					new XPathWildcardAnywhereElement() :
@@ -172,7 +172,7 @@ export class XPath {
 			case XPathLexer.STRING:
 				if (ttype === Token.INVALID_TYPE) {
 					throw new Error(word + " at index " +
-						wordToken.getStartIndex() +
+						wordToken.startIndex +
 						" isn't a valid token name");
 				}
 				return anywhere ?
@@ -181,7 +181,7 @@ export class XPath {
 			default:
 				if (ruleIndex == -1) {
 					throw new Error(word + " at index " +
-						wordToken.getStartIndex() +
+						wordToken.startIndex +
 						" isn't a valid rule name");
 				}
 				return anywhere ?
@@ -210,7 +210,7 @@ export class XPath {
 		while (i < this.elements.length) {
 			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
 			for (let node of work) {
-				if (node.getChildCount() > 0) {
+				if (node.childCount > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.

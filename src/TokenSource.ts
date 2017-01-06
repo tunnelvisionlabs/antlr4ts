@@ -41,7 +41,7 @@ export interface TokenSource {
 	 * @return The line number for the current position in the input stream, or
 	 * 0 if the current token source does not track line numbers.
 	 */
-	getLine(): number;
+	readonly line: number;
 
 	/**
 	 * Get the index into the current line for the current position in the input
@@ -50,7 +50,7 @@ export interface TokenSource {
 	 * @return The line number for the current position in the input stream, or
 	 * -1 if the current token source does not track character positions.
 	 */
-	getCharPositionInLine(): number;
+	readonly charPositionInLine: number;
 
 	/**
 	 * Get the {@link CharStream} from which this token source is currently
@@ -60,7 +60,7 @@ export interface TokenSource {
 	 * the input, or {@code null} if no input stream is available for the token
 	 * source.
 	 */
-	getInputStream(): CharStream | undefined;
+	readonly inputStream: CharStream | undefined;
 
 	/**
 	 * Gets the name of the underlying input source. This method returns a
@@ -68,22 +68,12 @@ export interface TokenSource {
 	 * returns {@link IntStream#UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull
-	getSourceName(): string;
+	readonly sourceName: string;
 
 	/**
-	 * Set the {@link TokenFactory} this token source should use for creating
-	 * {@link Token} objects from the input.
-	 *
-	 * @param factory The {@link TokenFactory} to use for creating tokens.
-	 */
-	setTokenFactory(/*@NotNull*/ factory: TokenFactory): void;
-
-	/**
-	 * Gets the {@link TokenFactory} this token source is currently using for
-	 * creating {@link Token} objects from the input.
-	 *
-	 * @return The {@link TokenFactory} currently used by this token source.
+	 * Gets or sets the `TokenFactory` this token source is currently using for
+	 * creating `Token` objects from the input.
 	 */
 	//@NotNull
-	getTokenFactory(): TokenFactory;
+	tokenFactory: TokenFactory;
 }

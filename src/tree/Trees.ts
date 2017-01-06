@@ -37,17 +37,17 @@ export class Trees {
      */
 	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
 		let ruleNames: string[];
-		if (arg2 instanceof Parser) { ruleNames = arg2.getRuleNames(); }
+		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.getChildCount() == 0) return s;
+		if (t.childCount == 0) return s;
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
 		buf += (' ');
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			if (i > 0) buf += (' ');
 			buf += (this.toStringTree(t.getChild(i), ruleNames));
 		}
@@ -58,23 +58,23 @@ export class Trees {
 	static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
 		let ruleNames: string[] | undefined;
 		if (arg2 instanceof Parser) {
-			ruleNames = arg2.getRuleNames();
+			ruleNames = arg2.ruleNames;
 		} else if (arg2) {
 			ruleNames = arg2;
 		} else {
 			// no recog or rule names
-			let payload = t.getPayload();
-			if (typeof payload.getText === 'function') {
-				return payload.getText();
+			let payload = t.payload;
+			if (typeof payload.text === 'string') {
+				return payload.text;
 			}
-			return t.getPayload().toString();;
+			return t.payload.toString();;
 		}
 
 		if (t instanceof RuleNode) {
-			let ruleContext: RuleContext = t.getRuleContext();
-			let ruleIndex: number = ruleContext.getRuleIndex();
+			let ruleContext: RuleContext = t.ruleContext;
+			let ruleIndex: number = ruleContext.ruleIndex;
 			let ruleName: string = ruleNames[ruleIndex];
-			let altNumber: number = ruleContext.getAltNumber();
+			let altNumber: number = ruleContext.altNumber;
 			if (altNumber !== ATN.INVALID_ALT_NUMBER) {
 				return ruleName + ":" + altNumber;
 			}
@@ -84,8 +84,8 @@ export class Trees {
 			return t.toString();
 		}
 		else if (t instanceof TerminalNode) {
-			let symbol = t.getSymbol() as any;
-			return symbol.getText();
+			let symbol = t.symbol;
+			return symbol.text || "";
 		}
 		throw new TypeError("Unexpected node type");
 	}
@@ -95,7 +95,7 @@ export class Trees {
 	/** Return ordered list of all children of this node */
 	static getChildren(t: ParseTree): ParseTree[] {
 		let kids = [] as ParseTree[];
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			kids.push(t.getChild(i));
 		}
 		return kids;
@@ -109,10 +109,10 @@ export class Trees {
 	@NotNull
 	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
 		let ancestors = [] as ParseTree[];
-		let p = t.getParent();
+		let p = t.parent;
 		while (p) {
 			ancestors.unshift(p); // insert at start
-			p = p.getParent();
+			p = p.parent;
 		}
 		return ancestors;
 	}
@@ -123,11 +123,11 @@ export class Trees {
      *  @since 4.5.1
      */
 	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
-		if (!t || !u || !t.getParent()) return false;
-		let p = u.getParent();
+		if (!t || !u || !t.parent) return false;
+		let p = u.parent;
 		while (p) {
 			if (t === p) return true;
-			p = p.getParent();
+			p = p.parent;
 		}
 		return false;
 	}
@@ -149,13 +149,13 @@ export class Trees {
 	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
-			if (t.getSymbol().getType() === index) nodes.push(t);
+			if (t.symbol.type === index) nodes.push(t);
 		}
 		else if (!findTokens && t instanceof ParserRuleContext) {
-			if (t.getRuleIndex() === index) nodes.push(t);
+			if (t.ruleIndex === index) nodes.push(t);
 		}
 		// check children
-		for (let i = 0; i < t.getChildCount(); i++) {
+		for (let i = 0; i < t.childCount; i++) {
 			Trees._findAllNodes(t.getChild(i), index, findTokens, nodes);
 		}
 	}
@@ -169,7 +169,7 @@ export class Trees {
 
 		function recurse(e: ParseTree): void {
 			nodes.push(e);
-			const n = e.getChildCount();
+			const n = e.childCount;
 			for (let i = 0; i < n; i++) {
 				recurse(e.getChild(i));
 			}
@@ -188,7 +188,7 @@ export class Trees {
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number // inclusive
 	): ParserRuleContext | undefined {
-		let n: number = t.getChildCount();
+		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {
 			let child: ParseTree = t.getChild(i);
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
@@ -196,8 +196,8 @@ export class Trees {
 		}
 		if (t instanceof ParserRuleContext) {
 			let stopToken = t.getStop();
-			if (startTokenIndex >= t.getStart().getTokenIndex() && // is range fully contained in t?
-				(stopToken == null || stopTokenIndex <= stopToken.getTokenIndex())) {
+			if (startTokenIndex >= t.getStart().tokenIndex && // is range fully contained in t?
+				(stopToken == null || stopTokenIndex <= stopToken.tokenIndex)) {
 				// note: r.getStop()==null likely implies that we bailed out of parser and there's nothing to the right
 				return t;
 			}
@@ -218,10 +218,10 @@ export class Trees {
 		startIndex: number,
 		stopIndex: number): void {
 		if (!t) return;
-		let count = t.getChildCount();
+		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
 			let child = t.getChild(i);
-			let range: Interval = child.getSourceInterval();
+			let range: Interval = child.sourceInterval;
 			if (child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex)) {
 				if (Trees.isAncestorOf(child, root)) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken = new CommonToken(Token.INVALID_TYPE, "...");
@@ -238,7 +238,7 @@ export class Trees {
 	//static findNodeSuchThat(t: ParseTree, pred: Predicate<ParseTree>): ParseTree {
 	//	if ( pred.eval(t) ) return t;
 
-	//	let n: number =  t.getChildCount();
+	//	let n: number =  t.childCount;
 	//	for (let i = 0 ; i < n ; i++){
 	//		let u: ParseTree =  findNodeSuchThat(t.getChild(i), pred);
 	//		if ( u!=null ) return u;

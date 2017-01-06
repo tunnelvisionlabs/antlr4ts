@@ -64,7 +64,7 @@ export abstract class Transition {
 		this.target = target;
 	}
 
-	abstract getSerializationType(): TransitionType;
+	abstract readonly serializationType: TransitionType;
 
 	/**
 	 * Determines if the transition is an "epsilon" transition.
@@ -75,11 +75,11 @@ export abstract class Transition {
 	 * consume an input symbol; otherwise, {@code false} if traversing this
 	 * transition consumes (matches) an input symbol.
 	 */
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return false;
 	}
 
-	label(): IntervalSet | undefined {
+	get label(): IntervalSet | undefined {
 		return undefined;
 	}
 

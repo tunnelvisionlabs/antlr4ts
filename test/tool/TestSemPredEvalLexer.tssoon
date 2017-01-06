@@ -74,7 +74,7 @@ export class TestSemPredEvalLexer extends BaseTest {
 	@Test testEnumNotID(): void {
 		let grammar: string = 
 			"lexer grammar L;\n"+
-			"ENUM : [a-z]+ {getText().equals(\"enum\")}? ;\n" +
+			"ENUM : [a-z]+ {text.equals(\"enum\")}? ;\n" +
 			"ID   : [a-z]+ ;\n"+
 			"WS : (' '|'\\n') -> skip ;";
 		let found: string =  execLexer("L.g4", grammar, "L", "enum abc enum", true);
@@ -119,10 +119,10 @@ export class TestSemPredEvalLexer extends BaseTest {
 	@Test testLexerInputPositionSensitivePredicates(): void {
 		let grammar: string = 
 			"lexer grammar L;\n"+
-			"WORD1 : ID1+ {System.out.println(getText());} ;\n"+
-			"WORD2 : ID2+ {System.out.println(getText());} ;\n"+
-			"fragment ID1 : {getCharPositionInLine()<2}? [a-zA-Z];\n"+
-			"fragment ID2 : {getCharPositionInLine()>=2}? [a-zA-Z];\n"+
+			"WORD1 : ID1+ {System.out.println(text);} ;\n"+
+			"WORD2 : ID2+ {System.out.println(text);} ;\n"+
+			"fragment ID1 : {charPositionInLine<2}? [a-zA-Z];\n"+
+			"fragment ID2 : {charPositionInLine>=2}? [a-zA-Z];\n"+
 			"WS : (' '|'\\n') -> skip;\n";
 		let found: string =  execLexer("L.g4", grammar, "L", "a cde\nabcde\n");
 		let expecting: string = 
@@ -141,8 +141,8 @@ export class TestSemPredEvalLexer extends BaseTest {
 	@Test testPredicatedKeywords(): void {
 		let grammar: string = 
 			"lexer grammar A;" +
-			"ENUM : [a-z]+ {getText().equals(\"enum\")}? {System.out.println(\"enum!\");} ;\n" +
-			"ID   : [a-z]+ {System.out.println(\"ID \"+getText());} ;\n" +
+			"ENUM : [a-z]+ {text.equals(\"enum\")}? {System.out.println(\"enum!\");} ;\n" +
+			"ID   : [a-z]+ {System.out.println(\"ID \"+text);} ;\n" +
 			"WS   : [ \\n] -> skip ;";
 		let found: string =  execLexer("A.g4", grammar, "A", "enum enu a");
 		let expecting: string = 

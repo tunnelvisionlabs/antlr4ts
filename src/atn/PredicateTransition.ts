@@ -30,19 +30,19 @@ export class PredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.PREDICATE;
 	}
 
 	@Override
-	isEpsilon(): boolean { return true; }
+	get isEpsilon(): boolean { return true; }
 
 	@Override
 	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
-	getPredicate(): SemanticContext.Predicate {
+	get predicate(): SemanticContext.Predicate {
 		return new SemanticContext.Predicate(this.ruleIndex, this.predIndex, this.isCtxDependent);
 	}
 

@@ -17,12 +17,12 @@ import { Override } from '../Decorators';
 export class RuleStopState extends ATNState {
 
 	@Override
-	getNonStopStateNumber(): number {
+	get nonStopStateNumber(): number {
 		return -1;
 	}
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.RULE_STOP;
 	}
 

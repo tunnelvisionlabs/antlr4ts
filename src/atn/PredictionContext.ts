@@ -33,15 +33,15 @@ export abstract class PredictionContext implements Equatable {
 	 *  private int referenceHashCode() {
 	 *      int hash = {@link MurmurHash#initialize MurmurHash.initialize}({@link #INITIAL_HASH});
 	 *
-	 *      for (int i = 0; i &lt; {@link #size()}; i++) {
+	 *      for (int i = 0; i &lt; this.size; i++) {
 	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getParent getParent}(i));
 	 *      }
 	 *
-	 *      for (int i = 0; i &lt; {@link #size()}; i++) {
+	 *      for (int i = 0; i &lt; this.size; i++) {
 	 *          hash = {@link MurmurHash#update MurmurHash.update}(hash, {@link #getReturnState getReturnState}(i));
 	 *      }
 	 *
-	 *      hash = {@link MurmurHash#finish MurmurHash.finish}(hash, 2 * {@link #size()});
+	 *      hash = {@link MurmurHash#finish MurmurHash.finish}(hash, 2 * this.size);
 	 *      return hash;
 	 *  }
 	 * </pre>
@@ -81,7 +81,7 @@ export abstract class PredictionContext implements Equatable {
 		return hash;
 	}
 
-	abstract size(): number;
+	abstract readonly size: number;
 
 	abstract getReturnState(index: number): number;
 
@@ -95,13 +95,13 @@ export abstract class PredictionContext implements Equatable {
 	protected abstract removeEmptyContext(): PredictionContext;
 
 	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
-		if (outerContext.isEmpty()) {
+		if (outerContext.isEmpty) {
 			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
 
 		let parent: PredictionContext;
-		if (outerContext.parent) {
-			parent = PredictionContext.fromRuleContext(atn, outerContext.parent, fullContext);
+		if (outerContext._parent) {
+			parent = PredictionContext.fromRuleContext(atn, outerContext._parent, fullContext);
 		} else {
 			parent = fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
@@ -124,14 +124,14 @@ export abstract class PredictionContext implements Equatable {
 			return context0;
 		}
 
-		if (context0.isEmpty()) {
+		if (context0.isEmpty) {
 			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext.addEmptyContext(context1);
-		} else if (context1.isEmpty()) {
+		} else if (context1.isEmpty) {
 			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
 		}
 
-		let context0size: number = context0.size();
-		let context1size: number = context1.size();
+		let context0size: number = context0.size;
+		let context1size: number = context1.size;
 		if (context0size === 1 && context1size === 1 && context0.getReturnState(0) === context1.getReturnState(0)) {
 			let merged: PredictionContext = contextCache.join(context0.getParent(0), context1.getParent(0));
 			if (merged === context0.getParent(0)) {
@@ -219,7 +219,7 @@ export abstract class PredictionContext implements Equatable {
 		@NotNull context: PredictionContext,
 		@NotNull contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
 		@NotNull visited: PredictionContext.IdentityHashMap): PredictionContext {
-		if (context.isEmpty()) {
+		if (context.isEmpty) {
 			return context;
 		}
 
@@ -235,13 +235,13 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		let changed: boolean = false;
-		let parents: PredictionContext[] = new Array<PredictionContext>(context.size());
+		let parents: PredictionContext[] = new Array<PredictionContext>(context.size);
 		for (let i = 0; i < parents.length; i++) {
 			let parent: PredictionContext = PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
 			if (changed || parent !== context.getParent(i)) {
 				if (!changed) {
-					parents = new Array<PredictionContext>(context.size());
-					for (let j = 0; j < context.size(); j++) {
+					parents = new Array<PredictionContext>(context.size);
+					for (let j = 0; j < context.size; j++) {
 						parents[j] = context.getParent(j);
 					}
 
@@ -258,13 +258,13 @@ export abstract class PredictionContext implements Equatable {
 			return context;
 		}
 
-		// We know parents.length>0 because context.isEmpty() is checked at the beginning of the method.
+		// We know parents.length>0 because context.isEmpty is checked at the beginning of the method.
 		let updated: PredictionContext;
 		if (parents.length === 1) {
 			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
 		} else {
-			let returnStates: number[] = new Array<number>(context.size());
-			for (let i = 0; i < context.size(); i++) {
+			let returnStates: number[] = new Array<number>(context.size);
+			for (let i = 0; i < context.size; i++) {
 				returnStates[i] = context.getReturnState(i);
 			}
 
@@ -288,9 +288,9 @@ export abstract class PredictionContext implements Equatable {
 		return new SingletonPredictionContext(this, returnState);
 	}
 
-	abstract isEmpty(): boolean;
+	abstract readonly isEmpty: boolean;
 
-	abstract hasEmpty(): boolean;
+	abstract readonly hasEmpty: boolean;
 
 	@Override
 	hashCode(): number {
@@ -311,18 +311,18 @@ export abstract class PredictionContext implements Equatable {
 			let stateNumber: number = currentState;
 			let localBuffer: string = "";
 			localBuffer += "[";
-			while (!p.isEmpty() && p !== stop) {
+			while (!p.isEmpty && p !== stop) {
 				let index: number = 0;
-				if (p.size() > 0) {
+				if (p.size > 0) {
 					let bits: number = 1;
-					while (((1 << bits) >>> 0) < p.size()) {
+					while (((1 << bits) >>> 0) < p.size) {
 						bits++;
 					}
 
 					let mask: number = ((1 << bits) >>> 0) - 1;
 					index = (perm >> offset) & mask;
-					last = last && index >= p.size() - 1;
-					if (index >= p.size()) {
+					last = last && index >= p.size - 1;
+					if (index >= p.size) {
 						continue outer;
 					}
 
@@ -335,12 +335,12 @@ export abstract class PredictionContext implements Equatable {
 						localBuffer += ' ';
 					}
 
-					let atn: ATN = recognizer.getATN();
+					let atn: ATN = recognizer.atn;
 					let s: ATNState = atn.states[stateNumber];
-					let ruleName: string = recognizer.getRuleNames()[s.ruleIndex];
+					let ruleName: string = recognizer.ruleNames[s.ruleIndex];
 					localBuffer += ruleName;
 				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
-					if (!p.isEmpty()) {
+					if (!p.isEmpty) {
 						if (localBuffer.length > 1) {
 							// first char is '[', if more than that this isn't the first rule
 							localBuffer += ' ';
@@ -374,7 +374,7 @@ class EmptyPredictionContext extends PredictionContext {
 		this.fullContext = fullContext;
 	}
 
-	isFullContext(): boolean {
+	get isFullContext(): boolean {
 		return this.fullContext;
 	}
 
@@ -404,7 +404,7 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return 0;
 	}
 
@@ -419,12 +419,12 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return true;
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return true;
 	}
 
@@ -472,23 +472,23 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.returnStates.length;
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return false;
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return this.returnStates[this.returnStates.length - 1] === PredictionContext.EMPTY_FULL_STATE_KEY;
 	}
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		if (this.hasEmpty()) {
+		if (this.hasEmpty) {
 			return this;
 		}
 
@@ -501,7 +501,7 @@ class ArrayPredictionContext extends PredictionContext {
 
 	@Override
 	protected removeEmptyContext(): PredictionContext {
-		if (!this.hasEmpty()) {
+		if (!this.hasEmpty) {
 			return this;
 		}
 
@@ -520,9 +520,9 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	private static appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
-		if (suffix.isEmpty()) {
+		if (suffix.isEmpty) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
-				if (context.hasEmpty()) {
+				if (context.hasEmpty) {
 					return PredictionContext.EMPTY_LOCAL;
 				}
 
@@ -532,17 +532,17 @@ class ArrayPredictionContext extends PredictionContext {
 			return context;
 		}
 
-		if (suffix.size() !== 1) {
+		if (suffix.size !== 1) {
 			throw "Appending a tree suffix is not yet supported.";
 		}
 
 		let result = visited.get(context);
 		if (!result) {
-			if (context.isEmpty()) {
+			if (context.isEmpty) {
 				result = suffix;
 			} else {
-				let parentCount: number = context.size();
-				if (context.hasEmpty()) {
+				let parentCount: number = context.size;
+				if (context.hasEmpty) {
 					parentCount--;
 				}
 
@@ -563,7 +563,7 @@ class ArrayPredictionContext extends PredictionContext {
 					result = new ArrayPredictionContext(updatedParents, updatedReturnStates);
 				}
 
-				if (context.hasEmpty()) {
+				if (context.hasEmpty) {
 					result = PredictionContext.join(result, suffix);
 				}
 			}
@@ -608,27 +608,27 @@ class ArrayPredictionContext extends PredictionContext {
 				continue;
 			}
 
-			let selfSize: number = operands.getX().size();
+			let selfSize: number = operands.x.size;
 			if (selfSize === 0) {
-				if (!operands.getX().equals(operands.getY())) {
+				if (!operands.x.equals(operands.y)) {
 					return false;
 				}
 
 				continue;
 			}
 
-			let otherSize: number = operands.getY().size();
+			let otherSize: number = operands.y.size;
 			if (selfSize !== otherSize) {
 				return false;
 			}
 
 			for (let i = 0; i < selfSize; i++) {
-				if (operands.getX().getReturnState(i) !== operands.getY().getReturnState(i)) {
+				if (operands.x.getReturnState(i) !== operands.y.getReturnState(i)) {
 					return false;
 				}
 
-				let selfParent: PredictionContext = operands.getX().getParent(i);
-				let otherParent: PredictionContext = operands.getY().getParent(i);
+				let selfParent: PredictionContext = operands.x.getParent(i);
+				let otherParent: PredictionContext = operands.y.getParent(i);
 				if (selfParent.hashCode() !== otherParent.hashCode()) {
 					return false;
 				}
@@ -675,17 +675,17 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return 1;
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return false;
 	}
 
 	@Override
-	hasEmpty(): boolean {
+	get hasEmpty(): boolean {
 		return false;
 	}
 

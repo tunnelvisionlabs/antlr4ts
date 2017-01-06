@@ -32,7 +32,7 @@ export class ListTokenSource implements TokenSource {
 	 * the next token in {@link #tokens} (or the previous token if the end of
 	 * the input has been reached).
 	 */
-	private sourceName?: string;
+	private _sourceName?: string;
 
 	/**
 	 * The index into {@link #tokens} of token to return by the next call to
@@ -71,23 +71,23 @@ export class ListTokenSource implements TokenSource {
 		}
 
 		this.tokens = tokens;
-		this.sourceName = sourceName;
+		this._sourceName = sourceName;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	getCharPositionInLine(): number {
+	get charPositionInLine(): number {
 		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].getCharPositionInLine();
+			return this.tokens[this.i].charPositionInLine;
 		} else if (this.eofToken != null) {
-			return this.eofToken.getCharPositionInLine();
+			return this.eofToken.charPositionInLine;
 		} else if (this.tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
-			let tokenText: string | undefined = lastToken.getText();
+			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				let lastNewLine: number = tokenText.lastIndexOf('\n');
 				if (lastNewLine >= 0) {
@@ -95,7 +95,7 @@ export class ListTokenSource implements TokenSource {
 				}
 			}
 
-			return lastToken.getCharPositionInLine() + lastToken.getStopIndex() - lastToken.getStartIndex() + 1;
+			return lastToken.charPositionInLine + lastToken.stopIndex - lastToken.startIndex + 1;
 		}
 
 		// only reach this if tokens is empty, meaning EOF occurs at the first
@@ -112,21 +112,21 @@ export class ListTokenSource implements TokenSource {
 			if (this.eofToken == null) {
 				let start: number = -1;
 				if (this.tokens.length > 0) {
-					let previousStop: number = this.tokens[this.tokens.length - 1].getStopIndex();
+					let previousStop: number = this.tokens[this.tokens.length - 1].stopIndex;
 					if (previousStop !== -1) {
 						start = previousStop + 1;
 					}
 				}
 
 				let stop: number = Math.max(-1, start - 1);
-				this.eofToken = this._factory.create({ source: this, stream: this.getInputStream() }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.getLine(), this.getCharPositionInLine());
+				this.eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.line, this.charPositionInLine);
 			}
 
 			return this.eofToken;
 		}
 
 		let t: Token = this.tokens[this.i];
-		if (this.i === this.tokens.length - 1 && t.getType() === Token.EOF) {
+		if (this.i === this.tokens.length - 1 && t.type === Token.EOF) {
 			this.eofToken = t;
 		}
 
@@ -138,18 +138,18 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getLine(): number {
+	get line(): number {
 		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].getLine();
+			return this.tokens[this.i].line;
 		} else if (this.eofToken != null) {
-			return this.eofToken.getLine();
+			return this.eofToken.line;
 		} else if (this.tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
-			let line: number = lastToken.getLine();
+			let line: number = lastToken.line;
 
-			let tokenText: string | undefined = lastToken.getText();
+			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				for (let i = 0; i < tokenText.length; i++) {
 					if (tokenText.charAt(i) == '\n') {
@@ -171,13 +171,13 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getInputStream(): CharStream | undefined {
+	get inputStream(): CharStream | undefined {
 		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].getInputStream();
+			return this.tokens[this.i].inputStream;
 		} else if (this.eofToken != null) {
-			return this.eofToken.getInputStream();
+			return this.eofToken.inputStream;
 		} else if (this.tokens.length > 0) {
-			return this.tokens[this.tokens.length - 1].getInputStream();
+			return this.tokens[this.tokens.length - 1].inputStream;
 		}
 
 		// no input stream information is available
@@ -188,14 +188,14 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	getSourceName(): string {
-		if (this.sourceName) {
-			return this.sourceName;
+	get sourceName(): string {
+		if (this._sourceName) {
+			return this._sourceName;
 		}
 
-		let inputStream: CharStream | undefined = this.getInputStream();
+		let inputStream: CharStream | undefined = this.inputStream;
 		if (inputStream != null) {
-			return inputStream.getSourceName();
+			return inputStream.sourceName;
 		}
 
 		return "List";
@@ -204,8 +204,8 @@ export class ListTokenSource implements TokenSource {
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	setTokenFactory(@NotNull factory: TokenFactory): void {
+	// @Override
+	set tokenFactory(@NotNull factory: TokenFactory) {
 		this._factory = factory;
 	}
 
@@ -214,7 +214,7 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	@NotNull
-	getTokenFactory(): TokenFactory {
+	get tokenFactory(): TokenFactory {
 		return this._factory;
 	}
 }

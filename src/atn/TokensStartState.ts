@@ -13,7 +13,7 @@ import { Override } from '../Decorators';
 export class TokensStartState extends DecisionState {
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.TOKEN_START;
 	}
 }

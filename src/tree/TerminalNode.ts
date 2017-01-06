@@ -14,11 +14,11 @@ import { RuleNode } from './RuleNode';
 import { Token } from '../Token';
 
 export class TerminalNode implements ParseTree {
-	symbol: Token;
-	parent: RuleNode | undefined;
+	_symbol: Token;
+	_parent: RuleNode | undefined;
 
 	constructor(symbol: Token) {
-		this.symbol = symbol;
+		this._symbol = symbol;
 	}
 
 	@Override
@@ -26,29 +26,28 @@ export class TerminalNode implements ParseTree {
 		throw new RangeError("Terminal Node has no children.");
 	}
 
-	@Override
-	getSymbol(): Token {
-		return this.symbol;
+	get symbol(): Token {
+		return this._symbol;
 	}
 
 	@Override
-	getParent(): RuleNode | undefined {
-		return this.parent;
+	get parent(): RuleNode | undefined {
+		return this._parent;
 	}
 
 	@Override
-	getPayload(): Token {
-		return this.symbol;
+	get payload(): Token {
+		return this._symbol;
 	}
 
 	@Override
-	getSourceInterval(): Interval {
-		let tokenIndex: number = this.symbol.getTokenIndex();
+	get sourceInterval(): Interval {
+		let tokenIndex: number = this._symbol.tokenIndex;
 		return new Interval(tokenIndex, tokenIndex);
 	}
 
 	@Override
-	getChildCount(): number {
+	get childCount(): number {
 		return 0;
 	}
 
@@ -58,8 +57,8 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
-	getText(): string {
-		return this.symbol.getText() || "";
+	get text(): string {
+		return this._symbol.text || "";
 	}
 
 	@Override
@@ -69,10 +68,10 @@ export class TerminalNode implements ParseTree {
 
 	@Override
 	toString(): string {
-		if (this.symbol.getType() === Token.EOF) {
+		if (this._symbol.type === Token.EOF) {
 			return "<EOF>";
 		}
 
-		return this.symbol.getText() || "";
+		return this._symbol.text || "";
 	}
 }

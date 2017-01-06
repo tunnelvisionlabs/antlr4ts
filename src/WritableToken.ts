@@ -8,15 +8,15 @@
 import { Token } from './Token';
 
 export interface WritableToken extends Token {
-	setText(text: string): void;
+	text: string | undefined;
 
-	setType(ttype: number): void;
+	type: number;
 
-	setLine(line: number): void;
+	line: number;
 
-	setCharPositionInLine(pos: number): void;
+	charPositionInLine: number;
 
-	setChannel(channel: number): void;
+	channel: number;
 
-	setTokenIndex(index: number): void;
+	tokenIndex: number;
 }

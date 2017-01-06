@@ -9,7 +9,7 @@
  * This interface provides information about the vocabulary used by a
  * recognizer.
  *
- * @see Recognizer#getVocabulary()
+ * @see Recognizer.vocabulary
  * @author Sam Harwell
  */
 export interface Vocabulary {

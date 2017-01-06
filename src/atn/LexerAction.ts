@@ -24,7 +24,7 @@ export interface LexerAction extends Equatable {
 	 * @return The serialization type of the lexer action.
 	 */
 	//@NotNull
-	getActionType(): LexerActionType;
+	readonly actionType: LexerActionType;
 
 	/**
 	 * Gets whether the lexer action is position-dependent. Position-dependent
@@ -34,13 +34,13 @@ export interface LexerAction extends Equatable {
 	 * <p>Many lexer commands, including {@code type}, {@code skip}, and
 	 * {@code more}, do not check the input index during their execution.
 	 * Actions like this are position-independent, and may be stored more
-	 * efficiently as part of the {@link ATNConfig#getLexerActionExecutor()}.</p>
+	 * efficiently as part of the `ATNConfig.lexerActionExecutor`.</p>
 	 *
 	 * @return {@code true} if the lexer action semantics can be affected by the
 	 * position of the input {@link CharStream} at the time it is executed;
 	 * otherwise, {@code false}.
 	 */
-	isPositionDependent(): boolean;
+	readonly isPositionDependent: boolean;
 
 	/**
 	 * Execute the lexer action in the context of the specified {@link Lexer}.

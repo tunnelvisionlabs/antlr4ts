@@ -21,7 +21,7 @@
  *  Parser._ctx.
  *
  *  public final SContext s() throws RecognitionException {
- *      SContext _localctx = new SContext(_ctx, getState()); <-- create new node
+ *      SContext _localctx = new SContext(_ctx, state); <-- create new node
  *      enterRule(_localctx, 0, RULE_s);                     <-- push it
  *      ...
  *      exitRule();                                          <-- pop back to _localctx
@@ -68,14 +68,14 @@ import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext extends RuleNode {
-	parent: RuleContext | undefined;
+	_parent: RuleContext | undefined;
 	invokingState: number;
 
 	constructor();
 	constructor(parent: RuleContext | undefined, invokingState: number);
 	constructor(parent?: RuleContext, invokingState?: number) {
 		super();
-		this.parent = parent;
+		this._parent = parent;
 		this.invokingState = invokingState != null ? invokingState : -1;
 	}
 
@@ -87,7 +87,7 @@ export class RuleContext extends RuleNode {
 		let n = 0;
 		let p: RuleContext | undefined = this;
 		while (p) {
-			p = p.parent;
+			p = p._parent;
 			n++;
 		}
 		return n;
@@ -96,25 +96,25 @@ export class RuleContext extends RuleNode {
 	/** A context is empty if there is no invoking state; meaning nobody called
 	 *  current context.
 	 */
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.invokingState === -1;
 	}
 
 	// satisfy the ParseTree / SyntaxTree interface
 
 	@Override
-	getSourceInterval(): Interval {
+	get sourceInterval(): Interval {
 		return Interval.INVALID;
 	}
 
 	@Override
-	getRuleContext(): RuleContext { return this; }
+	get ruleContext(): RuleContext { return this; }
 
 	@Override
-	getParent(): RuleContext | undefined { return this.parent; }
+	get parent(): RuleContext | undefined { return this._parent; }
 
 	@Override
-	getPayload(): RuleContext { return this; }
+	get payload(): RuleContext { return this; }
 
 	/** Return the combined text of all child nodes. This method only considers
 	 *  tokens which have been added to the parse tree.
@@ -124,20 +124,20 @@ export class RuleContext extends RuleNode {
 	 *  method.
 	 */
 	@Override
-	getText(): string {
-		if (this.getChildCount() === 0) {
+	get text(): string {
+		if (this.childCount === 0) {
 			return "";
 		}
 
 		let builder = "";
-		for (let i = 0; i < this.getChildCount(); i++) {
-			builder += this.getChild(i).getText();
+		for (let i = 0; i < this.childCount; i++) {
+			builder += this.getChild(i).text;
 		}
 
 		return builder.toString();
 	}
 
-	getRuleIndex(): number { return -1; }
+	get ruleIndex(): number { return -1; }
 
 	/** For rule associated with this parse tree internal node, return
 	 *  the outer alternative number used to match the input. Default
@@ -148,7 +148,7 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	getAltNumber(): number { return ATN.INVALID_ALT_NUMBER; }
+	get altNumber(): number { return ATN.INVALID_ALT_NUMBER; }
 
 	/** Set the outer alternative number for this context node. Default
 	 *  implementation does nothing to avoid backing field overhead for
@@ -158,15 +158,15 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	setAltNumber(altNumber: number): void { }
+	set altNumber(altNumber: number) { }
 
 	@Override
 	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than or equal to 0 and less than getChildCount()");
+		throw new RangeError("i must be greater than or equal to 0 and less than childCount");
 	}
 
 	@Override
-	getChildCount(): number {
+	get childCount(): number {
 		return 0;
 	}
 
@@ -206,7 +206,7 @@ export class RuleContext extends RuleNode {
 		arg1?: Recognizer<any, any> | string[],
 		stop?: RuleContext)
 		: string {
-		const ruleNames = (arg1 instanceof Recognizer) ? arg1.getRuleNames() : arg1;
+		const ruleNames = (arg1 instanceof Recognizer) ? arg1.ruleNames : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
 		let buf = "";
@@ -214,21 +214,21 @@ export class RuleContext extends RuleNode {
 		buf += ("[");
 		while (p && p !== stop) {
 			if (!ruleNames) {
-				if (!p.isEmpty()) {
+				if (!p.isEmpty) {
 					buf += (p.invokingState);
 				}
 			} else {
-				let ruleIndex: number = p.getRuleIndex();
+				let ruleIndex: number = p.ruleIndex;
 				let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
 					? ruleNames[ruleIndex] : ruleIndex.toString();
 				buf += (ruleName);
 			}
 
-			if (p.parent && (ruleNames || !p.parent.isEmpty())) {
+			if (p._parent && (ruleNames || !p._parent.isEmpty)) {
 				buf += (" ");
 			}
 
-			p = p.parent;
+			p = p._parent;
 		}
 
 		buf += ("]");

@@ -65,18 +65,18 @@ export class IntegerList {
 			this._size += list.length;
 		} else if (list instanceof IntegerList) {
 			this.ensureCapacity(this._size + list._size);
-			this._data.subarray(this._size, this._size + list.size()).set(list._data);
+			this._data.subarray(this._size, this._size + list.size).set(list._data);
 			this._size += list._size;
 		} else {
 			// list is JavaCollection<number>
-			this.ensureCapacity(this._size + list.size());
+			this.ensureCapacity(this._size + list.size);
 			let current: number = 0;
 			for (let xi = list.iterator(); xi.hasNext(); /*empty*/) {
 				this._data[this._size + current] = xi.next();
 				current++;
 			}
 
-			this._size += list.size();
+			this._size += list.size;
 		}
 	}
 
@@ -130,11 +130,11 @@ export class IntegerList {
 		this._size -= (toIndex - fromIndex);
 	}
 
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this._size === 0;
 	}
 
-	size(): number {
+	get size(): number {
 		return this._size;
 	}
 

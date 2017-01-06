@@ -48,7 +48,7 @@ export class Interval implements Equatable {
 	/** return number of elements between a and b inclusively. x..x is length 1.
 	 *  if b &lt; a, then length is 0.  9..10 has length 2.
 	 */
-	length(): number {
+	get length(): number {
 		if (this.b < this.a) {
 			return 0;
 		}

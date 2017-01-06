@@ -22,11 +22,11 @@ export class IntegerStack extends IntegerList {
 	}
 
 	pop(): number {
-		return this.removeAt(this.size() - 1);
+		return this.removeAt(this.size - 1);
 	}
 
 	peek(): number {
-		return this.get(this.size() - 1);
+		return this.get(this.size - 1);
 	}
 
 }

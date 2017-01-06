@@ -69,8 +69,8 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return bucket.value;
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	keySet(): JavaSet<K> {
@@ -114,8 +114,8 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return value;
 	}
 
-	size(): number {
-		return this.backingStore.size();
+	get size(): number {
+		return this.backingStore.size;
 	}
 
 	values(): JavaCollection<V> {
@@ -184,8 +184,8 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<JavaMap.Entry<K, V>> {
@@ -209,8 +209,8 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	size(): number {
-		return this.backingStore.size();
+	get size(): number {
+		return this.backingStore.size;
 	}
 
 	toArray(): JavaMap.Entry<K, V>[];
@@ -269,8 +269,8 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<K> {
@@ -294,8 +294,8 @@ class KeySet<K, V> implements JavaSet<K> {
 		throw new Error("Not implemented");
 	}
 
-	size(): number {
-		return this.backingStore.size();
+	get size(): number {
+		return this.backingStore.size;
 	}
 
 	toArray(): K[];
@@ -360,8 +360,8 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.hashCode();
 	}
 
-	isEmpty(): boolean {
-		return this.backingStore.isEmpty();
+	get isEmpty(): boolean {
+		return this.backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<V> {
@@ -398,15 +398,15 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		throw new Error("Not implemented");
 	}
 
-	size(): number {
-		return this.backingStore.size();
+	get size(): number {
+		return this.backingStore.size;
 	}
 
 	toArray(): V[];
 	toArray(a: V[]): V[];
 	toArray(a?: V[]): V[] {
-		if (a === undefined || a.length < this.backingStore.size()) {
-			a = new Array<V>(this.backingStore.size());
+		if (a === undefined || a.length < this.backingStore.size) {
+			a = new Array<V>(this.backingStore.size);
 		}
 
 		let i = 0;

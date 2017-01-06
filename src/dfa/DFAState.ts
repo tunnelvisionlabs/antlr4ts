@@ -53,7 +53,7 @@ export class DFAState {
 	@NotNull
 	private readonly edges: Map<number, DFAState>;
 
-	private acceptStateInfo: AcceptStateInfo | undefined;
+	private _acceptStateInfo: AcceptStateInfo | undefined;
 
 	/** These keys for these edges are the top level element of the global context. */
 	@NotNull
@@ -82,12 +82,12 @@ export class DFAState {
 		this.contextEdges = new Map<number, DFAState>();
 	}
 
-	isContextSensitive(): boolean {
+	get isContextSensitive(): boolean {
 		return !!this.contextSymbols;
 	}
 
 	isContextSymbol(symbol: number): boolean {
-		if (!this.isContextSensitive()) {
+		if (!this.isContextSensitive) {
 			return false;
 		}
 
@@ -95,13 +95,13 @@ export class DFAState {
 	}
 
 	setContextSymbol(symbol: number): void {
-		assert(this.isContextSensitive());
+		assert(this.isContextSensitive);
 		this.contextSymbols!.set(symbol);
 	}
 
 	setContextSensitive(atn: ATN): void {
-		assert(!this.configs.isOutermostConfigSet());
-		if (this.isContextSensitive()) {
+		assert(!this.configs.isOutermostConfigSet);
+		if (this.isContextSensitive) {
 			return;
 		}
 
@@ -110,32 +110,32 @@ export class DFAState {
 		}
 	}
 
-	getAcceptStateInfo(): AcceptStateInfo | undefined {
-		return this.acceptStateInfo;
+	get acceptStateInfo(): AcceptStateInfo | undefined {
+		return this._acceptStateInfo;
 	}
 
-	setAcceptState(acceptStateInfo: AcceptStateInfo): void {
-		this.acceptStateInfo = acceptStateInfo;
+	set acceptStateInfo(acceptStateInfo: AcceptStateInfo | undefined) {
+		this._acceptStateInfo = acceptStateInfo;
 	}
 
-	isAcceptState(): boolean {
-		return !!this.acceptStateInfo;
+	get isAcceptState(): boolean {
+		return !!this._acceptStateInfo;
 	}
 
-	getPrediction(): number {
-		if (!this.acceptStateInfo) {
+	get prediction(): number {
+		if (!this._acceptStateInfo) {
 			return ATN.INVALID_ALT_NUMBER;
 		}
 
-		return this.acceptStateInfo.getPrediction();
+		return this._acceptStateInfo.prediction;
 	}
 
-	getLexerActionExecutor(): LexerActionExecutor | undefined {
-		if (!this.acceptStateInfo) {
+	get lexerActionExecutor(): LexerActionExecutor | undefined {
+		if (!this._acceptStateInfo) {
 			return undefined;
 		}
 
-		return this.acceptStateInfo.getLexerActionExecutor();
+		return this._acceptStateInfo.lexerActionExecutor;
 	}
 
 	getTarget(symbol: number): DFAState | undefined {
@@ -159,7 +159,7 @@ export class DFAState {
 	}
 
 	setContextTarget(invokingState: number, target: DFAState): void {
-		if (!this.isContextSensitive()) {
+		if (!this.isContextSensitive) {
 			throw new Error("The state is not context sensitive.");
 		}
 
@@ -228,13 +228,13 @@ export class DFAState {
 	toString(): string {
 		let buf = "";
 		buf += (this.stateNumber) + (":") + (this.configs);
-		if (this.isAcceptState()) {
+		if (this.isAcceptState) {
 			buf += ("=>");
 			if (this.predicates) {
 				buf += this.predicates;
 			}
 			else {
-				buf += (this.getPrediction());
+				buf += (this.prediction);
 			}
 		}
 		return buf.toString();

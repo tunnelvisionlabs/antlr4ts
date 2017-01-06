@@ -23,21 +23,21 @@ export class EpsilonTransition extends Transition {
 	 * @return the rule index of a precedence rule for which this transition is
 	 * returning from, where the precedence value is 0; otherwise, -1.
 	 *
-	 * @see ATNConfig#isPrecedenceFilterSuppressed()
+	 * @see ATNConfig.isPrecedenceFilterSuppressed
 	 * @see ParserATNSimulator#applyPrecedenceFilter(ATNConfigSet, ParserRuleContext, PredictionContextCache)
 	 * @since 4.4.1
 	 */
-	outermostPrecedenceReturn(): number {
+	get outermostPrecedenceReturn(): number {
 		return this._outermostPrecedenceReturn;
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.EPSILON;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true;
 	}
 

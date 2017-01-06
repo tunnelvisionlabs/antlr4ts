@@ -38,52 +38,52 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
                     return tokens[i++];
                 }
                 @Override
-                getSourceName(): string { return "test"; }
+                get sourceName(): string { return "test"; }
 				@Override
-				getCharPositionInLine(): number {
+				get charPositionInLine(): number {
 					return 0;
 				}
 				@Override
-				getLine(): number {
+				get line(): number {
 					return 0;
 				}
 				@Override
-				getInputStream(): CharStream {
+				get inputStream(): CharStream {
 					return null;
 				}
 
 				@Override
-				getTokenFactory(): TokenFactory {
+				get tokenFactory(): TokenFactory {
 					return CommonTokenFactory.DEFAULT;
 				}
 
-				@Override
-				setTokenFactory(factory: TokenFactory): void {
+				// @Override
+				set tokenFactory(factory: TokenFactory) {
 				}
 			};
 
         let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
 
-        assertEquals("x", tokens.LT(1).getText()); // must skip first off channel token
+        assertEquals("x", tokens.LT(1).text); // must skip first off channel token
         tokens.consume();
-        assertEquals("=", tokens.LT(1).getText());
-        assertEquals("x", tokens.LT(-1).getText());
+        assertEquals("=", tokens.LT(1).text);
+        assertEquals("x", tokens.LT(-1).text);
 
         tokens.consume();
-        assertEquals("34", tokens.LT(1).getText());
-        assertEquals("=", tokens.LT(-1).getText());
+        assertEquals("34", tokens.LT(1).text);
+        assertEquals("=", tokens.LT(-1).text);
 
         tokens.consume();
-        assertEquals(";", tokens.LT(1).getText());
-        assertEquals("34", tokens.LT(-1).getText());
+        assertEquals(";", tokens.LT(1).text);
+        assertEquals("34", tokens.LT(-1).text);
 
         tokens.consume();
         assertEquals(Token.EOF, tokens.LA(1));
-        assertEquals(";", tokens.LT(-1).getText());
+        assertEquals(";", tokens.LT(-1).text);
 
-        assertEquals("34", tokens.LT(-2).getText());
-        assertEquals("=", tokens.LT(-3).getText());
-        assertEquals("x", tokens.LT(-4).getText());
+        assertEquals("34", tokens.LT(-2).text);
+        assertEquals("=", tokens.LT(-3).text);
+        assertEquals("x", tokens.LT(-4).text);
     }
 
 	@Test testFetchOffChannel(): void {
@@ -110,27 +110,27 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 					return tokens[i++];
 				}
 				@Override
-				getSourceName(): string { return "test"; }
+				get sourceName(): string { return "test"; }
 				@Override
-				getCharPositionInLine(): number {
+				get charPositionInLine(): number {
 					return 0;
 				}
 				@Override
-				getLine(): number {
+				get line(): number {
 					return 0;
 				}
 				@Override
-				getInputStream(): CharStream {
+				get inputStream(): CharStream {
 					return null;
 				}
 
 				@Override
-				getTokenFactory(): TokenFactory {
+				get tokenFactory(): TokenFactory {
 					return CommonTokenFactory.DEFAULT;
 				}
 
-				@Override
-				setTokenFactory(factory: TokenFactory): void {
+				// @Override
+				set tokenFactory(factory: TokenFactory) {
 				}
 			};
 
@@ -187,32 +187,32 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getLine(): number {
+			get line(): number {
 				return 0;
 			}
 
 			@Override
-			getCharPositionInLine(): number {
+			get charPositionInLine(): number {
 				return 0;
 			}
 
 			@Override
-			getInputStream(): CharStream {
+			get inputStream(): CharStream {
 				return null;
 			}
 
 			@Override
-			getSourceName(): string {
+			get sourceName(): string {
 				return IntStream.UNKNOWN_SOURCE_NAME;
 			}
 
 			@Override
-			getTokenFactory(): TokenFactory {
+			get tokenFactory(): TokenFactory {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
-			@Override
-			setTokenFactory(factory: TokenFactory): void {
+			// @Override
+			set tokenFactory(factory: TokenFactory) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};
@@ -221,8 +221,8 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 		tokens.fill();
 
 		assertEquals(Token.EOF, tokens.LA(1));
-		assertEquals(0, tokens.index());
-		assertEquals(1, tokens.size());
+		assertEquals(0, tokens.index);
+		assertEquals(1, tokens.size);
 	}
 
 	@Test(expected = IllegalStateException.class)
@@ -235,32 +235,32 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 			}
 
 			@Override
-			getLine(): number {
+			get line(): number {
 				return 0;
 			}
 
 			@Override
-			getCharPositionInLine(): number {
+			get charPositionInLine(): number {
 				return 0;
 			}
 
 			@Override
-			getInputStream(): CharStream {
+			get inputStream(): CharStream {
 				return null;
 			}
 
 			@Override
-			getSourceName(): string {
+			get sourceName(): string {
 				return IntStream.UNKNOWN_SOURCE_NAME;
 			}
 
 			@Override
-			getTokenFactory(): TokenFactory {
+			get tokenFactory(): TokenFactory {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 
-			@Override
-			setTokenFactory(factory: TokenFactory): void {
+			// @Override
+			set tokenFactory(factory: TokenFactory) {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};
@@ -269,8 +269,8 @@ export class TestCommonTokenStream extends TestBufferedTokenStream {
 		tokens.fill();
 
 		assertEquals(Token.EOF, tokens.LA(1));
-		assertEquals(0, tokens.index());
-		assertEquals(1, tokens.size());
+		assertEquals(0, tokens.index);
+		assertEquals(1, tokens.size);
 		tokens.consume();
 	}
 }

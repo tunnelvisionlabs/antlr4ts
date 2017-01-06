@@ -18,7 +18,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `LT(k).getType() === LA(k)`.
+	 * is non-null and the value of `LT(k).type === LA(k)`.
 	 *
 	 * A `RangeError` is thrown if `k<0` and fewer than `-k` calls to `consume()` have occurred from the beginning of
 	 * the stream before calling this method.
@@ -30,7 +30,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `tryLT(k).getType() === LA(k)`.
+	 * is non-null and the value of `tryLT(k).type === LA(k)`.
 	 *
 	 * The return value is `undefined` if `k<0` and fewer than `-k` calls to `consume()` have occurred from the
 	 * beginning of the stream before calling this method.
@@ -65,7 +65,7 @@ export interface TokenStream extends IntStream {
 	 * stream.
 	 */
 	//@NotNull
-	getTokenSource(): TokenSource;
+	readonly tokenSource: TokenSource;
 
 	/**
 	 * Return the text of all tokens within the specified {@code interval}. This
@@ -77,7 +77,7 @@ export interface TokenStream extends IntStream {
 	 * TokenStream stream = ...;
 	 * String text = "";
 	 * for (int i = interval.a; i &lt;= interval.b; i++) {
-	 *   text += stream.get(i).getText();
+	 *   text += stream.get(i).text;
 	 * }
 	 * </pre>
 	 *
@@ -89,7 +89,7 @@ export interface TokenStream extends IntStream {
 	 * @throws NullPointerException if {@code interval} is {@code null}
 	 */
 	//@NotNull
-	getTextFromInterval(/*@NotNull*/ interval: Interval): string;
+	getText(/*@NotNull*/ interval: Interval): string;
 
 	/**
 	 * Return the text of all tokens in the stream. This method behaves like the
@@ -99,7 +99,7 @@ export interface TokenStream extends IntStream {
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;
-	 * String text = stream.getText(new Interval(0, stream.size()));
+	 * String text = stream.getText(new Interval(0, stream.size));
 	 * </pre>
 	 *
 	 * @return The text of all tokens in the stream.
@@ -113,12 +113,12 @@ export interface TokenStream extends IntStream {
 	 * exceptions from the call to {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <p>If {@code ctx.getSourceInterval()} does not return a valid interval of
+	 * <p>If {@code ctx.sourceInterval} does not return a valid interval of
 	 * tokens provided by this stream, the behavior is unspecified.</p>
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;
-	 * String text = stream.getText(ctx.getSourceInterval());
+	 * String text = stream.getText(ctx.sourceInterval);
 	 * </pre>
 	 *
 	 * @param ctx The context providing the source interval of tokens to get
@@ -126,7 +126,7 @@ export interface TokenStream extends IntStream {
 	 * @return The text of all tokens within the source interval of {@code ctx}.
 	 */
 	//@NotNull
-	getTextFromContext(/*@NotNull*/ ctx: RuleContext): string;
+	getText(/*@NotNull*/ ctx: RuleContext): string;
 
 	/**
 	 * Return the text of all tokens in this stream between {@code start} and
@@ -136,7 +136,7 @@ export interface TokenStream extends IntStream {
 	 * this stream, or if the {@code stop} occurred before the {@code start}
 	 * token, the behavior is unspecified.</p>
 	 *
-	 * <p>For streams which ensure that the {@link Token#getTokenIndex} method is
+	 * <p>For streams which ensure that the `Token.tokenIndex` method is
 	 * accurate for all of its provided tokens, this method behaves like the
 	 * following code. Other streams may implement this method in other ways
 	 * provided the behavior is consistent with this at a high level.</p>
@@ -144,8 +144,8 @@ export interface TokenStream extends IntStream {
 	 * <pre>
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = start.getTokenIndex(); i &lt;= stop.getTokenIndex(); i++) {
-	 *   text += stream.get(i).getText();
+	 * for (int i = start.tokenIndex; i &lt;= stop.tokenIndex; i++) {
+	 *   text += stream.get(i).text;
 	 * }
 	 * </pre>
 	 *

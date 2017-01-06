@@ -34,9 +34,9 @@ export class TestIntervalSet {
 	}
 
 	@Test testMin(): void {
-		assertEquals(0, IntervalSet.COMPLETE_CHAR_SET.getMinElement());
-		assertEquals(Token.EPSILON, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EPSILON)).getMinElement());
-		assertEquals(Token.EOF, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EOF)).getMinElement());
+		assertEquals(0, IntervalSet.COMPLETE_CHAR_SET.minElement);
+		assertEquals(Token.EPSILON, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EPSILON)).minElement);
+		assertEquals(Token.EOF, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EOF)).minElement);
 	}
 
 	@Test testIsolatedElements(): void {
@@ -366,7 +366,7 @@ export class TestIntervalSet {
 		s.add(50,55);
 		s.add(5,19);
 		let expecting: string =  "32";
-		let result: string =  String(s.size());
+		let result: string =  String(s.size);
 		assertEquals(expecting, result);
 	}
 
@@ -432,10 +432,10 @@ export class TestIntervalSet {
     }
 
 	@Test testEmptyIsNil(): void {
-		assertTrue(new IntervalSet().isNil());
+		assertTrue(new IntervalSet().isNil);
 	}
 
 	@Test testNotEmptyIsNotNil(): void {
-		assertFalse(IntervalSet.of(1).isNil());
+		assertFalse(IntervalSet.of(1).isNil);
 	}
 }

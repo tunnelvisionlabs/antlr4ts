@@ -38,9 +38,9 @@ export class TestUnbufferedCharStream extends BaseTest {
 	@Test
 	testSeekPastEOF(): void {
 		let input: CharStream =  createStream("");
-		assertEquals(0, input.index());
+		assertEquals(0, input.index);
 		input.seek(1);
-		assertEquals(0, input.index());
+		assertEquals(0, input.index);
 	}
 
 	/**
@@ -101,7 +101,7 @@ export class TestUnbufferedCharStream extends BaseTest {
 		let input: CharStream =  createStream("xyz");
 		input.consume();
 		let m1: number =  input.mark();
-		assertEquals(1, input.index());
+		assertEquals(1, input.index);
 		input.consume();
 		input.seek(0);
 	}
@@ -111,7 +111,7 @@ export class TestUnbufferedCharStream extends BaseTest {
 		let input: CharStream =  createStream("xyz");
 		input.consume();
 		let m1: number =  input.mark();
-		assertEquals(1, input.index());
+		assertEquals(1, input.index);
 		input.getText(new Interval(0, 1));
 	}
 
@@ -120,7 +120,7 @@ export class TestUnbufferedCharStream extends BaseTest {
 		let input: CharStream =  createStream("xyz");
 		input.consume();
 		let m1: number =  input.mark();
-		assertEquals(1, input.index());
+		assertEquals(1, input.index);
 		input.consume();
 		input.consume();
 		assertEquals("yz", input.getText(new Interval(1, 2)));
@@ -276,9 +276,9 @@ export class TestUnbufferedCharStream extends BaseTest {
 		let input: TestingUnbufferedCharStream =  createStream("x = 302 * 91 + 20234234 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
 		// copy text into tokens from char stream
-		lexEngine.setTokenFactory(new CommonTokenFactory(true));
+		lexEngine.tokenFactory = new CommonTokenFactory(true);
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
-        let result: string =  tokens.LT(1).getText();
+        let result: string =  tokens.LT(1).text;
         let expecting: string =  "x";
         assertEquals(expecting, result);
 		tokens.fill();

@@ -34,7 +34,7 @@ export class ParseTreeWalker {
 			}
 
 			// Move down to first child, if exists
-			if (currentNode.getChildCount() > 0) {
+			if (currentNode.childCount > 0) {
 				nodeStack.push(currentNode);
 				indexStack.push(currentIndex);
 				currentIndex = 0;
@@ -59,7 +59,7 @@ export class ParseTreeWalker {
 				// Move to next sibling if possible
 				let last = nodeStack[nodeStack.length - 1];
 				currentIndex++;
-				currentNode = currentIndex < last.getChildCount() ? last.getChild(currentIndex) : undefined;
+				currentNode = currentIndex < last.childCount ? last.getChild(currentIndex) : undefined;
 				if (currentNode) {
 					break;
 				}
@@ -78,7 +78,7 @@ export class ParseTreeWalker {
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
 	protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.getRuleContext() as ParserRuleContext;
+		let ctx = r.ruleContext as ParserRuleContext;
 		if (listener.enterEveryRule) {
 			listener.enterEveryRule(ctx);
 		}
@@ -87,7 +87,7 @@ export class ParseTreeWalker {
 	}
 
 	protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.getRuleContext() as ParserRuleContext;
+		let ctx = r.ruleContext as ParserRuleContext;
 		ctx.exitRule(listener);
 		if (listener.exitEveryRule) {
 			listener.exitEveryRule(ctx);

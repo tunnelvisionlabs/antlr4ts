@@ -18,7 +18,7 @@ export class NotSetTransition extends SetTransition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.NOT_SET;
 	}
 

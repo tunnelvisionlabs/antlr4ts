@@ -31,7 +31,7 @@ export class TestBufferedTokenStream extends BaseTest {
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
-        let result: string =  tokens.LT(1).getText();
+        let result: string =  tokens.LT(1).text;
         let expecting: string =  "x";
         assertEquals(expecting, result);
     }
@@ -52,7 +52,7 @@ export class TestBufferedTokenStream extends BaseTest {
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
-        let result: string =  tokens.LT(2).getText();
+        let result: string =  tokens.LT(2).text;
         let expecting: string =  " ";
         assertEquals(expecting, result);
     }
@@ -75,14 +75,14 @@ export class TestBufferedTokenStream extends BaseTest {
 
         let i: number =  1;
         let t: Token =  tokens.LT(i);
-        while ( t.getType()!=Token.EOF ) {
+        while ( t.type!=Token.EOF ) {
             i++;
             t = tokens.LT(i);
         }
         tokens.LT(i++); // push it past end
         tokens.LT(i++);
 
-        let result: string =  tokens.getText();
+        let result: string =  tokens.text;
         let expecting: string =  "x = 3 * 0 + 2 * 0;";
         assertEquals(expecting, result);
     }
@@ -104,12 +104,12 @@ export class TestBufferedTokenStream extends BaseTest {
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
         let t: Token =  tokens.LT(1);
-        while ( t.getType()!=Token.EOF ) {
+        while ( t.type!=Token.EOF ) {
             tokens.consume();
             t = tokens.LT(1);
         }
 
-        let result: string =  tokens.getText();
+        let result: string =  tokens.text;
         let expecting: string =  "x = 3 * 0 + 2 * 0;";
         assertEquals(expecting, result);
     }
@@ -132,16 +132,16 @@ export class TestBufferedTokenStream extends BaseTest {
 
         tokens.consume(); // get x into buffer
         let t: Token =  tokens.LT(-1);
-        assertEquals("x", t.getText());
+        assertEquals("x", t.text);
 
         tokens.consume();
         tokens.consume(); // consume '='
         t = tokens.LT(-3);
-        assertEquals("x", t.getText());
+        assertEquals("x", t.text);
         t = tokens.LT(-2);
-        assertEquals(" ", t.getText());
+        assertEquals(" ", t.text);
         t = tokens.LT(-1);
-        assertEquals("=", t.getText());
+        assertEquals("=", t.text);
     }
 
 }

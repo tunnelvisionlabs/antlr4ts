@@ -16,13 +16,13 @@ import { Override } from './Decorators';
 import { Vocabulary } from './Vocabulary';
 
 export class LexerInterpreter extends Lexer {
-	protected grammarFileName: string;
-	protected atn: ATN;
+	protected _grammarFileName: string;
+	protected _atn: ATN;
 
-	protected ruleNames: string[];
-	protected modeNames: string[];
+	protected _ruleNames: string[];
+	protected _modeNames: string[];
 	@NotNull
-	private vocabulary: Vocabulary;
+	private _vocabulary: Vocabulary;
 
 	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
 		super(input);
@@ -31,37 +31,37 @@ export class LexerInterpreter extends Lexer {
 			throw new Error("IllegalArgumentException: The ATN must be a lexer ATN.");
 		}
 
-		this.grammarFileName = grammarFileName;
-		this.atn = atn;
+		this._grammarFileName = grammarFileName;
+		this._atn = atn;
 
-		this.ruleNames = ruleNames.slice(0);
-		this.modeNames = modeNames.slice(0);
-		this.vocabulary = vocabulary;
+		this._ruleNames = ruleNames.slice(0);
+		this._modeNames = modeNames.slice(0);
+		this._vocabulary = vocabulary;
 		this._interp = new LexerATNSimulator(atn, this);
 	}
 
 	@Override
-	getATN(): ATN {
-		return this.atn;
+	get atn(): ATN {
+		return this._atn;
 	}
 
 	@Override
-	getGrammarFileName(): string {
-		return this.grammarFileName;
+	get grammarFileName(): string {
+		return this._grammarFileName;
 	}
 
 	@Override
-	getRuleNames(): string[] {
-		return this.ruleNames;
+	get ruleNames(): string[] {
+		return this._ruleNames;
 	}
 
 	@Override
-	getModeNames(): string[] {
-		return this.modeNames;
+	get modeNames(): string[] {
+		return this._modeNames;
 	}
 
 	@Override
-	getVocabulary(): Vocabulary {
-		return this.vocabulary;
+	get vocabulary(): Vocabulary {
+		return this._vocabulary;
 	}
 }

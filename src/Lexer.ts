@@ -86,7 +86,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	_mode: number = Lexer.DEFAULT_MODE;
 
 	/** You can set the text for the current token to override what is in
-	 *  the input char buffer.  Use setText() or can set this instance var.
+	 *  the input char buffer.  Set `text` or can set this instance var.
 	 */
 	_text: string | undefined;
 
@@ -116,7 +116,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._mode = Lexer.DEFAULT_MODE;
 		this._modeStack.clear();
 
-		this.getInterpreter().reset();
+		this.interpreter.reset();
 	}
 
 	/** Return a token from this source; i.e., match a token on the char
@@ -140,18 +140,18 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 				this._token = undefined;
 				this._channel = Token.DEFAULT_CHANNEL;
-				this._tokenStartCharIndex = this._input.index();
-				this._tokenStartCharPositionInLine = this.getInterpreter().getCharPositionInLine();
-				this._tokenStartLine = this.getInterpreter().getLine();
+				this._tokenStartCharIndex = this._input.index;
+				this._tokenStartCharPositionInLine = this.interpreter.charPositionInLine;
+				this._tokenStartLine = this.interpreter.line;
 				this._text = undefined;
 				do {
 					this._type = Token.INVALID_TYPE;
 //				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
 //								   " in mode "+mode+
-//								   " at index "+input.index());
+//								   " at index "+input.index);
 					let ttype: number;
 					try {
-						ttype = this.getInterpreter().match(this._input, this._mode);
+						ttype = this.interpreter.match(this._input, this._mode);
 					}
 					catch (e) {
 						if (e instanceof LexerNoViableAltException) {
@@ -206,36 +206,36 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	popMode(): number {
-		if (this._modeStack.isEmpty()) throw new Error("EmptyStackException");
+		if (this._modeStack.isEmpty) throw new Error("EmptyStackException");
 		if (LexerATNSimulator.debug) console.log("popMode back to " + this._modeStack.peek());
 		this.mode(this._modeStack.pop());
 		return this._mode;
 	}
 
 	@Override
-	getTokenFactory(): TokenFactory {
+	get tokenFactory(): TokenFactory {
 		return this._factory;
 	}
 
-	@Override
-	setTokenFactory(factory: TokenFactory): void {
+	// @Override
+	set tokenFactory(factory: TokenFactory) {
 		this._factory = factory;
 	}
 
 	/** Set the char stream and reset the lexer */
-	setInputStream(input: CharStream): void {
+	set inputStream(input: CharStream) {
 		this.reset(false);
 		this._input = input;
 		this._tokenFactorySourcePair = { source: this, stream: this._input };
 	}
 
 	@Override
-	getSourceName(): string {
-		return this._input.getSourceName();
+	get sourceName(): string {
+		return this._input.sourceName;
 	}
 
 	@Override
-	getInputStream(): CharStream {
+	get inputStream(): CharStream {
 		return this._input;
 	}
 
@@ -258,87 +258,87 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	emit(token?: Token): Token {
 		if (!token) token = this._factory.create(
 			this._tokenFactorySourcePair, this._type, this._text, this._channel,
-			this._tokenStartCharIndex, this.getCharIndex() - 1, this._tokenStartLine,
+			this._tokenStartCharIndex, this.charIndex - 1, this._tokenStartLine,
 			this._tokenStartCharPositionInLine);
 		this._token = token;
 		return token;
 	}
 
 	emitEOF(): Token {
-		let cpos: number = this.getCharPositionInLine();
-		let line: number = this.getLine();
+		let cpos: number = this.charPositionInLine;
+		let line: number = this.line;
 		let eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
-			Token.DEFAULT_CHANNEL, this._input.index(), this._input.index() - 1,
+			Token.DEFAULT_CHANNEL, this._input.index, this._input.index - 1,
 			line, cpos);
 		this.emit(eof);
 		return eof;
 	}
 
 	@Override
-	getLine(): number {
-		return this.getInterpreter().getLine();
+	get line(): number {
+		return this.interpreter.line;
 	}
 
 	@Override
-	getCharPositionInLine(): number {
-		return this.getInterpreter().getCharPositionInLine();
+	get charPositionInLine(): number {
+		return this.interpreter.charPositionInLine;
 	}
 
-	setLine(line: number): void {
-		this.getInterpreter().setLine(line);
+	set line(line: number) {
+		this.interpreter.line = line;
 	}
 
-	setCharPositionInLine(charPositionInLine: number): void {
-		this.getInterpreter().setCharPositionInLine(charPositionInLine);
+	set charPositionInLine(charPositionInLine: number) {
+		this.interpreter.charPositionInLine = charPositionInLine;
 	}
 
 	/** What is the index of the current character of lookahead? */
-	getCharIndex(): number {
-		return this._input.index();
+	get charIndex(): number {
+		return this._input.index;
 	}
 
 	/** Return the text matched so far for the current token or any
 	 *  text override.
 	 */
-	getText(): string {
+	get text(): string {
 		if (this._text != null) {
 			return this._text;
 		}
-		return this.getInterpreter().getText(this._input);
+		return this.interpreter.getText(this._input);
 	}
 
 	/** Set the complete text of this token; it wipes any previous
 	 *  changes to the text.
 	 */
-	setText(text: string): void {
+	set text(text: string) {
 		this._text = text;
 	}
 
 	/** Override if emitting multiple tokens. */
-	getToken(): Token | undefined { return this._token; }
+	get token(): Token | undefined { return this._token; }
 
-	setToken(_token: Token): void {
+	set token(_token: Token | undefined) {
 		this._token = _token;
 	}
 
-	setType(ttype: number): void {
+	set type(ttype: number) {
 		this._type = ttype;
 	}
 
-	getType(): number {
+	get type(): number {
 		return this._type;
 	}
 
-	setChannel(channel: number): void {
+	set channel(channel: number) {
 		this._channel = channel;
 	}
 
-	getChannel(): number {
+	get channel(): number {
 		return this._channel;
 	}
 
-	abstract getModeNames(): string[];
+	abstract readonly modeNames: string[];
 
 	/** Return a list of all Token objects in input char stream.
 	 *  Forces load of all tokens. Does not include EOF token.
@@ -346,7 +346,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	getAllTokens(): Token[] {
 		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
-		while (t.getType() != Token.EOF) {
+		while (t.type != Token.EOF) {
 			tokens.push(t);
 			t = this.nextToken();
 		}
@@ -355,7 +355,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	notifyListeners(e: LexerNoViableAltException): void {
 		let text: string = this._input.getText(
-			Interval.of(this._tokenStartCharIndex, this._input.index()));
+			Interval.of(this._tokenStartCharIndex, this._input.index));
 		let msg: string = "token recognition error at: '" +
 			this.getErrorDisplay(text) + "'";
 
@@ -398,7 +398,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		if (re instanceof LexerNoViableAltException) {
 			if (this._input.LA(1) != IntStream.EOF) {
 				// skip a char and try again
-				this.getInterpreter().consume(this._input);
+				this.interpreter.consume(this._input);
 			}
 		} else {
 			//System.out.println("consuming char "+(char)input.LA(1)+" during recovery");

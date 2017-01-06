@@ -18,26 +18,26 @@ export interface Token {
 	/**
 	 * Get the text of the token.
 	 */
-	getText(): string | undefined;
+	readonly text: string | undefined;
 
 	/** Get the token type of the token */
-	getType(): number;
+	readonly type: number;
 
 	/** The line number on which the 1st character of this token was matched,
 	 *  line=1..n
 	 */
-	getLine(): number;
+	readonly line: number;
 
 	/** The index of the first character of this token relative to the
 	 *  beginning of the line at which it occurs, 0..n-1
 	 */
-	getCharPositionInLine(): number;
+	readonly charPositionInLine: number;
 
 	/** Return the channel this token. Each token can arrive at the parser
 	 *  on a different channel, but the parser only "tunes" to a single channel.
 	 *  The parser ignores everything not on DEFAULT_CHANNEL.
 	 */
-	getChannel(): number;
+	readonly channel: number;
 
 	/** An index from 0..n-1 of the token object in the input stream.
 	 *  This must be valid in order to print token streams and
@@ -46,26 +46,26 @@ export interface Token {
 	 *  Return -1 to indicate that this token was conjured up since
 	 *  it doesn't have a valid index.
 	 */
-	getTokenIndex(): number;
+	readonly tokenIndex: number;
 
 	/** The starting character index of the token
 	 *  This method is optional; return -1 if not implemented.
 	 */
-	getStartIndex(): number;
+	readonly startIndex: number;
 
 	/** The last character index of the token.
 	 *  This method is optional; return -1 if not implemented.
 	 */
-	getStopIndex(): number;
+	readonly stopIndex: number;
 
 	/** Gets the {@link TokenSource} which created this token.
 	 */
-	getTokenSource(): TokenSource | undefined;
+	readonly tokenSource: TokenSource | undefined;
 
 	/**
 	 * Gets the {@link CharStream} from which this token was derived.
 	 */
-	getInputStream(): CharStream | undefined;
+	readonly inputStream: CharStream | undefined;
 }
 
 export namespace Token {
@@ -100,7 +100,7 @@ export namespace Token {
 	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
 	 * {@link #HIDDEN_CHANNEL}.</p>
 	 *
-	 * @see Token#getChannel()
+	 * @see `Token.channel`
 	 */
 	export const MIN_USER_CHANNEL_VALUE: number = 2;
 }

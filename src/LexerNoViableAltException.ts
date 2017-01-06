@@ -17,38 +17,38 @@ export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;
 
 	/** Matching attempted at what input index? */
-	private startIndex: number;
+	private _startIndex: number;
 
-	/** Which configurations did we try at input.index() that couldn't match input.LA(1)? */
-	private deadEndConfigs?: ATNConfigSet;
+	/** Which configurations did we try at input.index that couldn't match input.LA(1)? */
+	private _deadEndConfigs?: ATNConfigSet;
 
 	constructor(lexer: Lexer | undefined,
 		@NotNull input: CharStream,
 		startIndex: number,
 		deadEndConfigs: ATNConfigSet | undefined) {
 		super(lexer, input);
-		this.startIndex = startIndex;
-		this.deadEndConfigs = deadEndConfigs;
+		this._startIndex = startIndex;
+		this._deadEndConfigs = deadEndConfigs;
 	}
 
-	getStartIndex(): number {
-		return this.startIndex;
+	get startIndex(): number {
+		return this._startIndex;
 	}
 
-	getDeadEndConfigs(): ATNConfigSet | undefined {
-		return this.deadEndConfigs;
+	get deadEndConfigs(): ATNConfigSet | undefined {
+		return this._deadEndConfigs;
 	}
 
 	@Override
-	getInputStream(): CharStream {
-		return super.getInputStream() as CharStream;
+	get inputStream(): CharStream {
+		return super.inputStream as CharStream;
 	}
 
 	@Override
 	toString(): string {
 		let symbol = "";
-		if (this.startIndex >= 0 && this.startIndex < this.getInputStream().size()) {
-			symbol = this.getInputStream().getText(Interval.of(this.startIndex, this.startIndex));
+		if (this._startIndex >= 0 && this._startIndex < this.inputStream.size) {
+			symbol = this.inputStream.getText(Interval.of(this._startIndex, this._startIndex));
 			symbol = Utils.escapeWhitespace(symbol, false);
 		}
 

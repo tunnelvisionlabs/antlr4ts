@@ -42,7 +42,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	@Override
 	visitChildren(@NotNull node: RuleNode): Result {
 		let result: Result = this.defaultResult();
-		let n: number = node.getChildCount();
+		let n: number = node.childCount;
 		for (let i = 0; i < n; i++) {
 			if (!this.shouldVisitNextChild(node, result)) {
 				break;

@@ -15,20 +15,20 @@ import * as Utils from '../misc/Utils';
  * @author Sam Harwell
  */
 export class ConflictInfo {
-	private conflictedAlts: BitSet;
+	private _conflictedAlts: BitSet;
 
 	private exact: boolean;
 
 	constructor(conflictedAlts: BitSet, exact: boolean) {
-		this.conflictedAlts = conflictedAlts;
+		this._conflictedAlts = conflictedAlts;
 		this.exact = exact;
 	}
 
 	/**
 	 * Gets the set of conflicting alternatives for the configuration set.
 	 */
-	getConflictedAlts(): BitSet {
-		return this.conflictedAlts;
+	get conflictedAlts(): BitSet {
+		return this._conflictedAlts;
 	}
 
 	/**
@@ -45,7 +45,7 @@ export class ConflictInfo {
 	 * accept states are conflicting but not exact are treated as non-accept
 	 * states.</p>
 	 */
-	isExact(): boolean {
+	get isExact(): boolean {
 		return this.exact;
 	}
 
@@ -57,12 +57,12 @@ export class ConflictInfo {
 			return false;
 		}
 
-		return this.isExact() === obj.isExact()
-			&& Utils.equals(this.getConflictedAlts(), obj.getConflictedAlts());
+		return this.isExact === obj.isExact
+			&& Utils.equals(this.conflictedAlts, obj.conflictedAlts);
 	}
 
 	@Override
 	hashCode(): number {
-		return this.getConflictedAlts().hashCode();
+		return this.conflictedAlts.hashCode();
 	}
 }

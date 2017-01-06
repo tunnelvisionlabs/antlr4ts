@@ -28,13 +28,13 @@ export class SetTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.SET;
 	}
 
 	@Override
 	@NotNull
-	label(): IntervalSet {
+	get label(): IntervalSet {
 		return this.set;
 	}
 

@@ -12,29 +12,29 @@ import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
 
 /**
- * Implements the {@code type} lexer action by calling {@link Lexer#setType}
+ * Implements the {@code type} lexer action by setting `Lexer.type`
  * with the assigned type.
  *
  * @author Sam Harwell
  * @since 4.2
  */
 export class LexerTypeAction implements LexerAction {
-	private readonly type: number;
+	private readonly _type: number;
 
 	/**
 	 * Constructs a new {@code type} action with the specified token type value.
-	 * @param type The type to assign to the token using {@link Lexer#setType}.
+	 * @param type The type to assign to the token using `Lexer.type`.
 	 */
 	constructor(type: number) {
-		this.type = type;
+		this._type = type;
 	}
 
 	/**
 	 * Gets the type to assign to a token created by the lexer.
 	 * @return The type to assign to a token created by the lexer.
 	 */
-	getType(): number {
-		return this.type;
+	get type(): number {
+		return this._type;
 	}
 
 	/**
@@ -42,7 +42,7 @@ export class LexerTypeAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#TYPE}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.TYPE;
 	}
 
@@ -51,26 +51,26 @@ export class LexerTypeAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#setType} with the
-	 * value provided by {@link #getType}.</p>
+	 * <p>This action is implemented by setting `Lexer.type` with the
+	 * value provided by `type`.</p>
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.setType(this.type);
+		lexer.type = this._type;
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
-		hash = MurmurHash.update(hash, this.type);
+		hash = MurmurHash.update(hash, this.actionType);
+		hash = MurmurHash.update(hash, this._type);
 		return MurmurHash.finish(hash, 2);
 	}
 
@@ -82,11 +82,11 @@ export class LexerTypeAction implements LexerAction {
 			return false;
 		}
 
-		return this.type === obj.type;
+		return this._type === obj._type;
 	}
 
 	@Override
 	toString(): string {
-		return `type(${this.type})`;
+		return `type(${this._type})`;
 	}
 }

@@ -33,12 +33,12 @@ export class RuleTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.RULE;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true;
 	}
 

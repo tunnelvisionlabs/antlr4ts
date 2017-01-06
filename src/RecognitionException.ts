@@ -25,7 +25,7 @@ export class RecognitionException extends Error {
 	// private static serialVersionUID: number =  -3861826954750022374L;
 
 	/** The {@link Recognizer} where this exception originated. */
-	private recognizer?: Recognizer<any, any>;
+	private _recognizer?: Recognizer<any, any>;
 
 	private ctx?: RuleContext;
 
@@ -38,7 +38,7 @@ export class RecognitionException extends Error {
 	 */
 	private offendingToken?: Token;
 
-	private offendingState: number = -1;
+	private _offendingState: number = -1;
 
 	constructor(lexer: Lexer | undefined,
 		input: CharStream);
@@ -59,10 +59,10 @@ export class RecognitionException extends Error {
 		message?: string) {
 		super(message);
 
-		this.recognizer = recognizer;
+		this._recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if (recognizer) this.offendingState = recognizer.getState();
+		if (recognizer) this._offendingState = recognizer.state;
 	}
 
 	/**
@@ -74,12 +74,12 @@ export class RecognitionException extends Error {
 	 *
 	 * <p>If the state number is not known, this method returns -1.</p>
 	 */
-	getOffendingState(): number {
-		return this.offendingState;
+	get offendingState(): number {
+		return this._offendingState;
 	}
 
 	protected setOffendingState(offendingState: number): void {
-		this.offendingState = offendingState;
+		this._offendingState = offendingState;
 	}
 
 	/**
@@ -92,9 +92,9 @@ export class RecognitionException extends Error {
 	 * @return The set of token types that could potentially follow the current
 	 * state in the ATN, or {@code null} if the information is not available.
 	 */
-	getExpectedTokens(): IntervalSet | undefined {
-		if (this.recognizer) {
-			return this.recognizer.getATN().getExpectedTokens(this.offendingState, this.ctx);
+	get expectedTokens(): IntervalSet | undefined {
+		if (this._recognizer) {
+			return this._recognizer.atn.getExpectedTokens(this._offendingState, this.ctx);
 		}
 		return undefined;
 	}
@@ -107,7 +107,7 @@ export class RecognitionException extends Error {
 	 * @return The {@link RuleContext} at the time this exception was thrown.
 	 * If the context is not available, this method returns {@code null}.
 	 */
-	getContext(): RuleContext | undefined {
+	get context(): RuleContext | undefined {
 		return this.ctx;
 	}
 
@@ -122,19 +122,19 @@ export class RecognitionException extends Error {
 	 * available.
 	 */
 
-	getInputStream(): IntStream | undefined {
+	get inputStream(): IntStream | undefined {
 		return this.input;
 	}
 
 	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
-		if (recognizer && recognizer !== this.recognizer) return undefined;
+		if (recognizer && recognizer !== this._recognizer) return undefined;
 		return this.offendingToken;
 	}
 
 	protected setOffendingToken<Symbol extends Token>(
 		recognizer: Recognizer<Symbol, any>,
 		offendingToken?: Symbol): void {
-		if (recognizer === this.recognizer) {
+		if (recognizer === this._recognizer) {
 			this.offendingToken = offendingToken;
 		}
 	}
@@ -147,7 +147,7 @@ export class RecognitionException extends Error {
 	 * @return The recognizer where this exception occurred, or {@code null} if
 	 * the recognizer is not available.
 	 */
-	getRecognizer(): Recognizer<any, any> | undefined {
-		return this.recognizer;
+	get recognizer(): Recognizer<any, any> | undefined {
+		return this._recognizer;
 	}
 }

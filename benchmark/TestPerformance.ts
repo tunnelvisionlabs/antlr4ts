@@ -571,12 +571,12 @@ export class TestPerformance {
 					if (TestPerformance.CLEAR_DFA) {
 						let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
 						if (TestPerformance.sharedLexers.length > 0 && TestPerformance.sharedLexers[index] != null) {
-							let atn: ATN = TestPerformance.sharedLexers[index]!.getATN();
+							let atn: ATN = TestPerformance.sharedLexers[index]!.atn;
 							atn.clearDFA();
 						}
 
 						if (TestPerformance.sharedParsers.length > 0 && TestPerformance.sharedParsers[index] != null) {
-							let atn: ATN = TestPerformance.sharedParsers[index]!.getATN();
+							let atn: ATN = TestPerformance.sharedParsers[index]!.atn;
 							atn.clearDFA();
 						}
 
@@ -916,13 +916,13 @@ export class TestPerformance {
 
 			let input: CharStream =  inputDescriptor.getInputStream();
             input.seek(0);
-            inputSize += input.size();
+            inputSize += input.size;
 			inputCount++;
 			let futureChecksum: () => FileParseResult | undefined = () => {
 				// @Override
 				// call(): FileParseResult {
 					// this incurred a great deal of overhead and was causing significant variations in performance results.
-					// console.log(`Parsing file ${input.getSourceName()}`);
+					// console.log(`Parsing file ${input.sourceName}`);
 					try {
 						return factory.parseFile(input, currentPass, 0);
 					} catch (ex) {
@@ -984,7 +984,7 @@ export class TestPerformance {
 		if (TestPerformance.sharedLexers.length > 0) {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
 			let lexer: Lexer =  TestPerformance.sharedLexers[index]!;
-			let lexerInterpreter: LexerATNSimulator =  lexer.getInterpreter();
+			let lexerInterpreter: LexerATNSimulator =  lexer.interpreter;
 			let modeToDFA: DFA[] =  lexerInterpreter.atn.modeToDFA;
 			if (TestPerformance.SHOW_DFA_STATE_STATS) {
 				let states: number =  0;
@@ -997,30 +997,30 @@ export class TestPerformance {
 						continue;
 					}
 
-					states += dfa.states.size();
+					states += dfa.states.size;
 					for (let state of asIterable<DFAState>(dfa.states)) {
-						configs += state.configs.size();
+						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
 				}
 
-				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size()} unique), ${lexerInterpreter.atn.getContextCacheSize()} prediction contexts.`);
+				console.log(`There are ${states} lexer DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${lexerInterpreter.atn.contextCacheSize} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					console.log("\tMode\tStates\tConfigs\tMode");
 					for (let i = 0; i < modeToDFA.length; i++) {
 						let dfa: DFA =  modeToDFA[i];
-						if (dfa == null || dfa.states.isEmpty()) {
+						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 
 						let modeConfigs: number =  0;
 						for (let state of asIterable<DFAState>(dfa.states)) {
-							modeConfigs += state.configs.size();
+							modeConfigs += state.configs.size;
 						}
 
-						let modeName: string =  lexer.getModeNames()[i];
-						console.log(`\t${dfa.decision}\t${dfa.states.size()}\t${modeConfigs}\t${modeName}`);
+						let modeName: string =  lexer.modeNames[i];
+						console.log(`\t${dfa.decision}\t${dfa.states.size}\t${modeConfigs}\t${modeName}`);
 					}
 				}
 			}
@@ -1030,7 +1030,7 @@ export class TestPerformance {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
 			let parser: Parser =  TestPerformance.sharedParsers[index]!;
             // make sure the individual DFAState objects actually have unique ATNConfig arrays
-			let interpreter: ParserATNSimulator =  parser.getInterpreter();
+			let interpreter: ParserATNSimulator =  parser.interpreter;
             let decisionToDFA: DFA[] =  interpreter.atn.decisionToDFA;
 
             if (TestPerformance.SHOW_DFA_STATE_STATS) {
@@ -1044,14 +1044,14 @@ export class TestPerformance {
                         continue;
                     }
 
-                    states += dfa.states.size();
+                    states += dfa.states.size;
 					for (let state of asIterable<DFAState>(dfa.states)) {
-						configs += state.configs.size();
+						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
                 }
 
-                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size()} unique), ${interpreter.atn.getContextCacheSize()} prediction contexts.`);
+                console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${interpreter.atn.contextCacheSize} prediction contexts.`);
 
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					if (TestPerformance.COMPUTE_TRANSITION_STATS) {
@@ -1063,16 +1063,16 @@ export class TestPerformance {
 
 					for (let i = 0; i < decisionToDFA.length; i++) {
 						let dfa: DFA =  decisionToDFA[i];
-						if (dfa == null || dfa.states.isEmpty()) {
+						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 
 						let decisionConfigs: number =  0;
 						for (let state of asIterable<DFAState>(dfa.states)) {
-							decisionConfigs += state.configs.size();
+							decisionConfigs += state.configs.size;
 						}
 
-						let ruleName: string =  parser.getRuleNames()[parser.getATN().decisionToState[dfa.decision].ruleIndex];
+						let ruleName: string =  parser.ruleNames[parser.atn.decisionToState[dfa.decision].ruleIndex];
 
 						let calls: number =  0;
 						let fullContextCalls: number =  0;
@@ -1116,11 +1116,11 @@ export class TestPerformance {
 								fullContextLookahead = fullContextTransitions / fullContextCalls;
 							}
 
-							formatString = `\t${dfa.decision}\t${dfa.states.size()}\t${decisionConfigs}\t${calls}\t${fullContextCalls}\t${nonSllCalls}\t${transitions}\t${computedTransitions}\t${fullContextTransitions}\t${lookahead}\t${fullContextLookahead}\t${ruleName}`;
+							formatString = `\t${dfa.decision}\t${dfa.states.size}\t${decisionConfigs}\t${calls}\t${fullContextCalls}\t${nonSllCalls}\t${transitions}\t${computedTransitions}\t${fullContextTransitions}\t${lookahead}\t${fullContextLookahead}\t${ruleName}`;
 						}
 						else {
 							calls = 0;
-							formatString = `\t${dfa.decision}\t${dfa.states.size()}\t${decisionConfigs}\t${ruleName}`;
+							formatString = `\t${dfa.decision}\t${dfa.states.size}\t${decisionConfigs}\t${ruleName}`;
 						}
 
 						console.log(formatString);
@@ -1142,16 +1142,16 @@ export class TestPerformance {
 
                 if (TestPerformance.SHOW_CONFIG_STATS) {
                     for (let state of asIterable<DFAState>(dfa.states)) {
-                        if (state.configs.size() >= contextsInDFAState.length) {
-							let contextsInDFAState2 = new Int32Array(state.configs.size() + 1);
+                        if (state.configs.size >= contextsInDFAState.length) {
+							let contextsInDFAState2 = new Int32Array(state.configs.size + 1);
 							contextsInDFAState2.set(contextsInDFAState);
                             contextsInDFAState = contextsInDFAState2;
                         }
 
-                        if (state.isAcceptState()) {
+                        if (state.isAcceptState) {
                             let hasGlobal: boolean =  false;
                             for (let config of asIterable(state.configs)) {
-                                if (config.getReachesIntoOuterContext()) {
+                                if (config.reachesIntoOuterContext) {
                                     globalConfigCount++;
                                     hasGlobal = true;
                                 } else {
@@ -1166,7 +1166,7 @@ export class TestPerformance {
                             }
                         }
 
-                        contextsInDFAState[state.configs.size()]++;
+                        contextsInDFAState[state.configs.size]++;
                     }
                 }
 
@@ -1180,7 +1180,7 @@ export class TestPerformance {
 
                             this.configOutputSize = configOutput.length;
 							throw new Error("Not implemented");
-                            // writeFileSync(tmpdir, "d" + dfa.decision + ".s" + state.stateNumber + ".a" + config.getAlt() + ".config.dot", configOutput);
+                            // writeFileSync(tmpdir, "d" + dfa.decision + ".s" + state.stateNumber + ".a" + config.alt + ".config.dot", configOutput);
                         }
                     }
                 }
@@ -1226,12 +1226,12 @@ export class TestPerformance {
 				return;
 			}
 
-			TestPerformance.updateChecksum(checksum, token.getStartIndex());
-			TestPerformance.updateChecksum(checksum, token.getStopIndex());
-			TestPerformance.updateChecksum(checksum, token.getLine());
-			TestPerformance.updateChecksum(checksum, token.getCharPositionInLine());
-			TestPerformance.updateChecksum(checksum, token.getType());
-			TestPerformance.updateChecksum(checksum, token.getChannel());
+			TestPerformance.updateChecksum(checksum, token.startIndex);
+			TestPerformance.updateChecksum(checksum, token.stopIndex);
+			TestPerformance.updateChecksum(checksum, token.line);
+			TestPerformance.updateChecksum(checksum, token.charPositionInLine);
+			TestPerformance.updateChecksum(checksum, token.type);
+			TestPerformance.updateChecksum(checksum, token.channel);
 		}
 	}
 
@@ -1281,34 +1281,34 @@ export class TestPerformance {
 
 						let lexer: Lexer | undefined = TestPerformance.sharedLexers[thread];
                         if (TestPerformance.REUSE_LEXER && lexer != null) {
-                            lexer.setInputStream(input);
+                            lexer.inputStream = input;
                         } else {
 							let previousLexer: Lexer | undefined =  lexer;
                             lexer = new lexerCtor(input);
 							TestPerformance.sharedLexers[thread] = lexer;
-							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousLexer == null ? lexer : previousLexer).getATN();
+							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousLexer == null ? lexer : previousLexer).atn;
 							if (!TestPerformance.REUSE_LEXER_DFA || (!TestPerformance.FILE_GRANULARITY && previousLexer == null)) {
 								atn = TestPerformance.sharedLexerATNs[thread]!;
 							}
 
 							if (!TestPerformance.ENABLE_LEXER_DFA) {
-								lexer.setInterpreter(new NonCachingLexerATNSimulator(atn, lexer));
+								lexer.interpreter = new NonCachingLexerATNSimulator(atn, lexer);
 							} else if (!TestPerformance.REUSE_LEXER_DFA || TestPerformance.COMPUTE_TRANSITION_STATS) {
-								lexer.setInterpreter(new StatisticsLexerATNSimulator(atn, lexer));
+								lexer.interpreter = new StatisticsLexerATNSimulator(atn, lexer);
 							}
                         }
 
 						lexer.removeErrorListeners();
 						lexer.addErrorListener(DescriptiveLexerErrorListener.INSTANCE);
 
-						lexer.getInterpreter().optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
+						lexer.interpreter.optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
 						if (TestPerformance.ENABLE_LEXER_DFA && !TestPerformance.REUSE_LEXER_DFA) {
-							lexer.getInterpreter().atn.clearDFA();
+							lexer.interpreter.atn.clearDFA();
 						}
 
                         let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
                         tokens.fill();
-                        TestPerformance.tokenCount[currentPass] += tokens.size();
+                        TestPerformance.tokenCount[currentPass] += tokens.size;
 
 						if (TestPerformance.COMPUTE_CHECKSUM) {
 							for (let token of tokens.getTokens()) {
@@ -1317,33 +1317,33 @@ export class TestPerformance {
 						}
 
                         if (!TestPerformance.RUN_PARSER) {
-                            return new FileParseResult(input.getSourceName(), checksum.getValue(), undefined, tokens.size(), startTime, lexer, undefined);
+                            return new FileParseResult(input.sourceName, checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
                         }
 
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
 						let parser: AnyJavaParser | undefined = TestPerformance.sharedParsers[thread];
                         if (TestPerformance.REUSE_PARSER && parser != null) {
-                            parser.setInputStream(tokens);
+                            parser.inputStream = tokens;
                         } else {
 							let previousParser: Parser | undefined =  parser;
 
 							if (TestPerformance.USE_PARSER_INTERPRETER) {
 								let referenceParser: Parser = new parserCtor(tokens);
-								parser = new ParserInterpreter(referenceParser.getGrammarFileName(), referenceParser.getVocabulary(), referenceParser.getRuleNames(), referenceParser.getATN(), tokens);
+								parser = new ParserInterpreter(referenceParser.grammarFileName, referenceParser.vocabulary, referenceParser.ruleNames, referenceParser.atn, tokens);
 							}
 							else {
 								parser = new parserCtor(tokens);
 							}
 
-							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser).getATN();
+							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser).atn;
 							if (!TestPerformance.REUSE_PARSER_DFA || (!TestPerformance.FILE_GRANULARITY && previousParser == null)) {
 								atn = TestPerformance.sharedParserATNs[thread]!;
 							}
 
 							if (!TestPerformance.ENABLE_PARSER_DFA) {
-								parser.setInterpreter(new NonCachingParserATNSimulator(atn, parser));
+								parser.interpreter = new NonCachingParserATNSimulator(atn, parser);
 							} else if (!TestPerformance.REUSE_PARSER_DFA || TestPerformance.COMPUTE_TRANSITION_STATS) {
-								parser.setInterpreter(new StatisticsParserATNSimulator(atn, parser));
+								parser.interpreter = new StatisticsParserATNSimulator(atn, parser);
 							}
 
                             TestPerformance.sharedParsers[thread] = parser;
@@ -1357,24 +1357,24 @@ export class TestPerformance {
 						}
 
 						if (TestPerformance.ENABLE_PARSER_DFA && !TestPerformance.REUSE_PARSER_DFA) {
-							parser.getInterpreter().atn.clearDFA();
+							parser.interpreter.atn.clearDFA();
 						}
 
-						parser.getInterpreter().setPredictionMode(TestPerformance.TWO_STAGE_PARSING ? PredictionMode.SLL : TestPerformance.PREDICTION_MODE);
-						parser.getInterpreter().force_global_context = TestPerformance.FORCE_GLOBAL_CONTEXT && !TestPerformance.TWO_STAGE_PARSING;
-						parser.getInterpreter().always_try_local_context = TestPerformance.TRY_LOCAL_CONTEXT_FIRST || TestPerformance.TWO_STAGE_PARSING;
-						parser.getInterpreter().enable_global_context_dfa = TestPerformance.ENABLE_PARSER_FULL_CONTEXT_DFA;
-						parser.getInterpreter().optimize_ll1 = TestPerformance.OPTIMIZE_LL1;
-						parser.getInterpreter().optimize_unique_closure = TestPerformance.OPTIMIZE_UNIQUE_CLOSURE;
-						parser.getInterpreter().optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
-						parser.getInterpreter().tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
-						parser.getInterpreter().treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
-						parser.setBuildParseTree(TestPerformance.BUILD_PARSE_TREES);
+						parser.interpreter.setPredictionMode(TestPerformance.TWO_STAGE_PARSING ? PredictionMode.SLL : TestPerformance.PREDICTION_MODE);
+						parser.interpreter.force_global_context = TestPerformance.FORCE_GLOBAL_CONTEXT && !TestPerformance.TWO_STAGE_PARSING;
+						parser.interpreter.always_try_local_context = TestPerformance.TRY_LOCAL_CONTEXT_FIRST || TestPerformance.TWO_STAGE_PARSING;
+						parser.interpreter.enable_global_context_dfa = TestPerformance.ENABLE_PARSER_FULL_CONTEXT_DFA;
+						parser.interpreter.optimize_ll1 = TestPerformance.OPTIMIZE_LL1;
+						parser.interpreter.optimize_unique_closure = TestPerformance.OPTIMIZE_UNIQUE_CLOSURE;
+						parser.interpreter.optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
+						parser.interpreter.tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
+						parser.interpreter.treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
+						parser.buildParseTree = TestPerformance.BUILD_PARSE_TREES;
 						if (!TestPerformance.BUILD_PARSE_TREES && TestPerformance.BLANK_LISTENER) {
 							parser.addParseListener(listener);
 						}
 						if (TestPerformance.BAIL_ON_ERROR || TestPerformance.TWO_STAGE_PARSING) {
-							parser.setErrorHandler(new BailErrorStrategy());
+							parser.errorHandler = new BailErrorStrategy();
 						}
 
         //                 let parseMethod: Method =  parserClass.getMethod(entryPoint);
@@ -1386,7 +1386,7 @@ export class TestPerformance {
 							}
 
 							if (parser instanceof ParserInterpreter) {
-								parseResult = parser.parse(parser.getRuleNames().indexOf(entryPointName));
+								parseResult = parser.parse(parser.ruleNames.indexOf(entryPointName));
 							}
 							else {
 								parseResult = entryPoint(parser);
@@ -1396,7 +1396,7 @@ export class TestPerformance {
 								throw ex;
 							}
 
-							let sourceName: string =  tokens.getSourceName();
+							let sourceName: string =  tokens.sourceName;
 							sourceName = sourceName != null && sourceName.length > 0 ? sourceName+": " : "";
 							if (TestPerformance.REPORT_SECOND_STAGE_RETRY) {
 								console.error(sourceName+"Forced to retry with full context.");
@@ -1408,11 +1408,11 @@ export class TestPerformance {
 
 							tokens.reset();
 							if (TestPerformance.REUSE_PARSER && TestPerformance.sharedParsers[thread] != null) {
-								parser.setInputStream(tokens);
+								parser.inputStream = tokens;
 							} else {
 								if (TestPerformance.USE_PARSER_INTERPRETER) {
 									let referenceParser: Parser = new parserCtor(tokens);
-									parser = new ParserInterpreter(referenceParser.getGrammarFileName(), referenceParser.getVocabulary(), referenceParser.getRuleNames(), referenceParser.getATN(), tokens);
+									parser = new ParserInterpreter(referenceParser.grammarFileName, referenceParser.vocabulary, referenceParser.ruleNames, referenceParser.atn, tokens);
 								}
 								else {
 									parser = new parserCtor(tokens);
@@ -1426,22 +1426,22 @@ export class TestPerformance {
 							parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
 							parser.addErrorListener(new SummarizingDiagnosticErrorListener());
 							if (!TestPerformance.ENABLE_PARSER_DFA) {
-								parser.setInterpreter(new NonCachingParserATNSimulator(parser.getATN(), parser));
+								parser.interpreter = new NonCachingParserATNSimulator(parser.atn, parser);
 							} else if (!TestPerformance.REUSE_PARSER_DFA) {
-								parser.setInterpreter(new StatisticsParserATNSimulator(TestPerformance.sharedParserATNs[thread]!, parser));
+								parser.interpreter = new StatisticsParserATNSimulator(TestPerformance.sharedParserATNs[thread]!, parser);
 							} else if (TestPerformance.COMPUTE_TRANSITION_STATS) {
-								parser.setInterpreter(new StatisticsParserATNSimulator(parser.getATN(), parser));
+								parser.interpreter = new StatisticsParserATNSimulator(parser.atn, parser);
 							}
-							parser.getInterpreter().setPredictionMode(TestPerformance.PREDICTION_MODE);
-							parser.getInterpreter().force_global_context = TestPerformance.FORCE_GLOBAL_CONTEXT;
-							parser.getInterpreter().always_try_local_context = TestPerformance.TRY_LOCAL_CONTEXT_FIRST;
-							parser.getInterpreter().enable_global_context_dfa = TestPerformance.ENABLE_PARSER_FULL_CONTEXT_DFA;
-							parser.getInterpreter().optimize_ll1 = TestPerformance.OPTIMIZE_LL1;
-							parser.getInterpreter().optimize_unique_closure = TestPerformance.OPTIMIZE_UNIQUE_CLOSURE;
-							parser.getInterpreter().optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
-							parser.getInterpreter().tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
-							parser.getInterpreter().treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
-							parser.setBuildParseTree(TestPerformance.BUILD_PARSE_TREES);
+							parser.interpreter.setPredictionMode(TestPerformance.PREDICTION_MODE);
+							parser.interpreter.force_global_context = TestPerformance.FORCE_GLOBAL_CONTEXT;
+							parser.interpreter.always_try_local_context = TestPerformance.TRY_LOCAL_CONTEXT_FIRST;
+							parser.interpreter.enable_global_context_dfa = TestPerformance.ENABLE_PARSER_FULL_CONTEXT_DFA;
+							parser.interpreter.optimize_ll1 = TestPerformance.OPTIMIZE_LL1;
+							parser.interpreter.optimize_unique_closure = TestPerformance.OPTIMIZE_UNIQUE_CLOSURE;
+							parser.interpreter.optimize_tail_calls = TestPerformance.OPTIMIZE_TAIL_CALLS;
+							parser.interpreter.tail_call_preserves_sll = TestPerformance.TAIL_CALL_PRESERVES_SLL;
+							parser.interpreter.treat_sllk1_conflict_as_ambiguity = TestPerformance.TREAT_SLLK1_CONFLICT_AS_AMBIGUITY;
+							parser.buildParseTree = TestPerformance.BUILD_PARSE_TREES;
 							if (TestPerformance.COMPUTE_CHECKSUM && !TestPerformance.BUILD_PARSE_TREES) {
 								parser.addParseListener(new ChecksumParseTreeListener(checksum));
 							}
@@ -1449,11 +1449,11 @@ export class TestPerformance {
 								parser.addParseListener(listener);
 							}
 							if (TestPerformance.BAIL_ON_ERROR) {
-								parser.setErrorHandler(new BailErrorStrategy());
+								parser.errorHandler = new BailErrorStrategy();
 							}
 
 							if (parser instanceof ParserInterpreter) {
-								parseResult = parser.parse(parser.getRuleNames().indexOf(entryPointName));
+								parseResult = parser.parse(parser.ruleNames.indexOf(entryPointName));
 							} else {
 								parseResult = entryPoint(parser);
 							}
@@ -1466,7 +1466,7 @@ export class TestPerformance {
                             ParseTreeWalker.DEFAULT.walk(listener, parseResult);
                         }
 
-						return new FileParseResult(input.getSourceName(), checksum.getValue(), parseResult, tokens.size(), TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
+						return new FileParseResult(input.sourceName, checksum.getValue(), parseResult, tokens.size, TestPerformance.TIME_PARSE_ONLY ? parseStartTime : startTime, lexer, parser);
                     } catch (e) {
 						if (!TestPerformance.REPORT_SYNTAX_ERRORS && e instanceof ParseCancellationException) {
 							return new FileParseResult("unknown", checksum.getValue(), undefined, 0, startTime, undefined, undefined);
@@ -1519,7 +1519,7 @@ export class FileParseResult {
 		this.elapsedTime = this.startTime.elapsed();
 
 		if (lexer != null) {
-			let interpreter: LexerATNSimulator =  lexer.getInterpreter();
+			let interpreter: LexerATNSimulator =  lexer.interpreter;
 			if (interpreter instanceof StatisticsLexerATNSimulator) {
 				this.lexerTotalTransitions = interpreter.totalTransitions;
 				this.lexerComputedTransitions = interpreter.computedTransitions;
@@ -1531,7 +1531,7 @@ export class FileParseResult {
 			let dfaSize: number =  0;
 			for (let dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
-					dfaSize += dfa.states.size();
+					dfaSize += dfa.states.size;
 				}
 			}
 
@@ -1543,7 +1543,7 @@ export class FileParseResult {
 		}
 
 		if (parser != null) {
-			let interpreter: ParserATNSimulator =  parser.getInterpreter();
+			let interpreter: ParserATNSimulator =  parser.interpreter;
 			if (interpreter instanceof StatisticsParserATNSimulator) {
 				this.decisionInvocations = interpreter.decisionInvocations;
 				this.fullContextFallback = interpreter.fullContextFallback;
@@ -1563,7 +1563,7 @@ export class FileParseResult {
 			let dfaSize: number =  0;
 			for (let dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
-					dfaSize += dfa.states.size();
+					dfaSize += dfa.states.size;
 				}
 			}
 
@@ -1683,8 +1683,8 @@ class DescriptiveErrorListener extends BaseErrorListener {
 			return;
 		}
 
-		let inputStream = recognizer.getInputStream();
-		let sourceName: string =  inputStream != null ? inputStream.getSourceName() : "";
+		let inputStream = recognizer.inputStream;
+		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
@@ -1703,8 +1703,8 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 			return;
 		}
 
-		let inputStream = recognizer.getInputStream();
-		let sourceName: string =  inputStream != null ? inputStream.getSourceName() : "";
+		let inputStream = recognizer.inputStream;
+		let sourceName: string =  inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
@@ -1726,7 +1726,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let llPredictions: BitSet =  this.getConflictingAlts(ambigAlts, configs);
 			let llPrediction: number =  llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
 			if (sllPrediction !== llPrediction) {
-				(<StatisticsParserATNSimulator>recognizer.getInterpreter()).nonSll[dfa.decision]++;
+				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
 			}
 		}
 
@@ -1736,8 +1736,8 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 
 		// show the rule name along with the decision
 		let decision: number =  dfa.decision;
-		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let rule: string =  recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportAmbiguity d=${decision} (${rule}): ambigAlts=${ambigAlts}, input='${input}'`);
 	}
 
@@ -1751,8 +1751,8 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
-		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let rule: string =  recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let representedAlts: BitSet =  this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
@@ -1763,7 +1763,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
 			if (sllPrediction !== prediction) {
-				(<StatisticsParserATNSimulator>recognizer.getInterpreter()).nonSll[dfa.decision]++;
+				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
 			}
 		}
 
@@ -1773,8 +1773,8 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 
 		// show the rule name and viable configs along with the base info
 		let decision: number =  dfa.decision;
-		let rule: string =  recognizer.getRuleNames()[dfa.atnStartState.ruleIndex];
-		let input: string =  recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let rule: string =  recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportContextSensitivity d=${decision} (${rule}), input='${input}', viable={${prediction}}`);
 	}
 }
@@ -1956,26 +1956,26 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	@Override
 	visitTerminal(node: TerminalNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_TERMINAL);
-		TestPerformance.updateChecksum(this.checksum, node.getSymbol());
+		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override
 	visitErrorNode(node: ErrorNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_ERROR_NODE);
-		TestPerformance.updateChecksum(this.checksum, node.getSymbol());
+		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override
 	enterEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.ENTER_RULE);
-		TestPerformance.updateChecksum(this.checksum, ctx.getRuleIndex());
+		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
 		TestPerformance.updateChecksum(this.checksum, ctx.getStart());
 	}
 
 	@Override
 	exitEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.EXIT_RULE);
-		TestPerformance.updateChecksum(this.checksum, ctx.getRuleIndex());
+		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
 		TestPerformance.updateChecksum(this.checksum, ctx.getStop());
 	}
 
@@ -2013,7 +2013,7 @@ class CloneableANTLRFileStream extends ANTLRInputStream {
 
 	createCopy(): ANTLRInputStream {
 		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
-		stream.name = this.getSourceName();
+		stream.name = this.sourceName;
 		return stream;
 	}
 }

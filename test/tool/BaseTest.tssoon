@@ -82,7 +82,7 @@ export abstract class BaseTest {
 	static {
 		let baseTestDir: string =  System.getProperty("antlr.java-test-dir");
 		let perTestDirectories: boolean =  false;
-		if (baseTestDir == null || baseTestDir.isEmpty()) {
+		if (baseTestDir == null || baseTestDir.isEmpty) {
 			baseTestDir = System.getProperty("java.io.tmpdir");
 			perTestDirectories = true;
 		}
@@ -168,7 +168,7 @@ export abstract class BaseTest {
 
 		let atn: ATN =  g.atn;
 		if (useSerializer) {
-			let serialized: char[] =  ATNSerializer.getSerializedAsChars(atn, Arrays.asList(g.getRuleNames()));
+			let serialized: char[] =  ATNSerializer.getSerializedAsChars(atn, Arrays.asList(g.ruleNames));
 			return new ATNDeserializer().deserialize(serialized);
 		}
 
@@ -205,7 +205,7 @@ export abstract class BaseTest {
 
 	getTypesFromString(g: Grammar, expecting: string): IntegerList {
 		let expectingTokenTypes: IntegerList =  new IntegerList();
-		if ( expecting!=null && !expecting.trim().isEmpty() ) {
+		if ( expecting!=null && !expecting.trim().isEmpty ) {
 			for (let tname of expecting.replace(" ", "").split(",")) {
 				let ttype: number =  g.getTokenType(tname);
 				expectingTokenTypes.add(ttype);
@@ -385,7 +385,7 @@ export abstract class BaseTest {
 //				String.valueOf(diagnostic.getLineNumber())+
 //				": " + diagnostic.getMessage(null));
 //		}
-//		if ( errors.size()>0 ) {
+//		if ( errors.size>0 ) {
 //			System.err.println("compile stderr from: "+cmdLine);
 //			System.err.println(errors);
 //			return false;
@@ -484,7 +484,7 @@ export abstract class BaseTest {
 		}
 		options.add(new File(tmpdir,grammarFileName).toString());
 
-		optionsA: string[] =  new String[options.size()];
+		optionsA: string[] =  new String[options.size];
 		options.toArray(optionsA);
 		let antlr: Tool =  newTool(optionsA);
 		let equeue: ErrorQueue =  new ErrorQueue(antlr);
@@ -494,9 +494,9 @@ export abstract class BaseTest {
 		}
 		antlr.processGrammarsOnCommandLine();
 
-		if ( !defaultListener && !equeue.errors.isEmpty() ) {
+		if ( !defaultListener && !equeue.errors.isEmpty ) {
 			System.err.println("antlr reports errors from "+options);
-			for (let i = 0; i < equeue.errors.size(); i++) {
+			for (let i = 0; i < equeue.errors.size; i++) {
 				let msg: ANTLRMessage =  equeue.errors.get(i);
 				System.err.println(msg);
 			}
@@ -509,17 +509,17 @@ export abstract class BaseTest {
 			}
 			console.log("###");
 		}
-		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+		if ( !defaultListener && !equeue.warnings.isEmpty ) {
 			System.err.println("antlr reports warnings from "+options);
-			for (let i = 0; i < equeue.warnings.size(); i++) {
+			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
 				System.err.println(msg);
 			}
 		}
 
-		if ( !defaultListener && !equeue.warnings.isEmpty() ) {
+		if ( !defaultListener && !equeue.warnings.isEmpty ) {
 			System.err.println("antlr reports warnings from "+options);
-			for (let i = 0; i < equeue.warnings.size(); i++) {
+			for (let i = 0; i < equeue.warnings.size; i++) {
 				let msg: ANTLRMessage =  equeue.warnings.get(i);
 				System.err.println(msg);
 			}
@@ -680,7 +680,7 @@ export abstract class BaseTest {
 	{
 		let equeue: ErrorQueue = 
 			antlr(grammarFileName, grammarStr, defaultListener, extraOptions);
-		if (!equeue.errors.isEmpty()) {
+		if (!equeue.errors.isEmpty) {
 			return false;
 		}
 
@@ -701,7 +701,7 @@ export abstract class BaseTest {
 				files.add(grammarName+"BaseVisitor.java");
 			}
 		}
-		let allIsWell: boolean =  compile(files.toArray(new String[files.size()]));
+		let allIsWell: boolean =  compile(files.toArray(new String[files.size]));
 		return allIsWell;
 	}
 
@@ -949,7 +949,7 @@ export abstract class BaseTest {
 			let snippet: string =  output.substring(start+b.length(),end);
 			assertEquals(expected, snippet);
 		}
-		if ( equeue.size()>0 ) {
+		if ( equeue.size>0 ) {
 			System.err.println(equeue.toString());
 		}
 	}
@@ -994,7 +994,7 @@ export abstract class BaseTest {
 
 	{
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.errors.size(); i++) {
+		for (let i = 0; i < equeue.errors.size; i++) {
 			let m: ANTLRMessage =  equeue.errors.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
@@ -1004,7 +1004,7 @@ export abstract class BaseTest {
 		assertTrue("error is not a GrammarSemanticsMessage",
 				   foundMsg instanceof GrammarSemanticsMessage);
 		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
-		if ( equeue.size()!=1 ) {
+		if ( equeue.size!=1 ) {
 			System.err.println(equeue);
 		}
 	}
@@ -1014,7 +1014,7 @@ export abstract class BaseTest {
 
 	{
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.warnings.size(); i++) {
+		for (let i = 0; i < equeue.warnings.size; i++) {
 			let m: ANTLRMessage =  equeue.warnings.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
@@ -1024,7 +1024,7 @@ export abstract class BaseTest {
 		assertTrue("error is not a GrammarSemanticsMessage",
 				   foundMsg instanceof GrammarSemanticsMessage);
 		assertEquals(Arrays.toString(expectedMessage.getArgs()), Arrays.toString(foundMsg.getArgs()));
-		if ( equeue.size()!=1 ) {
+		if ( equeue.size!=1 ) {
 			System.err.println(equeue);
 		}
 	}
@@ -1035,14 +1035,14 @@ export abstract class BaseTest {
 	{
 		//System.out.println("errors="+equeue);
 		let foundMsg: ANTLRMessage =  null;
-		for (let i = 0; i < equeue.errors.size(); i++) {
+		for (let i = 0; i < equeue.errors.size; i++) {
 			let m: ANTLRMessage =  equeue.errors.get(i);
 			if (m.getErrorType()==expectedMessage.getErrorType() ) {
 				foundMsg = m;
 			}
 		}
-		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty());
-		assertTrue("too many errors; "+equeue.errors, equeue.errors.size()<=1);
+		assertTrue("no error; "+expectedMessage.getErrorType()+" expected", !equeue.errors.isEmpty);
+		assertTrue("too many errors; "+equeue.errors, equeue.errors.size<=1);
 		assertNotNull("couldn't find expected error: "+expectedMessage.getErrorType(), foundMsg);
 		/*
 		assertTrue("error is not a GrammarSemanticsMessage",
@@ -1061,8 +1061,8 @@ export abstract class BaseTest {
 			}
 
 			let t: Token =  get(i);
-			if ( hide.contains(t.getType()) ) {
-				((WritableToken)t).setChannel(Token.HIDDEN_CHANNEL);
+			if ( hide.contains(t.type) ) {
+				((WritableToken)t).channel = Token.HIDDEN_CHANNEL;
 			}
 
 			return true;
@@ -1105,8 +1105,8 @@ export abstract class BaseTest {
 			"        <lexerName> lex = new <lexerName>(input);\n" +
 			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
 			"        <createParser>\n"+
-			"		 parser.setBuildParseTree(true);\n" +
-			"		 parser.getInterpreter().reportAmbiguities = true;\n" +
+			"		 parser.buildParseTree = true;\n" +
+			"		 parser.interpreter.reportAmbiguities = true;\n" +
 			"		 <profile>\n"+
 			"        ParserRuleContext tree = parser.<parserStartRuleName>();\n" +
 			"		 <if(profile)>System.out.println(Arrays.toString(profiler.getDecisionInfo()));<endif>\n" +
@@ -1120,9 +1120,9 @@ export abstract class BaseTest {
 			"\n" +
 			"		@Override\n" +
 			"		public void enterEveryRule(ParserRuleContext ctx) {\n" +
-			"			for (int i = 0; i \\< ctx.getChildCount(); i++) {\n" +
-			"				ParseTree parent = ctx.getChild(i).getParent();\n" +
-			"				if (!(parent instanceof RuleNode) || ((RuleNode)parent).getRuleContext() != ctx) {\n" +
+			"			for (int i = 0; i \\< ctx.childCount; i++) {\n" +
+			"				ParseTree parent = ctx.getChild(i).parent;\n" +
+			"				if (!(parent instanceof RuleNode) || ((RuleNode)parent).ruleContext != ctx) {\n" +
 			"					throw new IllegalStateException(\"Invalid parse tree shape detected.\");\n" +
 			"				}\n" +
 			"			}\n" +
@@ -1140,7 +1140,7 @@ export abstract class BaseTest {
 		if ( profile ) {
 			outputFileST.add("profile",
 							 "ProfilingATNSimulator profiler = new ProfilingATNSimulator(parser);\n" +
-							 "parser.setInterpreter(profiler);");
+							 "parser.interpreter = profiler;");
 		}
 		else {
 			outputFileST.add("profile", new ArrayList<Object>());
@@ -1163,7 +1163,7 @@ export abstract class BaseTest {
 			"        CommonTokenStream tokens = new CommonTokenStream(lex);\n" +
 			"        tokens.fill();\n" +
 			"        for (Object t : tokens.getTokens()) System.out.println(t);\n" +
-			(showDFA?"System.out.print(lex.getInterpreter().getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")+
+			(showDFA?"System.out.print(lex.interpreter.getDFA(Lexer.DEFAULT_MODE).toLexerString());\n":"")+
 			"    }\n" +
 			"}"
 			);
@@ -1258,17 +1258,17 @@ export abstract class BaseTest {
     }
 
 	realElements(elements: List<string>): List<string> {
-		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size());
+		return elements.subList(Token.MIN_USER_TOKEN_TYPE, elements.size);
 	}
 
 	assertNotNullOrEmpty(message: string, text: string): void {
 		assertNotNull(message, text);
-		assertFalse(message, text.isEmpty());
+		assertFalse(message, text.isEmpty);
 	}
 
 	assertNotNullOrEmpty(text: string): void {
 		assertNotNull(text);
-		assertFalse(text.isEmpty());
+		assertFalse(text.isEmpty);
 	}
 
 	public static class IntTokenStream implements TokenStream {
@@ -1280,15 +1280,15 @@ export abstract class BaseTest {
 		consume(): void { p++; }
 
 		@Override
-		LA(int i) { return LT(i).getType(): number; }
+		LA(int i) { return LT(i).type: number; }
 
 		@Override
 		mark(): number {
-			return index();
+			return index;
 		}
 
 		@Override
-		index(): number { return p; }
+		get index(): number { return p; }
 
 		@Override
 		release(marker: number): void {
@@ -1301,12 +1301,12 @@ export abstract class BaseTest {
 		}
 
 		@Override
-		size(): number {
-			return types.size();
+		get size(): number {
+			return types.size;
 		}
 
 		@Override
-		getSourceName(): string {
+		get sourceName(): string {
 			return UNKNOWN_SOURCE_NAME;
 		}
 
@@ -1314,10 +1314,10 @@ export abstract class BaseTest {
 		LT(i: number): Token {
 			let t: CommonToken; 
 			let rawIndex: number =  p + i - 1;
-			if ( rawIndex>=types.size() ) t = new CommonToken(Token.EOF);
+			if ( rawIndex>=types.size ) t = new CommonToken(Token.EOF);
 			else t = new CommonToken(types.get(rawIndex));
 			else t = new CommonToken(types.get(rawIndex));
-			t.setTokenIndex(rawIndex);
+			t.tokenIndex = rawIndex;
 			return t;
 		}
 
@@ -1327,7 +1327,7 @@ export abstract class BaseTest {
 		}
 
 		@Override
-		getTokenSource(): TokenSource {
+		get tokenSource(): TokenSource {
 			return null;
 		}
 

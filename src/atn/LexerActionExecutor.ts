@@ -26,7 +26,7 @@ import { NotNull, Override } from '../Decorators';
  */
 export class LexerActionExecutor {
 	@NotNull
-	private lexerActions: LexerAction[];
+	private _lexerActions: LexerAction[];
 
 	/**
 	 * Caches the result of {@link #hashCode} since the hash code is an element
@@ -39,7 +39,7 @@ export class LexerActionExecutor {
 	 * @param lexerActions The lexer actions to execute.
 	 */
 	constructor(@NotNull lexerActions: LexerAction[]) {
-		this.lexerActions = lexerActions;
+		this._lexerActions = lexerActions;
 
 		let hash: number = MurmurHash.initialize();
 		for (let lexerAction of lexerActions) {
@@ -70,7 +70,7 @@ export class LexerActionExecutor {
 			return new LexerActionExecutor([lexerAction]);
 		}
 
-		let lexerActions = lexerActionExecutor.lexerActions.slice(0);
+		let lexerActions = lexerActionExecutor._lexerActions.slice(0);
 		lexerActions.push(lexerAction);
 		return new LexerActionExecutor(lexerActions);
 	}
@@ -106,13 +106,13 @@ export class LexerActionExecutor {
 	 */
 	fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
 		let updatedLexerActions: LexerAction[] | undefined;
-		for (let i = 0; i < this.lexerActions.length; i++) {
-			if (this.lexerActions[i].isPositionDependent() && !(this.lexerActions[i] instanceof LexerIndexedCustomAction)) {
+		for (let i = 0; i < this._lexerActions.length; i++) {
+			if (this._lexerActions[i].isPositionDependent && !(this._lexerActions[i] instanceof LexerIndexedCustomAction)) {
 				if (!updatedLexerActions) {
-					updatedLexerActions = this.lexerActions.slice(0);
+					updatedLexerActions = this._lexerActions.slice(0);
 				}
 
-				updatedLexerActions[i] = new LexerIndexedCustomAction(offset, this.lexerActions[i]);
+				updatedLexerActions[i] = new LexerIndexedCustomAction(offset, this._lexerActions[i]);
 			}
 		}
 
@@ -128,8 +128,8 @@ export class LexerActionExecutor {
 	 * @return The lexer actions to be executed by this executor.
 	 */
 	@NotNull
-	getLexerActions(): LexerAction[] {
-		return this.lexerActions;
+	get lexerActions(): LexerAction[] {
+		return this._lexerActions;
 	}
 
 	/**
@@ -153,15 +153,15 @@ export class LexerActionExecutor {
 	 */
 	execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
 		let requiresSeek: boolean = false;
-		let stopIndex: number = input.index();
+		let stopIndex: number = input.index;
 		try {
-			for (let lexerAction of this.lexerActions) {
+			for (let lexerAction of this._lexerActions) {
 				if (lexerAction instanceof LexerIndexedCustomAction) {
-					let offset: number = lexerAction.getOffset();
+					let offset: number = lexerAction.offset;
 					input.seek(startIndex + offset);
-					lexerAction = lexerAction.getAction();
+					lexerAction = lexerAction.action;
 					requiresSeek = (startIndex + offset) !== stopIndex;
-				} else if (lexerAction.isPositionDependent()) {
+				} else if (lexerAction.isPositionDependent) {
 					input.seek(stopIndex);
 					requiresSeek = false;
 				}
@@ -189,6 +189,6 @@ export class LexerActionExecutor {
 		}
 
 		return this.cachedHashCode === obj.cachedHashCode
-			&& ArrayEqualityComparator.INSTANCE.equals(this.lexerActions, obj.lexerActions);
+			&& ArrayEqualityComparator.INSTANCE.equals(this._lexerActions, obj._lexerActions);
 	}
 }

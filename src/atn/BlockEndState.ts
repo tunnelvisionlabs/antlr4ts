@@ -15,7 +15,7 @@ export class BlockEndState extends ATNState {
 	startState: BlockStartState;
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.BLOCK_END;
 	}
 }

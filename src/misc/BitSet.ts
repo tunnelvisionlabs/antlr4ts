@@ -184,7 +184,7 @@ export class BitSet implements Iterable<number>{
 	 * Returns the number of bits set to `true` in this `BitSet`.
 	 */
 	cardinality(): number {
-		if (this.isEmpty()) {
+		if (this.isEmpty) {
 			return 0;
 		}
 		const data = this.data;
@@ -326,7 +326,7 @@ export class BitSet implements Iterable<number>{
 	/**
 	 * Returns true if this `BitSet` contains no bits that are set to `true`.
 	 */
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return this.length() === 0;
 	}
 
@@ -614,7 +614,7 @@ export class BitSet implements Iterable<number>{
 	 * Returns the number of bits of space actually in use by this `BitSet` to represent bit values. The maximum element
 	 * in the set is the size - 1st element.
 	 */
-	size(): number {
+	get size(): number {
 		return this.data.byteLength * 8;
 	}
 

@@ -49,18 +49,18 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	size(): number {
-		return this.source.size();
+	get size(): number {
+		return this.source.size;
 	}
 
 	@Override
-	index(): number {
-		return this.source.index();
+	get index(): number {
+		return this.source.index;
 	}
 
 	@Override
-	getSourceName(): string {
-		return this.source.getSourceName();
+	get sourceName(): string {
+		return this.source.sourceName;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		if (this.la1 !== BACKSLASH) {
 			this.source.consume();
 			this.la1 = this.source.LA(1);
-			this.range = Math.max(this.range, this.source.index());
+			this.range = Math.max(this.range, this.source.index);
 			this.slashCount = 0;
 			return;
 		}
@@ -81,7 +81,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		// make sure the next character has been processed
 		this.LA(1);
 
-		if (this.escapeListIndex >= this.escapeIndexes.size() || this.escapeIndexes.get(this.escapeListIndex) !== this.index()) {
+		if (this.escapeListIndex >= this.escapeIndexes.size || this.escapeIndexes.get(this.escapeListIndex) !== this.index) {
 			this.source.consume();
 			this.slashCount++;
 		}
@@ -96,7 +96,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		}
 
 		this.la1 = this.source.LA(1);
-		assert(this.range >= this.index());
+		assert(this.range >= this.index);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		}
 
 		if (i <= 0) {
-			let desiredIndex: number = this.index() + i;
+			let desiredIndex: number = this.index + i;
 			for (let j = this.escapeListIndex - 1; j >= 0; j--) {
 				if (this.escapeIndexes.get(j) + 6 + this.escapeIndirectionLevels.get(j) > desiredIndex) {
 					desiredIndex -= 5 + this.escapeIndirectionLevels.get(j);
@@ -117,11 +117,11 @@ export class JavaUnicodeInputStream implements CharStream {
 				}
 			}
 
-			return this.source.LA(desiredIndex - this.index());
+			return this.source.LA(desiredIndex - this.index);
 		}
 		else {
-			let desiredIndex: number =  this.index() + i - 1;
-			for (let j = this.escapeListIndex; j < this.escapeIndexes.size(); j++) {
+			let desiredIndex: number =  this.index + i - 1;
+			for (let j = this.escapeListIndex; j < this.escapeIndexes.size; j++) {
 				if (this.escapeIndexes.get(j) === desiredIndex) {
 					return this.escapeCharacters.get(j);
 				}
@@ -129,11 +129,11 @@ export class JavaUnicodeInputStream implements CharStream {
 					desiredIndex += 5 + this.escapeIndirectionLevels.get(j);
 				}
 				else {
-					return this.source.LA(desiredIndex - this.index() + 1);
+					return this.source.LA(desiredIndex - this.index + 1);
 				}
 			}
 
-			let currentIndex: number[] =  [this.index()];
+			let currentIndex: number[] =  [this.index];
 			let slashCountPtr: number[] =  [this.slashCount];
 			let indirectionLevelPtr: number[] =  [0];
 			for (let j = 0; j < i; j++) {
@@ -182,7 +182,7 @@ export class JavaUnicodeInputStream implements CharStream {
 			this.slashCount++;
 		}
 
-		this.escapeListIndex = this.escapeIndexes.binarySearch(this.source.index());
+		this.escapeListIndex = this.escapeIndexes.binarySearch(this.source.index);
 		if (this.escapeListIndex < 0) {
 			this.escapeListIndex = -this.escapeListIndex - 1;
 		}
@@ -217,23 +217,23 @@ export class JavaUnicodeInputStream implements CharStream {
 
 		let blockUnicodeEscape: boolean =  (slashCountPtr[0] % 2) !== 0;
 
-		let c0: number = this.source.LA(nextIndexPtr[0] - this.index() + 1);
+		let c0: number = this.source.LA(nextIndexPtr[0] - this.index + 1);
 		if (c0 === BACKSLASH) {
 			slashCountPtr[0]++;
 
 			if (!blockUnicodeEscape) {
-				let c1: number =  this.source.LA(nextIndexPtr[0] - this.index() + 2);
+				let c1: number =  this.source.LA(nextIndexPtr[0] - this.index + 2);
 				if (c1 === LOWER_U) {
-					let c2: number =  this.source.LA(nextIndexPtr[0] - this.index() + 3);
+					let c2: number =  this.source.LA(nextIndexPtr[0] - this.index + 3);
 					indirectionLevelPtr[0] = 0;
 					while (c2 === LOWER_U) {
 						indirectionLevelPtr[0]++;
-						c2 = this.source.LA(nextIndexPtr[0] - this.index() + 3 + indirectionLevelPtr[0]);
+						c2 = this.source.LA(nextIndexPtr[0] - this.index + 3 + indirectionLevelPtr[0]);
 					}
 
-					let c3: number =  this.source.LA(nextIndexPtr[0] - this.index() + 4 + indirectionLevelPtr[0]);
-					let c4: number =  this.source.LA(nextIndexPtr[0] - this.index() + 5 + indirectionLevelPtr[0]);
-					let c5: number =  this.source.LA(nextIndexPtr[0] - this.index() + 6 + indirectionLevelPtr[0]);
+					let c3: number =  this.source.LA(nextIndexPtr[0] - this.index + 4 + indirectionLevelPtr[0]);
+					let c4: number =  this.source.LA(nextIndexPtr[0] - this.index + 5 + indirectionLevelPtr[0]);
+					let c5: number =  this.source.LA(nextIndexPtr[0] - this.index + 6 + indirectionLevelPtr[0]);
 					if (JavaUnicodeInputStream.isHexDigit(c2) && JavaUnicodeInputStream.isHexDigit(c3) && JavaUnicodeInputStream.isHexDigit(c4) && JavaUnicodeInputStream.isHexDigit(c5)) {
 						let value: number =  JavaUnicodeInputStream.hexValue(c2);
 						value = (value << 4) + JavaUnicodeInputStream.hexValue(c3);

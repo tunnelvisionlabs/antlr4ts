@@ -98,7 +98,7 @@ export class TestGrammarParserInterpreter {
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		let parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
 		let t: ParseTree =  parser.parse(g.rules.get(startRule).index);
-		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.getRuleNames());
+		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.ruleNames);
 		let treeStr: string =  Trees.toStringTree(t, nodeTextProvider);
 		console.log("parse tree: "+treeStr);
 		assertEquals(expectedParseTree, treeStr);

@@ -14,7 +14,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  :r=a ;\n" +
 			"a : 'x' {System.out.println(getRuleInvocationStack());} ;\n";
@@ -27,7 +27,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  :r=a ;\n" +
 			"a : 'x' 'y'\n" +
@@ -41,7 +41,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  :r=a ;\n" +
 			"a : 'x' | 'y'\n" +
@@ -55,7 +55,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  :r=a ;\n" +
 			"a : ('x' | 'y')* 'z'\n" +
@@ -69,7 +69,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  : r=a ;\n" +
 			"a : b 'x'\n" +
@@ -86,7 +86,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  : r=a ;\n" +
 			"a : 'x' 'y'\n" +
@@ -101,7 +101,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  : r=a ;\n" +
 			"a : 'x' | 'y'\n" +
@@ -116,7 +116,7 @@ export class TestParseTrees extends BaseTest {
 		let grammar: string = 
 			"grammar T;\n" +
 			"s\n" +
-			"@init {setBuildParseTree(true);}\n" +
+			"@init {buildParseTree = true;}\n" +
 			"@after {System.out.println($r.ctx.toStringTree(this));}\n" +
 			"  : r=a ;\n" +
 			"a : 'x' 'y'* '!'\n" +

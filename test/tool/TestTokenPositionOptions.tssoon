@@ -50,7 +50,7 @@ export class TestTokenPositionOptions extends BaseTest {
 		let nodes: List<GrammarAST> =  g.ast.getNodesWithTypePreorderDFS(types);
 		let tokens: List<Token> =  new ArrayList<Token>();
 		for (let node of nodes) {
-			tokens.add(node.getToken());
+			tokens.add(node.token);
 		}
 		assertEquals(expectedElementTokens, Utils.join(tokens.toArray(), "\n"));
 	}
@@ -94,7 +94,7 @@ export class TestTokenPositionOptions extends BaseTest {
 		let nodes: List<GrammarAST> =  g.ast.getNodesWithTypePreorderDFS(types);
 		let tokens: List<Token> =  new ArrayList<Token>();
 		for (let node of nodes) {
-			tokens.add(node.getToken());
+			tokens.add(node.token);
 		}
 		assertEquals(expectedElementTokens, Utils.join(tokens.toArray(), "\n"));
 	}
@@ -139,7 +139,7 @@ export class TestTokenPositionOptions extends BaseTest {
 		let nodes: List<GrammarAST> =  g.ast.getNodesWithTypePreorderDFS(types);
 		let tokens: List<Token> =  new ArrayList<Token>();
 		for (let node of nodes) {
-			tokens.add(node.getToken());
+			tokens.add(node.token);
 		}
 		assertEquals(expectedElementTokens, Utils.join(tokens.toArray(), "\n"));
 	}

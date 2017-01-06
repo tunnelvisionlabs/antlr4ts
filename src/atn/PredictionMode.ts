@@ -109,8 +109,8 @@ export namespace PredictionMode {
 		@Override
 		hashCode(o: ATNConfig): number {
 			let hashCode: number = MurmurHash.initialize(7);
-			hashCode = MurmurHash.update(hashCode, o.getState().stateNumber);
-			hashCode = MurmurHash.update(hashCode, o.getContext());
+			hashCode = MurmurHash.update(hashCode, o.state.stateNumber);
+			hashCode = MurmurHash.update(hashCode, o.context);
 			hashCode = MurmurHash.finish(hashCode, 2);
 			return hashCode;
 		}
@@ -119,8 +119,8 @@ export namespace PredictionMode {
 		equals(a: ATNConfig, b: ATNConfig): boolean {
 			if (a === b) return true;
 			if (a == null || b == null) return false;
-			return a.getState().stateNumber == b.getState().stateNumber
-				&& a.getContext().equals(b.getContext());
+			return a.state.stateNumber == b.state.stateNumber
+				&& a.context.equals(b.context);
 		}
 	}
 
@@ -136,7 +136,7 @@ export namespace PredictionMode {
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
 		for (let c of asIterable(configs)) {
-			if (c.getState() instanceof RuleStopState) {
+			if (c.state instanceof RuleStopState) {
 				return true;
 			}
 		}
@@ -156,7 +156,7 @@ export namespace PredictionMode {
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
 		for (let config of asIterable(configs)) {
-			if (!(config.getState() instanceof RuleStopState)) {
+			if (!(config.state instanceof RuleStopState)) {
 				return false;
 			}
 		}

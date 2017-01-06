@@ -261,7 +261,7 @@ export class TestLexerActions extends BaseTest {
 			"fragment WS: [ \\t]+;\n" +
 			"fragment EOL: '\\r'? '\\n';\n" +
 			"\n" +
-			"LINE: WS? ~[\\r\\n]* EOL { !getText().trim().startsWith(\"Item:\") }?;\n" +
+			"LINE: WS? ~[\\r\\n]* EOL { !text.trim().startsWith(\"Item:\") }?;\n" +
 			"ITEM: WS? 'Item:' -> pushMode(ITEM_HEADING_MODE);\n" +
 			"\n" +
 			"mode ITEM_HEADING_MODE;\n" +

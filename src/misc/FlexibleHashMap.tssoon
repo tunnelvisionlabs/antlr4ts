@@ -124,7 +124,7 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 
 	@Override
 	values(): Collection<V> {
-		let a: List<V> =  new ArrayList<V>(size());
+		let a: List<V> =  new ArrayList<V>(size);
 		for (let bucket of buckets) {
 			if ( bucket==null ) continue;
 			for (let e of bucket) {
@@ -160,7 +160,7 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 			}
 		}
 
-		hash = MurmurHash.finish(hash, size());
+		hash = MurmurHash.finish(hash, size);
 		return hash;
 	}
 
@@ -178,7 +178,7 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 		threshold = (int)(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
-		let oldSize: number =  size();
+		let oldSize: number =  size;
 		for (let bucket of old) {
 			if ( bucket==null ) continue;
 			for (let e of bucket) {
@@ -190,12 +190,12 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return n;
 	}
 
 	@Override
-	isEmpty(): boolean {
+	get isEmpty(): boolean {
 		return n==0;
 	}
 
@@ -207,7 +207,7 @@ export class FlexibleHashMap<K,V> implements Map<K, V> {
 
 	@Override
 	toString(): string {
-		if ( size()==0 ) return "{}";
+		if ( size==0 ) return "{}";
 
 		let buf: StringBuilder =  new StringBuilder();
 		buf.append('{');

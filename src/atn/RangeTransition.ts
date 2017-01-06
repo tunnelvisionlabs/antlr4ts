@@ -22,13 +22,13 @@ export class RangeTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.RANGE;
 	}
 
 	@Override
 	@NotNull
-	label(): IntervalSet {
+	get label(): IntervalSet {
 		return IntervalSet.of(this.from, this.to);
 	}
 

@@ -23,42 +23,42 @@ import { PredicateTransition } from './atn/PredicateTransition';
 export class FailedPredicateException extends RecognitionException {
 	//private static serialVersionUID: number =  5379330841495778709L;
 
-	private ruleIndex: number;
-	private predicateIndex: number;
-	private predicate?: string;
+	private _ruleIndex: number;
+	private _predicateIndex: number;
+	private _predicate?: string;
 
 	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
 		super(
 			recognizer,
-			recognizer.getInputStream(),
-			recognizer.getContext(),
+			recognizer.inputStream,
+			recognizer.context,
 			FailedPredicateException.formatMessage(predicate, message));
-		let s: ATNState = recognizer.getInterpreter().atn.states[recognizer.getState()];
+		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 
 		let trans = s.transition(0) as AbstractPredicateTransition;
 		if (trans instanceof PredicateTransition) {
-			this.ruleIndex = trans.ruleIndex;
-			this.predicateIndex = trans.predIndex;
+			this._ruleIndex = trans.ruleIndex;
+			this._predicateIndex = trans.predIndex;
 		}
 		else {
-			this.ruleIndex = 0;
-			this.predicateIndex = 0;
+			this._ruleIndex = 0;
+			this._predicateIndex = 0;
 		}
 
-		this.predicate = predicate;
-		super.setOffendingToken(recognizer, recognizer.getCurrentToken());
+		this._predicate = predicate;
+		super.setOffendingToken(recognizer, recognizer.currentToken);
 	}
 
-	getRuleIndex(): number {
-		return this.ruleIndex;
+	get ruleIndex(): number {
+		return this._ruleIndex;
 	}
 
-	getPredIndex(): number {
-		return this.predicateIndex;
+	get predicateIndex(): number {
+		return this._predicateIndex;
 	}
 
-	getPredicate(): string | undefined {
-		return this.predicate;
+	get predicate(): string | undefined {
+		return this._predicate;
 	}
 
 	@NotNull

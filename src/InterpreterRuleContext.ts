@@ -24,7 +24,7 @@ export class InterpreterRuleContext extends ParserRuleContext {
 	/**
 	 * This is the backing field for {@link #getRuleIndex}.
 	 */
-	private ruleIndex: number;
+	private _ruleIndex: number;
 
 	constructor(ruleIndex: number);
 
@@ -45,11 +45,11 @@ export class InterpreterRuleContext extends ParserRuleContext {
 			super();
 		}
 
-		this.ruleIndex = ruleIndex;
+		this._ruleIndex = ruleIndex;
 	}
 
 	@Override
-	getRuleIndex(): number {
-		return this.ruleIndex;
+	get ruleIndex(): number {
+		return this._ruleIndex;
 	}
 }

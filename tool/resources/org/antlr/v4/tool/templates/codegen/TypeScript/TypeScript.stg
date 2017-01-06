@@ -154,13 +154,13 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 	<vocabulary(parser.name, parser.literalNames, parser.symbolicNames)>
 
 	@Override
-	public getGrammarFileName(): string { return "<parser.grammarFileName>"; }
+	public get grammarFileName(): string { return "<parser.grammarFileName>"; }
 
 	@Override
-	public getRuleNames(): string[] { return <parser.name>.ruleNames; }
+	public get ruleNames(): string[] { return <parser.name>.ruleNames; }
 
 	@Override
-	public getSerializedATN(): string { return <parser.name>._serializedATN; }
+	public get serializedATN(): string { return <parser.name>._serializedATN; }
 
 	<namedActions.members>
 	<parser:(ctor)()>
@@ -203,7 +203,7 @@ public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._
 
 @Override
 @NotNull
-public getVocabulary(): Vocabulary {
+public get vocabulary(): Vocabulary {
 	return <className>.VOCABULARY;
 }
 >>
@@ -273,7 +273,7 @@ case <index>:
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
 //@RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
-	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.getState()<currentRule.args:{a | , <a.name>}>);
+	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -310,7 +310,7 @@ LeftFactoredRuleFunction(currentRule,args,code,locals,namedActions,finallyAction
 <<
 
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>private <endif><currentRule.ctxType> <currentRule.name>(<args; separator=",">) {
-	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.getState()<currentRule.args:{a | , <a.name>}>);
+	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterLeftFactoredRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.variantOf>);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -345,7 +345,7 @@ LeftUnfactoredRuleFunction(currentRule,args,code,locals,namedActions,finallyActi
 <<
 
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>private <endif><currentRule.ctxType> <currentRule.name>(<args; separator=",">) {
-	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.getState()<currentRule.args:{a | , <a.name>}>);
+	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.variantOf>);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -387,7 +387,7 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	}
 
 	let _parentctx: ParserRuleContext = this._ctx;
-	let _parentState: number = this.getState();
+	let _parentState: number = this.state;
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
 	let _prevctx: <currentRule.ctxType> = _localctx;
 	let _startState: number = <currentRule.startState>;
@@ -434,7 +434,7 @@ CodeBlockForAlt(currentAltCodeBlock, locals, preamble, ops) ::= <<
 >>
 
 LL1AltBlock(choice, preamble, alts, error) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 <if(choice.label)><labelref(choice.label)> = this._input.LT(1);<endif>
 <preamble; separator="\n">
@@ -448,7 +448,7 @@ default:
 >>
 
 LL1OptionalBlock(choice, alts, error) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 switch (this._input.LA(1)) {
 <choice.altLook,alts:{look,alt| <cases(ttypes=look)>
@@ -460,7 +460,7 @@ default:
 >>
 
 LL1OptionalBlockSingleAlt(choice, expr, alts, preamble, error, followExpr) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 <preamble; separator="\n">
 if (<expr>) {
@@ -470,24 +470,24 @@ if (<expr>) {
 >>
 
 LL1StarBlockSingleAlt(choice, loopExpr, alts, preamble, iteration) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 <preamble; separator="\n">
 while (<loopExpr>) {
 	<alts; separator="\n">
-	this.setState(<choice.loopBackStateNumber>);
+	this.state = <choice.loopBackStateNumber>;
 	this._errHandler.sync(this);
 	<iteration>
 }
 >>
 
 LL1PlusBlockSingleAlt(choice, loopExpr, alts, preamble, iteration) ::= <<
-this.setState(<choice.blockStartStateNumber>); <! alt block decision !>
+this.state = <choice.blockStartStateNumber>; <! alt block decision !>
 this._errHandler.sync(this);
 <preamble; separator="\n">
 do {
 	<alts; separator="\n">
-	this.setState(<choice.stateNumber>); <! loopback/exit decision !>
+	this.state = <choice.stateNumber>; <! loopback/exit decision !>
 	this._errHandler.sync(this);
 	<iteration>
 } while ( <loopExpr> );
@@ -496,11 +496,11 @@ do {
 // LL(*) stuff
 
 AltBlock(choice, preamble, alts, error) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 <if(choice.label)><labelref(choice.label)> = this._input.LT(1);<endif>
 <preamble; separator="\n">
-switch ( this.getInterpreter().adaptivePredict(this._input,<choice.decision>,this._ctx) ) {
+switch ( this.interpreter.adaptivePredict(this._input,<choice.decision>,this._ctx) ) {
 <alts:{alt |
 case <i>:
 	<alt>
@@ -509,9 +509,9 @@ case <i>:
 >>
 
 OptionalBlock(choice, alts, error) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
-switch ( this.getInterpreter().adaptivePredict(this._input,<choice.decision>,this._ctx) ) {
+switch ( this.interpreter.adaptivePredict(this._input,<choice.decision>,this._ctx) ) {
 <alts:{alt |
 case <i><if(!choice.ast.greedy)>+1<endif>:
 	<alt>
@@ -520,22 +520,22 @@ case <i><if(!choice.ast.greedy)>+1<endif>:
 >>
 
 StarBlock(choice, alts, sync, iteration) ::= <<
-this.setState(<choice.stateNumber>);
+this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
-_alt = this.getInterpreter().adaptivePredict(this._input,<choice.decision>,this._ctx);
+_alt = this.interpreter.adaptivePredict(this._input,<choice.decision>,this._ctx);
 while ( _alt!==<choice.exitAlt> && _alt!==ATN.INVALID_ALT_NUMBER ) {
 	if ( _alt===1<if(!choice.ast.greedy)>+1<endif> ) {
 		<iteration>
 		<alts> <! should only be one !>
 	}
-	this.setState(<choice.loopBackStateNumber>);
+	this.state = <choice.loopBackStateNumber>;
 	this._errHandler.sync(this);
-	_alt = this.getInterpreter().adaptivePredict(this._input,<choice.decision>,this._ctx);
+	_alt = this.interpreter.adaptivePredict(this._input,<choice.decision>,this._ctx);
 }
 >>
 
 PlusBlock(choice, alts, error) ::= <<
-this.setState(<choice.blockStartStateNumber>); <! alt block decision !>
+this.state = <choice.blockStartStateNumber>; <! alt block decision !>
 this._errHandler.sync(this);
 _alt = 1<if(!choice.ast.greedy)>+1<endif>;
 do {
@@ -547,9 +547,9 @@ case <i><if(!choice.ast.greedy)>+1<endif>:
 	default:
 		<error>
 	}
-	this.setState(<choice.loopBackStateNumber>); <! loopback/exit decision !>
+	this.state = <choice.loopBackStateNumber>; <! loopback/exit decision !>
 	this._errHandler.sync(this);
-	_alt = this.getInterpreter().adaptivePredict(this._input,<choice.decision>,this._ctx);
+	_alt = this.interpreter.adaptivePredict(this._input,<choice.decision>,this._ctx);
 } while ( _alt!==<choice.exitAlt> && _alt!==ATN.INVALID_ALT_NUMBER );
 >>
 
@@ -590,12 +590,12 @@ cases(ttypes) ::= <<
 >>
 
 InvokeRule(r, argExprsChunks) ::= <<
-this.setState(<r.stateNumber>);
+this.state = <r.stateNumber>;
 <if(r.labels)><r.labels:{l | <labelref(l)> = }><endif>this.<r.name>(<argExprsChunks><if(r.ast.options.p)><if(argExprsChunks)>,<endif><r.ast.options.p><endif>);
 >>
 
 MatchToken(m) ::= <<
-this.setState(<m.stateNumber>);
+this.state = <m.stateNumber>;
 <if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this.match(<parser.name>.<m.name>);
 >>
 
@@ -604,7 +604,7 @@ MatchSet(m, expr, capture) ::= "<CommonSetStuff(m, expr, capture, false)>"
 MatchNotSet(m, expr, capture) ::= "<CommonSetStuff(m, expr, capture, true)>"
 
 CommonSetStuff(m, expr, capture, invert) ::= <<
-this.setState(<m.stateNumber>);
+this.state = <m.stateNumber>;
 <if(m.labels)><m.labels:{l | <labelref(l)> = }>this._input.LT(1);<endif>
 <capture>
 if ( <if(invert)><m.varName> \<= 0 || <else>!<endif>(<expr>) ) {
@@ -620,7 +620,7 @@ if ( <if(invert)><m.varName> \<= 0 || <else>!<endif>(<expr>) ) {
 >>
 
 Wildcard(w) ::= <<
-this.setState(<w.stateNumber>);
+this.state = <w.stateNumber>;
 <if(w.labels)><w.labels:{l | <labelref(l)> = }><endif>this.matchWildcard();
 >>
 
@@ -631,7 +631,7 @@ Action(a, foo, chunks) ::= "<chunks>"
 ArgAction(a, chunks) ::= "<chunks>"
 
 SemPred(p, chunks, failChunks) ::= <<
-this.setState(<p.stateNumber>);
+this.state = <p.stateNumber>;
 if (!(<chunks>)) throw new FailedPredicateException(this, <p.predicate><if(failChunks)>, <failChunks><elseif(p.msg)>, <p.msg><endif>);
 >>
 
@@ -667,13 +667,13 @@ SetAttr(s,rhsChunks) ::= "<ctx(s)>.<s.name> = <rhsChunks>;"
 TokenLabelType() ::= "<file.TokenLabelType; null={Token}>"
 InputSymbolType() ::= "<file.InputSymbolType; null={Token}>"
 
-TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getText():undefined)"
-TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getType():0)"
-TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getLine():0)"
-TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getCharPositionInLine():0)"
-TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getChannel():0)"
-TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.getTokenIndex():0)"
-TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Number(<ctx(t)>._<t.label>.getText()):0)"
+TokenPropertyRef_text(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.text:undefined)"
+TokenPropertyRef_type(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.type:0)"
+TokenPropertyRef_line(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.line:0)"
+TokenPropertyRef_pos(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.charPositionInLine:0)"
+TokenPropertyRef_channel(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.channel:0)"
+TokenPropertyRef_index(t) ::= "(<ctx(t)>._<t.label>!=null?<ctx(t)>._<t.label>.tokenIndex:0)"
+TokenPropertyRef_int(t) ::= "(<ctx(t)>._<t.label>!=null?Number(<ctx(t)>._<t.label>.text):0)"
 
 RulePropertyRef_start(r) ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.start):undefined)"
 RulePropertyRef_stop(r)	 ::= "(<ctx(r)>._<r.label>!=null?(<ctx(r)>._<r.label>.stop):undefined)"
@@ -773,7 +773,7 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
-	@Override public getRuleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
+	@Override public get ruleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
 <if(struct.provideCopyFrom)> <! don't need copy unless we have subclasses !>
 	public copyFrom(ctx: <struct.name>): void {
 		super.copyFrom(ctx);
@@ -911,16 +911,16 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 	}
 
 	@Override
-	public getGrammarFileName(): string { return "<lexer.grammarFileName>"; }
+	public get grammarFileName(): string { return "<lexer.grammarFileName>"; }
 
 	@Override
-	public getRuleNames(): string[] { return <lexer.name>.ruleNames; }
+	public get ruleNames(): string[] { return <lexer.name>.ruleNames; }
 
 	@Override
-	public getSerializedATN(): string { return <lexer.name>._serializedATN; }
+	public get serializedATN(): string { return <lexer.name>._serializedATN; }
 
 	@Override
-	public getModeNames(): string[] { return <lexer.name>.modeNames; }
+	public get modeNames(): string[] { return <lexer.name>.modeNames; }
 
 	<dumpActions(lexer, "", actionFuncs, sempredFuncs)>
 	<atn>

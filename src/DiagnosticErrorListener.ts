@@ -66,7 +66,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
 		let conflictingAlts: BitSet = this.getConflictingAlts(ambigAlts, configs);
-		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportAmbiguity d=${decision}: ambigAlts=${conflictingAlts}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
@@ -80,7 +80,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		@NotNull conflictState: SimulatorState): void {
 		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportAttemptingFullContext d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
@@ -94,7 +94,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		@NotNull acceptState: SimulatorState): void {
 		let format: string = "reportContextSensitivity d=%s, input='%s'";
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let text: string = recognizer.getInputStream().getTextFromInterval(Interval.of(startIndex, stopIndex));
+		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportContextSensitivity d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
@@ -105,7 +105,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 		let decision: number = dfa.decision;
 		let ruleIndex: number = dfa.atnStartState.ruleIndex;
 
-		let ruleNames: string[] = recognizer.getRuleNames();
+		let ruleNames: string[] = recognizer.ruleNames;
 		if (ruleIndex < 0 || ruleIndex >= ruleNames.length) {
 			return decision.toString();
 		}
@@ -137,7 +137,7 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 
 		let result: BitSet = new BitSet();
 		for (let config of asIterable(configs)) {
-			result.set(config.getAlt());
+			result.set(config.alt);
 		}
 
 		return result;

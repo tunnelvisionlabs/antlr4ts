@@ -33,7 +33,7 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "a", "(s a)");
-		assertEquals("0..0", t.getSourceInterval().toString());
+		assertEquals("0..0", t.sourceInterval.toString());
 	}
 
 	@Test testEOF(): void {
@@ -46,7 +46,7 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "a", "(s a <EOF>)");
-		assertEquals("0..1", t.getSourceInterval().toString());
+		assertEquals("0..1", t.sourceInterval.toString());
 	}
 
 	@Test testEOFInChild(): void {
@@ -60,8 +60,8 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "a", "(s (x a <EOF>))");
-		assertEquals("0..1", t.getSourceInterval().toString());
-		assertEquals("0..1", t.getChild(0).getSourceInterval().toString());
+		assertEquals("0..1", t.sourceInterval.toString());
+		assertEquals("0..1", t.getChild(0).sourceInterval.toString());
 	}
 
 	@Test testEmptyRuleAfterEOFInChild(): void {
@@ -76,9 +76,9 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "a", "(s (x a <EOF>) y)");
-		assertEquals("0..1", t.getSourceInterval().toString()); // s
-		assertEquals("0..1", t.getChild(0).getSourceInterval().toString()); // x
-// unspecified		assertEquals("1..0", t.getChild(1).getSourceInterval().toString()); // y
+		assertEquals("0..1", t.sourceInterval.toString()); // s
+		assertEquals("0..1", t.getChild(0).sourceInterval.toString()); // x
+// unspecified		assertEquals("1..0", t.getChild(1).sourceInterval.toString()); // y
 	}
 
 	@Test testEmptyRuleAfterJustEOFInChild(): void {
@@ -93,10 +93,10 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "", "(s (x <EOF>) y)");
-		assertEquals("0..0", t.getSourceInterval().toString()); // s
-		assertEquals("0..0", t.getChild(0).getSourceInterval().toString()); // x
+		assertEquals("0..0", t.sourceInterval.toString()); // s
+		assertEquals("0..0", t.getChild(0).sourceInterval.toString()); // x
 		// this next one is a weird special case where somebody tries to match beyond in the file
-// unspecified		assertEquals("0..-1", t.getChild(1).getSourceInterval().toString()); // y
+// unspecified		assertEquals("0..-1", t.getChild(1).sourceInterval.toString()); // y
 	}
 
 	@Test testEmptyInput(): void {
@@ -110,8 +110,8 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "", "(s x <EOF>)");
-		assertEquals("0..0", t.getSourceInterval().toString()); // s
-		assertEquals("0..-1", t.getChild(0).getSourceInterval().toString()); // x
+		assertEquals("0..0", t.sourceInterval.toString()); // s
+		assertEquals("0..-1", t.getChild(0).sourceInterval.toString()); // x
 	}
 
 	@Test testEmptyInputWithCallsAfter(): void {
@@ -127,9 +127,9 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "", "(s (x <EOF>) (y z))");
-		assertEquals("0..0", t.getSourceInterval().toString()); // s
-		assertEquals("0..0", t.getChild(0).getSourceInterval().toString()); // x
-// unspecified		assertEquals("0..-1", t.getChild(1).getSourceInterval().toString()); // x
+		assertEquals("0..0", t.sourceInterval.toString()); // s
+		assertEquals("0..0", t.getChild(0).sourceInterval.toString()); // x
+// unspecified		assertEquals("0..-1", t.getChild(1).sourceInterval.toString()); // x
 	}
 
 	@Test testEmptyFirstRule(): void {
@@ -143,9 +143,9 @@ export class TestParserInterpreter extends BaseTest {
 			lg);
 
 		let t: ParseTree =  testInterp(lg, g, "s", "a", "(s x a)");
-		assertEquals("0..0", t.getSourceInterval().toString()); // s
+		assertEquals("0..0", t.sourceInterval.toString()); // s
 		// This gets an empty interval because the stop token is null for x
-		assertEquals("0..-1", t.getChild(0).getSourceInterval().toString()); // x
+		assertEquals("0..-1", t.getChild(0).sourceInterval.toString()); // x
 	}
 
 	@Test testAorB(): void {

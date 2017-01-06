@@ -30,7 +30,7 @@ import * as Utils from './misc/Utils';
  * <p>
  * This rewriter makes no modifications to the token stream. It does not ask the
  * stream to fill itself up nor does it advance the input cursor. The token
- * stream {@link TokenStream#index()} will return the same value before and
+ * stream `TokenStream.index` will return the same value before and
  * after any {@link #getText()} call.</p>
  *
  * <p>
@@ -146,7 +146,7 @@ export class TokenStreamRewriter {
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
 		} else {
-			index = tokenOrIndex.getTokenIndex();
+			index = tokenOrIndex.tokenIndex;
 		}
 
 		// to insert after, just insert before next index (even if past end)
@@ -165,7 +165,7 @@ export class TokenStreamRewriter {
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
 		} else {
-			index = tokenOrIndex.getTokenIndex();
+			index = tokenOrIndex.tokenIndex;
 		}
 
 		let op: RewriteOperation = new InsertBeforeOp(this.tokens, index, text);
@@ -194,15 +194,15 @@ export class TokenStreamRewriter {
 
 	replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (typeof from !== 'number') {
-			from = from.getTokenIndex();
+			from = from.tokenIndex;
 		}
 
 		if (typeof to !== 'number') {
-			to = to.getTokenIndex();
+			to = to.tokenIndex;
 		}
 
-		if ( from > to || from<0 || to<0 || to >= this.tokens.size() ) {
-			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size()})`);
+		if ( from > to || from<0 || to<0 || to >= this.tokens.size ) {
+			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size})`);
 		}
 
 		let op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, text);
@@ -297,7 +297,7 @@ export class TokenStreamRewriter {
 		if (intervalOrProgram instanceof Interval) {
 			interval = intervalOrProgram;
 		} else {
-			interval = Interval.of(0, this.tokens.size() - 1);
+			interval = Interval.of(0, this.tokens.size - 1);
 		}
 
 		if (typeof intervalOrProgram === 'string') {
@@ -309,11 +309,11 @@ export class TokenStreamRewriter {
 		let stop: number =  interval.b;
 
 		// ensure start/end are in range
-		if ( stop > this.tokens.size()-1 ) stop = this.tokens.size()-1;
+		if ( stop > this.tokens.size-1 ) stop = this.tokens.size-1;
 		if ( start<0 ) start = 0;
 
 		if ( rewrites==null || rewrites.length === 0 ) {
-			return this.tokens.getTextFromInterval(interval); // no instructions to execute
+			return this.tokens.getText(interval); // no instructions to execute
 		}
 
 		let buf: string[] = [];
@@ -323,13 +323,13 @@ export class TokenStreamRewriter {
 
 		// Walk buffer, executing instructions and emitting tokens
 		let i: number =  start;
-		while ( i <= stop && i < this.tokens.size() ) {
+		while ( i <= stop && i < this.tokens.size ) {
 			let op: RewriteOperation | undefined =  indexToOp.get(i);
 			indexToOp.delete(i); // remove so any left have index size-1
 			let t: Token = this.tokens.get(i);
 			if ( op==null ) {
 				// no operation at that index, just dump token
-				if ( t.getType()!==Token.EOF ) buf.push(String(t.getText()));
+				if ( t.type!==Token.EOF ) buf.push(String(t.text));
 				i++; // move to next token
 			}
 			else {
@@ -340,11 +340,11 @@ export class TokenStreamRewriter {
 		// include stuff after end if it's last index in buffer
 		// So, if they did an insertAfter(lastValidIndex, "foo"), include
 		// foo if end==lastValidIndex.
-		if ( stop===this.tokens.size()-1 ) {
+		if ( stop===this.tokens.size-1 ) {
 			// Scan any remaining operations after last token
 			// should be included (they will be inserts).
 			for (let op of indexToOp.values()) {
-				if ( op.index >= this.tokens.size()-1 ) buf += op.text;
+				if ( op.index >= this.tokens.size-1 ) buf += op.text;
 			}
 		}
 
@@ -564,8 +564,8 @@ class InsertBeforeOp extends RewriteOperation {
 	@Override
 	execute(buf: string[]): number {
 		buf.push(this.text);
-		if ( this.tokens.get(this.index).getType()!=Token.EOF ) {
-			buf.push(String(this.tokens.get(this.index).getText()));
+		if ( this.tokens.get(this.index).type !== Token.EOF ) {
+			buf.push(String(this.tokens.get(this.index).text));
 		}
 		return this.index+1;
 	}

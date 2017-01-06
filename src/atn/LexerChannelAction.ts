@@ -19,14 +19,14 @@ import { NotNull, Override } from '../Decorators';
  * @since 4.2
  */
 export class LexerChannelAction implements LexerAction {
-	private readonly channel: number;
+	private readonly _channel: number;
 
 	/**
 	 * Constructs a new {@code channel} action with the specified channel value.
 	 * @param channel The channel value to pass to {@link Lexer#setChannel}.
 	 */
 	constructor(channel: number) {
-		this.channel = channel;
+		this._channel = channel;
 	}
 
 	/**
@@ -34,8 +34,8 @@ export class LexerChannelAction implements LexerAction {
 	 *
 	 * @return The channel to use for the {@link Token} created by the lexer.
 	 */
-	getChannel(): number {
-		return this.channel;
+	get channel(): number {
+		return this._channel;
 	}
 
 	/**
@@ -43,7 +43,7 @@ export class LexerChannelAction implements LexerAction {
 	 * @return This method returns {@link LexerActionType#CHANNEL}.
 	 */
 	@Override
-	getActionType(): LexerActionType {
+	get actionType(): LexerActionType {
 		return LexerActionType.CHANNEL;
 	}
 
@@ -52,7 +52,7 @@ export class LexerChannelAction implements LexerAction {
 	 * @return This method returns {@code false}.
 	 */
 	@Override
-	isPositionDependent(): boolean {
+	get isPositionDependent(): boolean {
 		return false;
 	}
 
@@ -64,14 +64,14 @@ export class LexerChannelAction implements LexerAction {
 	 */
 	@Override
 	execute(@NotNull lexer: Lexer): void {
-		lexer.setChannel(this.channel);
+		lexer.channel = this._channel;
 	}
 
 	@Override
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		hash = MurmurHash.update(hash, this.getActionType());
-		hash = MurmurHash.update(hash, this.channel);
+		hash = MurmurHash.update(hash, this.actionType);
+		hash = MurmurHash.update(hash, this._channel);
 		return MurmurHash.finish(hash, 2);
 	}
 
@@ -83,11 +83,11 @@ export class LexerChannelAction implements LexerAction {
 			return false;
 		}
 
-		return this.channel === obj.channel;
+		return this._channel === obj._channel;
 	}
 
 	@Override
 	toString(): string {
-		return `channel(${this.channel})`;
+		return `channel(${this._channel})`;
 	}
 }

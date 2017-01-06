@@ -16,7 +16,7 @@ import { Override } from '../Decorators';
 export class BasicState extends ATNState {
 
 	@Override
-	getStateType(): ATNStateType {
+	get stateType(): ATNStateType {
 		return ATNStateType.BASIC;
 	}
 

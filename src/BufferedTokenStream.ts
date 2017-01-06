@@ -33,7 +33,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * The {@link TokenSource} from which tokens for this stream are fetched.
 	 */
 	@NotNull
-	protected tokenSource: TokenSource;
+	private _tokenSource: TokenSource;
 
 	/**
 	 * A collection of all tokens fetched from the token source. The list is
@@ -75,16 +75,16 @@ export class BufferedTokenStream implements TokenStream {
 			throw new Error("tokenSource cannot be null");
 		}
 
-		this.tokenSource = tokenSource;
+		this._tokenSource = tokenSource;
 	}
 
 	@Override
-	getTokenSource(): TokenSource {
-		return this.tokenSource;
+	get tokenSource(): TokenSource {
+		return this._tokenSource;
 	}
 
 	@Override
-	index(): number {
+	get index(): number {
 		return this.p;
 	}
 
@@ -109,7 +109,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	size(): number {
+	get size(): number {
 		return this.tokens.length;
 	}
 
@@ -169,11 +169,11 @@ export class BufferedTokenStream implements TokenStream {
 		for (let i = 0; i < n; i++) {
 			let t: Token = this.tokenSource.nextToken();
 			if (this.isWritableToken(t)) {
-				t.setTokenIndex(this.tokens.length);
+				t.tokenIndex = this.tokens.length;
 			}
 
 			this.tokens.push(t);
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				this.fetchedEOF = true;
 				return i + 1;
 			}
@@ -205,7 +205,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		for (let i = start; i <= stop; i++) {
 			let t: Token = this.tokens[i];
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				break;
 			}
 
@@ -222,7 +222,7 @@ export class BufferedTokenStream implements TokenStream {
 			return Token.INVALID_TYPE;
 		}
 
-		return token.getType();
+		return token.type;
 	}
 
 	protected tryLB(k: number): Token | undefined {
@@ -295,8 +295,8 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Reset this token stream by setting its token source. */
-	setTokenSource(tokenSource: TokenSource): void {
-		this.tokenSource = tokenSource;
+	set tokenSource(tokenSource: TokenSource) {
+		this._tokenSource = tokenSource;
 		this.tokens.length = 0;
 		this.p = -1;
 	}
@@ -330,9 +330,9 @@ export class BufferedTokenStream implements TokenStream {
 
 		let typesSet = types;
 
-		// list = tokens[start:stop]:{T t, t.getType() in types}
+		// list = tokens[start:stop]:{T t, t.type in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
-		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.getType()); });
+		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.type); });
 
 		return filteredTokens;
 	}
@@ -345,13 +345,13 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected nextTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);
-		if (i >= this.size()) {
-			return this.size() - 1;
+		if (i >= this.size) {
+			return this.size - 1;
 		}
 
 		let token: Token = this.tokens[i];
-		while (token.getChannel() !== channel) {
-			if (token.getType() === Token.EOF) {
+		while (token.channel !== channel) {
+			if (token.type === Token.EOF) {
 				return i;
 			}
 
@@ -375,14 +375,14 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected previousTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);
-		if (i >= this.size()) {
+		if (i >= this.size) {
 			// the EOF token is on every channel
-			return this.size() - 1;
+			return this.size - 1;
 		}
 
 		while (i >= 0) {
 			let token: Token = this.tokens[i];
-			if (token.getType() === Token.EOF || token.getChannel() === channel) {
+			if (token.type === Token.EOF || token.channel === channel) {
 				return i;
 			}
 
@@ -407,7 +407,7 @@ export class BufferedTokenStream implements TokenStream {
 		let from: number = tokenIndex + 1;
 		// if none onchannel to right, nextOnChannel=-1 so set to = last token
 		if (nextOnChannel === -1) {
-			to = this.size() - 1;
+			to = this.size - 1;
 		} else {
 			to = nextOnChannel;
 		}
@@ -447,11 +447,11 @@ export class BufferedTokenStream implements TokenStream {
 		for (let i = from; i <= to; i++) {
 			let t: Token = this.tokens[i];
 			if (channel === -1) {
-				if (t.getChannel() !== Lexer.DEFAULT_TOKEN_CHANNEL) {
+				if (t.channel !== Lexer.DEFAULT_TOKEN_CHANNEL) {
 					hidden.push(t);
 				}
 			} else {
-				if (t.getChannel() === channel) {
+				if (t.channel === channel) {
 					hidden.push(t);
 				}
 			}
@@ -461,20 +461,24 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	getSourceName(): string {
-		return this.tokenSource.getSourceName();
+	get sourceName(): string {
+		return this.tokenSource.sourceName;
 	}
 
 	/** Get the text of all tokens in this buffer. */
+	getText(): string;
+	getText(interval: Interval): string;
+	getText(context: RuleContext): string;
 	@NotNull
 	@Override
-	getText(): string {
-		return this.getTextFromInterval(Interval.of(0, this.size() - 1));
-	}
+	getText(interval?: Interval | RuleContext): string {
+		if (interval === undefined) {
+			interval = Interval.of(0, this.size - 1);
+		} else if (!(interval instanceof Interval)) {
+			// Note: the more obvious check for 'instanceof RuleContext' results in a circular dependency problem
+			interval = interval.sourceInterval;
+		}
 
-	@NotNull
-	@Override
-	getTextFromInterval(interval: Interval): string {
 		let start: number = interval.a;
 		let stop: number = interval.b;
 		if (start < 0 || stop < 0) {
@@ -489,11 +493,11 @@ export class BufferedTokenStream implements TokenStream {
 		let buf: string = "";
 		for (let i = start; i <= stop; i++) {
 			let t: Token = this.tokens[i];
-			if (t.getType() === Token.EOF) {
+			if (t.type === Token.EOF) {
 				break;
 			}
 
-			buf += t.getText();
+			buf += t.text;
 		}
 
 		return buf.toString();
@@ -501,15 +505,9 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	getTextFromContext(ctx: RuleContext): string {
-		return this.getTextFromInterval(ctx.getSourceInterval());
-	}
-
-	@NotNull
-	@Override
 	getTextFromRange(start: any, stop: any): string {
 		if (this.isToken(start) && this.isToken(stop)) {
-			return this.getTextFromInterval(Interval.of(start.getTokenIndex(), stop.getTokenIndex()));
+			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));
 		}
 
 		return "";

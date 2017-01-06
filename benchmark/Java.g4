@@ -775,16 +775,16 @@ shiftExpression
 
 shiftOp
     :   t1='<' t2='<'
-//        { $t1.getLine() == $t2.getLine() &&
-//          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() }?
+//        { $t1.line == $t2.line &&
+//          $t1.charPositionInLine + 1 == $t2.charPositionInLine }?
     |   t1='>' t2='>' t3='>'
-//        { $t1.getLine() == $t2.getLine() &&
-//          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() &&
-//          $t2.getLine() == $t3.getLine() &&
-//          $t2.getCharPositionInLine() + 1 == $t3.getCharPositionInLine() }?
+//        { $t1.line == $t2.line &&
+//          $t1.charPositionInLine + 1 == $t2.charPositionInLine &&
+//          $t2.line == $t3.line &&
+//          $t2.charPositionInLine + 1 == $t3.charPositionInLine }?
     |   t1='>' t2='>'
-//        { $t1.getLine() == $t2.getLine() &&
-//          $t1.getCharPositionInLine() + 1 == $t2.getCharPositionInLine() }?
+//        { $t1.line == $t2.line &&
+//          $t1.charPositionInLine + 1 == $t2.charPositionInLine }?
     ;
 
 

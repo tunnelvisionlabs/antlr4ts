@@ -17,18 +17,18 @@ import { TokenSource } from '../../TokenSource';
  */
 export class RuleTagToken implements Token {
 	/**
-	 * This is the backing field for {@link #getRuleName}.
+	 * This is the backing field for `ruleName`.
 	 */
-	private ruleName: string;
+	private _ruleName: string;
 	/**
 	 * The token type for the current token. This is the token type assigned to
 	 * the bypass alternative for the rule during ATN deserialization.
 	 */
 	private bypassTokenType: number;
 	/**
-	 * This is the backing field for {@link #getLabel}.
+	 * This is the backing field for `label`.
 	 */
-	private label?: string;
+	private _label?: string;
 
 	/**
 	 * Constructs a new instance of {@link RuleTagToken} with the specified rule
@@ -47,9 +47,9 @@ export class RuleTagToken implements Token {
 			throw new Error("ruleName cannot be null or empty.");
 		}
 
-		this.ruleName = ruleName;
+		this._ruleName = ruleName;
 		this.bypassTokenType = bypassTokenType;
-		this.label = label;
+		this._label = label;
 	}
 
 	/**
@@ -58,8 +58,8 @@ export class RuleTagToken implements Token {
 	 * @return The name of the parser rule associated with this rule tag.
 	 */
 	@NotNull
-	getRuleName(): string {
-		return this.ruleName;
+	get ruleName(): string {
+		return this._ruleName;
 	}
 
 	/**
@@ -68,8 +68,8 @@ export class RuleTagToken implements Token {
 	 * @return The name of the label associated with the rule tag, or
 	 * {@code null} if this is an unlabeled rule tag.
 	 */
-	getLabel(): string | undefined {
-		return this.label;
+	get label(): string | undefined {
+		return this._label;
 	}
 
 	/**
@@ -78,7 +78,7 @@ export class RuleTagToken implements Token {
 	 * <p>Rule tag tokens are always placed on the {@link #DEFAULT_CHANNEL}.</p>
 	 */
 	@Override
-	getChannel(): number {
+	get channel(): number {
 		return Token.DEFAULT_CHANNEL;
 	}
 
@@ -89,12 +89,12 @@ export class RuleTagToken implements Token {
 	 * delimiters.</p>
 	 */
 	@Override
-	getText(): string {
-		if (this.label != null) {
-			return "<" + this.label + ":" + this.ruleName + ">";
+	get text(): string {
+		if (this._label != null) {
+			return "<" + this._label + ":" + this._ruleName + ">";
 		}
 
-		return "<" + this.ruleName + ">";
+		return "<" + this._ruleName + ">";
 	}
 
 	/**
@@ -104,7 +104,7 @@ export class RuleTagToken implements Token {
 	 * transitions created during ATN deserialization.</p>
 	 */
 	@Override
-	getType(): number {
+	get type(): number {
 		return this.bypassTokenType;
 	}
 
@@ -114,7 +114,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns 0.</p>
 	 */
 	@Override
-	getLine(): number {
+	get line(): number {
 		return 0;
 	}
 
@@ -124,7 +124,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getCharPositionInLine(): number {
+	get charPositionInLine(): number {
 		return -1;
 	}
 
@@ -134,7 +134,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getTokenIndex(): number {
+	get tokenIndex(): number {
 		return -1;
 	}
 
@@ -144,7 +144,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getStartIndex(): number {
+	get startIndex(): number {
 		return -1;
 	}
 
@@ -154,7 +154,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
 	 */
 	@Override
-	getStopIndex(): number {
+	get stopIndex(): number {
 		return -1;
 	}
 
@@ -164,7 +164,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getTokenSource(): TokenSource | undefined {
+	get tokenSource(): TokenSource | undefined {
 		return undefined;
 	}
 
@@ -174,7 +174,7 @@ export class RuleTagToken implements Token {
 	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
 	 */
 	@Override
-	getInputStream(): CharStream | undefined {
+	get inputStream(): CharStream | undefined {
 		return undefined;
 	}
 
@@ -186,6 +186,6 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	toString(): string {
-		return this.ruleName + ":" + this.bypassTokenType;
+		return this._ruleName + ":" + this.bypassTokenType;
 	}
 }

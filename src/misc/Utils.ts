@@ -117,7 +117,7 @@ export function equals(x: any, y: any): boolean {
 
 // export function removeAll<T>(@NotNull predicate: List<T> list,@NotNull Predicate<? super T>): void {
 // 	let j: number =  0;
-// 	for (let i = 0; i < list.size(); i++) {
+// 	for (let i = 0; i < list.size; i++) {
 // 		let item: T =  list.get(i);
 // 		if (!predicate.eval(item)) {
 // 			if (j != i) {
@@ -128,8 +128,8 @@ export function equals(x: any, y: any): boolean {
 // 		}
 // 	}
 
-// 	if (j < list.size()) {
-// 		list.subList(j, list.size()).clear();
+// 	if (j < list.size) {
+// 		list.subList(j, list.size).clear();
 // 	}
 // }
 
@@ -170,8 +170,8 @@ export function toCharArray(str: string): Uint16Array {
 
 // export function toCharArray(data: IntegerList): char[] {
 // 	if ( data==null ) return null;
-// 	let cdata: char[] =  new char[data.size()];
-// 	for (let i=0; i<data.size(); i++) {
+// 	let cdata: char[] =  new char[data.size];
+// 	for (let i=0; i<data.size; i++) {
 // 		cdata[i] = (char)data.get(i);
 // 	}
 // 	return cdata;

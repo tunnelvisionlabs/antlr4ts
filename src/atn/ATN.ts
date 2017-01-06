@@ -111,8 +111,8 @@ export class ATN {
 		this.LL1Table.clear();
 	}
 
-	getContextCacheSize(): number {
-		return this.contextCache.size();
+	get contextCacheSize(): number {
+		return this.contextCache.size;
 	}
 
 	getCachedContext(context: PredictionContext): PredictionContext {
@@ -192,7 +192,7 @@ export class ATN {
 		return undefined;
 	}
 
-	getNumberOfDecisions(): number {
+	get numberOfDecisions(): number {
 		return this.decisionToState.length;
 	}
 
@@ -254,7 +254,7 @@ export class ATN {
 			following = this.nextTokens(rt.followState);
 			expected.addAll(following);
 			expected.remove(Token.EPSILON);
-			ctx = ctx.parent;
+			ctx = ctx._parent;
 		}
 
 		if (following.contains(Token.EPSILON)) {

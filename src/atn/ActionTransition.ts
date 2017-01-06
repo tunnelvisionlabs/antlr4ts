@@ -23,12 +23,12 @@ export class ActionTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.ACTION;
 	}
 
 	@Override
-	isEpsilon(): boolean {
+	get isEpsilon(): boolean {
 		return true; // we are to be ignored by analysis 'cept for predicates
 	}
 

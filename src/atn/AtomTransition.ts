@@ -22,13 +22,13 @@ export class AtomTransition extends Transition {
 	}
 
 	@Override
-	getSerializationType(): TransitionType {
+	get serializationType(): TransitionType {
 		return TransitionType.ATOM;
 	}
 
 	@Override
 	@NotNull
-	label(): IntervalSet {
+	get label(): IntervalSet {
 		return IntervalSet.of(this._label);
 	}
 

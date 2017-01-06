@@ -61,7 +61,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  for each element in the children list. For example, for a rule
 	 *  invocation there is the invoking state and the following state.
 	 *
-	 *  The parser setState() method updates field s and adds it to this list
+	 *  The parser state property updates field s and adds it to this list
 	 *  if we are debugging/tracing.
      *
      *  This does not trace states visited during prediction.
@@ -104,7 +104,7 @@ export class ParserRuleContext extends RuleContext {
 	 * YContext as well else they are lost!
 	 */
 	copyFrom(ctx: ParserRuleContext): void {
-		this.parent = ctx.parent;
+		this._parent = ctx._parent;
 		this.invokingState = ctx.invokingState;
 
 		this.start = ctx.start;
@@ -117,7 +117,7 @@ export class ParserRuleContext extends RuleContext {
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
 					this.children.push(child);
-					child.parent = this;
+					child._parent = this;
 				}
 			}
 		}
@@ -139,7 +139,7 @@ export class ParserRuleContext extends RuleContext {
 			// Does not set parent link
 		} else {
 			t = new TerminalNode(t);
-			t.parent = this;
+			t._parent = this;
 			result = t;
 		}
 
@@ -170,14 +170,14 @@ export class ParserRuleContext extends RuleContext {
 	addErrorNode(badToken: Token): ErrorNode {
 		let t = new ErrorNode(badToken);
 		this.addChild(t);
-		t.parent = this;
+		t._parent = this;
 		return t;
 	}
 
 	@Override
 	/** Override to make type more specific */
-	getParent(): ParserRuleContext | undefined {
-		let parent = super.getParent();
+	get parent(): ParserRuleContext | undefined {
+		let parent = super.parent;
 		if (parent === undefined || parent instanceof ParserRuleContext) {
 			return parent;
 		}
@@ -218,8 +218,8 @@ export class ParserRuleContext extends RuleContext {
 		let j: number = -1; // what token with ttype have we found?
 		for (let o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol: Token = o.getSymbol();
-				if (symbol.getType() === ttype) {
+				let symbol: Token = o.symbol;
+				if (symbol.type === ttype) {
 					j++;
 					if (j === i) {
 						return o;
@@ -240,8 +240,8 @@ export class ParserRuleContext extends RuleContext {
 
 		for (let o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol = o.getSymbol();
-				if (symbol.getType() === ttype) {
+				let symbol = o.symbol;
+				if (symbol.type === ttype) {
 					tokens.push(o);
 				}
 			}
@@ -250,19 +250,13 @@ export class ParserRuleContext extends RuleContext {
 		return tokens;
 	}
 
+	get ruleContext(): this {
+		return this;
+	}
+
 	// NOTE: argument order change from Java version
-	getRuleContext(): this;
-	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T;
-	getRuleContext<T extends ParserRuleContext>(i?: number, ctxType?: { new (...args: any[]): T; }): this | T {
-		if (i === undefined) {
-			return this;
-		}
-
-		if (ctxType) {
-			return this.getChild(i, ctxType);
-		}
-
-		throw new Error("Required ctxType was not provided");
+	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
+		return this.getChild(i, ctxType);
 	}
 
 	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
@@ -281,19 +275,19 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	@Override
-	getChildCount() {
+	get childCount() {
 		return this.children ? this.children.length : 0;
 	}
 
 	@Override
-	getSourceInterval(): Interval {
+	get sourceInterval(): Interval {
 		if (!this.start) {
 			return Interval.INVALID;
 		}
-		if (!this.stop || this.stop.getTokenIndex() < this.start.getTokenIndex()) {
-			return Interval.of(this.start.getTokenIndex(), this.start.getTokenIndex() - 1); // empty
+		if (!this.stop || this.stop.tokenIndex < this.start.tokenIndex) {
+			return Interval.of(this.start.tokenIndex, this.start.tokenIndex - 1); // empty
 		}
-		return Interval.of(this.start.getTokenIndex(), this.stop.getTokenIndex());
+		return Interval.of(this.start.tokenIndex, this.stop.tokenIndex);
 	}
 
 	/**

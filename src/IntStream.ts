@@ -41,15 +41,15 @@ export interface IntStream {
 	 * effects:
 	 *
 	 * <ul>
-	 *   <li><strong>Forward movement:</strong> The value of {@link #index index()}
-	 *		before calling this method is less than the value of {@code index()}
+	 *   <li><strong>Forward movement:</strong> The value of `index`
+	 *		before calling this method is less than the value of `index`
 	 *		after calling this method.</li>
 	 *   <li><strong>Ordered lookahead:</strong> The value of {@code LA(1)} before
 	 *		calling this method becomes the value of {@code LA(-1)} after calling
 	 *		this method.</li>
 	 * </ul>
 	 *
-	 * Note that calling this method does not guarantee that {@code index()} is
+	 * Note that calling this method does not guarantee that `index` is
 	 * incremented by exactly 1, as that would preclude the ability to implement
 	 * filtering streams (e.g. {@link CommonTokenStream} which distinguishes
 	 * between "on-channel" and "off-channel" tokens).
@@ -73,10 +73,10 @@ export interface IntStream {
 	 *
 	 * <ul>
 	 *   <li>{@code i>0}</li>
-	 *   <li>{@code i==-1} and {@link #index index()} returns a value greater
-	 *     than the value of {@code index()} after the stream was constructed
+	 *   <li>{@code i==-1} and `index` returns a value greater
+	 *     than the value of `index` after the stream was constructed
 	 *     and {@code LA(1)} was called in that order. Specifying the current
-	 *     {@code index()} relative to the index after the stream was created
+	 *     `index` relative to the index after the stream was created
 	 *     allows for filtering implementations that do not return every symbol
 	 *     from the underlying source. Specifying the call to {@code LA(1)}
 	 *     allows for lazily initialized streams.</li>
@@ -99,7 +99,7 @@ export interface IntStream {
 	/**
 	 * A mark provides a guarantee that {@link #seek seek()} operations will be
 	 * valid over a "marked range" extending from the index where {@code mark()}
-	 * was called to the current {@link #index index()}. This allows the use of
+	 * was called to the current `index`. This allows the use of
 	 * streaming input sources by specifying the minimum buffering requirements
 	 * to support arbitrary lookahead during prediction.
 	 *
@@ -120,7 +120,7 @@ export interface IntStream {
 	 * <p>This method does not change the current position in the input stream.</p>
 	 *
 	 * <p>The following example shows the use of {@link #mark mark()},
-	 * {@link #release release(mark)}, {@link #index index()}, and
+	 * {@link #release release(mark)}, `index`, and
 	 * {@link #seek seek(index)} as part of an operation to safely work within a
 	 * marked region, then restore the stream position to its original value and
 	 * release the mark.</p>
@@ -129,7 +129,7 @@ export interface IntStream {
 	 * int index = -1;
 	 * int mark = stream.mark();
 	 * try {
-	 *   index = stream.index();
+	 *   index = stream.index;
 	 *   // perform work here...
 	 * } finally {
 	 *   if (index != -1) {
@@ -166,7 +166,7 @@ export interface IntStream {
 	 * {@link IntStream initializing method} has occurred after this stream was
 	 * constructed.</p>
 	 */
-	index(): number;
+	readonly index: number;
 
 	/**
 	 * Set the input cursor to the position indicated by {@code index}. If the
@@ -176,7 +176,7 @@ export interface IntStream {
 	 * will be true.
 	 *
 	 * <ul>
-	 *   <li>{@link #index index()} will return the index of the first symbol
+	 *   <li>`index` will return the index of the first symbol
 	 *     appearing at or after the specified {@code index}. Specifically,
 	 *     implementations which filter their sources should automatically
 	 *     adjust {@code index} forward the minimum amount required for the
@@ -205,7 +205,7 @@ export interface IntStream {
 	 * @throws UnsupportedOperationException if the size of the stream is
 	 * unknown.
 	 */
-	size(): number;
+	readonly size: number;
 
 	/**
 	 * Gets the name of the underlying symbol source. This method returns a
@@ -213,5 +213,5 @@ export interface IntStream {
 	 * returns {@link #UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull
-	getSourceName(): string;
+	readonly sourceName: string;
 }
