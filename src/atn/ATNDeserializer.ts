@@ -6,6 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
 
 import { ActionTransition } from './ActionTransition';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ATN } from './ATN';
 import { ATNDeserializationOptions } from './ATNDeserializationOptions';
 import { ATNState } from './ATNState';
@@ -321,7 +322,17 @@ export class ATNDeserializer {
 		}
 
 		// edges for rule stop states can be derived, so they aren't serialized
-		let returnTransitions = new Set<{ stopState: number, returnState: number, outermostPrecedenceReturn: number }>();
+		type T = { stopState: number, returnState: number, outermostPrecedenceReturn: number };
+		let returnTransitionsSet = new Array2DHashSet<T>({
+			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
+
+			equals: function (a: T, b: T): boolean {
+				return a.stopState === b.stopState
+					&& a.returnState === b.returnState
+					&& a.outermostPrecedenceReturn === b.outermostPrecedenceReturn;
+			}
+		});
+		let returnTransitions: T[] = [];
 		for (let state of atn.states) {
 			let returningToLeftFactored: boolean = state.ruleIndex >= 0 && atn.ruleToStartState[state.ruleIndex].leftFactored;
 			for (let i = 0; i < state.getNumberOfTransitions(); i++) {
@@ -343,7 +354,10 @@ export class ATNDeserializer {
 					}
 				}
 
-				returnTransitions.add({ stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn: outermostPrecedenceReturn });
+				let current = { stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn: outermostPrecedenceReturn };
+				if (returnTransitionsSet.add(current)) {
+					returnTransitions.push(current);
+				}
 			}
 		}
 
