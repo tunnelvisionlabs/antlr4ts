@@ -176,35 +176,22 @@ export class Stopwatch {
 	}
 }
 
-export interface Hash {
-	getValue(): number;
+export class MurmurHashChecksum {
+	private value: number;
+	private count: number;
 
-	reset(): void;
+	constructor() {
+		this.value = MurmurHash.initialize();
+		this.count = 0;
+	}
 
-	update(i: number): void;
-}
-
-class Murmur implements Hash {
-	private readonly seed?: number;
-	private hash: number;
-	private wordCount: number = 0;
-
-	constructor(seed?: number) {
-		this.reset();
+	update(value: number): void {
+		this.value = MurmurHash.update(this.value, value);
+		this.count++;
 	}
 
 	getValue(): number {
-		return MurmurHash.finish(this.hash, this.wordCount);
-	}
-
-	reset(): void {
-		this.hash = MurmurHash.initialize(this.seed);
-		this.wordCount = 0;
-	}
-
-	update(i: number): void {
-		this.hash = MurmurHash.update(this.hash, i);
-		this.wordCount++;
+		return MurmurHash.finish(this.value, this.count);
 	}
 }
 
@@ -936,7 +923,7 @@ export class TestPerformance {
 			results.push(futureChecksum());
         }
 
-		let checksum: Hash =  new Murmur();
+		let checksum = new MurmurHashChecksum();
 		let currentIndex: number =  -1;
 		for (let future of results) {
 			currentIndex++;
@@ -1216,7 +1203,7 @@ export class TestPerformance {
 		return result;
 	}
 
-	public static updateChecksum(checksum: Hash, value: number | Token | undefined): void {
+	public static updateChecksum(checksum: MurmurHashChecksum, value: number | Token | undefined): void {
 		if (typeof value === 'number') {
 			checksum.update(value);
 		} else {
@@ -1267,7 +1254,7 @@ export class TestPerformance {
                 // @SuppressWarnings("unused")
 				// @Override
                 parseFile(input: CharStream, currentPass: number, thread: number): FileParseResult {
-					let checksum: Hash =  new Murmur();
+					let checksum = new MurmurHashChecksum();
 
 					let startTime: Stopwatch = Stopwatch.startNew();
 					assert(thread >= 0 && thread < TestPerformance.NUMBER_OF_THREADS);
@@ -1947,9 +1934,9 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	private static ENTER_RULE: number =  3;
 	private static EXIT_RULE: number =  4;
 
-	private checksum: Hash;
+	private checksum: MurmurHashChecksum;
 
-	constructor(checksum: Hash) {
+	constructor(checksum: MurmurHashChecksum) {
 		this.checksum = checksum;
 	}
 

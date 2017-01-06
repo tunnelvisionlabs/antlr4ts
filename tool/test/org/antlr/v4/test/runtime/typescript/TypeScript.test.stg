@@ -221,6 +221,14 @@ TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
 ImportListener(X) ::= ""
 
+ImportVisitor(grammarName) ::= <<
+@parser::header {
+import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
+import { RuleNode } from 'antlr4ts/tree/RuleNode';
+import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
+}
+>>
+
 ImportPredictionMode() ::= <<
 @beforeParser {
 import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
@@ -448,13 +456,145 @@ export class LeafListener implements TListener {
 }
 >>
 
-ImportVisitor(X) ::= ""
-BasicVisitor(X) ::= ""
-WalkVisitor(s) ::= ""
-LRWithLabelsVisitor(X) ::= ""
-RuleGetterVisitor(X) ::= ""
-LRVisitor(x) ::= ""
-TokenGetterVisitor(x) ::= ""
+WalkVisitor(s) ::= <<
+console.log(new LeafVisitor().visit(<s>));
+>>
+
+TerminalVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	@Override
+	visitTerminal(node: TerminalNode): string {
+		return node.symbol.toString() + "\n";
+	}
+
+	@Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	@Override
+	protected aggregateResult(aggregate: string, nextResult: string): string {
+		return aggregate + nextResult;
+	}
+}
+}
+>>
+
+ErrorVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	@Override
+	visitErrorNode(node: ErrorNode): string {
+		return "Error encountered: " + node.symbol.toString();
+	}
+
+	@Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	@Override
+	protected aggregateResult(aggregate: string, nextResult: string): string {
+		return aggregate + nextResult;
+	}
+}
+}
+>>
+
+ShouldNotVisitEOFVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	@Override
+	visitTerminal(node: TerminalNode): string {
+		return node.symbol.toString() + "\n";
+	}
+
+	@Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	@Override
+	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+		return currentResult.length === 0;
+	}
+}
+}
+>>
+
+ShouldNotVisitTerminalVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	@Override
+	visitTerminal(node: TerminalNode): never {
+		throw new Error("Should not be reachable");
+	}
+
+	@Override
+	protected defaultResult(): string {
+		return "default result";
+	}
+
+	@Override
+	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+		return false;
+	}
+}
+}
+>>
+
+CalculatorVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <grammarName>Visitor\<number> {
+	@Override
+	visitS(context: SContext): number {
+		return this.visit(context.expr());
+	}
+
+	@Override
+	visitNumber(context: NumberContext): number {
+		return Number(context.INT().text);
+	}
+
+	@Override
+	visitMultiply(context: MultiplyContext): number {
+		let left: number = this.visit(context.expr(0));
+		let right: number = this.visit(context.expr(1));
+		return left / right;
+		// if (context.MUL() !== undefined) {
+		// 	return left * right;
+		// }
+		// else {
+		// 	return left / right;
+		// }
+	}
+
+	@Override
+	visitAdd(context: AddContext): number {
+		let left: number = this.visit(context.expr(0));
+		let right: number = this.visit(context.expr(1));
+		return left + right;
+		// if (context.ADD() !== undefined) {
+		// 	return left + right;
+		// }
+		// else {
+		// 	return left - right;
+		// }
+	}
+
+	@Override
+	protected defaultResult(): never {
+		throw new Error("Should not be reachable");
+	}
+
+	@Override
+	protected aggregateResult(aggregate: number, nextResult: number): never {
+		throw new Error("Should not be reachable");
+	}
+}
+}
+>>
 
 DeclareContextListGettersFunction() ::= <<
 foo(s: SContext): void {
@@ -488,14 +628,6 @@ IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
 
 	// Skipped due to limitations in the TypeScript target
-	"Visitors.Basic": "Test not implemented by this target.",
-	"Visitors.LR": "Test not implemented by this target.",
-	"Visitors.LRWithLabels": "Test not implemented by this target.",
-	"Visitors.RuleGetters_1": "Test not implemented by this target.",
-	"Visitors.RuleGetters_2": "Test not implemented by this target.",
-	"Visitors.TokenGetters_1": "Test not implemented by this target.",
-	"Visitors.TokenGetters_2": "Test not implemented by this target.",
-
 	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Arguments are not supported with labeled outer alternatives.",
 
 	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Arguments are not supported with labeled outer alternatives.",
