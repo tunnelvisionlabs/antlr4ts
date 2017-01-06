@@ -147,8 +147,8 @@ string(text) ::= <<
 writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
 writeln(s) ::= <<console.log(<s>);>>
-
 write(s) ::= <<process.stdout.write(String(<s>));>>
+writeList(s) ::= <<console.log(<s; separator="+">);>>
 
 False() ::= "false"
 
@@ -171,6 +171,7 @@ AssertIsList(v) ::= "let __ttt__: Array\<any> = <v>;" // just use static type sy
 AssignLocal(s,v) ::= "<s> = <v>;"
 
 InitIntMember(n,v) ::= <%<n>: number = <v>;%>
+InitLocalIntMember(n, v) ::= <%let <n>: number = <v>;%>
 
 InitBooleanMember(n,v) ::= <%<n>: boolean = <v>;%>
 
@@ -220,11 +221,30 @@ TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
 ImportListener(X) ::= ""
 
+ImportPredictionMode() ::= <<
+@beforeParser {
+import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
+}
+>>
+
+ImportBailErrorStrategy() ::= <<
+@beforeParser {
+import { BailErrorStrategy } from 'antlr4ts/BailErrorStrategy';
+}
+>>
+
 GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.getVocabulary())"
 
 RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
 
+FULL_CONTEXT_DFA() ::= "this.getInterpreter().enable_global_context_dfa = true;"
 LL_EXACT_AMBIG_DETECTION() ::= <<this.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
+
+ParserToken(parser, token) ::= <%<parser>.<token>%>
+
+Production(p) ::= <%<p>%>
+
+Result(r) ::= <%<r>%>
 
 ParserPropertyMember() ::= <<
 @members {
@@ -234,11 +254,13 @@ Property(): boolean {
 }
 >>
 
-PositionAdjustingLexer() ::= <<
+ParserPropertyCall(p, call) ::= "<p>.<call>"
 
+PositionAdjustingLexer() ::= <<
+@members {
 nextToken(): Token {
 	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
-		this._interp = new PositionAdjustingLexerATNSimulator(_ATN, this);
+		this._interp = new PositionAdjustingLexerATNSimulator(PositionAdjustingLexer._ATN, this);
 	}
 
 	return super.nextToken();
@@ -246,11 +268,11 @@ nextToken(): Token {
 
 emit(): Token {
 	switch (this._type) {
-	case TOKENS:
+	case PositionAdjustingLexer.TOKENS:
 		this.handleAcceptPositionForKeyword("tokens");
 		break;
 
-	case LABEL:
+	case PositionAdjustingLexer.LABEL:
 		this.handleAcceptPositionForIdentifier();
 		break;
 
@@ -262,13 +284,13 @@ emit(): Token {
 }
 
 private handleAcceptPositionForIdentifier(): boolean {
-	let tokenText = Text;
+	let tokenText = this.getText();
 	let identifierLength = 0;
-	while (identifierLength \< tokenText.length && this.isIdentifierChar(tokenText[identifierLength])) {
+	while (identifierLength \< tokenText.length && PositionAdjustingLexer.isIdentifierChar(tokenText[identifierLength])) {
 		identifierLength++;
 	}
 
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + identifierLength) {
+	if (this.getInputStream().index() > this._tokenStartCharIndex + identifierLength) {
 		let offset = identifierLength - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
@@ -278,7 +300,7 @@ private handleAcceptPositionForIdentifier(): boolean {
 }
 
 private handleAcceptPositionForKeyword(keyword: string): boolean {
-	if (this.getInputStream().getIndex() > this._tokenStartCharIndex + keyword.length) {
+	if (this.getInputStream().index() > this._tokenStartCharIndex + keyword.length) {
 		let offset = keyword.length - 1;
 		this.getInterpreter().resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
 		return true;
@@ -292,9 +314,15 @@ getInterpreter(): PositionAdjustingLexerATNSimulator {
 }
 
 private static isIdentifierChar(c: string): boolean {
-	return char.IsLetterOrDigit(c) || c == '_';
+	return /^[a-zA-Z0-9_]$/.test(c);
+}
 }
 
+@beforeLexer {
+import { Token } from 'antlr4ts';
+}
+
+@afterLexer {
 export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
 	constructor(atn: ATN, recog: Lexer) {
@@ -309,19 +337,25 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 	}
 
 }
-
+}
 >>
 
 BasicListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
+@parser::afterParser {
 export class LeafListener implements TListener {
 	visitTerminal(node: TerminalNode): void {
 		console.log(node.getSymbol().getText());
 	}
 }
+}
 >>
 
 WalkListener(s) ::= <<
-ParseTreeWalker.Default.Walk(new LeafListener(), <s>);
+ParseTreeWalker.DEFAULT.walk(new LeafListener(), <s>);
 >>
 
 TreeNodeWithAltNumField(X) ::= <<
@@ -341,55 +375,86 @@ export class MyRuleNode extends PRC {
 >>
 
 TokenGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
+@parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: TParser.AContext): void {
+	exitA(ctx: AContext): void {
 		if (ctx.getChildCount() === 2 && ctx.INT().length === 2) {
-			console.log("{0} {1} [{2}, {3}]",ctx.INT(0).getSymbol().getText(),
-				ctx.INT(1).getSymbol().getText(), ctx.INT()[0], ctx.INT()[1]);
+			console.log(ctx.INT(0).getSymbol().getText() + " " +
+				ctx.INT(1).getSymbol().getText() + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
 		} else {
-			console.log(ctx.ID().getSymbol());
+			console.log(ctx.ID().getSymbol().toString());
 		}
 	}
+}
 }
 >>
 
 RuleGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
+@parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: TParser.AContext): void {
+	exitA(ctx: AContext): void {
 		if (ctx.getChildCount() === 2) {
-			console.log("{0} {1} {2}",ctx.b(0).getStart().getText(),
-				ctx.b(1).getStart().getText(),ctx.b()[0].getStart().getText());
+			console.log(ctx.b(0).getStart().getText() + " " +
+				ctx.b(1).getStart().getText() + " " + ctx.b()[0].getStart().getText());
 		} else {
 			console.log(ctx.b(0).getStart().getText());
 		}
 	}
 }
+}
 >>
 
-
 LRListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
+@parser::afterParser {
 export class LeafListener implements TListener {
-	exitE(ctx: TParser.EContext): void {
+	exitE(ctx: EContext): void {
 		if (ctx.getChildCount() === 3) {
-			console.log("{0} {1} {2}\n",ctx.e(0).getStart().getText(),
-				ctx.e(1).getStart().getText(), ctx.e()[0].getStart().getText());
+			console.log(ctx.e(0).getStart().getText() + " " +
+				ctx.e(1).getStart().getText() + " " + ctx.e()[0].getStart().getText());
 		} else {
 			console.log(ctx.INT().getSymbol().getText());
 		}
 	}
 }
+}
 >>
 
 LRWithLabelsListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+}
+
+@parser::afterParser {
 export class LeafListener implements TListener {
-	exitCall(ctx: TParser.CallContext): void {
-		console.log("{0} {1}",ctx.e().getStart().getText(),ctx.eList());
+	exitCall(ctx: CallContext): void {
+		console.log(ctx.e().getStart().getText() + " " + ctx.eList());
 	}
-	exitInt(ctx: TParser.IntContext): void {
+	exitInt(ctx: IntContext): void {
 		console.log(ctx.INT().getSymbol().getText());
 	}
 }
+}
 >>
+
+ImportVisitor(X) ::= ""
+BasicVisitor(X) ::= ""
+WalkVisitor(s) ::= ""
+LRWithLabelsVisitor(X) ::= ""
+RuleGetterVisitor(X) ::= ""
+LRVisitor(x) ::= ""
+TokenGetterVisitor(x) ::= ""
 
 DeclareContextListGettersFunction() ::= <<
 foo(s: SContext): void {
@@ -412,71 +477,37 @@ Declare_pred() ::= <<pred(v: boolean): boolean {
 
 Invoke_pred(v) ::= <<this.pred(<v>)>>
 
+ParserTokenType(t) ::= "Parser.<t>"
+ContextRuleFunction(ctx, rule) ::= "<ctx>.<rule>"
+ContextLabel(ctx, label) ::= "<ctx>._<label>"
+StringType() ::= "string | undefined"
+IntType() ::= "number"
+ContextMember(ctx, subctx, member) ::= "<ctx>.<subctx>.<member>"
+
 IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
-	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Test does not support replacing the 'int' type.",
-	"CompositeParsers.ImportedRuleWithAction": "Test suite cannot distinguish between field and local variable declaration, but the syntax in TypeScript differs for these (the latter requires a 'let').",
-
-	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.DependentPredNotInOuterCtxShouldBeIgnored": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.PredicateDependentOnArg": "Test does not support replacing the 'int' type.",
-	"SemPredEvalParser.PredicateDependentOnArg2": "Test does not support replacing the 'int' type.",
-
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.MultipleAlternativesWithCommonLabel_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActions_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_1": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_2": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_3": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.ReturnValueAndActionsAndLabels_4": "Test does not support replacing the 'int' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_1": "Test does not support replacing the 'String' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_2": "Test does not support replacing the 'String' type.",
-	"LeftRecursion.PrefixOpWithActionAndLabel_3": "Test does not support replacing the 'String' type.",
-
-	"FullContextParsing.AmbiguityNoLoop": "Test does not support importing PredictionMode.",
-	"FullContextParsing.AmbigYieldsCtxSensitiveDFA": "Test does not support importing PredictionMode.",
-	"FullContextParsing.ExprAmbiguity_1": "Test does not support replacing the 'int' type.",
-	"FullContextParsing.ExprAmbiguity_2": "Test does not support replacing the 'int' type.",
-	"FullContextParsing.CtxSensitiveDFATwoDiffInputWithDFA": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.CtxSensitiveWithDFA_1": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.CtxSensitiveWithDFA_2": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_1": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_2": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_3": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_4": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_5": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithDFA_6": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_1": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_2": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_3": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_4": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_5": "Test does not support importing PredictionMode.",
-	"FullContextParsing.FullContextIF_THEN_ELSEParse_WithoutDFA_6": "Test does not support importing PredictionMode.",
-	"FullContextParsing.SLLSeesEOFInLLGrammarWithDFA": "Test does not support 'this.' when calling getInterpreter().",
-	"FullContextParsing.LoopsSimulateTailRecursion": "Test does not support importing PredictionMode.",
-
-	"LexerExec.PositionAdjustingLexer": "Test does not support using '@beforeParser' instead of '@members'.",
-
-	"ParserExec.PredictionIssue334": "Test does not support importing 'BailErrorStrategy'.",
-
-	"Listeners.Basic": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.LR": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.LRWithLabels": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.RuleGetters_1": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.RuleGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.TokenGetters_1": "Test does not support using '@beforeParser' instead of '@members'.",
-	"Listeners.TokenGetters_2": "Test does not support using '@beforeParser' instead of '@members'.",
-
-	"SemPredEvalParser.2UnpredicatedAlts": "Test does not support importing PredictionMode.",
-	"SemPredEvalParser.2UnpredicatedAltsAndOneOrthogonalAlt": "Test does not support importing PredictionMode.",
 
 	// Skipped due to limitations in the TypeScript target
+	"Visitors.Basic": "Test not implemented by this target.",
+	"Visitors.LR": "Test not implemented by this target.",
+	"Visitors.LRWithLabels": "Test not implemented by this target.",
+	"Visitors.RuleGetters_1": "Test not implemented by this target.",
+	"Visitors.RuleGetters_2": "Test not implemented by this target.",
+	"Visitors.TokenGetters_1": "Test not implemented by this target.",
+	"Visitors.TokenGetters_2": "Test not implemented by this target.",
+
+	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Arguments are not supported with labeled outer alternatives.",
+
+	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.DependentPredNotInOuterCtxShouldBeIgnored": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.PredicateDependentOnArg": "Arguments are not supported with labeled outer alternatives.",
+	"SemPredEvalParser.PredicateDependentOnArg2": "Arguments are not supported with labeled outer alternatives.",
+
+	"FullContextParsing.ExprAmbiguity_1": "Arguments are not supported with labeled outer alternatives.",
+	"FullContextParsing.ExprAmbiguity_2": "Arguments are not supported with labeled outer alternatives.",
+
+	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass.",
 
 	default: false
 ]

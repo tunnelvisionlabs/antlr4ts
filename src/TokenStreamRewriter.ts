@@ -150,7 +150,10 @@ export class TokenStreamRewriter {
 		}
 
 		// to insert after, just insert before next index (even if past end)
-		this.insertBefore(index + 1, text, programName);
+		let op = new InsertAfterOp(this.tokens, index, text);
+		let rewrites: RewriteOperation[] = this.getProgram(programName);
+		op.instructionIndex = rewrites.length;
+		rewrites.push(op);
 	}
 
 	insertBefore(t: Token, text: any): void;
@@ -431,8 +434,6 @@ export class TokenStreamRewriter {
 				// throw exception unless disjoint or identical
 				let disjoint: boolean =
 					prevRop.lastIndex<rop.index || prevRop.index > rop.lastIndex;
-				let same: boolean =
-					prevRop.index==rop.index && prevRop.lastIndex==rop.lastIndex;
 				// Delete special case of replace (text==null):
 				// D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
 				if ( prevRop.text==null && rop.text==null && !disjoint ) {
@@ -442,7 +443,7 @@ export class TokenStreamRewriter {
 					rop.lastIndex = Math.max(prevRop.lastIndex, rop.lastIndex);
 					// console.log(`new rop ${rop}`);
 				}
-				else if ( !disjoint && !same ) {
+				else if ( !disjoint ) {
 					throw new Error(`replace op boundaries of ${rop} overlap with previous ${prevRop}`);
 				}
 			}
@@ -457,12 +458,18 @@ export class TokenStreamRewriter {
 			// combine current insert with prior if any at same index
 			let prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (let prevIop of prevInserts) {
-				if ( prevIop.index == iop.index ) { // combine objects
-					// convert to strings...we're in process of toString'ing
-					// whole token buffer so no lazy eval issue with any templates
-					iop.text = this.catOpText(iop.text,prevIop.text);
-					// delete redundant prior insert
-					rewrites[prevIop.instructionIndex] = undefined;
+				if ( prevIop.index === iop.index ) {
+					if (prevIop instanceof InsertAfterOp) {
+						iop.text = this.catOpText(prevIop.text, iop.text);
+						rewrites[prevIop.instructionIndex] = undefined;
+					}
+					else if (prevIop instanceof InsertBeforeOp) { // combine objects
+						// convert to strings...we're in process of toString'ing
+						// whole token buffer so no lazy eval issue with any templates
+						iop.text = this.catOpText(iop.text,prevIop.text);
+						// delete redundant prior insert
+						rewrites[prevIop.instructionIndex] = undefined;
+					}
 				}
 			}
 			// look for replaces where iop.index is in range; error
@@ -518,10 +525,10 @@ export class TokenStreamRewriter {
 
 export class RewriteOperation {
 	protected tokens: TokenStream;
-/** What index into rewrites List are we? */
-public instructionIndex: number;
-/** Token buffer index. */
-public index: number;
+	/** What index into rewrites List are we? */
+	public instructionIndex: number;
+	/** Token buffer index. */
+	public index: number;
 	public text: any;
 
 	constructor(tokens: TokenStream, index: number);
@@ -561,6 +568,16 @@ class InsertBeforeOp extends RewriteOperation {
 			buf.push(String(this.tokens.get(this.index).getText()));
 		}
 		return this.index+1;
+	}
+}
+
+/** Distinguish between insert after/before to do the "insert afters"
+ *  first and then the "insert befores" at same index. Implementation
+ *  of "insert after" is "insert before index+1".
+ */
+class InsertAfterOp extends InsertBeforeOp {
+	constructor(tokens: TokenStream, index: number, text: any) {
+		super(tokens, index + 1, text); // insert after is insert before index+1
 	}
 }
 

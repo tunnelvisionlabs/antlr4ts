@@ -73,7 +73,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		let i: number = this.p;
 		let n: number = 1;
 		// find k good tokens looking backwards
-		while (n <= k) {
+		while (n <= k && i > 0) {
 			// skip off-channel tokens
 			i = this.previousTokenOnChannel(i - 1, this.channel);
 			n++;

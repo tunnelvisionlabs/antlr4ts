@@ -13,28 +13,62 @@ import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
 	walk(listener: ParseTreeListener, t: ParseTree): void {
-		if (t instanceof ErrorNode) {
-			if (listener.visitErrorNode) {
-				listener.visitErrorNode(t);
+		let nodeStack: ParseTree[] = [];
+		let indexStack: number[] = [];
+
+		let currentNode: ParseTree | undefined = t;
+		let currentIndex: number = 0;
+
+		while (currentNode) {
+			// pre-order visit
+			if (currentNode instanceof ErrorNode) {
+				if (listener.visitErrorNode) {
+					listener.visitErrorNode(currentNode);
+				}
+			} else if (currentNode instanceof TerminalNode) {
+				if (listener.visitTerminal) {
+					listener.visitTerminal(currentNode);
+				}
+			} else {
+				this.enterRule(listener, currentNode as RuleNode);
 			}
 
-			return;
-		}
-		else if (t instanceof TerminalNode) {
-			if (listener.visitTerminal) {
-				listener.visitTerminal(t);
+			// Move down to first child, if exists
+			if (currentNode.getChildCount() > 0) {
+				nodeStack.push(currentNode);
+				indexStack.push(currentIndex);
+				currentIndex = 0;
+				currentNode = currentNode.getChild(0);
+				continue;
 			}
 
-			return;
-		}
+			// No child nodes, so walk tree
+			do {
+				// post-order visit
+				if (currentNode instanceof RuleNode) {
+					this.exitRule(listener, currentNode);
+				}
 
-		let r = t as RuleNode;
-		this.enterRule(listener, r);
-		let n: number = r.getChildCount();
-		for (let i = 0; i < n; i++) {
-			this.walk(listener, r.getChild(i));
+				// No parent, so no siblings
+				if (nodeStack.length === 0) {
+					currentNode = undefined;
+					currentIndex = 0;
+					break;
+				}
+
+				// Move to next sibling if possible
+				let last = nodeStack[nodeStack.length - 1];
+				currentIndex++;
+				currentNode = currentIndex < last.getChildCount() ? last.getChild(currentIndex) : undefined;
+				if (currentNode) {
+					break;
+				}
+
+				// No next sibling, so move up
+				currentNode = nodeStack.pop();
+				currentIndex = indexStack.pop()!;
+			} while (currentNode);
 		}
-		this.exitRule(listener, r);
 	}
 
 	/**

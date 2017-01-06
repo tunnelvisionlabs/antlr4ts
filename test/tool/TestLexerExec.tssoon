@@ -513,7 +513,7 @@ export class TestLexerExec extends BaseTest {
 		let grammar: string = 
 			"lexer grammar L;\n"+
 			"I : [0-9]+ {System.out.println(\"I\");} ;\n"+
-			"WS : [ \\u]+ -> skip ;";
+			"WS : [ \\n]+ -> skip ;";
 		let found: string =  execLexer("L.g4", grammar, "L", "34 ");
 		let expecting: string = 
 			"I\n" +
@@ -526,7 +526,7 @@ export class TestLexerExec extends BaseTest {
 		let grammar: string = 
 			"lexer grammar L;\n"+
 			"DASHBRACK : [\\-\\]]+ {System.out.println(\"DASHBRACK\");} ;\n"+
-			"WS : [ \\u]+ -> skip ;";
+			"WS : [ \\n]+ -> skip ;";
 		let found: string =  execLexer("L.g4", grammar, "L", "- ] ");
 		let expecting: string = 
 			"DASHBRACK\n" +
@@ -534,19 +534,6 @@ export class TestLexerExec extends BaseTest {
 			"[@0,0:0='-',<1>,1:0]\n" +
 			"[@1,2:2=']',<1>,1:2]\n" +
 			"[@2,4:3='<EOF>',<-1>,1:4]\n";
-		assertEquals(expecting, found);
-	}
-
-	@Test testCharSetWithReversedRange(): void {
-		let grammar: string = 
-			"lexer grammar L;\n"+
-			"A : [z-a9]+ {System.out.println(\"A\");} ;\n"+
-			"WS : [ \\u]+ -> skip ;";
-		let found: string =  execLexer("L.g4", grammar, "L", "9");
-		let expecting: string = 
-			"A\n" +
-			"[@0,0:0='9',<1>,1:0]\n" +
-			"[@1,1:0='<EOF>',<-1>,1:1]\n";
 		assertEquals(expecting, found);
 	}
 

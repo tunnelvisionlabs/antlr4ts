@@ -91,8 +91,17 @@ export class ParserRuleContext extends RuleContext {
 		return ParserRuleContext.EMPTY;
 	}
 
-	/** COPY a ctx (I'm deliberately not using copy constructor) to avoid
-	 *  confusion with creating node with parent. Does not copy children.
+	/**
+	 * COPY a ctx (I'm deliberately not using copy constructor) to avoid
+	 * confusion with creating node with parent. Does not copy children.
+	 *
+	 * This is used in the generated parser code to flip a generic XContext
+	 * node for rule X to a YContext for alt label Y. In that sense, it is not
+	 * really a generic copy function.
+	 *
+	 * If we do an error sync() at start of a rule, we might add error nodes
+	 * to the generic XContext so this function must copy those nodes to the
+	 * YContext as well else they are lost!
 	 */
 	copyFrom(ctx: ParserRuleContext): void {
 		this.parent = ctx.parent;
@@ -100,6 +109,18 @@ export class ParserRuleContext extends RuleContext {
 
 		this.start = ctx.start;
 		this.stop = ctx.stop;
+
+		// copy any error nodes to alt label node
+		if (ctx.children) {
+			this.children = [];
+			// reset parent pointer for any error nodes
+			for (let child of ctx.children) {
+				if (child instanceof ErrorNode) {
+					this.children.push(child);
+					child.parent = this;
+				}
+			}
+		}
 	}
 
 	// Double dispatch methods for listeners

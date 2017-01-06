@@ -208,6 +208,23 @@ export class ATN {
 	 * <p>If {@code context} is {@code null}, it is treated as
 	 * {@link ParserRuleContext#EMPTY}.</p>
 	 *
+	 * <p>Note that this does NOT give you the set of all tokens that could
+	 * appear at a given token position in the input phrase.  In other words, it
+	 * does not answer:</p>
+	 *
+	 * <quote>"Given a specific partial input phrase, return the set of all
+	 * tokens that can follow the last token in the input phrase."</quote>
+	 *
+	 * <p>The big difference is that with just the input, the parser could land
+	 * right in the middle of a lookahead decision. Getting all
+	 * <em>possible</em> tokens given a partial input stream is a separate
+	 * computation. See https://github.com/antlr/antlr4/issues/1428</p>
+	 *
+	 * <p>For this function, we are specifying an ATN state and call stack to
+	 * compute what token(s) can come next and specifically: outside of a
+	 * lookahead decision. That is what you want for error reporting and
+	 * recovery upon parse error.</p>
+	 *
 	 * @param stateNumber the ATN state number
 	 * @param context the full parse context
 	 * @return The set of potentially valid input symbols which could follow the

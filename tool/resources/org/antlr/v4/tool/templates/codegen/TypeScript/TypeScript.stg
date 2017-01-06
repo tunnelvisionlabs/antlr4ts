@@ -55,7 +55,7 @@ import { <file.grammarName>Visitor } from './<file.grammarName>Visitor';
 <namedActions.afterParser>
 >>
 
-ListenerFile(file, header) ::= <<
+ListenerFile(file, header, namedActions) ::= <<
 <fileHeader(file.grammarFileName, file.ANTLRVersion)>
 
 <header>
@@ -63,6 +63,8 @@ ListenerFile(file, header) ::= <<
 import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
+<namedActions.beforeListener>
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -91,9 +93,11 @@ enter<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;
  */
 exit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;}; separator="\n">
 }
+
+<namedActions.afterListener>
 >>
 
-VisitorFile(file, header) ::= <<
+VisitorFile(file, header, namedActions) ::= <<
 <fileHeader(file.grammarFileName, file.ANTLRVersion)>
 
 <header>
@@ -101,6 +105,8 @@ VisitorFile(file, header) ::= <<
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from './<file.parserName>';}; separator="\n">
+
+<namedActions.beforeVisitor>
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -123,6 +129,8 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  */
 visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; separator="\n">
 }
+
+<namedActions.afterVisitor>
 >>
 
 fileHeader(grammarFileName, ANTLRVersion) ::= <<
@@ -427,6 +435,7 @@ CodeBlockForAlt(currentAltCodeBlock, locals, preamble, ops) ::= <<
 
 LL1AltBlock(choice, preamble, alts, error) ::= <<
 this.setState(<choice.stateNumber>);
+this._errHandler.sync(this);
 <if(choice.label)><labelref(choice.label)> = this._input.LT(1);<endif>
 <preamble; separator="\n">
 switch (this._input.LA(1)) {
@@ -440,17 +449,19 @@ default:
 
 LL1OptionalBlock(choice, alts, error) ::= <<
 this.setState(<choice.stateNumber>);
+this._errHandler.sync(this);
 switch (this._input.LA(1)) {
 <choice.altLook,alts:{look,alt| <cases(ttypes=look)>
 	<alt>
 	break;}; separator="\n">
 default:
-	<error>
+	break;
 }
 >>
 
 LL1OptionalBlockSingleAlt(choice, expr, alts, preamble, error, followExpr) ::= <<
 this.setState(<choice.stateNumber>);
+this._errHandler.sync(this);
 <preamble; separator="\n">
 if (<expr>) {
 	<alts; separator="\n">
@@ -599,6 +610,11 @@ this.setState(<m.stateNumber>);
 if ( <if(invert)><m.varName> \<= 0 || <else>!<endif>(<expr>) ) {
 	<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this._errHandler.recoverInline(this);
 } else {
+	if (this._input.LA(1) === Token.EOF) {
+		this.matchedEOF = true;
+	}
+
+	this._errHandler.reportMatch(this);
 	this.consume();
 }
 >>
@@ -631,10 +647,10 @@ LexerSkipCommand()  ::= "this.skip();"
 LexerMoreCommand()  ::= "this.more();"
 LexerPopModeCommand() ::= "this.popMode();"
 
-LexerTypeCommand(arg)      ::= "this._type = <arg>;"
-LexerChannelCommand(arg)   ::= "this._channel = <arg>;"
-LexerModeCommand(arg)      ::= "this._mode = <arg>;"
-LexerPushModeCommand(arg)  ::= "this.pushMode(<arg>);"
+LexerTypeCommand(arg, grammar)      ::= "this._type = <arg>;"
+LexerChannelCommand(arg, grammar)   ::= "this._channel = <arg>;"
+LexerModeCommand(arg, grammar)      ::= "this._mode = <arg>;"
+LexerPushModeCommand(arg, grammar)  ::= "this.pushMode(<arg>);"
 
 ActionText(t) ::= "<t.text>"
 ActionTemplate(t) ::= "<t.st>"
@@ -863,7 +879,11 @@ import { VocabularyImpl } from '<basePath()>/VocabularyImpl';
 
 import * as Utils from '<basePath()>/misc/Utils';
 
+<namedActions.beforeLexer>
+
 <lexer>
+
+<namedActions.afterLexer>
 >>
 
 Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass, isLexer=true) ::= <<

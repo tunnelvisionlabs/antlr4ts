@@ -469,7 +469,6 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	getText(): string {
-		this.fill();
 		return this.getTextFromInterval(Interval.of(0, this.size() - 1));
 	}
 
@@ -482,7 +481,7 @@ export class BufferedTokenStream implements TokenStream {
 			return "";
 		}
 
-		this.lazyInit();
+		this.fill();
 		if (stop >= this.tokens.length) {
 			stop = this.tokens.length - 1;
 		}

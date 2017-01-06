@@ -57,7 +57,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
 			let intermediateResult = new Map<string, number>();
-			for (let i = 0; i < this.getATN().maxTokenType; i++) {
+			for (let i = 0; i <= this.getATN().maxTokenType; i++) {
 				let literalName = vocabulary.getLiteralName(i);
 				if (literalName != null) {
 					intermediateResult.set(literalName, i);
