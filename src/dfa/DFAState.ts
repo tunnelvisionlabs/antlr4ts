@@ -9,7 +9,6 @@ import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { BitSet } from '../misc/BitSet';
-import { DFA } from './DFA';
 import { LexerActionExecutor } from '../atn/LexerActionExecutor';
 import { MurmurHash } from '../misc/MurmurHash';
 import { NotNull, Override } from '../Decorators';
@@ -67,16 +66,7 @@ export class DFAState {
 	 */
 	predicates: DFAState.PredPrediction[] | undefined;
 
-	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ configs: ATNConfigSet);
-	constructor(/*@NotNull*/ configs: ATNConfigSet);
-	constructor(arg0: DFA | ATNConfigSet, arg1?: ATNConfigSet) {
-		let configs: ATNConfigSet;
-		if (arg0 instanceof DFA) {
-			configs = arg1!;
-		} else {
-			configs = arg0;
-		}
-
+	constructor(configs: ATNConfigSet) {
 		this.configs = configs;
 		this.edges = new Map<number, DFAState>();
 		this.contextEdges = new Map<number, DFAState>();
