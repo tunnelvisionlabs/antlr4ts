@@ -394,7 +394,7 @@ export class LeafListener implements TListener {
 			console.log(ctx.INT(0).symbol.text + " " +
 				ctx.INT(1).symbol.text + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
 		} else {
-			console.log(ctx.ID().symbol.toString());
+			console.log(ctx.ID()!.symbol.toString());
 		}
 	}
 }
@@ -432,7 +432,7 @@ export class LeafListener implements TListener {
 			console.log(ctx.e(0).start.text + " " +
 				ctx.e(1).start.text + " " + ctx.e()[0].start.text);
 		} else {
-			console.log(ctx.INT().symbol.text);
+			console.log(ctx.INT()!.symbol.text);
 		}
 	}
 }
@@ -561,26 +561,24 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 	visitMultiply(context: MultiplyContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
-		return left / right;
-		// if (context.MUL() !== undefined) {
-		// 	return left * right;
-		// }
-		// else {
-		// 	return left / right;
-		// }
+		if (context.MUL() !== undefined) {
+			return left * right;
+		}
+		else {
+			return left / right;
+		}
 	}
 
 	@Override
 	visitAdd(context: AddContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
-		return left + right;
-		// if (context.ADD() !== undefined) {
-		// 	return left + right;
-		// }
-		// else {
-		// 	return left - right;
-		// }
+		if (context.ADD() !== undefined) {
+			return left + right;
+		}
+		else {
+			return left - right;
+		}
 	}
 
 	@Override
