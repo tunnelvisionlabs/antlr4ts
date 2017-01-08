@@ -1,6 +1,6 @@
 {
   "name": "antlr4ts-root",
-  "version": "0.4.0-alpha.4",
+  "version": "0.4.0-dev",
   "description": "Root project for ANTLR 4 runtime for Typescript",
   "private": true,
   "main": "index.js",
