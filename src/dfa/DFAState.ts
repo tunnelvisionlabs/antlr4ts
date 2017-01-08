@@ -66,6 +66,11 @@ export class DFAState {
 	 */
 	predicates: DFAState.PredPrediction[] | undefined;
 
+	/**
+	 * Constructs a new `DFAState`.
+	 *
+	 * @param configs The set of ATN configurations defining this state.
+	 */
 	constructor(configs: ATNConfigSet) {
 		this.configs = configs;
 		this.edges = new Map<number, DFAState>();

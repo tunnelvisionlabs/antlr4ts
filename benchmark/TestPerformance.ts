@@ -1393,7 +1393,7 @@ export class TestPerformance {
 								throw ex;
 							}
 
-							tokens.reset();
+							tokens.seek(0);
 							if (TestPerformance.REUSE_PARSER && TestPerformance.sharedParsers[thread] != null) {
 								parser.inputStream = tokens;
 							} else {

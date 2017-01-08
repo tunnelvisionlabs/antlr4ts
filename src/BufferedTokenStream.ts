@@ -98,10 +98,6 @@ export class BufferedTokenStream implements TokenStream {
 		// no resources to release
 	}
 
-	reset(): void {
-		this.seek(0);
-	}
-
 	@Override
 	seek(index: number): void {
 		this.lazyInit();
@@ -299,6 +295,7 @@ export class BufferedTokenStream implements TokenStream {
 		this._tokenSource = tokenSource;
 		this.tokens.length = 0;
 		this.p = -1;
+		this.fetchedEOF = false;
 	}
 
     /** Given a start and stop index, return a {@code List} of all tokens in
