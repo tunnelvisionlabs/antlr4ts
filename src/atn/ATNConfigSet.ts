@@ -49,6 +49,13 @@ function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
 }
 
 /**
+ * Represents a set of ATN configurations (see `ATNConfig`). As configurations are added to the set, they are merged
+ * with other `ATNConfig` instances already in the set when possible using the graph-structured stack.
+ *
+ * An instance of this class represents the complete set of positions (with context) in an ATN which would be associated
+ * with a single DFA state. Its internal representation is more complex than traditional state used for NFA to DFA
+ * conversion due to performance requirements (both improving speed and reducing memory overhead) as well as supporting
+ * features such as semantic predicates and non-greedy operators in a form to support ANTLR's prediction algorithm.
  *
  * @author Sam Harwell
  */

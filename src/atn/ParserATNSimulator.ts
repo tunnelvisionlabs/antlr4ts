@@ -2363,7 +2363,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	@NotNull
 	protected createDFAState(@NotNull dfa: DFA, @NotNull configs: ATNConfigSet): DFAState {
-		return new DFAState(dfa, configs);
+		return new DFAState(configs);
 	}
 
 	protected reportAttemptingFullContext(@NotNull dfa: DFA, conflictingAlts: BitSet | undefined, @NotNull conflictState: SimulatorState, startIndex: number, stopIndex: number): void {

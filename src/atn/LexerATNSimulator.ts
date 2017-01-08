@@ -645,12 +645,12 @@ export class LexerATNSimulator extends ATNSimulator {
 		 */
 		assert(!configs.hasSemanticContext);
 
-		let proposed: DFAState = new DFAState(this.atn.modeToDFA[this.mode], configs);
+		let proposed: DFAState = new DFAState(configs);
 		let existing: DFAState | undefined = this.atn.modeToDFA[this.mode].states.get(proposed);
 		if (existing != null) return existing;
 
 		configs.optimizeConfigs(this);
-		let newState: DFAState = new DFAState(this.atn.modeToDFA[this.mode], configs.clone(true));
+		let newState: DFAState = new DFAState(configs.clone(true));
 
 		let firstConfigWithRuleStopState: ATNConfig | undefined = undefined;
 		for (let c of asIterable(configs)) {

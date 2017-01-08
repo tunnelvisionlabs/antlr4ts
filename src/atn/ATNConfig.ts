@@ -27,12 +27,34 @@ import * as assert from 'assert';
  */
 const SUPPRESS_PRECEDENCE_FILTER: number = 0x80000000;
 
-/** A tuple: (ATN state, predicted alt, syntactic, semantic context).
- *  The syntactic context is a graph-structured stack node whose
- *  path(s) to the root is the rule invocation(s)
- *  chain used to arrive at the state.  The semantic context is
- *  the tree of semantic predicates encountered before reaching
- *  an ATN state.
+/**
+ * Represents a location with context in an ATN. The location is identified by the following values:
+ *
+ * * The current ATN state
+ * * The predicted alternative
+ * * The semantic context which must be true for this configuration to be enabled
+ * * The syntactic context, which is represented as a graph-structured stack whose path(s) lead to the root of the rule
+ *   invocations leading to this state
+ *
+ * In addition to these values, `ATNConfig` stores several properties about paths taken to get to the location which
+ * were added over time to help with performance, correctness, and/or debugging.
+ *
+ * * `reachesIntoOuterContext`:: Used to ensure semantic predicates are not evaluated in the wrong context.
+ * * `hasPassedThroughNonGreedyDecision`: Used for enabling first-match-wins instead of longest-match-wins after
+ *   crossing a non-greedy decision.
+ * * `lexerActionExecutor`: Used for tracking the lexer action(s) to execute should this instance be selected during
+ *   lexing.
+ * * `isPrecedenceFilterSuppressed`: A state variable for one of the dynamic disambiguation strategies employed by
+ *   `ParserATNSimulator.applyPrecedenceFilter`.
+ *
+ * Due to the use of a graph-structured stack, a single `ATNConfig` is capable of representing many individual ATN
+ * configurations which reached the same location in an ATN by following different paths.
+ *
+ * PERF: To conserve memory, `ATNConfig` is split into several different concrete types. `ATNConfig` itself stores the
+ * minimum amount of information typically used to define an `ATNConfig` instance. Various derived types provide
+ * additional storage space for cases where a non-default value is used for some of the object properties. The
+ * `ATNConfig.create` and `ATNConfig.transform` methods automatically select the smallest concrete type capable of
+ * representing the unique information for any given `ATNConfig`.
  */
 export class ATNConfig implements Equatable {
 	/** The ATN state associated with this configuration */
@@ -214,6 +236,31 @@ export class ATNConfig implements Equatable {
 		}
 	}
 
+	/**
+	 * Determines if this `ATNConfig` fully contains another `ATNConfig`.
+	 *
+	 * An ATN configuration represents a position (including context) in an ATN during parsing. Since `ATNConfig` stores
+	 * the context as a graph, a single `ATNConfig` instance is capable of representing many ATN configurations which
+	 * are all in the same "location" but have different contexts. These `ATNConfig` instances are again merged when
+	 * they are added to an `ATNConfigSet`. This method supports `ATNConfigSet.contains` by evaluating whether a
+	 * particular `ATNConfig` contains all of the ATN configurations represented by another `ATNConfig`.
+	 *
+	 * An `ATNConfig` _a_ contains another `ATNConfig` _b_ if all of the following conditions are met:
+	 *
+	 * * The configurations are in the same state (`state`)
+	 * * The configurations predict the same alternative (`alt`)
+	 * * The semantic context of _a_ implies the semantic context of _b_ (this method performs a weaker equality check)
+	 * * Joining the prediction contexts of _a_ and _b_ results in the prediction context of _a_
+	 *
+	 * This method implements a conservative approximation of containment. As a result, when this method returns `true`
+	 * it is known that parsing from `subconfig` can only recognize a subset of the inputs which can be recognized
+	 * starting at the current `ATNConfig`. However, due to the imprecise evaluation of implication for the semantic
+	 * contexts, no assumptions can be made about the relationship between the configurations when this method returns
+	 * `false`.
+	 *
+	 * @param subconfig The sub configuration.
+	 * @return `true` if this configuration contains `subconfig`; otherwise, `false`.
+	 */
 	contains(subconfig: ATNConfig): boolean {
 		if (this.state.stateNumber !== subconfig.state.stateNumber
 			|| this.alt !== subconfig.alt
@@ -308,6 +355,14 @@ export class ATNConfig implements Equatable {
 		return hashCode;
 	}
 
+	/**
+	 * Returns a graphical representation of the current `ATNConfig` in Graphviz format. The graph can be stored to a
+	 * **.dot** file and then rendered to an image using Graphviz.
+	 *
+	 * @return A Graphviz graph representing the current `ATNConfig`.
+	 *
+	 * @see http://www.graphviz.org/
+	 */
 	toDotString(): string {
 		let builder = "";
 		builder += ("digraph G {\n");
@@ -408,6 +463,13 @@ export class ATNConfig implements Equatable {
 	}
 }
 
+/**
+ * This class was derived from `ATNConfig` purely as a memory optimization. It allows for the creation of an `ATNConfig`
+ * with a non-default semantic context.
+ *
+ * See the `ATNConfig` documentation for more information about conserving memory through the use of several concrete
+ * types.
+ */
 class SemanticContextATNConfig extends ATNConfig {
 	@NotNull
 	private _semanticContext: SemanticContext;
@@ -431,6 +493,13 @@ class SemanticContextATNConfig extends ATNConfig {
 
 }
 
+/**
+ * This class was derived from `ATNConfig` purely as a memory optimization. It allows for the creation of an `ATNConfig`
+ * with a lexer action.
+ *
+ * See the `ATNConfig` documentation for more information about conserving memory through the use of several concrete
+ * types.
+ */
 class ActionATNConfig extends ATNConfig {
 	private _lexerActionExecutor?: LexerActionExecutor;
 	private passedThroughNonGreedyDecision: boolean;
@@ -462,6 +531,13 @@ class ActionATNConfig extends ATNConfig {
 	}
 }
 
+/**
+ * This class was derived from `SemanticContextATNConfig` purely as a memory optimization. It allows for the creation of
+ * an `ATNConfig` with both a lexer action and a non-default semantic context.
+ *
+ * See the `ATNConfig` documentation for more information about conserving memory through the use of several concrete
+ * types.
+ */
 class ActionSemanticContextATNConfig extends SemanticContextATNConfig {
 	private _lexerActionExecutor?: LexerActionExecutor;
 	private passedThroughNonGreedyDecision: boolean;

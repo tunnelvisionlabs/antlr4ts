@@ -10,6 +10,7 @@ import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
+import { DecisionState } from '../atn/DecisionState';
 import { DFASerializer } from './DFASerializer';
 import { DFAState } from './DFAState';
 import { LexerATNSimulator } from '../atn/LexerATNSimulator';
@@ -18,12 +19,16 @@ import { NotNull } from '../Decorators';
 import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { StarLoopEntryState } from '../atn/StarLoopEntryState';
 import { Token } from '../Token';
+import { TokensStartState } from '../atn/TokensStartState';
 import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
 
 export class DFA {
 	/**
 	 * A set of all states in the `DFA`.
+	 *
+	 * Note that this collection of states holds the DFA states for both SLL and LL prediction. Only the start state
+	 * needs to be differentiated for these cases, which is tracked by the `s0` and `s0full` fields.
 	 */
 	@NotNull
 	readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
@@ -52,6 +57,23 @@ export class DFA {
 	 */
 	private precedenceDfa: boolean;
 
+	/**
+	 * Constructs a `DFA` instance associated with a lexer mode.
+	 *
+	 * The start state for a `DFA` constructed with this constructor should be a `TokensStartState`, which is the start
+	 * state for a lexer mode. The prediction made by this DFA determines the lexer rule which matches the current
+	 * input.
+	 *
+	 * @param atnStartState The start state for the mode.
+	 */
+	constructor(atnStartState: TokensStartState);
+	/**
+	 * Constructs a `DFA` instance associated with a decision.
+	 *
+	 * @param atnStartState The decision associated with this DFA.
+	 * @param decision The decision number.
+	 */
+	constructor(atnStartState: DecisionState, decision: number);
 	constructor(@NotNull atnStartState: ATNState, decision: number = 0) {
 		if (!atnStartState.atn) {
 			throw new Error("The ATNState must be associated with an ATN");
@@ -61,6 +83,10 @@ export class DFA {
 		this.atn = atnStartState.atn;
 		this.decision = decision;
 
+		// Precedence DFAs are associated with the special precedence decision created for left-recursive rules which
+		// evaluate their alternatives using a precedence hierarchy. When such a decision is encountered, we mark this
+		// DFA instance as a precedence DFA and initialize the initial states s0 and s0full to special DFAState
+		// instances which use outgoing edges to link to the actual start state used for each precedence level.
 		let isPrecedenceDfa: boolean = false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
