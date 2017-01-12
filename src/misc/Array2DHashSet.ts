@@ -20,28 +20,24 @@ import { MurmurHash } from './MurmurHash';
 //        For this reason I've commented tweaked the implements clause
 
 const INITAL_CAPACITY: number = 16; // must be power of 2
-const INITAL_BUCKET_CAPACITY: number = 8;
 const LOAD_FACTOR: number = 0.75;
 
 export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>;
 
-	protected buckets: ((T | undefined)[] | undefined)[];
+	protected buckets: (T[] | undefined)[];
 
 	/** How many elements in set */
 	protected n: number = 0;
 
 	protected threshold: number = Math.floor(INITAL_CAPACITY * LOAD_FACTOR); // when to expand
 
-	protected initialBucketCapacity: number = INITAL_BUCKET_CAPACITY;
-
-	constructor(comparator?: EqualityComparator<T>, initialCapacity?: number, initialBucketCapacity?: number);
+	constructor(comparator?: EqualityComparator<T>, initialCapacity?: number);
 	constructor(set: Array2DHashSet<T>);
 	constructor(
 		comparatorOrSet?: EqualityComparator<T> | Array2DHashSet<T>,
-		initialCapacity: number = INITAL_CAPACITY,
-		initialBucketCapacity: number = INITAL_BUCKET_CAPACITY) {
+		initialCapacity: number = INITAL_CAPACITY) {
 
 		if (comparatorOrSet instanceof Array2DHashSet) {
 			this.comparator = comparatorOrSet.comparator;
@@ -55,11 +51,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 			this.n = comparatorOrSet.n;
 			this.threshold = comparatorOrSet.threshold;
-			this.initialBucketCapacity = comparatorOrSet.initialBucketCapacity;
 		} else {
 			this.comparator = comparatorOrSet || DefaultEqualityComparator.INSTANCE;
 			this.buckets = this.createBuckets(initialCapacity);
-			this.initialBucketCapacity = initialBucketCapacity;
 		}
 	}
 
@@ -79,8 +73,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 		// NEW BUCKET
 		if (!bucket) {
-			bucket = this.createBucket(this.initialBucketCapacity);
-			bucket[0] = o;
+			bucket = [o];
 			this.buckets[b] = bucket;
 			this.n++;
 			return o;
@@ -89,19 +82,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		// LOOK FOR IT IN BUCKET
 		for (let i = 0; i < bucket.length; i++) {
 			let existing = bucket[i];
-			if (!existing) {
-				// empty slot; not there, add.
-				bucket[i] = o;
-				this.n++;
-				return o;
+			if (this.comparator.equals(existing, o)) {
+				return existing; // found existing, quit
 			}
-			if (this.comparator.equals(existing, o)) return existing; // found existing, quit
 		}
 
 		// FULL BUCKET, expand and add to end
-		let oldLength: number = bucket.length;
-		bucket.length *= 2;
-		bucket[oldLength] = o; // add to end
+		bucket.push(o);
 		this.n++;
 		return o;
 	}
@@ -116,12 +103,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		for (let e of bucket) {
-			if (!e) {
-				// empty slot; not there
-				return undefined;
+			if (this.comparator.equals(e, o)) {
+				return e;
 			}
-
-			if (this.comparator.equals(e, o)) return e;
 		}
 
 		return undefined;
@@ -160,41 +144,26 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected expand(): void {
 		let old = this.buckets;
 		let newCapacity: number = this.buckets.length * 2;
-		let newTable: ((T | undefined)[] | undefined)[] = this.createBuckets(newCapacity);
-		let newBucketLengths: Uint32Array = new Uint32Array(newTable.length);
+		let newTable: (T[] | undefined)[] = this.createBuckets(newCapacity);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
 		let oldSize: number = this.size;
 		for (let bucket of old) {
-			if (bucket == null) {
+			if (!bucket) {
 				continue;
 			}
 
 			for (let o of bucket) {
-				if (o == null) {
-					break;
-				}
-
 				let b: number = this.getBucket(o);
-				let bucketLength: number = newBucketLengths[b];
-				let newBucket: (T | undefined)[] | undefined;
-				if (bucketLength === 0) {
-					// new bucket
-					newBucket = this.createBucket(this.initialBucketCapacity);
-					newTable[b] = newBucket;
-				}
-				else {
-					newBucket = newTable[b]!;
-					if (bucketLength === newBucket.length) {
-						// expand
-						newBucket.length *= 2;
-					}
+				let newBucket: T[] | undefined = this.buckets[b];
+				if (!newBucket) {
+					newBucket = [];
+					this.buckets[b] = newBucket;
 				}
 
-				newBucket[bucketLength] = o;
-				newBucketLengths[b]++;
+				newBucket.push(o);
 			}
 		}
 
@@ -279,15 +248,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 		for (let i = 0; i < bucket.length; i++) {
 			let e = bucket[i];
-			if (!e) {
-				// empty slot; not there
-				return false;
-			}
-
 			if (this.comparator.equals(e, obj)) {          // found it
 				// shift all elements to the right down one
-				bucket.copyWithin(i, i + 1)
-				bucket[bucket.length - 1] = undefined;
+				bucket.copyWithin(i, i + 1);
+				bucket.length--;
 				this.n--;
 				return true;
 			}
@@ -357,11 +321,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 
 			newsize += j;
-
-			while (j < i) {
-				bucket[j] = undefined;
-				j++;
-			}
+			bucket.length = j;
 		}
 
 		let changed: boolean = newsize != this.n;
@@ -451,19 +411,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @return the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
-	protected createBuckets(capacity: number): ((T | undefined)[] | undefined)[] {
+	protected createBuckets(capacity: number): (T[] | undefined)[] {
 		return new Array<T[]>(capacity);
-	}
-
-	/**
-	 * Return an array of {@code T} with length {@code capacity}.
-	 *
-	 * @param capacity the length of the array to return
-	 * @return the newly constructed array
-	 */
-	@SuppressWarnings("unchecked")
-	protected createBucket(capacity: number): (T | undefined)[] {
-		return new Array<T>(capacity);
 	}
 }
 
