@@ -27,7 +27,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>;
 
-	protected buckets: (T | undefined)[][];
+	protected buckets: ((T | undefined)[] | undefined)[];
 
 	/** How many elements in set */
 	protected n: number = 0;
@@ -47,8 +47,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			this.comparator = comparatorOrSet.comparator;
 			this.buckets = comparatorOrSet.buckets.slice(0);
 			for (let i = 0; i < this.buckets.length; i++) {
-				if (this.buckets[i]) {
-					this.buckets[i] = this.buckets[i].slice(0);
+				let bucket = this.buckets[i];
+				if (bucket) {
+					this.buckets[i] = bucket.slice(0);
 				}
 			}
 
@@ -159,7 +160,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected expand(): void {
 		let old = this.buckets;
 		let newCapacity: number = this.buckets.length * 2;
-		let newTable: T[][] = this.createBuckets(newCapacity);
+		let newTable: ((T | undefined)[] | undefined)[] = this.createBuckets(newCapacity);
 		let newBucketLengths: Uint32Array = new Uint32Array(newTable.length);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
@@ -178,14 +179,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 				let b: number = this.getBucket(o);
 				let bucketLength: number = newBucketLengths[b];
-				let newBucket: T[];
+				let newBucket: (T | undefined)[] | undefined;
 				if (bucketLength === 0) {
 					// new bucket
 					newBucket = this.createBucket(this.initialBucketCapacity);
 					newTable[b] = newBucket;
 				}
 				else {
-					newBucket = newTable[b];
+					newBucket = newTable[b]!;
 					if (bucketLength === newBucket.length) {
 						// expand
 						newBucket.length *= 2;
@@ -450,7 +451,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @return the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
-	protected createBuckets(capacity: number): T[][] {
+	protected createBuckets(capacity: number): ((T | undefined)[] | undefined)[] {
 		return new Array<T[]>(capacity);
 	}
 
@@ -461,7 +462,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @return the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
-	protected createBucket(capacity: number): T[] {
+	protected createBucket(capacity: number): (T | undefined)[] {
 		return new Array<T>(capacity);
 	}
 }
