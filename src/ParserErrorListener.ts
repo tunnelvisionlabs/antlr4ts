@@ -57,14 +57,14 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param configs the ATN configuration set where the ambiguity was
 	 * identified
 	 */
-	reportAmbiguity(
+	reportAmbiguity?: (
 		/*@NotNull*/ recognizer: Parser,
 		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
 		ambigAlts: BitSet | undefined,
-		/*@NotNull*/ configs: ATNConfigSet): void;
+		/*@NotNull*/ configs: ATNConfigSet) => void;
 
 	/**
 	 * This method is called when an SLL conflict occurs and the parser is about
@@ -85,13 +85,13 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param conflictState the simulator state when the SLL conflict was
 	 * detected
 	 */
-	reportAttemptingFullContext(
+	reportAttemptingFullContext?: (
 		/*@NotNull*/ recognizer: Parser,
 		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		conflictingAlts: BitSet | undefined,
-		/*@NotNull*/ conflictState: SimulatorState): void;
+		/*@NotNull*/ conflictState: SimulatorState) => void;
 
 	/**
 	 * This method is called by the parser when a full-context prediction has a
@@ -129,11 +129,11 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param acceptState the simulator state when the unambiguous prediction
 	 * was determined
 	 */
-	reportContextSensitivity(
+	reportContextSensitivity?: (
 		/*@NotNull*/ recognizer: Parser,
 		/*@NotNull*/ dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		prediction: number,
-		/*@NotNull*/ acceptState: SimulatorState): void;
+		/*@NotNull*/ acceptState: SimulatorState) => void;
 }

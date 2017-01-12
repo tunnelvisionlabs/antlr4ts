@@ -21,7 +21,6 @@ import { ATNConfig } from '../src/atn/ATNConfig';
 import { ATNConfigSet } from '../src/atn/ATNConfigSet';
 import { ATNDeserializer } from '../src/atn/ATNDeserializer';
 import { BailErrorStrategy } from '../src/BailErrorStrategy';
-import { BaseErrorListener } from '../src/BaseErrorListener';
 import { BitSet } from '../src/misc/BitSet';
 import { CharStream } from '../src/CharStream';
 import { CommonTokenStream } from '../src/CommonTokenStream';
@@ -41,6 +40,7 @@ import { Override } from '../src/Decorators';
 import { ParseCancellationException } from '../src/misc/ParseCancellationException';
 import { Parser } from '../src/Parser';
 import { ParserATNSimulator } from '../src/atn/ParserATNSimulator';
+import { ParserErrorListener } from '../src/ParserErrorListener';
 import { ParserInterpreter } from '../src/ParserInterpreter';
 import { ParserRuleContext } from '../src/ParserRuleContext';
 import { ParseTree } from '../src/tree/ParseTree';
@@ -1661,7 +1661,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 	}
 }
 
-class DescriptiveErrorListener extends BaseErrorListener {
+class DescriptiveErrorListener implements ParserErrorListener {
 	static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override

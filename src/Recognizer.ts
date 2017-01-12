@@ -195,7 +195,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	getErrorListenerDispatch(): ANTLRErrorListener<Symbol> {
-		return new ProxyErrorListener<Symbol>(this.getErrorListeners());
+		return new ProxyErrorListener<Symbol, ANTLRErrorListener<Symbol>>(this.getErrorListeners());
 	}
 
 	// subclass needs to override these if there are sempreds or actions

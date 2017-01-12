@@ -43,12 +43,12 @@ export interface ANTLRErrorListener<Symbol> {
 	 *        the parser was able to recover in line without exiting the
 	 *        surrounding rule.
 	 */
-	syntaxError<T extends Symbol>(
+	syntaxError?: <T extends Symbol>(
 		/*@NotNull*/ recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,
 		charPositionInLine: number,
 		/*@NotNull*/
 		msg: string,
-		e: RecognitionException | undefined): void;
+		e: RecognitionException | undefined) => void;
 }
