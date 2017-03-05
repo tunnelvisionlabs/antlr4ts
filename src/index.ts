@@ -43,7 +43,7 @@ export * from './Token';
 export * from './TokenFactory';
 export * from './TokenSource';
 export * from './TokenStream';
-// export * from './TokenStreamRewriter';
+export * from './TokenStreamRewriter';
 // export * from './UnbufferedCharStream';
 // export * from './UnbufferedTokenStream';
 export * from './Vocabulary';
