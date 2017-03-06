@@ -799,7 +799,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *  This is very useful for error messages.
 	 */
 
-	getRuleInvocationStack(p: RuleContext | undefined = this._ctx): string[] {
+	getRuleInvocationStack(ctx: RuleContext = this._ctx): string[] {
+		let p: RuleContext | undefined = ctx;  		// Workaround for Microsoft/TypeScript#14487
 		let ruleNames: string[] = this.ruleNames;
 		let stack: string[] = [];
 		while (p != null) {
