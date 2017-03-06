@@ -78,7 +78,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @see ATNDeserializationOptions.isGenerateRuleBypassTransitions
 	 */
-	private static readonly bypassAltsAtnCache = new WeakMap<string, ATN>();
+	private static readonly bypassAltsAtnCache = new Map<string, ATN>();
 
 	/**
 	 * The error handling strategy for the parser. The default value is a new
