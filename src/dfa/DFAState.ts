@@ -167,16 +167,16 @@ export class DFAState {
 
 	getContextEdgeMap(): Map<number, DFAState> {
 		let map = new Map<number, DFAState>(this.contextEdges);
-		if (map.has(-1)) {
+		let existing = map.get(-1);
+		if (existing !== undefined) {
 			if (map.size === 1) {
 				let result = new Map<number, DFAState>();
-				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, map.get(-1));
+				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, existing);
 				return result;
 			}
 			else {
-				let removed = map.get(-1);
 				map.delete(-1);
-				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, removed);
+				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, existing);
 			}
 		}
 

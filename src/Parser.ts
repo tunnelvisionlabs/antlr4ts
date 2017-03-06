@@ -78,7 +78,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @see ATNDeserializationOptions.isGenerateRuleBypassTransitions
 	 */
-	private static readonly bypassAltsAtnCache = new WeakMap<string, ATN>();
+	private static readonly bypassAltsAtnCache = new Map<string, ATN>();
 
 	/**
 	 * The error handling strategy for the parser. The default value is a new
@@ -801,7 +801,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *  This is very useful for error messages.
 	 */
 
-	getRuleInvocationStack(p: RuleContext | undefined = this._ctx): string[] {
+	getRuleInvocationStack(ctx: RuleContext = this._ctx): string[] {
+		let p: RuleContext | undefined = ctx;  		// Workaround for Microsoft/TypeScript#14487
 		let ruleNames: string[] = this.ruleNames;
 		let stack: string[] = [];
 		while (p != null) {
@@ -809,7 +810,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			let ruleIndex: number = p.ruleIndex;
 			if (ruleIndex < 0) stack.push("n/a");
 			else stack.push(ruleNames[ruleIndex]);
-			p = p._parent;
+			p = p._parent as RuleContext;
 		}
 		return stack;
 	}
