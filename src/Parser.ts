@@ -807,7 +807,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			let ruleIndex: number = p.ruleIndex;
 			if (ruleIndex < 0) stack.push("n/a");
 			else stack.push(ruleNames[ruleIndex]);
-			p = p._parent;
+			p = p._parent as RuleContext;
 		}
 		return stack;
 	}
