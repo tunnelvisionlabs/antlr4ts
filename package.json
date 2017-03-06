@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
+    "prepublish": "npm run copyfiles && npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
     "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
     "unlinkruntime": "cd target/src && npm unlink",
     "buildtool": "cd tool && npm link",
@@ -33,7 +33,8 @@
     "benchmark-core": "node target/benchmark/TestPerformance.js",
     "preprofile": "npm run antlr4ts-benchmark && tsc",
     "profile": "npm run profile-core",
-    "profile-core": "node --prof target/benchmark/TestPerformance.js"
+    "profile-core": "node --prof target/benchmark/TestPerformance.js",
+    "copyfiles": "cpy README.md target/src/ && cpy LICENSE target/src/"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.41",
+    "cpy-cli": "^1.0.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.0",
     "mocha-typescript": "^1.0.10",
