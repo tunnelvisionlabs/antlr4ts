@@ -170,13 +170,13 @@ export class DFAState {
 		if (map.has(-1)) {
 			if (map.size === 1) {
 				let result = new Map<number, DFAState>();
-				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, map.get(-1));
+				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, map.get(-1) as DFAState);
 				return result;
 			}
 			else {
 				let removed = map.get(-1);
 				map.delete(-1);
-				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, removed);
+				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, removed as DFAState);
 			}
 		}
 
