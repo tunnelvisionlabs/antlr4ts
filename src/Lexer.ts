@@ -360,7 +360,9 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 			this.getErrorDisplay(text) + "'";
 
 		let listener: ANTLRErrorListener<number> = this.getErrorListenerDispatch();
-		listener.syntaxError(this, undefined, this._tokenStartLine, this._tokenStartCharPositionInLine, msg, e);
+		if (listener.syntaxError) {
+			listener.syntaxError(this, undefined, this._tokenStartLine, this._tokenStartCharPositionInLine, msg, e);
+		}
 	}
 
 	getErrorDisplay(s: string | number): string {

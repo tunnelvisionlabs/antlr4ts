@@ -8,7 +8,6 @@ export * from './ANTLRErrorStrategy';
 // export * from './ANTLRFileStream';
 export * from './ANTLRInputStream';
 export * from './BailErrorStrategy';
-export * from './BaseErrorListener';
 export * from './BufferedTokenStream';
 export * from './CharStream';
 export * from './CommonToken';

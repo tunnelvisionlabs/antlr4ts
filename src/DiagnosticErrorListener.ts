@@ -29,16 +29,16 @@
 
 import { ATNConfig } from './atn/ATNConfig';
 import { ATNConfigSet } from './atn/ATNConfigSet';
-import { BaseErrorListener } from "./BaseErrorListener";
 import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/DFA';
 import { Parser } from './Parser';
+import { ParserErrorListener } from './ParserErrorListener';
 import { SimulatorState } from './atn/SimulatorState';
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
 import { asIterable } from './misc/Stubs';
 
-export class DiagnosticErrorListener extends BaseErrorListener {
+export class DiagnosticErrorListener implements ParserErrorListener {
 
 	/**
 	 * Initializes a new instance of {@link DiagnosticErrorListener}, specifying
@@ -48,7 +48,6 @@ export class DiagnosticErrorListener extends BaseErrorListener {
 	 * {@code false} to report all ambiguities.  Defaults to true.
 	 */
 	constructor(protected exactOnly: boolean = true) {
-		super()
 		this.exactOnly = exactOnly;
 	}
 

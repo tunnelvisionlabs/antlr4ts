@@ -20,10 +20,10 @@ import { Override } from "./Decorators";
 /**
  * @author Sam Harwell
  */
-export class ProxyParserErrorListener extends ProxyErrorListener<Token>
+export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserErrorListener>
 	implements ParserErrorListener {
 
-	constructor(delegates: ANTLRErrorListener<Token>[]) {
+	constructor(delegates: ParserErrorListener[]) {
 		super(delegates);
 	}
 
@@ -38,7 +38,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		configs: ATNConfigSet): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+				if (listener.reportAmbiguity) {
 					listener.reportAmbiguity(
 						recognizer,
 						dfa,
@@ -61,7 +61,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		conflictState: SimulatorState): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+				if (listener.reportAttemptingFullContext) {
 					listener.reportAttemptingFullContext(
 						recognizer,
 						dfa,
@@ -82,7 +82,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 		acceptState: SimulatorState): void {
 		this.getDelegates()
 			.forEach(listener => {
-				if (ProxyParserErrorListener.isParserErrorListener(listener)) {
+				if (listener.reportContextSensitivity) {
 					listener.reportContextSensitivity(
 						recognizer,
 						dfa,
@@ -92,9 +92,5 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token>
 						acceptState);
 				}
 			});
-	}
-
-	static isParserErrorListener(listener: ANTLRErrorListener<Token>): listener is ParserErrorListener {
-		return (listener as any).reportAmbiguity;
 	}
 }

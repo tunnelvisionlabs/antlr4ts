@@ -498,7 +498,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		let listener = this.getErrorListenerDispatch();
-		listener.syntaxError(this, offendingToken, line, charPositionInLine, msg, e);
+		if (listener.syntaxError) {
+			listener.syntaxError(this, offendingToken, line, charPositionInLine, msg, e);
+		}
 	}
 
 	/**

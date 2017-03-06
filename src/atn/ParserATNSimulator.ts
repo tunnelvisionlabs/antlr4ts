@@ -2372,7 +2372,12 @@ export class ParserATNSimulator extends ATNSimulator {
 			console.log("reportAttemptingFullContext decision=" + dfa.decision + ":" + conflictState.s0.configs +
 				", input=" + this._parser.inputStream.getText(interval));
 		}
-		if (this._parser != null) this._parser.getErrorListenerDispatch().reportAttemptingFullContext(this._parser, dfa, startIndex, stopIndex, conflictingAlts, conflictState);
+		if (this._parser != null) {
+			let listener = this._parser.getErrorListenerDispatch();
+			if (listener.reportAttemptingFullContext) {
+				listener.reportAttemptingFullContext(this._parser, dfa, startIndex, stopIndex, conflictingAlts, conflictState);
+			}
+		}
 	}
 
 	protected reportContextSensitivity(@NotNull dfa: DFA, prediction: number, @NotNull acceptState: SimulatorState, startIndex: number, stopIndex: number): void {
@@ -2381,7 +2386,12 @@ export class ParserATNSimulator extends ATNSimulator {
 			console.log("reportContextSensitivity decision=" + dfa.decision + ":" + acceptState.s0.configs +
 				", input=" + this._parser.inputStream.getText(interval));
 		}
-		if (this._parser != null) this._parser.getErrorListenerDispatch().reportContextSensitivity(this._parser, dfa, startIndex, stopIndex, prediction, acceptState);
+		if (this._parser != null) {
+			let listener = this._parser.getErrorListenerDispatch();
+			if (listener.reportContextSensitivity) {
+				listener.reportContextSensitivity(this._parser, dfa, startIndex, stopIndex, prediction, acceptState);
+			}
+		}
 	}
 
 	/** If context sensitive parsing, we know it's ambiguity not conflict */
@@ -2399,8 +2409,12 @@ export class ParserATNSimulator extends ATNSimulator {
 				ambigAlts + ":" + configs +
 				", input=" + this._parser.inputStream.getText(interval));
 		}
-		if (this._parser != null) this._parser.getErrorListenerDispatch().reportAmbiguity(this._parser, dfa, startIndex, stopIndex,
-			exact, ambigAlts, configs);
+		if (this._parser != null) {
+			let listener = this._parser.getErrorListenerDispatch();
+			if (listener.reportAmbiguity) {
+				listener.reportAmbiguity(this._parser, dfa, startIndex, stopIndex, exact, ambigAlts, configs);
+			}
+		}
 	}
 
 	protected getReturnState(context: RuleContext): number {
