@@ -26,34 +26,78 @@ import { TokensStartState } from './TokensStartState';
 
 import * as assert from 'assert';
 
-/** */
+/**
+ * An Augmented Transition Network (ATN), a graph structured representation of a
+ * formal language.   ATNs are much more flexible than some other language
+ * representations, allowing even complicated grammars to be represented.  This class
+ * always includes an ATN, but also includes other data structures, here's why...
+ *
+ * The ANTLR 4 tool translates grammar source files (.g4) into an ATN, then
+ * serializes the ATN into a string embedded in the source code for a Lexer
+ * or Parser. At runtime, an {@link ATNDeserializer} converts that string
+ * back into an instance of this class, and it cached.  In theory, parsing
+ * using an ATN can be very time-expensive (O(N^4), but the ANTLR runtime
+ * incrementally generates and caches more efficent representations where
+ * possible, based both on the grammar's ATN and the symbols being recognized.
+ *
+ * These more efficent (but less flexible) structures include a {@Link LL1Table} for
+ * decisions implementable with only a single symbol of lookahead, and a
+ * collection of Deterministic Finite Automata (${@link DFA}s) which can handle
+ * some cases requiring multi-symbol lookahead.   Rather than trying to
+ * exhaustively construct these structures, the ANTLR runtime generates them
+ * sort of like a Just-in-time (JIT) compiler.
+ *
+ * To improve efficency, more than one Lexer or Parser instance can hold a reference
+ * the same ATN, and the incrementally constructed LL1Tables and DFAs are cached
+ * in this internally mutable datastructure.
+ *
+ * The net effect is that in most cases, ANTLR recognizers can achieve near
+ * linear-time (O(N)) behavior while retaining the flexability to process very
+ * complex grammars.  Note however that this time-complexity will typically can only
+ * only be observed after a warm-up to populate the LL1 and DFA datastructures.
+ * Whenever a Lexer or Parser
+ * encounters a decision it's not prepaired to make based on LL1 or DFA prediction,
+ * it uses class {@linkATNSimulator} to evaluate the situation and if possible,
+ * update set of the faster predictors to handle the new case.
+ */
 export class ATN {
+	/**
+	 * A table, indexed by atn state number, of the ATN graph nodes.
+	 */
 	@NotNull
 	readonly states: ATNState[] = [];
 
-	/** Each subrule/rule is a decision point and we must track them so we
-	 *  can go back later and build DFA predictors for them.  This includes
-	 *  all the rules, subrules, optional blocks, ()+, ()* etc...
+	/**
+	 * Each Grammar rule (or subrule) is a decision point and we must track
+	 * them so we can go back later and build DFA predictors for them.  This
+	 * array includes enties for all the rules, subrules, optional blocks,
+	 * repeating blocks, etc.   It is indexed by a decision number, which is seperate
+	 * and distinct from the ATN state number, but the nodes are a subset of
+	 * the states above.
 	 */
 	@NotNull
 	decisionToState: DecisionState[] = [];
 
 	/**
-	 * Maps from rule index to starting state number.
+	 * Maps from rule index to the starting ATN state for that rule.
 	 */
 	ruleToStartState: RuleStartState[];
 
 	/**
-	 * Maps from rule index to stop state number.
+	 * Maps from rule index to the stopping ATN state for that rule.
 	 */
 	ruleToStopState: RuleStopState[];
 
+	/**
+	 * Lexers support named "modes" permitting more flexible operation, this
+	 * Map supports such modes.
+	 */
 	@NotNull
 	modeNameToStartState: Map<string, TokensStartState> =
 		new Map<string, TokensStartState>();
 
 	/**
-	 * The type of the ATN.
+	 * The type of the ATN (Lexer or Parser)
 	 */
 	grammarType: ATNType;
 
@@ -77,21 +121,31 @@ export class ATN {
 	 */
 	lexerActions: LexerAction[];
 
+	/**
+	** In addition to names, Lexer modes also have numeric identifiers for faster lookup.
+	*/
 	@NotNull
 	modeToStartState: TokensStartState[] = [];
 
 	private contextCache: Array2DHashMap<PredictionContext, PredictionContext> =
 		new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
+	/**
+	 * Each decision point in the grammar may be represented by a cached DFA,
+	 * but the cached DFAs are mutable.
+	 */
 	@NotNull
 	decisionToDFA: DFA[] = [];
 	@NotNull
 	modeToDFA: DFA[] = [];
 
-	LL1Table: Map<number, number> = new Map<number, number>();
+	/**
+	 * For simple decisions, a LL1 style map is sufficent and efficent.
+	 */
+	LL1Table: Map<number, number> =  new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
-	constructor(@NotNull grammarType: ATNType, maxTokenType: number) {
+	constructor(@NotNull grammarType: ATNType, maxTokenType: number)  {
 		this.grammarType = grammarType;
 		this.maxTokenType = maxTokenType;
 	}
