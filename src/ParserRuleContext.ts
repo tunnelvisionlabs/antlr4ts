@@ -130,11 +130,12 @@ export class ParserRuleContext extends RuleContext {
 		this._stop = ctx._stop;
 
 		// copy any error nodes to alt label node
-		if (ctx.children) {
+		if (ctx.children.length) {
+			const children = this.mutableChildren;
 			// reset parent pointer for any error nodes
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
-					this.mutableChildren.push(child);
+					children.push(child);
 					child._parent = this;
 				}
 			}
