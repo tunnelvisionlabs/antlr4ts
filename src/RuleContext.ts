@@ -161,6 +161,11 @@ export class RuleContext extends RuleNode {
 	set altNumber(altNumber: number) { }
 
 	@Override
+	get children() : ReadonlyArray<ParseTree> {
+		return [] as ReadonlyArray<ParseTree>;
+	}
+
+	@Override
 	getChild(i: number): ParseTree {
 		throw new RangeError("i must be greater than or equal to 0 and less than childCount");
 	}

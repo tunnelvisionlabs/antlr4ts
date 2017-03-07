@@ -22,6 +22,11 @@ export class TerminalNode implements ParseTree {
 	}
 
 	@Override
+	get children() : ReadonlyArray<ParseTree> {
+		return [];
+	}
+
+	@Override
 	getChild(i: number): never {
 		throw new RangeError("Terminal Node has no children.");
 	}

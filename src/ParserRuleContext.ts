@@ -46,7 +46,20 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	children?: ParseTree[];
+
+
+	_children?: Array<ParseTree>;
+	static _emptyChildren = [];
+
+	get children() : ReadonlyArray<ParseTree> {
+		let result = this._children;
+		return result ? result : ParserRuleContext._emptyChildren;
+	}
+
+	get mutableChildren() {
+		if (!this._children) this._children = [];
+		return this._children as Array<ParseTree>;
+	}
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -112,11 +125,10 @@ export class ParserRuleContext extends RuleContext {
 
 		// copy any error nodes to alt label node
 		if (ctx.children) {
-			this.children = [];
 			// reset parent pointer for any error nodes
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
-					this.children.push(child);
+					this.mutableChildren.push(child);
 					child._parent = this;
 				}
 			}
@@ -143,12 +155,7 @@ export class ParserRuleContext extends RuleContext {
 			result = t;
 		}
 
-		if (!this.children) {
-			this.children = [t];
-		} else {
-			this.children.push(t);
-		}
-
+		this.mutableChildren.push(t);
 		return result;
 	}
 
@@ -158,7 +165,7 @@ export class ParserRuleContext extends RuleContext {
  	 */
 	removeLastChild(): void {
 		if (this.children) {
-			this.children.pop();
+			this.mutableChildren.pop();
 		}
 	}
 

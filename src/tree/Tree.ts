@@ -14,6 +14,8 @@ export interface Tree {
 	 */
 	readonly parent: Tree | undefined;
 
+	readonly children: ReadonlyArray<Tree> | undefined;
+
 	/**
 	 * This method returns whatever object represents the data at this note. For
 	 * example, for parse trees, the payload can be a {@link Token} representing
