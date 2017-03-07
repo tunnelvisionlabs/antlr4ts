@@ -210,7 +210,7 @@ export class XPath {
 		while (i < this.elements.length) {
 			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
 			for (let node of work) {
-				if (node.childCount > 0) {
+				if (node.children.length > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.

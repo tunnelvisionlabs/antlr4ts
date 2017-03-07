@@ -578,7 +578,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	enterLeftFactoredRule(localctx: ParserRuleContext, state: number, ruleIndex: number): void {
 		this.state = state;
 		if (this._buildParseTrees) {
-			let factoredContext = this._ctx.getChild(this._ctx.childCount - 1) as ParserRuleContext;
+			const children = this._ctx.children;
+			let factoredContext = children[children.length - 1] as ParserRuleContext;
 			this._ctx.removeLastChild();
 			factoredContext._parent = localctx;
 			localctx.addChild(factoredContext);

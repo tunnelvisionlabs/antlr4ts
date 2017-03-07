@@ -125,13 +125,14 @@ export class RuleContext extends RuleNode {
 	 */
 	@Override
 	get text(): string {
-		if (this.childCount === 0) {
+		const children = this.children;
+		if (children.length === 0) {
 			return "";
 		}
 
 		let builder = "";
-		for (let i = 0; i < this.childCount; i++) {
-			builder += this.getChild(i).text;
+		for (let i = 0; i < children.length; i++) {
+			builder += children[i].text;
 		}
 
 		return builder.toString();
@@ -163,16 +164,6 @@ export class RuleContext extends RuleNode {
 	@Override
 	get children() : ReadonlyArray<ParseTree> {
 		return [] as ReadonlyArray<ParseTree>;
-	}
-
-	@Override
-	getChild(i: number): ParseTree {
-		throw new RangeError("i must be greater than or equal to 0 and less than childCount");
-	}
-
-	@Override
-	get childCount(): number {
-		return 0;
 	}
 
 	@Override

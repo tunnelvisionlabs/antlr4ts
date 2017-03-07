@@ -12,15 +12,15 @@ import { Parser } from "../Parser";
 import { Interval } from "../misc/Interval";
 
 export abstract class RuleNode implements ParseTree {
+	protected static EmptyChildren: ReadonlyArray<ParseTree> = [];
+
 	abstract readonly ruleContext: RuleContext;
 
 	//@Override
 	abstract readonly parent: RuleNode | undefined;
 
 	//@Override
-	abstract readonly children: ReadonlyArray<ParseTree>;
-
-	abstract getChild(i: number): ParseTree;
+	get children() { return RuleNode.EmptyChildren; }
 
 	abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
 
@@ -32,5 +32,4 @@ export abstract class RuleNode implements ParseTree {
 
 	abstract readonly payload: any;
 
-	abstract readonly childCount: number;
 }
