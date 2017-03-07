@@ -51,11 +51,17 @@ export class ParserRuleContext extends RuleContext {
 	_children?: Array<ParseTree>;
 	static _emptyChildren = [];
 
+	/** Access children for read
+	 * Avoids creation of extra empty arrays by using a shared _emptyChildren array
+	 */
 	get children() : ReadonlyArray<ParseTree> {
 		let result = this._children;
 		return result ? result : ParserRuleContext._emptyChildren;
 	}
 
+	/** Access the children in a read/write way.
+	 * This will create the _children array if needed.
+	 */
 	get mutableChildren() {
 		if (!this._children) this._children = [];
 		return this._children as Array<ParseTree>;
