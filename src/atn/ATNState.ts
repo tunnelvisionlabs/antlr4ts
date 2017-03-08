@@ -74,7 +74,7 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */
 export abstract class ATNState {
-	private static readonly serializationNames: string[] = [
+	private static readonly _serializationNames: string[] = [
 		"INVALID",
 		"BASIC",
 		"RULE_START",

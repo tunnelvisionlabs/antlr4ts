@@ -80,7 +80,7 @@ export class ATN {
 	@NotNull
 	modeToStartState: TokensStartState[] = [];
 
-	private contextCache: Array2DHashMap<PredictionContext, PredictionContext> =
+	private _contextCache: Array2DHashMap<PredictionContext, PredictionContext> =
 		new Array2DHashMap<PredictionContext, PredictionContext>(ObjectEqualityComparator.INSTANCE);
 
 	@NotNull
@@ -107,16 +107,16 @@ export class ATN {
 			this.modeToDFA[i] = new DFA(this.modeToStartState[i]);
 		}
 
-		this.contextCache.clear();
+		this._contextCache.clear();
 		this.LL1Table.clear();
 	}
 
 	get contextCacheSize(): number {
-		return this.contextCache.size;
+		return this._contextCache.size;
 	}
 
 	getCachedContext(context: PredictionContext): PredictionContext {
-		return PredictionContext.getCachedContext(context, this.contextCache, new PredictionContext.IdentityHashMap());
+		return PredictionContext.getCachedContext(context, this._contextCache, new PredictionContext.IdentityHashMap());
 	}
 
 	getDecisionToDFA(): DFA[] {

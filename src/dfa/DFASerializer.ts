@@ -20,9 +20,9 @@ import { VocabularyImpl } from '../VocabularyImpl';
 /** A DFA walker that knows how to dump them to serialized strings. */
 export class DFASerializer {
 	@NotNull
-	private dfa: DFA;
+	private _dfa: DFA;
 	@NotNull
-	private vocabulary: Vocabulary;
+	private _vocabulary: Vocabulary;
 
 	ruleNames?: string[];
 
@@ -40,22 +40,22 @@ export class DFASerializer {
 			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
 		}
 
-		this.dfa = dfa;
-		this.vocabulary = vocabulary;
+		this._dfa = dfa;
+		this._vocabulary = vocabulary;
 		this.ruleNames = ruleNames;
 		this.atn = atn;
 	}
 
 	@Override
 	toString(): string {
-		if (!this.dfa.s0) {
+		if (!this._dfa.s0) {
 			return "";
 		}
 
 		let buf = "";
 
-		if (this.dfa.states) {
-			let states: DFAState[] = new Array<DFAState>(...this.dfa.states.toArray());
+		if (this._dfa.states) {
+			let states: DFAState[] = new Array<DFAState>(...this._dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
@@ -123,7 +123,7 @@ export class DFASerializer {
 	}
 
 	protected getEdgeLabel(i: number): string {
-		return this.vocabulary.getDisplayName(i);
+		return this._vocabulary.getDisplayName(i);
 	}
 
 	getStateString(s: DFAState): string {

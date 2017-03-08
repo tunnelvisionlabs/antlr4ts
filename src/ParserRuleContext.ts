@@ -38,7 +38,7 @@ import { Token } from "./Token";
  *  satisfy the superclass interface.
  */
 export class ParserRuleContext extends RuleContext {
-	private static readonly EMPTY: ParserRuleContext = new ParserRuleContext();
+	private static readonly _EMPTY: ParserRuleContext = new ParserRuleContext();
 
 	/** If we are debugging or building a parse tree for a visitor,
 	 *  we need to track all of the tokens and rule invocations associated
@@ -88,7 +88,7 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	static emptyContext(): ParserRuleContext {
-		return ParserRuleContext.EMPTY;
+		return ParserRuleContext._EMPTY;
 	}
 
 	/**

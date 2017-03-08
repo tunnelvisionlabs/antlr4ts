@@ -56,10 +56,10 @@ export class DFAState {
 
 	/** These keys for these edges are the top level element of the global context. */
 	@NotNull
-	private readonly contextEdges: Map<number, DFAState>;
+	private readonly _contextEdges: Map<number, DFAState>;
 
 	/** Symbols in this set require a global context transition before matching an input symbol. */
-	private contextSymbols: BitSet | undefined;
+	private _contextSymbols: BitSet | undefined;
 
 	/**
 	 * This list is computed by {@link ParserATNSimulator#predicateDFAState}.
@@ -74,11 +74,11 @@ export class DFAState {
 	constructor(configs: ATNConfigSet) {
 		this.configs = configs;
 		this.edges = new Map<number, DFAState>();
-		this.contextEdges = new Map<number, DFAState>();
+		this._contextEdges = new Map<number, DFAState>();
 	}
 
 	get isContextSensitive(): boolean {
-		return !!this.contextSymbols;
+		return !!this._contextSymbols;
 	}
 
 	isContextSymbol(symbol: number): boolean {
@@ -86,12 +86,12 @@ export class DFAState {
 			return false;
 		}
 
-		return this.contextSymbols!.get(symbol);
+		return this._contextSymbols!.get(symbol);
 	}
 
 	setContextSymbol(symbol: number): void {
 		assert(this.isContextSensitive);
-		this.contextSymbols!.set(symbol);
+		this._contextSymbols!.set(symbol);
 	}
 
 	setContextSensitive(atn: ATN): void {
@@ -100,8 +100,8 @@ export class DFAState {
 			return;
 		}
 
-		if (!this.contextSymbols) {
-			this.contextSymbols = new BitSet();
+		if (!this._contextSymbols) {
+			this._contextSymbols = new BitSet();
 		}
 	}
 
@@ -150,7 +150,7 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		return this.contextEdges.get(invokingState);
+		return this._contextEdges.get(invokingState);
 	}
 
 	setContextTarget(invokingState: number, target: DFAState): void {
@@ -162,11 +162,11 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		this.contextEdges.set(invokingState, target);
+		this._contextEdges.set(invokingState, target);
 	}
 
 	getContextEdgeMap(): Map<number, DFAState> {
-		let map = new Map<number, DFAState>(this.contextEdges);
+		let map = new Map<number, DFAState>(this._contextEdges);
 		let existing = map.get(-1);
 		if (existing !== undefined) {
 			if (map.size === 1) {

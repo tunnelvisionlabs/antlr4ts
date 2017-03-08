@@ -46,10 +46,10 @@ export abstract class PredictionContext implements Equatable {
 	 *  }
 	 * </pre>
 	 */
-	private readonly cachedHashCode: number;
+	private readonly _cachedHashCode: number;
 
 	constructor(cachedHashCode: number) {
-		this.cachedHashCode = cachedHashCode;
+		this._cachedHashCode = cachedHashCode;
 	}
 
 	protected static calculateEmptyHashCode(): number {
@@ -111,11 +111,11 @@ export abstract class PredictionContext implements Equatable {
 		return parent.getChild(transition.followState.stateNumber);
 	}
 
-	private static addEmptyContext(context: PredictionContext): PredictionContext {
+	private static _addEmptyContext(context: PredictionContext): PredictionContext {
 		return context.addEmptyContext();
 	}
 
-	private static removeEmptyContext(context: PredictionContext): PredictionContext {
+	private static _removeEmptyContext(context: PredictionContext): PredictionContext {
 		return context.removeEmptyContext();
 	}
 
@@ -125,9 +125,9 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		if (context0.isEmpty) {
-			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext.addEmptyContext(context1);
+			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext._addEmptyContext(context1);
 		} else if (context1.isEmpty) {
-			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
+			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext._addEmptyContext(context0);
 		}
 
 		let context0size: number = context0.size;
@@ -294,7 +294,7 @@ export abstract class PredictionContext implements Equatable {
 
 	@Override
 	hashCode(): number {
-		return this.cachedHashCode;
+		return this._cachedHashCode;
 	}
 
 	// @Override
@@ -367,15 +367,15 @@ export abstract class PredictionContext implements Equatable {
 }
 
 class EmptyPredictionContext extends PredictionContext {
-	private fullContext: boolean;
+	private _fullContext: boolean;
 
 	constructor(fullContext: boolean) {
 		super(PredictionContext.calculateEmptyHashCode());
-		this.fullContext = fullContext;
+		this._fullContext = fullContext;
 	}
 
 	get isFullContext(): boolean {
-		return this.fullContext;
+		return this._fullContext;
 	}
 
 	@Override
@@ -516,10 +516,10 @@ class ArrayPredictionContext extends PredictionContext {
 
 	@Override
 	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
-		return ArrayPredictionContext.appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
+		return ArrayPredictionContext._appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
 	}
 
-	private static appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
+	private static _appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
 		if (suffix.isEmpty) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
 				if (context.hasEmpty) {
@@ -553,7 +553,7 @@ class ArrayPredictionContext extends PredictionContext {
 				}
 
 				for (let i = 0; i < parentCount; i++) {
-					updatedParents[i] = ArrayPredictionContext.appendContextImpl(context.getParent(i), suffix, visited);
+					updatedParents[i] = ArrayPredictionContext._appendContextImpl(context.getParent(i), suffix, visited);
 				}
 
 				if (updatedParents.length === 1) {
@@ -588,10 +588,10 @@ class ArrayPredictionContext extends PredictionContext {
 		}
 
 		let other: ArrayPredictionContext = o;
-		return this.equalsImpl(other, new Array2DHashSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>());
+		return this._equalsImpl(other, new Array2DHashSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>());
 	}
 
-	private equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
+	private _equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
 		let selfWorkList: PredictionContext[] = [];
 		let otherWorkList: PredictionContext[] = [];
 		selfWorkList.push(this);

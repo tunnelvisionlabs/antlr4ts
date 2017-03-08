@@ -21,7 +21,7 @@ import { NotNull } from "./Decorators";
 import { PredicateTransition } from './atn/PredicateTransition';
 
 export class FailedPredicateException extends RecognitionException {
-	//private static serialVersionUID: number =  5379330841495778709L;
+	//private static _serialVersionUID: number =  5379330841495778709L;
 
 	private _ruleIndex: number;
 	private _predicateIndex: number;
@@ -32,7 +32,7 @@ export class FailedPredicateException extends RecognitionException {
 			recognizer,
 			recognizer.inputStream,
 			recognizer.context,
-			FailedPredicateException.formatMessage(predicate, message));
+			FailedPredicateException._formatMessage(predicate, message));
 		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 
 		let trans = s.transition(0) as AbstractPredicateTransition;
@@ -62,7 +62,7 @@ export class FailedPredicateException extends RecognitionException {
 	}
 
 	@NotNull
-	private static formatMessage(predicate: string | undefined, message: string | undefined): string {
+	private static _formatMessage(predicate: string | undefined, message: string | undefined): string {
 		if (message) {
 			return message;
 		}

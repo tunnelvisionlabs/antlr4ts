@@ -164,7 +164,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		for (let i = 0; i < n; i++) {
 			let t: Token = this.tokenSource.nextToken();
-			if (this.isWritableToken(t)) {
+			if (this._isWritableToken(t)) {
 				t.tokenIndex = this.tokens.length;
 			}
 
@@ -503,7 +503,7 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	getTextFromRange(start: any, stop: any): string {
-		if (this.isToken(start) && this.isToken(stop)) {
+		if (this._isToken(start) && this._isToken(stop)) {
 			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));
 		}
 
@@ -523,12 +523,12 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	// TODO: Figure out a way to make this more flexible?
-	private isWritableToken(t: Token): t is WritableToken {
+	private _isWritableToken(t: Token): t is WritableToken {
 		return t instanceof CommonToken;
 	}
 
 	// TODO: Figure out a way to make this more flexible?
-	private isToken(t: any): t is Token {
+	private _isToken(t: any): t is Token {
 		return t instanceof CommonToken;
 	}
 }

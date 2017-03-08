@@ -70,7 +70,7 @@ export class ATNConfig implements Equatable {
 	 * <li>0x80000000: Suppress precedence filter</li>
 	 * </ul>
 	 */
-	private altAndOuterContextDepth: number;
+	private _altAndOuterContextDepth: number;
 
 	/** The stack of invoking states leading to the rule/states associated
 	 *  with this config.  We track only those contexts pushed during
@@ -86,11 +86,11 @@ export class ATNConfig implements Equatable {
 		if (typeof altOrConfig === 'number') {
 			assert((altOrConfig & 0xFFFFFF) == altOrConfig);
 			this._state = state;
-			this.altAndOuterContextDepth = altOrConfig;
+			this._altAndOuterContextDepth = altOrConfig;
 			this._context = context;
 		} else {
 			this._state = state;
-			this.altAndOuterContextDepth = altOrConfig.altAndOuterContextDepth;
+			this._altAndOuterContextDepth = altOrConfig._altAndOuterContextDepth;
 			this._context = context;
 		}
 	}
@@ -126,7 +126,7 @@ export class ATNConfig implements Equatable {
 
 	/** What alt (or lexer rule) is predicted by this configuration */
 	get alt(): number {
-		return this.altAndOuterContextDepth & 0x00FFFFFF;
+		return this._altAndOuterContextDepth & 0x00FFFFFF;
 	}
 
 	@NotNull
@@ -155,14 +155,14 @@ export class ATNConfig implements Equatable {
 	 * don't ever decrement. TODO: make it a boolean then</p>
 	 */
 	get outerContextDepth(): number {
-		return (this.altAndOuterContextDepth >>> 24) & 0x7F;
+		return (this._altAndOuterContextDepth >>> 24) & 0x7F;
 	}
 
 	set outerContextDepth(outerContextDepth: number) {
 		assert(outerContextDepth >= 0);
 		// saturate at 0x7F - everything but zero/positive is only used for debug information anyway
 		outerContextDepth = Math.min(outerContextDepth, 0x7F);
-		this.altAndOuterContextDepth = ((outerContextDepth << 24) | (this.altAndOuterContextDepth & ~0x7F000000) >>> 0);
+		this._altAndOuterContextDepth = ((outerContextDepth << 24) | (this._altAndOuterContextDepth & ~0x7F000000) >>> 0);
 	}
 
 	get lexerActionExecutor(): LexerActionExecutor | undefined {
@@ -189,18 +189,18 @@ export class ATNConfig implements Equatable {
 	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor): ATNConfig;
 	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, arg2?: SemanticContext | PredictionContext | LexerActionExecutor): ATNConfig {
 		if (arg2 == null) {
-			return this.transformImpl(state, this._context, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
+			return this._transformImpl(state, this._context, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
 		} else if (arg2 instanceof PredictionContext) {
-			return this.transformImpl(state, arg2, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
+			return this._transformImpl(state, arg2, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
 		} else if (arg2 instanceof SemanticContext) {
-			return this.transformImpl(state, this._context, arg2, checkNonGreedy, this.lexerActionExecutor);
+			return this._transformImpl(state, this._context, arg2, checkNonGreedy, this.lexerActionExecutor);
 		} else {
-			return this.transformImpl(state, this._context, this.semanticContext, checkNonGreedy, arg2);
+			return this._transformImpl(state, this._context, this.semanticContext, checkNonGreedy, arg2);
 		}
 	}
 
-	private transformImpl(@NotNull state: ATNState, context: PredictionContext, @NotNull semanticContext: SemanticContext, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig {
-		let passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig.checkNonGreedyDecision(this, state);
+	private _transformImpl(@NotNull state: ATNState, context: PredictionContext, @NotNull semanticContext: SemanticContext, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig {
+		let passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig._checkNonGreedyDecision(this, state);
 		if (semanticContext != SemanticContext.NONE) {
 			if (lexerActionExecutor != null || passedThroughNonGreedy) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, this, context, passedThroughNonGreedy);
@@ -217,7 +217,7 @@ export class ATNConfig implements Equatable {
 		}
 	}
 
-	private static checkNonGreedyDecision(source: ATNConfig, target: ATNState): boolean {
+	private static _checkNonGreedyDecision(source: ATNConfig, target: ATNState): boolean {
 		return source.hasPassedThroughNonGreedyDecision
 			|| target instanceof DecisionState && target.nonGreedy;
 	}
@@ -307,15 +307,15 @@ export class ATNConfig implements Equatable {
 	}
 
 	get isPrecedenceFilterSuppressed(): boolean {
-		return (this.altAndOuterContextDepth & SUPPRESS_PRECEDENCE_FILTER) !== 0;
+		return (this._altAndOuterContextDepth & SUPPRESS_PRECEDENCE_FILTER) !== 0;
 	}
 
 	set isPrecedenceFilterSuppressed(value: boolean) {
 		if (value) {
-			this.altAndOuterContextDepth |= SUPPRESS_PRECEDENCE_FILTER;
+			this._altAndOuterContextDepth |= SUPPRESS_PRECEDENCE_FILTER;
 		}
 		else {
-			this.altAndOuterContextDepth &= ~SUPPRESS_PRECEDENCE_FILTER;
+			this._altAndOuterContextDepth &= ~SUPPRESS_PRECEDENCE_FILTER;
 		}
 	}
 
@@ -502,7 +502,7 @@ class SemanticContextATNConfig extends ATNConfig {
  */
 class ActionATNConfig extends ATNConfig {
 	private _lexerActionExecutor?: LexerActionExecutor;
-	private passedThroughNonGreedyDecision: boolean;
+	private _passedThroughNonGreedyDecision: boolean;
 
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
@@ -517,7 +517,7 @@ class ActionATNConfig extends ATNConfig {
 		}
 
 		this._lexerActionExecutor = lexerActionExecutor;
-		this.passedThroughNonGreedyDecision = passedThroughNonGreedyDecision;
+		this._passedThroughNonGreedyDecision = passedThroughNonGreedyDecision;
 	}
 
 	@Override
@@ -527,7 +527,7 @@ class ActionATNConfig extends ATNConfig {
 
 	@Override
 	get hasPassedThroughNonGreedyDecision(): boolean {
-		return this.passedThroughNonGreedyDecision;
+		return this._passedThroughNonGreedyDecision;
 	}
 }
 
@@ -540,7 +540,7 @@ class ActionATNConfig extends ATNConfig {
  */
 class ActionSemanticContextATNConfig extends SemanticContextATNConfig {
 	private _lexerActionExecutor?: LexerActionExecutor;
-	private passedThroughNonGreedyDecision: boolean;
+	private _passedThroughNonGreedyDecision: boolean;
 
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
@@ -552,7 +552,7 @@ class ActionSemanticContextATNConfig extends SemanticContextATNConfig {
 		}
 
 		this._lexerActionExecutor = lexerActionExecutor;
-		this.passedThroughNonGreedyDecision = passedThroughNonGreedyDecision;
+		this._passedThroughNonGreedyDecision = passedThroughNonGreedyDecision;
 	}
 
 	@Override
@@ -562,6 +562,6 @@ class ActionSemanticContextATNConfig extends SemanticContextATNConfig {
 
 	@Override
 	get hasPassedThroughNonGreedyDecision(): boolean {
-		return this.passedThroughNonGreedyDecision;
+		return this._passedThroughNonGreedyDecision;
 	}
 }

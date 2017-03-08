@@ -51,7 +51,7 @@ export class IntegerList {
 
 	add(value: number): void {
 		if (this._data.length === this._size) {
-			this.ensureCapacity(this._size + 1);
+			this._ensureCapacity(this._size + 1);
 		}
 
 		this._data[this._size] = value;
@@ -60,16 +60,16 @@ export class IntegerList {
 
 	addAll(list: number[] | IntegerList | JavaCollection<number>): void {
 		if (Array.isArray(list)) {
-			this.ensureCapacity(this._size + list.length);
+			this._ensureCapacity(this._size + list.length);
 			this._data.subarray(this._size, this._size + list.length).set(list);
 			this._size += list.length;
 		} else if (list instanceof IntegerList) {
-			this.ensureCapacity(this._size + list._size);
+			this._ensureCapacity(this._size + list._size);
 			this._data.subarray(this._size, this._size + list.size).set(list._data);
 			this._size += list._size;
 		} else {
 			// list is JavaCollection<number>
-			this.ensureCapacity(this._size + list.size);
+			this._ensureCapacity(this._size + list.size);
 			let current: number = 0;
 			for (let xi = list.iterator(); xi.hasNext(); /*empty*/) {
 				this._data[this._size + current] = xi.next();
@@ -251,7 +251,7 @@ export class IntegerList {
 		return Arrays.binarySearch(this._data, key, fromIndex, toIndex);
 	}
 
-	private ensureCapacity(capacity: number): void {
+	private _ensureCapacity(capacity: number): void {
 		if (capacity < 0 || capacity > MAX_ARRAY_SIZE) {
 			throw new RangeError();
 		}

@@ -43,19 +43,19 @@ import { TokenSource } from './TokenSource';
 import { TokenStream } from './TokenStream';
 
 class TraceListener implements ParseTreeListener {
-	constructor(private ruleNames: string[], private tokenStream: TokenStream) {
+	constructor(private _ruleNames: string[], private _tokenStream: TokenStream) {
 	}
 
 	@Override
 	enterEveryRule(ctx: ParserRuleContext): void {
-		console.log("enter   " + this.ruleNames[ctx.ruleIndex] +
-			", LT(1)=" + this.tokenStream.LT(1).text);
+		console.log("enter   " + this._ruleNames[ctx.ruleIndex] +
+			", LT(1)=" + this._tokenStream.LT(1).text);
 	}
 
 	@Override
 	exitEveryRule(ctx: ParserRuleContext): void {
-		console.log("exit    " + this.ruleNames[ctx.ruleIndex] +
-			", LT(1)=" + this.tokenStream.LT(1).text);
+		console.log("exit    " + this._ruleNames[ctx.ruleIndex] +
+			", LT(1)=" + this._tokenStream.LT(1).text);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ class TraceListener implements ParseTreeListener {
 	visitTerminal(node: TerminalNode): void {
 		let parent = node.parent!.ruleContext;
 		let token: Token = node.symbol;
-		console.log("consume " + token + " rule " + this.ruleNames[parent.ruleIndex]);
+		console.log("consume " + token + " rule " + this._ruleNames[parent.ruleIndex]);
 	}
 }
 
@@ -78,7 +78,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @see ATNDeserializationOptions.isGenerateRuleBypassTransitions
 	 */
-	private static readonly bypassAltsAtnCache = new Map<string, ATN>();
+	private static readonly _bypassAltsAtnCache = new Map<string, ATN>();
 
 	/**
 	 * The error handling strategy for the parser. The default value is a new
@@ -402,12 +402,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			throw new Error("The current parser does not support an ATN with bypass alternatives.");
 		}
 
-		let result = Parser.bypassAltsAtnCache.get(serializedAtn);
+		let result = Parser._bypassAltsAtnCache.get(serializedAtn);
 		if (result == null) {
 			let deserializationOptions: ATNDeserializationOptions = new ATNDeserializationOptions();
 			deserializationOptions.isGenerateRuleBypassTransitions = true;
 			result = new ATNDeserializer(deserializationOptions).deserialize(Utils.toCharArray(serializedAtn));
-			Parser.bypassAltsAtnCache.set(serializedAtn, result);
+			Parser._bypassAltsAtnCache.set(serializedAtn, result);
 		}
 
 		return result;

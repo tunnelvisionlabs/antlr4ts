@@ -290,7 +290,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	static retry_debug: boolean = false;
 
 	@NotNull
-	private predictionMode: PredictionMode = PredictionMode.LL;
+	private _predictionMode: PredictionMode = PredictionMode.LL;
 	force_global_context: boolean = false;
 	always_try_local_context: boolean = true;
 
@@ -337,7 +337,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 */
 	protected userWantsCtxSensitive: boolean = true;
 
-	private dfa?: DFA;
+	private _dfa?: DFA;
 
 	constructor(@NotNull atn: ATN, parser: Parser) {
 		super(atn);
@@ -346,11 +346,11 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	@NotNull
 	getPredictionMode(): PredictionMode {
-		return this.predictionMode;
+		return this._predictionMode;
 	}
 
 	setPredictionMode(@NotNull predictionMode: PredictionMode): void {
-		this.predictionMode = predictionMode;
+		this._predictionMode = predictionMode;
 	}
 
 	@Override
@@ -380,7 +380,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		this.dfa = dfa;
+		this._dfa = dfa;
 
 		if (this.force_global_context) {
 			useContext = true;
@@ -389,7 +389,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			useContext = useContext || dfa.isContextSensitive;
 		}
 
-		this.userWantsCtxSensitive = useContext || (this.predictionMode !== PredictionMode.SLL && outerContext != null && !this.atn.decisionToState[decision].sll);
+		this.userWantsCtxSensitive = useContext || (this._predictionMode !== PredictionMode.SLL && outerContext != null && !this.atn.decisionToState[decision].sll);
 		if (outerContext == null) {
 			outerContext = ParserRuleContext.emptyContext();
 		}
@@ -416,7 +416,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return alt;
 		}
 		finally {
-			this.dfa = undefined;
+			this._dfa = undefined;
 			input.seek(index);
 			input.release(m);
 		}
@@ -626,7 +626,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				input.seek(startIndex);
 			}
 
-			let alts: BitSet = this.evalSemanticContext(predicates, outerContext, this.reportAmbiguities && this.predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION);
+			let alts: BitSet = this.evalSemanticContext(predicates, outerContext, this.reportAmbiguities && this._predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION);
 			switch (alts.cardinality()) {
 			case 0:
 				throw this.noViableAlt(input, outerContext, s.configs, startIndex);
@@ -685,7 +685,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		// More picky when we need exact conflicts
-		if (useContext && this.predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION) {
+		if (useContext && this._predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION) {
 			return state.configs.isExactConflict;
 		}
 
@@ -1825,9 +1825,9 @@ export class ParserATNSimulator extends ATNSimulator {
 						continue;
 					}
 
-					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
+					if (this._dfa != null && this._dfa.isPrecedenceDfa) {
 						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn;
-						if (outermostPrecedenceReturn == this.dfa.atnStartState.ruleIndex) {
+						if (outermostPrecedenceReturn == this._dfa.atnStartState.ruleIndex) {
 							c.isPrecedenceFilterSuppressed = true;
 						}
 					}
@@ -1991,7 +1991,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		return config.transform(t.target, false, newContext);
 	}
 
-	private static STATE_ALT_SORT_COMPARATOR: (o1: ATNConfig, o2: ATNConfig) => number =
+	private static _STATE_ALT_SORT_COMPARATOR: (o1: ATNConfig, o2: ATNConfig) => number =
 		(o1: ATNConfig, o2: ATNConfig): number => {
 			let diff: number = o1.state.nonStopStateNumber - o2.state.nonStopStateNumber;
 			if (diff !== 0) {
@@ -2006,13 +2006,13 @@ export class ParserATNSimulator extends ATNSimulator {
 			return 0;
 		};
 
-	private isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
+	private _isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
 		if (configset.uniqueAlt !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
 			return undefined;
 		}
 
 		let configs: ATNConfig[] = configset.toArray();
-		configs.sort(ParserATNSimulator.STATE_ALT_SORT_COMPARATOR);
+		configs.sort(ParserATNSimulator._STATE_ALT_SORT_COMPARATOR);
 
 		let exact: boolean = !configset.dipsIntoOuterContext;
 		let alts: BitSet = new BitSet();
@@ -2331,7 +2331,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		if (!configs.isReadOnly) {
 			if (configs.conflictInfo == null) {
-				configs.conflictInfo = this.isConflicted(configs, contextCache);
+				configs.conflictInfo = this._isConflicted(configs, contextCache);
 			}
 		}
 

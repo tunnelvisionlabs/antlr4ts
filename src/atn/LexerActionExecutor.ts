@@ -32,7 +32,7 @@ export class LexerActionExecutor {
 	 * Caches the result of {@link #hashCode} since the hash code is an element
 	 * of the performance-critical {@link LexerATNConfig#hashCode} operation.
 	 */
-	private cachedHashCode: number;
+	private _cachedHashCode: number;
 
 	/**
 	 * Constructs an executor for a sequence of {@link LexerAction} actions.
@@ -46,7 +46,7 @@ export class LexerActionExecutor {
 			hash = MurmurHash.update(hash, lexerAction);
 		}
 
-		this.cachedHashCode = MurmurHash.finish(hash, lexerActions.length);
+		this._cachedHashCode = MurmurHash.finish(hash, lexerActions.length);
 	}
 
 	/**
@@ -177,7 +177,7 @@ export class LexerActionExecutor {
 
 	@Override
 	hashCode(): number {
-		return this.cachedHashCode;
+		return this._cachedHashCode;
 	}
 
 	@Override
@@ -188,7 +188,7 @@ export class LexerActionExecutor {
 			return false;
 		}
 
-		return this.cachedHashCode === obj.cachedHashCode
+		return this._cachedHashCode === obj._cachedHashCode
 			&& ArrayEqualityComparator.INSTANCE.equals(this._lexerActions, obj._lexerActions);
 	}
 }

@@ -49,13 +49,13 @@ export class DFA {
 	@NotNull
 	atn: ATN;
 
-	private nextStateNumber: number = 0;
+	private _nextStateNumber: number = 0;
 
 	/**
 	 * {@code true} if this DFA is for a precedence decision; otherwise,
 	 * {@code false}. This is the backing field for {@link #isPrecedenceDfa}.
 	 */
-	private precedenceDfa: boolean;
+	private _precedenceDfa: boolean;
 
 	/**
 	 * Constructs a `DFA` instance associated with a lexer mode.
@@ -96,7 +96,7 @@ export class DFA {
 			}
 		}
 
-		this.precedenceDfa = isPrecedenceDfa;
+		this._precedenceDfa = isPrecedenceDfa;
 	}
 
 	/**
@@ -111,7 +111,7 @@ export class DFA {
 	 * @see Parser.precedence
 	 */
 	get isPrecedenceDfa(): boolean {
-		return this.precedenceDfa;
+		return this._precedenceDfa;
 	}
 
 	/**
@@ -186,7 +186,7 @@ export class DFA {
 	}
 
 	addState(state: DFAState): DFAState {
-		state.stateNumber = this.nextStateNumber++;
+		state.stateNumber = this._nextStateNumber++;
 		return this.states.getOrAdd(state);
 	}
 

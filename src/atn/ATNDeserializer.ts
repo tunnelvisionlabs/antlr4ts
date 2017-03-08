@@ -76,36 +76,36 @@ export class ATNDeserializer {
 	/**
 	 * This is the earliest supported serialized UUID.
 	 */
-	private static readonly BASE_SERIALIZED_UUID: UUID = UUID.fromString("E4178468-DF95-44D0-AD87-F22A5D5FB6D3");
+	private static readonly _BASE_SERIALIZED_UUID: UUID = UUID.fromString("E4178468-DF95-44D0-AD87-F22A5D5FB6D3");
 	/**
 	 * This UUID indicates an extension of {@link #ADDED_PRECEDENCE_TRANSITIONS}
 	 * for the addition of lexer actions encoded as a sequence of
 	 * {@link LexerAction} instances.
 	 */
-	private static readonly ADDED_LEXER_ACTIONS: UUID = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
+	private static readonly _ADDED_LEXER_ACTIONS: UUID = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
 	/**
 	 * This list contains all of the currently supported UUIDs, ordered by when
 	 * the feature first appeared in this branch.
 	 */
-	private static readonly SUPPORTED_UUIDS: UUID[] = [
-		ATNDeserializer.BASE_SERIALIZED_UUID,
-		ATNDeserializer.ADDED_LEXER_ACTIONS
+	private static readonly _SUPPORTED_UUIDS: UUID[] = [
+		ATNDeserializer._BASE_SERIALIZED_UUID,
+		ATNDeserializer._ADDED_LEXER_ACTIONS
 	];
 
 	/**
 	 * This is the current serialized UUID.
 	 */
-	private static readonly SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_LEXER_ACTIONS;
+	private static readonly _SERIALIZED_UUID: UUID = ATNDeserializer._ADDED_LEXER_ACTIONS;
 
 	@NotNull
-	private readonly deserializationOptions: ATNDeserializationOptions;
+	private readonly _deserializationOptions: ATNDeserializationOptions;
 
 	constructor(deserializationOptions?: ATNDeserializationOptions) {
 		if (deserializationOptions == null) {
 			deserializationOptions = ATNDeserializationOptions.defaultOptions;
 		}
 
-		this.deserializationOptions = deserializationOptions;
+		this._deserializationOptions = deserializationOptions;
 	}
 
 	/**
@@ -122,12 +122,12 @@ export class ATNDeserializer {
 	 * introduced; otherwise, {@code false}.
 	 */
 	protected isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
-		let featureIndex: number = ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(feature));
+		let featureIndex: number = ATNDeserializer._SUPPORTED_UUIDS.findIndex(e => e.equals(feature));
 		if (featureIndex < 0) {
 			return false;
 		}
 
-		return ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(actualUuid)) >= featureIndex;
+		return ATNDeserializer._SUPPORTED_UUIDS.findIndex(e => e.equals(actualUuid)) >= featureIndex;
 	}
 
 	deserialize(@NotNull data: Uint16Array): ATN {
@@ -155,12 +155,12 @@ export class ATNDeserializer {
 
 		let uuid: UUID = ATNDeserializer.toUUID(data, p);
 		p += 8;
-		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) < 0) {
-			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer.SERIALIZED_UUID} or a legacy UUID).`;
+		if (ATNDeserializer._SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) < 0) {
+			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer._SERIALIZED_UUID} or a legacy UUID).`;
 			throw new Error(reason);
 		}
 
-		let supportsLexerActions: boolean = this.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid);
+		let supportsLexerActions: boolean = this.isFeatureSupported(ATNDeserializer._ADDED_LEXER_ACTIONS, uuid);
 
 		let grammarType: ATNType = ATNDeserializer.toInt(data[p++]);
 		let maxTokenType: number = ATNDeserializer.toInt(data[p++]);
@@ -246,7 +246,7 @@ export class ATNDeserializer {
 
 				atn.ruleToTokenType[i] = tokenType;
 
-				if (!this.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid)) {
+				if (!this.isFeatureSupported(ATNDeserializer._ADDED_LEXER_ACTIONS, uuid)) {
 					// this piece of unused metadata was serialized prior to the
 					// addition of LexerAction
 					let actionIndexIgnored: number = ATNDeserializer.toInt(data[p++]);
@@ -467,11 +467,11 @@ export class ATNDeserializer {
 			atn.decisionToDFA[i] = new DFA(atn.decisionToState[i], i);
 		}
 
-		if (this.deserializationOptions.isVerifyATN) {
+		if (this._deserializationOptions.isVerifyATN) {
 			this.verifyATN(atn);
 		}
 
-		if (this.deserializationOptions.isGenerateRuleBypassTransitions && atn.grammarType === ATNType.PARSER) {
+		if (this._deserializationOptions.isGenerateRuleBypassTransitions && atn.grammarType === ATNType.PARSER) {
 			atn.ruleToTokenType = new Int32Array(atn.ruleToStartState.length);
 			for (let i = 0; i < atn.ruleToStartState.length; i++) {
 				atn.ruleToTokenType[i] = atn.maxTokenType + i + 1;
@@ -556,31 +556,31 @@ export class ATNDeserializer {
 				bypassStart.addTransition(new EpsilonTransition(matchState));
 			}
 
-			if (this.deserializationOptions.isVerifyATN) {
+			if (this._deserializationOptions.isVerifyATN) {
 				// reverify after modification
 				this.verifyATN(atn);
 			}
 		}
 
-		if (this.deserializationOptions.isOptimize) {
+		if (this._deserializationOptions.isOptimize) {
 			while (true) {
 				let optimizationCount: number = 0;
-				optimizationCount += ATNDeserializer.inlineSetRules(atn);
-				optimizationCount += ATNDeserializer.combineChainedEpsilons(atn);
+				optimizationCount += ATNDeserializer._inlineSetRules(atn);
+				optimizationCount += ATNDeserializer._combineChainedEpsilons(atn);
 				let preserveOrder: boolean = atn.grammarType === ATNType.LEXER;
-				optimizationCount += ATNDeserializer.optimizeSets(atn, preserveOrder);
+				optimizationCount += ATNDeserializer._optimizeSets(atn, preserveOrder);
 				if (optimizationCount === 0) {
 					break;
 				}
 			}
 
-			if (this.deserializationOptions.isVerifyATN) {
+			if (this._deserializationOptions.isVerifyATN) {
 				// reverify after modification
 				this.verifyATN(atn);
 			}
 		}
 
-		ATNDeserializer.identifyTailCalls(atn);
+		ATNDeserializer._identifyTailCalls(atn);
 
 		return atn;
 	}
@@ -704,7 +704,7 @@ export class ATNDeserializer {
 		}
 	}
 
-	private static inlineSetRules(atn: ATN): number {
+	private static _inlineSetRules(atn: ATN): number {
 		let inlinedCalls: number = 0;
 
 		let ruleToInlineTransition: Transition[] = new Array<Transition>(atn.ruleToStartState.length);
@@ -826,7 +826,7 @@ export class ATNDeserializer {
 		return inlinedCalls;
 	}
 
-	private static combineChainedEpsilons(atn: ATN): number {
+	private static _combineChainedEpsilons(atn: ATN): number {
 		let removedEdges: number = 0;
 
 		for (let state of atn.states) {
@@ -895,7 +895,7 @@ export class ATNDeserializer {
 		return removedEdges;
 	}
 
-	private static optimizeSets(atn: ATN, preserveOrder: boolean): number {
+	private static _optimizeSets(atn: ATN, preserveOrder: boolean): number {
 		if (preserveOrder) {
 			// this optimization currently doesn't preserve edge order.
 			return 0;
@@ -996,7 +996,7 @@ export class ATNDeserializer {
 		return removedPaths;
 	}
 
-	private static identifyTailCalls(atn: ATN): void {
+	private static _identifyTailCalls(atn: ATN): void {
 		for (let state of atn.states) {
 			for (let i = 0; i < state.numberOfTransitions; i++) {
 				let transition = state.transition(i);
@@ -1004,8 +1004,8 @@ export class ATNDeserializer {
 					continue;
 				}
 
-				transition.tailCall = this.testTailCall(atn, transition, false);
-				transition.optimizedTailCall = this.testTailCall(atn, transition, true);
+				transition.tailCall = this._testTailCall(atn, transition, false);
+				transition.optimizedTailCall = this._testTailCall(atn, transition, true);
 			}
 
 			if (!state.isOptimized) {
@@ -1018,13 +1018,13 @@ export class ATNDeserializer {
 					continue;
 				}
 
-				transition.tailCall = this.testTailCall(atn, transition, false);
-				transition.optimizedTailCall = this.testTailCall(atn, transition, true);
+				transition.tailCall = this._testTailCall(atn, transition, false);
+				transition.optimizedTailCall = this._testTailCall(atn, transition, true);
 			}
 		}
 	}
 
-	private static testTailCall(atn: ATN, transition: RuleTransition, optimizedPath: boolean): boolean {
+	private static _testTailCall(atn: ATN, transition: RuleTransition, optimizedPath: boolean): boolean {
 		if (!optimizedPath && transition.tailCall) {
 			return true;
 		}

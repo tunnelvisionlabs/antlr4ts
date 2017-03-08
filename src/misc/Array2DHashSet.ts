@@ -420,16 +420,16 @@ class SetIterator<T> implements JavaIterator<T>  {
 	nextIndex: number = 0;
 	removed: boolean = true;
 
-	constructor(private data: T[], private set: Array2DHashSet<T>) { }
+	constructor(private _data: T[], private _set: Array2DHashSet<T>) { }
 
 	public hasNext(): boolean {
-		return this.nextIndex < this.data.length;
+		return this.nextIndex < this._data.length;
 	}
 
 	next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
+		if (this.nextIndex >= this._data.length) throw new RangeError("Attempted to iterate past end.")
 		this.removed = false;
-		return this.data[this.nextIndex++];
+		return this._data[this.nextIndex++];
 	}
 
 	// Note: this is an untested extension to the JavaScript iterator interface
@@ -438,7 +438,7 @@ class SetIterator<T> implements JavaIterator<T>  {
 			throw new Error("This entry has already been removed");
 		}
 
-		this.set.remove(this.data[this.nextIndex - 1]);
+		this._set.remove(this._data[this.nextIndex - 1]);
 		this.removed = true;
 	}
 }

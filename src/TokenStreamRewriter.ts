@@ -255,13 +255,13 @@ export class TokenStreamRewriter {
 	protected getProgram(name: string): RewriteOperation[] {
 		let is: RewriteOperation[] | undefined = this.programs.get(name);
 		if ( is==null ) {
-			is = this.initializeProgram(name);
+			is = this._initializeProgram(name);
 		}
 
 		return is;
 	}
 
-	private initializeProgram(name: string): RewriteOperation[] {
+	private _initializeProgram(name: string): RewriteOperation[] {
 		let is: RewriteOperation[] = [];
 		this.programs.set(name, is);
 		return is;

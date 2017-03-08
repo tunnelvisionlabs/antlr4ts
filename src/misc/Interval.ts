@@ -17,7 +17,7 @@ export class Interval implements Equatable {
 		return Interval._INVALID;
 	}
 
-	private static readonly cache: Interval[] = new Array<Interval>(INTERVAL_POOL_MAX_VALUE + 1);
+	private static readonly _cache: Interval[] = new Array<Interval>(INTERVAL_POOL_MAX_VALUE + 1);
 
 	/**
 	 * @param a The start of the interval
@@ -38,11 +38,11 @@ export class Interval implements Equatable {
 			return new Interval(a, b);
 		}
 
-		if (Interval.cache[a] == null) {
-			Interval.cache[a] = new Interval(a, a);
+		if (Interval._cache[a] == null) {
+			Interval._cache[a] = new Interval(a, a);
 		}
 
-		return Interval.cache[a];
+		return Interval._cache[a];
 	}
 
 	/** return number of elements between a and b inclusively. x..x is length 1.

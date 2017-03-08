@@ -51,7 +51,7 @@ export class IntervalSet implements IntSet {
 	/** The list of sorted, disjoint intervals. */
 	private _intervals: Interval[];
 
-	private readonly: boolean = false;
+	private _readonly: boolean = false;
 
 	constructor(intervals?: Interval[]) {
 		if (intervals != null) {
@@ -73,7 +73,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	clear(): void {
-		if (this.readonly) {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -93,7 +93,7 @@ export class IntervalSet implements IntSet {
 
 	// copy on write so we can cache a..a intervals and sets of that
 	protected addRange(addition: Interval): void {
-		if (this.readonly) {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -660,7 +660,7 @@ export class IntervalSet implements IntSet {
 
 	@Override
 	remove(el: number): void {
-		if (this.readonly) {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -697,14 +697,14 @@ export class IntervalSet implements IntSet {
 	}
 
 	get isReadonly(): boolean {
-		return this.readonly;
+		return this._readonly;
 	}
 
 	setReadonly(readonly: boolean): void {
-		if (this.readonly && !readonly) {
+		if (this._readonly && !readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
-		this.readonly = readonly;
+		this._readonly = readonly;
 	}
 }
