@@ -57,15 +57,15 @@
  */
 
 import { ATN } from './atn/ATN';
-import { Parser } from './Parser';
-import { Recognizer } from './Recognizer';
-import { RuleNode } from "./tree/RuleNode";
-import { ParseTree } from "./tree/ParseTree";
+import { Override } from "./Decorators";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators"
-import { Trees } from "./tree/Trees";
-import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
+import { Recognizer } from './Recognizer';
+import { ParseTree } from "./tree/ParseTree";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { RuleNode } from "./tree/RuleNode";
+import { Trees } from "./tree/Trees";
 
 export class RuleContext extends RuleNode {
 	_parent: RuleContext | undefined;

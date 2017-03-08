@@ -12,14 +12,14 @@
  */
 
 import { ATNConfigSet } from './atn/ATNConfigSet';
+import { NotNull } from "./Decorators";
+import { IntStream } from "./IntStream";
 import { Parser } from './Parser';
 import { ParserRuleContext } from './ParserRuleContext';
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from './Recognizer';
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
-import { IntStream } from "./IntStream";
-import { NotNull } from "./Decorators";
 
 export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
@@ -41,7 +41,7 @@ export class NoViableAltException extends RecognitionException {
 		/*@NotNull*/ input: TokenStream,
 		/*@NotNull*/ startToken: Token,
 		/*@NotNull*/ offendingToken: Token,
-		deadEndConfigs: ATNConfigSet | undefined,
+		             deadEndConfigs: ATNConfigSet | undefined,
 		/*@NotNull*/ ctx: ParserRuleContext);
 
 	constructor(

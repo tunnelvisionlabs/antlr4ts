@@ -7,13 +7,13 @@
 import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { ATN } from "./atn/ATN";
 import { ATNSimulator } from "./atn/ATNSimulator";
-import { ConsoleErrorListener } from "./ConsoleErrorListener";
-import { IntStream } from "./IntStream";
 import { ParseInfo } from "./atn/ParseInfo";
+import { ConsoleErrorListener } from "./ConsoleErrorListener";
+import { NotNull, SuppressWarnings } from "./Decorators";
+import { IntStream } from "./IntStream";
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { SuppressWarnings, NotNull } from "./Decorators";
 import { Token } from "./Token";
 import { Vocabulary } from "./Vocabulary";
 import { VocabularyImpl } from "./VocabularyImpl";
@@ -163,8 +163,8 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	/** What is the error header, normally line/character position information? */
 	@NotNull
 	getErrorHeader(@NotNull e: RecognitionException): string {
-		let token = e.getOffendingToken()
-		if (!token) return ""
+		let token = e.getOffendingToken();
+		if (!token) return "";
 		let line = token.line;
 		let charPositionInLine: number = token.charPositionInLine;
 		return "line " + line + ":" + charPositionInLine;

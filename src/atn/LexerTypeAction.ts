@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.3204839-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Lexer } from '../Lexer';
+import { MurmurHash } from '../misc/MurmurHash';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
 
 /**
  * Implements the {@code type} lexer action by setting `Lexer.type`

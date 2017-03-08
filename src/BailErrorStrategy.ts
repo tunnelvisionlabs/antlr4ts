@@ -33,11 +33,11 @@
  *
  * @see Parser.errorHandler
  */
-import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from './Parser';
-import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
+import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
+import { InputMismatchException } from "./InputMismatchException";
 import { ParseCancellationException } from "./misc/ParseCancellationException";
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token";

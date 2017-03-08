@@ -5,32 +5,32 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.1083066-07:00
 
+import * as assert from 'assert';
+import { CharStream } from '../CharStream';
+import { NotNull, Override } from '../Decorators';
 import { AcceptStateInfo } from '../dfa/AcceptStateInfo';
-import { ActionTransition } from './ActionTransition';
+import { DFA } from '../dfa/DFA';
+import { DFAState } from '../dfa/DFAState';
+import { IntStream } from '../IntStream';
+import { Lexer } from '../Lexer';
+import { LexerNoViableAltException } from '../LexerNoViableAltException';
+import { Interval } from '../misc/Interval';
 import { asIterable } from '../misc/Stubs';
+import { Token } from '../Token';
+import { ActionTransition } from './ActionTransition';
 import { ATN } from './ATN';
 import { ATNConfig } from './ATNConfig';
 import { ATNConfigSet } from './ATNConfigSet';
 import { ATNSimulator } from './ATNSimulator';
 import { ATNState } from './ATNState';
-import { CharStream } from '../CharStream';
-import { DFA } from '../dfa/DFA';
-import { DFAState } from '../dfa/DFAState';
-import { Interval } from '../misc/Interval';
-import { IntStream } from '../IntStream';
-import { Lexer } from '../Lexer';
 import { LexerActionExecutor } from './LexerActionExecutor';
-import { LexerNoViableAltException } from '../LexerNoViableAltException';
-import { NotNull, Override } from '../Decorators';
 import { OrderedATNConfigSet } from './OrderedATNConfigSet';
-import { PredictionContext } from './PredictionContext';
 import { PredicateTransition } from './PredicateTransition';
+import { PredictionContext } from './PredictionContext';
 import { RuleStopState } from './RuleStopState';
 import { RuleTransition } from './RuleTransition';
-import { Token } from '../Token';
 import { Transition } from './Transition';
 import { TransitionType } from './TransitionType';
-import * as assert from 'assert';
 
 /** "dup" of ParserInterpreter */
 export class LexerATNSimulator extends ATNSimulator {
@@ -261,7 +261,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	protected failOrAccept(prevAccept: LexerATNSimulator.SimState, input: CharStream,
-		reach: ATNConfigSet, t: number): number {
+		                      reach: ATNConfigSet, t: number): number {
 		if (prevAccept.dfaState != null) {
 			let lexerActionExecutor: LexerActionExecutor | undefined = prevAccept.dfaState.lexerActionExecutor;
 			this.accept(input, lexerActionExecutor, this.startIndex,
@@ -324,7 +324,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	protected accept(@NotNull input: CharStream, lexerActionExecutor: LexerActionExecutor | undefined,
-						  startIndex: number, index: number, line: number, charPos: number): void {
+						            startIndex: number, index: number, line: number, charPos: number): void {
 		if (LexerATNSimulator.debug) {
 			console.log(`ACTION ${lexerActionExecutor}`);
 		}
@@ -349,7 +349,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	@NotNull
 	protected computeStartState( @NotNull input: CharStream,
-		@NotNull p: ATNState): ATNConfigSet {
+		                            @NotNull p: ATNState): ATNConfigSet {
 		let initialContext: PredictionContext = PredictionContext.EMPTY_FULL;
 		let configs: ATNConfigSet = new OrderedATNConfigSet();
 		for (let i = 0; i < p.numberOfTransitions; i++) {
@@ -431,16 +431,16 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	// side-effect: can alter configs.hasSemanticContext
 	protected getEpsilonTarget(@NotNull input: CharStream,
-		@NotNull config: ATNConfig,
-		@NotNull t: Transition,
-		@NotNull configs: ATNConfigSet,
-		speculative: boolean,
-		treatEofAsEpsilon: boolean): ATNConfig | undefined {
+		                          @NotNull config: ATNConfig,
+		                          @NotNull t: Transition,
+		                          @NotNull configs: ATNConfigSet,
+		                          speculative: boolean,
+		                          treatEofAsEpsilon: boolean): ATNConfig | undefined {
 		let c: ATNConfig | undefined;
 
 		switch (t.serializationType) {
 		case TransitionType.RULE:
-			let ruleTransition: RuleTransition = <RuleTransition>t;
+			let ruleTransition: RuleTransition = <RuleTransition> t;
 			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.context.hasEmpty) {
 				c = config.transform(t.target, true);
 			}
@@ -473,7 +473,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				states reached by traversing predicates. Since this is when we
 				test them, we cannot cash the DFA state target of ID.
 			*/
-			let pt: PredicateTransition = <PredicateTransition>t;
+			let pt: PredicateTransition = <PredicateTransition> t;
 			if (LexerATNSimulator.debug) {
 				console.log("EVAL rule " + pt.ruleIndex + ":" + pt.predIndex);
 			}
@@ -501,7 +501,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				// getEpsilonTarget to return two configurations, so
 				// additional modifications are needed before we can support
 				// the split operation.
-				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.lexerActionExecutor, this.atn.lexerActions[(<ActionTransition>t).actionIndex]);
+				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.lexerActionExecutor, this.atn.lexerActions[(<ActionTransition> t).actionIndex]);
 				c = config.transform(t.target, true, lexerActionExecutor);
 				break;
 			}
@@ -584,8 +584,8 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	protected captureSimState(@NotNull settings: LexerATNSimulator.SimState,
-		@NotNull input: CharStream,
-		@NotNull dfaState: DFAState): void {
+		                         @NotNull input: CharStream,
+		                         @NotNull dfaState: DFAState): void {
 		settings.index = input.index;
 		settings.line = this._line;
 		settings.charPos = this._charPositionInLine;

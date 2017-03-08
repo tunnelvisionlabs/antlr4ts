@@ -7,8 +7,8 @@
 
 import { ATNSimulator } from './atn/ATNSimulator';
 import { CharStream } from './CharStream';
-import { Interval } from './misc/Interval';
 import { NotNull, Override } from './Decorators';
+import { Interval } from './misc/Interval';
 import { Recognizer } from './Recognizer';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';

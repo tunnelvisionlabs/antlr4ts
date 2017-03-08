@@ -23,8 +23,8 @@
  * <p>TODO: what to do about lexers</p>
  */
 import { Parser } from "./Parser";
-import { Token } from "./Token";
 import { RecognitionException } from "./RecognitionException";
+import { Token } from "./Token";
 
 export interface ANTLRErrorStrategy {
 	/**

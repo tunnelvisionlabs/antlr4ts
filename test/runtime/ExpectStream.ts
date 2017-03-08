@@ -6,7 +6,7 @@
 import * as assert from 'assert';
 const stdMocks = require('std-mocks');
 
-export function expectConsole( output: string, errors: string, during: ()=> void ) {
+export function expectConsole( output: string, errors: string, during: () => void ) {
 	try {
 		stdMocks.use();
 		during();

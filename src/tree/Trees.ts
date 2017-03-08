@@ -5,20 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
-import { Arrays } from "../misc/Arrays";
 import { ATN } from '../atn/ATN';
 import { CommonToken } from "../CommonToken";
-import { ErrorNode } from "./ErrorNode";
-import { Interval } from "../misc/Interval";
 import { NotNull } from "../Decorators";
+import { Arrays } from "../misc/Arrays";
+import { Interval } from "../misc/Interval";
+import * as Utils from "../misc/Utils";
 import { Parser } from '../Parser';
 import { ParserRuleContext } from "../ParserRuleContext";
-import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
+import { Token } from "../Token";
+import { ErrorNode } from "./ErrorNode";
+import { ParseTree } from "./ParseTree";
 import { RuleNode } from "./RuleNode";
 import { TerminalNode } from "./TerminalNode";
-import { Token } from "../Token";
-import * as Utils from "../misc/Utils";
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
 export class Trees {
@@ -67,7 +67,7 @@ export class Trees {
 			if (typeof payload.text === 'string') {
 				return payload.text;
 			}
-			return t.payload.toString();;
+			return t.payload.toString(); ;
 		}
 
 		if (t instanceof RuleNode) {
@@ -89,8 +89,6 @@ export class Trees {
 		}
 		throw new TypeError("Unexpected node type");
 	}
-
-
 
 	/** Return ordered list of all children of this node */
 	static getChildren(t: ParseTree): ParseTree[] {
@@ -185,8 +183,8 @@ export class Trees {
 	*  @since 4.5
 	*/
 	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
-		startTokenIndex: number, // inclusive
-		stopTokenIndex: number // inclusive
+		                                      startTokenIndex: number, // inclusive
+		                                      stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {
 		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {
@@ -214,9 +212,9 @@ export class Trees {
 	*  @since 4.5.1
 	*/
 	static stripChildrenOutOfRange(t: ParserRuleContext,
-		root: ParserRuleContext,
-		startIndex: number,
-		stopIndex: number): void {
+		                              root: ParserRuleContext,
+		                              startIndex: number,
+		                              stopIndex: number): void {
 		if (!t) return;
 		let count = t.childCount;
 		for (let i = 0; i < count; i++) {

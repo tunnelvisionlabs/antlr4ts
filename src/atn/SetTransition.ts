@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.3060135-07:00
 
-import { ATNState } from './ATNState';
+import { NotNull, Nullable, Override } from '../Decorators';
 import { IntervalSet } from '../misc/IntervalSet';
-import { Override, NotNull, Nullable } from '../Decorators';
 import { Token } from '../Token';
+import { ATNState } from './ATNState';
 import { Transition } from './Transition';
 import { TransitionType } from './TransitionType';
 

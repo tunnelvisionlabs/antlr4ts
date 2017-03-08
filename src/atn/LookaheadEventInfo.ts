@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.6852565-07:00
 
-import { DecisionEventInfo } from './DecisionEventInfo';
 import { NotNull } from '../Decorators';
-import { SimulatorState } from './SimulatorState';
 import { TokenStream } from '../TokenStream';
+import { DecisionEventInfo } from './DecisionEventInfo';
+import { SimulatorState } from './SimulatorState';
 
 /**
  * This class represents profiling event information for tracking the lookahead
@@ -40,12 +40,12 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 * an SLL prediction
 	 */
 	constructor(decision: number,
-		state: SimulatorState | undefined,
-		predictedAlt: number,
-		@NotNull input: TokenStream,
-		startIndex: number,
-		stopIndex: number,
-		fullCtx: boolean) {
+		           state: SimulatorState | undefined,
+		           predictedAlt: number,
+		           @NotNull input: TokenStream,
+		           startIndex: number,
+		           stopIndex: number,
+		           fullCtx: boolean) {
 
 		super(decision, state, input, startIndex, stopIndex, fullCtx);
 		this.predictedAlt = predictedAlt;

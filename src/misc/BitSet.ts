@@ -55,7 +55,7 @@ function findMSBSet(word: number) {
  */
 function bitsFor(fromBit: number, toBit: number): number {
 	fromBit &= 0xF;
-	toBit &= 0xF
+	toBit &= 0xF;
 	if (fromBit === toBit) return (1 << fromBit) >>> 0;
 	return ((0xFFFF >>> (15 - toBit)) ^ (0xFFFF >>> (16 - fromBit)));
 }
@@ -141,7 +141,7 @@ export class BitSet implements Iterable<number>{
 
 		for (let i = 0; i < words; i++) {
 			if ((data[i] &= other[i]) !== 0) {
-				lastWord = i;;
+				lastWord = i; ;
 			}
 		}
 
@@ -166,7 +166,7 @@ export class BitSet implements Iterable<number>{
 
 		for (let i = 0; i < words; i++) {
 			if ((data[i] &= (other[i] ^ 0xFFFF)) !== 0) {
-				lastWord = i;;
+				lastWord = i; ;
 			}
 		}
 
@@ -178,7 +178,6 @@ export class BitSet implements Iterable<number>{
 			this.data = data.slice(0, lastWord + 1);
 		}
 	}
-
 
 	/**
 	 * Returns the number of bits set to `true` in this `BitSet`.
@@ -266,7 +265,7 @@ export class BitSet implements Iterable<number>{
 			while (word < lastWord) {
 				this.data[word++] ^= 0xFFFF;
 			}
-			this.data[word++] ^= bitsFor(0, toIndex)
+			this.data[word++] ^= bitsFor(0, toIndex);
 		}
 	}
 
@@ -475,7 +474,6 @@ export class BitSet implements Iterable<number>{
 		return unIndex(word) + findMSBSet((data[word] | ignore) ^ 0xFFFF);
 	}
 
-
 	/**
 	 * Returns the index of the nearest bit that is set to `true` that occurs on or before the specified starting index.
 	 * If no such bit exists, or if `-1` is given as the starting index, then `-1` is returned.
@@ -577,7 +575,7 @@ export class BitSet implements Iterable<number>{
 
 		if (value && lastWord >= this.data.length) {
 			// Grow array "just enough" for bits we need to set
-			var temp = new Uint16Array(lastWord + 1);
+			let temp = new Uint16Array(lastWord + 1);
 			this.data.forEach((value, index) => temp[index] = value);
 			this.data = temp;
 		} else if (!value) {
@@ -788,7 +786,7 @@ class BitSetIterator implements IterableIterator<number>{
 
 	next() {
 		while (this.index < this.data.length) {
-			const bits = this.data[this.index] & this.mask;;
+			const bits = this.data[this.index] & this.mask; ;
 			if (bits !== 0) {
 				const bitNumber = unIndex(this.index) + findLSBSet(bits);
 				this.mask = bitsFor(bitNumber + 1, 15);

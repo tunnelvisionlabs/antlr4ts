@@ -5,26 +5,26 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.4188352-07:00
 
+import { NotNull, Override } from '../Decorators';
+import { DFA } from '../dfa/DFA';
+import { DFAState } from '../dfa/DFAState';
+import { BitSet } from '../misc/BitSet';
+import { Parser } from '../Parser';
+import { ParserRuleContext } from '../ParserRuleContext';
+import { TokenStream } from '../TokenStream';
 import { AmbiguityInfo } from './AmbiguityInfo';
 import { ATN } from './ATN';
 import { ATNConfigSet } from './ATNConfigSet';
 import { ATNSimulator } from './ATNSimulator';
-import { BitSet } from '../misc/BitSet';
 import { ContextSensitivityInfo } from './ContextSensitivityInfo';
 import { DecisionInfo } from './DecisionInfo';
-import { DFA } from '../dfa/DFA';
-import { DFAState } from '../dfa/DFAState';
 import { ErrorInfo } from './ErrorInfo';
-import { NotNull, Override } from '../Decorators';
 import { LookaheadEventInfo } from './LookaheadEventInfo';
-import { Parser } from '../Parser';
 import { ParserATNSimulator } from './ParserATNSimulator';
-import { ParserRuleContext } from '../ParserRuleContext';
 import { PredicateEvalInfo } from './PredicateEvalInfo';
 import { PredictionContextCache } from './PredictionContextCache';
 import { SemanticContext } from './SemanticContext';
 import { SimulatorState } from './SimulatorState';
-import { TokenStream } from '../TokenStream';
 
 /**
  * @since 4.3
@@ -143,7 +143,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		if (reachState == null) {
 			// no reach on current lookahead symbol. ERROR.
 			this.decisions[this.currentDecision].errors.push(
-				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index)
+				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index),
 			);
 		}
 
@@ -181,7 +181,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			if (existingTargetState === ATNSimulator.ERROR) {
 				let state: SimulatorState = new SimulatorState(this.currentState.outerContext, previousD, this.currentState.useContext, this.currentState.remainingOuterContext);
 				this.decisions[this.currentDecision].errors.push(
-					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index)
+					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index),
 				);
 			}
 		}
@@ -214,7 +214,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			let fullContext: boolean = this._llStopIndex >= 0;
 			let stopIndex: number = fullContext ? this._llStopIndex : this._sllStopIndex;
 			this.decisions[this.currentDecision].predicateEvals.push(
-				new PredicateEvalInfo(this.currentState, this.currentDecision, this._input, this._startIndex, stopIndex, pred, result, alt)
+				new PredicateEvalInfo(this.currentState, this.currentDecision, this._input, this._startIndex, stopIndex, pred, result, alt),
 			);
 		}
 
@@ -229,7 +229,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 		if (prediction !== this.conflictingAltResolvedBySLL) {
 			this.decisions[this.currentDecision].contextSensitivities.push(
-				new ContextSensitivityInfo(this.currentDecision, acceptState, this._input, startIndex, stopIndex)
+				new ContextSensitivityInfo(this.currentDecision, acceptState, this._input, startIndex, stopIndex),
 			);
 		}
 		super.reportContextSensitivity(dfa, prediction, acceptState, startIndex, stopIndex);
@@ -267,11 +267,11 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			// to different minimum alternatives we have also identified a
 			// context sensitivity.
 			this.decisions[this.currentDecision].contextSensitivities.push(
-				new ContextSensitivityInfo(this.currentDecision, this.currentState, this._input, startIndex, stopIndex)
+				new ContextSensitivityInfo(this.currentDecision, this.currentState, this._input, startIndex, stopIndex),
 			);
 		}
 		this.decisions[this.currentDecision].ambiguities.push(
-			new AmbiguityInfo(this.currentDecision, this.currentState, ambigAlts, this._input, startIndex, stopIndex)
+			new AmbiguityInfo(this.currentDecision, this.currentState, ambigAlts, this._input, startIndex, stopIndex),
 		);
 		super.reportAmbiguity(dfa, D, startIndex, stopIndex, exact, ambigAlts, configs);
 	}

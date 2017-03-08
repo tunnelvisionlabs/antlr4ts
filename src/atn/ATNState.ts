@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
+import { Override } from '../Decorators';
+import { IntervalSet } from '../misc/IntervalSet';
 import { ATN } from './ATN';
 import { ATNStateType } from './ATNStateType';
-import { IntervalSet } from '../misc/IntervalSet';
-import { Override } from '../Decorators';
 import { Transition } from './Transition';
 
 const INITIAL_NUM_TRANSITIONS: number = 4;
@@ -87,7 +87,7 @@ export abstract class ATNState {
 		"STAR_LOOP_BACK",
 		"STAR_LOOP_ENTRY",
 		"PLUS_LOOP_BACK",
-		"LOOP_END"
+		"LOOP_END",
 	];
 
 	/** Which ATN are we in? */

@@ -4,11 +4,11 @@
  */
 
 require('source-map-support').install();
-import {Equatable} from '../src/misc/Stubs';
+import * as assert from "assert";
+import { suite, test } from 'mocha-typescript';
 import {Array2DHashSet} from '../src/misc/Array2DHashSet';
 import {MurmurHash} from '../src/misc/MurmurHash';
-import { suite, test } from 'mocha-typescript';
-import * as assert from "assert";
+import {Equatable} from '../src/misc/Stubs';
 
 class EquatableTest implements Equatable {
 
@@ -61,7 +61,7 @@ describe('EquatableTest', function() {
 describe('Array2DHashSet', function() {
     let set: Array2DHashSet<EquatableTest>;
 
-    beforeEach(function() { set = new Array2DHashSet<EquatableTest>()});
+    beforeEach(function() { set = new Array2DHashSet<EquatableTest>(); });
 
     it('shoud count entities', function() {
         assert( set.isEmpty );

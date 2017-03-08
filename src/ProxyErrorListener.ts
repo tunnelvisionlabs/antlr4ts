@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:56.8126690-07:00
 import { ANTLRErrorListener } from './ANTLRErrorListener';
+import { NotNull, Override } from "./Decorators";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
-import { Override, NotNull } from "./Decorators";
 
 /**
  * This implementation of {@link ANTLRErrorListener} dispatches all calls to a
@@ -36,7 +36,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 		charPositionInLine: number,
 		@NotNull msg: string,
 		e: RecognitionException | undefined): void {
-		this.delegates.forEach(listener => {
+		this.delegates.forEach((listener) => {
 			if (listener.syntaxError) {
 				listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
 			}

@@ -5,23 +5,23 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.3567094-07:00
 
-import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
 import { ATNState } from '../atn/ATNState';
 import { ATNType } from '../atn/ATNType';
 import { DecisionState } from '../atn/DecisionState';
-import { DFASerializer } from './DFASerializer';
-import { DFAState } from './DFAState';
 import { LexerATNSimulator } from '../atn/LexerATNSimulator';
-import { LexerDFASerializer } from './LexerDFASerializer';
-import { NotNull } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { StarLoopEntryState } from '../atn/StarLoopEntryState';
-import { Token } from '../Token';
 import { TokensStartState } from '../atn/TokensStartState';
+import { NotNull } from '../Decorators';
+import { Array2DHashSet } from '../misc/Array2DHashSet';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Token } from '../Token';
 import { Vocabulary } from '../Vocabulary';
 import { VocabularyImpl } from '../VocabularyImpl';
+import { DFASerializer } from './DFASerializer';
+import { DFAState } from './DFAState';
+import { LexerDFASerializer } from './LexerDFASerializer';
 
 export class DFA {
 	/**
@@ -131,10 +131,10 @@ export class DFA {
 
 		// s0 and s0full are never null for a precedence DFA
 		if (fullContext) {
-			return (<DFAState>this.s0full).getTarget(precedence);
+			return (<DFAState> this.s0full).getTarget(precedence);
 		}
 		else {
-			return (<DFAState>this.s0).getTarget(precedence);
+			return (<DFAState> this.s0).getTarget(precedence);
 		}
 	}
 
@@ -159,11 +159,11 @@ export class DFA {
 
 		if (fullContext) {
 			// s0full is never null for a precedence DFA
-			(<DFAState>this.s0full).setTarget(precedence, startState);
+			(<DFAState> this.s0full).setTarget(precedence, startState);
 		}
 		else {
 			// s0 is never null for a precedence DFA
-			(<DFAState>this.s0).setTarget(precedence, startState);
+			(<DFAState> this.s0).setTarget(precedence, startState);
 		}
 	}
 
@@ -179,7 +179,7 @@ export class DFA {
 	get isContextSensitive(): boolean {
 		if (this.isPrecedenceDfa) {
 			// s0full is never null for a precedence DFA
-			return (<DFAState>this.s0full).getEdgeMap().size > 0;
+			return (<DFAState> this.s0full).getEdgeMap().size > 0;
 		}
 
 		return this.s0full != null;

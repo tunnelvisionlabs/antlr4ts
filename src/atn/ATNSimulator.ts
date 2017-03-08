@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.3184311-07:00
 
+import { NotNull } from '../Decorators';
+import { DFAState } from '../dfa/DFAState';
 import { ATN } from './ATN';
 import { ATNConfigSet } from './ATNConfigSet';
-import { DFAState } from '../dfa/DFAState';
-import { NotNull } from '../Decorators';
 import { PredictionContext } from './PredictionContext';
 
 export abstract class ATNSimulator {

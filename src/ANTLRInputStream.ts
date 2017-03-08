@@ -13,9 +13,9 @@
  */
 import * as assert from "assert";
 import { CharStream } from "./CharStream";
-import { Arrays } from "./misc/Arrays";
 import { Override } from "./Decorators";
 import { IntStream } from "./IntStream";
+import { Arrays } from "./misc/Arrays";
 import { Interval } from "./misc/Interval";
 
 const READ_BUFFER_SIZE: number = 1024;

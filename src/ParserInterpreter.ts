@@ -10,27 +10,27 @@ import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from './atn/ATNStateType';
 import { AtomTransition } from './atn/AtomTransition';
-import { BitSet } from './misc/BitSet';
 import { DecisionState } from './atn/DecisionState';
-import { FailedPredicateException } from './FailedPredicateException';
-import { InputMismatchException } from './InputMismatchException';
-import { InterpreterRuleContext } from './InterpreterRuleContext';
 import { LoopEndState } from './atn/LoopEndState';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Parser } from './Parser';
 import { ParserATNSimulator } from './atn/ParserATNSimulator';
-import { ParserRuleContext } from './ParserRuleContext';
 import { PrecedencePredicateTransition } from './atn/PrecedencePredicateTransition';
 import { PredicateTransition } from './atn/PredicateTransition';
-import { RecognitionException } from './RecognitionException';
 import { RuleStartState } from './atn/RuleStartState';
 import { RuleTransition } from './atn/RuleTransition';
 import { StarLoopEntryState } from './atn/StarLoopEntryState';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
 import { Transition } from './atn/Transition';
 import { TransitionType } from './atn/TransitionType';
+import { Override } from './Decorators';
+import { NotNull } from './Decorators';
+import { FailedPredicateException } from './FailedPredicateException';
+import { InputMismatchException } from './InputMismatchException';
+import { InterpreterRuleContext } from './InterpreterRuleContext';
+import { BitSet } from './misc/BitSet';
+import { Parser } from './Parser';
+import { ParserRuleContext } from './ParserRuleContext';
+import { RecognitionException } from './RecognitionException';
+import { Token } from './Token';
+import { TokenStream } from './TokenStream';
 import { Vocabulary } from './Vocabulary';
 
 /** A parser simulator that mimics what ANTLR's generated
@@ -98,9 +98,9 @@ export class ParserInterpreter extends Parser {
 	 */
 	constructor(/*@NotNull*/ old: ParserInterpreter);
 	constructor(grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
-							 ruleNames: string[], atn: ATN, input: TokenStream);
+							      ruleNames: string[], atn: ATN, input: TokenStream);
 	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
-							 ruleNames?: string[], atn?: ATN, input?: TokenStream) {
+							      ruleNames?: string[], atn?: ATN, input?: TokenStream) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;
@@ -421,7 +421,7 @@ export class ParserInterpreter extends Parser {
 
 			let source = tok.tokenSource;
 			let stream = source !== undefined ? source.inputStream : undefined;
-			let sourcePair = { source: source, stream: stream };
+			let sourcePair = { source, stream };
 
 			if (e instanceof InputMismatchException) {
 				let expectedTokens = e.expectedTokens;

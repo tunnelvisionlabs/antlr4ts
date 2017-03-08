@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
 
+import { Interval } from "../misc/Interval";
+import { Parser } from "../Parser";
 import { RuleContext } from '../RuleContext';
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
-import { Parser } from "../Parser";
-import { Interval } from "../misc/Interval";
 
 export abstract class RuleNode implements ParseTree {
 	abstract readonly ruleContext: RuleContext;

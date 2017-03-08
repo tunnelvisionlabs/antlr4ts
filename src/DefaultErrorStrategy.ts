@@ -13,22 +13,22 @@ import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
 import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from "./atn/ATNStateType";
+import { PredictionContext } from './atn/PredictionContext';
+import { RuleTransition } from './atn/RuleTransition';
+import { NotNull, Override } from "./Decorators";
 import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
 import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
-import { PredictionContext } from './atn/PredictionContext';
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { RuleTransition } from './atn/RuleTransition';
-import { TokenStream } from "./TokenStream";
 import { Token } from "./Token";
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
 import { Vocabulary } from "./Vocabulary";
-import { Override, NotNull } from "./Decorators";
 
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
@@ -122,7 +122,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	@Override
 	reportError(recognizer: Parser,
-		e: RecognitionException): void {
+		           e: RecognitionException): void {
 		// if we've already reported an error and have not matched a token
 		// yet successfully, don't report any errors.
 		if (this.inErrorRecoveryMode(recognizer)) {
@@ -291,7 +291,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param e the recognition exception
 	 */
 	protected reportNoViableAlternative(@NotNull recognizer: Parser,
-		@NotNull e: NoViableAltException): void {
+		                                   @NotNull e: NoViableAltException): void {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
@@ -315,7 +315,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param e the recognition exception
 	 */
 	protected reportInputMismatch(@NotNull recognizer: Parser,
-		@NotNull e: InputMismatchException): void {
+		                             @NotNull e: InputMismatchException): void {
 		let expected = e.expectedTokens;
 		let expectedString = expected ? expected.toStringVocabulary(recognizer.vocabulary) : "";
 		let msg: string = "mismatched input " + this.getTokenErrorDisplay(e.getOffendingToken(recognizer)) +
@@ -333,7 +333,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param e the recognition exception
 	 */
 	protected reportFailedPredicate(@NotNull recognizer: Parser,
-		@NotNull e: FailedPredicateException): void {
+		                               @NotNull e: FailedPredicateException): void {
 		let ruleName: string = recognizer.ruleNames[recognizer.context.ruleIndex];
 		let msg: string = "rule " + ruleName + " " + e.message;
 		this.notifyErrorListeners(recognizer, msg, e);
@@ -593,7 +593,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let stream = x ? x.inputStream : undefined;
 
 		return factory.create(
-			{ source: tokenSource, stream: stream },
+			{ source: tokenSource, stream },
 			expectedTokenType, tokenText,
 			Token.DEFAULT_CHANNEL,
 			-1, -1,

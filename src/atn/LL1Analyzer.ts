@@ -5,21 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.4445360-07:00
 
-import { AbstractPredicateTransition } from './AbstractPredicateTransition';
+import { NotNull } from '../Decorators';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
+import { BitSet } from '../misc/BitSet';
+import { IntervalSet } from '../misc/IntervalSet';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Token } from '../Token';
+import { AbstractPredicateTransition } from './AbstractPredicateTransition';
 import { ATN } from './ATN';
 import { ATNConfig } from './ATNConfig';
 import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { IntervalSet } from '../misc/IntervalSet';
-import { NotNull } from '../Decorators';
 import { NotSetTransition } from './NotSetTransition';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import { RuleStopState } from './RuleStopState';
 import { RuleTransition } from './RuleTransition';
 import { SetTransition } from './SetTransition';
-import { Token } from '../Token';
 import { Transition } from './Transition';
 import { WildcardTransition } from './WildcardTransition';
 
@@ -161,13 +161,13 @@ export class LL1Analyzer {
 	 * is {@link PredictionContext#EMPTY_LOCAL}.
 	 */
 	protected _LOOK(@NotNull s: ATNState,
-		stopState: ATNState | undefined,
-		@NotNull ctx: PredictionContext,
-		@NotNull look: IntervalSet,
-		@NotNull lookBusy: Array2DHashSet<ATNConfig>,
-		@NotNull calledRuleStack: BitSet,
-		seeThruPreds: boolean,
-		addEOF: boolean): void {
+		               stopState: ATNState | undefined,
+		               @NotNull ctx: PredictionContext,
+		               @NotNull look: IntervalSet,
+		               @NotNull lookBusy: Array2DHashSet<ATNConfig>,
+		               @NotNull calledRuleStack: BitSet,
+		               seeThruPreds: boolean,
+		               addEOF: boolean): void {
 //		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
 		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
 		if (!lookBusy.add(c)) return;
@@ -248,7 +248,7 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined = (<Transition>t).label;
+				let set: IntervalSet | undefined = (<Transition> t).label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));

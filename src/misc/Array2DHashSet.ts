@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
 import * as assert from "assert";
+import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
 import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import { EqualityComparator } from './EqualityComparator';
-import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
-import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from './Stubs';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
 import { MurmurHash } from './MurmurHash';
+import { ObjectEqualityComparator } from './ObjectEqualityComparator';
+import { asIterable, Collection, JavaCollection, JavaIterable, JavaIterator, JavaSet } from './Stubs';
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 
@@ -427,7 +427,7 @@ class SetIterator<T> implements JavaIterator<T>  {
 	}
 
 	next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
+		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.");
 		this.removed = false;
 		return this.data[this.nextIndex++];
 	}

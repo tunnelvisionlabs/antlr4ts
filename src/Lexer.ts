@@ -6,14 +6,14 @@
 // ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
 
 import { ANTLRErrorListener } from './ANTLRErrorListener';
+import { LexerATNSimulator } from './atn/LexerATNSimulator';
 import { CharStream } from './CharStream';
 import { CommonTokenFactory } from './CommonTokenFactory';
+import { Override } from './Decorators';
+import { IntStream } from './IntStream';
+import { LexerNoViableAltException } from './LexerNoViableAltException';
 import { IntegerStack } from './misc/IntegerStack';
 import { Interval } from './misc/Interval';
-import { IntStream } from './IntStream';
-import { LexerATNSimulator } from './atn/LexerATNSimulator';
-import { LexerNoViableAltException } from './LexerNoViableAltException';
-import { Override } from './Decorators';
 import { RecognitionException } from './RecognitionException';
 import { Recognizer } from './Recognizer';
 import { Token } from './Token';
@@ -238,7 +238,6 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	get inputStream(): CharStream {
 		return this._input;
 	}
-
 
 	/** The standard method called to automatically emit a token at the
 	 *  outermost lexical rule.  The token object should point into the

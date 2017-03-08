@@ -5,17 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.2796692-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { MurmurHash } from '../misc/MurmurHash';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Equatable } from '../misc/Stubs';
+import { Recognizer } from '../Recognizer';
 import { ATNState } from './ATNState';
 import { DecisionState } from './DecisionState';
-import { Equatable } from '../misc/Stubs';
 import { LexerActionExecutor } from './LexerActionExecutor';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Recognizer';
 import { SemanticContext } from './SemanticContext';
 
 import * as assert from 'assert';

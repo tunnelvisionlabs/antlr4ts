@@ -5,16 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.9521478-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
+import { MurmurHash } from '../misc/MurmurHash';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { Comparable } from '../misc/Stubs';
 import { Equatable } from '../misc/Stubs';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import * as Utils from '../misc/Utils';
 import { Recognizer } from '../Recognizer';
 import { RuleContext } from '../RuleContext';
-import * as Utils from '../misc/Utils';
 
 function max<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 	let result: T | undefined;
@@ -297,7 +297,7 @@ export namespace SemanticContext {
 		opnds: SemanticContext[];
 
 		constructor(@NotNull a: SemanticContext, @NotNull b: SemanticContext) {
-			super()
+			super();
 
 			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
 			if (a instanceof AND) operands.addAll(a.opnds);

@@ -7,9 +7,9 @@
 
 import assert = require('assert');
 import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Lexer } from './Lexer';
 import { NotNull, Override } from './Decorators';
+import { Lexer } from './Lexer';
+import { Interval } from './misc/Interval';
 import { RuleContext } from './RuleContext';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
@@ -243,7 +243,7 @@ export class BufferedTokenStream implements TokenStream {
 	tryLT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
-			throw new RangeError("0 is not a valid lookahead index")
+			throw new RangeError("0 is not a valid lookahead index");
 		}
 
 		if (k < 0) {

@@ -60,7 +60,6 @@ export namespace MurmurHash {
 		return hash & 0xFFFFFFFF;
 	}
 
-
 	/**
 	 * Apply the final computation steps to the intermediate value {@code hash}
 	 * to form the final result of the MurmurHash 3 hash function.

@@ -16,12 +16,12 @@ export function Nullable(
 }
 
 export function Override(target: any,
-	propertyKey: PropertyKey,
-	propertyDescriptor?: PropertyDescriptor) {
+	                        propertyKey: PropertyKey,
+	                        propertyDescriptor?: PropertyDescriptor) {
 	// do something with 'target' ...
 }
 
 export function SuppressWarnings(options: string) {
 	return (target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) => {
-	}
+	};
 }

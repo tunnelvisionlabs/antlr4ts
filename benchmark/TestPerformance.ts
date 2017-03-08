@@ -14,59 +14,59 @@
 require('source-map-support').install();
 import { ANTLRErrorListener } from '../src/ANTLRErrorListener';
 import { ANTLRInputStream } from '../src/ANTLRInputStream';
-import { Array2DHashSet } from '../src/misc/Array2DHashSet';
-import { asIterable } from '../src/misc/Stubs';
 import { ATN } from '../src/atn/ATN';
 import { ATNConfig } from '../src/atn/ATNConfig';
 import { ATNConfigSet } from '../src/atn/ATNConfigSet';
 import { ATNDeserializer } from '../src/atn/ATNDeserializer';
+import { LexerATNSimulator } from '../src/atn/LexerATNSimulator';
+import { ParserATNSimulator } from '../src/atn/ParserATNSimulator';
+import { PredictionContextCache } from '../src/atn/PredictionContextCache';
+import { PredictionMode } from '../src/atn/PredictionMode';
+import { SimulatorState } from '../src/atn/SimulatorState';
 import { BailErrorStrategy } from '../src/BailErrorStrategy';
-import { BitSet } from '../src/misc/BitSet';
 import { CharStream } from '../src/CharStream';
 import { CommonTokenStream } from '../src/CommonTokenStream';
+import { Override } from '../src/Decorators';
+import { NotNull } from '../src/Decorators';
 import { DefaultErrorStrategy } from '../src/DefaultErrorStrategy';
 import { DFA } from '../src/dfa/DFA';
 import { DFAState } from '../src/dfa/DFAState';
 import { DiagnosticErrorListener } from '../src/DiagnosticErrorListener';
-import { ErrorNode } from '../src/tree/ErrorNode';
-import { Interval } from '../src/misc/Interval';
-import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
 import { Lexer } from '../src/Lexer';
-import { LexerATNSimulator } from '../src/atn/LexerATNSimulator';
+import { Array2DHashSet } from '../src/misc/Array2DHashSet';
+import { BitSet } from '../src/misc/BitSet';
+import { Interval } from '../src/misc/Interval';
 import { MurmurHash } from '../src/misc/MurmurHash';
-import { NotNull } from '../src/Decorators';
 import { ObjectEqualityComparator } from '../src/misc/ObjectEqualityComparator';
-import { Override } from '../src/Decorators';
 import { ParseCancellationException } from '../src/misc/ParseCancellationException';
+import { asIterable } from '../src/misc/Stubs';
 import { Parser } from '../src/Parser';
-import { ParserATNSimulator } from '../src/atn/ParserATNSimulator';
 import { ParserErrorListener } from '../src/ParserErrorListener';
 import { ParserInterpreter } from '../src/ParserInterpreter';
 import { ParserRuleContext } from '../src/ParserRuleContext';
-import { ParseTree } from '../src/tree/ParseTree';
-import { ParseTreeListener } from '../src/tree/ParseTreeListener';
-import { ParseTreeWalker } from '../src/tree/ParseTreeWalker';
-import { PredictionContextCache } from '../src/atn/PredictionContextCache';
-import { PredictionMode } from '../src/atn/PredictionMode';
 import { RecognitionException } from '../src/RecognitionException';
 import { Recognizer } from '../src/Recognizer';
-import { SimulatorState } from '../src/atn/SimulatorState';
-import { TerminalNode } from '../src/tree/TerminalNode';
 import { Token } from '../src/Token';
 import { TokenSource } from '../src/TokenSource';
 import { TokenStream } from '../src/TokenStream';
+import { ErrorNode } from '../src/tree/ErrorNode';
+import { ParseTree } from '../src/tree/ParseTree';
+import { ParseTreeListener } from '../src/tree/ParseTreeListener';
+import { ParseTreeWalker } from '../src/tree/ParseTreeWalker';
+import { TerminalNode } from '../src/tree/TerminalNode';
+import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
 
 import * as Utils from '../src/misc/Utils';
 
-import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
-import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
-import { JavaLRLexer as JavaLRLexer } from './gen/lr/JavaLRLexer';
 import { JavaLRLexer as JavaLRLexerAtn } from './gen/lr-atn/JavaLRLexer';
+import { JavaLRLexer as JavaLRLexer } from './gen/lr/JavaLRLexer';
+import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
+import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
 
-import { JavaParser as JavaParser } from './gen/std/JavaParser';
-import { JavaParser as JavaParserAtn } from './gen/std-atn/JavaParser';
-import { JavaLRParser as JavaLRParser } from './gen/lr/JavaLRParser';
 import { JavaLRParser as JavaLRParserAtn } from './gen/lr-atn/JavaLRParser';
+import { JavaLRParser as JavaLRParser } from './gen/lr/JavaLRParser';
+import { JavaParser as JavaParserAtn } from './gen/std-atn/JavaParser';
+import { JavaParser as JavaParser } from './gen/std/JavaParser';
 
 import * as assert from "assert";
 import * as fs from 'fs';
@@ -99,7 +99,7 @@ function listFilesSync(directory: string, filter: FilenameFilter): string[] {
 		return filter.accept(directory, path.basename(value));
 	});
 
-	return files.map(value => path.join(directory, value));
+	return files.map((value) => path.join(directory, value));
 }
 
 function writeFileSync(directory: string, name: string, content: string): void {
@@ -487,11 +487,11 @@ export class TestPerformance {
 
     compileJdk(): void {
         let jdkSourceRoot: string | undefined = this.getSourceRoot("JDK");
-		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
+		      assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 
-		let lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
-		let parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
-		if (TestPerformance.FORCE_ATN) {
+		      let lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
+		      let parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
+		      if (TestPerformance.FORCE_ATN) {
 			lexerCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexerAtn : JavaLexerAtn;
 			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParserAtn : JavaParserAtn;
 		} else {
@@ -499,8 +499,8 @@ export class TestPerformance {
 			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
 		}
 
-		let listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
-		let entryPoint: string =  "compilationUnit";
+		      let listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
+		      let entryPoint: string =  "compilationUnit";
         let factory: ParserFactory = this.getParserFactory(lexerCtor, parserCtor, EmptyListener, JavaLRParser.prototype.compilationUnit.name, (parser) => parser.compilationUnit());
 
         if (TestPerformance.TOP_PACKAGE.length > 0) {
@@ -510,11 +510,11 @@ export class TestPerformance {
         let directory: string = jdkSourceRoot;
         assertTrue(fs.lstatSync(directory).isDirectory());
 
-		let filesFilter: FilenameFilter = FilenameFilters.extension(".java", false);
-		let directoriesFilter: FilenameFilter =  FilenameFilters.ALL_FILES;
-		let sources: InputDescriptor[] = this.loadSources(directory, filesFilter, directoriesFilter, TestPerformance.RECURSIVE);
+		      let filesFilter: FilenameFilter = FilenameFilters.extension(".java", false);
+		      let directoriesFilter: FilenameFilter =  FilenameFilters.ALL_FILES;
+		      let sources: InputDescriptor[] = this.loadSources(directory, filesFilter, directoriesFilter, TestPerformance.RECURSIVE);
 
-		for (let i = 0; i < TestPerformance.PASSES; i++) {
+		      for (let i = 0; i < TestPerformance.PASSES; i++) {
 			if (TestPerformance.COMPUTE_TRANSITION_STATS) {
 				TestPerformance.totalTransitionsPerFile[i] = new Uint32Array(Math.min(sources.length, TestPerformance.MAX_FILES_PER_PARSE_ITERATION));
 				TestPerformance.computedTransitionsPerFile[i] = new Uint32Array(Math.min(sources.length, TestPerformance.MAX_FILES_PER_PARSE_ITERATION));
@@ -534,15 +534,15 @@ export class TestPerformance {
 				TestPerformance.tokensPerFile[i] = new Int32Array(Math.min(sources.length, TestPerformance.MAX_FILES_PER_PARSE_ITERATION));
 			}
 		}
-		console.log(`Located ${sources.length} source files.`);
-		process.stdout.write(TestPerformance.getOptionsDescription(TestPerformance.TOP_PACKAGE));
+		      console.log(`Located ${sources.length} source files.`);
+		      process.stdout.write(TestPerformance.getOptionsDescription(TestPerformance.TOP_PACKAGE));
 
 		// let executorService: ExecutorService =  Executors.newFixedThreadPool(TestPerformance.FILE_GRANULARITY ? 1 : TestPerformance.NUMBER_OF_THREADS, new NumberedThreadFactory());
 		// let passResults: Promise<any>[] = [];
 		// passResults.add(executorService.submit(new Runnable() {
 		// 	@Override
 		// 	run(): void {
-				try {
+				    try {
 					this.parse1(0, factory, sources, TestPerformance.SHUFFLE_FILES_AT_START);
 				} catch (ex) {
 					//Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
@@ -555,7 +555,7 @@ export class TestPerformance {
 		// 	passResults.add(executorService.submit(new Runnable() {
 		// 		@Override
 		// 		run(): void {
-					if (TestPerformance.CLEAR_DFA) {
+					       if (TestPerformance.CLEAR_DFA) {
 						let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
 						if (TestPerformance.sharedLexers.length > 0 && TestPerformance.sharedLexers[index] != null) {
 							let atn: ATN = TestPerformance.sharedLexers[index]!.atn;
@@ -573,7 +573,7 @@ export class TestPerformance {
 						}
 					}
 
-					try {
+					       try {
 						this.parse2(currentPass, factory, sources, TestPerformance.SHUFFLE_FILES_AFTER_ITERATIONS);
 					} catch (ex) {
 						// Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
@@ -590,16 +590,16 @@ export class TestPerformance {
 		// executorService.shutdown();
 		// executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.SHOW_TRANSITION_STATS_PER_FILE) {
+		      if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.SHOW_TRANSITION_STATS_PER_FILE) {
 			this.computeTransitionStatistics();
 		}
 
-		if (TestPerformance.COMPUTE_TIMING_STATS) {
+		      if (TestPerformance.COMPUTE_TIMING_STATS) {
 			this.computeTimingStatistics();
 		}
 
-		sources.length = 0;
-		if (TestPerformance.PAUSE_FOR_HEAP_DUMP) {
+		      sources.length = 0;
+		      if (TestPerformance.PAUSE_FOR_HEAP_DUMP) {
 			forceGC();
 			console.log("Pausing before application exit.");
 			// try {
@@ -768,7 +768,7 @@ export class TestPerformance {
 	}
 
 	private getSourceRoot(prefix: string): string {
-		let sourceRoot: string =  process.env[prefix+"_SOURCE_ROOT"];
+		let sourceRoot: string =  process.env[prefix + "_SOURCE_ROOT"];
 		// if (sourceRoot == null) {
 		// 	sourceRoot = System.getProperty(prefix+"_SOURCE_ROOT");
 		// }
@@ -795,8 +795,8 @@ export class TestPerformance {
 
         builder += (", Grammar=") + (TestPerformance.USE_LR_GRAMMAR ? "LR" : "Standard");
         builder += (", ForceAtn=") + (TestPerformance.FORCE_ATN);
-		builder += (", Lexer:") + (TestPerformance.ENABLE_LEXER_DFA ? "DFA" : "ATN");
-		builder += (", Parser:") + (TestPerformance.ENABLE_PARSER_DFA ? "DFA" : "ATN");
+		      builder += (", Lexer:") + (TestPerformance.ENABLE_LEXER_DFA ? "DFA" : "ATN");
+		      builder += (", Parser:") + (TestPerformance.ENABLE_PARSER_DFA ? "DFA" : "ATN");
 
         builder += ('\n');
 
@@ -813,7 +813,7 @@ export class TestPerformance {
 
         builder += ('\n');
 
-		builder += ("UniqueClosure=") + (TestPerformance.OPTIMIZE_UNIQUE_CLOSURE ? "optimize" : "complete");
+		      builder += ("UniqueClosure=") + (TestPerformance.OPTIMIZE_UNIQUE_CLOSURE ? "optimize" : "complete");
 
         builder += ('\n');
 
@@ -829,7 +829,7 @@ export class TestPerformance {
 			forceGC();
 		}
 
-        this.parseSources(currentPass, factory, sources, shuffleSources);
+  this.parseSources(currentPass, factory, sources, shuffleSources);
     }
 
     /**
@@ -841,7 +841,7 @@ export class TestPerformance {
 			forceGC();
 		}
 
-        this.parseSources(currentPass, factory, sources, shuffleSources);
+  this.parseSources(currentPass, factory, sources, shuffleSources);
     }
 
 	protected loadSources(directory: string, filesFilter: FilenameFilter, directoriesFilter: FilenameFilter, recursive: boolean): InputDescriptor[];
@@ -853,10 +853,10 @@ export class TestPerformance {
 			return result;
 		}
 
-        assert(fs.lstatSync(directory).isDirectory());
+  assert(fs.lstatSync(directory).isDirectory());
 
-        let sources: string[] = listFilesSync(directory, filesFilter);
-        for (let file of sources) {
+  let sources: string[] = listFilesSync(directory, filesFilter);
+  for (let file of sources) {
 			if (!fs.lstatSync(file).isFile()) {
 				continue;
 			}
@@ -864,7 +864,7 @@ export class TestPerformance {
 			result.push(new InputDescriptor(fs.realpathSync(file)));
         }
 
-        if (recursive) {
+  if (recursive) {
             let children: string[] = listFilesSync(directory, directoriesFilter);
             for (let child of children) {
                 if (fs.lstatSync(child).isDirectory()) {
@@ -884,8 +884,8 @@ export class TestPerformance {
 		}
 
 		let startTime: Stopwatch = Stopwatch.startNew();
-        TestPerformance.tokenCount[currentPass] = 0;
-        let inputSize: number =  0;
+  TestPerformance.tokenCount[currentPass] = 0;
+  let inputSize: number =  0;
 		let inputCount: number =  0;
 
 		let results: (FileParseResult | undefined)[] = [];
@@ -896,14 +896,14 @@ export class TestPerformance {
 		// 	executorService = Executors.newSingleThreadExecutor(new FixedThreadNumberFactory((<NumberedThread>Thread.currentThread()).getThreadNumber()));
 		// }
 
-        for (let inputDescriptor of sources) {
+  for (let inputDescriptor of sources) {
 			if (inputCount >= TestPerformance.MAX_FILES_PER_PARSE_ITERATION) {
 				break;
 			}
 
 			let input: CharStream =  inputDescriptor.getInputStream();
-            input.seek(0);
-            inputSize += input.size;
+   input.seek(0);
+   inputSize += input.size;
 			inputCount++;
 			let futureChecksum: () => FileParseResult | undefined = () => {
 				// @Override
@@ -929,12 +929,12 @@ export class TestPerformance {
 			currentIndex++;
 			let fileChecksum: number =  0;
 			// try {
-				let fileResult: FileParseResult | undefined =  future;
-				if (fileResult == null) {
+			let fileResult: FileParseResult | undefined =  future;
+			if (fileResult == null) {
 					continue;
 				}
 
-				if (TestPerformance.COMPUTE_TRANSITION_STATS) {
+			if (TestPerformance.COMPUTE_TRANSITION_STATS) {
 					TestPerformance.totalTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserTotalTransitions);
 					TestPerformance.computedTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserComputedTransitions);
 
@@ -948,12 +948,12 @@ export class TestPerformance {
 					}
 				}
 
-				if (TestPerformance.COMPUTE_TIMING_STATS) {
+			if (TestPerformance.COMPUTE_TIMING_STATS) {
 					TestPerformance.timePerFile[currentPass][currentIndex] = fileResult.elapsedTime.totalMilliseconds;
 					TestPerformance.tokensPerFile[currentPass][currentIndex] = fileResult.tokenCount;
 				}
 
-				fileChecksum = fileResult.checksum;
+			fileChecksum = fileResult.checksum;
 			// } catch (ExecutionException ex) {
 			// 	Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
 			// }
@@ -966,7 +966,7 @@ export class TestPerformance {
 		// executorService.shutdown();
 		// executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-        console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${Math.round(startTime.elapsedMillis())}ms`);
+  console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${Math.round(startTime.elapsedMillis())}ms`);
 
 		if (TestPerformance.sharedLexers.length > 0) {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
@@ -1018,12 +1018,12 @@ export class TestPerformance {
 			let parser: Parser =  TestPerformance.sharedParsers[index]!;
             // make sure the individual DFAState objects actually have unique ATNConfig arrays
 			let interpreter: ParserATNSimulator =  parser.interpreter;
-            let decisionToDFA: DFA[] =  interpreter.atn.decisionToDFA;
+   let decisionToDFA: DFA[] =  interpreter.atn.decisionToDFA;
 
-            if (TestPerformance.SHOW_DFA_STATE_STATS) {
+   if (TestPerformance.SHOW_DFA_STATE_STATS) {
                 let states: number =  0;
-				let configs: number =  0;
-				let uniqueConfigs: Array2DHashSet<ATNConfig> =  new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
+				            let configs: number =  0;
+				            let uniqueConfigs: Array2DHashSet<ATNConfig> =  new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 
                 for (let i = 0; i < decisionToDFA.length; i++) {
                     let dfa: DFA =  decisionToDFA[i];
@@ -1032,7 +1032,7 @@ export class TestPerformance {
                     }
 
                     states += dfa.states.size;
-					for (let state of asIterable<DFAState>(dfa.states)) {
+					               for (let state of asIterable<DFAState>(dfa.states)) {
 						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -1040,7 +1040,7 @@ export class TestPerformance {
 
                 console.log(`There are ${states} parser DFAState instances, ${configs} configs (${uniqueConfigs.size} unique), ${interpreter.atn.contextCacheSize} prediction contexts.`);
 
-				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
+				            if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					if (TestPerformance.COMPUTE_TRANSITION_STATS) {
 						console.log("\tDecision\tStates\tConfigs\tPredict (ALL)\tPredict (LL)\tNon-SLL\tTransitions\tTransitions (ATN)\tTransitions (LL)\tLA (SLL)\tLA (LL)\tRule");
 					}
@@ -1115,13 +1115,13 @@ export class TestPerformance {
 				}
             }
 
-            let localDfaCount: number =  0;
-            let globalDfaCount: number =  0;
-            let localConfigCount: number =  0;
-            let globalConfigCount: number =  0;
-            let contextsInDFAState: Int32Array =  new Int32Array(0);
+   let localDfaCount: number =  0;
+   let globalDfaCount: number =  0;
+   let localConfigCount: number =  0;
+   let globalConfigCount: number =  0;
+   let contextsInDFAState: Int32Array =  new Int32Array(0);
 
-            for (let i = 0; i < decisionToDFA.length; i++) {
+   for (let i = 0; i < decisionToDFA.length; i++) {
                 let dfa: DFA =  decisionToDFA[i];
                 if (dfa == null) {
                     continue;
@@ -1132,7 +1132,7 @@ export class TestPerformance {
                         if (state.configs.size >= contextsInDFAState.length) {
 							let contextsInDFAState2 = new Int32Array(state.configs.size + 1);
 							contextsInDFAState2.set(contextsInDFAState);
-                            contextsInDFAState = contextsInDFAState2;
+       contextsInDFAState = contextsInDFAState2;
                         }
 
                         if (state.isAcceptState) {
@@ -1166,14 +1166,14 @@ export class TestPerformance {
                             }
 
                             this.configOutputSize = configOutput.length;
-							throw new Error("Not implemented");
+							                     throw new Error("Not implemented");
                             // writeFileSync(tmpdir, "d" + dfa.decision + ".s" + state.stateNumber + ".a" + config.alt + ".config.dot", configOutput);
                         }
                     }
                 }
             }
 
-            if (TestPerformance.SHOW_CONFIG_STATS && currentPass === 0) {
+   if (TestPerformance.SHOW_CONFIG_STATS && currentPass === 0) {
                 console.log(`  DFA accept states: ${localDfaCount + globalDfaCount} total, ${localDfaCount} with only local context, ${globalDfaCount} with a global context`);
                 console.log(`  Config stats: ${localConfigCount + globalConfigCount} total, ${localConfigCount} local, ${globalConfigCount} global`);
                 if (TestPerformance.SHOW_DFA_STATE_STATS) {
@@ -1236,14 +1236,14 @@ export class TestPerformance {
             let tokenSource =  new lexerCtor(new ANTLRInputStream(""));
             new parserCtor(new CommonTokenStream(tokenSource));
 
-			if (!TestPerformance.REUSE_LEXER_DFA) {
+			         if (!TestPerformance.REUSE_LEXER_DFA) {
 				let lexerSerializedATN: string = lexerCtor.prototype._serializedATN;
 				for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 					TestPerformance.sharedLexerATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(lexerSerializedATN));
 				}
 			}
 
-			if (TestPerformance.RUN_PARSER && !TestPerformance.REUSE_PARSER_DFA) {
+			         if (TestPerformance.RUN_PARSER && !TestPerformance.REUSE_PARSER_DFA) {
 				let parserSerializedATN: string = parserCtor.prototype._serializedATN;
 				for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 					TestPerformance.sharedParserATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(parserSerializedATN));
@@ -1259,7 +1259,7 @@ export class TestPerformance {
 					let startTime: Stopwatch = Stopwatch.startNew();
 					assert(thread >= 0 && thread < TestPerformance.NUMBER_OF_THREADS);
 
-                    try {
+     try {
 						let listener: ParseTreeListener | undefined =  TestPerformance.sharedListeners[thread];
 						if (listener == null) {
 							listener = new listenerCtor();
@@ -1267,11 +1267,11 @@ export class TestPerformance {
 						}
 
 						let lexer: Lexer | undefined = TestPerformance.sharedLexers[thread];
-                        if (TestPerformance.REUSE_LEXER && lexer != null) {
+      if (TestPerformance.REUSE_LEXER && lexer != null) {
                             lexer.inputStream = input;
                         } else {
 							let previousLexer: Lexer | undefined =  lexer;
-                            lexer = new lexerCtor(input);
+       lexer = new lexerCtor(input);
 							TestPerformance.sharedLexers[thread] = lexer;
 							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousLexer == null ? lexer : previousLexer).atn;
 							if (!TestPerformance.REUSE_LEXER_DFA || (!TestPerformance.FILE_GRANULARITY && previousLexer == null)) {
@@ -1293,9 +1293,9 @@ export class TestPerformance {
 							lexer.interpreter.atn.clearDFA();
 						}
 
-                        let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
-                        tokens.fill();
-                        TestPerformance.tokenCount[currentPass] += tokens.size;
+      let tokens: CommonTokenStream =  new CommonTokenStream(lexer);
+      tokens.fill();
+      TestPerformance.tokenCount[currentPass] += tokens.size;
 
 						if (TestPerformance.COMPUTE_CHECKSUM) {
 							for (let token of tokens.getTokens()) {
@@ -1303,13 +1303,13 @@ export class TestPerformance {
 							}
 						}
 
-                        if (!TestPerformance.RUN_PARSER) {
+      if (!TestPerformance.RUN_PARSER) {
                             return new FileParseResult(input.sourceName, checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
                         }
 
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
 						let parser: AnyJavaParser | undefined = TestPerformance.sharedParsers[thread];
-                        if (TestPerformance.REUSE_PARSER && parser != null) {
+      if (TestPerformance.REUSE_PARSER && parser != null) {
                             parser.inputStream = tokens;
                         } else {
 							let previousParser: Parser | undefined =  parser;
@@ -1333,7 +1333,7 @@ export class TestPerformance {
 								parser.interpreter = new StatisticsParserATNSimulator(atn, parser);
 							}
 
-                            TestPerformance.sharedParsers[thread] = parser;
+       TestPerformance.sharedParsers[thread] = parser;
                         }
 
 						parser.removeParseListeners();
@@ -1365,7 +1365,7 @@ export class TestPerformance {
 						}
 
         //                 let parseMethod: Method =  parserClass.getMethod(entryPoint);
-                        let parseResult: ParserRuleContext;
+      let parseResult: ParserRuleContext;
 
 						try {
 							if (TestPerformance.COMPUTE_CHECKSUM && !TestPerformance.BUILD_PARSE_TREES) {
@@ -1384,9 +1384,9 @@ export class TestPerformance {
 							}
 
 							let sourceName: string =  tokens.sourceName;
-							sourceName = sourceName != null && sourceName.length > 0 ? sourceName+": " : "";
+							sourceName = sourceName != null && sourceName.length > 0 ? sourceName + ": " : "";
 							if (TestPerformance.REPORT_SECOND_STAGE_RETRY) {
-								console.error(sourceName+"Forced to retry with full context.");
+								console.error(sourceName + "Forced to retry with full context.");
 							}
 
 							if (!(ex instanceof ParseCancellationException)) {
@@ -1449,7 +1449,7 @@ export class TestPerformance {
 						if (TestPerformance.COMPUTE_CHECKSUM && TestPerformance.BUILD_PARSE_TREES) {
 							ParseTreeWalker.DEFAULT.walk(new ChecksumParseTreeListener(checksum), parseResult);
 						}
-                        if (TestPerformance.BUILD_PARSE_TREES && TestPerformance.BLANK_LISTENER) {
+      if (TestPerformance.BUILD_PARSE_TREES && TestPerformance.BLANK_LISTENER) {
                             ParseTreeWalker.DEFAULT.walk(listener, parseResult);
                         }
 
@@ -1461,9 +1461,9 @@ export class TestPerformance {
 
                         // e.printStackTrace(System.out);
 						console.error(e);
-                        throw new Error("IllegalStateException: " + e);
+      throw new Error("IllegalStateException: " + e);
                     }
-                }
+                },
             };
         // } catch (Exception e) {
         //     e.printStackTrace(System.out);
@@ -1665,7 +1665,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 	static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override
-	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends Token>(recognizer: Recognizer<T, any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1676,7 +1676,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
 
-		console.error(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
+		console.error(sourceName + "line " + line + ":" + charPositionInLine + " " + msg);
 	}
 
 }
@@ -1685,7 +1685,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 	static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
 
 	@Override
-	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1696,7 +1696,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
 
-		process.stderr.write(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
+		process.stderr.write(sourceName + "line " + line + ":" + charPositionInLine + " " + msg);
 	}
 
 }
@@ -1713,7 +1713,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let llPredictions: BitSet =  this.getConflictingAlts(ambigAlts, configs);
 			let llPrediction: number =  llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
 			if (sllPrediction !== llPrediction) {
-				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
+				(<StatisticsParserATNSimulator> recognizer.interpreter).nonSll[dfa.decision]++;
 			}
 		}
 
@@ -1750,7 +1750,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
 			if (sllPrediction !== prediction) {
-				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
+				(<StatisticsParserATNSimulator> recognizer.interpreter).nonSll[dfa.decision]++;
 			}
 		}
 
@@ -1775,7 +1775,7 @@ namespace FilenameFilters {
 		// @Override
 		accept(dir: string, name: string): boolean {
 			return true;
-		}
+		},
 	};
 
 	export function extension(extension: string): FilenameFilter;

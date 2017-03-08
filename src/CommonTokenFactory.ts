@@ -7,8 +7,8 @@
 
 import { CharStream } from './CharStream';
 import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
 import { Override } from './Decorators';
+import { Interval } from './misc/Interval';
 import { TokenFactory } from './TokenFactory';
 import { TokenSource } from './TokenSource';
 
