@@ -98,7 +98,7 @@ export class DFASerializer {
 			}
 		}
 		let output: string = buf;
-		if (output.length === 0) return "";
+		if (output.length === 0) { return ""; }
 		//return Utils.sortLinesInString(output);
 		return output;
 	}

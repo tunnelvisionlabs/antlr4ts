@@ -144,6 +144,7 @@ fileHeader(grammarFileName, ANTLRVersion) ::= <<
 // tslint:disable:no-consecutive-blank-lines
 // tslint:disable:no-trailing-whitespace
 // tslint:disable:switch-default
+// tslint:disable:curly
 >>
 
 Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<

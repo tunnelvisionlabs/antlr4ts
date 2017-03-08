@@ -132,9 +132,9 @@ export class ANTLRInputStream implements CharStream {
 	getText(interval: Interval): string {
 		let start: number = interval.a;
 		let stop: number = interval.b;
-		if (stop >= this.n) stop = this.n - 1;
+		if (stop >= this.n) { stop = this.n - 1; }
 		let count: number = stop - start + 1;
-		if (start >= this.n) return "";
+		if (start >= this.n) { return ""; }
 		// System.err.println("data: "+Arrays.toString(data)+", n="+n+
 		// 				   ", start="+start+
 		// 				   ", stop="+stop);

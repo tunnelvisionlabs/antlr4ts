@@ -36,7 +36,7 @@ function unIndex(n: number) {
 function findLSBSet(word: number) {
 	let bit = 1;
 	for (let i = 0; i < 16; i++) {
-		if ((word & bit) !== 0) return i;
+		if ((word & bit) !== 0) {return i; }
 		bit = (bit << 1) >>> 0;
 	}
 	throw new RangeError("No specified bit found");
@@ -45,7 +45,7 @@ function findLSBSet(word: number) {
 function findMSBSet(word: number) {
 	let bit = (1 << 15) >>> 0;
 	for (let i = 15; i >= 0; i--) {
-		if ((word & bit) !== 0) return i;
+		if ((word & bit) !== 0) {return i; }
 		bit = bit >>> 1;
 	}
 	throw new RangeError("No specified bit found");
@@ -58,7 +58,7 @@ function findMSBSet(word: number) {
 function bitsFor(fromBit: number, toBit: number): number {
 	fromBit &= 0xF;
 	toBit &= 0xF;
-	if (fromBit === toBit) return (1 << fromBit) >>> 0;
+	if (fromBit === toBit) {return (1 << fromBit) >>> 0; }
 	return ((0xFFFF >>> (15 - toBit)) ^ (0xFFFF >>> (16 - fromBit)));
 }
 
@@ -119,7 +119,7 @@ export class BitSet implements Iterable<number> {
 			} else {
 				let max = -1;
 				for (let v of arg) {
-					if (max < v) max = v;
+					if (max < v) {max = v; }
 				}
 				this.data = new Uint16Array(getIndex(max - 1) + 1);
 				for (let v of arg) {
@@ -255,7 +255,7 @@ export class BitSet implements Iterable<number> {
 		if (toIndex == null) {
 			toIndex = fromIndex;
 		}
-		if (fromIndex < 0 || toIndex < fromIndex) throw new RangeError();
+		if (fromIndex < 0 || toIndex < fromIndex) {throw new RangeError(); }
 
 		let word = getIndex(fromIndex);
 		const lastWord = getIndex(toIndex);
@@ -336,7 +336,7 @@ export class BitSet implements Iterable<number> {
 	 * zero if the `BitSet` contains no set bits.
 	 */
 	length(): number {
-		if (!this.data.length) return 0;
+		if (!this.data.length) {return 0; }
 		return this.previousSetBit(unIndex(this.data.length) - 1) + 1;
 	}
 
@@ -356,7 +356,7 @@ export class BitSet implements Iterable<number> {
 		const data = this.data;
 		const length = data.length;
 		let word = getIndex(fromIndex);
-		if (word > length) return -1;
+		if (word > length) {return -1; }
 
 		let ignore = 0xFFFF ^ bitsFor(fromIndex, 15);
 
@@ -364,9 +364,9 @@ export class BitSet implements Iterable<number> {
 			word++;
 			ignore = 0;
 			for (; word < length; word++) {
-				if (data[word] !== 0xFFFF) break;
+				if (data[word] !== 0xFFFF) {break; }
 			}
-			if (word === length) return -1;	// Hit the end
+			if (word === length) {return -1; }	// Hit the end
 		}
 		return unIndex(word) + findLSBSet((data[word] | ignore) ^ 0xFFFF);
 	}
@@ -395,16 +395,16 @@ export class BitSet implements Iterable<number> {
 		const data = this.data;
 		const length = data.length;
 		let word = getIndex(fromIndex);
-		if (word > length) return -1;
+		if (word > length) {return -1; }
 		let mask = bitsFor(fromIndex, 15);
 
 		if ((data[word] & mask) === 0) {
 			word++;
 			mask = 0xFFFF;
 			for (; word < length; word++) {
-				if (data[word] !== 0) break;
+				if (data[word] !== 0) {break; }
 			}
-			if (word >= length) return -1;
+			if (word >= length) {return -1; }
 		}
 		return unIndex(word) + findLSBSet(data[word] & mask);
 	}
@@ -426,14 +426,14 @@ export class BitSet implements Iterable<number> {
 		// Or those words both sets have in common
 
 		for (let i = 0; i < minWords; i++) {
-			if ((dest[i] = data[i] | other[i]) !== 0) lastWord = i;
+			if ((dest[i] = data[i] | other[i]) !== 0) {lastWord = i; }
 		}
 
 		// Copy words from larger set (if there is one)
 
 		const longer = data.length > other.length ? data : other;
 		for (let i = minWords; i < words; i++) {
-			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+			if ((dest[i] = longer[i]) !== 0) {lastWord = i; }
 		}
 
 		if (lastWord === -1) {
@@ -461,7 +461,7 @@ export class BitSet implements Iterable<number> {
 		const data = this.data;
 		const length = data.length;
 		let word = getIndex(fromIndex);
-		if (word >= length) word = length - 1;
+		if (word >= length) {word = length - 1; }
 
 		let ignore = 0xFFFF ^ bitsFor(0, fromIndex);
 
@@ -469,9 +469,9 @@ export class BitSet implements Iterable<number> {
 			ignore = 0;
 			word--;
 			for (; word >= 0; word--) {
-				if (data[word] !== 0xFFFF) break;
+				if (data[word] !== 0xFFFF) {break; }
 			}
-			if (word < 0) return -1;	// Hit the end
+			if (word < 0) {return -1; }	// Hit the end
 		}
 		return unIndex(word) + findMSBSet((data[word] | ignore) ^ 0xFFFF);
 	}
@@ -500,7 +500,7 @@ export class BitSet implements Iterable<number> {
 		const data = this.data;
 		const length = data.length;
 		let word = getIndex(fromIndex);
-		if (word >= length) word = length - 1;
+		if (word >= length) {word = length - 1; }
 
 		let mask = bitsFor(0, fromIndex);
 
@@ -508,9 +508,9 @@ export class BitSet implements Iterable<number> {
 			word--;
 			mask = 0xFFFF;
 			for (; word >= 0; word--) {
-				if (data[word] !== 0) break;
+				if (data[word] !== 0) {break; }
 			}
-			if (word < 0) return -1;
+			if (word < 0) {return -1; }
 		}
 		return unIndex(word) + findMSBSet(data[word] & mask);
 	}
@@ -582,8 +582,9 @@ export class BitSet implements Iterable<number> {
 			this.data = temp;
 		} else if (!value) {
 			// But there is no need to grow array to clear bits.
-			if (word >= this.data.length)
+			if (word >= this.data.length) {
 				return; // Early exit
+			}
 			if (lastWord >= this.data.length) {
 				// Adjust work to fit array
 				lastWord = this.data.length - 1;
@@ -747,14 +748,14 @@ export class BitSet implements Iterable<number> {
 		// Xor those words both sets have in common
 
 		for (let i = 0; i < minWords; i++) {
-			if ((dest[i] = data[i] ^ other[i]) !== 0) lastWord = i;
+			if ((dest[i] = data[i] ^ other[i]) !== 0) {lastWord = i; }
 		}
 
 		// Copy words from larger set (if there is one)
 
 		const longer = data.length > other.length ? data : other;
 		for (let i = minWords; i < words; i++) {
-			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+			if ((dest[i] = longer[i]) !== 0) {lastWord = i; }
 		}
 
 		if (lastWord === -1) {

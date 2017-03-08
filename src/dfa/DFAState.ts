@@ -207,7 +207,7 @@ export class DFAState {
 	@Override
 	equals(o: any): boolean {
 		// compare set of ATN configurations in this set with other
-		if (this === o) return true;
+		if (this === o) { return true; }
 
 		if (!(o instanceof DFAState)) {
 			return false;
@@ -215,7 +215,7 @@ export class DFAState {
 
 		let other: DFAState = o;
 		let sameSet: boolean = this.configs.equals(other.configs);
-//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
+		//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
 	}
 
@@ -244,7 +244,7 @@ export namespace DFAState {
 		@NotNull
 		pred: SemanticContext;  // never null; at least SemanticContext.NONE
 		alt: number;
-		constructor(@NotNull pred: SemanticContext, alt: number) {
+		constructor( @NotNull pred: SemanticContext, alt: number) {
 			this.alt = alt;
 			this.pred = pred;
 		}

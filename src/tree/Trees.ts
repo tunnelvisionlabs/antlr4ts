@@ -41,14 +41,14 @@ export class Trees {
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.childCount === 0) return s;
+		if (t.childCount === 0) { return s; }
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
 		buf += (' ');
 		for (let i = 0; i < t.childCount; i++) {
-			if (i > 0) buf += (' ');
+			if (i > 0) { buf += (' '); }
 			buf += (this.toStringTree(t.getChild(i), ruleNames));
 		}
 		buf += (")");
@@ -121,10 +121,10 @@ export class Trees {
      *  @since 4.5.1
      */
 	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
-		if (!t || !u || !t.parent) return false;
+		if (!t || !u || !t.parent) { return false; }
 		let p = u.parent;
 		while (p) {
-			if (t === p) return true;
+			if (t === p) { return true; }
 			p = p.parent;
 		}
 		return false;
@@ -147,10 +147,10 @@ export class Trees {
 	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
-			if (t.symbol.type === index) nodes.push(t);
+			if (t.symbol.type === index) { nodes.push(t); }
 		}
 		else if (!findTokens && t instanceof ParserRuleContext) {
-			if (t.ruleIndex === index) nodes.push(t);
+			if (t.ruleIndex === index) { nodes.push(t); }
 		}
 		// check children
 		for (let i = 0; i < t.childCount; i++) {
@@ -191,7 +191,7 @@ export class Trees {
 		for (let i = 0; i < n; i++) {
 			let child: ParseTree = t.getChild(i);
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
-			if (r) return r;
+			if (r) { return r; }
 		}
 		if (t instanceof ParserRuleContext) {
 			let stopToken = t.stop;
@@ -217,7 +217,7 @@ export class Trees {
 		root: ParserRuleContext,
 		startIndex: number,
 		stopIndex: number): void {
-		if (!t) return;
+		if (!t) { return; }
 		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
 			let child = t.getChild(i);

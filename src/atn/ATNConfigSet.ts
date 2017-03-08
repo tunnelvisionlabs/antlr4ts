@@ -493,15 +493,15 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 		buf += ("]");
 
-		if (this._hasSemanticContext) buf += (",hasSemanticContext=") + (this._hasSemanticContext);
-		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) buf += (",uniqueAlt=") + (this._uniqueAlt);
+		if (this._hasSemanticContext) { buf += (",hasSemanticContext=") + (this._hasSemanticContext); }
+		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) {buf += (",uniqueAlt=") + (this._uniqueAlt); }
 		if (this._conflictInfo != null) {
 			buf += (",conflictingAlts=") + (this._conflictInfo.conflictedAlts);
 			if (!this._conflictInfo.isExact) {
 				buf += ("*");
 			}
 		}
-		if (this._dipsIntoOuterContext) buf += (",dipsIntoOuterContext");
+		if (this._dipsIntoOuterContext) {buf += (",dipsIntoOuterContext"); }
 		return buf.toString();
 	}
 

@@ -171,7 +171,7 @@ export class LL1Analyzer {
 		addEOF: boolean): void {
 		//		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
 		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
-		if (!lookBusy.add(c)) return;
+		if (!lookBusy.add(c)) { return; }
 
 		if (s === stopState) {
 			if (PredictionContext.isEmptyLocal(ctx)) {

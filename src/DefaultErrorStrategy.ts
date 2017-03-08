@@ -184,7 +184,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			recognizer.consume();
 		}
 		this.lastErrorIndex = recognizer.inputStream.index;
-		if (!this.lastErrorStates) this.lastErrorStates = new IntervalSet();
+		if (!this.lastErrorStates) { this.lastErrorStates = new IntervalSet(); }
 		this.lastErrorStates.add(recognizer.state);
 		let followSet: IntervalSet = this.getErrorRecoverySet(recognizer);
 		this.consumeUntil(recognizer, followSet);
@@ -297,8 +297,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
-			if (e.startToken.type === Token.EOF) input = "<EOF>";
-			else input = tokens.getTextFromRange(e.startToken, e.getOffendingToken());
+			if (e.startToken.type === Token.EOF) { input = "<EOF>"; }
+			else { input = tokens.getTextFromRange(e.startToken, e.getOffendingToken()); }
 		}
 		else {
 			input = "<unknown input>";
@@ -576,8 +576,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let expectedTokenType: number = expecting.minElement; // get any element
 		let tokenText: string;
-		if (expectedTokenType === Token.EOF) tokenText = "<missing EOF>";
-		else tokenText = "<missing " + recognizer.vocabulary.getDisplayName(expectedTokenType) + ">";
+		if (expectedTokenType === Token.EOF) { tokenText = "<missing EOF>"; }
+		else { tokenText = "<missing " + recognizer.vocabulary.getDisplayName(expectedTokenType) + ">"; }
 		let current: Token = currentSymbol;
 		let lookback = recognizer.inputStream.tryLT(-1);
 		if (current.type === Token.EOF && lookback != null) {
@@ -618,7 +618,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *  so that it creates a new Java type.
 	 */
 	protected getTokenErrorDisplay(t: Token | undefined): string {
-		if (!t) return "<no token>";
+		if (!t) { return "<no token>"; }
 		let s = this.getSymbolText(t);
 		if (!s) {
 			if (this.getSymbolType(t) === Token.EOF) {

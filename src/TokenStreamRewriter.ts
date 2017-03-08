@@ -309,8 +309,8 @@ export class TokenStreamRewriter {
 		let stop: number = interval.b;
 
 		// ensure start/end are in range
-		if (stop > this.tokens.size - 1) stop = this.tokens.size - 1;
-		if (start < 0) start = 0;
+		if (stop > this.tokens.size - 1) { stop = this.tokens.size - 1; }
+		if (start < 0) { start = 0; }
 
 		if (rewrites == null || rewrites.length === 0) {
 			return this.tokens.getText(interval); // no instructions to execute
@@ -329,7 +329,7 @@ export class TokenStreamRewriter {
 			let t: Token = this.tokens.get(i);
 			if (op == null) {
 				// no operation at that index, just dump token
-				if (t.type !== Token.EOF) buf.push(String(t.text));
+				if (t.type !== Token.EOF) { buf.push(String(t.text)); }
 				i++; // move to next token
 			}
 			else {
@@ -344,7 +344,7 @@ export class TokenStreamRewriter {
 			// Scan any remaining operations after last token
 			// should be included (they will be inserts).
 			for (let op of indexToOp.values()) {
-				if (op.index >= this.tokens.size - 1) buf += op.text;
+				if (op.index >= this.tokens.size - 1) { buf += op.text; }
 			}
 		}
 
@@ -406,8 +406,8 @@ export class TokenStreamRewriter {
 		// WALK REPLACES
 		for (let i = 0; i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined = rewrites[i];
-			if (op == null) continue;
-			if (!(op instanceof ReplaceOp)) continue;
+			if (op == null) { continue; }
+			if (!(op instanceof ReplaceOp)) { continue; }
 			let rop: ReplaceOp = op;
 			// Wipe prior inserts within range
 			let inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
@@ -452,8 +452,8 @@ export class TokenStreamRewriter {
 		// WALK INSERTS
 		for (let i = 0; i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined = rewrites[i];
-			if (op == null) continue;
-			if (!(op instanceof InsertBeforeOp)) continue;
+			if (op == null) { continue; }
+			if (!(op instanceof InsertBeforeOp)) { continue; }
 			let iop: InsertBeforeOp = op;
 			// combine current insert with prior if any at same index
 			let prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
@@ -488,7 +488,7 @@ export class TokenStreamRewriter {
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
 		let m: Map<number, RewriteOperation> = new Map<number, RewriteOperation>();
 		for (let op of rewrites) {
-			if (!op) continue; // ignore deleted ops
+			if (!op) { continue; } // ignore deleted ops
 			if (m.get(op.index) != null) {
 				throw new Error("should only be one op per index");
 			}
@@ -501,8 +501,8 @@ export class TokenStreamRewriter {
 	protected catOpText(a: any, b: any): string {
 		let x: string = "";
 		let y: string = "";
-		if (a != null) x = a.toString();
-		if (b != null) y = b.toString();
+		if (a != null) { x = a.toString(); }
+		if (b != null) { y = b.toString(); }
 		return x + y;
 	}
 
@@ -511,7 +511,7 @@ export class TokenStreamRewriter {
 		let ops: T[] = [];
 		for (let i = 0; i < before && i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined = rewrites[i];
-			if (op == null) continue; // ignore deleted
+			if (op == null) { continue; } // ignore deleted
 			if (op instanceof kind) {
 				ops.push(op);
 			}
