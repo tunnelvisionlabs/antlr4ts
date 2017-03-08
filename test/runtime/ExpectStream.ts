@@ -4,6 +4,7 @@
  */
 
 import * as assert from 'assert';
+// tslint:disable-next-line:no-var-requires
 const stdMocks = require('std-mocks');
 
 export function expectConsole( output: string, errors: string, during: () => void ) {

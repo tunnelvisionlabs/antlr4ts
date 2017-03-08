@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable-next-line:no-var-requires
 require('source-map-support').install();
 import * as assert from "assert";
 import { suite, test } from 'mocha-typescript';
@@ -29,20 +30,20 @@ class EquatableTest implements Equatable {
 }
 
 const alpha = new EquatableTest("alpha", "1");
-const alpha_again = new EquatableTest("alpha", "1");
+const alphaAgain = new EquatableTest("alpha", "1");
 const beta = new EquatableTest("beta", "1");
 
 describe('EquatableTest', function() {
 
     it('should respect identity', function() {
       assert( alpha.equals(alpha));
-      assert( alpha_again.equals(alpha_again));
+      assert( alphaAgain.equals(alphaAgain));
       assert( beta.equals(beta));
     });
 
     it('should compare equality by value', function() {
-        assert( alpha.equals(alpha_again));
-        assert( alpha_again.equals(alpha));
+        assert( alpha.equals(alphaAgain));
+        assert( alphaAgain.equals(alpha));
     });
 
     it('should detect difference by value', function() {
@@ -50,7 +51,7 @@ describe('EquatableTest', function() {
     });
 
     it('should hash identical values the same', function() {
-        assert.equal(alpha.hashCode(), alpha_again.hashCode());
+        assert.equal(alpha.hashCode(), alphaAgain.hashCode());
     });
 
     it('should hash different values differently', function() {
@@ -77,7 +78,7 @@ describe('Array2DHashSet', function() {
         assert(set.isEmpty);
         set.add(alpha);
         assert(set.contains(alpha), "identity match failed");
-        assert(set.contains(alpha_again), "value match failed");
+        assert(set.contains(alphaAgain), "value match failed");
         assert(!set.contains(beta), "value difference ignored");
     });
 });
@@ -89,6 +90,6 @@ describe('Array2DHashSet', function() {
 @suite class DecoratorDriven {
     @test
     "Comparison by value"() {
-        assert(alpha.equals(alpha_again));
+        assert(alpha.equals(alphaAgain));
     }
 }

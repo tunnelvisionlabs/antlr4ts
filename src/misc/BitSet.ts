@@ -3,6 +3,8 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable:no-conditional-assignment -- Compact notation for this module only
+
 import * as assert from "assert";
 import * as util from "util";
 import { MurmurHash } from "./MurmurHash";
@@ -576,7 +578,7 @@ export class BitSet implements Iterable<number>{
 		if (value && lastWord >= this.data.length) {
 			// Grow array "just enough" for bits we need to set
 			let temp = new Uint16Array(lastWord + 1);
-			this.data.forEach((value, index) => temp[index] = value);
+			this.data.forEach((v, index) => temp[index] = v);
 			this.data = temp;
 		} else if (!value) {
 			// But there is no need to grow array to clear bits.

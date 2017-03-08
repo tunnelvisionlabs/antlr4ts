@@ -88,6 +88,7 @@ export class ATN {
 	@NotNull
 	modeToDFA: DFA[] = [];
 
+	// tslint:disable-next-line:variable-name
 	LL1Table: Map<number, number> = new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */

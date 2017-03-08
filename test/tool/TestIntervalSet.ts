@@ -5,6 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.6934341-07:00
 
+// tslint:disable-next-line:no-var-requires
 require('source-map-support').install();
 import { Lexer } from '../../src/Lexer';
 import { IntervalSet } from '../../src/misc/IntervalSet';

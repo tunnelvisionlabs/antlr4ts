@@ -117,8 +117,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	getNumberOfOnChannelTokens(): number {
 		let n: number = 0;
 		this.fill();
-		for (let i = 0; i < this.tokens.length; i++) {
-			let t: Token = this.tokens[i];
+		for (let t of this.tokens) {
 			if (t.channel === this.channel) {
 				n++;
 			}

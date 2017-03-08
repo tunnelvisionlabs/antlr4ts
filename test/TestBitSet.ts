@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable-next-line:no-var-requires
 require('source-map-support').install();
 import * as assert from "assert";
 import { BitSet } from "../src/misc/BitSet";
@@ -354,4 +355,3 @@ describe("BitSet Tests", function() {
 	});
 
 });
-

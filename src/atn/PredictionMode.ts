@@ -119,7 +119,7 @@ export namespace PredictionMode {
 		equals(a: ATNConfig, b: ATNConfig): boolean {
 			if (a === b) return true;
 			if (a == null || b == null) return false;
-			return a.state.stateNumber == b.state.stateNumber
+			return a.state.stateNumber === b.state.stateNumber
 				&& a.context.equals(b.context);
 		}
 	}

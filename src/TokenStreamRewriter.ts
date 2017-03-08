@@ -412,7 +412,7 @@ export class TokenStreamRewriter {
 			// Wipe prior inserts within range
 			let inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (let iop of inserts) {
-				if ( iop.index == rop.index ) {
+				if ( iop.index === rop.index ) {
 					// E.g., insert before 2, delete 2..2; update replace
 					// text to include insert before, kill insert
 					rewrites[iop.instructionIndex] = undefined;
@@ -475,7 +475,7 @@ export class TokenStreamRewriter {
 			// look for replaces where iop.index is in range; error
 			let prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
 			for (let rop of prevReplaces) {
-				if ( iop.index == rop.index ) {
+				if ( iop.index === rop.index ) {
 					rop.text = this.catOpText(iop.text, rop.text);
 					rewrites[i] = undefined;	// delete current insert
 					continue;
@@ -487,9 +487,8 @@ export class TokenStreamRewriter {
 		}
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
 		let m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
-		for (let i = 0; i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined = rewrites[i];
-			if ( op == null ) continue; // ignore deleted ops
+		for (let op of rewrites) {
+			if ( !op ) continue; // ignore deleted ops
 			if ( m.get(op.index) != null ) {
 				throw new Error("should only be one op per index");
 			}

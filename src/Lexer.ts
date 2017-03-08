@@ -230,13 +230,13 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	@Override
-	get sourceName(): string {
-		return this._input.sourceName;
+	get inputStream(): CharStream {
+		return this._input;
 	}
 
 	@Override
-	get inputStream(): CharStream {
-		return this._input;
+	get sourceName(): string {
+		return this._input.sourceName;
 	}
 
 	/** The standard method called to automatically emit a token at the
@@ -279,13 +279,13 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this.interpreter.line;
 	}
 
+	set line(line: number) {
+		this.interpreter.line = line;
+	}
+
 	@Override
 	get charPositionInLine(): number {
 		return this.interpreter.charPositionInLine;
-	}
-
-	set line(line: number) {
-		this.interpreter.line = line;
 	}
 
 	set charPositionInLine(charPositionInLine: number) {
@@ -345,7 +345,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	getAllTokens(): Token[] {
 		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
-		while (t.type != Token.EOF) {
+		while (t.type !== Token.EOF) {
 			tokens.push(t);
 			t = this.nextToken();
 		}
@@ -375,8 +375,9 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 				return "\\t";
 			case 0x0d:
 				return "\\r";
+			default:
+				return String.fromCharCode(s);
 			}
-			return String.fromCharCode(s);
 		}
 		return s.replace(/\n/g, "\\n")
 			.replace(/\t/g, "\\t")
@@ -397,7 +398,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	recover(re: LexerNoViableAltException): void;
 	recover(re: RecognitionException): void {
 		if (re instanceof LexerNoViableAltException) {
-			if (this._input.LA(1) != IntStream.EOF) {
+			if (this._input.LA(1) !== IntStream.EOF) {
 				// skip a char and try again
 				this.interpreter.consume(this._input);
 			}

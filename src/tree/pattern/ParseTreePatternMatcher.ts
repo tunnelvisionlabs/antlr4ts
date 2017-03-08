@@ -180,7 +180,7 @@ export class ParseTreePatternMatcher {
 	// Implementation of match
 	@NotNull
 	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
-		if (typeof pattern == "string") {
+		if (typeof pattern === "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
 		} else {

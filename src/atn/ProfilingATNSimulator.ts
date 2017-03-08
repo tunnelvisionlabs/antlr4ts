@@ -91,21 +91,21 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			this.decisions[decision].timeInPrediction += nanoseconds;
 			this.decisions[decision].invocations++;
 
-			let SLL_k: number = this._sllStopIndex - this._startIndex + 1;
-			this.decisions[decision].SLL_TotalLook += SLL_k;
-			this.decisions[decision].SLL_MinLook = this.decisions[decision].SLL_MinLook === 0 ? SLL_k : Math.min(this.decisions[decision].SLL_MinLook, SLL_k);
-			if (SLL_k > this.decisions[decision].SLL_MaxLook) {
-				this.decisions[decision].SLL_MaxLook = SLL_k;
+			let sllK: number = this._sllStopIndex - this._startIndex + 1;
+			this.decisions[decision].SLL_TotalLook += sllK;
+			this.decisions[decision].SLL_MinLook = this.decisions[decision].SLL_MinLook === 0 ? sllK : Math.min(this.decisions[decision].SLL_MinLook, sllK);
+			if (sllK > this.decisions[decision].SLL_MaxLook) {
+				this.decisions[decision].SLL_MaxLook = sllK;
 				this.decisions[decision].SLL_MaxLookEvent =
 					new LookaheadEventInfo(decision, undefined, alt, input, this._startIndex, this._sllStopIndex, false);
 			}
 
 			if (this._llStopIndex >= 0) {
-				let LL_k: number = this._llStopIndex - this._startIndex + 1;
-				this.decisions[decision].LL_TotalLook += LL_k;
-				this.decisions[decision].LL_MinLook = this.decisions[decision].LL_MinLook == 0 ? LL_k : Math.min(this.decisions[decision].LL_MinLook, LL_k);
-				if (LL_k > this.decisions[decision].LL_MaxLook) {
-					this.decisions[decision].LL_MaxLook = LL_k;
+				let llK: number = this._llStopIndex - this._startIndex + 1;
+				this.decisions[decision].LL_TotalLook += llK;
+				this.decisions[decision].LL_MinLook = this.decisions[decision].LL_MinLook === 0 ? llK : Math.min(this.decisions[decision].LL_MinLook, llK);
+				if (llK > this.decisions[decision].LL_MaxLook) {
+					this.decisions[decision].LL_MaxLook = llK;
 					this.decisions[decision].LL_MaxLookEvent =
 						new LookaheadEventInfo(decision, undefined, alt, input, this._startIndex, this._llStopIndex, true);
 				}

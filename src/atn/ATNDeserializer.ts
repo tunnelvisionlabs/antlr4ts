@@ -148,7 +148,7 @@ export class ATNDeserializer {
 
 		let p: number = 0;
 		let version: number = ATNDeserializer.toInt(data[p++]);
-		if (version != ATNDeserializer.SERIALIZED_VERSION) {
+		if (version !== ATNDeserializer.SERIALIZED_VERSION) {
 			let reason = `Could not deserialize ATN with version ${version} (expected ${ATNDeserializer.SERIALIZED_VERSION}).`;
 			throw new Error(reason);
 		}
@@ -236,7 +236,7 @@ export class ATNDeserializer {
 		for (let i = 0; i < nrules; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
 			let startState: RuleStartState = <RuleStartState> atn.states[s];
-			startState.leftFactored = ATNDeserializer.toInt(data[p++]) != 0;
+			startState.leftFactored = ATNDeserializer.toInt(data[p++]) !== 0;
 			atn.ruleToStartState[i] = startState;
 			if (atn.grammarType === ATNType.LEXER) {
 				let tokenType: number = ATNDeserializer.toInt(data[p++]);
@@ -292,7 +292,7 @@ export class ATNDeserializer {
 			let set: IntervalSet = new IntervalSet();
 			sets.push(set);
 
-			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) != 0;
+			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) !== 0;
 			if (containsEof) {
 				set.add(-1);
 			}
@@ -324,13 +324,13 @@ export class ATNDeserializer {
 		// edges for rule stop states can be derived, so they aren't serialized
 		type T = { stopState: number, returnState: number, outermostPrecedenceReturn: number };
 		let returnTransitionsSet = new Array2DHashSet<T>({
-			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
-
-			equals: function (a: T, b: T): boolean {
+			equals: (a: T, b: T) => {
 				return a.stopState === b.stopState
 					&& a.returnState === b.returnState
 					&& a.outermostPrecedenceReturn === b.outermostPrecedenceReturn;
 			},
+			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
+
 		});
 		let returnTransitions: T[] = [];
 		for (let state of atn.states) {
@@ -422,12 +422,12 @@ export class ATNDeserializer {
 				for (let i = 0; i < atn.lexerActions.length; i++) {
 					let actionType: LexerActionType = ATNDeserializer.toInt(data[p++]);
 					let data1: number = ATNDeserializer.toInt(data[p++]);
-					if (data1 == 0xFFFF) {
+					if (data1 === 0xFFFF) {
 						data1 = -1;
 					}
 
 					let data2: number = ATNDeserializer.toInt(data[p++]);
-					if (data2 == 0xFFFF) {
+					if (data2 === 0xFFFF) {
 						data2 = -1;
 					}
 
@@ -528,8 +528,8 @@ export class ATNDeserializer {
 
 				// all non-excluded transitions that currently target end state need to target blockEnd instead
 				for (let state of atn.states) {
-					for (let i = 0; i < state.numberOfTransitions; i++) {
-						let transition = state.transition(i);
+					for (let j = 0; i < state.numberOfTransitions; i++) {
+						let transition = state.transition(j);
 						if (transition === excludeTransition) {
 							continue;
 						}
@@ -747,8 +747,7 @@ export class ATNDeserializer {
 			}
 		}
 
-		for (let stateNumber = 0; stateNumber < atn.states.length; stateNumber++) {
-			let state: ATNState = atn.states[stateNumber];
+		for (let state of atn.states) {
 			if (state.ruleIndex < 0) {
 				continue;
 			}
@@ -945,8 +944,7 @@ export class ATNDeserializer {
 
 			let blockEndState: ATNState = decision.getOptimizedTransition(setTransitions.minElement).target.getOptimizedTransition(0).target;
 			let matchSet: IntervalSet = new IntervalSet();
-			for (let i = 0; i < setTransitions.intervals.length; i++) {
-				let interval: Interval = setTransitions.intervals[i];
+			for (let interval of setTransitions.intervals) {
 				for (let j = interval.a; j <= interval.b; j++) {
 					let matchTransition: Transition = decision.getOptimizedTransition(j).target.getOptimizedTransition(0);
 					if (matchTransition instanceof NotSetTransition) {
@@ -1119,9 +1117,8 @@ export class ATNDeserializer {
 			case TransitionType.SET: return new SetTransition(target, sets[arg1]);
 			case TransitionType.NOT_SET: return new NotSetTransition(target, sets[arg1]);
 			case TransitionType.WILDCARD: return new WildcardTransition(target);
+			default: throw new Error("The specified transition type is not valid.");
 		}
-
-		throw new Error("The specified transition type is not valid.");
 	}
 
 	protected stateFactory(type: ATNStateType, ruleIndex: number): ATNState {

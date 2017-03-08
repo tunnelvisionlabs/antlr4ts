@@ -4,6 +4,7 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.1083066-07:00
+// tslint:disable:variable-name -- See bug #296
 
 import * as assert from 'assert';
 import { CharStream } from '../CharStream';
@@ -397,7 +398,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 			for (let i = 0; i < context.size; i++) {
 				let returnStateNumber: number = context.getReturnState(i);
-				if (returnStateNumber == PredictionContext.EMPTY_FULL_STATE_KEY) {
+				if (returnStateNumber === PredictionContext.EMPTY_FULL_STATE_KEY) {
 					continue;
 				}
 
@@ -700,7 +701,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	consume(@NotNull input: CharStream): void {
 		let curChar: number = input.LA(1);
-		if (curChar == '\n'.charCodeAt(0)) {
+		if (curChar === '\n'.charCodeAt(0)) {
 			this._line++;
 			this._charPositionInLine = 0;
 		} else {

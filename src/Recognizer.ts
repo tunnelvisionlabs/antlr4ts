@@ -131,6 +131,15 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 		return this._interp.atn;
 	}
 
+	/** If profiling during the parse/lex, this will return DecisionInfo records
+	 *  for each decision in recognizer in a ParseInfo object.
+	 *
+	 * @since 4.3
+	 */
+	get parseInfo(): ParseInfo | undefined {
+		return undefined;
+	}
+
 	/**
 	 * Get the ATN interpreter used by the recognizer for prediction.
 	 *
@@ -139,15 +148,6 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	@NotNull
 	get interpreter(): ATNInterpreter {
 		return this._interp;
-	}
-
-	/** If profiling during the parse/lex, this will return DecisionInfo records
-	 *  for each decision in recognizer in a ParseInfo object.
-	 *
-	 * @since 4.3
-	 */
-	get parseInfo(): ParseInfo | undefined {
-		return undefined;
 	}
 
 	/**

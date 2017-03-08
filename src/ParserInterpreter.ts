@@ -439,7 +439,6 @@ export class ParserInterpreter extends Parser {
 				this._ctx.addErrorNode(errToken);
 			}
 			else { // NoViableAlt
-				let source = tok.tokenSource;
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
 						Token.INVALID_TYPE, tok.text,

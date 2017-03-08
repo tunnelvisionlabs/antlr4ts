@@ -18,7 +18,8 @@
         false
       ],
       "no-namespace": [false],
-      "variable-name": [ true, "allow-leading-underscore", true]
-
+      "variable-name": [ true, "allow-leading-underscore", true],
+      "interface-name": [false],
+      "no-console": [false]
      }
 }

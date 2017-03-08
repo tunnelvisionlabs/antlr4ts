@@ -44,6 +44,7 @@ export namespace Arrays {
 		let result = "[";
 
 		let first = true;
+		// tslint:disable-next-line:prefer-for-of
 		for (let i = 0; i < array.length; i++) {
 			if (first) {
 				first = false;

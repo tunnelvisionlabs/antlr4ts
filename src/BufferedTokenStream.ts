@@ -83,6 +83,14 @@ export class BufferedTokenStream implements TokenStream {
 		return this._tokenSource;
 	}
 
+	/** Reset this token stream by setting its token source. */
+	set tokenSource(tokenSource: TokenSource) {
+		this._tokenSource = tokenSource;
+		this.tokens.length = 0;
+		this.p = -1;
+		this.fetchedEOF = false;
+	}
+
 	@Override
 	get index(): number {
 		return this.p;
@@ -288,14 +296,6 @@ export class BufferedTokenStream implements TokenStream {
 	protected setup(): void {
 		this.sync(0);
 		this.p = this.adjustSeekIndex(0);
-	}
-
-	/** Reset this token stream by setting its token source. */
-	set tokenSource(tokenSource: TokenSource) {
-		this._tokenSource = tokenSource;
-		this.tokens.length = 0;
-		this.p = -1;
-		this.fetchedEOF = false;
 	}
 
     /** Given a start and stop index, return a {@code List} of all tokens in

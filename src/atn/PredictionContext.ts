@@ -119,7 +119,7 @@ export abstract class PredictionContext implements Equatable {
 	}
 
 	static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
-		if (context0 == context1) {
+		if (context0 === context1) {
 			return context0;
 		}
 

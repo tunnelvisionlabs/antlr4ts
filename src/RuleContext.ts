@@ -204,8 +204,8 @@ export class RuleContext extends RuleNode {
 
 	toString(
 		arg1?: Recognizer<any, any> | string[],
-		stop?: RuleContext)
-		: string {
+		stop?: RuleContext): string {
+
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.ruleNames : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 

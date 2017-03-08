@@ -193,8 +193,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return;
 		}
 
-		for (let i = 0; i < this.configs.length; i++) {
-			let config: ATNConfig = this.configs[i];
+		for (let config of this.configs) {
 			config.context = interpreter.atn.getCachedContext(config.context);
 		}
 	}
@@ -295,7 +294,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 			let joined: PredictionContext = PredictionContext.join(mergedConfig.context, e.context, contextCache);
 			this.updatePropertiesForMergedConfig(e);
-			if (mergedConfig.context == joined) {
+			if (mergedConfig.context === joined) {
 				return false;
 			}
 
@@ -313,7 +312,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 				let joined: PredictionContext = PredictionContext.join(unmergedConfig.context, e.context, contextCache);
 				this.updatePropertiesForMergedConfig(e);
-				if (unmergedConfig.context == joined) {
+				if (unmergedConfig.context === joined) {
 					return false;
 				}
 
@@ -358,7 +357,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
-		if (left.state.stateNumber != right.state.stateNumber) {
+		if (left.state.stateNumber !== right.state.stateNumber) {
 			return false;
 		}
 
@@ -442,14 +441,14 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return false;
 		}
 
-		return this.outermostConfigSet == obj.outermostConfigSet
+		return this.outermostConfigSet === obj.outermostConfigSet
 			&& Utils.equals(this._conflictInfo, obj._conflictInfo)
 			&& ArrayEqualityComparator.INSTANCE.equals(this.configs, obj.configs);
 	}
 
 	@Override
 	hashCode(): number {
-		if (this.isReadOnly && this.cachedHashCode != -1) {
+		if (this.isReadOnly && this.cachedHashCode !== -1) {
 			return this.cachedHashCode;
 		}
 
@@ -474,10 +473,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let buf = "";
 		let sortedConfigs = this.configs.slice(0);
 		sortedConfigs.sort((o1, o2) => {
-			if (o1.alt != o2.alt) {
+			if (o1.alt !== o2.alt) {
 				return o1.alt - o2.alt;
 			}
-			else if (o1.state.stateNumber != o2.state.stateNumber) {
+			else if (o1.state.stateNumber !== o2.state.stateNumber) {
 				return o1.state.stateNumber - o2.state.stateNumber;
 			}
 			else {

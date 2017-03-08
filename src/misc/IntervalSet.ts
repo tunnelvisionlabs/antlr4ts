@@ -519,7 +519,7 @@ export class IntervalSet implements IntSet {
 			let a: number = I.a;
 			let b: number = I.b;
 			if (a === b) {
-				if (a == Token.EOF) {
+				if (a === Token.EOF) {
 					buf += "<EOF>";
 				} else if (elemAreChar) {
 					buf += "'" + String.fromCharCode(a) + "'";
@@ -597,7 +597,7 @@ export class IntervalSet implements IntSet {
 	get size(): number {
 		let n: number = 0;
 		let numIntervals: number = this._intervals.length;
-		if (numIntervals == 1) {
+		if (numIntervals === 1) {
 			let firstInterval: Interval = this._intervals[0];
 			return firstInterval.b - firstInterval.a + 1;
 		}
