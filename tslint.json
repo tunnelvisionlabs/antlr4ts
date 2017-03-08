@@ -1,6 +1,8 @@
 {
     "extends": "tslint:recommended",
     "rules": {
+      "no-bitwise": false,
+      "max-line-length": [ false ],
       "indent": [false],
       "quotemark": [false],
       "jsdoc-format": false,
@@ -9,6 +11,12 @@
       "member-ordering": [false],
       "member-access": [false],
       "comment-format": [false],
+      "one-line": [false],
+      "curly":false,
+      "no-empty": false,
+      "only-arrow-functions": [
+        false
+      ],
       "no-namespace": [false],
       "variable-name": [ true, "allow-leading-underscore", true]
 
