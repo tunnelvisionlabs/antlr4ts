@@ -15,9 +15,10 @@ export function Nullable(
 	propertyDescriptor?: PropertyDescriptor) {
 }
 
-export function Override(target: any,
-	                        propertyKey: PropertyKey,
-	                        propertyDescriptor?: PropertyDescriptor) {
+export function Override(
+	target: any,
+	propertyKey: PropertyKey,
+	propertyDescriptor?: PropertyDescriptor) {
 	// do something with 'target' ...
 }
 

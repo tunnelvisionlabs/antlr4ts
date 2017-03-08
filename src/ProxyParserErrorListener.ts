@@ -54,11 +54,11 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 
 	@Override
 	reportAttemptingFullContext(recognizer: Parser,
-		                           dfa: DFA,
-		                           startIndex: number,
-		                           stopIndex: number,
-		                           conflictingAlts: BitSet,
-		                           conflictState: SimulatorState): void {
+		dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet,
+		conflictState: SimulatorState): void {
 		this.getDelegates()
 			.forEach((listener) => {
 				if (listener.reportAttemptingFullContext) {
@@ -75,11 +75,11 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 
 	@Override
 	reportContextSensitivity(recognizer: Parser,
-		                        dfa: DFA,
-		                        startIndex: number,
-		                        stopIndex: number,
-		                        prediction: number,
-		                        acceptState: SimulatorState): void {
+		dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		acceptState: SimulatorState): void {
 		this.getDelegates()
 			.forEach((listener) => {
 				if (listener.reportContextSensitivity) {

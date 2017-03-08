@@ -30,8 +30,8 @@ export class TestGraphNodes {
 	}
 
 	@Test test_$_$(): void {
-		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_LOCAL,
-													  PredictionContext.EMPTY_LOCAL);
+		let r: PredictionContext = this.contextCache.join(	PredictionContext.EMPTY_LOCAL,
+															PredictionContext.EMPTY_LOCAL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -42,8 +42,8 @@ export class TestGraphNodes {
 	}
 
 	@Test test_$_$_fullctx(): void {
-		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL,
-													  PredictionContext.EMPTY_FULL);
+		let r: PredictionContext = this.contextCache.join(PredictionContext.EMPTY_FULL,
+			PredictionContext.EMPTY_FULL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -54,7 +54,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_x_$(): void {
-		let r: PredictionContext =  this.contextCache.join(this.x(false), PredictionContext.EMPTY_LOCAL);
+		let r: PredictionContext = this.contextCache.join(this.x(false), PredictionContext.EMPTY_LOCAL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -65,7 +65,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_x_$_fullctx(): void {
-		let r: PredictionContext =  this.contextCache.join(this.x(true), PredictionContext.EMPTY_FULL);
+		let r: PredictionContext = this.contextCache.join(this.x(true), PredictionContext.EMPTY_FULL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -78,7 +78,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_$_x(): void {
-		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_LOCAL, this.x(false));
+		let r: PredictionContext = this.contextCache.join(PredictionContext.EMPTY_LOCAL, this.x(false));
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -89,7 +89,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_$_x_fullctx(): void {
-		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL, this.x(true));
+		let r: PredictionContext = this.contextCache.join(PredictionContext.EMPTY_FULL, this.x(true));
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -102,7 +102,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a_a(): void {
-		let r: PredictionContext =  this.contextCache.join(this.a(false), this.a(false));
+		let r: PredictionContext = this.contextCache.join(this.a(false), this.a(false));
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -115,10 +115,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a$_ax(): void {
-		let a1: PredictionContext =  this.a(false);
-		let xx: PredictionContext =  this.x(false);
-		let a2: PredictionContext =  this.createSingleton(xx, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let a1: PredictionContext = this.a(false);
+		let xx: PredictionContext = this.x(false);
+		let a2: PredictionContext = this.createSingleton(xx, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -131,10 +131,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a$_ax_fullctx(): void {
-		let a1: PredictionContext =  this.a(true);
-		let xx: PredictionContext =  this.x(true);
-		let a2: PredictionContext =  this.createSingleton(xx, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let a1: PredictionContext = this.a(true);
+		let xx: PredictionContext = this.x(true);
+		let a2: PredictionContext = this.createSingleton(xx, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -149,10 +149,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax$_a$(): void {
-		let xx: PredictionContext =  this.x(false);
-		let a1: PredictionContext =  this.createSingleton(xx, 1);
-		let a2: PredictionContext =  this.a(false);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let xx: PredictionContext = this.x(false);
+		let a1: PredictionContext = this.createSingleton(xx, 1);
+		let a2: PredictionContext = this.a(false);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -165,12 +165,12 @@ export class TestGraphNodes {
 	}
 
 	@Test test_aa$_a$_$_fullCtx(): void {
-		let empty: PredictionContext =  PredictionContext.EMPTY_FULL;
-		let child1: PredictionContext =  this.createSingleton(empty, 8);
-		let right: PredictionContext =  this.contextCache.join(empty, child1);
-		let left: PredictionContext =  this.createSingleton(right, 8);
-		let merged: PredictionContext =  this.contextCache.join(left, right);
-		let actual: string =  toDOTString(merged);
+		let empty: PredictionContext = PredictionContext.EMPTY_FULL;
+		let child1: PredictionContext = this.createSingleton(empty, 8);
+		let right: PredictionContext = this.contextCache.join(empty, child1);
+		let left: PredictionContext = this.createSingleton(right, 8);
+		let merged: PredictionContext = this.contextCache.join(left, right);
+		let actual: string = toDOTString(merged);
 		// console.log(actual);
 		let expecting: string =
 			"digraph G {\n" +
@@ -185,10 +185,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax$_a$_fullctx(): void {
-		let xx: PredictionContext =  this.x(true);
-		let a1: PredictionContext =  this.createSingleton(xx, 1);
-		let a2: PredictionContext =  this.a(true);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let xx: PredictionContext = this.x(true);
+		let a1: PredictionContext = this.createSingleton(xx, 1);
+		let a2: PredictionContext = this.a(true);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -203,7 +203,7 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a_b(): void {
-		let r: PredictionContext =  this.contextCache.join(this.a(false), this.b(false));
+		let r: PredictionContext = this.contextCache.join(this.a(false), this.b(false));
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -217,10 +217,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax_ax_same(): void {
-		let xx: PredictionContext =  this.x(false);
-		let a1: PredictionContext =  this.createSingleton(xx, 1);
-		let a2: PredictionContext =  this.createSingleton(xx, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let xx: PredictionContext = this.x(false);
+		let a1: PredictionContext = this.createSingleton(xx, 1);
+		let a2: PredictionContext = this.createSingleton(xx, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -235,11 +235,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax_ax(): void {
-		let x1: PredictionContext =  this.x(false);
-		let x2: PredictionContext =  this.x(false);
-		let a1: PredictionContext =  this.createSingleton(x1, 1);
-		let a2: PredictionContext =  this.createSingleton(x2, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let x1: PredictionContext = this.x(false);
+		let x2: PredictionContext = this.x(false);
+		let a1: PredictionContext = this.createSingleton(x1, 1);
+		let a2: PredictionContext = this.createSingleton(x2, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -254,13 +254,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_abx_abx(): void {
-		let x1: PredictionContext =  this.x(false);
-		let x2: PredictionContext =  this.x(false);
-		let b1: PredictionContext =  this.createSingleton(x1, 2);
-		let b2: PredictionContext =  this.createSingleton(x2, 2);
-		let a1: PredictionContext =  this.createSingleton(b1, 1);
-		let a2: PredictionContext =  this.createSingleton(b2, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let x1: PredictionContext = this.x(false);
+		let x2: PredictionContext = this.x(false);
+		let b1: PredictionContext = this.createSingleton(x1, 2);
+		let b2: PredictionContext = this.createSingleton(x2, 2);
+		let a1: PredictionContext = this.createSingleton(b1, 1);
+		let a2: PredictionContext = this.createSingleton(b2, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -277,13 +277,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_abx_acx(): void {
-		let x1: PredictionContext =  this.x(false);
-		let x2: PredictionContext =  this.x(false);
-		let b: PredictionContext =  this.createSingleton(x1, 2);
-		let c: PredictionContext =  this.createSingleton(x2, 3);
-		let a1: PredictionContext =  this.createSingleton(b, 1);
-		let a2: PredictionContext =  this.createSingleton(c, 1);
-		let r: PredictionContext =  this.contextCache.join(a1, a2);
+		let x1: PredictionContext = this.x(false);
+		let x2: PredictionContext = this.x(false);
+		let b: PredictionContext = this.createSingleton(x1, 2);
+		let c: PredictionContext = this.createSingleton(x2, 3);
+		let a1: PredictionContext = this.createSingleton(b, 1);
+		let a2: PredictionContext = this.createSingleton(c, 1);
+		let r: PredictionContext = this.contextCache.join(a1, a2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -302,9 +302,9 @@ export class TestGraphNodes {
 
 	@Test test_ax_bx_same(): void {
 		let xx: PredictionContext = this.x(false);
-		let a: PredictionContext =  this.createSingleton(xx, 1);
-		let b: PredictionContext =  this.createSingleton(xx, 2);
-		let r: PredictionContext =  this.contextCache.join(a, b);
+		let a: PredictionContext = this.createSingleton(xx, 1);
+		let b: PredictionContext = this.createSingleton(xx, 2);
+		let r: PredictionContext = this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -320,11 +320,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax_bx(): void {
-		let x1: PredictionContext =  this.x(false);
-		let x2: PredictionContext =  this.x(false);
-		let a: PredictionContext =  this.createSingleton(x1, 1);
-		let b: PredictionContext =  this.createSingleton(x2, 2);
-		let r: PredictionContext =  this.contextCache.join(a, b);
+		let x1: PredictionContext = this.x(false);
+		let x2: PredictionContext = this.x(false);
+		let a: PredictionContext = this.createSingleton(x1, 1);
+		let b: PredictionContext = this.createSingleton(x2, 2);
+		let r: PredictionContext = this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -340,9 +340,9 @@ export class TestGraphNodes {
 	}
 
 	@Test test_ax_by(): void {
-		let a: PredictionContext =  this.createSingleton(this.x(false), 1);
-		let b: PredictionContext =  this.createSingleton(this.y(false), 2);
-		let r: PredictionContext =  this.contextCache.join(a, b);
+		let a: PredictionContext = this.createSingleton(this.x(false), 1);
+		let b: PredictionContext = this.createSingleton(this.y(false), 2);
+		let r: PredictionContext = this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -360,10 +360,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a$_bx(): void {
-		let x2: PredictionContext =  this.x(false);
-		let aa: PredictionContext =  this.a(false);
-		let b: PredictionContext =  this.createSingleton(x2, 2);
-		let r: PredictionContext =  this.contextCache.join(aa, b);
+		let x2: PredictionContext = this.x(false);
+		let aa: PredictionContext = this.a(false);
+		let b: PredictionContext = this.createSingleton(x2, 2);
+		let r: PredictionContext = this.contextCache.join(aa, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -379,10 +379,10 @@ export class TestGraphNodes {
 	}
 
 	@Test test_a$_bx_fullctx(): void {
-		let x2: PredictionContext =  this.x(true);
-		let aa: PredictionContext =  this.a(true);
-		let b: PredictionContext =  this.createSingleton(x2, 2);
-		let r: PredictionContext =  this.contextCache.join(aa, b);
+		let x2: PredictionContext = this.x(true);
+		let aa: PredictionContext = this.a(true);
+		let b: PredictionContext = this.createSingleton(x2, 2);
+		let r: PredictionContext = this.contextCache.join(aa, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -398,13 +398,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_aex_bfx(): void {
-		let x1: PredictionContext =  this.x(false);
-		let x2: PredictionContext =  this.x(false);
-		let e: PredictionContext =  this.createSingleton(x1, 5);
-		let f: PredictionContext =  this.createSingleton(x2, 6);
-		let a: PredictionContext =  this.createSingleton(e, 1);
-		let b: PredictionContext =  this.createSingleton(f, 2);
-		let r: PredictionContext =  this.contextCache.join(a, b);
+		let x1: PredictionContext = this.x(false);
+		let x2: PredictionContext = this.x(false);
+		let e: PredictionContext = this.createSingleton(x1, 5);
+		let f: PredictionContext = this.createSingleton(x2, 6);
+		let a: PredictionContext = this.createSingleton(e, 1);
+		let b: PredictionContext = this.createSingleton(f, 2);
+		let r: PredictionContext = this.contextCache.join(a, b);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -426,9 +426,9 @@ export class TestGraphNodes {
 	// Array merges
 
 	@Test test_A$_A$_fullctx(): void {
-		let A1: PredictionContext =  this.array(PredictionContext.EMPTY_FULL);
-		let A2: PredictionContext =  this.array(PredictionContext.EMPTY_FULL);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let A1: PredictionContext = this.array(PredictionContext.EMPTY_FULL);
+		let A2: PredictionContext = this.array(PredictionContext.EMPTY_FULL);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -439,12 +439,12 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aab_Ac(): void { // a,b + c
-		let aa: PredictionContext =  this.a(false);
-		let bb: PredictionContext =  this.b(false);
-		let cc: PredictionContext =  this.c(false);
-		let A1: PredictionContext = this. array(aa, bb);
-		let A2: PredictionContext =  this.array(cc);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let aa: PredictionContext = this.a(false);
+		let bb: PredictionContext = this.b(false);
+		let cc: PredictionContext = this.c(false);
+		let A1: PredictionContext = this.array(aa, bb);
+		let A2: PredictionContext = this.array(cc);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -459,11 +459,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aa_Aa(): void {
-		let a1: PredictionContext =  this.a(false);
-		let a2: PredictionContext = this. a(false);
-		let A1: PredictionContext =  this.array(a1);
-		let A2: PredictionContext =  this.array(a2);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a1: PredictionContext = this.a(false);
+		let a2: PredictionContext = this.a(false);
+		let A1: PredictionContext = this.array(a1);
+		let A2: PredictionContext = this.array(a2);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -476,12 +476,12 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aa_Abc(): void { // a + b,c
-		let aa: PredictionContext =  this.a(false);
-		let bb: PredictionContext =  this.b(false);
-		let cc: PredictionContext =  this.c(false);
-		let A1: PredictionContext =  this.array(aa);
-		let A2: PredictionContext =  this.array(bb, cc);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let aa: PredictionContext = this.a(false);
+		let bb: PredictionContext = this.b(false);
+		let cc: PredictionContext = this.c(false);
+		let A1: PredictionContext = this.array(aa);
+		let A2: PredictionContext = this.array(bb, cc);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -496,12 +496,12 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aac_Ab(): void { // a,c + b
-		let aa: PredictionContext =  this.a(false);
-		let bb: PredictionContext =  this.b(false);
-		let cc: PredictionContext =  this.c(false);
-		let A1: PredictionContext =  this.array(aa, cc);
-		let A2: PredictionContext =  this.array(bb);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let aa: PredictionContext = this.a(false);
+		let bb: PredictionContext = this.b(false);
+		let cc: PredictionContext = this.c(false);
+		let A1: PredictionContext = this.array(aa, cc);
+		let A2: PredictionContext = this.array(bb);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -516,9 +516,9 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aab_Aa(): void { // a,b + a
-		let A1: PredictionContext = this. array(this.a(false), this.b(false));
-		let A2: PredictionContext = this. array(this.a(false));
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let A1: PredictionContext = this.array(this.a(false), this.b(false));
+		let A2: PredictionContext = this.array(this.a(false));
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -532,9 +532,9 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aab_Ab(): void { // a,b + b
-		let A1: PredictionContext =  this.array(this.a(false), this.b(false));
-		let A2: PredictionContext =  this.array(this.b(false));
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let A1: PredictionContext = this.array(this.a(false), this.b(false));
+		let A2: PredictionContext = this.array(this.b(false));
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -548,11 +548,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aax_Aby(): void { // ax + by but in arrays
-		let a: PredictionContext =  this.createSingleton(this.x(false), 1);
-		let b: PredictionContext =  this.createSingleton(this.y(false), 2);
-		let A1: PredictionContext =  this.array(a);
-		let A2: PredictionContext =  this.array(b);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.x(false), 1);
+		let b: PredictionContext = this.createSingleton(this.y(false), 2);
+		let A1: PredictionContext = this.array(a);
+		let A2: PredictionContext = this.array(b);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -570,11 +570,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aax_Aay(): void { // ax + ay -> merged singleton a, array parent
-		let a1: PredictionContext =  this.createSingleton(this.x(false), 1);
-		let a2: PredictionContext =  this.createSingleton(this.y(false), 1);
-		let A1: PredictionContext =  this.array(a1);
-		let A2: PredictionContext =  this.array(a2);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a1: PredictionContext = this.createSingleton(this.x(false), 1);
+		let a2: PredictionContext = this.createSingleton(this.y(false), 1);
+		let A1: PredictionContext = this.array(a1);
+		let A2: PredictionContext = this.array(a2);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -590,11 +590,11 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaxc_Aayd(): void { // ax,c + ay,d -> merged a, array parent
-		let a1: PredictionContext =  this.createSingleton(this.x(false), 1);
-		let a2: PredictionContext =  this.createSingleton(this.y(false), 1);
-		let A1: PredictionContext =  this.array(a1, this.c(false));
-		let A2: PredictionContext =  this.array(a2, this.d(false));
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a1: PredictionContext = this.createSingleton(this.x(false), 1);
+		let a2: PredictionContext = this.createSingleton(this.y(false), 1);
+		let A1: PredictionContext = this.array(a1, this.c(false));
+		let A2: PredictionContext = this.array(a2, this.d(false));
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -612,13 +612,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaubv_Acwdx(): void { // au,bv + cw,dx -> [a,b,c,d]->[u,v,w,x]
-		let a: PredictionContext =  this.createSingleton(this.u(false), 1);
-		let b: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let c: PredictionContext =  this.createSingleton(this.w(false), 3);
-		let d: PredictionContext =  this.createSingleton(this.x(false), 4);
-		let A1: PredictionContext =  this.array(a, b);
-		let A2: PredictionContext =  this.array(c, d);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.u(false), 1);
+		let b: PredictionContext = this.createSingleton(this.v(false), 2);
+		let c: PredictionContext = this.createSingleton(this.w(false), 3);
+		let d: PredictionContext = this.createSingleton(this.x(false), 4);
+		let A1: PredictionContext = this.array(a, b);
+		let A2: PredictionContext = this.array(c, d);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -642,13 +642,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaubv_Abvdx(): void { // au,bv + bv,dx -> [a,b,d]->[u,v,x]
-		let a: PredictionContext =  this.createSingleton(this.u(false), 1);
-		let b1: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let b2: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let d: PredictionContext =  this.createSingleton(this.x(false), 4);
-		let A1: PredictionContext =  this.array(a, b1);
-		let A2: PredictionContext =  this.array(b2, d);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.u(false), 1);
+		let b1: PredictionContext = this.createSingleton(this.v(false), 2);
+		let b2: PredictionContext = this.createSingleton(this.v(false), 2);
+		let d: PredictionContext = this.createSingleton(this.x(false), 4);
+		let A1: PredictionContext = this.array(a, b1);
+		let A2: PredictionContext = this.array(b2, d);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -669,13 +669,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaubv_Abwdx(): void { // au,bv + bw,dx -> [a,b,d]->[u,[v,w],x]
-		let a: PredictionContext =  this.createSingleton(this.u(false), 1);
-		let b1: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let b2: PredictionContext =  this.createSingleton(this.w(false), 2);
-		let d: PredictionContext =  this.createSingleton(this.x(false), 4);
-		let A1: PredictionContext =  this.array(a, b1);
-		let A2: PredictionContext =  this.array(b2, d);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.u(false), 1);
+		let b1: PredictionContext = this.createSingleton(this.v(false), 2);
+		let b2: PredictionContext = this.createSingleton(this.w(false), 2);
+		let d: PredictionContext = this.createSingleton(this.x(false), 4);
+		let A1: PredictionContext = this.array(a, b1);
+		let A2: PredictionContext = this.array(b2, d);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -697,13 +697,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaubv_Abvdu(): void { // au,bv + bv,du -> [a,b,d]->[u,v,u]; u,v shared
-		let a: PredictionContext =  this.createSingleton(this.u(false), 1);
-		let b1: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let b2: PredictionContext =  this.createSingleton(this.v(false), 2);
-		let d: PredictionContext =  this.createSingleton(this.u(false), 4);
-		let A1: PredictionContext =  this.array(a, b1);
-		let A2: PredictionContext =  this.array(b2, d);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.u(false), 1);
+		let b1: PredictionContext = this.createSingleton(this.v(false), 2);
+		let b2: PredictionContext = this.createSingleton(this.v(false), 2);
+		let d: PredictionContext = this.createSingleton(this.u(false), 4);
+		let A1: PredictionContext = this.array(a, b1);
+		let A2: PredictionContext = this.array(b2, d);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -722,13 +722,13 @@ export class TestGraphNodes {
 	}
 
 	@Test test_Aaubu_Acudu(): void { // au,bu + cu,du -> [a,b,c,d]->[u,u,u,u]
-		let a: PredictionContext =  this.createSingleton(this.u(false), 1);
-		let b: PredictionContext =  this.createSingleton(this.u(false), 2);
-		let c: PredictionContext =  this.createSingleton(this.u(false), 3);
-		let d: PredictionContext =  this.createSingleton(this.u(false), 4);
-		let A1: PredictionContext =  this.array(a, b);
-		let A2: PredictionContext =  this.array(c, d);
-		let r: PredictionContext =  this.contextCache.join(A1, A2);
+		let a: PredictionContext = this.createSingleton(this.u(false), 1);
+		let b: PredictionContext = this.createSingleton(this.u(false), 2);
+		let c: PredictionContext = this.createSingleton(this.u(false), 3);
+		let d: PredictionContext = this.createSingleton(this.u(false), 4);
+		let A1: PredictionContext = this.array(a, b);
+		let A2: PredictionContext = this.array(c, d);
+		let r: PredictionContext = this.contextCache.join(A1, A2);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -747,55 +747,55 @@ export class TestGraphNodes {
 
 	// ------------ SUPPORT -------------------------
 
-a(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 1);
-}
-
-b(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 2);
-}
-
-c(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 3);
-}
-
-d(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 4);
-}
-
-u(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 6);
-}
-
-v(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 7);
-}
-
-w(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 8);
-}
-
-x(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 9);
-}
-
-y(fullContext: boolean): PredictionContext {
-	return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 10);
-}
-
-createSingleton(parent: PredictionContext, payload: number): PredictionContext {
-	let a: PredictionContext = this.contextCache.getChild(parent, payload);
-	return a;
-}
-
-array(...nodes: PredictionContext[]): PredictionContext {
-	let result: PredictionContext = nodes[0];
-	for (let i = 1; i < nodes.length; i++) {
-		result = this.contextCache.join(result, nodes[i]);
+	a(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 1);
 	}
 
-	return result;
-}
+	b(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 2);
+	}
+
+	c(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 3);
+	}
+
+	d(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 4);
+	}
+
+	u(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 6);
+	}
+
+	v(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 7);
+	}
+
+	w(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 8);
+	}
+
+	x(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 9);
+	}
+
+	y(fullContext: boolean): PredictionContext {
+		return this.createSingleton(fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL, 10);
+	}
+
+	createSingleton(parent: PredictionContext, payload: number): PredictionContext {
+		let a: PredictionContext = this.contextCache.getChild(parent, payload);
+		return a;
+	}
+
+	array(...nodes: PredictionContext[]): PredictionContext {
+		let result: PredictionContext = nodes[0];
+		for (let i = 1; i < nodes.length; i++) {
+			result = this.contextCache.join(result, nodes[i]);
+		}
+
+		return result;
+	}
 }
 
 function toDOTString(context: PredictionContext): string {

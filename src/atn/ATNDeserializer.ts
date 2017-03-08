@@ -130,7 +130,7 @@ export class ATNDeserializer {
 		return ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(actualUuid)) >= featureIndex;
 	}
 
-	deserialize(@NotNull data: Uint16Array): ATN {
+	deserialize( @NotNull data: Uint16Array): ATN {
 		data = data.slice(0);
 
 		// Each Uint16 value in data is shifted by +2 at the entry to this method. This is an encoding optimization
@@ -188,7 +188,7 @@ export class ATNDeserializer {
 			let s: ATNState = this.stateFactory(stype, ruleIndex);
 			if (stype === ATNStateType.LOOP_END) { // special case
 				let loopBackStateNumber: number = ATNDeserializer.toInt(data[p++]);
-				loopBackStateNumbers.push([<LoopEndState> s, loopBackStateNumber]);
+				loopBackStateNumbers.push([<LoopEndState>s, loopBackStateNumber]);
 			}
 			else if (s instanceof BlockStartState) {
 				let endStateNumber: number = ATNDeserializer.toInt(data[p++]);
@@ -203,25 +203,25 @@ export class ATNDeserializer {
 		}
 
 		for (let pair of endStateNumbers) {
-			pair[0].endState = <BlockEndState> atn.states[pair[1]];
+			pair[0].endState = <BlockEndState>atn.states[pair[1]];
 		}
 
 		let numNonGreedyStates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numNonGreedyStates; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<DecisionState> atn.states[stateNumber]).nonGreedy = true;
+			(<DecisionState>atn.states[stateNumber]).nonGreedy = true;
 		}
 
 		let numSllDecisions: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numSllDecisions; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<DecisionState> atn.states[stateNumber]).sll = true;
+			(<DecisionState>atn.states[stateNumber]).sll = true;
 		}
 
 		let numPrecedenceStates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numPrecedenceStates; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<RuleStartState> atn.states[stateNumber]).isPrecedenceRule = true;
+			(<RuleStartState>atn.states[stateNumber]).isPrecedenceRule = true;
 		}
 
 		//
@@ -235,7 +235,7 @@ export class ATNDeserializer {
 		atn.ruleToStartState = new Array<RuleStartState>(nrules);
 		for (let i = 0; i < nrules; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			let startState: RuleStartState = <RuleStartState> atn.states[s];
+			let startState: RuleStartState = <RuleStartState>atn.states[s];
 			startState.leftFactored = ATNDeserializer.toInt(data[p++]) !== 0;
 			atn.ruleToStartState[i] = startState;
 			if (atn.grammarType === ATNType.LEXER) {
@@ -273,7 +273,7 @@ export class ATNDeserializer {
 		let nmodes: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < nmodes; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			atn.modeToStartState.push(<TokensStartState> atn.states[s]);
+			atn.modeToStartState.push(<TokensStartState>atn.states[s]);
 		}
 
 		atn.modeToDFA = new Array<DFA>(nmodes);
@@ -408,7 +408,7 @@ export class ATNDeserializer {
 		let ndecisions: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 1; i <= ndecisions; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			let decState: DecisionState = <DecisionState> atn.states[s];
+			let decState: DecisionState = <DecisionState>atn.states[s];
 			atn.decisionToState.push(decState);
 			decState.decision = i - 1;
 		}
@@ -520,7 +520,7 @@ export class ATNDeserializer {
 						throw new Error("Couldn't identify final state of the precedence rule prefix section.");
 					}
 
-					excludeTransition = (<StarLoopEntryState> endState).loopBackState.transition(0);
+					excludeTransition = (<StarLoopEntryState>endState).loopBackState.transition(0);
 				}
 				else {
 					endState = atn.ruleToStopState[i];
@@ -592,7 +592,7 @@ export class ATNDeserializer {
 	 *
 	 * @param atn The ATN.
 	 */
-	protected markPrecedenceDecisions(@NotNull atn: ATN): void {
+	protected markPrecedenceDecisions( @NotNull atn: ATN): void {
 		// Map rule index -> precedence decision for that rule
 		let rulePrecedenceDecisions = new Map<number, StarLoopEntryState>();
 
@@ -731,19 +731,19 @@ export class ATNDeserializer {
 			}
 
 			switch (matchTransition.serializationType) {
-			case TransitionType.ATOM:
-			case TransitionType.RANGE:
-			case TransitionType.SET:
-				ruleToInlineTransition[i] = matchTransition;
-				break;
+				case TransitionType.ATOM:
+				case TransitionType.RANGE:
+				case TransitionType.SET:
+					ruleToInlineTransition[i] = matchTransition;
+					break;
 
-			case TransitionType.NOT_SET:
-			case TransitionType.WILDCARD:
-				// not implemented yet
-				continue;
+				case TransitionType.NOT_SET:
+				case TransitionType.WILDCARD:
+					// not implemented yet
+					continue;
 
-			default:
-				continue;
+				default:
+					continue;
 			}
 		}
 
@@ -788,20 +788,20 @@ export class ATNDeserializer {
 				optimizedTransitions.push(new EpsilonTransition(intermediateState));
 
 				switch (effective.serializationType) {
-				case TransitionType.ATOM:
-					intermediateState.addTransition(new AtomTransition(target, (<AtomTransition> effective)._label));
-					break;
+					case TransitionType.ATOM:
+						intermediateState.addTransition(new AtomTransition(target, (<AtomTransition>effective)._label));
+						break;
 
-				case TransitionType.RANGE:
-					intermediateState.addTransition(new RangeTransition(target, (<RangeTransition> effective).from, (<RangeTransition> effective).to));
-					break;
+					case TransitionType.RANGE:
+						intermediateState.addTransition(new RangeTransition(target, (<RangeTransition>effective).from, (<RangeTransition>effective).to));
+						break;
 
-				case TransitionType.SET:
-					intermediateState.addTransition(new SetTransition(target, (<SetTransition> effective).label));
-					break;
+					case TransitionType.SET:
+						intermediateState.addTransition(new SetTransition(target, (<SetTransition>effective).label));
+						break;
 
-				default:
-					throw new Error("UnsupportedOperationException");
+					default:
+						throw new Error("UnsupportedOperationException");
 				}
 			}
 
@@ -839,7 +839,7 @@ export class ATNDeserializer {
 				let transition: Transition = state.getOptimizedTransition(i);
 				let intermediate: ATNState = transition.target;
 				if (transition.serializationType !== TransitionType.EPSILON
-					|| (<EpsilonTransition> transition).outermostPrecedenceReturn !== -1
+					|| (<EpsilonTransition>transition).outermostPrecedenceReturn !== -1
 					|| intermediate.stateType !== ATNStateType.BASIC
 					|| !intermediate.onlyHasEpsilonTransitions) {
 					if (optimizedTransitions != null) {
@@ -851,7 +851,7 @@ export class ATNDeserializer {
 
 				for (let j = 0; j < intermediate.numberOfOptimizedTransitions; j++) {
 					if (intermediate.getOptimizedTransition(j).serializationType !== TransitionType.EPSILON
-						|| (<EpsilonTransition> intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn !== -1) {
+						|| (<EpsilonTransition>intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn !== -1) {
 						if (optimizedTransitions != null) {
 							optimizedTransitions.push(transition);
 						}
@@ -950,7 +950,7 @@ export class ATNDeserializer {
 					if (matchTransition instanceof NotSetTransition) {
 						throw new Error("Not yet implemented.");
 					} else {
-						matchSet.addAll(<IntervalSet> matchTransition.label);
+						matchSet.addAll(<IntervalSet>matchTransition.label);
 					}
 				}
 			}
@@ -1082,10 +1082,12 @@ export class ATNDeserializer {
 	}
 
 	@NotNull
-	protected edgeFactory(@NotNull atn: ATN,
-		                     type: TransitionType, src: number, trg: number,
-		                     arg1: number, arg2: number, arg3: number,
-		                     sets: IntervalSet[]): Transition {
+	protected edgeFactory(
+			@NotNull atn: ATN,
+			type: TransitionType, src: number, trg: number,
+			arg1: number, arg2: number, arg3: number,
+			sets: IntervalSet[],
+		): Transition {
 		let target: ATNState = atn.states[trg];
 		switch (type) {
 			case TransitionType.EPSILON: return new EpsilonTransition(target);
@@ -1097,7 +1099,7 @@ export class ATNDeserializer {
 					return new RangeTransition(target, arg1, arg2);
 				}
 			case TransitionType.RULE:
-				let rt: RuleTransition = new RuleTransition(<RuleStartState> atn.states[arg1], arg2, arg3, target);
+				let rt: RuleTransition = new RuleTransition(<RuleStartState>atn.states[arg1], arg2, arg3, target);
 				return rt;
 			case TransitionType.PREDICATE:
 				let pt: PredicateTransition = new PredicateTransition(target, arg1, arg2, arg3 !== 0);
@@ -1148,33 +1150,33 @@ export class ATNDeserializer {
 
 	protected lexerActionFactory(type: LexerActionType, data1: number, data2: number): LexerAction {
 		switch (type) {
-		case LexerActionType.CHANNEL:
-			return new LexerChannelAction(data1);
+			case LexerActionType.CHANNEL:
+				return new LexerChannelAction(data1);
 
-		case LexerActionType.CUSTOM:
-			return new LexerCustomAction(data1, data2);
+			case LexerActionType.CUSTOM:
+				return new LexerCustomAction(data1, data2);
 
-		case LexerActionType.MODE:
-			return new LexerModeAction(data1);
+			case LexerActionType.MODE:
+				return new LexerModeAction(data1);
 
-		case LexerActionType.MORE:
-			return LexerMoreAction.INSTANCE;
+			case LexerActionType.MORE:
+				return LexerMoreAction.INSTANCE;
 
-		case LexerActionType.POP_MODE:
-			return LexerPopModeAction.INSTANCE;
+			case LexerActionType.POP_MODE:
+				return LexerPopModeAction.INSTANCE;
 
-		case LexerActionType.PUSH_MODE:
-			return new LexerPushModeAction(data1);
+			case LexerActionType.PUSH_MODE:
+				return new LexerPushModeAction(data1);
 
-		case LexerActionType.SKIP:
-			return LexerSkipAction.INSTANCE;
+			case LexerActionType.SKIP:
+				return LexerSkipAction.INSTANCE;
 
-		case LexerActionType.TYPE:
-			return new LexerTypeAction(data1);
+			case LexerActionType.TYPE:
+				return new LexerTypeAction(data1);
 
-		default:
-			let message: string = `The specified lexer action type ${type} is not valid.`;
-			throw new Error(message);
+			default:
+				let message: string = `The specified lexer action type ${type} is not valid.`;
+				throw new Error(message);
 		}
 	}
 }

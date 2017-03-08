@@ -81,7 +81,7 @@ for (let i = 0; i < 16; i++) {
 	}
 }
 
-export class BitSet implements Iterable<number>{
+export class BitSet implements Iterable<number> {
 	private data: Uint16Array;
 
 	/**
@@ -780,7 +780,7 @@ export class BitSet implements Iterable<number>{
 	}
 }
 
-class BitSetIterator implements IterableIterator<number>{
+class BitSetIterator implements IterableIterator<number> {
 	private index = 0;
 	private mask = 0xFFFF;
 

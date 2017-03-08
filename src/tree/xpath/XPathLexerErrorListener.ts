@@ -13,7 +13,7 @@ import { Recognizer } from "../../Recognizer";
 export class XPathLexerErrorListener implements ANTLRErrorListener<number> {
 	@Override
 	syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T,
-		                             line: number, charPositionInLine: number, msg: string,
-		                             e: RecognitionException): void {
+		line: number, charPositionInLine: number, msg: string,
+		e: RecognitionException): void {
 	}
 }

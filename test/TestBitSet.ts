@@ -8,16 +8,16 @@ require('source-map-support').install();
 import * as assert from "assert";
 import { BitSet } from "../src/misc/BitSet";
 
-describe("BitSet Tests", function() {
-    const empty = new BitSet();
-    const evens = new BitSet(100);
-    for (let i = 0; i < 100; i += 2)
-        evens.set(i);
+describe("BitSet Tests", function () {
+	const empty = new BitSet();
+	const evens = new BitSet(100);
+	for (let i = 0; i < 100; i += 2)
+		evens.set(i);
 
-    const primes = new BitSet( [3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
-         59, 61, 67, 71, 73, 79, 83, 89, 97]);
+	const primes = new BitSet([3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
+		59, 61, 67, 71, 73, 79, 83, 89, 97]);
 
-    describe("empty", function() {
+	describe("empty", function () {
 		it("has zero length", () => {
 			assert.equal(empty.length(), 0);
 		});
@@ -51,11 +51,11 @@ describe("BitSet Tests", function() {
 		});
 
 		it("equals itself", () => {
-			assert( !empty.equals([1, 3]));
+			assert(!empty.equals([1, 3]));
 		});
 
 		it("equals itself", () => {
-			assert( empty.equals(empty));
+			assert(empty.equals(empty));
 		});
 
 		it("equals oversize", () => {
@@ -129,20 +129,20 @@ describe("BitSet Tests", function() {
 			a.xor(o);
 			assert.equal(a, "{75}");
 		});
-    });
+	});
 
-    describe("evens", () => {
-        it("has bits set", () => {
+	describe("evens", () => {
+		it("has bits set", () => {
 			for (let i = 0; i < 100; i += 2)
-				assert.equal( evens.get(i), true );
-			});
-
-		      it("has bits clear", () => {
-			for (let i = 1; i < 100; i += 2)
-			assert.equal( evens.get(i), false );
+				assert.equal(evens.get(i), true);
 		});
 
-		      it("JavaScript style iteration works", () => {
+		it("has bits clear", () => {
+			for (let i = 1; i < 100; i += 2)
+				assert.equal(evens.get(i), false);
+		});
+
+		it("JavaScript style iteration works", () => {
 			let count = 0;
 			for (let n of evens) {
 				assert.equal(n % 2, 0);
@@ -151,24 +151,24 @@ describe("BitSet Tests", function() {
 			assert.equal(count, 50);
 		});
 
-		      it("misc tests", () => {
+		it("misc tests", () => {
 			assert.equal(evens.get(100), false);
 			assert.equal(evens.get(101), false);
 			assert.equal(evens.cardinality(), 50);
 		});
 
-		      it("hash collisions", () => {
-			assert.notEqual( evens.hashCode(), 0);
-			assert.notEqual( evens.hashCode(), primes.hashCode());
+		it("hash collisions", () => {
+			assert.notEqual(evens.hashCode(), 0);
+			assert.notEqual(evens.hashCode(), primes.hashCode());
 		});
 
-		      it("copy constructor", () => {
-			const a = new BitSet( evens );
-			for (let i = 0; i < 100; i += 2) assert.equal( a.get(i), true );
-			for (let i = 1; i < 100; i += 2) assert.equal( a.get(i), false );
+		it("copy constructor", () => {
+			const a = new BitSet(evens);
+			for (let i = 0; i < 100; i += 2) assert.equal(a.get(i), true);
+			for (let i = 1; i < 100; i += 2) assert.equal(a.get(i), false);
 		});
 
-		      it ("set bits and clear bits", () => {
+		it("set bits and clear bits", () => {
 			assert.equal(evens.nextSetBit(60), 60);
 			assert.equal(evens.nextSetBit(61), 62);
 			assert.equal(evens.nextClearBit(60), 61);
@@ -179,7 +179,7 @@ describe("BitSet Tests", function() {
 			assert.equal(evens.previousClearBit(80), 79);
 		});
 
-		      it("lengthy bit scans", () => {
+		it("lengthy bit scans", () => {
 			let a = new BitSet([50, 70, 90]);
 			a.clear(90);
 			assert.equal(a.nextSetBit(0), 50);
@@ -189,7 +189,7 @@ describe("BitSet Tests", function() {
 			assert.equal(a.previousSetBit(69), 50);
 		});
 
-		      it("lengthy bit scans", () => {
+		it("lengthy bit scans", () => {
 			let a = new BitSet([50, 70, 90]);
 			a.clear(90);
 			a.flip(0, 100);
@@ -200,20 +200,20 @@ describe("BitSet Tests", function() {
 			assert.equal(a.previousClearBit(69), 50);
 		});
 
-    });
+	});
 
-    describe("primes", () => {
+	describe("primes", () => {
 		it("length()", () => {
 			assert.equal(primes.length(), 98);
-			});
+		});
 		it("cardinality()", () => {
 			assert.equal(primes.cardinality(), 25);
 		});
 		it("toString() as expected", () => {
-	        const s = primes.toString();
-        	assert.equal(s, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}");
+			const s = primes.toString();
+			assert.equal(s, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}");
 		});
-	 it("and operation", () => {
+		it("and operation", () => {
 			const a = new BitSet(evens);
 			a.and(primes);
 			assert.equal(a.cardinality(), 1);
@@ -221,9 +221,9 @@ describe("BitSet Tests", function() {
 			assert.equal(a.get(2), true);
 			assert.equal(a.get(9), false);
 			assert.equal(a.toString(), "{2}");
-			assert( !a.intersects(empty));
-			assert( a.intersects(evens));
-			assert( a.intersects(primes));
+			assert(!a.intersects(empty));
+			assert(a.intersects(evens));
+			assert(a.intersects(primes));
 
 		});
 		it("or operation", () => {
@@ -246,9 +246,9 @@ describe("BitSet Tests", function() {
 			c.or(primes);
 			assert.equal(b.cardinality(), c.cardinality() - 1);
 		});
-    });
+	});
 
-	   describe("range operations", () => {
+	describe("range operations", () => {
 		const ninetys = new BitSet();
 		ninetys.set(90, 99);
 		const tens = new BitSet();
@@ -260,7 +260,7 @@ describe("BitSet Tests", function() {
 		it("tens or ninetys", () => {
 			const a = tens.clone();
 			a.or(ninetys);
-			assert.equal( a, "{10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}");
+			assert.equal(a, "{10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}");
 
 			const b = ninetys.clone();
 			b.or(tens);
@@ -273,7 +273,7 @@ describe("BitSet Tests", function() {
 			assert(a.isEmpty);
 		});
 
-		it ("primes and composites do not intersect", () => {
+		it("primes and composites do not intersect", () => {
 			assert(!primes.intersects(composites));
 		});
 
@@ -285,9 +285,9 @@ describe("BitSet Tests", function() {
 			const ninetySeven = new BitSet(primes);
 			ninetySeven.and(ninetys);
 			assert.equal(ninetySeven, "{97}");
-			assert( ninetySeven.equals( new BitSet([97])));
-			assert( !ninetySeven.equals( primes ));
-			assert( !ninetySeven.equals( empty ));
+			assert(ninetySeven.equals(new BitSet([97])));
+			assert(!ninetySeven.equals(primes));
+			assert(!ninetySeven.equals(empty));
 		});
 
 		it("composites", () => {
@@ -338,7 +338,7 @@ describe("BitSet Tests", function() {
 		});
 	});
 
-	   describe("error cases", () => {
+	describe("error cases", () => {
 		const dummy = evens.clone();
 		it("constructor throws", () => {
 			assert.throws(() => { let a = new BitSet(-1); });

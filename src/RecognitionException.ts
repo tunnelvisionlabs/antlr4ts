@@ -40,16 +40,16 @@ export class RecognitionException extends Error {
 	private _offendingState: number = -1;
 
 	constructor(lexer: Lexer | undefined,
-		           input: CharStream);
+		input: CharStream);
 
 	constructor(recognizer: Recognizer<Token, any> | undefined,
-		           input: IntStream | undefined,
-		           ctx: ParserRuleContext | undefined);
+		input: IntStream | undefined,
+		ctx: ParserRuleContext | undefined);
 
 	constructor(recognizer: Recognizer<Token, any> | undefined,
-		           input: IntStream | undefined,
-		           ctx: ParserRuleContext | undefined,
-		           message: string);
+		input: IntStream | undefined,
+		ctx: ParserRuleContext | undefined,
+		message: string);
 
 	constructor(
 		recognizer: Lexer | Recognizer<Token, any> | undefined,

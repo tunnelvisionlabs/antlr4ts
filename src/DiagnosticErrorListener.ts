@@ -52,13 +52,13 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAmbiguity(@NotNull recognizer: Parser,
-		               @NotNull dfa: DFA,
-		               startIndex: number,
-		               stopIndex: number,
-		               exact: boolean,
-		               ambigAlts: BitSet | undefined,
-		               @NotNull configs: ATNConfigSet): void {
+	reportAmbiguity( @NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		exact: boolean,
+		ambigAlts: BitSet | undefined,
+		@NotNull configs: ATNConfigSet): void {
 		if (this.exactOnly && !exact) {
 			return;
 		}
@@ -71,12 +71,12 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext(@NotNull recognizer: Parser,
-		                           @NotNull dfa: DFA,
-		                           startIndex: number,
-		                           stopIndex: number,
-		                           conflictingAlts: BitSet | undefined,
-		                           @NotNull conflictState: SimulatorState): void {
+	reportAttemptingFullContext( @NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		conflictingAlts: BitSet | undefined,
+		@NotNull conflictState: SimulatorState): void {
 		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
 		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
@@ -85,12 +85,12 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportContextSensitivity(@NotNull recognizer: Parser,
-		                        @NotNull dfa: DFA,
-		                        startIndex: number,
-		                        stopIndex: number,
-		                        prediction: number,
-		                        @NotNull acceptState: SimulatorState): void {
+	reportContextSensitivity( @NotNull recognizer: Parser,
+		@NotNull dfa: DFA,
+		startIndex: number,
+		stopIndex: number,
+		prediction: number,
+		@NotNull acceptState: SimulatorState): void {
 		let format: string = "reportContextSensitivity d=%s, input='%s'";
 		let decision: string = this.getDecisionDescription(recognizer, dfa);
 		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));

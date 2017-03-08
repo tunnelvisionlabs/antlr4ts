@@ -40,12 +40,12 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 * an SLL prediction
 	 */
 	constructor(decision: number,
-		           state: SimulatorState | undefined,
-		           predictedAlt: number,
-		           @NotNull input: TokenStream,
-		           startIndex: number,
-		           stopIndex: number,
-		           fullCtx: boolean) {
+		state: SimulatorState | undefined,
+		predictedAlt: number,
+		@NotNull input: TokenStream,
+		startIndex: number,
+		stopIndex: number,
+		fullCtx: boolean) {
 
 		super(decision, state, input, startIndex, stopIndex, fullCtx);
 		this.predictedAlt = predictedAlt;

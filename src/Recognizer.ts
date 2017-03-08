@@ -24,9 +24,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
-	 	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
+	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
 	private static ruleIndexMapCache =
-	 	new WeakMap<string[], ReadonlyMap<string, number>>();
+	new WeakMap<string[], ReadonlyMap<string, number>>();
 
 	@SuppressWarnings("serial")
 	@NotNull
@@ -156,13 +156,13 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @param interpreter The ATN interpreter used by the recognizer for
 	 * prediction.
 	 */
-	set interpreter(@NotNull interpreter: ATNInterpreter) {
+	set interpreter( @NotNull interpreter: ATNInterpreter) {
 		this._interp = interpreter;
 	}
 
 	/** What is the error header, normally line/character position information? */
 	@NotNull
-	getErrorHeader(@NotNull e: RecognitionException): string {
+	getErrorHeader( @NotNull e: RecognitionException): string {
 		let token = e.getOffendingToken();
 		if (!token) return "";
 		let line = token.line;
@@ -173,12 +173,12 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * @exception NullPointerException if {@code listener} is {@code null}.
 	 */
-	addErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	addErrorListener( @NotNull listener: ANTLRErrorListener<Symbol>): void {
 		if (!listener) throw new TypeError("listener must not be null");
 		this._listeners.push(listener);
 	}
 
-	removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	removeErrorListener( @NotNull listener: ANTLRErrorListener<Symbol>): void {
 		let position = this._listeners.indexOf(listener);
 		if (position !== -1) {
 			this._listeners.splice(position, 1);
@@ -231,9 +231,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 *  configuration information.
 	 */
 	set state(atnState: number) {
-//		System.err.println("setState "+atnState);
+		//		System.err.println("setState "+atnState);
 		this._stateNumber = atnState;
-//		if ( traceATNStates ) _ctx.trace(atnState);
+		//		if ( traceATNStates ) _ctx.trace(atnState);
 	}
 
 	abstract readonly inputStream: IntStream | undefined;

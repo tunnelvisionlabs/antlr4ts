@@ -35,7 +35,7 @@ export class Trees {
     /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
      *  node payloads to get the text for the nodes.
      */
-	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
+	static toStringTree( @NotNull t: ParseTree, arg2?: Parser | string[]): string {
 		let ruleNames: string[];
 		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
 		else { ruleNames = arg2 as string[]; }
@@ -67,7 +67,7 @@ export class Trees {
 			if (typeof payload.text === 'string') {
 				return payload.text;
 			}
-			return t.payload.toString(); ;
+			return t.payload.toString();
 		}
 
 		if (t instanceof RuleNode) {
@@ -105,7 +105,7 @@ export class Trees {
 	 *  @since 4.5.1
 	 */
 	@NotNull
-	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
+	static getAncestors( @NotNull t: ParseTree): ParseTree[] {
 		let ancestors = [] as ParseTree[];
 		let p = t.parent;
 		while (p) {
@@ -182,9 +182,9 @@ export class Trees {
 	*
 	*  @since 4.5
 	*/
-	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
-		                                      startTokenIndex: number, // inclusive
-		                                      stopTokenIndex: number, // inclusive
+	static getRootOfSubtreeEnclosingRegion( @NotNull t: ParseTree,
+		startTokenIndex: number, // inclusive
+		stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {
 		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {
@@ -212,9 +212,9 @@ export class Trees {
 	*  @since 4.5.1
 	*/
 	static stripChildrenOutOfRange(t: ParserRuleContext,
-		                              root: ParserRuleContext,
-		                              startIndex: number,
-		                              stopIndex: number): void {
+		root: ParserRuleContext,
+		startIndex: number,
+		stopIndex: number): void {
 		if (!t) return;
 		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
