@@ -53,7 +53,8 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportAttemptingFullContext(recognizer: Parser,
+	reportAttemptingFullContext(
+		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -74,7 +75,8 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportContextSensitivity(recognizer: Parser,
+	reportContextSensitivity(
+		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

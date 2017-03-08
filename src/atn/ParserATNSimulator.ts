@@ -1690,12 +1690,13 @@ export class ParserATNSimulator extends ATNSimulator {
 		 ambig detection thought :(
 		  */
 
-	protected closure(sourceConfigs: ATNConfigSet,
-		@NotNull configs: ATNConfigSet,
-		collectPredicates: boolean,
-		hasMoreContext: boolean,
-		@Nullable contextCache: PredictionContextCache,
-		treatEofAsEpsilon: boolean): void {
+	protected closure(
+			sourceConfigs: ATNConfigSet,
+			@NotNull configs: ATNConfigSet,
+			collectPredicates: boolean,
+			hasMoreContext: boolean,
+			@Nullable contextCache: PredictionContextCache,
+			treatEofAsEpsilon: boolean): void {
 		if (contextCache == null) {
 			contextCache = PredictionContextCache.UNCACHED;
 		}
@@ -1712,7 +1713,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 	}
 
-	protected closureImpl( @NotNull config: ATNConfig,
+	protected closureImpl(
+		@NotNull config: ATNConfig,
 		@NotNull configs: ATNConfigSet,
 		@Nullable intermediate: ATNConfigSet,
 		@NotNull closureBusy: Array2DHashSet<ATNConfig>,
@@ -1921,7 +1923,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@Nullable
-	protected precedenceTransition( @NotNull config: ATNConfig,
+	protected precedenceTransition(
+		@NotNull config: ATNConfig,
 		@NotNull pt: PrecedencePredicateTransition,
 		collectPredicates: boolean,
 		inContext: boolean): ATNConfig {
@@ -1949,7 +1952,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@Nullable
-	protected predTransition( @NotNull config: ATNConfig,
+	protected predTransition(
+		@NotNull config: ATNConfig,
 		@NotNull pt: PredicateTransition,
 		collectPredicates: boolean,
 		inContext: boolean): ATNConfig {
@@ -2224,7 +2228,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected noViableAlt( @NotNull input: TokenStream,
+	protected noViableAlt(
+		@NotNull input: TokenStream,
 		@NotNull outerContext: ParserRuleContext,
 		@NotNull configs: ATNConfigSet,
 		startIndex: number): NoViableAltException {
@@ -2259,7 +2264,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected addDFAEdge( @NotNull dfa: DFA,
+	protected addDFAEdge(
+		@NotNull dfa: DFA,
 		@NotNull fromState: DFAState,
 		t: number,
 		contextTransitions: IntegerList | undefined,

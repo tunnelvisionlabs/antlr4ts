@@ -35,14 +35,14 @@ export class NoViableAltException extends RecognitionException {
 	@NotNull
 	private _startToken: Token;
 
-	constructor(/*@NotNull*/ recognizer: Parser);
+	constructor(recognizer: Parser);
 	constructor(
-		/*@NotNull*/ recognizer: Recognizer<Token, any>,
-		/*@NotNull*/ input: TokenStream,
-		/*@NotNull*/ startToken: Token,
-		/*@NotNull*/ offendingToken: Token,
+		recognizer: Recognizer<Token, any>,
+		input: TokenStream,
+		startToken: Token,
+		offendingToken: Token,
 		deadEndConfigs: ATNConfigSet | undefined,
-		/*@NotNull*/ ctx: ParserRuleContext);
+		ctx: ParserRuleContext);
 
 	constructor(
 		recognizer: Recognizer<Token, any>,

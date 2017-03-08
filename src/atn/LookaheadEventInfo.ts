@@ -39,7 +39,8 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 * prediction; otherwise, {@code false} if the current lookahead is part of
 	 * an SLL prediction
 	 */
-	constructor(decision: number,
+	constructor(
+		decision: number,
 		state: SimulatorState | undefined,
 		predictedAlt: number,
 		@NotNull input: TokenStream,

@@ -52,7 +52,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAmbiguity( @NotNull recognizer: Parser,
+	reportAmbiguity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -71,7 +72,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext( @NotNull recognizer: Parser,
+	reportAttemptingFullContext(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -85,7 +87,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportContextSensitivity( @NotNull recognizer: Parser,
+	reportContextSensitivity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

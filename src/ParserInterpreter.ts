@@ -97,10 +97,17 @@ export class ParserInterpreter extends Parser {
 	 *  @since 4.5
 	 */
 	constructor(/*@NotNull*/ old: ParserInterpreter);
-	constructor(grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
-		ruleNames: string[], atn: ATN, input: TokenStream);
-	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
-		ruleNames?: string[], atn?: ATN, input?: TokenStream) {
+	constructor(
+		grammarFileName: string,
+		vocabulary: Vocabulary,
+		ruleNames: string[],
+		atn: ATN,
+		input: TokenStream);
+	constructor(
+		grammarFileName: ParserInterpreter | string,
+		@NotNull vocabulary?: Vocabulary,
+		ruleNames?: string[], atn?: ATN, input?: TokenStream,
+		) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;

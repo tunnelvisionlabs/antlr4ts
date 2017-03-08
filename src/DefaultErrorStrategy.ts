@@ -121,7 +121,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * </ul>
 	 */
 	@Override
-	reportError(recognizer: Parser,
+	reportError(
+		recognizer: Parser,
 		e: RecognitionException): void {
 		// if we've already reported an error and have not matched a token
 		// yet successfully, don't report any errors.
@@ -290,7 +291,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportNoViableAlternative( @NotNull recognizer: Parser,
+	protected reportNoViableAlternative(
+		@NotNull recognizer: Parser,
 		@NotNull e: NoViableAltException): void {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
@@ -314,7 +316,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportInputMismatch( @NotNull recognizer: Parser,
+	protected reportInputMismatch(
+		@NotNull recognizer: Parser,
 		@NotNull e: InputMismatchException): void {
 		let expected = e.expectedTokens;
 		let expectedString = expected ? expected.toStringVocabulary(recognizer.vocabulary) : "";
@@ -332,7 +335,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportFailedPredicate( @NotNull recognizer: Parser,
+	protected reportFailedPredicate(
+		@NotNull recognizer: Parser,
 		@NotNull e: FailedPredicateException): void {
 		let ruleName: string = recognizer.ruleNames[recognizer.context.ruleIndex];
 		let msg: string = "rule " + ruleName + " " + e.message;

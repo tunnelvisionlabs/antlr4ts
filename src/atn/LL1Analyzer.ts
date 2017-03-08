@@ -160,7 +160,8 @@ export class LL1Analyzer {
 	 * outermost context is reached. This parameter has no effect if {@code ctx}
 	 * is {@link PredictionContext#EMPTY_LOCAL}.
 	 */
-	protected _LOOK( @NotNull s: ATNState,
+	protected _LOOK(
+		@NotNull s: ATNState,
 		stopState: ATNState | undefined,
 		@NotNull ctx: PredictionContext,
 		@NotNull look: IntervalSet,

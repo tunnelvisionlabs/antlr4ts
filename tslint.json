@@ -14,7 +14,6 @@
             "check-separator",
             "check-type"
         ],
-      "align": [false],
       "no-bitwise": false,
       "max-line-length": [ false ],
       "quotemark": [false],
