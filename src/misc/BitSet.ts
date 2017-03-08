@@ -627,7 +627,7 @@ export class BitSet implements Iterable<number>{
 	 * `n < 8 * bytes.length`.
 	 */
 	// toByteArray(): Int8Array {
-	// 	throw "NOT IMPLEMENTED";
+	// 	throw new Error("NOT IMPLEMENTED");
 	// }
 
 	/**
@@ -639,7 +639,7 @@ export class BitSet implements Iterable<number>{
 	 * `n < 32 * integers.length`.
 	 */
 	// toIntegerArray(): Int32Array {
-	// 	throw "NOT IMPLEMENTED";
+	// 	throw new Error("NOT IMPLEMENTED");
 	// }
 
 	hashCode(): number {
@@ -725,7 +725,7 @@ export class BitSet implements Iterable<number>{
 	// static valueOf(buffer: ArrayBuffer): BitSet;
 	// static valueOf(integers: Int32Array): BitSet;
 	// static valueOf(data: Int8Array | Int32Array | ArrayBuffer): BitSet {
-	// 	throw "NOT IMPLEMENTED";
+	// 	throw new Error("NOT IMPLEMENTED");
 	// }
 
 	/**
