@@ -356,6 +356,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	@Override
 	reset(): void {
+		// intentionally empty
 	}
 
 	adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;

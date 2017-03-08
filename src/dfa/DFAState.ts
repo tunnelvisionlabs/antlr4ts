@@ -236,6 +236,8 @@ export class DFAState {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - Used to simulate nested class
+
 export namespace DFAState {
 	/** Map a predicate to a predicted alternative. */
 	export class PredPrediction {

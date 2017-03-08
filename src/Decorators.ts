@@ -7,12 +7,14 @@ export function NotNull(
 	target: any,
 	propertyKey: PropertyKey,
 	propertyDescriptor?: PropertyDescriptor) {
+	// empty function
 }
 
 export function Nullable(
 	target: any,
 	propertyKey: PropertyKey,
 	propertyDescriptor?: PropertyDescriptor) {
+	// empty function
 }
 
 export function Override(
@@ -24,5 +26,6 @@ export function Override(
 
 export function SuppressWarnings(options: string) {
 	return (target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) => {
+	// empty function
 	};
 }

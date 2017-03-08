@@ -60,6 +60,7 @@ class TraceListener implements ParseTreeListener {
 
 	@Override
 	visitErrorNode(node: ErrorNode): void {
+		// intentionally empty
 	}
 
 	@Override

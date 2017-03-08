@@ -11,6 +11,8 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 
+// tslint:disable-next-line:no-namespace
+
 export namespace MurmurHash {
 
 	const DEFAULT_SEED: number = 0;

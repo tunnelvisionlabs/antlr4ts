@@ -227,8 +227,6 @@ export abstract class ATNState {
 
 		this.optimizedTransitions.splice(i, 1);
 	}
-}
 
-export namespace ATNState {
-	export const INVALID_STATE_NUMBER: number = -1;
+	public static readonly INVALID_STATE_NUMBER: number = -1;
 }

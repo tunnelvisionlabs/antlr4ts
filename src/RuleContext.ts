@@ -158,7 +158,9 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	set altNumber(altNumber: number) { }
+	set altNumber(altNumber: number) {
+		// intentionally empty
+	}
 
 	@Override
 	getChild(i: number): ParseTree {

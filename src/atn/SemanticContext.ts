@@ -143,6 +143,7 @@ export abstract class SemanticContext implements Equatable {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace SemanticContext {
 	/**
 	 * This random 30-bit prime represents the value of `AND.class.hashCode()`.

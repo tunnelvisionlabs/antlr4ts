@@ -72,5 +72,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
 	/** Make sure we don't attempt to recover from problems in subrules. */
 	@Override
-	sync(recognizer: Parser): void { }
+	sync(recognizer: Parser): void {
+		// Intentionally empty
+	}
 }

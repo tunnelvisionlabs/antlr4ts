@@ -47,10 +47,8 @@ export abstract class ATNSimulator {
 	clearDFA(): void {
 		this.atn.clearDFA();
 	}
-}
 
-export namespace ATNSimulator {
-	const RULE_VARIANT_DELIMITER: string = '$';
-	const RULE_LF_VARIANT_MARKER: string = "$lf$";
-	const RULE_NOLF_VARIANT_MARKER: string = "$nolf$";
+	public readonly RULE_VARIANT_DELIMITER: string = '$';
+	public readonly RULE_LF_VARIANT_MARKER: string = "$lf$";
+	public readonly RULE_NOLF_VARIANT_MARKER: string = "$nolf$";
 }

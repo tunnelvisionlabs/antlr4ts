@@ -728,6 +728,8 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
+
 export namespace LexerATNSimulator {
 	export const debug: boolean = false;
 	export const dfa_debug: boolean = false;

@@ -24,7 +24,8 @@ export class LexerPopModeAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code popMode} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerPopModeAction implements LexerAction {
 	toString(): string {
 		return "popMode";
 	}
-}
 
-export namespace LexerPopModeAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerPopModeAction = new LexerPopModeAction();
+	public static readonly INSTANCE = new LexerPopModeAction();
 }

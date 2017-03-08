@@ -1770,6 +1770,7 @@ export interface FilenameFilter {
 	accept(dir: string, name: string): boolean;
 }
 
+// tslint:disable-next-line:no-namespace
 namespace FilenameFilters {
 	export const ALL_FILES: FilenameFilter = {
 		// @Override

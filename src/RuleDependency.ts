@@ -18,6 +18,7 @@ import { Parser } from './Parser';
  */
 export function RuleDependency(dependency: DependencySpecification) {
 	return function(target: Object, propertyKey: PropertyKey, propertyDescriptor: PropertyDescriptor) {
+		// intentionally empty
 	};
 }
 

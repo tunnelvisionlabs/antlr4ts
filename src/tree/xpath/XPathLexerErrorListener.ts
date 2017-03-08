@@ -16,5 +16,6 @@ export class XPathLexerErrorListener implements ANTLRErrorListener<number> {
 		recognizer: Recognizer<T, any>, offendingSymbol: T,
 		line: number, charPositionInLine: number, msg: string,
 		e: RecognitionException): void {
+			// intentionally empty
 	}
 }

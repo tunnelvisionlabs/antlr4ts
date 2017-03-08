@@ -24,7 +24,8 @@ export class LexerMoreAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerMoreAction implements LexerAction {
 	toString(): string {
 		return "more";
 	}
-}
 
-export namespace LexerMoreAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerMoreAction = new LexerMoreAction();
+	public static readonly INSTANCE = new LexerMoreAction();
 }

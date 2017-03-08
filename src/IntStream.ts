@@ -5,6 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.6934376-07:00
 
+// tslint:disable-next-line:no-namespace - Used to simulate constants on an interfae
 export namespace IntStream {
 	/**
 	 * The value returned by {@link #LA LA()} when the end of the stream is

@@ -73,15 +73,6 @@ export class CommonTokenFactory implements TokenFactory {
 	createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}
-}
 
-export namespace CommonTokenFactory {
-	/**
-	 * The default {@link CommonTokenFactory} instance.
-	 *
-	 * <p>
-	 * This token factory does not explicitly copy token text when constructing
-	 * tokens.</p>
-	 */
-	export const DEFAULT: TokenFactory = new CommonTokenFactory();
+	public static readonly DEFAULT: TokenFactory = new CommonTokenFactory();
 }

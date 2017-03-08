@@ -82,6 +82,8 @@ export class PredictionContextCache {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - Used to simulate nested classes
+
 export namespace PredictionContextCache {
 	export class PredictionContextAndInt {
 		private obj: PredictionContext;

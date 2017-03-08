@@ -77,6 +77,7 @@ export interface JavaMap<K, V> extends Equatable {
 	values(): JavaCollection<V>;
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace JavaMap {
 	export interface Entry<K, V> extends Equatable {
 		getKey(): K;

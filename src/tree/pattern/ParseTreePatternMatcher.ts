@@ -511,6 +511,7 @@ export class ParseTreePatternMatcher {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - used to simulate nested class
 export namespace ParseTreePatternMatcher {
 	export class CannotInvokeStartRule extends Error {
 		public constructor(public error: Error) {

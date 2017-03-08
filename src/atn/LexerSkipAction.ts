@@ -24,7 +24,8 @@ export class LexerSkipAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code skip} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerSkipAction implements LexerAction {
 	toString(): string {
 		return "skip";
 	}
-}
 
-export namespace LexerSkipAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerSkipAction = new LexerSkipAction();
+	public static readonly INSTANCE = new LexerSkipAction();
 }

@@ -109,6 +109,7 @@ export class ANTLRInputStream implements CharStream {
 
 	@Override
 	release(marker: number): void {
+		// intentionally empty
 	}
 
 	/** consume() ahead until p==index; can't just set p=index as we must

@@ -266,6 +266,7 @@ export class ATN {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace ATN {
 	export const INVALID_ALT_NUMBER: number = 0;
 }

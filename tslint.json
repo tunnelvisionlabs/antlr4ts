@@ -24,11 +24,9 @@
       "member-access": [false],
       "comment-format": [false],
       "curly":false,
-      "no-empty": false,
       "only-arrow-functions": [
         false
       ],
-      "no-namespace": [false],
       "variable-name": [ true, "allow-leading-underscore", true],
       "interface-name": [false],
       "no-console": [false]

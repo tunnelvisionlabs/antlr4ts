@@ -68,6 +68,8 @@ export interface Token {
 	readonly inputStream: CharStream | undefined;
 }
 
+// tslint:disable-next-line:no-namespace - To simulate constants on an interface
+
 export namespace Token {
 	export const INVALID_TYPE: number = 0;
 

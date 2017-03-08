@@ -723,6 +723,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace PredictionContext {
 	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false);
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
@@ -739,6 +740,7 @@ export namespace PredictionContext {
 		static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
+			// intentionally empty
 		}
 
 		@Override

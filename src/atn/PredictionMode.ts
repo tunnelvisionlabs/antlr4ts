@@ -87,6 +87,7 @@ export enum PredictionMode {
 	LL_EXACT_AMBIG_DETECTION,
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace PredictionMode {
 	/** A Map that uses just the state and the stack context as the key. */
 	// NOTE: Base type used to be FlexibleHashMap<ATNConfig, BitSet>
@@ -100,6 +101,7 @@ export namespace PredictionMode {
 		static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
+			// empty function
 		}
 
 		/**

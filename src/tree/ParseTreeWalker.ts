@@ -93,8 +93,6 @@ export class ParseTreeWalker {
 			listener.exitEveryRule(ctx);
 		}
 	}
-}
 
-export namespace ParseTreeWalker {
-	export const DEFAULT: ParseTreeWalker = new ParseTreeWalker();
+	public static readonly DEFAULT = new ParseTreeWalker();
 }
