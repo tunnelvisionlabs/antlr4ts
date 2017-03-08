@@ -1,0 +1,16 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+      "indent": [false],
+      "quotemark": [false],
+      "jsdoc-format": false,
+      "array-type": [false],
+      "max-classes-per-file": [false],
+      "member-ordering": [false],
+      "member-access": [false],
+      "comment-format": [false],
+      "no-namespace": [false],
+      "variable-name": [ true, "allow-leading-underscore", true]
+
+     }
+}
