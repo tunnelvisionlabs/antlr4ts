@@ -47,8 +47,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * @param exactOnly {@code true} to report only exact ambiguities, otherwise
 	 * {@code false} to report all ambiguities.  Defaults to true.
 	 */
-	constructor(protected exactOnly: boolean = true) {
-		this.exactOnly = exactOnly;
+	constructor(protected _exactOnly: boolean = true) {
+		this._exactOnly = _exactOnly;
 	}
 
 	@Override
@@ -59,12 +59,12 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		exact: boolean,
 		ambigAlts: BitSet | undefined,
 		@NotNull configs: ATNConfigSet): void {
-		if (this.exactOnly && !exact) {
+		if (this._exactOnly && !exact) {
 			return;
 		}
 
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let conflictingAlts: BitSet = this.getConflictingAlts(ambigAlts, configs);
+		let decision: string = this._getDecisionDescription(recognizer, dfa);
+		let conflictingAlts: BitSet = this._getConflictingAlts(ambigAlts, configs);
 		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportAmbiguity d=${decision}: ambigAlts=${conflictingAlts}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
@@ -78,7 +78,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		conflictingAlts: BitSet | undefined,
 		@NotNull conflictState: SimulatorState): void {
 		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
+		let decision: string = this._getDecisionDescription(recognizer, dfa);
 		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportAttemptingFullContext d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
@@ -92,13 +92,13 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		prediction: number,
 		@NotNull acceptState: SimulatorState): void {
 		let format: string = "reportContextSensitivity d=%s, input='%s'";
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
+		let decision: string = this._getDecisionDescription(recognizer, dfa);
 		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		let message: string = `reportContextSensitivity d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
-	protected getDecisionDescription(
+	protected _getDecisionDescription(
 		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA): string {
 		let decision: number = dfa.decision;
@@ -129,7 +129,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * returns the set of alternatives represented in {@code configs}.
 	 */
 	@NotNull
-	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {
+	protected _getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {
 		if (reportedAlts != null) {
 			return reportedAlts;
 		}

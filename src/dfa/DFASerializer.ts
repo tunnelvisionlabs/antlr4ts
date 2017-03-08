@@ -70,7 +70,7 @@ export class DFASerializer {
 					}
 
 					let contextSymbol: boolean = false;
-					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry)) + ("->");
+					buf += (this.getStateString(s)) + ("-") + (this._getEdgeLabel(entry)) + ("->");
 					if (s.isContextSymbol(entry)) {
 						buf += ("!");
 						contextSymbol = true;
@@ -89,7 +89,7 @@ export class DFASerializer {
 					for (let entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
-							+ (this.getContextLabel(entry))
+							+ (this._getContextLabel(entry))
 							+ ("->")
 							+ (this.getStateString(contextEdges.get(entry)!))
 							+ ("\n");
@@ -103,7 +103,7 @@ export class DFASerializer {
 		return output;
 	}
 
-	protected getContextLabel(i: number): string {
+	protected _getContextLabel(i: number): string {
 		if (i === PredictionContext.EMPTY_FULL_STATE_KEY) {
 			return "ctx:EMPTY_FULL";
 		}
@@ -122,7 +122,7 @@ export class DFASerializer {
 		return "ctx:" + String(i);
 	}
 
-	protected getEdgeLabel(i: number): string {
+	protected _getEdgeLabel(i: number): string {
 		return this._vocabulary.getDisplayName(i);
 	}
 

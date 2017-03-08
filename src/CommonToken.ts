@@ -19,7 +19,7 @@ export class CommonToken implements WritableToken {
 	 * An empty {@link Tuple2} which is used as the default value of
 	 * {@link #source} for tokens that do not have a source.
 	 */
-	protected static readonly EMPTY_SOURCE: { source?: TokenSource, stream?: CharStream } =
+	protected static readonly _EMPTY_SOURCE: { source?: TokenSource, stream?: CharStream } =
 		{ source: undefined, stream: undefined };
 
 	/**
@@ -51,7 +51,7 @@ export class CommonToken implements WritableToken {
 	 * {@link Tuple2} containing these values.</p>
 	 */
 	@NotNull
-	protected source: { source?: TokenSource, stream?: CharStream };
+	protected _source: { source?: TokenSource, stream?: CharStream };
 
 	/**
 	 * This is the backing field for {@link #getText} when the token text is
@@ -64,24 +64,24 @@ export class CommonToken implements WritableToken {
 	/**
 	 * This is the backing field for `tokenIndex`.
 	 */
-	protected index: number = -1;
+	protected _index: number = -1;
 
 	/**
 	 * This is the backing field for `startIndex`.
 	 */
-	protected start: number;
+	protected _start: number;
 
 	/**
 	 * This is the backing field for `stopIndex`.
 	 */
 	private stop: number;
 
-	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
+	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource, stream?: CharStream } = CommonToken._EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start: number = 0, stop: number = 0) {
 		this._text = text;
 		this._type = type;
-		this.source = source;
+		this._source = source;
 		this._channel = channel;
-		this.start = start;
+		this._start = start;
 		this.stop = stop;
 		if (source.source != null) {
 			this._line = source.source.line;
@@ -103,17 +103,17 @@ export class CommonToken implements WritableToken {
 	 * @param oldToken The token to copy.
 	 */
 	static fromToken(@NotNull oldToken: Token): CommonToken {
-		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
+		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken._EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
-		result.index = oldToken.tokenIndex;
+		result._index = oldToken.tokenIndex;
 		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
 			result._text = oldToken.text;
-			result.source = oldToken.source;
+			result._source = oldToken._source;
 		} else {
 			result._text = oldToken.text;
-			result.source = { source: oldToken.tokenSource, stream: oldToken.inputStream };
+			result._source = { source: oldToken.tokenSource, stream: oldToken.inputStream };
 		}
 
 		return result;
@@ -141,8 +141,8 @@ export class CommonToken implements WritableToken {
 		}
 
 		let n: number = input.size;
-		if (this.start < n && this.stop < n) {
-			return input.getText(Interval.of(this.start, this.stop));
+		if (this._start < n && this.stop < n) {
+			return input.getText(Interval.of(this._start, this.stop));
 		} else {
 			return "<EOF>";
 		}
@@ -194,11 +194,11 @@ export class CommonToken implements WritableToken {
 
 	@Override
 	get startIndex(): number {
-		return this.start;
+		return this._start;
 	}
 
 	set startIndex(start: number) {
-		this.start = start;
+		this._start = start;
 	}
 
 	@Override
@@ -212,22 +212,22 @@ export class CommonToken implements WritableToken {
 
 	@Override
 	get tokenIndex(): number {
-		return this.index;
+		return this._index;
 	}
 
 	// @Override
 	set tokenIndex(index: number) {
-		this.index = index;
+		this._index = index;
 	}
 
 	@Override
 	get tokenSource(): TokenSource | undefined {
-		return this.source.source;
+		return this._source.source;
 	}
 
 	@Override
 	get inputStream(): CharStream | undefined {
-		return this.source.stream;
+		return this._source.stream;
 	}
 
 	toString(): string;
@@ -254,6 +254,6 @@ export class CommonToken implements WritableToken {
 			typeString = recognizer.vocabulary.getDisplayName(this._type);
 		}
 
-		return "[@" + this.tokenIndex + "," + this.start + ":" + this.stop + "='" + txt + "',<" + typeString + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
+		return "[@" + this.tokenIndex + "," + this._start + ":" + this.stop + "='" + txt + "',<" + typeString + ">" + channelStr + "," + this._line + ":" + this.charPositionInLine + "]";
 	}
 }

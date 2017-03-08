@@ -100,9 +100,9 @@ export abstract class ATNState {
 	epsilonOnlyTransitions: boolean = false;
 
 	/** Track the transitions emanating from this ATN state. */
-	protected transitions: Transition[] = [];
+	protected _transitions: Transition[] = [];
 
-	protected optimizedTransitions: Transition[] = this.transitions;
+	protected _optimizedTransitions: Transition[] = this._transitions;
 
 	/** Used to cache lookahead during parsing, not used during construction */
 	nextTokenWithinRule?: IntervalSet;
@@ -151,15 +151,15 @@ export abstract class ATNState {
 	}
 
 	getTransitions(): Transition[] {
-		return this.transitions.slice(0);
+		return this._transitions.slice(0);
 	}
 
 	get numberOfTransitions(): number {
-		return this.transitions.length;
+		return this._transitions.length;
 	}
 
 	addTransition(e: Transition, index?: number): void {
-		if (this.transitions.length === 0) {
+		if (this._transitions.length === 0) {
 			this.epsilonOnlyTransitions = e.isEpsilon;
 		}
 		else if (this.epsilonOnlyTransitions !== e.isEpsilon) {
@@ -167,19 +167,19 @@ export abstract class ATNState {
 			throw new Error("ATN state " + this.stateNumber + " has both epsilon and non-epsilon transitions.");
 		}
 
-		this.transitions.splice(index !== undefined ? index : this.transitions.length, 0, e);
+		this._transitions.splice(index !== undefined ? index : this._transitions.length, 0, e);
 	}
 
 	transition(i: number): Transition {
-		return this.transitions[i];
+		return this._transitions[i];
 	}
 
 	setTransition(i: number, e: Transition): void {
-		this.transitions[i] = e;
+		this._transitions[i] = e;
 	}
 
 	removeTransition(index: number): Transition {
-		return this.transitions.splice(index, 1)[0];
+		return this._transitions.splice(index, 1)[0];
 	}
 
 	abstract readonly stateType: ATNStateType;
@@ -193,23 +193,23 @@ export abstract class ATNState {
 	}
 
 	get isOptimized(): boolean {
-		return this.optimizedTransitions !== this.transitions;
+		return this._optimizedTransitions !== this._transitions;
 	}
 
 	get numberOfOptimizedTransitions(): number {
-		return this.optimizedTransitions.length;
+		return this._optimizedTransitions.length;
 	}
 
 	getOptimizedTransition(i: number): Transition {
-		return this.optimizedTransitions[i];
+		return this._optimizedTransitions[i];
 	}
 
 	addOptimizedTransition(e: Transition): void {
 		if (!this.isOptimized) {
-			this.optimizedTransitions = new Array<Transition>();
+			this._optimizedTransitions = new Array<Transition>();
 		}
 
-		this.optimizedTransitions.push(e);
+		this._optimizedTransitions.push(e);
 	}
 
 	setOptimizedTransition(i: number, e: Transition): void {
@@ -217,7 +217,7 @@ export abstract class ATNState {
 			throw new Error("This ATNState is not optimized.");
 		}
 
-		this.optimizedTransitions[i] = e;
+		this._optimizedTransitions[i] = e;
 	}
 
 	removeOptimizedTransition(i: number): void {
@@ -225,7 +225,7 @@ export abstract class ATNState {
 			throw new Error("This ATNState is not optimized.");
 		}
 
-		this.optimizedTransitions.splice(i, 1);
+		this._optimizedTransitions.splice(i, 1);
 	}
 }
 

@@ -52,7 +52,7 @@ export class ParserInterpreter extends Parser {
 	/** This identifies StarLoopEntryState's that begin the (...)*
 	 *  precedence loops of left recursive rules.
 	 */
-	protected pushRecursionContextStates: BitSet;
+	protected _pushRecursionContextStates: BitSet;
 
 	protected _ruleNames: string[];
 	@NotNull
@@ -76,10 +76,10 @@ export class ParserInterpreter extends Parser {
 	/** We need a map from (decision,inputIndex)->forced alt for computing ambiguous
 	 *  parse trees. For now, we allow exactly one override.
 	 */
-	protected overrideDecision: number = -1;
-	protected overrideDecisionInputIndex: number = -1;
-	protected overrideDecisionAlt: number = -1;
-	protected overrideDecisionReached: boolean = false; // latch and only override once; error might trigger infinite loop
+	protected _overrideDecision: number = -1;
+	protected _overrideDecisionInputIndex: number = -1;
+	protected _overrideDecisionAlt: number = -1;
+	protected _overrideDecisionReached: boolean = false; // latch and only override once; error might trigger infinite loop
 
 	/** What is the current context when we override a decisions?  This tells
 	 *  us what the root of the parse tree is when using override
@@ -106,7 +106,7 @@ export class ParserInterpreter extends Parser {
 			let old: ParserInterpreter = grammarFileName;
 			this._grammarFileName = old._grammarFileName;
 			this._atn = old._atn;
-			this.pushRecursionContextStates = old.pushRecursionContextStates;
+			this._pushRecursionContextStates = old._pushRecursionContextStates;
 			this._ruleNames = old._ruleNames;
 			this._vocabulary = old._vocabulary;
 			this.interpreter = new ParserATNSimulator(this._atn, this);
@@ -122,14 +122,14 @@ export class ParserInterpreter extends Parser {
 			this._vocabulary = vocabulary;
 
 			// identify the ATN states where pushNewRecursionContext() must be called
-			this.pushRecursionContextStates = new BitSet(atn.states.length);
+			this._pushRecursionContextStates = new BitSet(atn.states.length);
 			for (let state of atn.states) {
 				if (!(state instanceof StarLoopEntryState)) {
 					continue;
 				}
 
 				if (state.precedenceRuleDecision) {
-					this.pushRecursionContextStates.set(state.stateNumber);
+					this._pushRecursionContextStates.set(state.stateNumber);
 				}
 			}
 
@@ -146,7 +146,7 @@ export class ParserInterpreter extends Parser {
 			super.reset(resetInput);
 		}
 
-		this.overrideDecisionReached = false;
+		this._overrideDecisionReached = false;
 		this._overrideDecisionRoot = undefined;
 	}
 
@@ -174,7 +174,7 @@ export class ParserInterpreter extends Parser {
 	parse(startRuleIndex: number): ParserRuleContext {
 		let startRuleStartState: RuleStartState = this._atn.ruleToStartState[startRuleIndex];
 
-		this._rootContext = this.createInterpreterRuleContext(undefined, ATNState.INVALID_STATE_NUMBER, startRuleIndex);
+		this._rootContext = this._createInterpreterRuleContext(undefined, ATNState.INVALID_STATE_NUMBER, startRuleIndex);
 		if (startRuleStartState.isPrecedenceRule) {
 			this.enterRecursionRule(this._rootContext, startRuleStartState.stateNumber, startRuleIndex, 0);
 		}
@@ -183,7 +183,7 @@ export class ParserInterpreter extends Parser {
 		}
 
 		while (true) {
-			let p: ATNState = this.atnState;
+			let p: ATNState = this._atnState;
 			switch (p.stateType) {
 			case ATNStateType.RULE_STOP:
 				// pop; return from rule
@@ -200,19 +200,19 @@ export class ParserInterpreter extends Parser {
 					}
 				}
 
-				this.visitRuleStopState(p);
+				this._visitRuleStopState(p);
 				break;
 
 			default:
 				try {
-					this.visitState(p);
+					this._visitState(p);
 				}
 				catch (e) {
 					if (e instanceof RecognitionException) {
 						this.state = this._atn.ruleToStopState[p.ruleIndex].stateNumber;
 						this.context.exception = e;
 						this.errorHandler.reportError(this, e);
-						this.recover(e);
+						this._recover(e);
 					} else {
 						throw e;
 					}
@@ -229,26 +229,26 @@ export class ParserInterpreter extends Parser {
 		super.enterRecursionRule(localctx, state, ruleIndex, precedence);
 	}
 
-	protected get atnState(): ATNState {
+	protected get _atnState(): ATNState {
 		return this._atn.states[this.state];
 	}
 
-	protected visitState(p: ATNState): void {
+	protected _visitState(p: ATNState): void {
 		let predictedAlt: number = 1;
 		if (p.numberOfTransitions > 1) {
-			predictedAlt = this.visitDecisionState(p as DecisionState);
+			predictedAlt = this._visitDecisionState(p as DecisionState);
 		}
 
 		let transition: Transition = p.transition(predictedAlt - 1);
 		switch (transition.serializationType) {
 		case TransitionType.EPSILON:
-			if (this.pushRecursionContextStates.get(p.stateNumber) &&
+			if (this._pushRecursionContextStates.get(p.stateNumber) &&
 				!(transition.target instanceof LoopEndState)) {
 				// We are at the start of a left recursive rule's (...)* loop
 				// and we're not taking the exit branch of loop.
 				let parentContext = this._parentContextStack[this._parentContextStack.length - 1];
 				let localctx: InterpreterRuleContext =
-					this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
+					this._createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
 				this.pushNewRecursionContext(localctx,
 					this._atn.ruleToStartState[p.ruleIndex].stateNumber,
 					this._ctx.ruleIndex);
@@ -263,7 +263,7 @@ export class ParserInterpreter extends Parser {
 		case TransitionType.SET:
 		case TransitionType.NOT_SET:
 			if (!transition.matches(this._input.LA(1), Token.MIN_USER_TOKEN_TYPE, 65535)) {
-				this.recoverInline();
+				this._recoverInline();
 			}
 			this.matchWildcard();
 			break;
@@ -275,7 +275,7 @@ export class ParserInterpreter extends Parser {
 		case TransitionType.RULE:
 			let ruleStartState: RuleStartState = transition.target as RuleStartState;
 			let ruleIndex: number = ruleStartState.ruleIndex;
-			let newctx: InterpreterRuleContext = this.createInterpreterRuleContext(this._ctx, p.stateNumber, ruleIndex);
+			let newctx: InterpreterRuleContext = this._createInterpreterRuleContext(this._ctx, p.stateNumber, ruleIndex);
 			if (ruleStartState.isPrecedenceRule) {
 				this.enterRecursionRule(newctx, ruleStartState.stateNumber, ruleIndex, (transition as RuleTransition).precedence);
 			}
@@ -315,14 +315,14 @@ export class ParserInterpreter extends Parser {
 	 *  a decision state (instance of DecisionState). It gives an opportunity
 	 *  for subclasses to track interesting things.
 	 */
-	protected visitDecisionState(p: DecisionState): number {
+	protected _visitDecisionState(p: DecisionState): number {
 		let edge: number = 1;
 		let predictedAlt: number;
 		this.errorHandler.sync(this);
 		let decision: number = p.decision;
-		if (decision === this.overrideDecision && this._input.index === this.overrideDecisionInputIndex && !this.overrideDecisionReached) {
-			predictedAlt = this.overrideDecisionAlt;
-			this.overrideDecisionReached = true;
+		if (decision === this._overrideDecision && this._input.index === this._overrideDecisionInputIndex && !this._overrideDecisionReached) {
+			predictedAlt = this._overrideDecisionAlt;
+			this._overrideDecisionReached = true;
 		}
 		else {
 			predictedAlt = this.interpreter.adaptivePredict(this._input, decision, this._ctx);
@@ -333,14 +333,14 @@ export class ParserInterpreter extends Parser {
 	/** Provide simple "factory" for InterpreterRuleContext's.
 	 *  @since 4.5.1
 	 */
-	protected createInterpreterRuleContext(
+	protected _createInterpreterRuleContext(
 		parent: ParserRuleContext | undefined,
 		invokingStateNumber: number,
 		ruleIndex: number): InterpreterRuleContext {
 		return new InterpreterRuleContext(ruleIndex, parent, invokingStateNumber);
 	}
 
-	protected visitRuleStopState(p: ATNState): void {
+	protected _visitRuleStopState(p: ATNState): void {
 		let ruleStartState: RuleStartState = this._atn.ruleToStartState[p.ruleIndex];
 		if (ruleStartState.isPrecedenceRule) {
 			let parentContext: [ParserRuleContext, number] = this._parentContextStack.pop()!;
@@ -396,9 +396,9 @@ export class ParserInterpreter extends Parser {
 	 *  @since 4.5
 	 */
 	addDecisionOverride(decision: number, tokenIndex: number, forcedAlt: number): void {
-		this.overrideDecision = decision;
-		this.overrideDecisionInputIndex = tokenIndex;
-		this.overrideDecisionAlt = forcedAlt;
+		this._overrideDecision = decision;
+		this._overrideDecisionInputIndex = tokenIndex;
+		this._overrideDecisionAlt = forcedAlt;
 	}
 
 	get overrideDecisionRoot(): InterpreterRuleContext | undefined {
@@ -409,7 +409,7 @@ export class ParserInterpreter extends Parser {
 	 *  to recover, add an error node. Otherwise, nothing is seen in the parse
 	 *  tree.
 	 */
-	protected recover(e: RecognitionException): void {
+	protected _recover(e: RecognitionException): void {
 		let i: number = this._input.index;
 		this.errorHandler.recover(this, e);
 		if (this._input.index === i) {
@@ -451,7 +451,7 @@ export class ParserInterpreter extends Parser {
 		}
 	}
 
-	protected recoverInline(): Token {
+	protected _recoverInline(): Token {
 		return this._errHandler.recoverInline(this);
 	}
 

@@ -612,7 +612,7 @@ if ( <if(invert)><m.varName> \<= 0 || <else>!<endif>(<expr>) ) {
 	<if(m.labels)><m.labels:{l | <labelref(l)> = }><endif>this._errHandler.recoverInline(this);
 } else {
 	if (this._input.LA(1) === Token.EOF) {
-		this.matchedEOF = true;
+		this._matchedEOF = true;
 	}
 
 	this._errHandler.reportMatch(this);
@@ -857,7 +857,7 @@ _prevctx = _localctx;
 >>
 
 recRuleSetPrevCtx() ::= <<
-if ( this._parseListeners!=null ) this.triggerExitRuleEvent();
+if ( this._parseListeners!=null ) this._triggerExitRuleEvent();
 _prevctx = _localctx;
 >>
 

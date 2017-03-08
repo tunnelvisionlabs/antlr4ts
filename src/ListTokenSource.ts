@@ -24,7 +24,7 @@ export class ListTokenSource implements TokenSource {
 	/**
 	 * The wrapped collection of {@link Token} objects to return.
 	 */
-	protected tokens: Token[];
+	protected _tokens: Token[];
 
 	/**
 	 * The name of the input source. If this value is {@code null}, a call to
@@ -39,12 +39,12 @@ export class ListTokenSource implements TokenSource {
 	 * {@link #nextToken}. The end of the input is indicated by this value
 	 * being greater than or equal to the number of items in {@link #tokens}.
 	 */
-	protected i: number = 0;
+	protected _i: number = 0;
 
 	/**
 	 * This field caches the EOF token for the token source.
 	 */
-	protected eofToken?: Token;
+	protected _eofToken?: Token;
 
 	/**
 	 * This is the backing field for {@link #getTokenFactory} and
@@ -70,7 +70,7 @@ export class ListTokenSource implements TokenSource {
 			throw new Error("tokens cannot be null");
 		}
 
-		this.tokens = tokens;
+		this._tokens = tokens;
 		this._sourceName = sourceName;
 	}
 
@@ -79,14 +79,14 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	get charPositionInLine(): number {
-		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].charPositionInLine;
-		} else if (this.eofToken != null) {
-			return this.eofToken.charPositionInLine;
-		} else if (this.tokens.length > 0) {
+		if (this._i < this._tokens.length) {
+			return this._tokens[this._i].charPositionInLine;
+		} else if (this._eofToken != null) {
+			return this._eofToken.charPositionInLine;
+		} else if (this._tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
-			let lastToken: Token = this.tokens[this.tokens.length - 1];
+			let lastToken: Token = this._tokens[this._tokens.length - 1];
 			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				let lastNewLine: number = tokenText.lastIndexOf('\n');
@@ -108,29 +108,29 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	nextToken(): Token {
-		if (this.i >= this.tokens.length) {
-			if (this.eofToken == null) {
+		if (this._i >= this._tokens.length) {
+			if (this._eofToken == null) {
 				let start: number = -1;
-				if (this.tokens.length > 0) {
-					let previousStop: number = this.tokens[this.tokens.length - 1].stopIndex;
+				if (this._tokens.length > 0) {
+					let previousStop: number = this._tokens[this._tokens.length - 1].stopIndex;
 					if (previousStop !== -1) {
 						start = previousStop + 1;
 					}
 				}
 
 				let stop: number = Math.max(-1, start - 1);
-				this.eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.line, this.charPositionInLine);
+				this._eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.line, this.charPositionInLine);
 			}
 
-			return this.eofToken;
+			return this._eofToken;
 		}
 
-		let t: Token = this.tokens[this.i];
-		if (this.i === this.tokens.length - 1 && t.type === Token.EOF) {
-			this.eofToken = t;
+		let t: Token = this._tokens[this._i];
+		if (this._i === this._tokens.length - 1 && t.type === Token.EOF) {
+			this._eofToken = t;
 		}
 
-		this.i++;
+		this._i++;
 		return t;
 	}
 
@@ -139,14 +139,14 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	get line(): number {
-		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].line;
-		} else if (this.eofToken != null) {
-			return this.eofToken.line;
-		} else if (this.tokens.length > 0) {
+		if (this._i < this._tokens.length) {
+			return this._tokens[this._i].line;
+		} else if (this._eofToken != null) {
+			return this._eofToken.line;
+		} else if (this._tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
-			let lastToken: Token = this.tokens[this.tokens.length - 1];
+			let lastToken: Token = this._tokens[this._tokens.length - 1];
 			let line: number = lastToken.line;
 
 			let tokenText: string | undefined = lastToken.text;
@@ -172,12 +172,12 @@ export class ListTokenSource implements TokenSource {
 	 */
 	@Override
 	get inputStream(): CharStream | undefined {
-		if (this.i < this.tokens.length) {
-			return this.tokens[this.i].inputStream;
-		} else if (this.eofToken != null) {
-			return this.eofToken.inputStream;
-		} else if (this.tokens.length > 0) {
-			return this.tokens[this.tokens.length - 1].inputStream;
+		if (this._i < this._tokens.length) {
+			return this._tokens[this._i].inputStream;
+		} else if (this._eofToken != null) {
+			return this._eofToken.inputStream;
+		} else if (this._tokens.length > 0) {
+			return this._tokens[this._tokens.length - 1].inputStream;
 		}
 
 		// no input stream information is available

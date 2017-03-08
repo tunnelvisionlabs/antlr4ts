@@ -469,12 +469,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 	}
 
 	@Override
-	protected defaultResult(): string {
+	protected _defaultResult(): string {
 		return "";
 	}
 
 	@Override
-	protected aggregateResult(aggregate: string, nextResult: string): string {
+	protected _aggregateResult(aggregate: string, nextResult: string): string {
 		return aggregate + nextResult;
 	}
 }
@@ -490,12 +490,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 	}
 
 	@Override
-	protected defaultResult(): string {
+	protected _defaultResult(): string {
 		return "";
 	}
 
 	@Override
-	protected aggregateResult(aggregate: string, nextResult: string): string {
+	protected _aggregateResult(aggregate: string, nextResult: string): string {
 		return aggregate + nextResult;
 	}
 }
@@ -511,12 +511,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 	}
 
 	@Override
-	protected defaultResult(): string {
+	protected _defaultResult(): string {
 		return "";
 	}
 
 	@Override
-	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+	protected _shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
 		return currentResult.length === 0;
 	}
 }
@@ -532,12 +532,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 	}
 
 	@Override
-	protected defaultResult(): string {
+	protected _defaultResult(): string {
 		return "default result";
 	}
 
 	@Override
-	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+	protected _shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
 		return false;
 	}
 }
@@ -582,12 +582,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 	}
 
 	@Override
-	protected defaultResult(): never {
+	protected _defaultResult(): never {
 		throw new Error("Should not be reachable");
 	}
 
 	@Override
-	protected aggregateResult(aggregate: number, nextResult: number): never {
+	protected _aggregateResult(aggregate: number, nextResult: number): never {
 		throw new Error("Should not be reachable");
 	}
 }

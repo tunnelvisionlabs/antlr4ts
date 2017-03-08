@@ -24,7 +24,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 		}
 	}
 
-	protected getDelegates(): ReadonlyArray<TListener> {
+	protected _getDelegates(): ReadonlyArray<TListener> {
 		return this._delegates;
 	}
 

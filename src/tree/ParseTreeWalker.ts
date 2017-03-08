@@ -30,7 +30,7 @@ export class ParseTreeWalker {
 					listener.visitTerminal(currentNode);
 				}
 			} else {
-				this.enterRule(listener, currentNode as RuleNode);
+				this._enterRule(listener, currentNode as RuleNode);
 			}
 
 			// Move down to first child, if exists
@@ -46,7 +46,7 @@ export class ParseTreeWalker {
 			do {
 				// post-order visit
 				if (currentNode instanceof RuleNode) {
-					this.exitRule(listener, currentNode);
+					this._exitRule(listener, currentNode);
 				}
 
 				// No parent, so no siblings
@@ -77,7 +77,7 @@ export class ParseTreeWalker {
 	 * {@link RuleContext}-specific event. First we trigger the generic and then
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
-	protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
+	protected _enterRule(listener: ParseTreeListener, r: RuleNode): void {
 		let ctx = r.ruleContext as ParserRuleContext;
 		if (listener.enterEveryRule) {
 			listener.enterEveryRule(ctx);
@@ -86,7 +86,7 @@ export class ParseTreeWalker {
 		ctx.enterRule(listener);
 	}
 
-	protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
+	protected _exitRule(listener: ParseTreeListener, r: RuleNode): void {
 		let ctx = r.ruleContext as ParserRuleContext;
 		ctx.exitRule(listener);
 		if (listener.exitEveryRule) {

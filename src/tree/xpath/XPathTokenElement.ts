@@ -11,10 +11,10 @@ import { Trees } from "../Trees";
 import { XPathElement } from "./XPathElement";
 
 export class XPathTokenElement extends XPathElement {
-	protected tokenType: number;
+	protected _tokenType: number;
 	constructor(tokenName: string, tokenType: number) {
 		super(tokenName);
-		this.tokenType = tokenType;
+		this._tokenType = tokenType;
 	}
 
 	@Override
@@ -23,8 +23,8 @@ export class XPathTokenElement extends XPathElement {
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if (c instanceof TerminalNode) {
-				if ((c.symbol.type == this.tokenType && !this.invert) ||
-					(c.symbol.type != this.tokenType && this.invert)) {
+				if ((c.symbol.type == this._tokenType && !this.invert) ||
+					(c.symbol.type != this._tokenType && this.invert)) {
 					nodes.push(c);
 				}
 			}

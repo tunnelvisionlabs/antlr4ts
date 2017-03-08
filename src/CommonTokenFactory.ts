@@ -32,7 +32,7 @@ export class CommonTokenFactory implements TokenFactory {
 	 * The default value is {@code false} to avoid the performance and memory
 	 * overhead of copying text for every token unless explicitly requested.</p>
 	 */
-	protected copyText: boolean;
+	protected _copyText: boolean;
 
 	/**
 	 * Constructs a {@link CommonTokenFactory} with the specified value for
@@ -45,7 +45,7 @@ export class CommonTokenFactory implements TokenFactory {
 	 * @param copyText The value for {@link #copyText}.
 	 */
 	constructor(copyText: boolean = false) {
-		this.copyText = copyText;
+		this._copyText = copyText;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ export class CommonTokenFactory implements TokenFactory {
 		let t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
 		t.line = line;
 		t.charPositionInLine = charPositionInLine;
-		if (text == null && this.copyText && source.stream != null) {
+		if (text == null && this._copyText && source.stream != null) {
 			t.text = source.stream.getText(Interval.of(start, stop));
 		}
 

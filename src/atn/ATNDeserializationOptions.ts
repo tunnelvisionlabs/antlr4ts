@@ -54,7 +54,7 @@ export class ATNDeserializationOptions {
 	}
 
 	set isVerifyATN(verifyATN: boolean) {
-		this.throwIfReadOnly();
+		this._throwIfReadOnly();
 		this._verifyATN = verifyATN;
 	}
 
@@ -63,7 +63,7 @@ export class ATNDeserializationOptions {
 	}
 
 	set isGenerateRuleBypassTransitions(generateRuleBypassTransitions: boolean) {
-		this.throwIfReadOnly();
+		this._throwIfReadOnly();
 		this._generateRuleBypassTransitions = generateRuleBypassTransitions;
 	}
 
@@ -72,11 +72,11 @@ export class ATNDeserializationOptions {
 	}
 
 	set isOptimize(optimize: boolean) {
-		this.throwIfReadOnly();
+		this._throwIfReadOnly();
 		this._optimize = optimize;
 	}
 
-	protected throwIfReadOnly(): void {
+	protected _throwIfReadOnly(): void {
 		if (this.isReadOnly) {
 			throw new Error("The object is read only.");
 		}
