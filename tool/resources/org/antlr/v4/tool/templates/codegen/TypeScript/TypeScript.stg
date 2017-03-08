@@ -136,6 +136,14 @@ visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; se
 
 fileHeader(grammarFileName, ANTLRVersion) ::= <<
 // Generated from <grammarFileName> by ANTLR <ANTLRVersion>
+
+// tslint:disable:variable-name -- Non-conventional capitialization used
+// tslint:disable:whitespace
+// tslint:disable:trailing-comma
+// tslint:disable:ordered-imports
+// tslint:disable:no-consecutive-blank-lines
+// tslint:disable:no-trailing-whitespace
+// tslint:disable:no-trailing-LexerModeCommand
 >>
 
 Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
