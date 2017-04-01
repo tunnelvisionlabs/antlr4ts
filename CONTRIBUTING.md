@@ -137,3 +137,4 @@ ability to provide meaningful release notes.
 > git submodule init
 > git submodule update
 > ```
+> The later (update) command may need to be repeated occasionally after another contributor updates the version of reference code.

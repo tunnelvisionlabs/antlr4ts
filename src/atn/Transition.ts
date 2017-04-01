@@ -58,7 +58,7 @@ export abstract class Transition {
 
 	constructor(@NotNull target: ATNState) {
 		if (target == null) {
-			throw "target cannot be null.";
+			throw new Error("target cannot be null.");
 		}
 
 		this.target = target;
