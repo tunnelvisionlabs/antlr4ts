@@ -1,0 +1,8 @@
+sudo: false
+language: node_js
+node_js:
+  - "6"
+jdk: openjdk6
+script:
+  # npm install is run automatically by Travis before 'script'
+  - npm test
