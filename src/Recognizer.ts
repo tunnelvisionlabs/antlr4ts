@@ -23,9 +23,9 @@ import * as Utils from './misc/Utils';
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static readonly EOF: number = -1;
 
-	private static tokenTypeMapCache =
+	private static _tokenTypeMapCache =
 	 	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
-	private static ruleIndexMapCache =
+	private static _ruleIndexMapCache =
 	 	new WeakMap<string[], ReadonlyMap<string, number>>();
 
 	@SuppressWarnings("serial")
@@ -54,7 +54,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	@NotNull
 	getTokenTypeMap(): ReadonlyMap<string, number> {
 		let vocabulary: Vocabulary = this.vocabulary;
-		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
+		let result = Recognizer._tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
 			let intermediateResult = new Map<string, number>();
 			for (let i = 0; i <= this.atn.maxTokenType; i++) {
@@ -71,7 +71,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 			intermediateResult.set("EOF", Token.EOF);
 			result = Object.freeze(intermediateResult);
-			Recognizer.tokenTypeMapCache.set(vocabulary, result);
+			Recognizer._tokenTypeMapCache.set(vocabulary, result);
 		}
 
 		return result;
@@ -89,10 +89,10 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
 
-		let result: ReadonlyMap<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
+		let result: ReadonlyMap<string, number> | undefined = Recognizer._ruleIndexMapCache.get(ruleNames);
 		if (result == null) {
 			result = Object.freeze(Utils.toMap(ruleNames));
-			Recognizer.ruleIndexMapCache.set(ruleNames, result);
+			Recognizer._ruleIndexMapCache.set(ruleNames, result);
 		}
 
 		return result;

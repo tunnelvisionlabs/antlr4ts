@@ -17,10 +17,10 @@ import { ProfilingATNSimulator } from './ProfilingATNSimulator';
  * @since 4.3
  */
 export class ParseInfo {
-	protected atnSimulator: ProfilingATNSimulator;
+	protected _atnSimulator: ProfilingATNSimulator;
 
 	constructor(@NotNull atnSimulator: ProfilingATNSimulator) {
-		this.atnSimulator = atnSimulator;
+		this._atnSimulator = atnSimulator;
 	}
 
 	/**
@@ -32,7 +32,7 @@ export class ParseInfo {
 	 */
 	@NotNull
 	getDecisionInfo(): DecisionInfo[] {
-		return this.atnSimulator.getDecisionInfo();
+		return this._atnSimulator.getDecisionInfo();
 	}
 
 	/**
@@ -45,7 +45,7 @@ export class ParseInfo {
 	 */
 	@NotNull
 	getLLDecisions(): number[] {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let LL: number[] = [];
 		for (let i = 0; i < decisions.length; i++) {
 			let fallBack: number = decisions[i].LL_Fallback;
@@ -63,7 +63,7 @@ export class ParseInfo {
 	 * {@link DecisionInfo#timeInPrediction} for all decisions.
 	 */
 	getTotalTimeInPrediction(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let t: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			t += decisions[i].timeInPrediction;
@@ -78,7 +78,7 @@ export class ParseInfo {
 	 * {@link DecisionInfo#SLL_TotalLook} for all decisions.
 	 */
 	getTotalSLLLookaheadOps(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let k: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			k += decisions[i].SLL_TotalLook;
@@ -93,7 +93,7 @@ export class ParseInfo {
 	 * {@link DecisionInfo#LL_TotalLook} for all decisions.
 	 */
 	getTotalLLLookaheadOps(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let k: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			k += decisions[i].LL_TotalLook;
@@ -107,7 +107,7 @@ export class ParseInfo {
 	 * across all decisions made during parsing.
 	 */
 	getTotalSLLATNLookaheadOps(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let k: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			k += decisions[i].SLL_ATNTransitions;
@@ -121,7 +121,7 @@ export class ParseInfo {
 	 * across all decisions made during parsing.
 	 */
 	getTotalLLATNLookaheadOps(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let k: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			k += decisions[i].LL_ATNTransitions;
@@ -139,7 +139,7 @@ export class ParseInfo {
 	 * {@link #getTotalLLATNLookaheadOps}.</p>
 	 */
 	getTotalATNLookaheadOps(): number {
-		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
+		let decisions: DecisionInfo[] = this._atnSimulator.getDecisionInfo();
 		let k: number = 0;
 		for (let i = 0; i < decisions.length; i++) {
 			k += decisions[i].SLL_ATNTransitions;
@@ -163,11 +163,11 @@ export class ParseInfo {
 
 	getDFASize(decision?: number): number {
 		if (decision) {
-			let decisionToDFA: DFA = this.atnSimulator.atn.decisionToDFA[decision];
+			let decisionToDFA: DFA = this._atnSimulator.atn.decisionToDFA[decision];
 			return decisionToDFA.states.size;
 		} else {
 			let n: number = 0;
-			let decisionToDFA: DFA[] = this.atnSimulator.atn.decisionToDFA;
+			let decisionToDFA: DFA[] = this._atnSimulator.atn.decisionToDFA;
 			for (let i = 0; i < decisionToDFA.length; i++) {
 				n += this.getDFASize(i);
 			}

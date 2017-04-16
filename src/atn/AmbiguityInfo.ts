@@ -43,7 +43,7 @@ import { TokenStream } from '../TokenStream';
 export class AmbiguityInfo extends DecisionEventInfo {
 	/** The set of alternative numbers for this decision event that lead to a valid parse. */
 	@NotNull
-	private ambigAlts: BitSet;
+	private _ambigAlts: BitSet;
 
 	/**
 	 * Constructs a new instance of the {@link AmbiguityInfo} class with the
@@ -67,7 +67,7 @@ export class AmbiguityInfo extends DecisionEventInfo {
 		startIndex: number,
 		stopIndex: number) {
 		super(decision, state, input, startIndex, stopIndex, state.useContext);
-		this.ambigAlts = ambigAlts;
+		this._ambigAlts = ambigAlts;
 	}
 
 	/**
@@ -77,6 +77,6 @@ export class AmbiguityInfo extends DecisionEventInfo {
 	 */
 	@NotNull
 	get ambiguousAlternatives(): BitSet {
-		return this.ambigAlts;
+		return this._ambigAlts;
 	}
 }

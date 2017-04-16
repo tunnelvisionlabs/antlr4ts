@@ -8,14 +8,14 @@ import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 
 export abstract class XPathElement {
-	protected nodeName: string;
+	protected _nodeName: string;
 	public invert: boolean;
 
 	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
 	 *  op is null if just node
 	 */
 	constructor(nodeName: string) {
-		this.nodeName = nodeName;
+		this._nodeName = nodeName;
 		this.invert = false;
 	}
 
@@ -29,6 +29,6 @@ export abstract class XPathElement {
 	toString(): string {
 		let inv: string = this.invert ? "!" : "";
 		let className: string = Object.constructor.name;
-		return className + "[" + inv + this.nodeName + "]";
+		return className + "[" + inv + this._nodeName + "]";
 	}
 }

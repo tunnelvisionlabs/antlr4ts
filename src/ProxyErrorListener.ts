@@ -18,14 +18,14 @@ import { Override, NotNull } from "./Decorators";
  */
 export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Symbol>> implements ANTLRErrorListener<Symbol> {
 
-	constructor(private delegates: TListener[]) {
-		if (!delegates) {
+	constructor(private _delegates: TListener[]) {
+		if (!_delegates) {
 			throw new Error("Invalid delegates");
 		}
 	}
 
-	protected getDelegates(): ReadonlyArray<TListener> {
-		return this.delegates;
+	protected _getDelegates(): ReadonlyArray<TListener> {
+		return this._delegates;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 		charPositionInLine: number,
 		@NotNull msg: string,
 		e: RecognitionException | undefined): void {
-		this.delegates.forEach(listener => {
+		this._delegates.forEach(listener => {
 			if (listener.syntaxError) {
 				listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
 			}

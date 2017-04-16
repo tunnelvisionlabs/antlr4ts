@@ -17,11 +17,11 @@ import * as Utils from '../misc/Utils';
 export class ConflictInfo {
 	private _conflictedAlts: BitSet;
 
-	private exact: boolean;
+	private _exact: boolean;
 
 	constructor(conflictedAlts: BitSet, exact: boolean) {
 		this._conflictedAlts = conflictedAlts;
-		this.exact = exact;
+		this._exact = exact;
 	}
 
 	/**
@@ -46,7 +46,7 @@ export class ConflictInfo {
 	 * states.</p>
 	 */
 	get isExact(): boolean {
-		return this.exact;
+		return this._exact;
 	}
 
 	@Override

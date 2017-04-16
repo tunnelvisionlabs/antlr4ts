@@ -46,19 +46,19 @@ export abstract class PredictionContext implements Equatable {
 	 *  }
 	 * </pre>
 	 */
-	private readonly cachedHashCode: number;
+	private readonly _cachedHashCode: number;
 
 	constructor(cachedHashCode: number) {
-		this.cachedHashCode = cachedHashCode;
+		this._cachedHashCode = cachedHashCode;
 	}
 
-	protected static calculateEmptyHashCode(): number {
+	protected static _calculateEmptyHashCode(): number {
 		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 		hash = MurmurHash.finish(hash, 0);
 		return hash;
 	}
 
-	protected static calculateSingleHashCode(parent: PredictionContext, returnState: number): number {
+	protected static _calculateSingleHashCode(parent: PredictionContext, returnState: number): number {
 		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 		hash = MurmurHash.update(hash, parent);
 		hash = MurmurHash.update(hash, returnState);
@@ -66,7 +66,7 @@ export abstract class PredictionContext implements Equatable {
 		return hash;
 	}
 
-	protected static calculateHashCode(parents: PredictionContext[], returnStates: number[]): number {
+	protected static _calculateHashCode(parents: PredictionContext[], returnStates: number[]): number {
 		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 
 		for (let parent of parents) {
@@ -90,9 +90,9 @@ export abstract class PredictionContext implements Equatable {
 	// @NotNull
 	abstract getParent(index: number): PredictionContext;
 
-	protected abstract addEmptyContext(): PredictionContext;
+	protected abstract _addEmptyContext(): PredictionContext;
 
-	protected abstract removeEmptyContext(): PredictionContext;
+	protected abstract _removeEmptyContext(): PredictionContext;
 
 	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
 		if (outerContext.isEmpty) {
@@ -111,12 +111,12 @@ export abstract class PredictionContext implements Equatable {
 		return parent.getChild(transition.followState.stateNumber);
 	}
 
-	private static addEmptyContext(context: PredictionContext): PredictionContext {
-		return context.addEmptyContext();
+	private static _addEmptyContext(context: PredictionContext): PredictionContext {
+		return context._addEmptyContext();
 	}
 
-	private static removeEmptyContext(context: PredictionContext): PredictionContext {
-		return context.removeEmptyContext();
+	private static _removeEmptyContext(context: PredictionContext): PredictionContext {
+		return context._removeEmptyContext();
 	}
 
 	static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
@@ -125,9 +125,9 @@ export abstract class PredictionContext implements Equatable {
 		}
 
 		if (context0.isEmpty) {
-			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext.addEmptyContext(context1);
+			return PredictionContext.isEmptyLocal(context0) ? context0 : PredictionContext._addEmptyContext(context1);
 		} else if (context1.isEmpty) {
-			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
+			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext._addEmptyContext(context0);
 		}
 
 		let context0size: number = context0.size;
@@ -294,7 +294,7 @@ export abstract class PredictionContext implements Equatable {
 
 	@Override
 	hashCode(): number {
-		return this.cachedHashCode;
+		return this._cachedHashCode;
 	}
 
 	// @Override
@@ -367,24 +367,24 @@ export abstract class PredictionContext implements Equatable {
 }
 
 class EmptyPredictionContext extends PredictionContext {
-	private fullContext: boolean;
+	private _fullContext: boolean;
 
 	constructor(fullContext: boolean) {
-		super(PredictionContext.calculateEmptyHashCode());
-		this.fullContext = fullContext;
+		super(PredictionContext._calculateEmptyHashCode());
+		this._fullContext = fullContext;
 	}
 
 	get isFullContext(): boolean {
-		return this.fullContext;
+		return this._fullContext;
 	}
 
 	@Override
-	protected addEmptyContext(): PredictionContext {
+	protected _addEmptyContext(): PredictionContext {
 		return this;
 	}
 
 	@Override
-	protected removeEmptyContext(): PredictionContext {
+	protected _removeEmptyContext(): PredictionContext {
 		throw new Error("Cannot remove the empty context from itself.");
 	}
 
@@ -448,7 +448,7 @@ class ArrayPredictionContext extends PredictionContext {
 	returnStates: number[];
 
 	constructor( @NotNull parents: PredictionContext[], returnStates: number[], hashCode?: number) {
-		super(hashCode || PredictionContext.calculateHashCode(parents, returnStates));
+		super(hashCode || PredictionContext._calculateHashCode(parents, returnStates));
 		assert(parents.length === returnStates.length);
 		assert(returnStates.length > 1 || returnStates[0] !== PredictionContext.EMPTY_FULL_STATE_KEY, "Should be using PredictionContext.EMPTY instead.");
 
@@ -487,7 +487,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	protected addEmptyContext(): PredictionContext {
+	protected _addEmptyContext(): PredictionContext {
 		if (this.hasEmpty) {
 			return this;
 		}
@@ -500,7 +500,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	protected removeEmptyContext(): PredictionContext {
+	protected _removeEmptyContext(): PredictionContext {
 		if (!this.hasEmpty) {
 			return this;
 		}
@@ -516,10 +516,10 @@ class ArrayPredictionContext extends PredictionContext {
 
 	@Override
 	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
-		return ArrayPredictionContext.appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
+		return ArrayPredictionContext._appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
 	}
 
-	private static appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
+	private static _appendContextImpl(context: PredictionContext, suffix: PredictionContext, visited: PredictionContext.IdentityHashMap): PredictionContext {
 		if (suffix.isEmpty) {
 			if (PredictionContext.isEmptyLocal(suffix)) {
 				if (context.hasEmpty) {
@@ -553,7 +553,7 @@ class ArrayPredictionContext extends PredictionContext {
 				}
 
 				for (let i = 0; i < parentCount; i++) {
-					updatedParents[i] = ArrayPredictionContext.appendContextImpl(context.getParent(i), suffix, visited);
+					updatedParents[i] = ArrayPredictionContext._appendContextImpl(context.getParent(i), suffix, visited);
 				}
 
 				if (updatedParents.length === 1) {
@@ -588,10 +588,10 @@ class ArrayPredictionContext extends PredictionContext {
 		}
 
 		let other: ArrayPredictionContext = o;
-		return this.equalsImpl(other, new Array2DHashSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>());
+		return this._equalsImpl(other, new Array2DHashSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>());
 	}
 
-	private equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
+	private _equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
 		let selfWorkList: PredictionContext[] = [];
 		let otherWorkList: PredictionContext[] = [];
 		selfWorkList.push(this);
@@ -651,7 +651,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	returnState: number;
 
 	constructor(@NotNull parent: PredictionContext, returnState: number) {
-		super(PredictionContext.calculateSingleHashCode(parent, returnState));
+		super(PredictionContext._calculateSingleHashCode(parent, returnState));
 		// assert(returnState != PredictionContext.EMPTY_FULL_STATE_KEY && returnState != PredictionContext.EMPTY_LOCAL_STATE_KEY);
 		this.parent = parent;
 		this.returnState = returnState;
@@ -695,14 +695,14 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	protected addEmptyContext(): PredictionContext {
+	protected _addEmptyContext(): PredictionContext {
 		let parents: PredictionContext[] = [this.parent, PredictionContext.EMPTY_FULL];
 		let returnStates: number[] = [this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY];
 		return new ArrayPredictionContext(parents, returnStates);
 	}
 
 	@Override
-	protected removeEmptyContext(): PredictionContext {
+	protected _removeEmptyContext(): PredictionContext {
 		return this;
 	}
 

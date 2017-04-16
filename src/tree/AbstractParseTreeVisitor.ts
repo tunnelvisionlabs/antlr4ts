@@ -41,16 +41,16 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitChildren(@NotNull node: RuleNode): Result {
-		let result: Result = this.defaultResult();
+		let result: Result = this._defaultResult();
 		let n: number = node.childCount;
 		for (let i = 0; i < n; i++) {
-			if (!this.shouldVisitNextChild(node, result)) {
+			if (!this._shouldVisitNextChild(node, result)) {
 				break;
 			}
 
 			let c: ParseTree = node.getChild(i);
 			let childResult: Result = c.accept(this);
-			result = this.aggregateResult(result, childResult);
+			result = this._aggregateResult(result, childResult);
 		}
 
 		return result;
@@ -64,7 +64,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitTerminal(@NotNull node: TerminalNode): Result {
-		return this.defaultResult();
+		return this._defaultResult();
 	}
 
 	/**
@@ -75,7 +75,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 */
 	@Override
 	visitErrorNode(@NotNull node: ErrorNode): Result {
-		return this.defaultResult();
+		return this._defaultResult();
 	}
 
 	/**
@@ -87,7 +87,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 *
 	 * @return The default value returned by visitor methods.
 	 */
-	protected abstract defaultResult(): Result;
+	protected abstract _defaultResult(): Result;
 
 	/**
 	 * Aggregates the results of visiting multiple children of a node. After
@@ -108,7 +108,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 *
 	 * @return The updated aggregate result.
 	 */
-	protected aggregateResult(aggregate: Result, nextResult: Result): Result {
+	protected _aggregateResult(aggregate: Result, nextResult: Result): Result {
 		return nextResult;
 	}
 
@@ -136,7 +136,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * {@code false} to stop visiting children and immediately return the
 	 * current aggregate result from {@link #visitChildren}.
 	 */
-	protected shouldVisitNextChild(@NotNull node: RuleNode, currentResult: Result): boolean {
+	protected _shouldVisitNextChild(@NotNull node: RuleNode, currentResult: Result): boolean {
 		return true;
 	}
 }

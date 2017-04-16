@@ -29,14 +29,14 @@ import { suite, test as Test, skip as Ignore } from 'mocha-typescript';
 @suite
 export class TestTokenStreamRewriter {
 
-	private createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
+	private _createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
 		let stream = new ANTLRInputStream(input);
 		let lexer = new lexerCtor(stream);
 		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.modeNames, lexer.ruleNames, lexer.atn, stream);
 	}
 
 	@Test testInsertBeforeIndex0(): void {
-		let lexEngine: LexerInterpreter =  this.createLexerInterpreter("abc", RewriterLexer1);
+		let lexEngine: LexerInterpreter =  this._createLexerInterpreter("abc", RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -48,7 +48,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testInsertAfterLastIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -60,7 +60,7 @@ export class TestTokenStreamRewriter {
 
 	@Test test2InsertBeforeAfterMiddleIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -73,7 +73,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceIndex0(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -85,7 +85,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceLastIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -97,7 +97,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceMiddleIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -111,7 +111,7 @@ export class TestTokenStreamRewriter {
 		// Tokens: 0123456789
 		// Input:  x = 3 * 0;
 		let input: string =  "x = 3 * 0;";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer2);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer2);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -140,7 +140,7 @@ export class TestTokenStreamRewriter {
 		// Tokens: 012345678901234567
 		// Input:  x = 3 * 0 + 2 * 0;
 		let input: string =  "x = 3 * 0 + 2 * 0;";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer3);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer3);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -186,7 +186,7 @@ export class TestTokenStreamRewriter {
 
 	@Test test2ReplaceMiddleIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -199,7 +199,7 @@ export class TestTokenStreamRewriter {
 
 	@Test test2ReplaceMiddleIndex1InsertBefore(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -213,7 +213,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceThenDeleteMiddleIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -226,7 +226,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testInsertInPriorReplace(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -251,7 +251,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testInsertThenReplaceSameIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -266,7 +266,7 @@ export class TestTokenStreamRewriter {
 
 	@Test test2InsertMiddleIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -279,7 +279,7 @@ export class TestTokenStreamRewriter {
 
 	@Test test2InsertThenReplaceIndex0(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -293,7 +293,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceThenInsertBeforeLastIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -306,7 +306,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testInsertThenReplaceLastIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -319,7 +319,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceThenInsertAfterLastIndex(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -332,7 +332,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceRangeThenInsertAtLeftEdge(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -345,7 +345,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceRangeThenInsertAtRightEdge(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -371,7 +371,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceRangeThenInsertAfterRightEdge(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -384,7 +384,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceAll(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -396,7 +396,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceSubsetThenFetch(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -408,7 +408,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceThenReplaceSuperset(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -435,7 +435,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceThenReplaceLowerIndexedSuperset(): void {
 		let input: string =  "abcccba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -462,7 +462,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testReplaceSingleMiddleThenOverlappingSuperset(): void {
 		let input: string =  "abcba";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -475,7 +475,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testCombineInserts(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -488,7 +488,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testCombine3Inserts(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -502,7 +502,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testCombineInsertOnLeftWithReplace(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -517,7 +517,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testCombineInsertOnLeftWithDelete(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -534,7 +534,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testDisjointInserts(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -548,7 +548,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testOverlappingReplace(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -563,7 +563,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testOverlappingReplace2(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -590,7 +590,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testOverlappingReplace3(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -605,7 +605,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testOverlappingReplace4(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -620,7 +620,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testDropIdenticalReplace(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -635,7 +635,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testDropPrevCoveredInsert(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -650,7 +650,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testLeaveAloneDisjointInsert(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -663,7 +663,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testLeaveAloneDisjointInsert2(): void {
 		let input: string =  "abcc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -676,7 +676,7 @@ export class TestTokenStreamRewriter {
 
 	@Test testInsertBeforeTokenThenDeleteThatToken(): void {
 		let input: string =  "abc";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -691,7 +691,7 @@ export class TestTokenStreamRewriter {
 	@Test
 	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder(): void {
 		let input: string =  "aa";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
@@ -707,7 +707,7 @@ export class TestTokenStreamRewriter {
 	@Test
 	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2(): void {
 		let input: string = "aa";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -726,7 +726,7 @@ export class TestTokenStreamRewriter {
 	@Test
 	testPreservesOrderOfContiguousInserts(): void {
 		let input: string = "ab";
-		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let lexEngine: LexerInterpreter = this._createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		let tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);

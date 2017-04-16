@@ -97,14 +97,14 @@ export class ParseTreePatternMatcher {
 	 */
 	private _parser: Parser;
 
-	protected start = "<";
-	protected stop = ">";
-	protected escape = "\\"; // e.g., \< and \> must escape BOTH!
+	protected _start = "<";
+	protected _stop = ">";
+	protected _escape = "\\"; // e.g., \< and \> must escape BOTH!
 
 	/**
 	 * Regular expression corresponding to escape, for global replace
 	 */
-	protected escapeRE = /\\/g;
+	protected _escapeRE = /\\/g;
 
 	/**
 	 * Constructs a {@link ParseTreePatternMatcher} or from a {@link Lexer} and
@@ -137,10 +137,10 @@ export class ParseTreePatternMatcher {
 			throw new Error("stop cannot be null or empty");
 		}
 
-		this.start = start;
-		this.stop = stop;
-		this.escape = escapeLeft;
-		this.escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g");
+		this._start = start;
+		this._stop = stop;
+		this._escape = escapeLeft;
+		this._escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g");
 	}
 
 	/** Does {@code pattern} matched as rule {@code patternRuleIndex} match {@code tree}? */
@@ -157,7 +157,7 @@ export class ParseTreePatternMatcher {
 			return this.matches(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
+			let mismatchedNode = this._matchImpl(tree, pattern.patternTree, labels);
 			return !mismatchedNode;
 		}
 	}
@@ -185,7 +185,7 @@ export class ParseTreePatternMatcher {
 			return this.match(tree, p);
 		} else {
 			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
+			let mismatchedNode = this._matchImpl(tree, pattern.patternTree, labels);
 			return new ParseTreeMatch(tree, pattern, labels, mismatchedNode);
 		}
 	}
@@ -259,7 +259,7 @@ export class ParseTreePatternMatcher {
 	 * was successful. The specific node returned depends on the matching
 	 * algorithm used by the implementation, and may be overridden.
 	 */
-	protected matchImpl(
+	protected _matchImpl(
 		@NotNull tree: ParseTree,
 		@NotNull patternTree: ParseTree,
 		@NotNull labels: MultiMap<string, ParseTree>): ParseTree | undefined {
@@ -308,7 +308,7 @@ export class ParseTreePatternMatcher {
 			&& patternTree instanceof ParserRuleContext) {
 			let mismatchedNode: ParseTree | undefined = undefined;
 			// (expr ...) and <expr>
-			let ruleTagToken = this.getRuleTagToken(patternTree);
+			let ruleTagToken = this._getRuleTagToken(patternTree);
 			if (ruleTagToken) {
 				let m: ParseTreeMatch;
 				if (tree.ruleContext.ruleIndex === patternTree.ruleContext.ruleIndex) {
@@ -339,7 +339,7 @@ export class ParseTreePatternMatcher {
 
 			let n: number = tree.childCount;
 			for (let i = 0; i < n; i++) {
-				let childMatch = this.matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
+				let childMatch = this._matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
 				if (childMatch) {
 					return childMatch;
 				}
@@ -353,7 +353,7 @@ export class ParseTreePatternMatcher {
 	}
 
 	/** Is {@code t} {@code (expr <expr>)} subtree? */
-	protected getRuleTagToken(t: ParseTree): RuleTagToken | undefined {
+	protected _getRuleTagToken(t: ParseTree): RuleTagToken | undefined {
 		if (t instanceof RuleNode) {
 			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
 				let c = t.getChild(0) as TerminalNode;
@@ -424,19 +424,19 @@ export class ParseTreePatternMatcher {
 		let starts: number[] = [];
 		let stops: number[] = [];
 		while (p < n) {
-			if (p === pattern.indexOf(this.escape + this.start, p)) {
-				p += this.escape.length + this.start.length;
+			if (p === pattern.indexOf(this._escape + this._start, p)) {
+				p += this._escape.length + this._start.length;
 			}
-			else if (p === pattern.indexOf(this.escape + this.stop, p)) {
-				p += this.escape.length + this.stop.length;
+			else if (p === pattern.indexOf(this._escape + this._stop, p)) {
+				p += this._escape.length + this._stop.length;
 			}
-			else if (p === pattern.indexOf(this.start, p)) {
+			else if (p === pattern.indexOf(this._start, p)) {
 				starts.push(p);
-				p += this.start.length;
+				p += this._start.length;
 			}
-			else if (p === pattern.indexOf(this.stop, p)) {
+			else if (p === pattern.indexOf(this._stop, p)) {
 				stops.push(p);
-				p += this.stop.length;
+				p += this._stop.length;
 			}
 			else {
 				p++;
@@ -473,7 +473,7 @@ export class ParseTreePatternMatcher {
 		}
 		for (let i = 0; i < ntags; i++) {
 			// copy inside of <tag>
-			let tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
+			let tag: string = pattern.substring(starts[i] + this._start.length, stops[i]);
 			let ruleOrToken: string = tag;
 			let label: string | undefined = undefined;
 			let colon: number = tag.indexOf(':');
@@ -484,12 +484,12 @@ export class ParseTreePatternMatcher {
 			chunks.push(new TagChunk(ruleOrToken, label));
 			if (i + 1 < ntags) {
 				// copy from end of <tag> to start of next
-				let text: string = pattern.substring(stops[i] + this.stop.length, starts[i + 1]);
+				let text: string = pattern.substring(stops[i] + this._stop.length, starts[i + 1]);
 				chunks.push(new TextChunk(text));
 			}
 		}
 		if (ntags > 0) {
-			let afterLastTag: number = stops[ntags - 1] + this.stop.length;
+			let afterLastTag: number = stops[ntags - 1] + this._stop.length;
 			if (afterLastTag < n) { // copy text from end of last tag to end
 				let text: string = pattern.substring(afterLastTag, n);
 				chunks.push(new TextChunk(text));
@@ -500,7 +500,7 @@ export class ParseTreePatternMatcher {
 		for (let i = 0; i < chunks.length; i++) {
 			let c: Chunk = chunks[i];
 			if (c instanceof TextChunk) {
-				let unescaped: string = c.text.replace(this.escapeRE, "");
+				let unescaped: string = c.text.replace(this._escapeRE, "");
 				if (unescaped.length < c.text.length) {
 					chunks[i] = new TextChunk(unescaped);
 				}

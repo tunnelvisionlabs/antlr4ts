@@ -104,9 +104,9 @@ export function asIterable<T>(collection: Collection<T>): Iterable<T> {
 
 class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
 	private _iterator: JavaIterator<T>
-	constructor(private collection: JavaCollection<T>) { }
+	constructor(private _collection: JavaCollection<T>) { }
 
-	[Symbol.iterator]() { this._iterator = this.collection.iterator(); return this; }
+	[Symbol.iterator]() { this._iterator = this._collection.iterator(); return this; }
 
 	next(): IteratorResult<T> {
 		if (!this._iterator.hasNext()) {

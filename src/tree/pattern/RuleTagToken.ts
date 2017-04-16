@@ -24,7 +24,7 @@ export class RuleTagToken implements Token {
 	 * The token type for the current token. This is the token type assigned to
 	 * the bypass alternative for the rule during ATN deserialization.
 	 */
-	private bypassTokenType: number;
+	private _bypassTokenType: number;
 	/**
 	 * This is the backing field for `label`.
 	 */
@@ -48,7 +48,7 @@ export class RuleTagToken implements Token {
 		}
 
 		this._ruleName = ruleName;
-		this.bypassTokenType = bypassTokenType;
+		this._bypassTokenType = bypassTokenType;
 		this._label = label;
 	}
 
@@ -105,7 +105,7 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	get type(): number {
-		return this.bypassTokenType;
+		return this._bypassTokenType;
 	}
 
 	/**
@@ -186,6 +186,6 @@ export class RuleTagToken implements Token {
 	 */
 	@Override
 	toString(): string {
-		return this._ruleName + ":" + this.bypassTokenType;
+		return this._ruleName + ":" + this._bypassTokenType;
 	}
 }

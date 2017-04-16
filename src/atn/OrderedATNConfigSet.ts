@@ -36,13 +36,13 @@ export class OrderedATNConfigSet extends ATNConfigSet {
 	}
 
 	@Override
-	protected getKey(e: ATNConfig): { state: number, alt: number } {
+	protected _getKey(e: ATNConfig): { state: number, alt: number } {
 		// This is a specially crafted key to ensure configurations are only merged if they are equal
 		return { state: 0, alt: e.hashCode() };
 	}
 
 	@Override
-	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
+	protected _canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
 		return left.equals(right);
 	}
 

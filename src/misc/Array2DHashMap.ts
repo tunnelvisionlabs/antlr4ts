@@ -16,40 +16,40 @@ import { JavaIterator } from './Stubs';
 type Bucket<K, V> = { key: K, value?: V };
 
 class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>> {
-	private readonly keyComparator: EqualityComparator<K>;
+	private readonly _keyComparator: EqualityComparator<K>;
 
 	constructor(keyComparator: EqualityComparator<K>) {
-		this.keyComparator = keyComparator;
+		this._keyComparator = keyComparator;
 	}
 
 	hashCode(obj: Bucket<K, V>): number {
-		return this.keyComparator.hashCode(obj.key);
+		return this._keyComparator.hashCode(obj.key);
 	}
 
 	equals(a: Bucket<K, V>, b: Bucket<K, V>): boolean {
-		return this.keyComparator.equals(a.key, b.key);
+		return this._keyComparator.equals(a.key, b.key);
 	}
 }
 
 export class Array2DHashMap<K, V> implements JavaMap<K, V> {
-	private backingStore: Array2DHashSet<Bucket<K, V>>;
+	private _backingStore: Array2DHashSet<Bucket<K, V>>;
 
 	constructor(keyComparer: EqualityComparator<K>);
 	constructor(map: Array2DHashMap<K, V>);
 	constructor(keyComparer: EqualityComparator<K> | Array2DHashMap<K, V>) {
 		if (keyComparer instanceof Array2DHashMap) {
-			this.backingStore = new Array2DHashSet<Bucket<K, V>>(keyComparer.backingStore);
+			this._backingStore = new Array2DHashSet<Bucket<K, V>>(keyComparer._backingStore);
 		} else {
-			this.backingStore = new Array2DHashSet<Bucket<K, V>>(new MapKeyEqualityComparator<K, V>(keyComparer));
+			this._backingStore = new Array2DHashSet<Bucket<K, V>>(new MapKeyEqualityComparator<K, V>(keyComparer));
 		}
 	}
 
 	clear(): void {
-		this.backingStore.clear();
+		this._backingStore.clear();
 	}
 
 	containsKey(key: K): boolean {
-		return this.backingStore.contains({ key });
+		return this._backingStore.contains({ key });
 	}
 
 	containsValue(value: V): boolean {
@@ -57,11 +57,11 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	entrySet(): JavaSet<JavaMap.Entry<K, V>> {
-		return new EntrySet<K, V>(this, this.backingStore);
+		return new EntrySet<K, V>(this, this._backingStore);
 	}
 
 	get(key: K): V | undefined {
-		let bucket = this.backingStore.get({ key });
+		let bucket = this._backingStore.get({ key });
 		if (!bucket) {
 			return undefined;
 		}
@@ -70,18 +70,18 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	get isEmpty(): boolean {
-		return this.backingStore.isEmpty;
+		return this._backingStore.isEmpty;
 	}
 
 	keySet(): JavaSet<K> {
-		return new KeySet<K, V>(this, this.backingStore);
+		return new KeySet<K, V>(this, this._backingStore);
 	}
 
 	put(key: K, value: V): V | undefined {
-		let element = this.backingStore.get({ key, value });
+		let element = this._backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
-			this.backingStore.add({ key, value });
+			this._backingStore.add({ key, value });
 		} else {
 			result = element.value;
 			element.value = value;
@@ -91,10 +91,10 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	putIfAbsent(key: K, value: V): V | undefined {
-		let element = this.backingStore.get({ key, value });
+		let element = this._backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
-			this.backingStore.add({ key, value });
+			this._backingStore.add({ key, value });
 		} else {
 			result = element.value;
 		}
@@ -110,20 +110,20 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 
 	remove(key: K): V | undefined {
 		let value = this.get(key);
-		this.backingStore.remove({ key });
+		this._backingStore.remove({ key });
 		return value;
 	}
 
 	get size(): number {
-		return this.backingStore.size;
+		return this._backingStore.size;
 	}
 
 	values(): JavaCollection<V> {
-		return new ValueCollection<K, V>(this, this.backingStore);
+		return new ValueCollection<K, V>(this, this._backingStore);
 	}
 
 	hashCode(): number {
-		return this.backingStore.hashCode();
+		return this._backingStore.hashCode();
 	}
 
 	equals(o: any): boolean {
@@ -131,17 +131,17 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 			return false;
 		}
 
-		return this.backingStore.equals(o.backingStore);
+		return this._backingStore.equals(o._backingStore);
 	}
 }
 
 class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
-	private readonly map: Array2DHashMap<K, V>;
-	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+	private readonly _map: Array2DHashMap<K, V>;
+	private readonly _backingStore: Array2DHashSet<Bucket<K, V>>;
 
 	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
-		this.map = map;
-		this.backingStore = backingStore;
+		this._map = map;
+		this._backingStore = backingStore;
 	}
 
 	add(e: JavaMap.Entry<K, V>): boolean {
@@ -153,7 +153,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 	}
 
 	clear(): void {
-		this.map.clear();
+		this._map.clear();
 	}
 
 	contains(o: any): boolean {
@@ -177,15 +177,15 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 			return false;
 		}
 
-		return this.backingStore.equals(o.backingStore);
+		return this._backingStore.equals(o._backingStore);
 	}
 
 	hashCode(): number {
-		return this.backingStore.hashCode();
+		return this._backingStore.hashCode();
 	}
 
 	get isEmpty(): boolean {
-		return this.backingStore.isEmpty;
+		return this._backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<JavaMap.Entry<K, V>> {
@@ -210,7 +210,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 	}
 
 	get size(): number {
-		return this.backingStore.size;
+		return this._backingStore.size;
 	}
 
 	toArray(): JavaMap.Entry<K, V>[];
@@ -221,12 +221,12 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 }
 
 class KeySet<K, V> implements JavaSet<K> {
-	private readonly map: Array2DHashMap<K, V>;
-	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+	private readonly _map: Array2DHashMap<K, V>;
+	private readonly _backingStore: Array2DHashSet<Bucket<K, V>>;
 
 	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
-		this.map = map;
-		this.backingStore = backingStore;
+		this._map = map;
+		this._backingStore = backingStore;
 	}
 
 	add(e: K): boolean {
@@ -238,11 +238,11 @@ class KeySet<K, V> implements JavaSet<K> {
 	}
 
 	clear(): void {
-		this.map.clear();
+		this._map.clear();
 	}
 
 	contains(o: any): boolean {
-		return this.backingStore.contains({ key: o });
+		return this._backingStore.contains({ key: o });
 	}
 
 	containsAll(collection: Collection<any>): boolean {
@@ -262,15 +262,15 @@ class KeySet<K, V> implements JavaSet<K> {
 			return false;
 		}
 
-		return this.backingStore.equals(o.backingStore);
+		return this._backingStore.equals(o._backingStore);
 	}
 
 	hashCode(): number {
-		return this.backingStore.hashCode();
+		return this._backingStore.hashCode();
 	}
 
 	get isEmpty(): boolean {
-		return this.backingStore.isEmpty;
+		return this._backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<K> {
@@ -278,7 +278,7 @@ class KeySet<K, V> implements JavaSet<K> {
 	}
 
 	remove(o: any): boolean {
-		return this.backingStore.remove({ key: o });
+		return this._backingStore.remove({ key: o });
 	}
 
 	removeAll(collection: Collection<any>): boolean {
@@ -295,7 +295,7 @@ class KeySet<K, V> implements JavaSet<K> {
 	}
 
 	get size(): number {
-		return this.backingStore.size;
+		return this._backingStore.size;
 	}
 
 	toArray(): K[];
@@ -306,12 +306,12 @@ class KeySet<K, V> implements JavaSet<K> {
 }
 
 class ValueCollection<K, V> implements JavaCollection<V> {
-	private readonly map: Array2DHashMap<K, V>;
-	private readonly backingStore: Array2DHashSet<Bucket<K, V>>;
+	private readonly _map: Array2DHashMap<K, V>;
+	private readonly _backingStore: Array2DHashSet<Bucket<K, V>>;
 
 	constructor(map: Array2DHashMap<K, V>, backingStore: Array2DHashSet<Bucket<K, V>>) {
-		this.map = map;
-		this.backingStore = backingStore;
+		this._map = map;
+		this._backingStore = backingStore;
 	}
 
 	add(e: V): boolean {
@@ -323,11 +323,11 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	clear(): void {
-		this.map.clear();
+		this._map.clear();
 	}
 
 	contains(o: any): boolean {
-		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
+		for (let bucket of asIterable<Bucket<K, V>>(this._backingStore)) {
 			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
 				return true;
 			}
@@ -353,19 +353,19 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 			return false;
 		}
 
-		return this.backingStore.equals(o.backingStore);
+		return this._backingStore.equals(o._backingStore);
 	}
 
 	hashCode(): number {
-		return this.backingStore.hashCode();
+		return this._backingStore.hashCode();
 	}
 
 	get isEmpty(): boolean {
-		return this.backingStore.isEmpty;
+		return this._backingStore.isEmpty;
 	}
 
 	iterator(): JavaIterator<V> {
-		let delegate: JavaIterator<Bucket<K, V>> = this.backingStore.iterator();
+		let delegate: JavaIterator<Bucket<K, V>> = this._backingStore.iterator();
 		return {
 			hasNext(): boolean {
 				return delegate.hasNext();
@@ -399,18 +399,18 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	get size(): number {
-		return this.backingStore.size;
+		return this._backingStore.size;
 	}
 
 	toArray(): V[];
 	toArray(a: V[]): V[];
 	toArray(a?: V[]): V[] {
-		if (a === undefined || a.length < this.backingStore.size) {
-			a = new Array<V>(this.backingStore.size);
+		if (a === undefined || a.length < this._backingStore.size) {
+			a = new Array<V>(this._backingStore.size);
 		}
 
 		let i = 0;
-		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
+		for (let bucket of asIterable<Bucket<K, V>>(this._backingStore)) {
 			a[i++] = bucket.value!;
 		}
 

@@ -14,7 +14,7 @@
  * @author Sam Harwell
  */
 export class ParseCancellationException extends Error {
-	// private static serialVersionUID: number =  -3529552099366979683L;
+	// private static _serialVersionUID: number =  -3529552099366979683L;
 	readonly stack?: string;
 
 	constructor(public cause: Error) {

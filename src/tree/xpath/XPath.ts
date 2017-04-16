@@ -70,14 +70,14 @@ export class XPath {
 	static readonly WILDCARD: string = "*"; // word not operator/separator
 	static readonly NOT: string = "!"; 	   // word for invert operator
 
-	protected path: string;
-	protected elements: XPathElement[];
-	protected parser: Parser;
+	protected _path: string;
+	protected _elements: XPathElement[];
+	protected _parser: Parser;
 
 	constructor(parser: Parser, path: string) {
-		this.parser = parser;
-		this.path = path;
-		this.elements = this.split(path);
+		this._parser = parser;
+		this._path = path;
+		this._elements = this.split(path);
 //		System.out.println(Arrays.toString(elements));
 	}
 
@@ -123,7 +123,7 @@ export class XPath {
 						i++;
 						next = tokens[i];
 					}
-					let pathElement: XPathElement = this.getXPathElement(next, anywhere);
+					let pathElement: XPathElement = this._getXPathElement(next, anywhere);
 					pathElement.invert = invert;
 					elements.push(pathElement);
 					i++;
@@ -132,7 +132,7 @@ export class XPath {
 				case XPathLexer.TOKEN_REF:
 				case XPathLexer.RULE_REF:
 				case XPathLexer.WILDCARD:
-					elements.push(this.getXPathElement(el, false));
+					elements.push(this._getXPathElement(el, false));
 					i++;
 					break;
 
@@ -151,7 +151,7 @@ export class XPath {
 	 * element. {@code anywhere} is {@code true} if {@code //} precedes the
 	 * word.
 	 */
-	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
+	protected _getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
 		if (wordToken.type == Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
@@ -161,8 +161,8 @@ export class XPath {
 			throw new Error("Expected wordToken to have text content.");
 		}
 
-		let ttype: number = this.parser.getTokenType(word);
-		let ruleIndex: number = this.parser.getRuleIndex(word);
+		let ttype: number = this._parser.getTokenType(word);
+		let ruleIndex: number = this._parser.getRuleIndex(word);
 		switch (wordToken.type) {
 			case XPathLexer.WILDCARD:
 				return anywhere ?
@@ -207,14 +207,14 @@ export class XPath {
 		let work = [dummyRoot] as ParseTree[];
 
 		let i: number = 0;
-		while (i < this.elements.length) {
+		while (i < this._elements.length) {
 			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
 			for (let node of work) {
 				if (node.childCount > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.
-					let matching = this.elements[i].evaluate(node);
+					let matching = this._elements[i].evaluate(node);
 					next = next.concat(matching);
 				}
 			}

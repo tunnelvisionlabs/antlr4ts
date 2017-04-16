@@ -22,21 +22,21 @@ import { Token } from "./Token";
  *  and what kind of problem occurred.
  */
 export class RecognitionException extends Error {
-	// private static serialVersionUID: number =  -3861826954750022374L;
+	// private static _serialVersionUID: number =  -3861826954750022374L;
 
 	/** The {@link Recognizer} where this exception originated. */
 	private _recognizer?: Recognizer<any, any>;
 
-	private ctx?: RuleContext;
+	private _ctx?: RuleContext;
 
-	private input?: IntStream;
+	private _input?: IntStream;
 
 	/**
 	 * The current {@link Token} when an error occurred. Since not all streams
 	 * support accessing symbols by index, we have to track the {@link Token}
 	 * instance itself.
 	 */
-	private offendingToken?: Token;
+	private _offendingToken?: Token;
 
 	private _offendingState: number = -1;
 
@@ -60,8 +60,8 @@ export class RecognitionException extends Error {
 		super(message);
 
 		this._recognizer = recognizer;
-		this.input = input;
-		this.ctx = ctx;
+		this._input = input;
+		this._ctx = ctx;
 		if (recognizer) this._offendingState = recognizer.state;
 	}
 
@@ -94,7 +94,7 @@ export class RecognitionException extends Error {
 	 */
 	get expectedTokens(): IntervalSet | undefined {
 		if (this._recognizer) {
-			return this._recognizer.atn.getExpectedTokens(this._offendingState, this.ctx);
+			return this._recognizer.atn.getExpectedTokens(this._offendingState, this._ctx);
 		}
 		return undefined;
 	}
@@ -108,7 +108,7 @@ export class RecognitionException extends Error {
 	 * If the context is not available, this method returns {@code null}.
 	 */
 	get context(): RuleContext | undefined {
-		return this.ctx;
+		return this._ctx;
 	}
 
 	/**
@@ -123,19 +123,19 @@ export class RecognitionException extends Error {
 	 */
 
 	get inputStream(): IntStream | undefined {
-		return this.input;
+		return this._input;
 	}
 
 	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
 		if (recognizer && recognizer !== this._recognizer) return undefined;
-		return this.offendingToken;
+		return this._offendingToken;
 	}
 
 	protected setOffendingToken<Symbol extends Token>(
 		recognizer: Recognizer<Symbol, any>,
 		offendingToken?: Symbol): void {
 		if (recognizer === this._recognizer) {
-			this.offendingToken = offendingToken;
+			this._offendingToken = offendingToken;
 		}
 	}
 

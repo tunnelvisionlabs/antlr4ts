@@ -1582,15 +1582,15 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 	}
 
 	@Override
-	protected getExistingTargetState(s: DFAState, t: number): DFAState | undefined {
+	protected _getExistingTargetState(s: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions++;
-		return super.getExistingTargetState(s, t);
+		return super._getExistingTargetState(s, t);
 	}
 
 	@Override
-	protected computeTargetState(input: CharStream, s: DFAState, t: number): DFAState {
+	protected _computeTargetState(input: CharStream, s: DFAState, t: number): DFAState {
 		this.computedTransitions++;
-		return super.computeTargetState(input, s, t);
+		return super._computeTargetState(input, s, t);
 	}
 }
 
@@ -1638,26 +1638,26 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 	}
 
 	@Override
-	protected getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
+	protected _getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions[this.decision]++;
-		return super.getExistingTargetState(previousD, t);
+		return super._getExistingTargetState(previousD, t);
 	}
 
 	@Override
-	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
+	protected _computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
 		this.computedTransitions[this.decision]++;
-		return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+		return super._computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 	}
 
 	@Override
-	protected computeReachSet(dfa: DFA, previous: SimulatorState, t: number, contextCache: PredictionContextCache): SimulatorState | undefined {
+	protected _computeReachSet(dfa: DFA, previous: SimulatorState, t: number, contextCache: PredictionContextCache): SimulatorState | undefined {
 		if (previous.useContext) {
 			this.totalTransitions[this.decision]++;
 			this.computedTransitions[this.decision]++;
 			this.fullContextTransitions[this.decision]++;
 		}
 
-		return super.computeReachSet(dfa, previous, t, contextCache);
+		return super._computeReachSet(dfa, previous, t, contextCache);
 	}
 }
 
@@ -1708,9 +1708,9 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	@Override
 	reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet, configs: ATNConfigSet): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
-			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
+			let sllPredictions: BitSet =  this._getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
-			let llPredictions: BitSet =  this.getConflictingAlts(ambigAlts, configs);
+			let llPredictions: BitSet =  this._getConflictingAlts(ambigAlts, configs);
 			let llPrediction: number =  llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
 			if (sllPrediction !== llPrediction) {
 				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
@@ -1740,14 +1740,14 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		let decision: number =  dfa.decision;
 		let rule: string =  recognizer.ruleNames[dfa.atnStartState.ruleIndex];
 		let input: string =  recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
-		let representedAlts: BitSet =  this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
+		let representedAlts: BitSet =  this._getConflictingAlts(conflictingAlts, conflictState.s0.configs);
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
 
 	@Override
 	reportContextSensitivity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, prediction: number, acceptState: SimulatorState): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
-			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
+			let sllPredictions: BitSet =  this._getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
 			if (sllPrediction !== prediction) {
 				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
@@ -1906,11 +1906,11 @@ class NonCachingLexerATNSimulator extends StatisticsLexerATNSimulator {
 		super(atn, recog);
 	}
 
-	protected addDFAEdge(/*@NotNull*/ p: DFAState, t: number, /*@NotNull*/ q: ATNConfigSet): DFAState;
-	protected addDFAEdge(/*@NotNull*/ p: DFAState, t: number, /*@NotNull*/ q: DFAState): void;
-	protected addDFAEdge(p: DFAState, t: number, q: ATNConfigSet | DFAState): DFAState | void {
+	protected _addDFAEdge(/*@NotNull*/ p: DFAState, t: number, /*@NotNull*/ q: ATNConfigSet): DFAState;
+	protected _addDFAEdge(/*@NotNull*/ p: DFAState, t: number, /*@NotNull*/ q: DFAState): void;
+	protected _addDFAEdge(p: DFAState, t: number, q: ATNConfigSet | DFAState): DFAState | void {
 		if (q instanceof ATNConfigSet) {
-			return super.addDFAEdge(p, t, q);
+			return super._addDFAEdge(p, t, q);
 		} else {
 			// do nothing
 		}
@@ -1923,7 +1923,7 @@ class NonCachingParserATNSimulator extends StatisticsParserATNSimulator {
 	}
 
 	@Override
-	protected setDFAEdge(p: DFAState, t: number, q: DFAState): void {
+	protected _setDFAEdge(p: DFAState, t: number, q: DFAState): void {
 		// Do not set the edge
 	}
 }
@@ -1999,7 +1999,7 @@ class CloneableANTLRFileStream extends ANTLRInputStream {
 	}
 
 	createCopy(): ANTLRInputStream {
-		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
+		let stream: ANTLRInputStream =  new ANTLRInputStream(this._data);
 		stream.name = this.sourceName;
 		return stream;
 	}

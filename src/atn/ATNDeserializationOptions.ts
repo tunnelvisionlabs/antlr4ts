@@ -14,20 +14,20 @@ import { NotNull } from '../Decorators';
 export class ATNDeserializationOptions {
 	private static _defaultOptions?: ATNDeserializationOptions;
 
-	private readOnly: boolean = false;
-	private verifyATN: boolean;
-	private generateRuleBypassTransitions: boolean;
-	private optimize: boolean;
+	private _readOnly: boolean = false;
+	private _verifyATN: boolean;
+	private _generateRuleBypassTransitions: boolean;
+	private _optimize: boolean;
 
 	constructor(options?: ATNDeserializationOptions) {
 		if (options) {
-			this.verifyATN = options.verifyATN;
-			this.generateRuleBypassTransitions = options.generateRuleBypassTransitions;
-			this.optimize = options.optimize;
+			this._verifyATN = options._verifyATN;
+			this._generateRuleBypassTransitions = options._generateRuleBypassTransitions;
+			this._optimize = options._optimize;
 		} else {
-			this.verifyATN = true;
-			this.generateRuleBypassTransitions = false;
-			this.optimize = true;
+			this._verifyATN = true;
+			this._generateRuleBypassTransitions = false;
+			this._optimize = true;
 		}
 	}
 
@@ -42,41 +42,41 @@ export class ATNDeserializationOptions {
 	}
 
 	get isReadOnly(): boolean {
-		return this.readOnly;
+		return this._readOnly;
 	}
 
 	makeReadOnly(): void {
-		this.readOnly = true;
+		this._readOnly = true;
 	}
 
 	get isVerifyATN(): boolean {
-		return this.verifyATN;
+		return this._verifyATN;
 	}
 
 	set isVerifyATN(verifyATN: boolean) {
-		this.throwIfReadOnly();
-		this.verifyATN = verifyATN;
+		this._throwIfReadOnly();
+		this._verifyATN = verifyATN;
 	}
 
 	get isGenerateRuleBypassTransitions(): boolean {
-		return this.generateRuleBypassTransitions;
+		return this._generateRuleBypassTransitions;
 	}
 
 	set isGenerateRuleBypassTransitions(generateRuleBypassTransitions: boolean) {
-		this.throwIfReadOnly();
-		this.generateRuleBypassTransitions = generateRuleBypassTransitions;
+		this._throwIfReadOnly();
+		this._generateRuleBypassTransitions = generateRuleBypassTransitions;
 	}
 
 	get isOptimize(): boolean {
-		return this.optimize;
+		return this._optimize;
 	}
 
 	set isOptimize(optimize: boolean) {
-		this.throwIfReadOnly();
-		this.optimize = optimize;
+		this._throwIfReadOnly();
+		this._optimize = optimize;
 	}
 
-	protected throwIfReadOnly(): void {
+	protected _throwIfReadOnly(): void {
 		if (this.isReadOnly) {
 			throw new Error("The object is read only.");
 		}

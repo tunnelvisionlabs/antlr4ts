@@ -11,10 +11,10 @@ import { Trees } from "../Trees";
 import { XPathElement } from "./XPathElement";
 
 export class XPathRuleElement extends XPathElement {
-	protected ruleIndex: number;
+	protected _ruleIndex: number;
 	constructor(ruleName: string, ruleIndex: number) {
 		super(ruleName);
-		this.ruleIndex = ruleIndex;
+		this._ruleIndex = ruleIndex;
 	}
 
 	@Override
@@ -23,8 +23,8 @@ export class XPathRuleElement extends XPathElement {
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if (c instanceof ParserRuleContext) {
-				if ((c.ruleIndex === this.ruleIndex && !this.invert) ||
-					(c.ruleIndex !== this.ruleIndex && this.invert)) {
+				if ((c.ruleIndex === this._ruleIndex && !this.invert) ||
+					(c.ruleIndex !== this._ruleIndex && this.invert)) {
 					nodes.push(c);
 				}
 			}

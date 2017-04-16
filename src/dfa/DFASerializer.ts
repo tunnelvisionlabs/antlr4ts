@@ -20,9 +20,9 @@ import { VocabularyImpl } from '../VocabularyImpl';
 /** A DFA walker that knows how to dump them to serialized strings. */
 export class DFASerializer {
 	@NotNull
-	private dfa: DFA;
+	private _dfa: DFA;
 	@NotNull
-	private vocabulary: Vocabulary;
+	private _vocabulary: Vocabulary;
 
 	ruleNames?: string[];
 
@@ -40,22 +40,22 @@ export class DFASerializer {
 			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
 		}
 
-		this.dfa = dfa;
-		this.vocabulary = vocabulary;
+		this._dfa = dfa;
+		this._vocabulary = vocabulary;
 		this.ruleNames = ruleNames;
 		this.atn = atn;
 	}
 
 	@Override
 	toString(): string {
-		if (!this.dfa.s0) {
+		if (!this._dfa.s0) {
 			return "";
 		}
 
 		let buf = "";
 
-		if (this.dfa.states) {
-			let states: DFAState[] = new Array<DFAState>(...this.dfa.states.toArray());
+		if (this._dfa.states) {
+			let states: DFAState[] = new Array<DFAState>(...this._dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (let s of states) {
@@ -70,7 +70,7 @@ export class DFASerializer {
 					}
 
 					let contextSymbol: boolean = false;
-					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry)) + ("->");
+					buf += (this.getStateString(s)) + ("-") + (this._getEdgeLabel(entry)) + ("->");
 					if (s.isContextSymbol(entry)) {
 						buf += ("!");
 						contextSymbol = true;
@@ -89,7 +89,7 @@ export class DFASerializer {
 					for (let entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
-							+ (this.getContextLabel(entry))
+							+ (this._getContextLabel(entry))
 							+ ("->")
 							+ (this.getStateString(contextEdges.get(entry)!))
 							+ ("\n");
@@ -103,7 +103,7 @@ export class DFASerializer {
 		return output;
 	}
 
-	protected getContextLabel(i: number): string {
+	protected _getContextLabel(i: number): string {
 		if (i === PredictionContext.EMPTY_FULL_STATE_KEY) {
 			return "ctx:EMPTY_FULL";
 		}
@@ -122,8 +122,8 @@ export class DFASerializer {
 		return "ctx:" + String(i);
 	}
 
-	protected getEdgeLabel(i: number): string {
-		return this.vocabulary.getDisplayName(i);
+	protected _getEdgeLabel(i: number): string {
+		return this._vocabulary.getDisplayName(i);
 	}
 
 	getStateString(s: DFAState): string {

@@ -51,7 +51,7 @@ export class IntervalSet implements IntSet {
 	/** The list of sorted, disjoint intervals. */
 	private _intervals: Interval[];
 
-	private readonly: boolean = false;
+	private _readonly: boolean = false;
 
 	constructor(intervals?: Interval[]) {
 		if (intervals != null) {
@@ -73,7 +73,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	clear(): void {
-		if (this.readonly) {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -88,12 +88,12 @@ export class IntervalSet implements IntSet {
 	 *  {1..5, 6..7, 10..20}.  Adding 4..8 yields {1..8, 10..20}.
 	 */
 	add(a: number, b: number = a): void {
-		this.addRange(Interval.of(a, b));
+		this._addRange(Interval.of(a, b));
 	}
 
 	// copy on write so we can cache a..a intervals and sets of that
-	protected addRange(addition: Interval): void {
-		if (this.readonly) {
+	protected _addRange(addition: Interval): void {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -345,7 +345,7 @@ export class IntervalSet implements IntSet {
 					intersection = new IntervalSet();
 				}
 
-				intersection.addRange(mine.intersection(theirs));
+				intersection._addRange(mine.intersection(theirs));
 				j++;
 			}
 			else if (theirs.properlyContains(mine)) {
@@ -354,7 +354,7 @@ export class IntervalSet implements IntSet {
 					intersection = new IntervalSet();
 				}
 
-				intersection.addRange(mine.intersection(theirs));
+				intersection._addRange(mine.intersection(theirs));
 				i++;
 			}
 			else if (!mine.disjoint(theirs)) {
@@ -363,7 +363,7 @@ export class IntervalSet implements IntSet {
 					intersection = new IntervalSet();
 				}
 
-				intersection.addRange(mine.intersection(theirs));
+				intersection._addRange(mine.intersection(theirs));
 				// Move the iterator of lower range [a..b], but not
 				// the upper range as it may contain elements that will collide
 				// with the next iterator. So, if mine=[0..115] and
@@ -563,14 +563,14 @@ export class IntervalSet implements IntSet {
 			let a: number = I.a;
 			let b: number = I.b;
 			if (a === b) {
-				buf += this.elementName(vocabulary, a);
+				buf += this._elementName(vocabulary, a);
 			} else {
 				for (let i = a; i <= b; i++) {
 					if (i > a) {
 						buf += ", ";
 					}
 
-					buf += this.elementName(vocabulary, i);
+					buf += this._elementName(vocabulary, i);
 				}
 			}
 		}
@@ -583,7 +583,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@NotNull
-	protected elementName( @NotNull vocabulary: Vocabulary, a: number): string {
+	protected _elementName( @NotNull vocabulary: Vocabulary, a: number): string {
 		if (a === Token.EOF) {
 			return "<EOF>";
 		} else if (a === Token.EPSILON) {
@@ -660,7 +660,7 @@ export class IntervalSet implements IntSet {
 
 	@Override
 	remove(el: number): void {
-		if (this.readonly) {
+		if (this._readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
@@ -697,14 +697,14 @@ export class IntervalSet implements IntSet {
 	}
 
 	get isReadonly(): boolean {
-		return this.readonly;
+		return this._readonly;
 	}
 
 	setReadonly(readonly: boolean): void {
-		if (this.readonly && !readonly) {
+		if (this._readonly && !readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
-		this.readonly = readonly;
+		this._readonly = readonly;
 	}
 }

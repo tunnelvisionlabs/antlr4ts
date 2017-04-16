@@ -226,9 +226,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		if (this.mergedConfigs && this.unmerged) {
 			let config: ATNConfig = o;
-			let configKey = this.getKey(config);
+			let configKey = this._getKey(config);
 			let mergedConfig = this.mergedConfigs.get(configKey);
-			if (mergedConfig != null && this.canMerge(config, configKey, mergedConfig)) {
+			if (mergedConfig != null && this._canMerge(config, configKey, mergedConfig)) {
 				return mergedConfig.contains(config);
 			}
 
@@ -272,7 +272,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	add(e: ATNConfig): boolean;
 	add(e: ATNConfig, contextCache: PredictionContextCache | undefined): boolean;
 	add(e: ATNConfig, contextCache?: PredictionContextCache): boolean {
-		this.ensureWritable();
+		this._ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
 		}
@@ -284,10 +284,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		let addKey: boolean;
-		let key = this.getKey(e);
+		let key = this._getKey(e);
 		let mergedConfig = this.mergedConfigs.get(key);
 		addKey = (mergedConfig == null);
-		if (mergedConfig != null && this.canMerge(e, key, mergedConfig)) {
+		if (mergedConfig != null && this._canMerge(e, key, mergedConfig)) {
 			mergedConfig.outerContextDepth = Math.max(mergedConfig.outerContextDepth, e.outerContextDepth);
 			if (e.isPrecedenceFilterSuppressed) {
 				mergedConfig.isPrecedenceFilterSuppressed = true;
@@ -305,7 +305,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		for (let i = 0; i < this.unmerged.length; i++) {
 			let unmergedConfig: ATNConfig = this.unmerged[i];
-			if (this.canMerge(e, key, unmergedConfig)) {
+			if (this._canMerge(e, key, unmergedConfig)) {
 				unmergedConfig.outerContextDepth = Math.max(unmergedConfig.outerContextDepth, e.outerContextDepth);
 				if (e.isPrecedenceFilterSuppressed) {
 					unmergedConfig.isPrecedenceFilterSuppressed = true;
@@ -357,7 +357,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		assert(!this.outermostConfigSet || !this._dipsIntoOuterContext);
 	}
 
-	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
+	protected _canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
 		if (left.state.stateNumber != right.state.stateNumber) {
 			return false;
 		}
@@ -369,7 +369,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return left.semanticContext.equals(right.semanticContext);
 	}
 
-	protected getKey(e: ATNConfig): { state: number, alt: number } {
+	protected _getKey(e: ATNConfig): { state: number, alt: number } {
 		return { state: e.state.stateNumber, alt: e.alt };
 	}
 
@@ -391,7 +391,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	addAll(c: Collection<ATNConfig>): boolean;
 	addAll(c: Collection<ATNConfig>, contextCache: PredictionContextCache): boolean;
 	addAll(c: Collection<ATNConfig>, contextCache?: PredictionContextCache): boolean {
-		this.ensureWritable();
+		this._ensureWritable();
 
 		let changed: boolean = false;
 		for (let group of asIterable(c)) {
@@ -405,19 +405,19 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 	@Override
 	retainAll(c: Collection<any>): boolean {
-		this.ensureWritable();
+		this._ensureWritable();
 		throw new Error("Not supported yet.");
 	}
 
 	@Override
 	removeAll(c: Collection<any>): boolean {
-		this.ensureWritable();
+		this._ensureWritable();
 		throw new Error("Not supported yet.");
 	}
 
 	@Override
 	clear(): void {
-		this.ensureWritable();
+		this._ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
 		}
@@ -515,7 +515,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	set hasSemanticContext(value: boolean) {
-		this.ensureWritable();
+		this._ensureWritable();
 		this._hasSemanticContext = value;
 	}
 
@@ -524,7 +524,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	set conflictInfo(conflictInfo: ConflictInfo | undefined) {
-		this.ensureWritable();
+		this._ensureWritable();
 		this._conflictInfo = conflictInfo;
 	}
 
@@ -562,7 +562,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	remove(o: any): boolean;
 	remove(index: number): void;
 	remove(indexOrItem: number | any): boolean | void {
-		this.ensureWritable();
+		this._ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
 		}
@@ -574,7 +574,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let index = indexOrItem;
 		let config: ATNConfig = this.configs[index];
 		this.configs.splice(index, 1);
-		let key = this.getKey(config);
+		let key = this._getKey(config);
 		if (this.mergedConfigs.get(key) === config) {
 			this.mergedConfigs.remove(key);
 		} else {
@@ -587,7 +587,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 	}
 
-	protected ensureWritable(): void {
+	protected _ensureWritable(): void {
 		if (this.isReadOnly) {
 			throw new Error("This ATNConfigSet is read only.");
 		}

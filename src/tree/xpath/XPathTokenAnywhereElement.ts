@@ -10,14 +10,14 @@ import { Trees } from "../Trees";
 import { XPathElement } from "./XPathElement";
 
 export class XPathTokenAnywhereElement extends XPathElement {
-	protected tokenType: number;
+	protected _tokenType: number;
 	constructor(tokenName: string, tokenType: number) {
 		super(tokenName);
-		this.tokenType = tokenType;
+		this._tokenType = tokenType;
 	}
 
 	@Override
 	evaluate(t: ParseTree): ParseTree[] {
-		return Trees.findAllTokenNodes(t, this.tokenType);
+		return Trees.findAllTokenNodes(t, this._tokenType);
 	}
 }

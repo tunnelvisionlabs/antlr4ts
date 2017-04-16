@@ -42,7 +42,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 * The default value is {@link Token#DEFAULT_CHANNEL}, which matches the
 	 * default channel assigned to tokens created by the lexer.</p>
 	 */
-	protected channel: number;
+	protected _channel: number;
 
 	/**
 	 * Constructs a new {@link CommonTokenStream} using the specified token
@@ -56,26 +56,26 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 */
 	constructor(@NotNull tokenSource: TokenSource, channel: number = Token.DEFAULT_CHANNEL) {
 		super(tokenSource);
-		this.channel = channel;
+		this._channel = channel;
 	}
 
 	@Override
-	protected adjustSeekIndex(i: number): number {
-		return this.nextTokenOnChannel(i, this.channel);
+	protected _adjustSeekIndex(i: number): number {
+		return this._nextTokenOnChannel(i, this._channel);
 	}
 
 	@Override
-	protected tryLB(k: number): Token | undefined {
-		if ((this.p - k) < 0) {
+	protected _tryLB(k: number): Token | undefined {
+		if ((this._p - k) < 0) {
 			return undefined;
 		}
 
-		let i: number = this.p;
+		let i: number = this._p;
 		let n: number = 1;
 		// find k good tokens looking backwards
 		while (n <= k && i > 0) {
 			// skip off-channel tokens
-			i = this.previousTokenOnChannel(i - 1, this.channel);
+			i = this._previousTokenOnChannel(i - 1, this._channel);
 			n++;
 		}
 
@@ -83,43 +83,43 @@ export class CommonTokenStream extends BufferedTokenStream {
 			return undefined;
 		}
 
-		return this.tokens[i];
+		return this._tokens[i];
 	}
 
 	@Override
 	tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
-		this.lazyInit();
+		this._lazyInit();
 		if (k === 0) {
 			throw new RangeError("0 is not a valid lookahead index");
 		}
 
 		if (k < 0) {
-			return this.tryLB(-k);
+			return this._tryLB(-k);
 		}
 
-		let i: number = this.p;
+		let i: number = this._p;
 		let n: number = 1; // we know tokens[p] is a good one
 		// find k good tokens
 		while (n < k) {
 			// skip off-channel tokens, but make sure to not look past EOF
-			if (this.sync(i + 1)) {
-				i = this.nextTokenOnChannel(i + 1, this.channel);
+			if (this._sync(i + 1)) {
+				i = this._nextTokenOnChannel(i + 1, this._channel);
 			}
 			n++;
 		}
 
 		//		if ( i>range ) range = i;
-		return this.tokens[i];
+		return this._tokens[i];
 	}
 
 	/** Count EOF just once. */
 	getNumberOfOnChannelTokens(): number {
 		let n: number = 0;
 		this.fill();
-		for (let i = 0; i < this.tokens.length; i++) {
-			let t: Token = this.tokens[i];
-			if (t.channel === this.channel) {
+		for (let i = 0; i < this._tokens.length; i++) {
+			let t: Token = this._tokens[i];
+			if (t.channel === this._channel) {
 				n++;
 			}
 

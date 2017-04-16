@@ -28,11 +28,11 @@ export class VocabularyImpl implements Vocabulary {
 	static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
-	private readonly literalNames: (string | undefined)[];
+	private readonly _literalNames: (string | undefined)[];
 	@NotNull
-	private readonly symbolicNames: (string | undefined)[];
+	private readonly _symbolicNames: (string | undefined)[];
 	@NotNull
-	private readonly displayNames: (string | undefined)[];
+	private readonly _displayNames: (string | undefined)[];
 
 	private _maxTokenType: number;
 
@@ -54,13 +54,13 @@ export class VocabularyImpl implements Vocabulary {
 	 * @see #getDisplayName(int)
 	 */
 	constructor(literalNames: (string | undefined)[], symbolicNames: (string | undefined)[], displayNames: (string | undefined)[]) {
-		this.literalNames = literalNames;
-		this.symbolicNames = symbolicNames;
-		this.displayNames = displayNames;
+		this._literalNames = literalNames;
+		this._symbolicNames = symbolicNames;
+		this._displayNames = displayNames;
 		// See note here on -1 part: https://github.com/antlr/antlr4/pull/1146
 		this._maxTokenType =
-			Math.max(this.displayNames.length,
-				Math.max(this.literalNames.length, this.symbolicNames.length)) - 1;
+			Math.max(this._displayNames.length,
+				Math.max(this._literalNames.length, this._symbolicNames.length)) - 1;
 	}
 
 	@Override
@@ -70,8 +70,8 @@ export class VocabularyImpl implements Vocabulary {
 
 	@Override
 	getLiteralName(tokenType: number): string | undefined {
-		if (tokenType >= 0 && tokenType < this.literalNames.length) {
-			return this.literalNames[tokenType];
+		if (tokenType >= 0 && tokenType < this._literalNames.length) {
+			return this._literalNames[tokenType];
 		}
 
 		return undefined;
@@ -79,8 +79,8 @@ export class VocabularyImpl implements Vocabulary {
 
 	@Override
 	getSymbolicName(tokenType: number): string | undefined {
-		if (tokenType >= 0 && tokenType < this.symbolicNames.length) {
-			return this.symbolicNames[tokenType];
+		if (tokenType >= 0 && tokenType < this._symbolicNames.length) {
+			return this._symbolicNames[tokenType];
 		}
 
 		if (tokenType === Token.EOF) {
@@ -93,8 +93,8 @@ export class VocabularyImpl implements Vocabulary {
 	@Override
 	@NotNull
 	getDisplayName(tokenType: number): string {
-		if (tokenType >= 0 && tokenType < this.displayNames.length) {
-			let displayName = this.displayNames[tokenType];
+		if (tokenType >= 0 && tokenType < this._displayNames.length) {
+			let displayName = this._displayNames[tokenType];
 			if (displayName) {
 				return displayName;
 			}

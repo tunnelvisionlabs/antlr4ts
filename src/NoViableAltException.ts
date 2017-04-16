@@ -22,7 +22,7 @@ import { IntStream } from "./IntStream";
 import { NotNull } from "./Decorators";
 
 export class NoViableAltException extends RecognitionException {
-	//private static serialVersionUID: number =  5096000008992867052L;
+	//private static _serialVersionUID: number =  5096000008992867052L;
 
 	/** Which configurations did we try at input.index that couldn't match input.LT(1)? */
 	private _deadEndConfigs?: ATNConfigSet;
