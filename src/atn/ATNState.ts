@@ -73,6 +73,11 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  *
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */
+
+/**
+ * Abstract base class for all ATNState types.
+ */
+
 export abstract class ATNState {
 	private static readonly serializationNames: string[] = [
 		"INVALID",
@@ -97,9 +102,14 @@ export abstract class ATNState {
 
 	ruleIndex: number = 0;  // at runtime, we don't have Rule objects
 
+	/**
+	 * Epsilon transistions are transitions that do not consume an input symbol.   If all of the transitions out of this state are epsilon transistions, this flag gets set.
+	 */
 	epsilonOnlyTransitions: boolean = false;
 
-	/** Track the transitions emanating from this ATN state. */
+	/**
+	 * An array of all possible transitions (arcs) from this state to another.
+	 */
 	protected transitions: Transition[] = [];
 
 	protected optimizedTransitions: Transition[] = this.transitions;
