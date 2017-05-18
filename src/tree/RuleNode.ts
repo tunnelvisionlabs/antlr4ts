@@ -17,7 +17,8 @@ export abstract class RuleNode implements ParseTree {
 	//@Override
 	abstract readonly parent: RuleNode | undefined;
 
-	abstract getChild(i: number): ParseTree;
+	abstract getChild(i: number ): ParseTree;
+	abstract tryGetChild(i: number ): ParseTree | undefined;
 
 	abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
 
