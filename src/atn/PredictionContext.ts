@@ -384,17 +384,17 @@ class EmptyPredictionContext extends PredictionContext {
 
 	@Override
 	protected removeEmptyContext(): PredictionContext {
-		throw "Cannot remove the empty context from itself.";
+		throw new Error("Cannot remove the empty context from itself.");
 	}
 
 	@Override
 	getParent(index: number): PredictionContext {
-		throw "index out of bounds";
+		throw new Error("index out of bounds");
 	}
 
 	@Override
 	getReturnState(index: number): number {
-		throw "index out of bounds";
+		throw new Error("index out of bounds");
 	}
 
 	@Override
@@ -525,14 +525,14 @@ class ArrayPredictionContext extends PredictionContext {
 					return PredictionContext.EMPTY_LOCAL;
 				}
 
-				throw "what to do here?";
+				throw new Error("what to do here?");
 			}
 
 			return context;
 		}
 
 		if (suffix.size !== 1) {
-			throw "Appending a tree suffix is not yet supported.";
+			throw new Error("Appending a tree suffix is not yet supported.");
 		}
 
 		let result = visited.get(context);

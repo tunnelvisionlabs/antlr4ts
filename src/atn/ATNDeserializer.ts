@@ -84,18 +84,25 @@ export class ATNDeserializer {
 	 */
 	private static readonly ADDED_LEXER_ACTIONS: UUID = UUID.fromString("AB35191A-1603-487E-B75A-479B831EAF6D");
 	/**
+	 * This UUID indicates the serialized ATN contains two sets of
+	 * IntervalSets, where the second set's values are encoded as
+	 * 32-bit integers to support the full Unicode SMP range up to U+10FFFF.
+	 */
+	private static readonly ADDED_UNICODE_SMP: UUID = UUID.fromString("59627784-3BE5-417A-B9EB-8131A7286089");
+	/**
 	 * This list contains all of the currently supported UUIDs, ordered by when
 	 * the feature first appeared in this branch.
 	 */
 	private static readonly SUPPORTED_UUIDS: UUID[] = [
 		ATNDeserializer.BASE_SERIALIZED_UUID,
 		ATNDeserializer.ADDED_LEXER_ACTIONS,
+		ATNDeserializer.ADDED_UNICODE_SMP
 	];
 
 	/**
 	 * This is the current serialized UUID.
 	 */
-	private static readonly SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_LEXER_ACTIONS;
+	private static readonly SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_UNICODE_SMP;
 
 	@NotNull
 	private readonly deserializationOptions: ATNDeserializationOptions;
@@ -285,22 +292,12 @@ export class ATNDeserializer {
 		// SETS
 		//
 		let sets: IntervalSet[] = [];
-		let nsets: number = ATNDeserializer.toInt(data[p++]);
-		for (let i = 0; i < nsets; i++) {
-			let nintervals: number = ATNDeserializer.toInt(data[p]);
-			p++;
-			let set: IntervalSet = new IntervalSet();
-			sets.push(set);
+		p = this.readSets(data, p, sets, false);
 
-			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) !== 0;
-			if (containsEof) {
-				set.add(-1);
-			}
-
-			for (let j = 0; j < nintervals; j++) {
-				set.add(ATNDeserializer.toInt(data[p]), ATNDeserializer.toInt(data[p + 1]));
-				p += 2;
-			}
+		// Next, if the ATN was serialized with the Unicode SMP feature,
+		// deserialize sets with 32-bit arguments <= U+10FFFF.
+		if (this.isFeatureSupported(ATNDeserializer.ADDED_UNICODE_SMP, uuid)) {
+			p = this.readSets(data, p, sets, true);
 		}
 
 		//
@@ -583,6 +580,35 @@ export class ATNDeserializer {
 		ATNDeserializer.identifyTailCalls(atn);
 
 		return atn;
+	}
+
+	private readSets(data: Uint16Array, p: number, sets: IntervalSet[], read32: boolean): number {
+		let nsets: number = ATNDeserializer.toInt(data[p++]);
+		for (let i = 0; i < nsets; i++) {
+			let nintervals: number = ATNDeserializer.toInt(data[p]);
+			p++;
+			let set: IntervalSet = new IntervalSet();
+			sets.push(set);
+
+			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) != 0;
+			if (containsEof) {
+				set.add(-1);
+			}
+
+			if (read32) {
+				for (let j = 0; j < nintervals; j++) {
+					set.add(ATNDeserializer.toInt32(data, p), ATNDeserializer.toInt32(data, p + 2));
+					p += 4;
+				}
+			} else {
+				for (let j = 0; j < nintervals; j++) {
+					set.add(ATNDeserializer.toInt(data[p]), ATNDeserializer.toInt(data[p + 1]));
+					p += 2;
+				}
+			}
+		}
+
+		return p;
 	}
 
 	/**

@@ -74,7 +74,7 @@ export class IntervalSet implements IntSet {
 
 	clear(): void {
 		if (this.readonly) {
-			throw "can't alter readonly IntervalSet";
+			throw new Error("can't alter readonly IntervalSet");
 		}
 
 		this._intervals.length = 0;
@@ -94,7 +94,7 @@ export class IntervalSet implements IntSet {
 	// copy on write so we can cache a..a intervals and sets of that
 	protected addRange(addition: Interval): void {
 		if (this.readonly) {
-			throw "can't alter readonly IntervalSet";
+			throw new Error("can't alter readonly IntervalSet");
 		}
 
 		//System.out.println("add "+addition+" to "+intervals.toString());
@@ -661,7 +661,7 @@ export class IntervalSet implements IntSet {
 	@Override
 	remove(el: number): void {
 		if (this.readonly) {
-			throw "can't alter readonly IntervalSet";
+			throw new Error("can't alter readonly IntervalSet");
 		}
 
 		let n: number = this._intervals.length;
@@ -702,7 +702,7 @@ export class IntervalSet implements IntSet {
 
 	setReadonly(readonly: boolean): void {
 		if (this.readonly && !readonly) {
-			throw "can't alter readonly IntervalSet";
+			throw new Error("can't alter readonly IntervalSet");
 		}
 
 		this.readonly = readonly;

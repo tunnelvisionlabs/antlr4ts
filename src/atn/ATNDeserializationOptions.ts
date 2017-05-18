@@ -78,7 +78,7 @@ export class ATNDeserializationOptions {
 
 	protected throwIfReadOnly(): void {
 		if (this.isReadOnly) {
-			throw "The object is read only.";
+			throw new Error("The object is read only.");
 		}
 	}
 }
