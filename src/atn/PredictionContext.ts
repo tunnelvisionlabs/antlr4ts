@@ -5,19 +5,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
-
+import { NotNull, Override } from "../Decorators";
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { Arrays } from '../misc/Arrays';
-import { ATN } from './ATN';
-import { ATNState } from './ATNState';
 import { EqualityComparator } from '../misc/EqualityComparator';
 import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from "../Decorators";
 import { Equatable, JavaSet } from '../misc/Stubs';
-import { PredictionContextCache } from './PredictionContextCache';
 import { Recognizer } from '../Recognizer';
 import { RuleContext } from '../RuleContext';
+import { ATN } from './ATN';
+import { ATNState } from './ATNState';
+import { PredictionContextCache } from './PredictionContextCache';
 import { RuleTransition } from './RuleTransition';
 
 import * as assert from 'assert';
@@ -120,7 +119,7 @@ export abstract class PredictionContext implements Equatable {
 	}
 
 	static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
-		if (context0 == context1) {
+		if (context0 === context1) {
 			return context0;
 		}
 
@@ -724,8 +723,9 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace PredictionContext {
-	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false)
+	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false);
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
 	export const EMPTY_LOCAL_STATE_KEY: number = -((1 << 31) >>> 0);
 	export const EMPTY_FULL_STATE_KEY: number = ((1 << 31) >>> 0) - 1;
@@ -740,6 +740,7 @@ export namespace PredictionContext {
 		static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
+			// intentionally empty
 		}
 
 		@Override

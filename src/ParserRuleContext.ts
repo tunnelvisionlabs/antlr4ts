@@ -4,16 +4,16 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
-import { ErrorNode } from "./tree/ErrorNode";
-import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators";
+import { Interval } from "./misc/Interval";
 import { Parser } from "./Parser";
-import { ParseTree } from "./tree/ParseTree";
-import { ParseTreeListener } from "./tree/ParseTreeListener";
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { TerminalNode } from "./tree/TerminalNode";
 import { Token } from "./Token";
+import { ErrorNode } from "./tree/ErrorNode";
+import { ParseTree } from "./tree/ParseTree";
+import { ParseTreeListener } from "./tree/ParseTreeListener";
+import { TerminalNode } from "./tree/TerminalNode";
 
 /** A rule invocation record for parsing.
  *
@@ -125,8 +125,8 @@ export class ParserRuleContext extends RuleContext {
 
 	// Double dispatch methods for listeners
 
-	enterRule(listener: ParseTreeListener): void { }
-	exitRule(listener: ParseTreeListener): void { }
+	enterRule(listener: ParseTreeListener): void { /* empty */ }
+	exitRule(listener: ParseTreeListener): void { /* empty */ }
 
 	addChild(t: TerminalNode): void;
 	addChild(ruleInvocation: RuleContext): void;
@@ -190,7 +190,7 @@ export class ParserRuleContext extends RuleContext {
 	// Note: in TypeScript, order or arguments reversed
 	getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
-			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
+			throw new RangeError("index parameter must be between >= 0 and <= number of children.");
 		}
 
 		if (ctxType == null) {

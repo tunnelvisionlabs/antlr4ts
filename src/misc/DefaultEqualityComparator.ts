@@ -3,11 +3,11 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { EqualityComparator } from './EqualityComparator';
 import { Override } from '../Decorators';
-import { Equatable } from './Stubs';
+import { EqualityComparator } from './EqualityComparator';
 import { MurmurHash } from './MurmurHash';
 import { ObjectEqualityComparator } from './ObjectEqualityComparator';
+import { Equatable } from './Stubs';
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -31,7 +31,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 		} else if (typeof obj === 'string' || typeof obj === 'number') {
 			return MurmurHash.hashCode([obj]);
 		} else {
-			return ObjectEqualityComparator.INSTANCE.hashCode(<Equatable>obj);
+			return ObjectEqualityComparator.INSTANCE.hashCode(<Equatable> obj);
 		}
 	}
 
@@ -51,7 +51,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 		} else if (typeof a === 'string' || typeof a === 'number') {
 			return a === b;
 		} else {
-			return ObjectEqualityComparator.INSTANCE.equals(<Equatable>a, <Equatable>b);
+			return ObjectEqualityComparator.INSTANCE.equals(<Equatable> a, <Equatable> b);
 		}
 	}
 }

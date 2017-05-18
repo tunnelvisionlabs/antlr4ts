@@ -10,9 +10,9 @@ import { Lexer } from "../../Lexer";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
 import { Parser } from "../../Parser";
 import { ParserRuleContext } from "../../ParserRuleContext";
-import { ParseTree } from "../ParseTree";
 import { RecognitionException } from "../../RecognitionException";
 import { Token } from "../../Token";
+import { ParseTree } from "../ParseTree";
 import { XPathElement } from "./XPathElement";
 import { XPathLexer } from "./XPathLexer";
 import { XPathLexerErrorListener } from "./XPathLexerErrorListener";
@@ -152,7 +152,7 @@ export class XPath {
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
-		if (wordToken.type == Token.EOF) {
+		if (wordToken.type === Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
 
@@ -179,7 +179,7 @@ export class XPath {
 					new XPathTokenAnywhereElement(word, ttype) :
 					new XPathTokenElement(word, ttype);
 			default:
-				if (ruleIndex == -1) {
+				if (ruleIndex === -1) {
 					throw new Error(word + " at index " +
 						wordToken.startIndex +
 						" isn't a valid rule name");

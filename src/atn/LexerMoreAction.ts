@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.9613221-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Lexer } from '../Lexer';
+import { MurmurHash } from '../misc/MurmurHash';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
 
 /**
  * Implements the {@code more} lexer action by calling {@link Lexer#more}.
@@ -24,7 +24,8 @@ export class LexerMoreAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerMoreAction implements LexerAction {
 	toString(): string {
 		return "more";
 	}
-}
 
-export namespace LexerMoreAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerMoreAction = new LexerMoreAction();
+	public static readonly INSTANCE = new LexerMoreAction();
 }

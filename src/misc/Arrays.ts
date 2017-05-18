@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable-next-line:no-namespace
 export namespace Arrays {
 	/**
 	 * Searches the specified array of numbers for the specified value using the binary search algorithm. The array must
@@ -44,6 +45,7 @@ export namespace Arrays {
 		let result = "[";
 
 		let first = true;
+		// tslint:disable-next-line:prefer-for-of
 		for (let i = 0; i < array.length; i++) {
 			if (first) {
 				first = false;

@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.0710131-07:00
 
-import { BitSet } from '../misc/BitSet';
 import { Override } from '../Decorators';
+import { BitSet } from '../misc/BitSet';
 import * as Utils from '../misc/Utils';
 
 /**

@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
 import * as assert from "assert";
+import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
 import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import { EqualityComparator } from './EqualityComparator';
-import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
-import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from './Stubs';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
 import { MurmurHash } from './MurmurHash';
+import { ObjectEqualityComparator } from './ObjectEqualityComparator';
+import { asIterable, Collection, JavaCollection, JavaIterable, JavaIterator, JavaSet } from './Stubs';
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 
@@ -63,7 +63,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * the return value.
 	 */
 	getOrAdd(o: T): T {
-		if (this.n > this.threshold) this.expand();
+		if (this.n > this.threshold) { this.expand(); }
 		return this.getOrAddImpl(o);
 	}
 
@@ -80,8 +80,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		// LOOK FOR IT IN BUCKET
-		for (let i = 0; i < bucket.length; i++) {
-			let existing = bucket[i];
+		for (let existing of bucket) {
 			if (this.comparator.equals(existing, o)) {
 				return existing; // found existing, quit
 			}
@@ -94,7 +93,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	get(o: T): T | undefined {
-		if (o == null) return o;
+		if (o == null) { return o; }
 		let b: number = this.getBucket(o);
 		let bucket = this.buckets[b];
 		if (!bucket) {
@@ -121,9 +120,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) { continue; }
 			for (let o of bucket) {
-				if (o == null) break;
+				if (o == null) { break; }
 				hash = MurmurHash.update(hash, this.comparator.hashCode(o));
 			}
 		}
@@ -134,9 +133,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	equals(o: any): boolean {
-		if (o === this) return true;
-		if (!(o instanceof Array2DHashSet)) return false;
-		if (o.size !== this.size) return false;
+		if (o === this) {return true; }
+		if (!(o instanceof Array2DHashSet)) {return false; }
+		if (o.size !== this.size) {return false; }
 		let same: boolean = this.containsAll(o);
 		return same;
 	}
@@ -265,16 +264,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		if (collection instanceof Array2DHashSet) {
 			let s = collection as any as Array2DHashSet<T>;
 			for (let bucket of s.buckets) {
-				if (bucket == null) continue;
+				if (bucket == null) {continue; }
 				for (let o of bucket) {
-					if (o == null) break;
-					if (!this.containsFast(this.asElementType(o))) return false;
+					if (o == null) {break; }
+					if (!this.containsFast(this.asElementType(o))) {return false; }
 				}
 			}
 		}
 		else {
 			for (let o of asIterable(collection)) {
-				if (!this.containsFast(this.asElementType(o))) return false;
+				if (!this.containsFast(this.asElementType(o))) {return false; }
 			}
 		}
 		return true;
@@ -286,7 +285,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 		for (let o of asIterable(c)) {
 			let existing: T = this.getOrAdd(o);
-			if (existing !== o) changed = true;
+			if (existing !== o) {changed = true; }
 		}
 		return changed;
 	}
@@ -324,7 +323,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			bucket.length = j;
 		}
 
-		let changed: boolean = newsize != this.n;
+		let changed: boolean = newsize !== this.n;
 		this.n = newsize;
 		return changed;
 	}
@@ -333,7 +332,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	removeAll(c: Collection<T>): boolean {
 		let changed = false;
 		for (let o of asIterable(c)) {
-			if (this.removeFast(this.asElementType(o))) changed = true;
+			if (this.removeFast(this.asElementType(o))) { changed = true; }
 		}
 
 		return changed;
@@ -348,16 +347,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	toString(): string {
-		if (this.size === 0) return "{}";
+		if (this.size === 0) {return "{}"; }
 
 		let buf = '{';
 		let first: boolean = true;
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) {continue; }
 			for (let o of bucket) {
-				if (o == null) break;
-				if (first) first = false;
-				else buf += ", ";
+				if (o == null) {break; }
+				if (first) {first = false; }
+				else {buf += ", "; }
 				buf += o.toString();
 			}
 		}
@@ -375,10 +374,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			buf += '[';
 			let first: boolean = true;
 			for (let o of bucket) {
-				if (first) first = false;
-				else buf += " ";
-				if (o == null) buf += "_";
-				else buf += o.toString();
+				if (first) {first = false; }
+				else {buf += " "; }
+				if (o == null) {buf += "_"; }
+				else {buf += o.toString(); }
 			}
 			buf += "]\n";
 		}
@@ -427,7 +426,7 @@ class SetIterator<T> implements JavaIterator<T>  {
 	}
 
 	next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
+		if (this.nextIndex >= this.data.length) {throw new RangeError("Attempted to iterate past end."); }
 		this.removed = false;
 		return this.data[this.nextIndex++];
 	}

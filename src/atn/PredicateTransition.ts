@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.2826960-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { AbstractPredicateTransition } from './AbstractPredicateTransition';
 import { ATNState } from './ATNState';
-import { NotNull, Override } from '../Decorators';
 import { SemanticContext } from './SemanticContext';
 import { TransitionType } from './TransitionType';
 

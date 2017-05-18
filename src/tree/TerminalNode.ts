@@ -5,13 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
 
-import { Interval } from '../misc/Interval';
 import { Override } from '../Decorators';
+import { Interval } from '../misc/Interval';
 import { Parser } from '../Parser';
+import { Token } from '../Token';
 import { ParseTree } from './ParseTree';
 import { ParseTreeVisitor } from './ParseTreeVisitor';
 import { RuleNode } from './RuleNode';
-import { Token } from '../Token';
 
 export class TerminalNode implements ParseTree {
 	_symbol: Token;

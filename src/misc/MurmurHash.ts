@@ -11,6 +11,8 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 
+// tslint:disable-next-line:no-namespace
+
 export namespace MurmurHash {
 
 	const DEFAULT_SEED: number = 0;
@@ -59,7 +61,6 @@ export namespace MurmurHash {
 
 		return hash & 0xFFFFFFFF;
 	}
-
 
 	/**
 	 * Apply the final computation steps to the intermediate value {@code hash}

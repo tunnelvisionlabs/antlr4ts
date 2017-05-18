@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:34.9572142-07:00
 
+import { Override } from '../Decorators';
 import { ATNStateType } from './ATNStateType';
 import { BlockStartState } from './BlockStartState';
-import { Override } from '../Decorators';
 import { PlusLoopbackState } from './PlusLoopbackState';
 
 /** Start of {@code (A|B|...)+} loop. Technically a decision state, but

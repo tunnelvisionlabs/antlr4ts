@@ -13,22 +13,22 @@ import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
 import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from "./atn/ATNStateType";
+import { PredictionContext } from './atn/PredictionContext';
+import { RuleTransition } from './atn/RuleTransition';
+import { NotNull, Override } from "./Decorators";
 import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
 import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
-import { PredictionContext } from './atn/PredictionContext';
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { RuleTransition } from './atn/RuleTransition';
-import { TokenStream } from "./TokenStream";
 import { Token } from "./Token";
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
 import { Vocabulary } from "./Vocabulary";
-import { Override, NotNull } from "./Decorators";
 
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
@@ -67,7 +67,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * @param recognizer the parser instance
 	 */
-	protected beginErrorCondition(@NotNull recognizer: Parser): void {
+	protected beginErrorCondition( @NotNull recognizer: Parser): void {
 		this.errorRecoveryMode = true;
 	}
 
@@ -85,7 +85,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * @param recognizer
 	 */
-	protected endErrorCondition(@NotNull recognizer: Parser): void {
+	protected endErrorCondition( @NotNull recognizer: Parser): void {
 		this.errorRecoveryMode = false;
 		this.lastErrorStates = undefined;
 		this.lastErrorIndex = -1;
@@ -121,12 +121,13 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * </ul>
 	 */
 	@Override
-	reportError(recognizer: Parser,
+	reportError(
+		recognizer: Parser,
 		e: RecognitionException): void {
 		// if we've already reported an error and have not matched a token
 		// yet successfully, don't report any errors.
 		if (this.inErrorRecoveryMode(recognizer)) {
-//			System.err.print("[SPURIOUS] ");
+			//			System.err.print("[SPURIOUS] ");
 			return; // don't report spurious errors
 		}
 		this.beginErrorCondition(recognizer);
@@ -145,7 +146,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		}
 	}
 
-	protected notifyErrorListeners(@NotNull recognizer: Parser, message: string, e: RecognitionException): void {
+	protected notifyErrorListeners( @NotNull recognizer: Parser, message: string, e: RecognitionException): void {
 		let offendingToken: Token | null | undefined = e.getOffendingToken(recognizer);
 		if (offendingToken === undefined) {
 			// Pass null to notifyErrorListeners so it in turn calls the error listeners with undefined as the offending
@@ -165,11 +166,11 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 */
 	@Override
 	recover(recognizer: Parser, e: RecognitionException): void {
-//		System.out.println("recover in "+recognizer.getRuleInvocationStack()+
-//						   " index="+recognizer.inputStream.index+
-//						   ", lastErrorIndex="+
-//						   lastErrorIndex+
-//						   ", states="+lastErrorStates);
+		//		System.out.println("recover in "+recognizer.getRuleInvocationStack()+
+		//						   " index="+recognizer.inputStream.index+
+		//						   ", lastErrorIndex="+
+		//						   lastErrorIndex+
+		//						   ", states="+lastErrorStates);
 		if (this.lastErrorIndex === recognizer.inputStream.index &&
 			this.lastErrorStates &&
 			this.lastErrorStates.contains(recognizer.state)) {
@@ -177,13 +178,13 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			// state in ATN; must be a case where LT(1) is in the recovery
 			// token set so nothing got consumed. Consume a single token
 			// at least to prevent an infinite loop; this is a failsafe.
-//			System.err.println("seen error condition before index="+
-//							   lastErrorIndex+", states="+lastErrorStates);
-//			System.err.println("FAILSAFE consumes "+recognizer.getTokenNames()[recognizer.inputStream.LA(1)]);
+			//			System.err.println("seen error condition before index="+
+			//							   lastErrorIndex+", states="+lastErrorStates);
+			//			System.err.println("FAILSAFE consumes "+recognizer.getTokenNames()[recognizer.inputStream.LA(1)]);
 			recognizer.consume();
 		}
 		this.lastErrorIndex = recognizer.inputStream.index;
-		if (!this.lastErrorStates) this.lastErrorStates = new IntervalSet();
+		if (!this.lastErrorStates) { this.lastErrorStates = new IntervalSet(); }
 		this.lastErrorStates.add(recognizer.state);
 		let followSet: IntervalSet = this.getErrorRecoverySet(recognizer);
 		this.consumeUntil(recognizer, followSet);
@@ -238,7 +239,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	@Override
 	sync(recognizer: Parser): void {
 		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
-//		System.err.println("sync @ "+s.stateNumber+"="+s.getClass().getSimpleName());
+		//		System.err.println("sync @ "+s.stateNumber+"="+s.getClass().getSimpleName());
 		// If already recovering, don't try to sync
 		if (this.inErrorRecoveryMode(recognizer)) {
 			return;
@@ -254,30 +255,30 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		}
 
 		switch (s.stateType) {
-		case ATNStateType.BLOCK_START:
-		case ATNStateType.STAR_BLOCK_START:
-		case ATNStateType.PLUS_BLOCK_START:
-		case ATNStateType.STAR_LOOP_ENTRY:
-			// report error and recover if possible
-			if (this.singleTokenDeletion(recognizer)) {
-				return;
-			}
+			case ATNStateType.BLOCK_START:
+			case ATNStateType.STAR_BLOCK_START:
+			case ATNStateType.PLUS_BLOCK_START:
+			case ATNStateType.STAR_LOOP_ENTRY:
+				// report error and recover if possible
+				if (this.singleTokenDeletion(recognizer)) {
+					return;
+				}
 
-			throw new InputMismatchException(recognizer);
+				throw new InputMismatchException(recognizer);
 
-		case ATNStateType.PLUS_LOOP_BACK:
-		case ATNStateType.STAR_LOOP_BACK:
-//			System.err.println("at loop back: "+s.getClass().getSimpleName());
-			this.reportUnwantedToken(recognizer);
-			let expecting: IntervalSet = recognizer.getExpectedTokens();
-			let whatFollowsLoopIterationOrRule: IntervalSet =
-				expecting.or(this.getErrorRecoverySet(recognizer));
-			this.consumeUntil(recognizer, whatFollowsLoopIterationOrRule);
-			break;
+			case ATNStateType.PLUS_LOOP_BACK:
+			case ATNStateType.STAR_LOOP_BACK:
+				//			System.err.println("at loop back: "+s.getClass().getSimpleName());
+				this.reportUnwantedToken(recognizer);
+				let expecting: IntervalSet = recognizer.getExpectedTokens();
+				let whatFollowsLoopIterationOrRule: IntervalSet =
+					expecting.or(this.getErrorRecoverySet(recognizer));
+				this.consumeUntil(recognizer, whatFollowsLoopIterationOrRule);
+				break;
 
-		default:
-			// do nothing if we can't identify the exact kind of ATN state
-			break;
+			default:
+				// do nothing if we can't identify the exact kind of ATN state
+				break;
 		}
 	}
 
@@ -290,13 +291,14 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportNoViableAlternative(@NotNull recognizer: Parser,
+	protected reportNoViableAlternative(
+		@NotNull recognizer: Parser,
 		@NotNull e: NoViableAltException): void {
 		let tokens: TokenStream = recognizer.inputStream;
 		let input: string;
 		if (tokens) {
-			if (e.startToken.type === Token.EOF) input = "<EOF>";
-			else input = tokens.getTextFromRange(e.startToken, e.getOffendingToken());
+			if (e.startToken.type === Token.EOF) { input = "<EOF>"; }
+			else { input = tokens.getTextFromRange(e.startToken, e.getOffendingToken()); }
 		}
 		else {
 			input = "<unknown input>";
@@ -314,7 +316,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportInputMismatch(@NotNull recognizer: Parser,
+	protected reportInputMismatch(
+		@NotNull recognizer: Parser,
 		@NotNull e: InputMismatchException): void {
 		let expected = e.expectedTokens;
 		let expectedString = expected ? expected.toStringVocabulary(recognizer.vocabulary) : "";
@@ -332,7 +335,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @param e the recognition exception
 	 */
-	protected reportFailedPredicate(@NotNull recognizer: Parser,
+	protected reportFailedPredicate(
+		@NotNull recognizer: Parser,
 		@NotNull e: FailedPredicateException): void {
 		let ruleName: string = recognizer.ruleNames[recognizer.context.ruleIndex];
 		let msg: string = "rule " + ruleName + " " + e.message;
@@ -357,7 +361,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * @param recognizer the parser instance
 	 */
-	protected reportUnwantedToken(@NotNull recognizer: Parser): void {
+	protected reportUnwantedToken( @NotNull recognizer: Parser): void {
 		if (this.inErrorRecoveryMode(recognizer)) {
 			return;
 		}
@@ -389,7 +393,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * @param recognizer the parser instance
 	 */
-	protected reportMissingToken(@NotNull recognizer: Parser): void {
+	protected reportMissingToken( @NotNull recognizer: Parser): void {
 		if (this.inErrorRecoveryMode(recognizer)) {
 			return;
 		}
@@ -491,7 +495,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @return {@code true} if single-token insertion is a viable recovery
 	 * strategy for the current mismatched input, otherwise {@code false}
 	 */
-	protected singleTokenInsertion(@NotNull recognizer: Parser): boolean {
+	protected singleTokenInsertion( @NotNull recognizer: Parser): boolean {
 		let currentSymbolType: number = recognizer.inputStream.LA(1);
 		// if current token is consistent with what could come after current
 		// ATN state, then we know we're missing a token; error recovery
@@ -500,7 +504,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let next: ATNState = currentState.transition(0).target;
 		let atn: ATN = recognizer.interpreter.atn;
 		let expectingAtLL2: IntervalSet = atn.nextTokens(next, PredictionContext.fromRuleContext(atn, recognizer.context));
-//		console.warn("LT(2) set="+expectingAtLL2.toString(recognizer.getTokenNames()));
+		//		console.warn("LT(2) set="+expectingAtLL2.toString(recognizer.getTokenNames()));
 		if (expectingAtLL2.contains(currentSymbolType)) {
 			this.reportMissingToken(recognizer);
 			return true;
@@ -527,7 +531,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * deletion successfully recovers from the mismatched input, otherwise
 	 * {@code null}
 	 */
-	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
+	protected singleTokenDeletion( @NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number = recognizer.inputStream.LA(2);
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		if (expecting.contains(nextTokenType)) {
@@ -567,13 +571,13 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *  override this method to create the appropriate tokens.
 	 */
 	@NotNull
-	protected getMissingSymbol(@NotNull recognizer: Parser): Token {
+	protected getMissingSymbol( @NotNull recognizer: Parser): Token {
 		let currentSymbol: Token = recognizer.currentToken;
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
 		let expectedTokenType: number = expecting.minElement; // get any element
 		let tokenText: string;
-		if (expectedTokenType === Token.EOF) tokenText = "<missing EOF>";
-		else tokenText = "<missing " + recognizer.vocabulary.getDisplayName(expectedTokenType) + ">";
+		if (expectedTokenType === Token.EOF) { tokenText = "<missing EOF>"; }
+		else { tokenText = "<missing " + recognizer.vocabulary.getDisplayName(expectedTokenType) + ">"; }
 		let current: Token = currentSymbol;
 		let lookback = recognizer.inputStream.tryLT(-1);
 		if (current.type === Token.EOF && lookback != null) {
@@ -593,7 +597,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let stream = x ? x.inputStream : undefined;
 
 		return factory.create(
-			{ source: tokenSource, stream: stream },
+			{ source: tokenSource, stream },
 			expectedTokenType, tokenText,
 			Token.DEFAULT_CHANNEL,
 			-1, -1,
@@ -601,7 +605,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	}
 
 	@NotNull
-	protected getExpectedTokens(@NotNull recognizer: Parser): IntervalSet {
+	protected getExpectedTokens( @NotNull recognizer: Parser): IntervalSet {
 		return recognizer.getExpectedTokens();
 	}
 
@@ -614,7 +618,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *  so that it creates a new Java type.
 	 */
 	protected getTokenErrorDisplay(t: Token | undefined): string {
-		if (!t) return "<no token>";
+		if (!t) { return "<no token>"; }
 		let s = this.getSymbolText(t);
 		if (!s) {
 			if (this.getSymbolType(t) === Token.EOF) {
@@ -626,17 +630,17 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		return this.escapeWSAndQuote(s);
 	}
 
-	protected getSymbolText(@NotNull symbol: Token): string | undefined {
+	protected getSymbolText( @NotNull symbol: Token): string | undefined {
 		return symbol.text;
 	}
 
-	protected getSymbolType(@NotNull symbol: Token): number {
+	protected getSymbolType( @NotNull symbol: Token): number {
 		return symbol.type;
 	}
 
 	@NotNull
-	protected escapeWSAndQuote(@NotNull s: string): string {
-//		if ( s==null ) return s;
+	protected escapeWSAndQuote( @NotNull s: string): string {
+		//		if ( s==null ) return s;
 		s = s.replace("\n", "\\n");
 		s = s.replace("\r", "\\r");
 		s = s.replace("\t", "\\t");
@@ -736,7 +740,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *  at run-time upon error to avoid overhead during parsing.
 	 */
 	@NotNull
-	protected getErrorRecoverySet(@NotNull recognizer: Parser): IntervalSet {
+	protected getErrorRecoverySet( @NotNull recognizer: Parser): IntervalSet {
 		let atn: ATN = recognizer.interpreter.atn;
 		let ctx: RuleContext | undefined = recognizer.context;
 		let recoverSet: IntervalSet = new IntervalSet();
@@ -749,17 +753,17 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 			ctx = ctx._parent;
 		}
 		recoverSet.remove(Token.EPSILON);
-//		System.out.println("recover set "+recoverSet.toString(recognizer.getTokenNames()));
+		//		System.out.println("recover set "+recoverSet.toString(recognizer.getTokenNames()));
 		return recoverSet;
 	}
 
 	/** Consume tokens until one matches the given token set. */
-	protected consumeUntil(@NotNull recognizer: Parser, @NotNull set: IntervalSet): void {
-//		System.err.println("consumeUntil("+set.toString(recognizer.getTokenNames())+")");
+	protected consumeUntil( @NotNull recognizer: Parser, @NotNull set: IntervalSet): void {
+		//		System.err.println("consumeUntil("+set.toString(recognizer.getTokenNames())+")");
 		let ttype: number = recognizer.inputStream.LA(1);
 		while (ttype !== Token.EOF && !set.contains(ttype)) {
 			//System.out.println("consume during recover LA(1)="+getTokenNames()[input.LA(1)]);
-//			recognizer.inputStream.consume();
+			//			recognizer.inputStream.consume();
 			recognizer.consume();
 			ttype = recognizer.inputStream.LA(1);
 		}

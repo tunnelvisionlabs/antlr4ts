@@ -4,8 +4,8 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { ParserRuleContext } from "../../ParserRuleContext";
 import { Override } from "../../Decorators";
+import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
 import { Trees } from "../Trees";
 import { XPathElement } from "./XPathElement";

@@ -6,8 +6,8 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.7499997-07:00
 
 /** How to emit recognition errors. */
-import { Recognizer } from "./Recognizer";
 import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from "./Recognizer";
 
 export interface ANTLRErrorListener<Symbol> {
 	/**

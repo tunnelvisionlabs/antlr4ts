@@ -10,27 +10,27 @@ import { ATN } from './atn/ATN';
 import { ATNState } from './atn/ATNState';
 import { ATNStateType } from './atn/ATNStateType';
 import { AtomTransition } from './atn/AtomTransition';
-import { BitSet } from './misc/BitSet';
 import { DecisionState } from './atn/DecisionState';
-import { FailedPredicateException } from './FailedPredicateException';
-import { InputMismatchException } from './InputMismatchException';
-import { InterpreterRuleContext } from './InterpreterRuleContext';
 import { LoopEndState } from './atn/LoopEndState';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Parser } from './Parser';
 import { ParserATNSimulator } from './atn/ParserATNSimulator';
-import { ParserRuleContext } from './ParserRuleContext';
 import { PrecedencePredicateTransition } from './atn/PrecedencePredicateTransition';
 import { PredicateTransition } from './atn/PredicateTransition';
-import { RecognitionException } from './RecognitionException';
 import { RuleStartState } from './atn/RuleStartState';
 import { RuleTransition } from './atn/RuleTransition';
 import { StarLoopEntryState } from './atn/StarLoopEntryState';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
 import { Transition } from './atn/Transition';
 import { TransitionType } from './atn/TransitionType';
+import { Override } from './Decorators';
+import { NotNull } from './Decorators';
+import { FailedPredicateException } from './FailedPredicateException';
+import { InputMismatchException } from './InputMismatchException';
+import { InterpreterRuleContext } from './InterpreterRuleContext';
+import { BitSet } from './misc/BitSet';
+import { Parser } from './Parser';
+import { ParserRuleContext } from './ParserRuleContext';
+import { RecognitionException } from './RecognitionException';
+import { Token } from './Token';
+import { TokenStream } from './TokenStream';
 import { Vocabulary } from './Vocabulary';
 
 /** A parser simulator that mimics what ANTLR's generated
@@ -97,10 +97,17 @@ export class ParserInterpreter extends Parser {
 	 *  @since 4.5
 	 */
 	constructor(/*@NotNull*/ old: ParserInterpreter);
-	constructor(grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
-							 ruleNames: string[], atn: ATN, input: TokenStream);
-	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
-							 ruleNames?: string[], atn?: ATN, input?: TokenStream) {
+	constructor(
+		grammarFileName: string,
+		vocabulary: Vocabulary,
+		ruleNames: string[],
+		atn: ATN,
+		input: TokenStream);
+	constructor(
+		grammarFileName: ParserInterpreter | string,
+		@NotNull vocabulary?: Vocabulary,
+		ruleNames?: string[], atn?: ATN, input?: TokenStream,
+		) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;
@@ -185,40 +192,40 @@ export class ParserInterpreter extends Parser {
 		while (true) {
 			let p: ATNState = this.atnState;
 			switch (p.stateType) {
-			case ATNStateType.RULE_STOP:
-				// pop; return from rule
-				if (this._ctx.isEmpty) {
-					if (startRuleStartState.isPrecedenceRule) {
-						let result: ParserRuleContext = this._ctx;
-						let parentContext: [ParserRuleContext, number] = this._parentContextStack.pop() !;
-						this.unrollRecursionContexts(parentContext[0]);
-						return result;
+				case ATNStateType.RULE_STOP:
+					// pop; return from rule
+					if (this._ctx.isEmpty) {
+						if (startRuleStartState.isPrecedenceRule) {
+							let result: ParserRuleContext = this._ctx;
+							let parentContext: [ParserRuleContext, number] = this._parentContextStack.pop()!;
+							this.unrollRecursionContexts(parentContext[0]);
+							return result;
+						}
+						else {
+							this.exitRule();
+							return this._rootContext;
+						}
 					}
-					else {
-						this.exitRule();
-						return this._rootContext;
+
+					this.visitRuleStopState(p);
+					break;
+
+				default:
+					try {
+						this.visitState(p);
 					}
-				}
-
-				this.visitRuleStopState(p);
-				break;
-
-			default:
-				try {
-					this.visitState(p);
-				}
-				catch (e) {
-					if (e instanceof RecognitionException) {
-						this.state = this._atn.ruleToStopState[p.ruleIndex].stateNumber;
-						this.context.exception = e;
-						this.errorHandler.reportError(this, e);
-						this.recover(e);
-					} else {
-						throw e;
+					catch (e) {
+						if (e instanceof RecognitionException) {
+							this.state = this._atn.ruleToStopState[p.ruleIndex].stateNumber;
+							this.context.exception = e;
+							this.errorHandler.reportError(this, e);
+							this.recover(e);
+						} else {
+							throw e;
+						}
 					}
-				}
 
-				break;
+					break;
 			}
 		}
 	}
@@ -241,71 +248,71 @@ export class ParserInterpreter extends Parser {
 
 		let transition: Transition = p.transition(predictedAlt - 1);
 		switch (transition.serializationType) {
-		case TransitionType.EPSILON:
-			if (this.pushRecursionContextStates.get(p.stateNumber) &&
-				!(transition.target instanceof LoopEndState)) {
-				// We are at the start of a left recursive rule's (...)* loop
-				// and we're not taking the exit branch of loop.
-				let parentContext = this._parentContextStack[this._parentContextStack.length - 1];
-				let localctx: InterpreterRuleContext =
-					this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
-				this.pushNewRecursionContext(localctx,
-					this._atn.ruleToStartState[p.ruleIndex].stateNumber,
-					this._ctx.ruleIndex);
-			}
-			break;
+			case TransitionType.EPSILON:
+				if (this.pushRecursionContextStates.get(p.stateNumber) &&
+					!(transition.target instanceof LoopEndState)) {
+					// We are at the start of a left recursive rule's (...)* loop
+					// and we're not taking the exit branch of loop.
+					let parentContext = this._parentContextStack[this._parentContextStack.length - 1];
+					let localctx: InterpreterRuleContext =
+						this.createInterpreterRuleContext(parentContext[0], parentContext[1], this._ctx.ruleIndex);
+					this.pushNewRecursionContext(localctx,
+						this._atn.ruleToStartState[p.ruleIndex].stateNumber,
+						this._ctx.ruleIndex);
+				}
+				break;
 
-		case TransitionType.ATOM:
-			this.match((transition as AtomTransition)._label);
-			break;
+			case TransitionType.ATOM:
+				this.match((transition as AtomTransition)._label);
+				break;
 
-		case TransitionType.RANGE:
-		case TransitionType.SET:
-		case TransitionType.NOT_SET:
-			if (!transition.matches(this._input.LA(1), Token.MIN_USER_TOKEN_TYPE, 65535)) {
-				this.recoverInline();
-			}
-			this.matchWildcard();
-			break;
+			case TransitionType.RANGE:
+			case TransitionType.SET:
+			case TransitionType.NOT_SET:
+				if (!transition.matches(this._input.LA(1), Token.MIN_USER_TOKEN_TYPE, 65535)) {
+					this.recoverInline();
+				}
+				this.matchWildcard();
+				break;
 
-		case TransitionType.WILDCARD:
-			this.matchWildcard();
-			break;
+			case TransitionType.WILDCARD:
+				this.matchWildcard();
+				break;
 
-		case TransitionType.RULE:
-			let ruleStartState: RuleStartState = transition.target as RuleStartState;
-			let ruleIndex: number = ruleStartState.ruleIndex;
-			let newctx: InterpreterRuleContext = this.createInterpreterRuleContext(this._ctx, p.stateNumber, ruleIndex);
-			if (ruleStartState.isPrecedenceRule) {
-				this.enterRecursionRule(newctx, ruleStartState.stateNumber, ruleIndex, (transition as RuleTransition).precedence);
-			}
-			else {
-				this.enterRule(newctx, transition.target.stateNumber, ruleIndex);
-			}
-			break;
+			case TransitionType.RULE:
+				let ruleStartState: RuleStartState = transition.target as RuleStartState;
+				let ruleIndex: number = ruleStartState.ruleIndex;
+				let newctx: InterpreterRuleContext = this.createInterpreterRuleContext(this._ctx, p.stateNumber, ruleIndex);
+				if (ruleStartState.isPrecedenceRule) {
+					this.enterRecursionRule(newctx, ruleStartState.stateNumber, ruleIndex, (transition as RuleTransition).precedence);
+				}
+				else {
+					this.enterRule(newctx, transition.target.stateNumber, ruleIndex);
+				}
+				break;
 
-		case TransitionType.PREDICATE:
-			let predicateTransition: PredicateTransition = transition as PredicateTransition;
-			if (!this.sempred(this._ctx, predicateTransition.ruleIndex, predicateTransition.predIndex)) {
-				throw new FailedPredicateException(this);
-			}
+			case TransitionType.PREDICATE:
+				let predicateTransition: PredicateTransition = transition as PredicateTransition;
+				if (!this.sempred(this._ctx, predicateTransition.ruleIndex, predicateTransition.predIndex)) {
+					throw new FailedPredicateException(this);
+				}
 
-			break;
+				break;
 
-		case TransitionType.ACTION:
-			let actionTransition: ActionTransition = transition as ActionTransition;
-			this.action(this._ctx, actionTransition.ruleIndex, actionTransition.actionIndex);
-			break;
+			case TransitionType.ACTION:
+				let actionTransition: ActionTransition = transition as ActionTransition;
+				this.action(this._ctx, actionTransition.ruleIndex, actionTransition.actionIndex);
+				break;
 
-		case TransitionType.PRECEDENCE:
-			if (!this.precpred(this._ctx, (transition as PrecedencePredicateTransition).precedence)) {
-				let precedence = (transition as PrecedencePredicateTransition).precedence;
-				throw new FailedPredicateException(this, `precpred(_ctx, ${precedence})`);
-			}
-			break;
+			case TransitionType.PRECEDENCE:
+				if (!this.precpred(this._ctx, (transition as PrecedencePredicateTransition).precedence)) {
+					let precedence = (transition as PrecedencePredicateTransition).precedence;
+					throw new FailedPredicateException(this, `precpred(_ctx, ${precedence})`);
+				}
+				break;
 
-		default:
-			throw new Error("UnsupportedOperationException: Unrecognized ATN transition type.");
+			default:
+				throw new Error("UnsupportedOperationException: Unrecognized ATN transition type.");
 		}
 
 		this.state = transition.target.stateNumber;
@@ -421,7 +428,7 @@ export class ParserInterpreter extends Parser {
 
 			let source = tok.tokenSource;
 			let stream = source !== undefined ? source.inputStream : undefined;
-			let sourcePair = { source: source, stream: stream };
+			let sourcePair = { source, stream };
 
 			if (e instanceof InputMismatchException) {
 				let expectedTokens = e.expectedTokens;
@@ -439,7 +446,6 @@ export class ParserInterpreter extends Parser {
 				this._ctx.addErrorNode(errToken);
 			}
 			else { // NoViableAlt
-				let source = tok.tokenSource;
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
 						Token.INVALID_TYPE, tok.text,

@@ -7,12 +7,12 @@
 
 import { ATN } from './atn/ATN';
 import { ATNType } from './atn/ATNType';
-import { CharStream } from './CharStream';
-import { Collection } from './misc/Stubs';
-import { Lexer } from './Lexer';
 import { LexerATNSimulator } from './atn/LexerATNSimulator';
+import { CharStream } from './CharStream';
 import { NotNull } from './Decorators';
 import { Override } from './Decorators';
+import { Lexer } from './Lexer';
+import { Collection } from './misc/Stubs';
 import { Vocabulary } from './Vocabulary';
 
 export class LexerInterpreter extends Lexer {
@@ -27,7 +27,7 @@ export class LexerInterpreter extends Lexer {
 	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
 		super(input);
 
-		if (atn.grammarType != ATNType.LEXER) {
+		if (atn.grammarType !== ATNType.LEXER) {
 			throw new Error("IllegalArgumentException: The ATN must be a lexer ATN.");
 		}
 

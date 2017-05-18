@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
+import { NotNull, Override } from '../Decorators';
+import { Lexer } from '../Lexer';
+import { Token } from '../Token';
+import { Vocabulary } from '../Vocabulary';
 import { ArrayEqualityComparator } from './ArrayEqualityComparator';
 import { IntegerList } from './IntegerList';
 import { Interval } from './Interval';
 import { IntSet } from './IntSet';
-import { Lexer } from '../Lexer';
 import { MurmurHash } from './MurmurHash';
-import { Override, NotNull } from '../Decorators';
-import { Token } from '../Token';
-import { Vocabulary } from '../Vocabulary';
 
 /**
  * This class implements the {@link IntSet} backed by a sorted array of
@@ -519,7 +519,7 @@ export class IntervalSet implements IntSet {
 			let a: number = I.a;
 			let b: number = I.b;
 			if (a === b) {
-				if (a == Token.EOF) {
+				if (a === Token.EOF) {
 					buf += "<EOF>";
 				} else if (elemAreChar) {
 					buf += "'" + String.fromCharCode(a) + "'";
@@ -597,7 +597,7 @@ export class IntervalSet implements IntSet {
 	get size(): number {
 		let n: number = 0;
 		let numIntervals: number = this._intervals.length;
-		if (numIntervals == 1) {
+		if (numIntervals === 1) {
 			let firstInterval: Interval = this._intervals[0];
 			return firstInterval.b - firstInterval.a + 1;
 		}

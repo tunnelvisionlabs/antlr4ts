@@ -29,14 +29,14 @@
 
 import { ATNConfig } from './atn/ATNConfig';
 import { ATNConfigSet } from './atn/ATNConfigSet';
-import { BitSet } from './misc/BitSet';
-import { DFA } from './dfa/DFA';
-import { Parser } from './Parser';
-import { ParserErrorListener } from './ParserErrorListener';
 import { SimulatorState } from './atn/SimulatorState';
-import { Override, NotNull } from "./Decorators";
+import { NotNull, Override } from "./Decorators";
+import { DFA } from './dfa/DFA';
+import { BitSet } from './misc/BitSet';
 import { Interval } from "./misc/Interval";
 import { asIterable } from './misc/Stubs';
+import { Parser } from './Parser';
+import { ParserErrorListener } from './ParserErrorListener';
 
 export class DiagnosticErrorListener implements ParserErrorListener {
 
@@ -52,7 +52,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAmbiguity(@NotNull recognizer: Parser,
+	reportAmbiguity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -71,7 +72,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext(@NotNull recognizer: Parser,
+	reportAttemptingFullContext(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -85,7 +87,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportContextSensitivity(@NotNull recognizer: Parser,
+	reportContextSensitivity(
+		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

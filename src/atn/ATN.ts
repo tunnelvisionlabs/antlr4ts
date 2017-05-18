@@ -5,23 +5,23 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.1063510-07:00
 
+import { NotNull } from '../Decorators';
+import { DFA } from '../dfa/DFA';
 import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { IntervalSet } from '../misc/IntervalSet';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { RuleContext } from '../RuleContext';
+import { Token } from '../Token';
 import { ATNState } from './ATNState';
 import { ATNType } from './ATNType';
 import { DecisionState } from './DecisionState';
-import { DFA } from '../dfa/DFA';
-import { IntervalSet } from '../misc/IntervalSet';
 import { InvalidState } from './InvalidState';
 import { LexerAction } from './LexerAction';
 import { LL1Analyzer } from './LL1Analyzer';
-import { NotNull } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
-import { RuleContext } from '../RuleContext';
 import { RuleStartState } from './RuleStartState';
 import { RuleStopState } from './RuleStopState';
 import { RuleTransition } from './RuleTransition';
-import { Token } from '../Token';
 import { TokensStartState } from './TokensStartState';
 
 import * as assert from 'assert';
@@ -88,6 +88,7 @@ export class ATN {
 	@NotNull
 	modeToDFA: DFA[] = [];
 
+	// tslint:disable-next-line:variable-name
 	LL1Table: Map<number, number> = new Map<number, number>();
 
 	/** Used for runtime deserialization of ATNs from strings */
@@ -265,6 +266,7 @@ export class ATN {
 	}
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace ATN {
 	export const INVALID_ALT_NUMBER: number = 0;
 }

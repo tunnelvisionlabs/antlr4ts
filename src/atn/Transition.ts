@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.8530496-07:00
 
-import { ATNState } from './ATNState';
-import { IntervalSet } from '../misc/IntervalSet';
 import { NotNull } from '../Decorators';
+import { IntervalSet } from '../misc/IntervalSet';
+import { ATNState } from './ATNState';
 import { TransitionType } from './TransitionType';
 
 /** An ATN transition between any two ATN states.  Subclasses define
@@ -34,7 +34,7 @@ export abstract class Transition {
 		"SET",
 		"NOT_SET",
 		"WILDCARD",
-		"PRECEDENCE"
+		"PRECEDENCE",
 	];
 
 	// @SuppressWarnings("serial")

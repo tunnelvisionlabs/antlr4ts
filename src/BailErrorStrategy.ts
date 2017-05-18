@@ -33,11 +33,11 @@
  *
  * @see Parser.errorHandler
  */
-import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from './Parser';
-import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
+import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
+import { InputMismatchException } from "./InputMismatchException";
 import { ParseCancellationException } from "./misc/ParseCancellationException";
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token";
@@ -72,5 +72,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
 	/** Make sure we don't attempt to recover from problems in subrules. */
 	@Override
-	sync(recognizer: Parser): void { }
+	sync(recognizer: Parser): void {
+		// Intentionally empty
+	}
 }

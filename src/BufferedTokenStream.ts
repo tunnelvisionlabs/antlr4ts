@@ -7,9 +7,9 @@
 
 import assert = require('assert');
 import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Lexer } from './Lexer';
 import { NotNull, Override } from './Decorators';
+import { Lexer } from './Lexer';
+import { Interval } from './misc/Interval';
 import { RuleContext } from './RuleContext';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
@@ -81,6 +81,14 @@ export class BufferedTokenStream implements TokenStream {
 	@Override
 	get tokenSource(): TokenSource {
 		return this._tokenSource;
+	}
+
+	/** Reset this token stream by setting its token source. */
+	set tokenSource(tokenSource: TokenSource) {
+		this._tokenSource = tokenSource;
+		this.tokens.length = 0;
+		this.p = -1;
+		this.fetchedEOF = false;
 	}
 
 	@Override
@@ -243,7 +251,7 @@ export class BufferedTokenStream implements TokenStream {
 	tryLT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
-			throw new RangeError("0 is not a valid lookahead index")
+			throw new RangeError("0 is not a valid lookahead index");
 		}
 
 		if (k < 0) {
@@ -288,14 +296,6 @@ export class BufferedTokenStream implements TokenStream {
 	protected setup(): void {
 		this.sync(0);
 		this.p = this.adjustSeekIndex(0);
-	}
-
-	/** Reset this token stream by setting its token source. */
-	set tokenSource(tokenSource: TokenSource) {
-		this._tokenSource = tokenSource;
-		this.tokens.length = 0;
-		this.p = -1;
-		this.fetchedEOF = false;
 	}
 
     /** Given a start and stop index, return a {@code List} of all tokens in

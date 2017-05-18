@@ -8,9 +8,9 @@
 /** This signifies any kind of mismatched input exceptions such as
  *  when the current input does not match the expected token.
  */
-import { RecognitionException } from "./RecognitionException";
 import { NotNull } from "./Decorators";
 import { Parser } from "./Parser";
+import { RecognitionException } from "./RecognitionException";
 
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;

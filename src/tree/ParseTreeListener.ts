@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6109431-07:00
 
-import { ErrorNode } from './ErrorNode';
 import { ParserRuleContext } from '../ParserRuleContext';
+import { ErrorNode } from './ErrorNode';
 import { TerminalNode } from './TerminalNode';
 
 /** This interface describes the minimal core of methods triggered

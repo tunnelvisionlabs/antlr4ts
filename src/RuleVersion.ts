@@ -15,6 +15,7 @@ import { ParserRuleContext } from './ParserRuleContext';
 export function RuleVersion(version: number) {
 
 	return function(target: Parser, propertyKey: PropertyKey, propertyDescriptor: TypedPropertyDescriptor<(...args: any[]) => ParserRuleContext>) {
+		// intentionally empty
 	};
 
 }

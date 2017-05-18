@@ -23,8 +23,8 @@ export class XPathTokenElement extends XPathElement {
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if (c instanceof TerminalNode) {
-				if ((c.symbol.type == this.tokenType && !this.invert) ||
-					(c.symbol.type != this.tokenType && this.invert)) {
+				if ((c.symbol.type === this.tokenType && !this.invert) ||
+					(c.symbol.type !== this.tokenType && this.invert)) {
 					nodes.push(c);
 				}
 			}

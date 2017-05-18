@@ -7,26 +7,26 @@
 
 import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
-import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
+import { NotNull } from "../../Decorators";
 import { Lexer } from '../../Lexer';
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
-import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
 import { Parser } from '../../Parser';
 import { ParserInterpreter } from "../../ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
+import { RecognitionException } from "../../RecognitionException";
+import { Token } from "../../Token";
 import { ParseTree } from "../ParseTree";
+import { RuleNode } from "../RuleNode";
+import { TerminalNode } from "../TerminalNode";
+import { Chunk } from "./Chunk";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePattern } from "./ParseTreePattern";
-import { RecognitionException } from "../../RecognitionException";
-import { RuleNode } from "../RuleNode";
 import { RuleTagToken } from "./RuleTagToken";
 import { TagChunk } from "./TagChunk";
-import { TerminalNode } from "../TerminalNode";
 import { TextChunk } from "./TextChunk";
-import { Token } from "../../Token";
 import { TokenTagToken } from "./TokenTagToken";
 
 /**
@@ -180,7 +180,7 @@ export class ParseTreePatternMatcher {
 	// Implementation of match
 	@NotNull
 	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
-		if (typeof pattern == "string") {
+		if (typeof pattern === "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
 		} else {
@@ -511,6 +511,7 @@ export class ParseTreePatternMatcher {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - used to simulate nested class
 export namespace ParseTreePatternMatcher {
 	export class CannotInvokeStartRule extends Error {
 		public constructor(public error: Error) {

@@ -6,9 +6,9 @@
 // CONVERSTION complete, Burt Harris 10/14/2016
 import { NotNull } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
+import { XPath } from "../xpath/XPath";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
-import { XPath } from "../xpath/XPath";
 
 /**
  * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by

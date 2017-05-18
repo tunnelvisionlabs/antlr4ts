@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.0449220-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Lexer } from '../Lexer';
+import { MurmurHash } from '../misc/MurmurHash';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
 
 /**
  * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.
@@ -24,7 +24,8 @@ export class LexerPopModeAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code popMode} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerPopModeAction implements LexerAction {
 	toString(): string {
 		return "popMode";
 	}
-}
 
-export namespace LexerPopModeAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerPopModeAction = new LexerPopModeAction();
+	public static readonly INSTANCE = new LexerPopModeAction();
 }

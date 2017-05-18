@@ -57,15 +57,15 @@
  */
 
 import { ATN } from './atn/ATN';
-import { Parser } from './Parser';
-import { Recognizer } from './Recognizer';
-import { RuleNode } from "./tree/RuleNode";
-import { ParseTree } from "./tree/ParseTree";
+import { Override } from "./Decorators";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators"
-import { Trees } from "./tree/Trees";
-import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { Parser } from './Parser';
 import { ParserRuleContext } from "./ParserRuleContext";
+import { Recognizer } from './Recognizer';
+import { ParseTree } from "./tree/ParseTree";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { RuleNode } from "./tree/RuleNode";
+import { Trees } from "./tree/Trees";
 
 export class RuleContext extends RuleNode {
 	_parent: RuleContext | undefined;
@@ -158,7 +158,9 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	set altNumber(altNumber: number) { }
+	set altNumber(altNumber: number) {
+		// intentionally empty
+	}
 
 	@Override
 	getChild(i: number): ParseTree {
@@ -204,8 +206,8 @@ export class RuleContext extends RuleNode {
 
 	toString(
 		arg1?: Recognizer<any, any> | string[],
-		stop?: RuleContext)
-		: string {
+		stop?: RuleContext): string {
+
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.ruleNames : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 

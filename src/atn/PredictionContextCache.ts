@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.6390614-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { Override } from "../Decorators";
-import { JavaMap } from '../misc/Stubs';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { PredictionContext } from './PredictionContext';
 import * as assert from 'assert';
+import { Override } from "../Decorators";
+import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { JavaMap } from '../misc/Stubs';
+import { PredictionContext } from './PredictionContext';
 
 /** Used to cache {@link PredictionContext} objects. Its used for the shared
  *  context cash associated with contexts in DFA states. This cache
@@ -82,6 +82,8 @@ export class PredictionContextCache {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - Used to simulate nested classes
+
 export namespace PredictionContextCache {
 	export class PredictionContextAndInt {
 		private obj: PredictionContext;
@@ -96,7 +98,7 @@ export namespace PredictionContextCache {
 		equals(obj: any): boolean {
 			if (!(obj instanceof PredictionContextAndInt)) {
 				return false;
-			} else if (obj == this) {
+			} else if (obj === this) {
 				return true;
 			}
 

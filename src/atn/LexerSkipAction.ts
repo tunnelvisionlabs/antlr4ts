@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.2324460-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Lexer } from '../Lexer';
+import { MurmurHash } from '../misc/MurmurHash';
 import { LexerAction } from './LexerAction';
 import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
 
 /**
  * Implements the {@code skip} lexer action by calling {@link Lexer#skip}.
@@ -24,7 +24,8 @@ export class LexerSkipAction implements LexerAction {
 	/**
 	 * Constructs the singleton instance of the lexer {@code skip} command.
 	 */
-	constructor() {
+	private constructor() {
+		// empty function
 	}
 
 	/**
@@ -71,11 +72,6 @@ export class LexerSkipAction implements LexerAction {
 	toString(): string {
 		return "skip";
 	}
-}
 
-export namespace LexerSkipAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerSkipAction = new LexerSkipAction();
+	public static readonly INSTANCE = new LexerSkipAction();
 }

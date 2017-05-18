@@ -13,9 +13,9 @@
  */
 import * as assert from "assert";
 import { CharStream } from "./CharStream";
-import { Arrays } from "./misc/Arrays";
 import { Override } from "./Decorators";
 import { IntStream } from "./IntStream";
+import { Arrays } from "./misc/Arrays";
 import { Interval } from "./misc/Interval";
 
 const READ_BUFFER_SIZE: number = 1024;
@@ -109,6 +109,7 @@ export class ANTLRInputStream implements CharStream {
 
 	@Override
 	release(marker: number): void {
+		// intentionally empty
 	}
 
 	/** consume() ahead until p==index; can't just set p=index as we must
@@ -131,9 +132,9 @@ export class ANTLRInputStream implements CharStream {
 	getText(interval: Interval): string {
 		let start: number = interval.a;
 		let stop: number = interval.b;
-		if (stop >= this.n) stop = this.n - 1;
+		if (stop >= this.n) { stop = this.n - 1; }
 		let count: number = stop - start + 1;
-		if (start >= this.n) return "";
+		if (start >= this.n) { return ""; }
 		// System.err.println("data: "+Arrays.toString(data)+", n="+n+
 		// 				   ", start="+start+
 		// 				   ", stop="+stop);

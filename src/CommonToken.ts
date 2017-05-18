@@ -7,8 +7,8 @@
 
 import { ATNSimulator } from './atn/ATNSimulator';
 import { CharStream } from './CharStream';
-import { Interval } from './misc/Interval';
 import { NotNull, Override } from './Decorators';
+import { Interval } from './misc/Interval';
 import { Recognizer } from './Recognizer';
 import { Token } from './Token';
 import { TokenSource } from './TokenSource';
@@ -120,16 +120,6 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	get type(): number {
-		return this._type;
-	}
-
-	// @Override
-	set line(line: number) {
-		this._line = line;
-	}
-
-	@Override
 	get text(): string | undefined {
 		if (this._text != null) {
 			return this._text;
@@ -167,6 +157,11 @@ export class CommonToken implements WritableToken {
 		return this._line;
 	}
 
+	// @Override
+	set line(line: number) {
+		this._line = line;
+	}
+
 	@Override
 	get charPositionInLine(): number {
 		return this._charPositionInLine;
@@ -185,6 +180,11 @@ export class CommonToken implements WritableToken {
 	// @Override
 	set channel(channel: number) {
 		this._channel = channel;
+	}
+
+	@Override
+	get type(): number {
+		return this._type;
 	}
 
 	// @Override

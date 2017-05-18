@@ -7,14 +7,14 @@ import * as es from './runtime/ExpectStream';
 
 describe("expectConsole()", () => {
 	it('should capture console.log()', () => {
-		es.expectConsole( "Testing 1,2,3\nbye\n", "", ()=> {
+		es.expectConsole( "Testing 1,2,3\nbye\n", "", () => {
 			console.log("Testing 1,2,3");
 			console.log("bye");
-		})
+		});
 	});
-	it('should capture console.error()', ()=> {
-		es.expectConsole( "", "pseudo-error\n", ()=>{
+	it('should capture console.error()', () => {
+		es.expectConsole( "", "pseudo-error\n", () => {
 			console.error("pseudo-error");
 		});
 	});
-})
+});

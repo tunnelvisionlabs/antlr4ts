@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
 import { ATNConfigSet } from "./atn/ATNConfigSet";
-import { RecognitionException } from "./RecognitionException";
+import { CharStream } from "./CharStream";
 import { NotNull, Override } from "./Decorators";
 import { Lexer } from "./Lexer";
-import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
 import * as Utils from "./misc/Utils";
+import { RecognitionException } from "./RecognitionException";
 
 export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;
@@ -22,7 +22,8 @@ export class LexerNoViableAltException extends RecognitionException {
 	/** Which configurations did we try at input.index that couldn't match input.LA(1)? */
 	private _deadEndConfigs?: ATNConfigSet;
 
-	constructor(lexer: Lexer | undefined,
+	constructor(
+		lexer: Lexer | undefined,
 		@NotNull input: CharStream,
 		startIndex: number,
 		deadEndConfigs: ATNConfigSet | undefined) {

@@ -5,18 +5,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
+import { Override } from '../Decorators';
 import { Array2DHashMap } from '../misc/Array2DHashMap';
+import { BitSet } from '../misc/BitSet';
+import { EqualityComparator } from '../misc/EqualityComparator';
+import { MurmurHash } from '../misc/MurmurHash';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { Collection } from '../misc/Stubs';
 import { asIterable } from '../misc/Stubs';
 import { ATN } from './ATN';
 import { ATNConfig } from './ATNConfig';
 import { ATNConfigSet } from './ATNConfigSet';
 import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { Collection } from '../misc/Stubs';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { MurmurHash } from '../misc/MurmurHash';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { Override } from '../Decorators';
 import { RuleStopState } from './RuleStopState';
 import { SemanticContext } from './SemanticContext';
 
@@ -84,9 +84,10 @@ export enum PredictionMode {
 	 * This prediction mode does not provide any guarantees for prediction
 	 * behavior for syntactically-incorrect inputs.</p>
 	 */
-	LL_EXACT_AMBIG_DETECTION
+	LL_EXACT_AMBIG_DETECTION,
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace PredictionMode {
 	/** A Map that uses just the state and the stack context as the key. */
 	// NOTE: Base type used to be FlexibleHashMap<ATNConfig, BitSet>
@@ -100,6 +101,7 @@ export namespace PredictionMode {
 		static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
+			// empty function
 		}
 
 		/**
@@ -117,9 +119,9 @@ export namespace PredictionMode {
 
 		@Override
 		equals(a: ATNConfig, b: ATNConfig): boolean {
-			if (a === b) return true;
-			if (a == null || b == null) return false;
-			return a.state.stateNumber == b.state.stateNumber
+			if (a === b) { return true; }
+			if (a == null || b == null) { return false; }
+			return a.state.stateNumber === b.state.stateNumber
 				&& a.context.equals(b.context);
 		}
 	}

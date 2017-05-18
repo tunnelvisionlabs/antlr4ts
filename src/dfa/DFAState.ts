@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.7771056-07:00
 
-import { AcceptStateInfo } from './AcceptStateInfo';
 import { ATN } from '../atn/ATN';
 import { ATNConfigSet } from '../atn/ATNConfigSet';
-import { BitSet } from '../misc/BitSet';
 import { LexerActionExecutor } from '../atn/LexerActionExecutor';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
 import { PredictionContext } from '../atn/PredictionContext';
 import { SemanticContext } from '../atn/SemanticContext';
+import { NotNull, Override } from '../Decorators';
+import { BitSet } from '../misc/BitSet';
+import { MurmurHash } from '../misc/MurmurHash';
+import { AcceptStateInfo } from './AcceptStateInfo';
 
 import * as assert from 'assert';
 
@@ -207,7 +207,7 @@ export class DFAState {
 	@Override
 	equals(o: any): boolean {
 		// compare set of ATN configurations in this set with other
-		if (this === o) return true;
+		if (this === o) { return true; }
 
 		if (!(o instanceof DFAState)) {
 			return false;
@@ -215,7 +215,7 @@ export class DFAState {
 
 		let other: DFAState = o;
 		let sameSet: boolean = this.configs.equals(other.configs);
-//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
+		//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
 	}
 
@@ -236,13 +236,15 @@ export class DFAState {
 	}
 }
 
+// tslint:disable-next-line:no-namespace - Used to simulate nested class
+
 export namespace DFAState {
 	/** Map a predicate to a predicted alternative. */
 	export class PredPrediction {
 		@NotNull
 		pred: SemanticContext;  // never null; at least SemanticContext.NONE
 		alt: number;
-		constructor(@NotNull pred: SemanticContext, alt: number) {
+		constructor( @NotNull pred: SemanticContext, alt: number) {
 			this.alt = alt;
 			this.pred = pred;
 		}

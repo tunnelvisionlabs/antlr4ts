@@ -152,7 +152,7 @@ export class ListTokenSource implements TokenSource {
 			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				for (let i = 0; i < tokenText.length; i++) {
-					if (tokenText.charAt(i) == '\n') {
+					if (tokenText.charAt(i) === '\n') {
 						line++;
 					}
 				}

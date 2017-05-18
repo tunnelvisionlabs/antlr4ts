@@ -4,10 +4,10 @@
  */
 
 import { Array2DHashSet } from './Array2DHashSet';
-import { asIterable } from './Stubs';
-import { Collection } from './Stubs';
 import { DefaultEqualityComparator } from './DefaultEqualityComparator';
 import { EqualityComparator } from './EqualityComparator';
+import { asIterable } from './Stubs';
+import { Collection } from './Stubs';
 import { Equatable, JavaCollection, JavaMap, JavaSet } from './Stubs';
 import { JavaIterator } from './Stubs';
 
@@ -377,7 +377,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 
 			remove(): void {
 				throw new Error("Not supported");
-			}
+			},
 		};
 	}
 

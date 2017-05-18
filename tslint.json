@@ -1,0 +1,33 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+      "indent": [true, "tabs"],
+      "one-line": [true,
+            "check-open-brace",
+            "check-whitespace"
+        ],
+      "whitespace": [true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type"
+        ],
+      "no-bitwise": false,
+      "max-line-length": [ false ],
+      "quotemark": [false],
+      "jsdoc-format": false,
+      "array-type": [false],
+      "max-classes-per-file": [false],
+      "member-ordering": [false],
+      "member-access": [false],
+      "comment-format": [false],
+      "only-arrow-functions": [
+        false
+      ],
+      "variable-name": [ true, "allow-leading-underscore", true],
+      "interface-name": [false],
+      "no-console": [false]
+     }
+}

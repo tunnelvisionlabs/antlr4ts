@@ -5,20 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.5488013-07:00
 
+import { NotNull, Override } from '../Decorators';
 import { Array2DHashMap } from '../misc/Array2DHashMap';
 import { Array2DHashSet } from '../misc/Array2DHashSet';
 import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
+import { BitSet } from '../misc/BitSet';
+import { EqualityComparator } from '../misc/EqualityComparator';
+import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
+import { JavaSet } from '../misc/Stubs';
+import { asIterable, Collection, JavaIterator } from '../misc/Stubs';
 import { ATN } from './ATN';
 import { ATNConfig } from './ATNConfig';
 import { ATNSimulator } from './ATNSimulator';
 import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { Collection, JavaIterator, asIterable } from '../misc/Stubs';
 import { ConflictInfo } from './ConflictInfo';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { JavaSet } from '../misc/Stubs';
-import { NotNull, Override } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
 import { PredictionContext } from './PredictionContext';
 import { PredictionContextCache } from './PredictionContextCache';
 import { SemanticContext } from './SemanticContext';
@@ -123,7 +123,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				this.unmerged = undefined;
 			} else if (!set.isReadOnly) {
 				this.mergedConfigs = NewKeyedConfigMap(set.mergedConfigs);
-				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
+				this.unmerged = (<ATNConfig[]> set.unmerged).slice(0);
 			} else {
 				this.mergedConfigs = NewKeyedConfigMap();
 				this.unmerged = [];
@@ -193,8 +193,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return;
 		}
 
-		for (let i = 0; i < this.configs.length; i++) {
-			let config: ATNConfig = this.configs[i];
+		for (let config of this.configs) {
 			config.context = interpreter.atn.getCachedContext(config.context);
 		}
 	}
@@ -295,7 +294,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 			let joined: PredictionContext = PredictionContext.join(mergedConfig.context, e.context, contextCache);
 			this.updatePropertiesForMergedConfig(e);
-			if (mergedConfig.context == joined) {
+			if (mergedConfig.context === joined) {
 				return false;
 			}
 
@@ -313,7 +312,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 				let joined: PredictionContext = PredictionContext.join(unmergedConfig.context, e.context, contextCache);
 				this.updatePropertiesForMergedConfig(e);
-				if (unmergedConfig.context == joined) {
+				if (unmergedConfig.context === joined) {
 					return false;
 				}
 
@@ -358,7 +357,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
-		if (left.state.stateNumber != right.state.stateNumber) {
+		if (left.state.stateNumber !== right.state.stateNumber) {
 			return false;
 		}
 
@@ -442,14 +441,14 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return false;
 		}
 
-		return this.outermostConfigSet == obj.outermostConfigSet
+		return this.outermostConfigSet === obj.outermostConfigSet
 			&& Utils.equals(this._conflictInfo, obj._conflictInfo)
 			&& ArrayEqualityComparator.INSTANCE.equals(this.configs, obj.configs);
 	}
 
 	@Override
 	hashCode(): number {
-		if (this.isReadOnly && this.cachedHashCode != -1) {
+		if (this.isReadOnly && this.cachedHashCode !== -1) {
 			return this.cachedHashCode;
 		}
 
@@ -474,10 +473,10 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		let buf = "";
 		let sortedConfigs = this.configs.slice(0);
 		sortedConfigs.sort((o1, o2) => {
-			if (o1.alt != o2.alt) {
+			if (o1.alt !== o2.alt) {
 				return o1.alt - o2.alt;
 			}
-			else if (o1.state.stateNumber != o2.state.stateNumber) {
+			else if (o1.state.stateNumber !== o2.state.stateNumber) {
 				return o1.state.stateNumber - o2.state.stateNumber;
 			}
 			else {
@@ -494,15 +493,15 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 		buf += ("]");
 
-		if (this._hasSemanticContext) buf += (",hasSemanticContext=") + (this._hasSemanticContext);
-		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) buf += (",uniqueAlt=") + (this._uniqueAlt);
+		if (this._hasSemanticContext) { buf += (",hasSemanticContext=") + (this._hasSemanticContext); }
+		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) {buf += (",uniqueAlt=") + (this._uniqueAlt); }
 		if (this._conflictInfo != null) {
 			buf += (",conflictingAlts=") + (this._conflictInfo.conflictedAlts);
 			if (!this._conflictInfo.isExact) {
 				buf += ("*");
 			}
 		}
-		if (this._dipsIntoOuterContext) buf += (",dipsIntoOuterContext");
+		if (this._dipsIntoOuterContext) {buf += (",dipsIntoOuterContext"); }
 		return buf.toString();
 	}
 
