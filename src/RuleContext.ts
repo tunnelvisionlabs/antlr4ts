@@ -166,6 +166,11 @@ export class RuleContext extends RuleNode {
 	}
 
 	@Override
+	tryGetChild(i: number): ParseTree | undefined {
+		return undefined;
+	}
+
+	@Override
 	get childCount(): number {
 		return 0;
 	}

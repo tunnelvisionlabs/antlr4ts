@@ -205,17 +205,17 @@ export class ParserRuleContext extends RuleContext {
 		return result;
 	}
 
-	tryGetChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+	tryGetChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): T | undefined {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			return undefined;
 		}
 
 		let j: number = -1; // what node with ctxType have we found?
 		for (let o of this.children) {
-			if (o instanceof ctxType) {
+			if (!ctxType || o instanceof ctxType) {
 				j++;
 				if (j === i) {
-					return o;
+					return o as T;
 				}
 			}
 		}
