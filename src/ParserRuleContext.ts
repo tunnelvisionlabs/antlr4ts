@@ -46,7 +46,26 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	children?: ParseTree[];
+
+
+	_children?: Array<ParseTree>;
+	static _emptyChildren = [];
+
+	/** Access children for read
+	 * Avoids creation of extra empty arrays by using a shared _emptyChildren array
+	 */
+	get children() : ReadonlyArray<ParseTree> {
+		let result = this._children;
+		return result ? result : ParserRuleContext._emptyChildren;
+	}
+
+	/** Access the children in a read/write way.
+	 * This will create the _children array if needed.
+	 */
+	get mutableChildren() {
+		if (!this._children) this._children = [];
+		return this._children as Array<ParseTree>;
+	}
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -111,12 +130,12 @@ export class ParserRuleContext extends RuleContext {
 		this._stop = ctx._stop;
 
 		// copy any error nodes to alt label node
-		if (ctx.children) {
-			this.children = [];
+		if (ctx.children.length) {
+			const children = this.mutableChildren;
 			// reset parent pointer for any error nodes
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
-					this.children.push(child);
+					children.push(child);
 					child._parent = this;
 				}
 			}
@@ -143,12 +162,7 @@ export class ParserRuleContext extends RuleContext {
 			result = t;
 		}
 
-		if (!this.children) {
-			this.children = [t];
-		} else {
-			this.children.push(t);
-		}
-
+		this.mutableChildren.push(t);
 		return result;
 	}
 
@@ -158,7 +172,7 @@ export class ParserRuleContext extends RuleContext {
  	 */
 	removeLastChild(): void {
 		if (this.children) {
-			this.children.pop();
+			this.mutableChildren.pop();
 		}
 	}
 
@@ -185,10 +199,8 @@ export class ParserRuleContext extends RuleContext {
 		throw new TypeError("Invalid parent type for ParserRuleContext");
 	}
 
-	getChild(i: number): ParseTree;
-	getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
 	// Note: in TypeScript, order or arguments reversed
-	getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
+	getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
 		}
@@ -278,7 +290,7 @@ export class ParserRuleContext extends RuleContext {
 
 	// NOTE: argument order change from Java version
 	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
-		return this.getChild(i, ctxType);
+		return this.getChild(i, ctxType) as T;
 	}
 
 	tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {

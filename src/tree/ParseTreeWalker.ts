@@ -34,11 +34,11 @@ export class ParseTreeWalker {
 			}
 
 			// Move down to first child, if exists
-			if (currentNode.childCount > 0) {
+			if (currentNode.children && currentNode.children.length > 0) {
 				nodeStack.push(currentNode);
 				indexStack.push(currentIndex);
 				currentIndex = 0;
-				currentNode = currentNode.getChild(0);
+				currentNode = currentNode.children[0];
 				continue;
 			}
 
@@ -59,7 +59,7 @@ export class ParseTreeWalker {
 				// Move to next sibling if possible
 				let last = nodeStack[nodeStack.length - 1];
 				currentIndex++;
-				currentNode = currentIndex < last.childCount ? last.getChild(currentIndex) : undefined;
+				currentNode = currentIndex < last.children.length ? last.children[currentIndex] : undefined;
 				if (currentNode) {
 					break;
 				}

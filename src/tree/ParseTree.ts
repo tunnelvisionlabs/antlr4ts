@@ -22,7 +22,7 @@ export interface ParseTree extends SyntaxTree {
 	readonly parent: ParseTree | undefined;
 
 	//@Override
-	getChild(i: number): ParseTree;
+	readonly children: ReadonlyArray<ParseTree>;
 
 	/** The {@link ParseTreeVisitor} needs a double dispatch method. */
 	accept<T>(visitor: ParseTreeVisitor<T>): T;

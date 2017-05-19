@@ -41,15 +41,15 @@ export class Trees {
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.childCount == 0) return s;
+		if (t.children.length == 0) return s;
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
 		buf += (' ');
-		for (let i = 0; i < t.childCount; i++) {
+		for (let i = 0; i < t.children.length; i++) {
 			if (i > 0) buf += (' ');
-			buf += (this.toStringTree(t.getChild(i), ruleNames));
+			buf += (this.toStringTree(t.children[i], ruleNames));
 		}
 		buf += (")");
 		return buf;
@@ -95,8 +95,8 @@ export class Trees {
 	/** Return ordered list of all children of this node */
 	static getChildren(t: ParseTree): ParseTree[] {
 		let kids = [] as ParseTree[];
-		for (let i = 0; i < t.childCount; i++) {
-			kids.push(t.getChild(i));
+		for (let i = 0; i < t.children.length; i++) {
+			kids.push(t.children[i]);
 		}
 		return kids;
 	}
@@ -155,8 +155,8 @@ export class Trees {
 			if (t.ruleIndex === index) nodes.push(t);
 		}
 		// check children
-		for (let i = 0; i < t.childCount; i++) {
-			Trees._findAllNodes(t.getChild(i), index, findTokens, nodes);
+		for (let i = 0; i < t.children.length; i++) {
+			Trees._findAllNodes(t.children[i], index, findTokens, nodes);
 		}
 	}
 
@@ -169,9 +169,9 @@ export class Trees {
 
 		function recurse(e: ParseTree): void {
 			nodes.push(e);
-			const n = e.childCount;
+			const n = e.children.length;
 			for (let i = 0; i < n; i++) {
-				recurse(e.getChild(i));
+				recurse(e.children[i]);
 			}
 		}
 
@@ -188,9 +188,9 @@ export class Trees {
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number // inclusive
 	): ParserRuleContext | undefined {
-		let n: number = t.childCount;
+		let n: number = t.children.length;
 		for (let i = 0; i < n; i++) {
-			let child: ParseTree = t.getChild(i);
+			let child: ParseTree = t.children[i];
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
 			if (r) return r;
 		}
@@ -220,12 +220,12 @@ export class Trees {
 		if (!t) return;
 		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
-			let child = t.getChild(i);
+			let child = t.children[i];
 			let range: Interval = child.sourceInterval;
 			if (child instanceof ParserRuleContext && (range.b < startIndex || range.a > stopIndex)) {
 				if (Trees.isAncestorOf(child, root)) { // replace only if subtree doesn't have displayed root
 					let abbrev: CommonToken = new CommonToken(Token.INVALID_TYPE, "...");
-					t.children![i] = new TerminalNode(abbrev); // HACK access to private
+					t.mutableChildren[i] = new TerminalNode(abbrev); // HACK access to private
 				}
 			}
 		}
@@ -240,7 +240,7 @@ export class Trees {
 
 	//	let n: number =  t.childCount;
 	//	for (let i = 0 ; i < n ; i++){
-	//		let u: ParseTree =  findNodeSuchThat(t.getChild(i), pred);
+	//		let u: ParseTree =  findNodeSuchThat(t.children[i], pred);
 	//		if ( u!=null ) return u;
 	//	}
 	//	return null;
