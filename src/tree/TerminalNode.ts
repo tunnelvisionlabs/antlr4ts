@@ -17,9 +17,15 @@ export class TerminalNode implements ParseTree {
 	_symbol: Token;
 	_parent: RuleNode | undefined;
 
-	constructor(symbol: Token) {
+	constructor(symbol: Token, parent?: RuleNode) {
+		this._parent = parent;
 		this._symbol = symbol;
 	}
+
+	// Dummy ArrayLike<ParseTree> implemetation
+
+	[n: number]: this;
+	length: number = 0;
 
 	@Override
 	getChild(i: number): never {
