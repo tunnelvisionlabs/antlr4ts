@@ -10,8 +10,9 @@ import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
 import { Parser } from "../Parser";
 import { Interval } from "../misc/Interval";
+import { TerminalNode } from "./TerminalNode";
 
-export abstract class RuleNode implements ParseTree {
+export abstract class RuleNode extends Array<RuleNode|TerminalNode> implements ParseTree {
 	abstract readonly ruleContext: RuleContext;
 
 	//@Override

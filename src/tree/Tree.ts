@@ -8,7 +8,7 @@
 /** The basic notion of a tree has a parent, a payload, and a list of children.
  *  It is the most abstract interface for all the trees used by ANTLR.
  */
-export interface Tree {
+export interface Tree extends ArrayLike<Tree> {
 	/** The parent of this node. If the return value is `undefined`, then this
 	 *  node is the root of the tree.
 	 */
