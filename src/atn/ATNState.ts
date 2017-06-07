@@ -13,7 +13,7 @@ import { Transition } from './Transition';
 
 const INITIAL_NUM_TRANSITIONS: number = 4;
 
-/**
+/** 
  * The following images show the relation of states and
  * {@link ATNState#transitions} for various grammar constructs.
  *
@@ -74,21 +74,6 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */
 export abstract class ATNState {
-	private static readonly serializationNames: string[] = [
-		"INVALID",
-		"BASIC",
-		"RULE_START",
-		"BLOCK_START",
-		"PLUS_BLOCK_START",
-		"STAR_BLOCK_START",
-		"TOKEN_START",
-		"RULE_STOP",
-		"BLOCK_END",
-		"STAR_LOOP_BACK",
-		"STAR_LOOP_ENTRY",
-		"PLUS_LOOP_BACK",
-		"LOOP_END"
-	];
 
 	/** Which ATN are we in? */
 	atn?: ATN;
