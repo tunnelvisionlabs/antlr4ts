@@ -33,7 +33,10 @@ import { BitSet } from './misc/BitSet';
 import { DFA } from './dfa/DFA';
 import { Parser } from './Parser';
 import { ParserErrorListener } from './ParserErrorListener';
+import { RecognitionException } from './RecognitionException';
+import { Recognizer } from './Recognizer';
 import { SimulatorState } from './atn/SimulatorState';
+import { Token } from './Token';
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
 import { asIterable } from './misc/Stubs';
@@ -49,6 +52,18 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 */
 	constructor(protected exactOnly: boolean = true) {
 		this.exactOnly = exactOnly;
+	}
+
+	@Override
+	syntaxError<T extends Token>(
+		/*@NotNull*/ recognizer: Recognizer<T, any>,
+		offendingSymbol: T | undefined,
+		line: number,
+		charPositionInLine: number,
+		/*@NotNull*/
+		msg: string,
+		e: RecognitionException | undefined): void
+	{
 	}
 
 	@Override
