@@ -3,8 +3,7 @@
   "version": "0.4.0-dev",
   "description": "ANTLR 4 runtime for JavaScript written in Typescript",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
@@ -19,8 +18,6 @@
     "url": "https://github.com/tunnelvisionlabs/antlr4ts/issues"
   },
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
-  "devDependencies": {
-  },
-  "dependencies": {
-  }
+  "devDependencies": {},
+  "dependencies": {}
 }
