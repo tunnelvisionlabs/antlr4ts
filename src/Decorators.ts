@@ -6,13 +6,13 @@
 export function NotNull(
 	target: any,
 	propertyKey: PropertyKey,
-	propertyDescriptor?: PropertyDescriptor) {
+	propertyDescriptor?: PropertyDescriptor | number) {
 }
 
 export function Nullable(
 	target: any,
 	propertyKey: PropertyKey,
-	propertyDescriptor?: PropertyDescriptor) {
+	propertyDescriptor?: PropertyDescriptor | number) {
 }
 
 export function Override(target: any,

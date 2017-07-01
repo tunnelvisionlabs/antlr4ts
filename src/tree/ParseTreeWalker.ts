@@ -12,7 +12,7 @@ import { RuleNode } from "./RuleNode";
 import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
-	walk(listener: ParseTreeListener, t: ParseTree): void {
+	walk<T extends ParseTreeListener>(listener: T, t: ParseTree): void {
 		let nodeStack: ParseTree[] = [];
 		let indexStack: number[] = [];
 

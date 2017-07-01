@@ -363,7 +363,7 @@ export class LeafListener implements TListener {
 >>
 
 WalkListener(s) ::= <<
-ParseTreeWalker.DEFAULT.walk(new LeafListener(), <s>);
+ParseTreeWalker.DEFAULT.walk\<TListener>(new LeafListener(), <s>);
 >>
 
 TreeNodeWithAltNumField(X) ::= <<

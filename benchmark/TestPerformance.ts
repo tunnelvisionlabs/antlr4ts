@@ -1665,7 +1665,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 	static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override
-	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1685,7 +1685,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 	static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
 
 	@Override
-	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1702,11 +1702,11 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 }
 
 class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
-	private _sllConflict: BitSet;
+	private _sllConflict: BitSet | undefined;
 	private _sllConfigs: ATNConfigSet;
 
 	@Override
-	reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet, configs: ATNConfigSet): void {
+	reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
@@ -1729,7 +1729,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, conflictingAlts: BitSet, conflictState: SimulatorState): void {
+	reportAttemptingFullContext(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, conflictingAlts: BitSet | undefined, conflictState: SimulatorState): void {
 		this._sllConflict = conflictingAlts;
 		this._sllConfigs = conflictState.s0.configs;
 		if (!TestPerformance.REPORT_FULL_CONTEXT) {
