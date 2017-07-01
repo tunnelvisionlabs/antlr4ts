@@ -136,6 +136,7 @@ visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; se
 
 fileHeader(grammarFileName, ANTLRVersion) ::= <<
 // Generated from <grammarFileName> by ANTLR <ANTLRVersion>
+// tslint:disable
 >>
 
 Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
