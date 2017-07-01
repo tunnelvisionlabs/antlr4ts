@@ -50,15 +50,14 @@
   },
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
   "devDependencies": {
-    "@types/mocha": "^2.2.32",
-    "@types/node": "^6.0.41",
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^6.0.79",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.0",
-    "mocha-typescript": "^1.0.10",
+    "mocha-typescript": "^1.1.5",
     "source-map-support": "^0.4.3",
     "std-mocks": "^1.0.1",
-    "typedoc": "^0.5.1",
-    "typescript": "^2.1.0"
+    "typescript": "^2.4.1"
   },
   "dependencies": {}
 }

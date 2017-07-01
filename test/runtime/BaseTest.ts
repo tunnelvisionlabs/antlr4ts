@@ -5,6 +5,7 @@
 
 import * as assert from 'assert';
 import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';
+import { ANTLRErrorListener } from 'antlr4ts/ANTLRErrorListener';
 import { CharStream } from 'antlr4ts/CharStream';
 import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
 import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';
@@ -17,6 +18,7 @@ import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';
 import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
 import { RuleNode } from 'antlr4ts/tree/RuleNode';
 import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
+import { Token } from 'antlr4ts/Token';
 
 const stdMocks = require('std-mocks');
 
@@ -85,7 +87,7 @@ export function parserTest<TParser extends Parser>(options: ParserTestOptions<TP
 	const parser = new options.parser(tokens);
 	if (options.debug) {
 		parser.interpreter.reportAmbiguities = true;
-		parser.addErrorListener(new DiagnosticErrorListener());
+		parser.addErrorListener(new DiagnosticErrorListener() as ANTLRErrorListener<Token>);
 	}
 
 	parser.buildParseTree = true;

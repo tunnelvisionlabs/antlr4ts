@@ -70,7 +70,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 			}
 
 			intermediateResult.set("EOF", Token.EOF);
-			result = Object.freeze(intermediateResult);
+			result = intermediateResult;
 			Recognizer.tokenTypeMapCache.set(vocabulary, result);
 		}
 
@@ -89,9 +89,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
 
-		let result: ReadonlyMap<string, number> | undefined = Recognizer.ruleIndexMapCache.get(ruleNames);
+		let result = Recognizer.ruleIndexMapCache.get(ruleNames);
 		if (result == null) {
-			result = Object.freeze(Utils.toMap(ruleNames));
+			result = Utils.toMap(ruleNames);
 			Recognizer.ruleIndexMapCache.set(ruleNames, result);
 		}
 
