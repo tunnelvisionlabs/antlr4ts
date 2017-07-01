@@ -12,7 +12,7 @@ import { RecognitionException } from "../../RecognitionException";
 
 export class XPathLexerErrorListener implements ANTLRErrorListener<number> {
 	@Override
-	syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T,
+	syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T | undefined,
 		line: number, charPositionInLine: number, msg: string,
 		e: RecognitionException): void {
 	}
