@@ -250,7 +250,8 @@ export class LL1Analyzer {
 //				System.out.println("adding "+ t);
 				let set: IntervalSet | undefined = (<Transition>t).label;
 				if (set != null) {
-					if (t instanceof NotSetTransition) {
+					// HACK:  this code may not be reachable, causing t to be of type never here.
+					if (<any>t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));
 					}
 					look.addAll(set);
