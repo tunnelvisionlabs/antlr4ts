@@ -247,11 +247,13 @@ export class LL1Analyzer {
 				look.addAll(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));
 			}
 			else {
-//				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined = (<Transition>t).label;
+				// TSC 2.6 thinks `t` is of type `never` here, which is odd.
+				// This t2 variable works around the type errors
+				const t2 = t as Transition;
+
+				let set: IntervalSet | undefined = t2.label;
 				if (set != null) {
-					// HACK:  this code may not be reachable, causing t to be of type never here.
-					if (<any>t instanceof NotSetTransition) {
+					if (t2 instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));
 					}
 					look.addAll(set);
