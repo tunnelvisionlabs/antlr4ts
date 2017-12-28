@@ -768,7 +768,7 @@ export class TestPerformance {
 	}
 
 	private getSourceRoot(prefix: string): string {
-		let sourceRoot: string =  process.env[prefix+"_SOURCE_ROOT"];
+		let sourceRoot: string = process.env[prefix+"_SOURCE_ROOT"] || "";
 		// if (sourceRoot == null) {
 		// 	sourceRoot = System.getProperty(prefix+"_SOURCE_ROOT");
 		// }

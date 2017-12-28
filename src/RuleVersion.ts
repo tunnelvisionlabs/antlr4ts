@@ -12,9 +12,12 @@ import { ParserRuleContext } from './ParserRuleContext';
  *
  * @author Sam Harwell
  */
-export function RuleVersion(version: number) {
+export function RuleVersion<T extends ParserRuleContext>(version: number) {
 
-	return function(target: Parser, propertyKey: PropertyKey, propertyDescriptor: TypedPropertyDescriptor<(...args: any[]) => ParserRuleContext>) {
+	return function (
+		target: Parser,
+		propertyKey: PropertyKey,
+		propertyDescriptor: TypedPropertyDescriptor<(...args: any[]) => T>) {
 	};
 
 }
