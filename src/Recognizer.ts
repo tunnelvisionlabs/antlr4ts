@@ -7,6 +7,7 @@
 import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { ATN } from "./atn/ATN";
 import { ATNSimulator } from "./atn/ATNSimulator";
+import { Character } from "./Character";
 import { ConsoleErrorListener } from "./ConsoleErrorListener";
 import { IntStream } from "./IntStream";
 import { ParseInfo } from "./atn/ParseInfo";
@@ -26,7 +27,10 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	private static tokenTypeMapCache =
 	 	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
 	private static ruleIndexMapCache =
-	 	new WeakMap<string[], ReadonlyMap<string, number>>();
+		 new WeakMap<string[], ReadonlyMap<string, number>>();
+		 
+	// Make stubbed out Character class available in limited context
+	protected readonly Character = Character;
 
 	@SuppressWarnings("serial")
 	@NotNull

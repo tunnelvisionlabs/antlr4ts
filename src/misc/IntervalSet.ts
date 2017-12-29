@@ -72,6 +72,19 @@ export class IntervalSet implements IntSet {
 		return s;
 	}
 
+	@NotNull
+	static fromPairs( pairs: number[]): IntervalSet {
+		const length = pairs.length;
+		if (length % 1 == 1) {
+			throw new RangeError("pairs must contain an even number of numbers")
+		}
+		let s: IntervalSet = new IntervalSet();
+		for (var i = 0; i<length; i+=2) {
+			s.add(pairs[i], pairs[i+1]);
+		}
+		return s;
+	}
+
 	clear(): void {
 		if (this.readonly) {
 			throw new Error("can't alter readonly IntervalSet");

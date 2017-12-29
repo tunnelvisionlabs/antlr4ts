@@ -8,6 +8,8 @@ import org.antlr.v4.codegen.CodeGenerator;
 import org.antlr.v4.codegen.Target;
 import org.antlr.v4.tool.ErrorType;
 import org.antlr.v4.tool.ast.GrammarAST;
+import org.antlr.v4.codegen.model.Action;
+import org.antlr.v4.codegen.target.TypeScriptActionRenderer;
 import org.stringtemplate.v4.NumberRenderer;
 import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroup;
@@ -142,6 +144,10 @@ public class TypeScriptTarget extends Target {
 		STGroup result = new STGroupFile(CodeGenerator.TEMPLATE_ROOT+"/TypeScript/"+getLanguage()+STGroup.GROUP_FILE_EXTENSION);
 		result.registerRenderer(Integer.class, new NumberRenderer());
 		result.registerRenderer(String.class, new StringRenderer());
+		result.registerRenderer(
+			org.antlr.v4.codegen.model.Action.class, 
+			new TypeScriptActionRenderer()
+			);
 		result.setListener(new STErrorListener() {
 			@Override
 			public void compileTimeError(STMessage msg) {

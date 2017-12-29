@@ -248,6 +248,7 @@ constructor(input: TokenStream) {
  */
 RuleActionFunction(r, actions) ::= <<
 private <r.name>_action(_localctx: <r.ctxType>, actionIndex: number): void {
+	const {Character, _input} = this;  // Helpers for semantic predicates written for Java
 	switch (actionIndex) {
 	<actions:{index|
 case <index>:
@@ -262,6 +263,7 @@ case <index>:
  */
 RuleSempredFunction(r, actions) ::= <<
 private <r.name>_sempred(_localctx: <r.ctxType>, predIndex: number): boolean {
+	const {Character, _input} = this;  // Helpers for semantic predicates written for Java
 	switch (predIndex) {
 	<actions:{index|
 case <index>:
