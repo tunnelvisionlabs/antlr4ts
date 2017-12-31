@@ -248,7 +248,8 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				let set: IntervalSet | undefined = (<Transition>t).label;
+				t = <Transition>t;
+				let set: IntervalSet | undefined = t.label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {
 						set = set.complement(IntervalSet.of(Token.MIN_USER_TOKEN_TYPE, this.atn.maxTokenType));
