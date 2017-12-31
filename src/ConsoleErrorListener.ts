@@ -37,7 +37,7 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 		line: number,
 		charPositionInLine: number,
 		msg: string,
-		e: RecognitionException): void {
+		e: RecognitionException | undefined): void {
 		console.error(`line ${line}:${charPositionInLine} ${msg}`);
 	}
 }

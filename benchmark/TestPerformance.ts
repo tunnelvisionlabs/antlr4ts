@@ -1665,7 +1665,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 	static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override
-	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1685,7 +1685,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 	static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
 
 	@Override
-	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException): void {
+	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
