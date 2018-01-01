@@ -34,7 +34,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
-		ambigAlts: BitSet,
+		ambigAlts: BitSet | undefined,
 		configs: ATNConfigSet): void {
 		this.getDelegates()
 			.forEach(listener => {
@@ -57,7 +57,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
-		conflictingAlts: BitSet,
+		conflictingAlts: BitSet | undefined,
 		conflictState: SimulatorState): void {
 		this.getDelegates()
 			.forEach(listener => {
