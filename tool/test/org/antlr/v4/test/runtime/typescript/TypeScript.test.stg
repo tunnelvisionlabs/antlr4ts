@@ -463,17 +463,17 @@ console.log(new LeafVisitor().visit(<s>));
 TerminalVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
-	@Override
+	// @Override
 	visitTerminal(node: TerminalNode): string {
 		return node.symbol.toString() + "\n";
 	}
 
-	@Override
+	// @Override
 	protected defaultResult(): string {
 		return "";
 	}
 
-	@Override
+	// @Override
 	protected aggregateResult(aggregate: string, nextResult: string): string {
 		return aggregate + nextResult;
 	}
@@ -484,17 +484,17 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 ErrorVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
-	@Override
+	// @Override
 	visitErrorNode(node: ErrorNode): string {
 		return "Error encountered: " + node.symbol.toString();
 	}
 
-	@Override
+	// @Override
 	protected defaultResult(): string {
 		return "";
 	}
 
-	@Override
+	// @Override
 	protected aggregateResult(aggregate: string, nextResult: string): string {
 		return aggregate + nextResult;
 	}
@@ -505,17 +505,17 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 ShouldNotVisitEOFVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
-	@Override
+	// @Override
 	visitTerminal(node: TerminalNode): string {
 		return node.symbol.toString() + "\n";
 	}
 
-	@Override
+	// @Override
 	protected defaultResult(): string {
 		return "";
 	}
 
-	@Override
+	// @Override
 	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
 		return currentResult.length === 0;
 	}
@@ -526,17 +526,17 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 ShouldNotVisitTerminalVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
-	@Override
+	// @Override
 	visitTerminal(node: TerminalNode): never {
 		throw new Error("Should not be reachable");
 	}
 
-	@Override
+	// @Override
 	protected defaultResult(): string {
 		return "default result";
 	}
 
-	@Override
+	// @Override
 	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
 		return false;
 	}
@@ -547,17 +547,17 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <g
 CalculatorVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <grammarName>Visitor\<number> {
-	@Override
+	// @Override
 	visitS(context: SContext): number {
 		return this.visit(context.expr());
 	}
 
-	@Override
+	// @Override
 	visitNumber(context: NumberContext): number {
 		return Number(context.INT().text);
 	}
 
-	@Override
+	// @Override
 	visitMultiply(context: MultiplyContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
@@ -569,7 +569,7 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 		}
 	}
 
-	@Override
+	// @Override
 	visitAdd(context: AddContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
@@ -581,12 +581,12 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 		}
 	}
 
-	@Override
+	// @Override
 	protected defaultResult(): never {
 		throw new Error("Should not be reachable");
 	}
 
-	@Override
+	// @Override
 	protected aggregateResult(aggregate: number, nextResult: number): never {
 		throw new Error("Should not be reachable");
 	}
