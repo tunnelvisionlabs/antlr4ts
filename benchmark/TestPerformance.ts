@@ -488,6 +488,7 @@ export class TestPerformance {
     compileJdk(): void {
         let jdkSourceRoot: string | undefined = this.getSourceRoot("JDK");
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
+		jdkSourceRoot = <string>jdkSourceRoot;
 
 		let lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
 		let parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
@@ -767,8 +768,8 @@ export class TestPerformance {
 		}
 	}
 
-	private getSourceRoot(prefix: string): string {
-		let sourceRoot: string =  process.env[prefix+"_SOURCE_ROOT"];
+	private getSourceRoot(prefix: string): string | undefined {
+		let sourceRoot =  process.env[prefix+"_SOURCE_ROOT"];
 		// if (sourceRoot == null) {
 		// 	sourceRoot = System.getProperty(prefix+"_SOURCE_ROOT");
 		// }
