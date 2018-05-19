@@ -183,11 +183,11 @@ AddMember(n,v) ::= <%this.<n> += <v>;%>
 
 PlusMember(v,n) ::= <%<v> + this.<n>%>
 
-MemberEquals(n,v) ::= <%this.<n> == <v>%>
+MemberEquals(n,v) ::= <%this.<n> === <v>%>
 
-ModMemberEquals(n,m,v) ::= <%this.<n> % <m> == <v>%>
+ModMemberEquals(n,m,v) ::= <%this.<n> % <m> === <v>%>
 
-ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> != <v>%>
+ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> !== <v>%>
 
 DumpDFA() ::= "this.dumpDFA();"
 

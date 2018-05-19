@@ -103,7 +103,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			if (this._llStopIndex >= 0) {
 				let LL_k: number = this._llStopIndex - this._startIndex + 1;
 				this.decisions[decision].LL_TotalLook += LL_k;
-				this.decisions[decision].LL_MinLook = this.decisions[decision].LL_MinLook == 0 ? LL_k : Math.min(this.decisions[decision].LL_MinLook, LL_k);
+				this.decisions[decision].LL_MinLook = this.decisions[decision].LL_MinLook === 0 ? LL_k : Math.min(this.decisions[decision].LL_MinLook, LL_k);
 				if (LL_k > this.decisions[decision].LL_MaxLook) {
 					this.decisions[decision].LL_MaxLook = LL_k;
 					this.decisions[decision].LL_MaxLookEvent =

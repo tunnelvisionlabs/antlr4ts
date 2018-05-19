@@ -234,7 +234,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 		else {
 			t = this._errHandler.recoverInline(this);
-			if (this._buildParseTrees && t.tokenIndex == -1) {
+			if (this._buildParseTrees && t.tokenIndex === -1) {
 				// we must have conjured up a new token during single token insertion
 				// if it's not the current symbol
 				this._ctx.addErrorNode(t);
@@ -328,7 +328,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	public removeParseListener(listener: ParseTreeListener): void {
 		let index = this._parseListeners.findIndex((l) => l === listener);
-		if (index != -1) {
+		if (index !== -1) {
 			this._parseListeners.splice(index, 1);
 		}
 	}
@@ -526,7 +526,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	public consume(): Token {
 		let o: Token = this.currentToken;
-		if (o.type != Parser.EOF) {
+		if (o.type !== Parser.EOF) {
 			this.inputStream.consume();
 		}
 		let hasListener: boolean = this._parseListeners.length !== 0;
@@ -754,7 +754,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			ctx = ctx._parent as ParserRuleContext;
 		}
 
-		if (following.contains(Token.EPSILON) && symbol == Token.EOF) {
+		if (following.contains(Token.EPSILON) && symbol === Token.EOF) {
 			return true;
 		}
 

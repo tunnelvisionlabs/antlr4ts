@@ -155,7 +155,7 @@ export class ATNDeserializer {
 
 		let p: number = 0;
 		let version: number = ATNDeserializer.toInt(data[p++]);
-		if (version != ATNDeserializer.SERIALIZED_VERSION) {
+		if (version !== ATNDeserializer.SERIALIZED_VERSION) {
 			let reason = `Could not deserialize ATN with version ${version} (expected ${ATNDeserializer.SERIALIZED_VERSION}).`;
 			throw new Error(reason);
 		}
@@ -243,7 +243,7 @@ export class ATNDeserializer {
 		for (let i = 0; i < nrules; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
 			let startState: RuleStartState = <RuleStartState>atn.states[s];
-			startState.leftFactored = ATNDeserializer.toInt(data[p++]) != 0;
+			startState.leftFactored = ATNDeserializer.toInt(data[p++]) !== 0;
 			atn.ruleToStartState[i] = startState;
 			if (atn.grammarType === ATNType.LEXER) {
 				let tokenType: number = ATNDeserializer.toInt(data[p++]);
@@ -419,12 +419,12 @@ export class ATNDeserializer {
 				for (let i = 0; i < atn.lexerActions.length; i++) {
 					let actionType: LexerActionType = ATNDeserializer.toInt(data[p++]);
 					let data1: number = ATNDeserializer.toInt(data[p++]);
-					if (data1 == 0xFFFF) {
+					if (data1 === 0xFFFF) {
 						data1 = -1;
 					}
 
 					let data2: number = ATNDeserializer.toInt(data[p++]);
-					if (data2 == 0xFFFF) {
+					if (data2 === 0xFFFF) {
 						data2 = -1;
 					}
 
@@ -590,7 +590,7 @@ export class ATNDeserializer {
 			let set: IntervalSet = new IntervalSet();
 			sets.push(set);
 
-			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) != 0;
+			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) !== 0;
 			if (containsEof) {
 				set.add(-1);
 			}

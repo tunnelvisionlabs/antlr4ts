@@ -346,7 +346,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	public getAllTokens(): Token[] {
 		let tokens: Token[] = [];
 		let t: Token = this.nextToken();
-		while (t.type != Token.EOF) {
+		while (t.type !== Token.EOF) {
 			tokens.push(t);
 			t = this.nextToken();
 		}
@@ -398,7 +398,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	public recover(re: LexerNoViableAltException): void;
 	public recover(re: RecognitionException): void {
 		if (re instanceof LexerNoViableAltException) {
-			if (this._input.LA(1) != IntStream.EOF) {
+			if (this._input.LA(1) !== IntStream.EOF) {
 				// skip a char and try again
 				this.interpreter.consume(this._input);
 			}

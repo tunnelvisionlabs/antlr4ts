@@ -397,7 +397,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 			for (let i = 0; i < context.size; i++) {
 				let returnStateNumber: number = context.getReturnState(i);
-				if (returnStateNumber == PredictionContext.EMPTY_FULL_STATE_KEY) {
+				if (returnStateNumber === PredictionContext.EMPTY_FULL_STATE_KEY) {
 					continue;
 				}
 
@@ -700,7 +700,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	public consume(@NotNull input: CharStream): void {
 		let curChar: number = input.LA(1);
-		if (curChar == '\n'.charCodeAt(0)) {
+		if (curChar === '\n'.charCodeAt(0)) {
 			this._line++;
 			this._charPositionInLine = 0;
 		} else {

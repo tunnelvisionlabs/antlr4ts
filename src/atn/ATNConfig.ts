@@ -84,7 +84,7 @@ export class ATNConfig implements Equatable {
 
 	constructor(@NotNull state: ATNState, altOrConfig: number | ATNConfig, @NotNull context: PredictionContext) {
 		if (typeof altOrConfig === 'number') {
-			assert((altOrConfig & 0xFFFFFF) == altOrConfig);
+			assert((altOrConfig & 0xFFFFFF) === altOrConfig);
 			this._state = state;
 			this.altAndOuterContextDepth = altOrConfig;
 			this._context = context;
@@ -102,7 +102,7 @@ export class ATNConfig implements Equatable {
 	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@*/ semanticContext: SemanticContext, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig;
 
 	public static create(@NotNull state: ATNState, alt: number, context: PredictionContext, @NotNull semanticContext: SemanticContext = SemanticContext.NONE, lexerActionExecutor?: LexerActionExecutor): ATNConfig {
-		if (semanticContext != SemanticContext.NONE) {
+		if (semanticContext !== SemanticContext.NONE) {
 			if (lexerActionExecutor != null) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, alt, context, false);
 			}
@@ -201,7 +201,7 @@ export class ATNConfig implements Equatable {
 
 	private transformImpl(@NotNull state: ATNState, context: PredictionContext, @NotNull semanticContext: SemanticContext, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig {
 		let passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig.checkNonGreedyDecision(this, state);
-		if (semanticContext != SemanticContext.NONE) {
+		if (semanticContext !== SemanticContext.NONE) {
 			if (lexerActionExecutor != null || passedThroughNonGreedy) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, this, context, passedThroughNonGreedy);
 			}
@@ -331,13 +331,13 @@ export class ATNConfig implements Equatable {
 			return false;
 		}
 
-		return this.state.stateNumber == o.state.stateNumber
-			&& this.alt == o.alt
-			&& this.reachesIntoOuterContext == o.reachesIntoOuterContext
+		return this.state.stateNumber === o.state.stateNumber
+			&& this.alt === o.alt
+			&& this.reachesIntoOuterContext === o.reachesIntoOuterContext
 			&& this.context.equals(o.context)
 			&& this.semanticContext.equals(o.semanticContext)
-			&& this.isPrecedenceFilterSuppressed == o.isPrecedenceFilterSuppressed
-			&& this.hasPassedThroughNonGreedyDecision == o.hasPassedThroughNonGreedyDecision
+			&& this.isPrecedenceFilterSuppressed === o.isPrecedenceFilterSuppressed
+			&& this.hasPassedThroughNonGreedyDecision === o.hasPassedThroughNonGreedyDecision
 			&& ObjectEqualityComparator.INSTANCE.equals(this.lexerActionExecutor, o.lexerActionExecutor);
 	}
 

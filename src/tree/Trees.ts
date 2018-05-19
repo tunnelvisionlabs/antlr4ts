@@ -41,7 +41,7 @@ export class Trees {
 		else { ruleNames = arg2 as string[]; }
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.childCount == 0) return s;
+		if (t.childCount === 0) return s;
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);

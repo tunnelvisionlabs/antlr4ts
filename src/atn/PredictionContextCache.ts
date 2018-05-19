@@ -96,7 +96,7 @@ export namespace PredictionContextCache {
 		public equals(obj: any): boolean {
 			if (!(obj instanceof PredictionContextAndInt)) {
 				return false;
-			} else if (obj == this) {
+			} else if (obj === this) {
 				return true;
 			}
 

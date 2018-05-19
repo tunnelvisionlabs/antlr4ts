@@ -27,7 +27,7 @@ export class LexerInterpreter extends Lexer {
 	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
 		super(input);
 
-		if (atn.grammarType != ATNType.LEXER) {
+		if (atn.grammarType !== ATNType.LEXER) {
 			throw new Error("IllegalArgumentException: The ATN must be a lexer ATN.");
 		}
 

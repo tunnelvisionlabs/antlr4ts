@@ -33,7 +33,6 @@
     "semicolon": false,
     "space-before-function-paren": false,
     "trailing-comma": false,
-    "triple-equals": false,
     "typedef-whitespace": false,
     "unified-signatures": false,
     "variable-name": false,

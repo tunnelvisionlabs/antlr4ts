@@ -324,7 +324,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			bucket.length = j;
 		}
 
-		let changed: boolean = newsize != this.n;
+		let changed: boolean = newsize !== this.n;
 		this.n = newsize;
 		return changed;
 	}

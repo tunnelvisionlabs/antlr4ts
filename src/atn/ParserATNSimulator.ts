@@ -1827,7 +1827,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
 						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn;
-						if (outermostPrecedenceReturn == this.dfa.atnStartState.ruleIndex) {
+						if (outermostPrecedenceReturn === this.dfa.atnStartState.ruleIndex) {
 							c.isPrecedenceFilterSuppressed = true;
 						}
 					}
@@ -2051,7 +2051,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			representedAlts = new BitSet();
 			let maxAlt: number = minAlt;
 			for (let config of configs) {
-				if (config.state.nonStopStateNumber != currentState) {
+				if (config.state.nonStopStateNumber !== currentState) {
 					break;
 				}
 
