@@ -329,7 +329,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		// list = tokens[start:stop]:{T t, t.type in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
-		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.type); });
+		filteredTokens = filteredTokens.filter((value) => typesSet.has(value.type));
 
 		return filteredTokens;
 	}
