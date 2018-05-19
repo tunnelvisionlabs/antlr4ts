@@ -22,11 +22,11 @@ class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>>
 		this.keyComparator = keyComparator;
 	}
 
-	hashCode(obj: Bucket<K, V>): number {
+	public hashCode(obj: Bucket<K, V>): number {
 		return this.keyComparator.hashCode(obj.key);
 	}
 
-	equals(a: Bucket<K, V>, b: Bucket<K, V>): boolean {
+	public equals(a: Bucket<K, V>, b: Bucket<K, V>): boolean {
 		return this.keyComparator.equals(a.key, b.key);
 	}
 }
@@ -44,23 +44,23 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		}
 	}
 
-	clear(): void {
+	public clear(): void {
 		this.backingStore.clear();
 	}
 
-	containsKey(key: K): boolean {
+	public containsKey(key: K): boolean {
 		return this.backingStore.contains({ key });
 	}
 
-	containsValue(value: V): boolean {
+	public containsValue(value: V): boolean {
 		return this.values().contains(value);
 	}
 
-	entrySet(): JavaSet<JavaMap.Entry<K, V>> {
+	public entrySet(): JavaSet<JavaMap.Entry<K, V>> {
 		return new EntrySet<K, V>(this, this.backingStore);
 	}
 
-	get(key: K): V | undefined {
+	public get(key: K): V | undefined {
 		let bucket = this.backingStore.get({ key });
 		if (!bucket) {
 			return undefined;
@@ -73,11 +73,11 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return this.backingStore.isEmpty;
 	}
 
-	keySet(): JavaSet<K> {
+	public keySet(): JavaSet<K> {
 		return new KeySet<K, V>(this, this.backingStore);
 	}
 
-	put(key: K, value: V): V | undefined {
+	public put(key: K, value: V): V | undefined {
 		let element = this.backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
@@ -90,7 +90,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return result;
 	}
 
-	putIfAbsent(key: K, value: V): V | undefined {
+	public putIfAbsent(key: K, value: V): V | undefined {
 		let element = this.backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
@@ -102,13 +102,13 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return result;
 	}
 
-	putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void {
+	public putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void {
 		for (let entry of asIterable(m.entrySet())) {
 			this.put(entry.getKey(), entry.getValue());
 		}
 	}
 
-	remove(key: K): V | undefined {
+	public remove(key: K): V | undefined {
 		let value = this.get(key);
 		this.backingStore.remove({ key });
 		return value;
@@ -118,15 +118,15 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		return this.backingStore.size;
 	}
 
-	values(): JavaCollection<V> {
+	public values(): JavaCollection<V> {
 		return new ValueCollection<K, V>(this, this.backingStore);
 	}
 
-	hashCode(): number {
+	public hashCode(): number {
 		return this.backingStore.hashCode();
 	}
 
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (!(o instanceof Array2DHashMap)) {
 			return false;
 		}
@@ -144,23 +144,23 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		this.backingStore = backingStore;
 	}
 
-	add(e: JavaMap.Entry<K, V>): boolean {
+	public add(e: JavaMap.Entry<K, V>): boolean {
 		throw new Error("Not implemented");
 	}
 
-	addAll(collection: Collection<JavaMap.Entry<K, V>>): boolean {
+	public addAll(collection: Collection<JavaMap.Entry<K, V>>): boolean {
 		throw new Error("Not implemented");
 	}
 
-	clear(): void {
+	public clear(): void {
 		this.map.clear();
 	}
 
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		throw new Error("Not implemented");
 	}
 
-	containsAll(collection: Collection<any>): boolean {
+	public containsAll(collection: Collection<any>): boolean {
 		for (let key of asIterable(collection)) {
 			if (!this.contains(key)) {
 				return false;
@@ -170,7 +170,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return true;
 	}
 
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof EntrySet)) {
@@ -180,7 +180,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.equals(o.backingStore);
 	}
 
-	hashCode(): number {
+	public hashCode(): number {
 		return this.backingStore.hashCode();
 	}
 
@@ -188,15 +188,15 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.isEmpty;
 	}
 
-	iterator(): JavaIterator<JavaMap.Entry<K, V>> {
+	public iterator(): JavaIterator<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	remove(o: any): boolean {
+	public remove(o: any): boolean {
 		throw new Error("Not implemented");
 	}
 
-	removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Collection<any>): boolean {
 		let removedAny = false;
 		for (let key of asIterable(collection)) {
 			removedAny = this.remove(key) || removedAny;
@@ -205,7 +205,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return removedAny;
 	}
 
-	retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Collection<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -213,9 +213,9 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.size;
 	}
 
-	toArray(): Array<JavaMap.Entry<K, V>>;
-	toArray(a: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>>;
-	toArray(a?: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>> {
+	public toArray(): Array<JavaMap.Entry<K, V>>;
+	public toArray(a: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>>;
+	public toArray(a?: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 }
@@ -229,23 +229,23 @@ class KeySet<K, V> implements JavaSet<K> {
 		this.backingStore = backingStore;
 	}
 
-	add(e: K): boolean {
+	public add(e: K): boolean {
 		throw new Error("Not supported");
 	}
 
-	addAll(collection: Collection<K>): boolean {
+	public addAll(collection: Collection<K>): boolean {
 		throw new Error("Not supported");
 	}
 
-	clear(): void {
+	public clear(): void {
 		this.map.clear();
 	}
 
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		return this.backingStore.contains({ key: o });
 	}
 
-	containsAll(collection: Collection<any>): boolean {
+	public containsAll(collection: Collection<any>): boolean {
 		for (let key of asIterable(collection)) {
 			if (!this.contains(key)) {
 				return false;
@@ -255,7 +255,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return true;
 	}
 
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof KeySet)) {
@@ -265,7 +265,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.equals(o.backingStore);
 	}
 
-	hashCode(): number {
+	public hashCode(): number {
 		return this.backingStore.hashCode();
 	}
 
@@ -273,15 +273,15 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.isEmpty;
 	}
 
-	iterator(): JavaIterator<K> {
+	public iterator(): JavaIterator<K> {
 		throw new Error("Not implemented");
 	}
 
-	remove(o: any): boolean {
+	public remove(o: any): boolean {
 		return this.backingStore.remove({ key: o });
 	}
 
-	removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Collection<any>): boolean {
 		let removedAny = false;
 		for (let key of asIterable(collection)) {
 			removedAny = this.remove(key) || removedAny;
@@ -290,7 +290,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return removedAny;
 	}
 
-	retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Collection<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -298,9 +298,9 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.size;
 	}
 
-	toArray(): K[];
-	toArray(a: K[]): K[];
-	toArray(a?: K[]): K[] {
+	public toArray(): K[];
+	public toArray(a: K[]): K[];
+	public toArray(a?: K[]): K[] {
 		throw new Error("Not implemented");
 	}
 }
@@ -314,19 +314,19 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		this.backingStore = backingStore;
 	}
 
-	add(e: V): boolean {
+	public add(e: V): boolean {
 		throw new Error("Not supported");
 	}
 
-	addAll(collection: Collection<V>): boolean {
+	public addAll(collection: Collection<V>): boolean {
 		throw new Error("Not supported");
 	}
 
-	clear(): void {
+	public clear(): void {
 		this.map.clear();
 	}
 
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
 			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
 				return true;
@@ -336,7 +336,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return false;
 	}
 
-	containsAll(collection: Collection<any>): boolean {
+	public containsAll(collection: Collection<any>): boolean {
 		for (let key of asIterable(collection)) {
 			if (!this.contains(key)) {
 				return false;
@@ -346,7 +346,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return true;
 	}
 
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof ValueCollection)) {
@@ -356,7 +356,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.equals(o.backingStore);
 	}
 
-	hashCode(): number {
+	public hashCode(): number {
 		return this.backingStore.hashCode();
 	}
 
@@ -364,7 +364,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.isEmpty;
 	}
 
-	iterator(): JavaIterator<V> {
+	public iterator(): JavaIterator<V> {
 		let delegate: JavaIterator<Bucket<K, V>> = this.backingStore.iterator();
 		return {
 			hasNext(): boolean {
@@ -381,11 +381,11 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		};
 	}
 
-	remove(o: any): boolean {
+	public remove(o: any): boolean {
 		throw new Error("Not implemented");
 	}
 
-	removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Collection<any>): boolean {
 		let removedAny = false;
 		for (let key of asIterable(collection)) {
 			removedAny = this.remove(key) || removedAny;
@@ -394,7 +394,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return removedAny;
 	}
 
-	retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Collection<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -402,9 +402,9 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.size;
 	}
 
-	toArray(): V[];
-	toArray(a: V[]): V[];
-	toArray(a?: V[]): V[] {
+	public toArray(): V[];
+	public toArray(a: V[]): V[];
+	public toArray(a?: V[]): V[] {
 		if (a === undefined || a.length < this.backingStore.size) {
 			a = new Array<V>(this.backingStore.size);
 		}

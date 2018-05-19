@@ -139,7 +139,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	@Override
-	reset(resetInput?: boolean): void {
+	public reset(resetInput?: boolean): void {
 		if (resetInput === undefined) {
 			super.reset();
 		} else {
@@ -171,7 +171,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	/** Begin parsing at startRuleIndex */
-	parse(startRuleIndex: number): ParserRuleContext {
+	public parse(startRuleIndex: number): ParserRuleContext {
 		let startRuleStartState: RuleStartState = this._atn.ruleToStartState[startRuleIndex];
 
 		this._rootContext = this.createInterpreterRuleContext(undefined, ATNState.INVALID_STATE_NUMBER, startRuleIndex);
@@ -224,7 +224,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	@Override
-	enterRecursionRule(localctx: ParserRuleContext, state: number, ruleIndex: number, precedence: number): void {
+	public enterRecursionRule(localctx: ParserRuleContext, state: number, ruleIndex: number, precedence: number): void {
 		this._parentContextStack.push([this._ctx, localctx.invokingState]);
 		super.enterRecursionRule(localctx, state, ruleIndex, precedence);
 	}
@@ -395,7 +395,7 @@ export class ParserInterpreter extends Parser {
 	 *
 	 *  @since 4.5
 	 */
-	addDecisionOverride(decision: number, tokenIndex: number, forcedAlt: number): void {
+	public addDecisionOverride(decision: number, tokenIndex: number, forcedAlt: number): void {
 		this.overrideDecision = decision;
 		this.overrideDecisionInputIndex = tokenIndex;
 		this.overrideDecisionAlt = forcedAlt;

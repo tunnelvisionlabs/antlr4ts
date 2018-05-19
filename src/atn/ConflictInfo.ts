@@ -50,7 +50,7 @@ export class ConflictInfo {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof ConflictInfo)) {
@@ -62,7 +62,7 @@ export class ConflictInfo {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		return this.conflictedAlts.hashCode();
 	}
 }

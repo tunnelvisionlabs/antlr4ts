@@ -62,12 +62,12 @@ export class LexerTypeAction implements LexerAction {
 	 * value provided by `type`.</p>
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.type = this._type;
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._type);
@@ -75,7 +75,7 @@ export class LexerTypeAction implements LexerAction {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerTypeAction)) {
@@ -86,7 +86,7 @@ export class LexerTypeAction implements LexerAction {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return `type(${this._type})`;
 	}
 }

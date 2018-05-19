@@ -55,7 +55,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	syntaxError<T extends Token>(
+	public syntaxError<T extends Token>(
 		/*@NotNull*/ recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,
@@ -67,7 +67,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAmbiguity(@NotNull recognizer: Parser,
+	public reportAmbiguity(@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -86,7 +86,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext(@NotNull recognizer: Parser,
+	public reportAttemptingFullContext(@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -100,7 +100,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	@Override
-	reportContextSensitivity(@NotNull recognizer: Parser,
+	public reportContextSensitivity(@NotNull recognizer: Parser,
 		@NotNull dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

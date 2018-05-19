@@ -130,20 +130,20 @@ export class TimeSpan {
 }
 
 export class Stopwatch {
-	static readonly MILLIS_PER_SECOND = 1000;
-	static readonly NANOS_PER_SECOND: number = 1000000000;
-	static readonly NANOS_PER_MILLISECOND: number = 1000000;
+	public static readonly MILLIS_PER_SECOND = 1000;
+	public static readonly NANOS_PER_SECOND: number = 1000000000;
+	public static readonly NANOS_PER_MILLISECOND: number = 1000000;
 
 	private _elapsed: number[] = [0, 0];
 	private _start?: number[];
 
-	static startNew(): Stopwatch {
+	public static startNew(): Stopwatch {
 		let result = new Stopwatch();
 		result.start();
 		return result;
 	}
 
-	start(): void {
+	public start(): void {
 		if (this._start !== undefined) {
 			throw new Error("The stopwatch is already started.");
 		}
@@ -151,7 +151,7 @@ export class Stopwatch {
 		this._start = process.hrtime();
 	}
 
-	elapsed(): TimeSpan {
+	public elapsed(): TimeSpan {
 		let result = { seconds: this._elapsed[0], nanos: this._elapsed[1] };
 		if (this._start !== undefined) {
 			let stop = process.hrtime();
@@ -171,7 +171,7 @@ export class Stopwatch {
 		return new TimeSpan(result.seconds, result.nanos);
 	}
 
-	elapsedMillis(): number {
+	public elapsedMillis(): number {
 		return this.elapsed().totalMilliseconds;
 	}
 }
@@ -185,12 +185,12 @@ export class MurmurHashChecksum {
 		this.count = 0;
 	}
 
-	update(value: number): void {
+	public update(value: number): void {
 		this.value = MurmurHash.update(this.value, value);
 		this.count++;
 	}
 
-	getValue(): number {
+	public getValue(): number {
 		return MurmurHash.finish(this.value, this.count);
 	}
 }
@@ -485,7 +485,7 @@ export class TestPerformance {
 
 	private static readonly tokenCount: Int32Array = new Int32Array(TestPerformance.PASSES);
 
-	compileJdk(): void {
+	public compileJdk(): void {
 		let jdkSourceRoot: string | undefined = this.getSourceRoot("JDK");
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 		jdkSourceRoot = <string>jdkSourceRoot;
@@ -784,7 +784,7 @@ export class TestPerformance {
 	//     }
 	// }
 
-	static getOptionsDescription(topPackage: string): string {
+	public static getOptionsDescription(topPackage: string): string {
 		let builder: string = "";
 		builder += ("Input=");
 		if (topPackage.length === 0) {
@@ -875,7 +875,7 @@ export class TestPerformance {
 		}
 	}
 
-	configOutputSize: number =  0;
+	public configOutputSize: number =  0;
 
 	protected parseSources(currentPass: number, factory: ParserFactory, sources: InputDescriptor[], shuffleSources: boolean): void {
 		if (shuffleSources) {
@@ -1479,24 +1479,24 @@ export interface ParserFactory {
 }
 
 export class FileParseResult {
-	sourceName: string;
-	checksum: number;
-	parseTree?: ParseTree;
-	tokenCount: number;
-	startTime: Stopwatch;
-	elapsedTime: TimeSpan;
+	public sourceName: string;
+	public checksum: number;
+	public parseTree?: ParseTree;
+	public tokenCount: number;
+	public startTime: Stopwatch;
+	public elapsedTime: TimeSpan;
 
-	lexerDFASize: number;
-	lexerTotalTransitions: number;
-	lexerComputedTransitions: number;
+	public lexerDFASize: number;
+	public lexerTotalTransitions: number;
+	public lexerComputedTransitions: number;
 
-	parserDFASize: number;
-	decisionInvocations: Uint32Array;
-	fullContextFallback: Uint32Array;
-	nonSll: Uint32Array;
-	parserTotalTransitions: Uint32Array;
-	parserComputedTransitions: Uint32Array;
-	parserFullContextTransitions: Uint32Array;
+	public parserDFASize: number;
+	public decisionInvocations: Uint32Array;
+	public fullContextFallback: Uint32Array;
+	public nonSll: Uint32Array;
+	public parserTotalTransitions: Uint32Array;
+	public parserComputedTransitions: Uint32Array;
+	public parserFullContextTransitions: Uint32Array;
 
 	constructor(sourceName: string, checksum: number, parseTree: ParseTree | undefined, tokenCount: number, startTime: Stopwatch, lexer: Lexer | undefined, parser: Parser | undefined) {
 		this.sourceName = sourceName;
@@ -1569,8 +1569,8 @@ export class FileParseResult {
 }
 
 class StatisticsLexerATNSimulator extends LexerATNSimulator {
-	totalTransitions: number;
-	computedTransitions: number;
+	public totalTransitions: number;
+	public computedTransitions: number;
 
 	constructor(atn: ATN);
 	constructor(atn: ATN, recog: Lexer);
@@ -1597,12 +1597,12 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 
 class StatisticsParserATNSimulator extends ParserATNSimulator {
 
-	decisionInvocations: Uint32Array;
-	fullContextFallback: Uint32Array;
-	nonSll: Uint32Array;
-	totalTransitions: Uint32Array;
-	computedTransitions: Uint32Array;
-	fullContextTransitions: Uint32Array;
+	public decisionInvocations: Uint32Array;
+	public fullContextFallback: Uint32Array;
+	public nonSll: Uint32Array;
+	public totalTransitions: Uint32Array;
+	public computedTransitions: Uint32Array;
+	public fullContextTransitions: Uint32Array;
 
 	private decision: number;
 
@@ -1616,10 +1616,10 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 		this.fullContextTransitions = new Uint32Array(atn.decisionToState.length);
 	}
 
-	adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number;
-	adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext: boolean): number;
+	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number;
+	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext: boolean): number;
 	@Override
-	adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext?: boolean): number {
+	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext?: boolean): number {
 		if (useContext === undefined) {
 			try {
 				this.decision = decision;
@@ -1663,10 +1663,10 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 }
 
 class DescriptiveErrorListener implements ParserErrorListener {
-	static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
+	public static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override
-	syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
+	public syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1683,10 +1683,10 @@ class DescriptiveErrorListener implements ParserErrorListener {
 }
 
 class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
-	static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
+	public static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
 
 	@Override
-	syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
+	public syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1707,7 +1707,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	private _sllConfigs: ATNConfigSet;
 
 	@Override
-	reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {
+	public reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
@@ -1730,7 +1730,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	}
 
 	@Override
-	reportAttemptingFullContext(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, conflictingAlts: BitSet | undefined, conflictState: SimulatorState): void {
+	public reportAttemptingFullContext(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, conflictingAlts: BitSet | undefined, conflictState: SimulatorState): void {
 		this._sllConflict = conflictingAlts;
 		this._sllConfigs = conflictState.s0.configs;
 		if (!TestPerformance.REPORT_FULL_CONTEXT) {
@@ -1746,7 +1746,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	}
 
 	@Override
-	reportContextSensitivity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, prediction: number, acceptState: SimulatorState): void {
+	public reportContextSensitivity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, prediction: number, acceptState: SimulatorState): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
@@ -1822,7 +1822,7 @@ class FileExtensionFilenameFilter implements FilenameFilter {
 	}
 
 	@Override
-	accept(dir: string, name: string): boolean {
+	public accept(dir: string, name: string): boolean {
 		if (this.caseSensitive) {
 			return name.endsWith(this.extension);
 		} else {
@@ -1841,7 +1841,7 @@ class FileNameFilenameFilter implements FilenameFilter {
 	}
 
 	@Override
-	accept(dir: string, name: string): boolean {
+	public accept(dir: string, name: string): boolean {
 		if (this.caseSensitive) {
 			return name === this.filename;
 		} else {
@@ -1859,7 +1859,7 @@ class AllFilenameFilter implements FilenameFilter {
 	}
 
 	@Override
-	accept(dir: string, name: string): boolean {
+	public accept(dir: string, name: string): boolean {
 		for (let filter of this.filters) {
 			if (!filter.accept(dir, name)) {
 				return false;
@@ -1878,7 +1878,7 @@ class AnyFilenameFilter implements FilenameFilter {
 	}
 
 	@Override
-	accept(dir: string, name: string): boolean {
+	public accept(dir: string, name: string): boolean {
 		for (let filter of this.filters) {
 			if (filter.accept(dir, name)) {
 				return true;
@@ -1897,7 +1897,7 @@ class NotFilenameFilter implements FilenameFilter {
 	}
 
 	@Override
-	accept(dir: string, name: string): boolean {
+	public accept(dir: string, name: string): boolean {
 		return !this.filter.accept(dir, name);
 	}
 }
@@ -1942,26 +1942,26 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 	}
 
 	@Override
-	visitTerminal(node: TerminalNode): void {
+	public visitTerminal(node: TerminalNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_TERMINAL);
 		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override
-	visitErrorNode(node: ErrorNode): void {
+	public visitErrorNode(node: ErrorNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_ERROR_NODE);
 		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
 	@Override
-	enterEveryRule(ctx: ParserRuleContext): void {
+	public enterEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.ENTER_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
 		TestPerformance.updateChecksum(this.checksum, ctx.start);
 	}
 
 	@Override
-	exitEveryRule(ctx: ParserRuleContext): void {
+	public exitEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.EXIT_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
 		TestPerformance.updateChecksum(this.checksum, ctx.stop);
@@ -1981,7 +1981,7 @@ export class InputDescriptor {
 	}
 
 	@NotNull
-	getInputStream(): CharStream {
+	public getInputStream(): CharStream {
 		if (this.inputStream == null) {
 			let input = fs.readFileSync(this.source, TestPerformance.ENCODING);
 			let stream = new CloneableANTLRFileStream(input);
@@ -1999,7 +1999,7 @@ class CloneableANTLRFileStream extends ANTLRInputStream {
 		super(input);
 	}
 
-	createCopy(): ANTLRInputStream {
+	public createCopy(): ANTLRInputStream {
 		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
 		stream.name = this.sourceName;
 		return stream;

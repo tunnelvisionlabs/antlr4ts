@@ -28,7 +28,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportAmbiguity(
+	public reportAmbiguity(
 		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
@@ -53,7 +53,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportAttemptingFullContext(recognizer: Parser,
+	public reportAttemptingFullContext(recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
@@ -74,7 +74,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportContextSensitivity(recognizer: Parser,
+	public reportContextSensitivity(recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,

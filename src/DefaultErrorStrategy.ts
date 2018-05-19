@@ -57,7 +57,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * ensure that the handler is not in error recovery mode.</p>
 	 */
 	@Override
-	reset(recognizer: Parser): void {
+	public reset(recognizer: Parser): void {
 		this.endErrorCondition(recognizer);
 	}
 
@@ -75,7 +75,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * {@inheritDoc}
 	 */
 	@Override
-	inErrorRecoveryMode(recognizer: Parser): boolean {
+	public inErrorRecoveryMode(recognizer: Parser): boolean {
 		return this.errorRecoveryMode;
 	}
 
@@ -97,7 +97,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * <p>The default implementation simply calls {@link #endErrorCondition}.</p>
 	 */
 	@Override
-	reportMatch(recognizer: Parser): void {
+	public reportMatch(recognizer: Parser): void {
 		this.endErrorCondition(recognizer);
 	}
 
@@ -121,7 +121,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * </ul>
 	 */
 	@Override
-	reportError(recognizer: Parser,
+	public reportError(recognizer: Parser,
 		e: RecognitionException): void {
 		// if we've already reported an error and have not matched a token
 		// yet successfully, don't report any errors.
@@ -164,7 +164,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * that can follow the current rule.</p>
 	 */
 	@Override
-	recover(recognizer: Parser, e: RecognitionException): void {
+	public recover(recognizer: Parser, e: RecognitionException): void {
 //		System.out.println("recover in "+recognizer.getRuleInvocationStack()+
 //						   " index="+recognizer.inputStream.index+
 //						   ", lastErrorIndex="+
@@ -236,7 +236,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * functionality by simply overriding this method as a blank { }.</p>
 	 */
 	@Override
-	sync(recognizer: Parser): void {
+	public sync(recognizer: Parser): void {
 		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 //		System.err.println("sync @ "+s.stateNumber+"="+s.getClass().getSimpleName());
 		// If already recovering, don't try to sync
@@ -455,7 +455,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * in rule {@code atom}. It can assume that you forgot the {@code ')'}.
 	 */
 	@Override
-	recoverInline(recognizer: Parser): Token {
+	public recoverInline(recognizer: Parser): Token {
 		// SINGLE TOKEN DELETION
 		let matchedSymbol = this.singleTokenDeletion(recognizer);
 		if (matchedSymbol) {

@@ -14,7 +14,7 @@ import { TransitionType } from './TransitionType';
 /** TODO: make all transitions sets? no, should remove set edges */
 export class AtomTransition extends Transition {
 	/** The token type or character value; or, signifies special label. */
-	_label: number;
+	public _label: number;
 
 	constructor(@NotNull target: ATNState, label: number) {
 		super(target);
@@ -33,13 +33,13 @@ export class AtomTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return this._label === symbol;
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return String(this.label);
 	}
 }

@@ -97,7 +97,7 @@ export namespace PredictionMode {
 	}
 
 	class AltAndContextConfigEqualityComparator implements EqualityComparator<ATNConfig> {
-		static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
+		public static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
 		}
@@ -107,7 +107,7 @@ export namespace PredictionMode {
 		 * and {@link ATNConfig#context}.
 		 */
 		@Override
-		hashCode(o: ATNConfig): number {
+		public hashCode(o: ATNConfig): number {
 			let hashCode: number = MurmurHash.initialize(7);
 			hashCode = MurmurHash.update(hashCode, o.state.stateNumber);
 			hashCode = MurmurHash.update(hashCode, o.context);
@@ -116,7 +116,7 @@ export namespace PredictionMode {
 		}
 
 		@Override
-		equals(a: ATNConfig, b: ATNConfig): boolean {
+		public equals(a: ATNConfig, b: ATNConfig): boolean {
 			if (a === b) return true;
 			if (a == null || b == null) return false;
 			return a.state.stateNumber == b.state.stateNumber

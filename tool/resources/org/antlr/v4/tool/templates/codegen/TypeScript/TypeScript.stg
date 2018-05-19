@@ -212,7 +212,7 @@ public get vocabulary(): Vocabulary {
 dumpActions(recog, argFuncs, actionFuncs, sempredFuncs) ::= <<
 <if(actionFuncs)>
 @Override
-action(_localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
+public action(_localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
 	switch (ruleIndex) {
 	<recog.actionFuncs.values:{f|
 case <f.ruleIndex>:

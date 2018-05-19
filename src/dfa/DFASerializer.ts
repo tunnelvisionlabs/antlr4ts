@@ -24,9 +24,9 @@ export class DFASerializer {
 	@NotNull
 	private vocabulary: Vocabulary;
 
-	ruleNames?: string[];
+	public ruleNames?: string[];
 
-	atn?: ATN;
+	public atn?: ATN;
 
 	constructor(/*@NotNull*/ dfa: DFA, /*@NotNull*/ vocabulary: Vocabulary);
 	constructor(/*@NotNull*/ dfa: DFA, /*@Nullable*/ parser: Recognizer<any, any> | undefined);
@@ -47,7 +47,7 @@ export class DFASerializer {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		if (!this.dfa.s0) {
 			return "";
 		}
@@ -126,7 +126,7 @@ export class DFASerializer {
 		return this.vocabulary.getDisplayName(i);
 	}
 
-	getStateString(s: DFAState): string {
+	public getStateString(s: DFAState): string {
 		if (s === ATNSimulator.ERROR) {
 			return "ERROR";
 		}

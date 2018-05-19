@@ -65,7 +65,7 @@ export class LexerActionExecutor {
 	 * of {@code lexerActionExecutor} and {@code lexerAction}.
 	 */
 	@NotNull
-	static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
+	public static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
 		if (!lexerActionExecutor) {
 			return new LexerActionExecutor([lexerAction]);
 		}
@@ -104,7 +104,7 @@ export class LexerActionExecutor {
 	 * @return A {@link LexerActionExecutor} which stores input stream offsets
 	 * for all position-dependent lexer actions.
 	 */
-	fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
+	public fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
 		let updatedLexerActions: LexerAction[] | undefined;
 		for (let i = 0; i < this._lexerActions.length; i++) {
 			if (this._lexerActions[i].isPositionDependent && !(this._lexerActions[i] instanceof LexerIndexedCustomAction)) {
@@ -151,7 +151,7 @@ export class LexerActionExecutor {
 	 * {@link IntStream#seek} to set the {@code input} position to the beginning
 	 * of the token.
 	 */
-	execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
+	public execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
 		let requiresSeek: boolean = false;
 		let stopIndex: number = input.index;
 		try {
@@ -176,12 +176,12 @@ export class LexerActionExecutor {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		return this.cachedHashCode;
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerActionExecutor)) {

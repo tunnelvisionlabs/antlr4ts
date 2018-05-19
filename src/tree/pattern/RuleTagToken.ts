@@ -185,7 +185,7 @@ export class RuleTagToken implements Token {
 	 * {@code ruleName:bypassTokenType}.</p>
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this._ruleName + ":" + this.bypassTokenType;
 	}
 }

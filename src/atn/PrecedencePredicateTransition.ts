@@ -16,7 +16,7 @@ import { TransitionType } from './TransitionType';
  * @author Sam Harwell
  */
 export class PrecedencePredicateTransition extends AbstractPredicateTransition {
-	precedence: number;
+	public precedence: number;
 
 	constructor( @NotNull target: ATNState, precedence: number) {
 		super(target);
@@ -34,7 +34,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
@@ -43,7 +43,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this.precedence + " >= _p";
 	}
 }

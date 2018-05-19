@@ -51,24 +51,24 @@ export class LexerPopModeAction implements LexerAction {
 	 * <p>This action is implemented by calling {@link Lexer#popMode}.</p>
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.popMode();
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		return obj === this;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return "popMode";
 	}
 }

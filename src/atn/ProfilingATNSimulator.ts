@@ -66,7 +66,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	}
 
 	@Override
-	adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number {
+	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number {
 		try {
 			this._input = input;
 			this._startIndex = input.index;
@@ -278,11 +278,11 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 	// ---------------------------------------------------------------------
 
-	getDecisionInfo(): DecisionInfo[] {
+	public getDecisionInfo(): DecisionInfo[] {
 		return this.decisions;
 	}
 
-	getCurrentState(): SimulatorState | undefined {
+	public getCurrentState(): SimulatorState | undefined {
 		return this.currentState;
 	}
 }

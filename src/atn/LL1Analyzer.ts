@@ -27,10 +27,10 @@ export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit
 	 *  a predicate during analysis if {@code seeThruPreds==false}.
 	 */
-	static readonly HIT_PRED: number = Token.INVALID_TYPE;
+	public static readonly HIT_PRED: number = Token.INVALID_TYPE;
 
 	@NotNull
-	atn: ATN;
+	public atn: ATN;
 
 	constructor(@NotNull atn: ATN) { this.atn = atn; }
 
@@ -44,7 +44,7 @@ export class LL1Analyzer {
 	 * @param s the ATN state
 	 * @return the expected symbols for each outgoing transition of {@code s}.
 	 */
-	getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
+	public getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
 		if (s == null) {
 			return undefined;
@@ -85,7 +85,7 @@ export class LL1Analyzer {
 	 * specified {@code ctx}.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
 	/**
 	 * Compute set of tokens that can follow {@code s} in the ATN in the
@@ -106,10 +106,10 @@ export class LL1Analyzer {
 	 * specified {@code ctx}.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
 
 	@NotNull
-	LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
+	public LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
 		if (stopState === undefined) {
 			if (s.atn == null) {
 				throw new Error("Illegal state");

@@ -45,7 +45,7 @@ export class ATNDeserializationOptions {
 		return this.readOnly;
 	}
 
-	makeReadOnly(): void {
+	public makeReadOnly(): void {
 		this.readOnly = true;
 	}
 

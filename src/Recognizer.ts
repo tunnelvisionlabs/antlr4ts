@@ -21,7 +21,7 @@ import { VocabularyImpl } from "./VocabularyImpl";
 import * as Utils from './misc/Utils';
 
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
-	static readonly EOF: number = -1;
+	public static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
 		new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
@@ -36,7 +36,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	private _stateNumber = -1;
 
-	abstract readonly ruleNames: string[];
+	public abstract readonly ruleNames: string[];
 
 	/**
 	 * Get the vocabulary used by the recognizer.
@@ -44,7 +44,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * @return A {@link Vocabulary} instance providing information about the
 	 * vocabulary used by the grammar.
 	 */
-	abstract readonly vocabulary: Vocabulary;
+	public abstract readonly vocabulary: Vocabulary;
 
 	/**
 	 * Get a map from token names to token types.
@@ -52,7 +52,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * <p>Used for XPath and tree pattern compilation.</p>
 	 */
 	@NotNull
-	getTokenTypeMap(): ReadonlyMap<string, number> {
+	public getTokenTypeMap(): ReadonlyMap<string, number> {
 		let vocabulary: Vocabulary = this.vocabulary;
 		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
@@ -83,7 +83,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	 * <p>Used for XPath and tree pattern compilation.</p>
 	 */
 	@NotNull
-	getRuleIndexMap(): ReadonlyMap<string, number> {
+	public getRuleIndexMap(): ReadonlyMap<string, number> {
 		let ruleNames: string[] = this.ruleNames;
 		if (ruleNames == null) {
 			throw new Error("The current recognizer does not provide a list of rule names.");
@@ -98,7 +98,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 		return result;
 	}
 
-	getTokenType(tokenName: string): number {
+	public getTokenType(tokenName: string): number {
 		let ttype = this.getTokenTypeMap().get(tokenName);
 		if (ttype != null) return ttype;
 		return Token.INVALID_TYPE;
@@ -119,7 +119,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	/** For debugging and other purposes, might want the grammar name.
 	 *  Have ANTLR generate an implementation for this method.
 	 */
-	abstract readonly grammarFileName: string;
+	public abstract readonly grammarFileName: string;
 
 	/**
 	 * Get the {@link ATN} used by the recognizer for prediction.
@@ -162,7 +162,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	/** What is the error header, normally line/character position information? */
 	@NotNull
-	getErrorHeader(@NotNull e: RecognitionException): string {
+	public getErrorHeader(@NotNull e: RecognitionException): string {
 		let token = e.getOffendingToken()
 		if (!token) return ""
 		let line = token.line;
@@ -173,47 +173,47 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * @exception NullPointerException if {@code listener} is {@code null}.
 	 */
-	addErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	public addErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
 		if (!listener) throw new TypeError("listener must not be null");
 		this._listeners.push(listener);
 	}
 
-	removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	public removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
 		let position = this._listeners.indexOf(listener);
 		if (position !== -1) {
 			this._listeners.splice(position, 1);
 		}
 	}
 
-	removeErrorListeners(): void {
+	public removeErrorListeners(): void {
 		this._listeners.length = 0;
 	}
 
 	@NotNull
-	getErrorListeners(): Array<ANTLRErrorListener<Symbol>> {
+	public getErrorListeners(): Array<ANTLRErrorListener<Symbol>> {
 		return this._listeners.slice(0);
 	}
 
-	getErrorListenerDispatch(): ANTLRErrorListener<Symbol> {
+	public getErrorListenerDispatch(): ANTLRErrorListener<Symbol> {
 		return new ProxyErrorListener<Symbol, ANTLRErrorListener<Symbol>>(this.getErrorListeners());
 	}
 
 	// subclass needs to override these if there are sempreds or actions
 	// that the ATN interp needs to execute
-	sempred(
+	public sempred(
 		_localctx: RuleContext | undefined,
 		ruleIndex: number,
 		actionIndex: number): boolean {
 		return true;
 	}
 
-	precpred(
+	public precpred(
 		localctx: RuleContext | undefined,
 		precedence: number): boolean {
 		return true;
 	}
 
-	action(
+	public action(
 		_localctx: RuleContext | undefined,
 		ruleIndex: number,
 		actionIndex: number): void {
@@ -236,5 +236,5 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 //		if ( traceATNStates ) _ctx.trace(atnState);
 	}
 
-	abstract readonly inputStream: IntStream | undefined;
+	public abstract readonly inputStream: IntStream | undefined;
 }

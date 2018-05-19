@@ -29,7 +29,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 	}
 
 	@Override
-	syntaxError<T extends Symbol>(
+	public syntaxError<T extends Symbol>(
 		@NotNull recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,

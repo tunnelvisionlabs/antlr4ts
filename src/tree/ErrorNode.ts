@@ -22,7 +22,7 @@ export class ErrorNode extends TerminalNode {
 	}
 
 	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
+	public accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitErrorNode(this);
 	}
 }

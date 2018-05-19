@@ -81,7 +81,7 @@ export class TagChunk extends Chunk {
 	 * returned as just the tag name.
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		if (this._label != null) {
 			return this._label + ":" + this._tag;
 		}

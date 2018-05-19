@@ -93,12 +93,12 @@ export class LexerCustomAction implements LexerAction {
 	 * appropriate rule and action indexes.</p>
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.action(undefined, this._ruleIndex, this._actionIndex);
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._ruleIndex);
@@ -107,7 +107,7 @@ export class LexerCustomAction implements LexerAction {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerCustomAction)) {

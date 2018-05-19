@@ -22,7 +22,7 @@ export class TestTokenStream {
 	 * This is a targeted regression test for antlr/antlr4#1584 (`BufferedTokenStream` cannot be reused after EOF).
 	 */
 	@test
-	testBufferedTokenStreamReuseAfterFill(): void {
+	public testBufferedTokenStreamReuseAfterFill(): void {
 		let firstInput = new ANTLRInputStream("A");
 		let tokenStream = new BufferedTokenStream(new XPathLexer(firstInput));
 		tokenStream.fill();

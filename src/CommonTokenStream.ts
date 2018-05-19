@@ -87,7 +87,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	@Override
-	tryLT(k: number): Token | undefined {
+	public tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();
 		if (k === 0) {
@@ -114,7 +114,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	/** Count EOF just once. */
-	getNumberOfOnChannelTokens(): number {
+	public getNumberOfOnChannelTokens(): number {
 		let n: number = 0;
 		this.fill();
 		for (let i = 0; i < this.tokens.length; i++) {

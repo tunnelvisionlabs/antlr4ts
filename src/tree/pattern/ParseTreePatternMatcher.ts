@@ -128,7 +128,7 @@ export class ParseTreePatternMatcher {
 	 * @exception IllegalArgumentException if {@code start} is {@code null} or empty.
 	 * @exception IllegalArgumentException if {@code stop} is {@code null} or empty.
 	 */
-	setDelimiters(start: string, stop: string, escapeLeft: string): void {
+	public setDelimiters(start: string, stop: string, escapeLeft: string): void {
 		if (!start) {
 			throw new Error("start cannot be null or empty");
 		}
@@ -144,14 +144,14 @@ export class ParseTreePatternMatcher {
 	}
 
 	/** Does {@code pattern} matched as rule {@code patternRuleIndex} match {@code tree}? */
-	matches(tree: ParseTree, pattern: string, patternRuleIndex: number): boolean;
+	public matches(tree: ParseTree, pattern: string, patternRuleIndex: number): boolean;
 
 	/** Does {@code pattern} matched as rule patternRuleIndex match tree? Pass in a
 	 *  compiled pattern instead of a string representation of a tree pattern.
 	 */
-	matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
+	public matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
 
-	matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
+	public matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
 		if (typeof pattern === "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.matches(tree, p);
@@ -167,7 +167,7 @@ export class ParseTreePatternMatcher {
 	 * {@code tree} and return a {@link ParseTreeMatch} object that contains the
 	 * matched elements, or the node at which the match failed.
 	 */
-	match(tree: ParseTree, pattern: string, patternRuleIndex: number): ParseTreeMatch;
+	public match(tree: ParseTree, pattern: string, patternRuleIndex: number): ParseTreeMatch;
 
 	/**
 	 * Compare {@code pattern} matched against {@code tree} and return a
@@ -175,11 +175,11 @@ export class ParseTreePatternMatcher {
 	 * node at which the match failed. Pass in a compiled pattern instead of a
 	 * string representation of a tree pattern.
 	 */
-	match(tree: ParseTree, pattern: ParseTreePattern): ParseTreeMatch;
+	public match(tree: ParseTree, pattern: ParseTreePattern): ParseTreeMatch;
 
 	// Implementation of match
 	@NotNull
-	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
+	public match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
 		if (typeof pattern == "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
@@ -194,7 +194,7 @@ export class ParseTreePatternMatcher {
 	 * For repeated use of a tree pattern, compile it to a
 	 * {@link ParseTreePattern} using this method.
 	 */
-	compile(pattern: string, patternRuleIndex: number): ParseTreePattern {
+	public compile(pattern: string, patternRuleIndex: number): ParseTreePattern {
 		let tokenList = this.tokenize(pattern);
 		let tokenSrc = new ListTokenSource(tokenList);
 		let tokens = new CommonTokenStream(tokenSrc);
@@ -366,7 +366,7 @@ export class ParseTreePatternMatcher {
 		return undefined;
 	}
 
-	tokenize(pattern: string): Token[] {
+	public tokenize(pattern: string): Token[] {
 		// split pattern into chunks: sea (raw input) and islands (<ID>, <expr>)
 		let chunks = this.split(pattern);
 
@@ -415,7 +415,7 @@ export class ParseTreePatternMatcher {
 	}
 
 	/** Split {@code <ID> = <e:expr> ;} into 4 chunks for tokenizing by {@link #tokenize}. */
-	split(pattern: string): Chunk[] {
+	public split(pattern: string): Chunk[] {
 		let p: number = 0;
 		let n: number = pattern.length;
 		let chunks: Chunk[] = [];

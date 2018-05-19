@@ -27,19 +27,19 @@ function assertTrue(value: boolean): void {
 
 @suite
 export class TestIntervalSet {
-	@Test testSingleElement(): void {
+	@Test public testSingleElement(): void {
 		let s: IntervalSet =  IntervalSet.of(99);
 		let expecting: string =  "99";
 		assertEquals(s.toString(), expecting);
 	}
 
-	@Test testMin(): void {
+	@Test public testMin(): void {
 		assertEquals(0, IntervalSet.COMPLETE_CHAR_SET.minElement);
 		assertEquals(Token.EPSILON, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EPSILON)).minElement);
 		assertEquals(Token.EOF, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EOF)).minElement);
 	}
 
-	@Test testIsolatedElements(): void {
+	@Test public testIsolatedElements(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(1);
 		s.add('z'.charCodeAt(0));
@@ -48,7 +48,7 @@ export class TestIntervalSet {
 		assertEquals(s.toString(), expecting);
 	}
 
-	@Test testMixedRangesAndElements(): void {
+	@Test public testMixedRangesAndElements(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(1);
 		s.add('a'.charCodeAt(0),'z'.charCodeAt(0));
@@ -57,7 +57,7 @@ export class TestIntervalSet {
 		assertEquals(s.toString(), expecting);
 	}
 
-	@Test testSimpleAnd(): void {
+	@Test public testSimpleAnd(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(13,15);
 		let expecting: string =  "{13..15}";
@@ -65,7 +65,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testRangeAndIsolatedElement(): void {
+	@Test public testRangeAndIsolatedElement(): void {
 		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
 		let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
 		let expecting: string =  "100";
@@ -73,7 +73,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testEmptyIntersection(): void {
+	@Test public testEmptyIntersection(): void {
 		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
 		let s2: IntervalSet =  IntervalSet.of('0'.charCodeAt(0),'9'.charCodeAt(0));
 		let expecting: string =  "{}";
@@ -81,7 +81,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testEmptyIntersectionSingleElements(): void {
+	@Test public testEmptyIntersectionSingleElements(): void {
 		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0));
 		let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
 		let expecting: string =  "{}";
@@ -89,7 +89,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testNotSingleElement(): void {
+	@Test public testNotSingleElement(): void {
 		let vocabulary: IntervalSet =  IntervalSet.of(1,1000);
 		vocabulary.add(2000,3000);
 		let s: IntervalSet =  IntervalSet.of(50,50);
@@ -98,7 +98,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testNotSet(): void {
+	@Test public testNotSet(): void {
 		let vocabulary: IntervalSet =  IntervalSet.of(1,1000);
 		let s: IntervalSet =  IntervalSet.of(50,60);
 		s.add(5);
@@ -108,7 +108,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testNotEqualSet(): void {
+	@Test public testNotEqualSet(): void {
 		let vocabulary: IntervalSet =  IntervalSet.of(1,1000);
 		let s: IntervalSet =  IntervalSet.of(1,1000);
 		let expecting: string =  "{}";
@@ -116,7 +116,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testNotSetEdgeElement(): void {
+	@Test public testNotSetEdgeElement(): void {
 		let vocabulary: IntervalSet =  IntervalSet.of(1,2);
 		let s: IntervalSet =  IntervalSet.of(1);
 		let expecting: string =  "2";
@@ -124,7 +124,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testNotSetFragmentedVocabulary(): void {
+	@Test public testNotSetFragmentedVocabulary(): void {
 		let vocabulary: IntervalSet =  IntervalSet.of(1,255);
 		vocabulary.add(1000,2000);
 		vocabulary.add(9999);
@@ -137,7 +137,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractOfCompletelyContainedRange(): void {
+	@Test public testSubtractOfCompletelyContainedRange(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(12,15);
 		let expecting: string =  "{10..11, 16..20}";
@@ -145,7 +145,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractFromSetWithEOF(): void {
+	@Test public testSubtractFromSetWithEOF(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		s.add(Token.EOF);
 		let s2: IntervalSet =  IntervalSet.of(12,15);
@@ -154,7 +154,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractOfOverlappingRangeFromLeft(): void {
+	@Test public testSubtractOfOverlappingRangeFromLeft(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(5,11);
 		let expecting: string =  "{12..20}";
@@ -167,7 +167,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractOfOverlappingRangeFromRight(): void {
+	@Test public testSubtractOfOverlappingRangeFromRight(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(15,25);
 		let expecting: string =  "{10..14}";
@@ -180,7 +180,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractOfCompletelyCoveredRange(): void {
+	@Test public testSubtractOfCompletelyCoveredRange(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(1,25);
 		let expecting: string =  "{}";
@@ -188,7 +188,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSubtractOfRangeSpanningMultipleRanges(): void {
+	@Test public testSubtractOfRangeSpanningMultipleRanges(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		s.add(30,40);
 		s.add(50,60); // s has 3 ranges now: 10..20, 30..40, 50..60
@@ -206,7 +206,7 @@ export class TestIntervalSet {
 	/** The following was broken:
 	 	{0..113, 115..65534}-{0..115, 117..65534}=116..65534
 	 */
-	@Test testSubtractOfWackyRange(): void {
+	@Test public testSubtractOfWackyRange(): void {
 		let s: IntervalSet =  IntervalSet.of(0,113);
 		s.add(115,200);
 		let s2: IntervalSet =  IntervalSet.of(0,115);
@@ -216,7 +216,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSimpleEquals(): void {
+	@Test public testSimpleEquals(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(10,20);
 		assertTrue(s.equals(s2));
@@ -225,7 +225,7 @@ export class TestIntervalSet {
 		assertFalse(s.equals(s3));
 	}
 
-	@Test testEquals(): void {
+	@Test public testEquals(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		s.add(2);
 		s.add(499,501);
@@ -239,7 +239,7 @@ export class TestIntervalSet {
 		assertFalse(s.equals(s3));
 	}
 
-	@Test testSingleElementMinusDisjointSet(): void {
+	@Test public testSingleElementMinusDisjointSet(): void {
 		let s: IntervalSet =  IntervalSet.of(15,15);
 		let s2: IntervalSet =  IntervalSet.of(1,5);
 		s2.add(10,20);
@@ -248,7 +248,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testMembership(): void {
+	@Test public testMembership(): void {
 		let s: IntervalSet =  IntervalSet.of(15,15);
 		s.add(50,60);
 		assertTrue(!s.contains(0));
@@ -261,7 +261,7 @@ export class TestIntervalSet {
 	}
 
 	// {2,15,18} & 10..20
-	@Test testIntersectionWithTwoContainedElements(): void {
+	@Test public testIntersectionWithTwoContainedElements(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(2,2);
 		s2.add(15);
@@ -271,7 +271,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testIntersectionWithTwoContainedElementsReversed(): void {
+	@Test public testIntersectionWithTwoContainedElementsReversed(): void {
 		let s: IntervalSet =  IntervalSet.of(10,20);
 		let s2: IntervalSet =  IntervalSet.of(2,2);
 		s2.add(15);
@@ -281,7 +281,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testComplement(): void {
+	@Test public testComplement(): void {
 		let s: IntervalSet =  IntervalSet.of(100,100);
 		s.add(101,101);
 		let s2: IntervalSet =  IntervalSet.of(100,102);
@@ -290,7 +290,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testComplement2(): void {
+	@Test public testComplement2(): void {
 		let s: IntervalSet =  IntervalSet.of(100,101);
 		let s2: IntervalSet =  IntervalSet.of(100,102);
 		let expecting: string =  "102";
@@ -298,7 +298,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testComplement3(): void {
+	@Test public testComplement3(): void {
 		let s: IntervalSet =  IntervalSet.of(1,96);
 		s.add(99, Lexer.MAX_CHAR_VALUE);
 		let expecting: string =  "{97..98}";
@@ -306,7 +306,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testMergeOfRangesAndSingleValues(): void {
+	@Test public testMergeOfRangesAndSingleValues(): void {
 		// {0..41, 42, 43..65534}
 		let s: IntervalSet =  IntervalSet.of(0,41);
 		s.add(42);
@@ -316,7 +316,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testMergeOfRangesAndSingleValuesReverse(): void {
+	@Test public testMergeOfRangesAndSingleValuesReverse(): void {
 		let s: IntervalSet =  IntervalSet.of(43,65534);
 		s.add(42);
 		s.add(0,41);
@@ -325,7 +325,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testMergeWhereAdditionMergesTwoExistingIntervals(): void {
+	@Test public testMergeWhereAdditionMergesTwoExistingIntervals(): void {
 		// 42, 10, {0..9, 11..41, 43..65534}
 		let s: IntervalSet =  IntervalSet.of(42);
 		s.add(10);
@@ -341,7 +341,7 @@ export class TestIntervalSet {
 	 * This case is responsible for antlr/antlr4#153.
 	 * https://github.com/antlr/antlr4/issues/153
 	 */
-	@Test testMergeWhereAdditionMergesThreeExistingIntervals(): void {
+	@Test public testMergeWhereAdditionMergesThreeExistingIntervals(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(0);
 		s.add(3);
@@ -352,7 +352,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testMergeWithDoubleOverlap(): void {
+	@Test public testMergeWithDoubleOverlap(): void {
 		let s: IntervalSet =  IntervalSet.of(1,10);
 		s.add(20,30);
 		s.add(5,25); // overlaps two!
@@ -361,7 +361,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testSize(): void {
+	@Test public testSize(): void {
 		let s: IntervalSet =  IntervalSet.of(20,30);
 		s.add(50,55);
 		s.add(5,19);
@@ -370,7 +370,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testToList(): void {
+	@Test public testToList(): void {
 		let s: IntervalSet =  IntervalSet.of(20,25);
 		s.add(50,55);
 		s.add(5,5);
@@ -385,7 +385,7 @@ export class TestIntervalSet {
 	 	'q' is 113 ascii
 	 	'u' is 117
 	*/
-	@Test testNotRIntersectionNotT(): void {
+	@Test public testNotRIntersectionNotT(): void {
 		let s: IntervalSet =  IntervalSet.of(0,'s'.charCodeAt(0));
 		s.add('u'.charCodeAt(0),200);
 		let s2: IntervalSet =  IntervalSet.of(0,'q'.charCodeAt(0));
@@ -395,7 +395,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testRmSingleElement(): void {
+	@Test public testRmSingleElement(): void {
 		let s: IntervalSet =  IntervalSet.of(1,10);
 		s.add(-3,-3);
 		s.remove(-3);
@@ -404,7 +404,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testRmLeftSide(): void {
+	@Test public testRmLeftSide(): void {
 		let s: IntervalSet =  IntervalSet.of(1,10);
 		s.add(-3,-3);
 		s.remove(1);
@@ -413,7 +413,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testRmRightSide(): void {
+	@Test public testRmRightSide(): void {
 		let s: IntervalSet =  IntervalSet.of(1,10);
 		s.add(-3,-3);
 		s.remove(10);
@@ -422,7 +422,7 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testRmMiddleRange(): void {
+	@Test public testRmMiddleRange(): void {
 		let s: IntervalSet =  IntervalSet.of(1,10);
 		s.add(-3,-3);
 		s.remove(5);
@@ -431,11 +431,11 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test testEmptyIsNil(): void {
+	@Test public testEmptyIsNil(): void {
 		assertTrue(new IntervalSet().isNil);
 	}
 
-	@Test testNotEmptyIsNotNil(): void {
+	@Test public testNotEmptyIsNotNil(): void {
 		assertFalse(IntervalSet.of(1).isNil);
 	}
 }

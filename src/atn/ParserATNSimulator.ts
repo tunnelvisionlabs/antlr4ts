@@ -285,14 +285,14 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * the input.</p>
  */
 export class ParserATNSimulator extends ATNSimulator {
-	static debug: boolean = false;
-	static dfa_debug: boolean = false;
-	static retry_debug: boolean = false;
+	public static debug: boolean = false;
+	public static dfa_debug: boolean = false;
+	public static retry_debug: boolean = false;
 
 	@NotNull
 	private predictionMode: PredictionMode = PredictionMode.LL;
-	force_global_context: boolean = false;
-	always_try_local_context: boolean = true;
+	public force_global_context: boolean = false;
+	public always_try_local_context: boolean = true;
 
 	/**
 	 * Determines whether the DFA is used for full-context predictions. When
@@ -309,12 +309,12 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * <p>
 	 * The default value is {@code false}.</p>
 	 */
-	enable_global_context_dfa: boolean = false;
-	optimize_unique_closure: boolean = true;
-	optimize_ll1: boolean = true;
-	optimize_tail_calls: boolean = true;
-	tail_call_preserves_sll: boolean = true;
-	treat_sllk1_conflict_as_ambiguity: boolean = false;
+	public enable_global_context_dfa: boolean = false;
+	public optimize_unique_closure: boolean = true;
+	public optimize_ll1: boolean = true;
+	public optimize_tail_calls: boolean = true;
+	public tail_call_preserves_sll: boolean = true;
+	public treat_sllk1_conflict_as_ambiguity: boolean = false;
 
 	protected _parser: Parser;
 
@@ -327,7 +327,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * to {@code false} enables additional internal optimizations which may lose
 	 * this information.
 	 */
-	reportAmbiguities: boolean = false;
+	public reportAmbiguities: boolean = false;
 
 	/** By default we do full context-sensitive LL(*) parsing not
 	 *  Strong LL(*) parsing. If we fail with Strong LL(*) we
@@ -345,21 +345,21 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	getPredictionMode(): PredictionMode {
+	public getPredictionMode(): PredictionMode {
 		return this.predictionMode;
 	}
 
-	setPredictionMode(@NotNull predictionMode: PredictionMode): void {
+	public setPredictionMode(@NotNull predictionMode: PredictionMode): void {
 		this.predictionMode = predictionMode;
 	}
 
 	@Override
-	reset(): void {
+	public reset(): void {
 	}
 
-	adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;
-	adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined, useContext: boolean): number;
-	adaptivePredict(@NotNull input: TokenStream,
+	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;
+	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined, useContext: boolean): number;
+	public adaptivePredict(@NotNull input: TokenStream,
 		decision: number,
 		outerContext: ParserRuleContext | undefined,
 		useContext?: boolean): number {
@@ -1865,7 +1865,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	getRuleName(index: number): string {
+	public getRuleName(index: number): string {
 		if (this._parser != null && index >= 0) return this._parser.ruleNames[index];
 		return "<rule " + index + ">";
 	}
@@ -2173,7 +2173,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	getTokenName(t: number): string {
+	public getTokenName(t: number): string {
 		if (t === Token.EOF) {
 			return "EOF";
 		}
@@ -2187,11 +2187,11 @@ export class ParserATNSimulator extends ATNSimulator {
 		return displayName + "<" + t + ">";
 	}
 
-	getLookaheadName(input: TokenStream): string {
+	public getLookaheadName(input: TokenStream): string {
 		return this.getTokenName(input.LA(1));
 	}
 
-	dumpDeadEndConfigs(@NotNull nvae: NoViableAltException): void {
+	public dumpDeadEndConfigs(@NotNull nvae: NoViableAltException): void {
 		console.log("dead end configs: ");
 		let deadEndConfigs = nvae.deadEndConfigs;
 		if (!deadEndConfigs) {

@@ -23,7 +23,7 @@ import { TransitionType } from './TransitionType';
  *  ATN transitions.</p>
  */
 export abstract class Transition {
-	static readonly serializationNames: string[] = [
+	public static readonly serializationNames: string[] = [
 		"INVALID",
 		"EPSILON",
 		"RANGE",
@@ -54,7 +54,7 @@ export abstract class Transition {
 
 	/** The target of this transition. */
 	@NotNull
-	target: ATNState;
+	public target: ATNState;
 
 	constructor(@NotNull target: ATNState) {
 		if (target == null) {
@@ -64,7 +64,7 @@ export abstract class Transition {
 		this.target = target;
 	}
 
-	abstract readonly serializationType: TransitionType;
+	public abstract readonly serializationType: TransitionType;
 
 	/**
 	 * Determines if the transition is an "epsilon" transition.
@@ -83,5 +83,5 @@ export abstract class Transition {
 		return undefined;
 	}
 
-	abstract matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean;
+	public abstract matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean;
 }

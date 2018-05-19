@@ -52,7 +52,7 @@ export class TextChunk extends Chunk {
 	 * `text` in single quotes.</p>
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return "'" + this._text + "'";
 	}
 }

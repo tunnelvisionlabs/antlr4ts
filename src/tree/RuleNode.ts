@@ -12,22 +12,22 @@ import { Parser } from "../Parser";
 import { Interval } from "../misc/Interval";
 
 export abstract class RuleNode implements ParseTree {
-	abstract readonly ruleContext: RuleContext;
+	public abstract readonly ruleContext: RuleContext;
 
 	//@Override
-	abstract readonly parent: RuleNode | undefined;
+	public abstract readonly parent: RuleNode | undefined;
 
-	abstract getChild(i: number): ParseTree;
+	public abstract getChild(i: number): ParseTree;
 
-	abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
+	public abstract accept<T>(visitor: ParseTreeVisitor<T>): T;
 
-	abstract readonly text: string;
+	public abstract readonly text: string;
 
-	abstract toStringTree(parser?: Parser | undefined): string;
+	public abstract toStringTree(parser?: Parser | undefined): string;
 
-	abstract readonly sourceInterval: Interval;
+	public abstract readonly sourceInterval: Interval;
 
-	abstract readonly payload: any;
+	public abstract readonly payload: any;
 
-	abstract readonly childCount: number;
+	public abstract readonly childCount: number;
 }

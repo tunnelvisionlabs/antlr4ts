@@ -11,5 +11,5 @@ import { Override } from '../Decorators';
 
 /**  The start of a regular {@code (...)} block. */
 export abstract class BlockStartState extends DecisionState {
-	endState: BlockEndState;
+	public endState: BlockEndState;
 }

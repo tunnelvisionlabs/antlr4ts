@@ -49,7 +49,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	 *  original {@link RecognitionException}.
 	 */
 	@Override
-	recover(recognizer: Parser, e: RecognitionException): void {
+	public recover(recognizer: Parser, e: RecognitionException): void {
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
 		}
@@ -61,7 +61,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	 *  successfully recovers, it won't throw an exception.
 	 */
 	@Override
-	recoverInline(recognizer: Parser): Token {
+	public recoverInline(recognizer: Parser): Token {
 		let e = new InputMismatchException(recognizer);
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
@@ -72,5 +72,5 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
 	/** Make sure we don't attempt to recover from problems in subrules. */
 	@Override
-	sync(recognizer: Parser): void { }
+	public sync(recognizer: Parser): void { }
 }

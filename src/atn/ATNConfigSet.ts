@@ -29,15 +29,15 @@ import * as Utils from '../misc/Utils';
 interface KeyType { state: number, alt: number }
 
 class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
-	hashCode(key: KeyType) {
+	public hashCode(key: KeyType) {
 		return key.state ^ key.alt;
 	}
 
-	equals(a: KeyType, b: KeyType) {
+	public equals(a: KeyType, b: KeyType) {
 		return a.state === b.state && a.alt === b.alt;
 	}
 
-	static readonly INSTANCE = new KeyTypeEqualityComparer();
+	public static readonly INSTANCE = new KeyTypeEqualityComparer();
 }
 
 function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
@@ -149,7 +149,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * set.
 	 */
 	@NotNull
-	getRepresentedAlternatives(): BitSet {
+	public getRepresentedAlternatives(): BitSet {
 		if (this._conflictInfo != null) {
 			return this._conflictInfo.conflictedAlts.clone();
 		}
@@ -179,7 +179,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		this.outermostConfigSet = outermostConfigSet;
 	}
 
-	getStates(): Array2DHashSet<ATNState> {
+	public getStates(): Array2DHashSet<ATNState> {
 		let states = new Array2DHashSet<ATNState>(ObjectEqualityComparator.INSTANCE);
 		for (let c of this.configs) {
 			states.add(c.state);
@@ -188,7 +188,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return states;
 	}
 
-	optimizeConfigs(interpreter: ATNSimulator): void {
+	public optimizeConfigs(interpreter: ATNSimulator): void {
 		if (this.configs.length === 0) {
 			return;
 		}
@@ -199,7 +199,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 	}
 
-	clone(readonly: boolean): ATNConfigSet {
+	public clone(readonly: boolean): ATNConfigSet {
 		let copy: ATNConfigSet = new ATNConfigSet(this, readonly);
 		if (!readonly && this.isReadOnly) {
 			copy.addAll(this.configs);
@@ -219,7 +219,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		if (!(o instanceof ATNConfig)) {
 			return false;
 		}
@@ -249,15 +249,15 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	iterator(): JavaIterator<ATNConfig> {
+	public iterator(): JavaIterator<ATNConfig> {
 		return new ATNConfigSetIterator(this, this.configs);
 	}
 
-	toArray(): ATNConfig[];
-	toArray(a?: ATNConfig[]): ATNConfig[];
+	public toArray(): ATNConfig[];
+	public toArray(a?: ATNConfig[]): ATNConfig[];
 
 	@Override
-	toArray(a?: ATNConfig[]): ATNConfig[] {
+	public toArray(a?: ATNConfig[]): ATNConfig[] {
 		if (!a || a.length < this.configs.length) {
 			return this.configs;
 		}
@@ -269,9 +269,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return a;
 	}
 
-	add(e: ATNConfig): boolean;
-	add(e: ATNConfig, contextCache: PredictionContextCache | undefined): boolean;
-	add(e: ATNConfig, contextCache?: PredictionContextCache): boolean {
+	public add(e: ATNConfig): boolean;
+	public add(e: ATNConfig, contextCache: PredictionContextCache | undefined): boolean;
+	public add(e: ATNConfig, contextCache?: PredictionContextCache): boolean {
 		this.ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
@@ -374,7 +374,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	containsAll(c: Collection<any>): boolean {
+	public containsAll(c: Collection<any>): boolean {
 		for (let o of asIterable(c)) {
 			if (!(o instanceof ATNConfig)) {
 				return false;
@@ -388,9 +388,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return true;
 	}
 
-	addAll(c: Collection<ATNConfig>): boolean;
-	addAll(c: Collection<ATNConfig>, contextCache: PredictionContextCache): boolean;
-	addAll(c: Collection<ATNConfig>, contextCache?: PredictionContextCache): boolean {
+	public addAll(c: Collection<ATNConfig>): boolean;
+	public addAll(c: Collection<ATNConfig>, contextCache: PredictionContextCache): boolean;
+	public addAll(c: Collection<ATNConfig>, contextCache?: PredictionContextCache): boolean {
 		this.ensureWritable();
 
 		let changed: boolean = false;
@@ -404,19 +404,19 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	retainAll(c: Collection<any>): boolean {
+	public retainAll(c: Collection<any>): boolean {
 		this.ensureWritable();
 		throw new Error("Not supported yet.");
 	}
 
 	@Override
-	removeAll(c: Collection<any>): boolean {
+	public removeAll(c: Collection<any>): boolean {
 		this.ensureWritable();
 		throw new Error("Not supported yet.");
 	}
 
 	@Override
-	clear(): void {
+	public clear(): void {
 		this.ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
@@ -433,7 +433,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (this === obj) {
 			return true;
 		}
@@ -448,7 +448,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		if (this.isReadOnly && this.cachedHashCode != -1) {
 			return this.cachedHashCode;
 		}
@@ -464,9 +464,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return hashCode;
 	}
 
-	toString(): string;
-	toString(showContext: boolean): string;
-	toString(showContext?: boolean): string {
+	public toString(): string;
+	public toString(showContext: boolean): string;
+	public toString(showContext?: boolean): string {
 		if (showContext == null) {
 			showContext = false;
 		}
@@ -548,7 +548,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return this._dipsIntoOuterContext;
 	}
 
-	get(index: number): ATNConfig {
+	public get(index: number): ATNConfig {
 		return this.configs[index];
 	}
 
@@ -559,9 +559,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	// 	throw new Error("Not supported yet.");
 	// }
 
-	remove(o: any): boolean;
-	remove(index: number): void;
-	remove(indexOrItem: number | any): boolean | void {
+	public remove(o: any): boolean;
+	public remove(index: number): void;
+	public remove(indexOrItem: number | any): boolean | void {
 		this.ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
 			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
@@ -595,22 +595,22 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 }
 
 class ATNConfigSetIterator implements JavaIterator<ATNConfig> {
-	index: number = -1;
-	removed: boolean = false;
-	set: ATNConfigSet;
-	configs: ATNConfig[];
+	public index: number = -1;
+	public removed: boolean = false;
+	public set: ATNConfigSet;
+	public configs: ATNConfig[];
 
 	constructor(set: ATNConfigSet, configs: ATNConfig[]) {
 		this.configs = configs;
 	}
 
 	@Override
-	hasNext(): boolean {
+	public hasNext(): boolean {
 		return this.index + 1 < this.configs.length;
 	}
 
 	@Override
-	next(): ATNConfig {
+	public next(): ATNConfig {
 		if (!this.hasNext()) {
 			throw new Error("NoSuchElementException");
 		}
@@ -621,7 +621,7 @@ class ATNConfigSetIterator implements JavaIterator<ATNConfig> {
 	}
 
 	@Override
-	remove(): void {
+	public remove(): void {
 		if (this.removed || this.index < 0 || this.index >= this.configs.length) {
 			throw new Error("IllegalStateException");
 		}

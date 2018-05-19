@@ -106,9 +106,9 @@ class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
 	private _iterator: JavaIterator<T>
 	constructor(private collection: JavaCollection<T>) { }
 
-	[Symbol.iterator]() { this._iterator = this.collection.iterator(); return this; }
+	public [Symbol.iterator]() { this._iterator = this.collection.iterator(); return this; }
 
-	next(): IteratorResult<T> {
+	public next(): IteratorResult<T> {
 		if (!this._iterator.hasNext()) {
 			// A bit of a hack needed here, tracking under https://github.com/Microsoft/TypeScript/issues/11375
 			return { done: true, value: undefined } as any as IteratorResult<T>;

@@ -25,7 +25,7 @@ export class VocabularyImpl implements Vocabulary {
 	 * except {@link Token#EOF}.</p>
 	 */
 	@NotNull
-	static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
+	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
 	private readonly literalNames: Array<string | undefined>;
@@ -69,7 +69,7 @@ export class VocabularyImpl implements Vocabulary {
 	}
 
 	@Override
-	getLiteralName(tokenType: number): string | undefined {
+	public getLiteralName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.literalNames.length) {
 			return this.literalNames[tokenType];
 		}
@@ -78,7 +78,7 @@ export class VocabularyImpl implements Vocabulary {
 	}
 
 	@Override
-	getSymbolicName(tokenType: number): string | undefined {
+	public getSymbolicName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.symbolicNames.length) {
 			return this.symbolicNames[tokenType];
 		}
@@ -92,7 +92,7 @@ export class VocabularyImpl implements Vocabulary {
 
 	@Override
 	@NotNull
-	getDisplayName(tokenType: number): string {
+	public getDisplayName(tokenType: number): string {
 		if (tokenType >= 0 && tokenType < this.displayNames.length) {
 			let displayName = this.displayNames[tokenType];
 			if (displayName) {

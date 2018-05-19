@@ -11,9 +11,9 @@ import { Transition } from './Transition';
 import { TransitionType } from './TransitionType';
 
 export class ActionTransition extends Transition {
-	ruleIndex: number;
-	actionIndex: number;
-	isCtxDependent: boolean;  // e.g., $i ref in action
+	public ruleIndex: number;
+	public actionIndex: number;
+	public isCtxDependent: boolean;  // e.g., $i ref in action
 
 	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex: number = -1, isCtxDependent: boolean = false) {
 		super(target);
@@ -33,12 +33,12 @@ export class ActionTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return "action_" + this.ruleIndex + ":" + this.actionIndex;
 	}
 }

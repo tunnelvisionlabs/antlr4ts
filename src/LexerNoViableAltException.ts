@@ -45,7 +45,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let symbol = "";
 		if (this._startIndex >= 0 && this._startIndex < this.inputStream.size) {
 			symbol = this.inputStream.getText(Interval.of(this._startIndex, this._startIndex));

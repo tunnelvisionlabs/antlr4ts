@@ -14,7 +14,7 @@ class EquatableTest implements Equatable {
 
 	constructor( public a: string, public b: string ){}
 
-	equals(o: any) {
+	public equals(o: any) {
 		if (this === o) return true;
 		if (o instanceof EquatableTest) {
 			return this.a === o.a && this.b === o.b;
@@ -22,7 +22,7 @@ class EquatableTest implements Equatable {
 		return false;
 	}
 
-	hashCode() {
+	public hashCode() {
 		// this currently generates a Typescript error because strings aren't Equatable
 		return MurmurHash.hashCode([this.a, this.b], 5280);
 	}
@@ -88,7 +88,7 @@ describe('Array2DHashSet', function() {
 //
 @suite class DecoratorDriven {
 	@test
-	"Comparison by value"() {
+	public "Comparison by value"() {
 		assert(alpha.equals(alpha_again));
 	}
 }

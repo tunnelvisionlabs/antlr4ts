@@ -25,13 +25,13 @@ export abstract class ATNSimulator {
 	}
 
 	@NotNull
-	atn: ATN;
+	public atn: ATN;
 
 	constructor(@NotNull atn: ATN) {
 		this.atn = atn;
 	}
 
-	abstract reset(): void;
+	public abstract reset(): void;
 
 	/**
 	 * Clear the DFA cache used by the current instance. Since the DFA cache may
@@ -44,7 +44,7 @@ export abstract class ATNSimulator {
 	 *
 	 * @since 4.3
 	 */
-	clearDFA(): void {
+	public clearDFA(): void {
 		this.atn.clearDFA();
 	}
 }

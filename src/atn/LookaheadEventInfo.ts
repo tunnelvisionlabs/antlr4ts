@@ -22,7 +22,7 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 *  user-level alts that differ from the rewritten rule with a (...) block
 	 *  and a (..)* loop.
 	 */
-	predictedAlt: number;
+	public predictedAlt: number;
 
 	/**
 	 * Constructs a new instance of the {@link LookaheadEventInfo} class with

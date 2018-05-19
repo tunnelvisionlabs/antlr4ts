@@ -62,7 +62,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * there. This method performs the same operation as {@link #add} aside from
 	 * the return value.
 	 */
-	getOrAdd(o: T): T {
+	public getOrAdd(o: T): T {
 		if (this.n > this.threshold) this.expand();
 		return this.getOrAddImpl(o);
 	}
@@ -93,7 +93,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return o;
 	}
 
-	get(o: T): T | undefined {
+	public get(o: T): T | undefined {
 		if (o == null) return o;
 		let b: number = this.getBucket(o);
 		let bucket = this.buckets[b];
@@ -118,7 +118,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (let bucket of this.buckets) {
 			if (bucket == null) continue;
@@ -133,7 +133,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) return true;
 		if (!(o instanceof Array2DHashSet)) return false;
 		if (o.size !== this.size) return false;
@@ -171,7 +171,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	add(t: T): boolean {
+	public add(t: T): boolean {
 		let existing: T = this.getOrAdd(t);
 		return existing === t;
 	}
@@ -187,11 +187,11 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		return this.containsFast(this.asElementType(o));
 	}
 
-	containsFast(@Nullable obj: T): boolean {
+	public containsFast(@Nullable obj: T): boolean {
 		if (obj == null) {
 			return false;
 		}
@@ -200,12 +200,12 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	iterator(): JavaIterator<T> {
+	public iterator(): JavaIterator<T> {
 		return new SetIterator<T>(this.toArray(), this);
 	}
 
 	@Override
-	toArray(a?: any[]): T[] {
+	public toArray(a?: any[]): T[] {
 
 		// Check if the array argument was provided
 		if (!a || a.length < this.size) {
@@ -230,11 +230,11 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	remove(o: any): boolean {
+	public remove(o: any): boolean {
 		return this.removeFast(this.asElementType(o));
 	}
 
-	removeFast(@Nullable obj: T): boolean {
+	public removeFast(@Nullable obj: T): boolean {
 		if (obj == null) {
 			return false;
 		}
@@ -261,7 +261,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	containsAll(collection: JavaCollection<T>): boolean {
+	public containsAll(collection: JavaCollection<T>): boolean {
 		if (collection instanceof Array2DHashSet) {
 			let s = collection as any as Array2DHashSet<T>;
 			for (let bucket of s.buckets) {
@@ -281,7 +281,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	addAll(c: Collection<T>): boolean {
+	public addAll(c: Collection<T>): boolean {
 		let changed: boolean = false;
 
 		for (let o of asIterable(c)) {
@@ -292,7 +292,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	retainAll(c: JavaCollection<T>): boolean {
+	public retainAll(c: JavaCollection<T>): boolean {
 		let newsize: number = 0;
 		for (let bucket of this.buckets) {
 			if (bucket == null) {
@@ -330,7 +330,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	removeAll(c: Collection<T>): boolean {
+	public removeAll(c: Collection<T>): boolean {
 		let changed = false;
 		for (let o of asIterable(c)) {
 			if (this.removeFast(this.asElementType(o))) changed = true;
@@ -340,14 +340,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	clear(): void {
+	public clear(): void {
 		this.buckets = this.createBuckets(INITAL_CAPACITY);
 		this.n = 0;
 		this.threshold = Math.floor(INITAL_CAPACITY * LOAD_FACTOR);
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		if (this.size === 0) return "{}";
 
 		let buf = '{';
@@ -365,7 +365,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return buf;
 	}
 
-	toTableString(): string {
+	public toTableString(): string {
 		let buf = "";
 		for (let bucket of this.buckets) {
 			if (bucket == null) {
@@ -417,8 +417,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 }
 
 class SetIterator<T> implements JavaIterator<T>  {
-	nextIndex: number = 0;
-	removed: boolean = true;
+	public nextIndex: number = 0;
+	public removed: boolean = true;
 
 	constructor(private data: T[], private set: Array2DHashSet<T>) { }
 
@@ -426,14 +426,14 @@ class SetIterator<T> implements JavaIterator<T>  {
 		return this.nextIndex < this.data.length;
 	}
 
-	next(): T {
+	public next(): T {
 		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
 		this.removed = false;
 		return this.data[this.nextIndex++];
 	}
 
 	// Note: this is an untested extension to the JavaScript iterator interface
-	remove(): void {
+	public remove(): void {
 		if (this.removed) {
 			throw new Error("This entry has already been removed");
 		}

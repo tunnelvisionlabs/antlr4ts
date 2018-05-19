@@ -95,13 +95,13 @@ export class ATNConfig implements Equatable {
 		}
 	}
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext): ATNConfig;
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@*/ semanticContext: SemanticContext, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@*/ semanticContext: SemanticContext, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig;
 
-	static create(@NotNull state: ATNState, alt: number, context: PredictionContext, @NotNull semanticContext: SemanticContext = SemanticContext.NONE, lexerActionExecutor?: LexerActionExecutor): ATNConfig {
+	public static create(@NotNull state: ATNState, alt: number, context: PredictionContext, @NotNull semanticContext: SemanticContext = SemanticContext.NONE, lexerActionExecutor?: LexerActionExecutor): ATNConfig {
 		if (semanticContext != SemanticContext.NONE) {
 			if (lexerActionExecutor != null) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, alt, context, false);
@@ -179,15 +179,15 @@ export class ATNConfig implements Equatable {
 	}
 
 	@Override
-	clone(): ATNConfig {
+	public clone(): ATNConfig {
 		return this.transform(this.state, false);
 	}
 
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, context: PredictionContext): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, arg2?: SemanticContext | PredictionContext | LexerActionExecutor): ATNConfig {
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, context: PredictionContext): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, arg2?: SemanticContext | PredictionContext | LexerActionExecutor): ATNConfig {
 		if (arg2 == null) {
 			return this.transformImpl(state, this._context, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
 		} else if (arg2 instanceof PredictionContext) {
@@ -222,9 +222,9 @@ export class ATNConfig implements Equatable {
 			|| target instanceof DecisionState && target.nonGreedy;
 	}
 
-	appendContext(context: number, contextCache: PredictionContextCache): ATNConfig;
-	appendContext(context: PredictionContext, contextCache: PredictionContextCache): ATNConfig;
-	appendContext(context: number | PredictionContext, contextCache: PredictionContextCache): ATNConfig {
+	public appendContext(context: number, contextCache: PredictionContextCache): ATNConfig;
+	public appendContext(context: PredictionContext, contextCache: PredictionContextCache): ATNConfig;
+	public appendContext(context: number | PredictionContext, contextCache: PredictionContextCache): ATNConfig {
 		if (typeof context === 'number') {
 			let appendedContext: PredictionContext = this.context.appendSingleContext(context, contextCache);
 			let result: ATNConfig = this.transform(this.state, false, appendedContext);
@@ -261,7 +261,7 @@ export class ATNConfig implements Equatable {
 	 * @param subconfig The sub configuration.
 	 * @return `true` if this configuration contains `subconfig`; otherwise, `false`.
 	 */
-	contains(subconfig: ATNConfig): boolean {
+	public contains(subconfig: ATNConfig): boolean {
 		if (this.state.stateNumber !== subconfig.state.stateNumber
 			|| this.alt !== subconfig.alt
 			|| !this.semanticContext.equals(subconfig.semanticContext)) {
@@ -324,7 +324,7 @@ export class ATNConfig implements Equatable {
      *  syntactic/semantic contexts are the same.
      */
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (this === o) {
 			return true;
 		} else if (!(o instanceof ATNConfig)) {
@@ -342,7 +342,7 @@ export class ATNConfig implements Equatable {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hashCode: number = MurmurHash.initialize(7);
 		hashCode = MurmurHash.update(hashCode, this.state.stateNumber);
 		hashCode = MurmurHash.update(hashCode, this.alt);
@@ -363,7 +363,7 @@ export class ATNConfig implements Equatable {
 	 *
 	 * @see http://www.graphviz.org/
 	 */
-	toDotString(): string {
+	public toDotString(): string {
 		let builder = "";
 		builder += ("digraph G {\n");
 		builder += ("rankdir=LR;\n");
@@ -402,10 +402,10 @@ export class ATNConfig implements Equatable {
 		return builder.toString();
 	}
 
-	toString(): string;
-	toString(recog: Recognizer<any, any> | undefined, showAlt: boolean): string;
-	toString(recog: Recognizer<any, any> | undefined, showAlt: boolean, showContext: boolean): string;
-	toString(recog?: Recognizer<any, any>, showAlt?: boolean, showContext?: boolean): string {
+	public toString(): string;
+	public toString(recog: Recognizer<any, any> | undefined, showAlt: boolean): string;
+	public toString(recog: Recognizer<any, any> | undefined, showAlt: boolean, showContext: boolean): string;
+	public toString(recog?: Recognizer<any, any>, showAlt?: boolean, showContext?: boolean): string {
 		// Must check showContext before showAlt to preserve original overload behavior
 		if (showContext == null) {
 			showContext = showAlt != null;

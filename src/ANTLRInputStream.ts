@@ -32,7 +32,7 @@ export class ANTLRInputStream implements CharStream {
 	protected p: number = 0;
 
 	/** What is name or source of this char stream? */
-	name?: string;
+	public name?: string;
 
 	/** Copy data in string to a local char array */
 	constructor(input: string) {
@@ -44,12 +44,12 @@ export class ANTLRInputStream implements CharStream {
 	 *  when the object was created *except* the data array is not
 	 *  touched.
 	 */
-	reset(): void {
+	public reset(): void {
 		this.p = 0;
 	}
 
 	@Override
-	consume(): void {
+	public consume(): void {
 		if (this.p >= this.n) {
 			assert(this.LA(1) === IntStream.EOF);
 			throw new Error("cannot consume EOF");
@@ -63,7 +63,7 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	LA(i: number): number {
+	public LA(i: number): number {
 		if (i === 0) {
 			return 0; // undefined
 		}
@@ -83,7 +83,7 @@ export class ANTLRInputStream implements CharStream {
 		return this.data.charCodeAt(this.p + i - 1);
 	}
 
-	LT(i: number): number {
+	public LT(i: number): number {
 		return this.LA(i);
 	}
 
@@ -103,19 +103,19 @@ export class ANTLRInputStream implements CharStream {
 
 	/** mark/release do nothing; we have entire buffer */
 	@Override
-	mark(): number {
+	public mark(): number {
 		return -1;
 	}
 
 	@Override
-	release(marker: number): void {
+	public release(marker: number): void {
 	}
 
 	/** consume() ahead until p==index; can't just set p=index as we must
 	 *  update line and charPositionInLine. If we seek backwards, just set p
 	 */
 	@Override
-	seek(index: number): void {
+	public seek(index: number): void {
 		if (index <= this.p) {
 			this.p = index; // just jump; don't update stream state (line, ...)
 			return;
@@ -128,7 +128,7 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	getText(interval: Interval): string {
+	public getText(interval: Interval): string {
 		let start: number = interval.a;
 		let stop: number = interval.b;
 		if (stop >= this.n) stop = this.n - 1;
@@ -149,5 +149,5 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	toString() { return this.data; }
+	public toString() { return this.data; }
 }

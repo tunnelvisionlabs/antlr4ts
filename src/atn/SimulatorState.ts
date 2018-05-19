@@ -14,12 +14,12 @@ import { ParserRuleContext } from '../ParserRuleContext';
  * @author Sam Harwell
  */
 export class SimulatorState {
-	outerContext: ParserRuleContext;
+	public outerContext: ParserRuleContext;
 
-	s0: DFAState;
+	public s0: DFAState;
 
-	useContext: boolean;
-	remainingOuterContext: ParserRuleContext | undefined;
+	public useContext: boolean;
+	public remainingOuterContext: ParserRuleContext | undefined;
 
 	constructor(outerContext: ParserRuleContext, @NotNull s0: DFAState, useContext: boolean, remainingOuterContext: ParserRuleContext | undefined) {
 		this.outerContext = outerContext != null ? outerContext : ParserRuleContext.emptyContext();

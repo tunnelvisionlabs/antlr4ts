@@ -17,7 +17,7 @@ import { ObjectEqualityComparator } from './ObjectEqualityComparator';
  * @author Sam Harwell
  */
 export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> {
-	static readonly INSTANCE: ArrayEqualityComparator = new ArrayEqualityComparator();
+	public static readonly INSTANCE: ArrayEqualityComparator = new ArrayEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
@@ -26,7 +26,7 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: Equatable[]): number {
+	public hashCode(obj: Equatable[]): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -44,7 +44,7 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: Equatable[], b: Equatable[]): boolean {
+	public equals(a: Equatable[], b: Equatable[]): boolean {
 		if (a == null) {
 			return b == null;
 		} else if (b == null) {

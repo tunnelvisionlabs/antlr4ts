@@ -35,7 +35,7 @@ export class Trees {
 	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
 	 *  node payloads to get the text for the nodes.
 	 */
-	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
+	public static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
 		let ruleNames: string[];
 		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
 		else { ruleNames = arg2 as string[]; }
@@ -55,7 +55,7 @@ export class Trees {
 		return buf;
 	}
 
-	static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
+	public static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
 		let ruleNames: string[] | undefined;
 		if (arg2 instanceof Parser) {
 			ruleNames = arg2.ruleNames;
@@ -93,7 +93,7 @@ export class Trees {
 
 
 	/** Return ordered list of all children of this node */
-	static getChildren(t: ParseTree): ParseTree[] {
+	public static getChildren(t: ParseTree): ParseTree[] {
 		let kids = [] as ParseTree[];
 		for (let i = 0; i < t.childCount; i++) {
 			kids.push(t.getChild(i));
@@ -107,7 +107,7 @@ export class Trees {
 	 *  @since 4.5.1
 	 */
 	@NotNull
-	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
+	public static getAncestors(@NotNull t: ParseTree): ParseTree[] {
 		let ancestors = [] as ParseTree[];
 		let p = t.parent;
 		while (p) {
@@ -122,7 +122,7 @@ export class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
+	public static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
 		if (!t || !u || !t.parent) return false;
 		let p = u.parent;
 		while (p) {
@@ -132,21 +132,21 @@ export class Trees {
 		return false;
 	}
 
-	static findAllTokenNodes(t: ParseTree, ttype: number): ParseTree[] {
+	public static findAllTokenNodes(t: ParseTree, ttype: number): ParseTree[] {
 		return Trees.findAllNodes(t, ttype, true);
 	}
 
-	static findAllRuleNodes(t: ParseTree, ruleIndex: number): ParseTree[] {
+	public static findAllRuleNodes(t: ParseTree, ruleIndex: number): ParseTree[] {
 		return Trees.findAllNodes(t, ruleIndex, false);
 	}
 
-	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): ParseTree[] {
+	public static findAllNodes(t: ParseTree, index: number, findTokens: boolean): ParseTree[] {
 		let nodes = [] as ParseTree[];
 		Trees._findAllNodes(t, index, findTokens, nodes);
 		return nodes;
 	}
 
-	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: ParseTree[]) {
+	public static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: ParseTree[]) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
 			if (t.symbol.type === index) nodes.push(t);
@@ -164,7 +164,7 @@ export class Trees {
 	 *
 	 * @since 4.5.1
 	 */
-	static getDescendants(t: ParseTree): ParseTree[] {
+	public static getDescendants(t: ParseTree): ParseTree[] {
 		let nodes: ParseTree[] = [];
 
 		function recurse(e: ParseTree): void {
@@ -184,7 +184,7 @@ export class Trees {
 	*
 	*  @since 4.5
 	*/
-	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
+	public static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number // inclusive
 	): ParserRuleContext | undefined {
@@ -213,7 +213,7 @@ export class Trees {
 	*
 	*  @since 4.5.1
 	*/
-	static stripChildrenOutOfRange(t: ParserRuleContext,
+	public static stripChildrenOutOfRange(t: ParserRuleContext,
 		root: ParserRuleContext,
 		startIndex: number,
 		stopIndex: number): void {

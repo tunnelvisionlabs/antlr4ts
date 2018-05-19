@@ -31,23 +31,23 @@ export class DFA {
 	 * needs to be differentiated for these cases, which is tracked by the `s0` and `s0full` fields.
 	 */
 	@NotNull
-	readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
+	public readonly states: Array2DHashSet<DFAState> = new Array2DHashSet<DFAState>(ObjectEqualityComparator.INSTANCE);
 
-	s0: DFAState | undefined;
+	public s0: DFAState | undefined;
 
-	s0full: DFAState | undefined;
+	public s0full: DFAState | undefined;
 
-	readonly decision: number;
+	public readonly decision: number;
 
 	/** From which ATN state did we create this DFA? */
 	@NotNull
-	atnStartState: ATNState;
+	public atnStartState: ATNState;
 	/**
 	 * Note: this field is accessed as `atnStartState.atn` in other targets. The TypeScript target keeps a separate copy
 	 * to avoid a number of additional null/undefined checks each time the ATN is accessed.
 	 */
 	@NotNull
-	atn: ATN;
+	public atn: ATN;
 
 	private nextStateNumber: number = 0;
 
@@ -124,7 +124,7 @@ export class DFA {
 	 * @ if this is not a precedence DFA.
 	 * @see `isPrecedenceDfa`
 	 */
-	getPrecedenceStartState(precedence: number, fullContext: boolean): DFAState | undefined {
+	public getPrecedenceStartState(precedence: number, fullContext: boolean): DFAState | undefined {
 		if (!this.isPrecedenceDfa) {
 			throw new Error("Only precedence DFAs may contain a precedence start state.");
 		}
@@ -148,7 +148,7 @@ export class DFA {
 	 * @ if this is not a precedence DFA.
 	 * @see `isPrecedenceDfa`
 	 */
-	setPrecedenceStartState(precedence: number, fullContext: boolean, startState: DFAState): void {
+	public setPrecedenceStartState(precedence: number, fullContext: boolean, startState: DFAState): void {
 		if (!this.isPrecedenceDfa) {
 			throw new Error("Only precedence DFAs may contain a precedence start state.");
 		}
@@ -185,15 +185,15 @@ export class DFA {
 		return this.s0full != null;
 	}
 
-	addState(state: DFAState): DFAState {
+	public addState(state: DFAState): DFAState {
 		state.stateNumber = this.nextStateNumber++;
 		return this.states.getOrAdd(state);
 	}
 
-	toString(): string;
-	toString(/*@NotNull*/ vocabulary: Vocabulary): string;
-	toString(/*@NotNull*/ vocabulary: Vocabulary, ruleNames: string[] | undefined): string;
-	toString(vocabulary?: Vocabulary, ruleNames?: string[]): string {
+	public toString(): string;
+	public toString(/*@NotNull*/ vocabulary: Vocabulary): string;
+	public toString(/*@NotNull*/ vocabulary: Vocabulary, ruleNames: string[] | undefined): string;
+	public toString(vocabulary?: Vocabulary, ruleNames?: string[]): string {
 		if (!vocabulary) {
 			vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
 		}
@@ -212,7 +212,7 @@ export class DFA {
 		return serializer.toString();
 	}
 
-	toLexerString(): string {
+	public toLexerString(): string {
 		if (!this.s0) {
 			return "";
 		}

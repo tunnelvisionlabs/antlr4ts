@@ -17,15 +17,15 @@ export class IntegerStack extends IntegerList {
 		super(arg);
 	}
 
-	push(value: number): void {
+	public push(value: number): void {
 		this.add(value);
 	}
 
-	pop(): number {
+	public pop(): number {
 		return this.removeAt(this.size - 1);
 	}
 
-	peek(): number {
+	public peek(): number {
 		return this.get(this.size - 1);
 	}
 

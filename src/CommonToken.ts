@@ -102,7 +102,7 @@ export class CommonToken implements WritableToken {
 	 *
 	 * @param oldToken The token to copy.
 	 */
-	static fromToken(@NotNull oldToken: Token): CommonToken {
+	public static fromToken(@NotNull oldToken: Token): CommonToken {
 		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.tokenIndex;
@@ -230,11 +230,11 @@ export class CommonToken implements WritableToken {
 		return this.source.stream;
 	}
 
-	toString(): string;
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
+	public toString(): string;
+	public toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
 
 	@Override
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
+	public toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
 		let channelStr: string = "";
 		if (this._channel > 0) {
 			channelStr = ",channel=" + this._channel;

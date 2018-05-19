@@ -23,18 +23,18 @@ export class PredicateEvalInfo extends DecisionEventInfo {
 	/**
 	 * The semantic context which was evaluated.
 	 */
-	semctx: SemanticContext;
+	public semctx: SemanticContext;
 	/**
 	 * The alternative number for the decision which is guarded by the semantic
 	 * context {@link #semctx}. Note that other ATN
 	 * configurations may predict the same alternative which are guarded by
 	 * other semantic contexts and/or {@link SemanticContext#NONE}.
 	 */
-	predictedAlt: number;
+	public predictedAlt: number;
 	/**
 	 * The result of evaluating the semantic context {@link #semctx}.
 	 */
-	evalResult: boolean;
+	public evalResult: boolean;
 
 	/**
 	 * Constructs a new instance of the {@link PredicateEvalInfo} class with the

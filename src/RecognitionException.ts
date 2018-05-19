@@ -126,7 +126,7 @@ export class RecognitionException extends Error {
 		return this.input;
 	}
 
-	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
+	public getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
 		if (recognizer && recognizer !== this._recognizer) return undefined;
 		return this.offendingToken;
 	}

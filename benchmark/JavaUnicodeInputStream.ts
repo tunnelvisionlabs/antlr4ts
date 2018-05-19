@@ -64,12 +64,12 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	getText(interval: Interval): string {
+	public getText(interval: Interval): string {
 		return this.source.getText(interval);
 	}
 
 	@Override
-	consume(): void {
+	public consume(): void {
 		if (this.la1 !== BACKSLASH) {
 			this.source.consume();
 			this.la1 = this.source.LA(1);
@@ -100,7 +100,7 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	LA(i: number): number {
+	public LA(i: number): number {
 		if (i === 1 && this.la1 !== BACKSLASH) {
 			return this.la1;
 		}
@@ -159,17 +159,17 @@ export class JavaUnicodeInputStream implements CharStream {
 	}
 
 	@Override
-	mark(): number {
+	public mark(): number {
 		return this.source.mark();
 	}
 
 	@Override
-	release(marker: number): void {
+	public release(marker: number): void {
 		this.source.release(marker);
 	}
 
 	@Override
-	seek(index: number): void {
+	public seek(index: number): void {
 		if (index > this.range) {
 			throw new Error("UnsupportedOperationException");
 		}

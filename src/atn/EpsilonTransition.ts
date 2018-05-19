@@ -42,13 +42,13 @@ export class EpsilonTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return "epsilon";
 	}
 }

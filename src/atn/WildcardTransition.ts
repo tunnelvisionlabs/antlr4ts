@@ -21,13 +21,13 @@ export class WildcardTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return symbol >= minVocabSymbol && symbol <= maxVocabSymbol;
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return ".";
 	}
 }

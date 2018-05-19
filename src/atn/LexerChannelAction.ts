@@ -63,12 +63,12 @@ export class LexerChannelAction implements LexerAction {
 	 * value provided by {@link #getChannel}.</p>
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.channel = this._channel;
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._channel);
@@ -76,7 +76,7 @@ export class LexerChannelAction implements LexerAction {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerChannelAction)) {
@@ -87,7 +87,7 @@ export class LexerChannelAction implements LexerAction {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return `channel(${this._channel})`;
 	}
 }

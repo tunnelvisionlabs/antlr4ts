@@ -89,9 +89,9 @@ import * as Utils from './misc/Utils';
  * first example shows.</p>
  */
 export class TokenStreamRewriter {
-	static readonly DEFAULT_PROGRAM_NAME: string =  "default";
-	static readonly PROGRAM_INIT_SIZE: number =  100;
-	static readonly MIN_TOKEN_INDEX: number =  0;
+	public static readonly DEFAULT_PROGRAM_NAME: string =  "default";
+	public static readonly PROGRAM_INIT_SIZE: number =  100;
+	public static readonly MIN_TOKEN_INDEX: number =  0;
 
 	/** Our source stream */
 	protected tokens: TokenStream;
@@ -112,36 +112,36 @@ export class TokenStreamRewriter {
 		this.lastRewriteTokenIndexes = new Map<string, number>();
 	}
 
-	getTokenStream(): TokenStream {
+	public getTokenStream(): TokenStream {
 		return this.tokens;
 	}
 
-	rollback(instructionIndex: number): void;
+	public rollback(instructionIndex: number): void;
 	/** Rollback the instruction stream for a program so that
 	 *  the indicated instruction (via instructionIndex) is no
 	 *  longer in the stream. UNTESTED!
 	 */
-	rollback(instructionIndex: number, programName: string): void;
-	rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public rollback(instructionIndex: number, programName: string): void;
+	public rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let is: RewriteOperation[] | undefined =  this.programs.get(programName);
 		if ( is!=null ) {
 			this.programs.set(programName, is.slice(TokenStreamRewriter.MIN_TOKEN_INDEX,instructionIndex));
 		}
 	}
 
-	deleteProgram(): void;
+	public deleteProgram(): void;
 
 	/** Reset the program so that no instructions exist */
-	deleteProgram(programName: string): void;
-	deleteProgram(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public deleteProgram(programName: string): void;
+	public deleteProgram(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		this.rollback(TokenStreamRewriter.MIN_TOKEN_INDEX, programName);
 	}
 
-	insertAfter(t: Token, text: any): void;
-	insertAfter(index: number, text: any): void;
-	insertAfter(t: Token, text: any, programName: string): void;
-	insertAfter(index: number, text: any, programName: string): void;
-	insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertAfter(t: Token, text: any): void;
+	public insertAfter(index: number, text: any): void;
+	public insertAfter(t: Token, text: any, programName: string): void;
+	public insertAfter(index: number, text: any, programName: string): void;
+	public insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
@@ -156,11 +156,11 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	insertBefore(t: Token, text: any): void;
-	insertBefore(index: number, text: any): void;
-	insertBefore(t: Token, text: any, programName: string): void;
-	insertBefore(index: number, text: any, programName: string): void;
-	insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertBefore(t: Token, text: any): void;
+	public insertBefore(index: number, text: any): void;
+	public insertBefore(t: Token, text: any, programName: string): void;
+	public insertBefore(index: number, text: any, programName: string): void;
+	public insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
 		if (typeof tokenOrIndex === 'number') {
 			index = tokenOrIndex;
@@ -174,9 +174,9 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	replaceSingle(index: number, text: any): void;
-	replaceSingle(indexT: Token, text: any): void;
-	replaceSingle(index: Token | number, text: any): void {
+	public replaceSingle(index: number, text: any): void;
+	public replaceSingle(indexT: Token, text: any): void;
+	public replaceSingle(index: Token | number, text: any): void {
 		if (typeof index === 'number') {
 			this.replace(index, index, text);
 		} else {
@@ -184,15 +184,15 @@ export class TokenStreamRewriter {
 		}
 	}
 
-	replace(from: number, to: number, text: any): void;
+	public replace(from: number, to: number, text: any): void;
 
-	replace(from: Token, to: Token, text: any): void;
+	public replace(from: Token, to: Token, text: any): void;
 
-	replace(from: number, to: number, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: number, to: number, /*@Nullable*/ text: any, programName: string): void;
 
-	replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
 
-	replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (typeof from !== 'number') {
 			from = from.tokenIndex;
 		}
@@ -211,19 +211,19 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	delete(index: number): void;
+	public delete(index: number): void;
 
-	delete(from: number, to: number): void;
+	public delete(from: number, to: number): void;
 
-	delete(indexT: Token): void;
+	public delete(indexT: Token): void;
 
-	delete(from: Token, to: Token): void;
+	public delete(from: Token, to: Token): void;
 
-	delete(from: number, to: number, programName: string): void;
+	public delete(from: number, to: number, programName: string): void;
 
-	delete(from: Token, to: Token, programName: string): void;
+	public delete(from: Token, to: Token, programName: string): void;
 
-	delete(from: Token | number, to?: Token | number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public delete(from: Token | number, to?: Token | number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (to === undefined) {
 			to = from;
 		}
@@ -270,14 +270,14 @@ export class TokenStreamRewriter {
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter.
  	 */
-	getText(): string;
+	public getText(): string;
 
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter in programName.
 	 *
 	 * @since 4.5
  	 */
-	getText(programName: string): string;
+	public getText(programName: string): string;
 
 	/** Return the text associated with the tokens in the interval from the
 	 *  original token stream but with the alterations given to this rewriter.
@@ -288,11 +288,11 @@ export class TokenStreamRewriter {
 	 *  insertBefore on the first token, you would get that insertion.
 	 *  The same is true if you do an insertAfter the stop token.
  	 */
-	getText(interval: Interval): string;
+	public getText(interval: Interval): string;
 
-	getText(interval: Interval, programName: string): string;
+	public getText(interval: Interval, programName: string): string;
 
-	getText(intervalOrProgram?: Interval | string, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): string {
+	public getText(intervalOrProgram?: Interval | string, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): string {
 		let interval: Interval;
 		if (intervalOrProgram instanceof Interval) {
 			interval = intervalOrProgram;
@@ -542,12 +542,12 @@ export class RewriteOperation {
 	/** Execute the rewrite operation by possibly adding to the buffer.
 	 *  Return the index of the next token to operate on.
 	 */
-	execute(buf: string[]): number {
+	public execute(buf: string[]): number {
 		return this.index;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let opName: string = this.constructor.name;
 		let $index = opName.indexOf('$');
 		opName = opName.substring($index+1, opName.length);
@@ -562,7 +562,7 @@ class InsertBeforeOp extends RewriteOperation {
 	}
 
 	@Override
-	execute(buf: string[]): number {
+	public execute(buf: string[]): number {
 		buf.push(this.text);
 		if ( this.tokens.get(this.index).type !== Token.EOF ) {
 			buf.push(String(this.tokens.get(this.index).text));
@@ -592,7 +592,7 @@ class ReplaceOp extends RewriteOperation {
 	}
 
 	@Override
-	execute(buf: string[]): number {
+	public execute(buf: string[]): number {
 		if ( this.text!=null ) {
 			buf.push(this.text);
 		}
@@ -600,7 +600,7 @@ class ReplaceOp extends RewriteOperation {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		if ( this.text==null ) {
 			return "<DeleteOp@"+this.tokens.get(this.index)+
 					".."+this.tokens.get(this.lastIndex)+">";

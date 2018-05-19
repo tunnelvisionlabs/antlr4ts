@@ -49,7 +49,7 @@ export class IntegerList {
 		}
 	}
 
-	add(value: number): void {
+	public add(value: number): void {
 		if (this._data.length === this._size) {
 			this.ensureCapacity(this._size + 1);
 		}
@@ -58,7 +58,7 @@ export class IntegerList {
 		this._size++;
 	}
 
-	addAll(list: number[] | IntegerList | JavaCollection<number>): void {
+	public addAll(list: number[] | IntegerList | JavaCollection<number>): void {
 		if (Array.isArray(list)) {
 			this.ensureCapacity(this._size + list.length);
 			this._data.subarray(this._size, this._size + list.length).set(list);
@@ -80,7 +80,7 @@ export class IntegerList {
 		}
 	}
 
-	get(index: number): number {
+	public get(index: number): number {
 		if (index < 0 || index >= this._size) {
 			throw RangeError();
 		}
@@ -88,7 +88,7 @@ export class IntegerList {
 		return this._data[index];
 	}
 
-	contains(value: number): boolean {
+	public contains(value: number): boolean {
 		for (let i = 0; i < this._size; i++) {
 			if (this._data[i] === value) {
 				return true;
@@ -98,7 +98,7 @@ export class IntegerList {
 		return false;
 	}
 
-	set(index: number, value: number): number {
+	public set(index: number, value: number): number {
 		if (index < 0 || index >= this._size) {
 			throw RangeError();
 		}
@@ -108,7 +108,7 @@ export class IntegerList {
 		return previous;
 	}
 
-	removeAt(index: number): number {
+	public removeAt(index: number): number {
 		let value: number = this.get(index);
 		this._data.copyWithin(index, index + 1, this._size);
 		this._data[this._size - 1] = 0;
@@ -116,7 +116,7 @@ export class IntegerList {
 		return value;
 	}
 
-	removeRange(fromIndex: number, toIndex: number): void {
+	public removeRange(fromIndex: number, toIndex: number): void {
 		if (fromIndex < 0 || toIndex < 0 || fromIndex > this._size || toIndex > this._size) {
 			throw RangeError();
 		}
@@ -138,7 +138,7 @@ export class IntegerList {
 		return this._size;
 	}
 
-	trimToSize(): void {
+	public trimToSize(): void {
 		if (this._data.length === this._size) {
 			return;
 		}
@@ -146,12 +146,12 @@ export class IntegerList {
 		this._data = this._data.slice(0, this._size);
 	}
 
-	clear(): void {
+	public clear(): void {
 		this._data.fill(0, 0, this._size);
 		this._size = 0;
 	}
 
-	toArray(): number[] {
+	public toArray(): number[] {
 		if (this._size === 0) {
 			return [];
 		}
@@ -159,7 +159,7 @@ export class IntegerList {
 		return Array.from(this._data.subarray(0, this._size));
 	}
 
-	sort(): void {
+	public sort(): void {
 		this._data.subarray(0, this._size).sort();
 	}
 
@@ -182,7 +182,7 @@ export class IntegerList {
 	 * @return {@code true} if the specified object is equal to this list
 	 */
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		}
@@ -214,7 +214,7 @@ export class IntegerList {
 	 * @return the hash code value for this list
 	 */
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hashCode: number = 1;
 		for (let i = 0; i < this._size; i++) {
 			hashCode = 31 * hashCode + this._data[i];
@@ -227,11 +227,11 @@ export class IntegerList {
 	 * Returns a string representation of this list.
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this._data.toString();
 	}
 
-	binarySearch(key: number, fromIndex?: number, toIndex?: number): number {
+	public binarySearch(key: number, fromIndex?: number, toIndex?: number): number {
 		if (fromIndex === undefined) {
 			fromIndex = 0;
 		}

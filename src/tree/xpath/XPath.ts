@@ -67,8 +67,8 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * Whitespace is not allowed.</p>
  */
 export class XPath {
-	static readonly WILDCARD: string = "*"; // word not operator/separator
-	static readonly NOT: string = "!"; 	   // word for invert operator
+	public static readonly WILDCARD: string = "*"; // word not operator/separator
+	public static readonly NOT: string = "!"; 	   // word for invert operator
 
 	protected path: string;
 	protected elements: XPathElement[];
@@ -83,7 +83,7 @@ export class XPath {
 
 	// TODO: check for invalid token/rule names, bad syntax
 
-	split(path: string): XPathElement[] {
+	public split(path: string): XPathElement[] {
 		let input = new ANTLRInputStream(path);
 		let lexer = new XPathLexer(input);
 		lexer.recover = (e: LexerNoViableAltException) => { throw e; };
@@ -190,7 +190,7 @@ export class XPath {
 		}
 	}
 
-	static findAll(tree: ParseTree, xpath: string, parser: Parser): ParseTree[] {
+	public static findAll(tree: ParseTree, xpath: string, parser: Parser): ParseTree[] {
 		let p: XPath = new XPath(parser, xpath);
 		return p.evaluate(tree);
 	}
@@ -200,7 +200,7 @@ export class XPath {
 	 * path. The root {@code /} is relative to the node passed to
 	 * {@link #evaluate}.
 	 */
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): ParseTree[] {
 		let dummyRoot = new ParserRuleContext();
 		dummyRoot.addChild(t as ParserRuleContext);
 

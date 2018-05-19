@@ -137,7 +137,7 @@ export class ATNDeserializer {
 		return ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(actualUuid)) >= featureIndex;
 	}
 
-	deserialize(@NotNull data: Uint16Array): ATN {
+	public deserialize(@NotNull data: Uint16Array): ATN {
 		data = data.slice(0);
 
 		// Each Uint16 value in data is shifted by +2 at the entry to this method. This is an encoding optimization

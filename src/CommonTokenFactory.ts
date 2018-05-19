@@ -49,7 +49,7 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	create(
+	public create(
 		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
 		text: string,
@@ -70,7 +70,7 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	createSimple(type: number, text: string): CommonToken {
+	public createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}
 }

@@ -26,7 +26,7 @@ export class OrderedATNConfigSet extends ATNConfigSet {
 	}
 
 	@Override
-	clone(readonly: boolean): ATNConfigSet {
+	public clone(readonly: boolean): ATNConfigSet {
 		let copy: OrderedATNConfigSet = new OrderedATNConfigSet(this, readonly);
 		if (!readonly && this.isReadOnly) {
 			copy.addAll(this);

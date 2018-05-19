@@ -16,7 +16,7 @@ import { ObjectEqualityComparator } from './ObjectEqualityComparator';
  * @author Sam Harwell
  */
 export class DefaultEqualityComparator implements EqualityComparator<any> {
-	static readonly INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
+	public static readonly INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
@@ -25,7 +25,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: any): number {
+	public hashCode(obj: any): number {
 		if (obj == null) {
 			return 0;
 		} else if (typeof obj === 'string' || typeof obj === 'number') {
@@ -45,7 +45,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: any, b: any): boolean {
+	public equals(a: any, b: any): boolean {
 		if (a == null) {
 			return b == null;
 		} else if (typeof a === 'string' || typeof a === 'number') {

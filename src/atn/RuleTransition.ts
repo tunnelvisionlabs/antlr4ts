@@ -14,16 +14,16 @@ import { TransitionType } from './TransitionType';
 /** */
 export class RuleTransition extends Transition {
 	/** Ptr to the rule definition object for this rule ref */
-	ruleIndex: number;      // no Rule object at runtime
+	public ruleIndex: number;      // no Rule object at runtime
 
-	precedence: number;
+	public precedence: number;
 
 	/** What node to begin computations following ref to rule */
 	@NotNull
-	followState: ATNState;
+	public followState: ATNState;
 
-	tailCall: boolean = false;
-	optimizedTailCall: boolean = false;
+	public tailCall: boolean = false;
+	public optimizedTailCall: boolean = false;
 
 	constructor(@NotNull ruleStart: RuleStartState, ruleIndex: number, precedence: number, @NotNull followState: ATNState) {
 		super(ruleStart);
@@ -43,7 +43,7 @@ export class RuleTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 }

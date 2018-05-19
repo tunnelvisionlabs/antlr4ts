@@ -34,7 +34,7 @@ import * as assert from 'assert';
 
 /** "dup" of ParserInterpreter */
 export class LexerATNSimulator extends ATNSimulator {
-	optimize_tail_calls: boolean = true;
+	public optimize_tail_calls: boolean = true;
 
 	protected recog: Lexer | undefined;
 
@@ -57,7 +57,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	@NotNull
 	protected prevAccept: LexerATNSimulator.SimState = new LexerATNSimulator.SimState();
 
-	static match_calls: number = 0;
+	public static match_calls: number = 0;
 
 	constructor(/*@NotNull*/ atn: ATN);
 	constructor(/*@NotNull*/ atn: ATN, recog: Lexer | undefined);
@@ -66,14 +66,14 @@ export class LexerATNSimulator extends ATNSimulator {
 		this.recog = recog;
 	}
 
-	copyState(@NotNull simulator: LexerATNSimulator): void {
+	public copyState(@NotNull simulator: LexerATNSimulator): void {
 		this._charPositionInLine = simulator.charPositionInLine;
 		this._line = simulator._line;
 		this.mode = simulator.mode;
 		this.startIndex = simulator.startIndex;
 	}
 
-	match(@NotNull input: CharStream, mode: number): number {
+	public match(@NotNull input: CharStream, mode: number): number {
 		LexerATNSimulator.match_calls++;
 		this.mode = mode;
 		let mark: number = input.mark();
@@ -94,7 +94,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	@Override
-	reset(): void {
+	public reset(): void {
 		this.prevAccept.reset();
 		this.startIndex = -1;
 		this._line = 1;
@@ -670,14 +670,14 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	getDFA(mode: number): DFA {
+	public getDFA(mode: number): DFA {
 		return this.atn.modeToDFA[mode];
 	}
 
 	/** Get the text matched so far for the current token.
 	 */
 	@NotNull
-	getText(@NotNull input: CharStream): string {
+	public getText(@NotNull input: CharStream): string {
 		// index is first lookahead char, don't include.
 		return input.getText(Interval.of(this.startIndex, input.index - 1));
 	}
@@ -698,7 +698,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		this._charPositionInLine = charPositionInLine;
 	}
 
-	consume(@NotNull input: CharStream): void {
+	public consume(@NotNull input: CharStream): void {
 		let curChar: number = input.LA(1);
 		if (curChar == '\n'.charCodeAt(0)) {
 			this._line++;
@@ -710,7 +710,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	getTokenName(t: number): string {
+	public getTokenName(t: number): string {
 		if (t === -1) return "EOF";
 		//if ( atn.g!=null ) return atn.g.getTokenDisplayName(t);
 		return "'" + String.fromCharCode(t) + "'";
@@ -737,12 +737,12 @@ export namespace LexerATNSimulator {
 	 *  can simply return the predicted token type.</p>
 	 */
 	export class SimState {
-		index: number = -1;
-		line: number = 0;
-		charPos: number = -1;
-		dfaState?: DFAState;
+		public index: number = -1;
+		public line: number = 0;
+		public charPos: number = -1;
+		public dfaState?: DFAState;
 
-		reset(): void {
+		public reset(): void {
 			this.index = -1;
 			this.line = 0;
 			this.charPos = -1;

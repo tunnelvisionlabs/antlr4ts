@@ -107,7 +107,7 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	nextToken(): Token {
+	public nextToken(): Token {
 		if (this.i >= this.tokens.length) {
 			if (this.eofToken == null) {
 				let start: number = -1;

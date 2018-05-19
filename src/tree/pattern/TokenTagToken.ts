@@ -80,7 +80,7 @@ export class TokenTagToken extends CommonToken {
 	 * {@code tokenName:type}.</p>
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this._tokenName + ":" + this.type;
 	}
 }
