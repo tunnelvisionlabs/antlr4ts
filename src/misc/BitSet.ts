@@ -581,7 +581,7 @@ export class BitSet implements Iterable<number>{
 
 		if (value && lastWord >= this.data.length) {
 			// Grow array "just enough" for bits we need to set
-			var temp = new Uint16Array(lastWord + 1);
+			let temp = new Uint16Array(lastWord + 1);
 			this.data.forEach((value, index) => temp[index] = value);
 			this.data = temp;
 		} else if (!value) {
