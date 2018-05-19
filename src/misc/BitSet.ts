@@ -140,7 +140,8 @@ export class BitSet implements Iterable<number>{
 		let lastWord = -1;	// Keep track of index of last non-zero word
 
 		for (let i = 0; i < words; i++) {
-			if ((data[i] &= other[i]) !== 0) {
+			let value = data[i] &= other[i];
+			if (value !== 0) {
 				lastWord = i;;
 			}
 		}
@@ -165,7 +166,8 @@ export class BitSet implements Iterable<number>{
 		let lastWord = -1;	// Keep track of index of last non-zero word
 
 		for (let i = 0; i < words; i++) {
-			if ((data[i] &= (other[i] ^ 0xFFFF)) !== 0) {
+			let value = data[i] &= (other[i] ^ 0xFFFF);
+			if (value !== 0) {
 				lastWord = i;;
 			}
 		}
@@ -425,14 +427,16 @@ export class BitSet implements Iterable<number>{
 		// Or those words both sets have in common
 
 		for (let i = 0; i < minWords; i++) {
-			if ((dest[i] = data[i] | other[i]) !== 0) lastWord = i;
+			let value = dest[i] = data[i] | other[i];
+			if (value !== 0) lastWord = i;
 		}
 
 		// Copy words from larger set (if there is one)
 
 		const longer = data.length > other.length ? data : other;
 		for (let i = minWords; i < words; i++) {
-			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+			let value = dest[i] = longer[i];
+			if (value !== 0) lastWord = i;
 		}
 
 		if (lastWord === -1) {
@@ -747,14 +751,16 @@ export class BitSet implements Iterable<number>{
 		// Xor those words both sets have in common
 
 		for (let i = 0; i < minWords; i++) {
-			if ((dest[i] = data[i] ^ other[i]) !== 0) lastWord = i;
+			let value = dest[i] = data[i] ^ other[i];
+			if (value !== 0) lastWord = i;
 		}
 
 		// Copy words from larger set (if there is one)
 
 		const longer = data.length > other.length ? data : other;
 		for (let i = minWords; i < words; i++) {
-			if ((dest[i] = longer[i]) !== 0) lastWord = i;
+			let value = dest[i] = longer[i];
+			if (value !== 0) lastWord = i;
 		}
 
 		if (lastWord === -1) {
