@@ -471,9 +471,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		this._input = input;
 	}
 
-    /** Match needs to return the current input symbol, which gets put
-     *  into the label for the associated token ref; e.g., x=ID.
-     */
+	/** Match needs to return the current input symbol, which gets put
+	 *  into the label for the associated token ref; e.g., x=ID.
+	 */
 	@NotNull
 	get currentToken(): Token {
 		return this._input.LT(1);

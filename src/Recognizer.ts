@@ -24,9 +24,9 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
-	 	new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
+		new WeakMap<Vocabulary, ReadonlyMap<string, number>>();
 	private static ruleIndexMapCache =
-	 	new WeakMap<string[], ReadonlyMap<string, number>>();
+		new WeakMap<string[], ReadonlyMap<string, number>>();
 
 	@SuppressWarnings("serial")
 	@NotNull

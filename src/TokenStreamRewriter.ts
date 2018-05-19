@@ -105,7 +105,7 @@ export class TokenStreamRewriter {
 	/** Map String (program name) &rarr; Integer index */
 	protected lastRewriteTokenIndexes: Map<string, number>;
 
-	 constructor(tokens: TokenStream)  {
+	constructor(tokens: TokenStream)  {
 		this.tokens = tokens;
 		this.programs = new Map<string, RewriteOperation[]>();
 		this.programs.set(TokenStreamRewriter.DEFAULT_PROGRAM_NAME, []);

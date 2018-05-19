@@ -8,15 +8,15 @@ import * as assert from "assert";
 import { BitSet } from "../src/misc/BitSet";
 
 describe("BitSet Tests", function() {
-    const empty = new BitSet();
-    const evens = new BitSet(100);
-    for (let i=0; i<100; i+=2)
-        evens.set(i);
+	const empty = new BitSet();
+	const evens = new BitSet(100);
+	for (let i=0; i<100; i+=2)
+		evens.set(i);
 
-    const primes = new BitSet( [3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
-         59, 61, 67, 71, 73, 79, 83, 89, 97]);
+	const primes = new BitSet( [3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
+		59, 61, 67, 71, 73, 79, 83, 89, 97]);
 
-    describe("empty", function() {
+	describe("empty", function() {
 		it("has zero length", ()=>{
 			assert.equal(empty.length(), 0);
 		});
@@ -128,10 +128,10 @@ describe("BitSet Tests", function() {
 			a.xor(o);
 			assert.equal(a, "{75}");
 		})
-    });
+	});
 
-    describe("evens", ()=> {
-        it("has bits set", ()=>{
+	describe("evens", ()=> {
+		it("has bits set", ()=>{
 			for (let i=0; i<100; i += 2)
 				assert.equal( evens.get(i), true );
 			});
@@ -200,9 +200,9 @@ describe("BitSet Tests", function() {
 			assert.equal(a.previousClearBit(69), 50);
 		})
 
-    });
+	});
 
-    describe("primes", () => {
+	describe("primes", () => {
 		it("length()", ()=>{
 			assert.equal(primes.length(), 98);
 			})
@@ -210,10 +210,10 @@ describe("BitSet Tests", function() {
 			assert.equal(primes.cardinality(), 25);
 		});
 		it("toString() as expected", ()=>{
-	        const s = primes.toString();
-        	assert.equal(s, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}");
+			const s = primes.toString();
+			assert.equal(s, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97}");
 		});
-	    it("and operation", ()=> {
+		it("and operation", ()=> {
 			const a = new BitSet(evens);
 			a.and(primes);
 			assert.equal(a.cardinality(), 1);
@@ -246,7 +246,7 @@ describe("BitSet Tests", function() {
 			c.or(primes);
 			assert.equal(b.cardinality(), c.cardinality() - 1);
 		});
-    });
+	});
 
 	describe("range operations", ()=> {
 		const ninetys = new BitSet();

@@ -6,7 +6,7 @@
     "class-name": false,
     "comment-format": false,
     "curly": false,
-    "indent": [false, "tabs"],
+    "indent": [true, "tabs"],
     "interface-name": false,
     "interface-over-type-literal": false,
     "jsdoc-format": false,
@@ -43,5 +43,14 @@
     "unified-signatures": false,
     "variable-name": false,
     "whitespace": false
+  },
+  "linterOptions": {
+    "exclude": [
+      // Disabled due to uncontrollable space indentation
+      "test/runtime/gen/TestParseTrees/testTokenAndRuleContextString/TParser.ts",
+      "test/runtime/gen/TestSemPredEvalLexer/testIndent/L.ts",
+      "test/runtime/gen/TestSemPredEvalLexer/testLexerInputPositionSensitivePredicates/L.ts",
+      "test/runtime/gen/TestSemPredEvalLexer/testPredicatedKeywords/L.ts"
+    ]
   }
 }

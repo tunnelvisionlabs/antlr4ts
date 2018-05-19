@@ -27,14 +27,14 @@ export class Trees {
 	 *  parse trees and extract data appropriately.
 	 */
 
-    /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
-     *  node payloads to get the text for the nodes.  Detect
-     *  parse trees and extract data appropriately.
-     */
+	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
+	 *  node payloads to get the text for the nodes.  Detect
+	 *  parse trees and extract data appropriately.
+	 */
 
-    /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
-     *  node payloads to get the text for the nodes.
-     */
+	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
+	 *  node payloads to get the text for the nodes.
+	 */
 	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
 		let ruleNames: string[];
 		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
@@ -117,11 +117,11 @@ export class Trees {
 		return ancestors;
 	}
 
-    /** Return true if t is u's parent or a node on path to root from u.
-     *  Use == not equals().
-     *
-     *  @since 4.5.1
-     */
+	/** Return true if t is u's parent or a node on path to root from u.
+	 *  Use == not equals().
+	 *
+	 *  @since 4.5.1
+	 */
 	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
 		if (!t || !u || !t.parent) return false;
 		let p = u.parent;

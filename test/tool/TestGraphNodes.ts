@@ -31,7 +31,7 @@ export class TestGraphNodes {
 
 	@Test test_$_$(): void {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_LOCAL,
-													  PredictionContext.EMPTY_LOCAL);
+													PredictionContext.EMPTY_LOCAL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +
@@ -43,7 +43,7 @@ export class TestGraphNodes {
 
 	@Test test_$_$_fullctx(): void {
 		let r: PredictionContext =  this.contextCache.join(PredictionContext.EMPTY_FULL,
-													  PredictionContext.EMPTY_FULL);
+													PredictionContext.EMPTY_FULL);
 		// console.log(toDOTString(r));
 		let expecting: string =
 			"digraph G {\n" +

@@ -775,7 +775,7 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
 	@Override public get ruleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
-<if(struct.provideCopyFrom)> <! don't need copy unless we have subclasses !>
+<if(struct.provideCopyFrom)><! don't need copy unless we have subclasses !>
 	public copyFrom(ctx: <struct.name>): void {
 		super.copyFrom(ctx);
 		<struct.attrs:{a | this.<a.name> = ctx.<a.name>;}; separator="\n">

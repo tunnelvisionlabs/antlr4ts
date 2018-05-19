@@ -480,8 +480,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	protected execDFA(@NotNull dfa: DFA,
-					   @NotNull input: TokenStream, startIndex: number,
-					   @NotNull state: SimulatorState): number {
+					@NotNull input: TokenStream, startIndex: number,
+					@NotNull state: SimulatorState): number {
 		let outerContext: ParserRuleContext = state.outerContext;
 		if (ParserATNSimulator.dfa_debug) console.log("DFA decision " + dfa.decision +
 			" exec LA(1)==" + this.getLookaheadName(input) +
@@ -736,8 +736,8 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	 */
 	protected execATN(@NotNull dfa: DFA,
-					   @NotNull input: TokenStream, startIndex: number,
-					   @NotNull initialState: SimulatorState): number {
+					@NotNull input: TokenStream, startIndex: number,
+					@NotNull initialState: SimulatorState): number {
 		if (ParserATNSimulator.debug) console.log("execATN decision " + dfa.decision + " exec LA(1)==" + this.getLookaheadName(input));
 
 		let outerContext: ParserRuleContext = initialState.outerContext;

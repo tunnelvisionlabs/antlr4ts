@@ -143,7 +143,7 @@ export class BufferedTokenStream implements TokenStream {
 		}
 	}
 
-    /** Make sure index {@code i} in tokens has a token.
+	/** Make sure index {@code i} in tokens has a token.
 	 *
 	 * @return {@code true} if a token is located at index {@code i}, otherwise
 	 *    {@code false}.
@@ -161,7 +161,7 @@ export class BufferedTokenStream implements TokenStream {
 		return true;
 	}
 
-    /** Add {@code n} elements to buffer.
+	/** Add {@code n} elements to buffer.
 	 *
 	 * @return The actual number of elements added to the buffer.
 	 */
@@ -298,10 +298,10 @@ export class BufferedTokenStream implements TokenStream {
 		this.p = this.adjustSeekIndex(0);
 	}
 
-    /** Given a start and stop index, return a {@code List} of all tokens in
-     *  the token type {@code BitSet}.  Return {@code null} if no tokens were found.  This
-     *  method looks at both on and off channel tokens.
-     */
+	/** Given a start and stop index, return a {@code List} of all tokens in
+	 *  the token type {@code BitSet}.  Return {@code null} if no tokens were found.  This
+	 *  method looks at both on and off channel tokens.
+	 */
 	getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {
 		this.lazyInit();
 

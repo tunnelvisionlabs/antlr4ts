@@ -324,7 +324,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	protected accept(@NotNull input: CharStream, lexerActionExecutor: LexerActionExecutor | undefined,
-						  startIndex: number, index: number, line: number, charPos: number): void {
+						startIndex: number, index: number, line: number, charPos: number): void {
 		if (LexerATNSimulator.debug) {
 			console.log(`ACTION ${lexerActionExecutor}`);
 		}

@@ -257,7 +257,7 @@ Result(r) ::= <%<r>%>
 ParserPropertyMember() ::= <<
 @members {
 Property(): boolean {
-  return true;
+	return true;
 }
 }
 >>

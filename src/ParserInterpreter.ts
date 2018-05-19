@@ -98,9 +98,9 @@ export class ParserInterpreter extends Parser {
 	 */
 	constructor(/*@NotNull*/ old: ParserInterpreter);
 	constructor(grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
-							 ruleNames: string[], atn: ATN, input: TokenStream);
+							ruleNames: string[], atn: ATN, input: TokenStream);
 	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
-							 ruleNames?: string[], atn?: ATN, input?: TokenStream) {
+							ruleNames?: string[], atn?: ATN, input?: TokenStream) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;

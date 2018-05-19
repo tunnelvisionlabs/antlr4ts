@@ -39,7 +39,7 @@ export class JavaUnicodeInputStream implements CharStream {
 
 	private la1: number;
 
-	 constructor(@NotNull source: CharStream)  {
+	constructor(@NotNull source: CharStream)  {
 		if (source == null) {
 			throw new Error("NullPointerException: source");
 		}

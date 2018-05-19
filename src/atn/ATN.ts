@@ -132,11 +132,11 @@ export class ATN {
 	// @NotNull
 	nextTokens(s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
-    /**
+	/**
 	 * Compute the set of valid tokens that can occur starting in {@code s} and
 	 * staying in same rule. {@link Token#EPSILON} is in set if we reach end of
 	 * rule.
-     */
+	 */
 	// @NotNull
 	nextTokens(/*@NotNull*/ s: ATNState): IntervalSet;
 
