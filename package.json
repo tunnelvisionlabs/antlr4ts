@@ -21,6 +21,7 @@
     "antlr4ts-benchmark-lr": "cd benchmark && antlr4ts -visitor JavaLR.g4 -DbaseImportPath=../../../src -o gen/lr",
     "antlr4ts-benchmark-lr-atn": "cd benchmark && antlr4ts -visitor -Xforce-atn JavaLR.g4 -DbaseImportPath=../../../src -o gen/lr-atn",
     "tsc": "tsc",
+    "tsc-watch": "tsc -w -p .",
     "buildrts": "cd test/runtime && tsc",
     "test": "mocha",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
