@@ -1,7 +1,6 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "adjacent-overload-signatures": false,
     "align": false,
     "arrow-parens": false,
     "arrow-return-shorthand": false,

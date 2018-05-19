@@ -125,6 +125,16 @@ export class CommonToken implements WritableToken {
 	}
 
 	// @Override
+	set type(type: number) {
+		this._type = type;
+	}
+
+	@Override
+	get line(): number {
+		return this._line;
+	}
+
+	// @Override
 	set line(line: number) {
 		this._line = line;
 	}
@@ -163,11 +173,6 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	get line(): number {
-		return this._line;
-	}
-
-	@Override
 	get charPositionInLine(): number {
 		return this._charPositionInLine;
 	}
@@ -185,11 +190,6 @@ export class CommonToken implements WritableToken {
 	// @Override
 	set channel(channel: number) {
 		this._channel = channel;
-	}
-
-	// @Override
-	set type(type: number) {
-		this._type = type;
 	}
 
 	@Override

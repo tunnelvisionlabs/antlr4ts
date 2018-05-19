@@ -222,6 +222,11 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._factory = factory;
 	}
 
+	@Override
+	get inputStream(): CharStream {
+		return this._input;
+	}
+
 	/** Set the char stream and reset the lexer */
 	set inputStream(input: CharStream) {
 		this.reset(false);
@@ -232,11 +237,6 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	@Override
 	get sourceName(): string {
 		return this._input.sourceName;
-	}
-
-	@Override
-	get inputStream(): CharStream {
-		return this._input;
 	}
 
 
@@ -280,13 +280,13 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this.interpreter.line;
 	}
 
+	set line(line: number) {
+		this.interpreter.line = line;
+	}
+
 	@Override
 	get charPositionInLine(): number {
 		return this.interpreter.charPositionInLine;
-	}
-
-	set line(line: number) {
-		this.interpreter.line = line;
 	}
 
 	set charPositionInLine(charPositionInLine: number) {
