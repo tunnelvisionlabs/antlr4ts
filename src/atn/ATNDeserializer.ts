@@ -319,7 +319,7 @@ export class ATNDeserializer {
 		}
 
 		// edges for rule stop states can be derived, so they aren't serialized
-		type T = { stopState: number, returnState: number, outermostPrecedenceReturn: number };
+		interface T { stopState: number, returnState: number, outermostPrecedenceReturn: number }
 		let returnTransitionsSet = new Array2DHashSet<T>({
 			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
 

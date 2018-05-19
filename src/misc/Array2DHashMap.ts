@@ -13,7 +13,7 @@ import { JavaIterator } from './Stubs';
 
 // Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
 // key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.
-type Bucket<K, V> = { key: K, value?: V };
+interface Bucket<K, V> { key: K, value?: V }
 
 class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>> {
 	private readonly keyComparator: EqualityComparator<K>;
