@@ -2,7 +2,6 @@
   "extends": "tslint:recommended",
   "rules": {
     "align": false,
-    "array-type": false,
     "ban-types": false,
     "class-name": false,
     "comment-format": false,

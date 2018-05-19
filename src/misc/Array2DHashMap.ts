@@ -213,9 +213,9 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.size;
 	}
 
-	toArray(): JavaMap.Entry<K, V>[];
-	toArray(a: JavaMap.Entry<K, V>[]): JavaMap.Entry<K, V>[];
-	toArray(a?: JavaMap.Entry<K, V>[]): JavaMap.Entry<K, V>[] {
+	toArray(): Array<JavaMap.Entry<K, V>>;
+	toArray(a: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>>;
+	toArray(a?: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 }

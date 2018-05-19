@@ -462,13 +462,13 @@ export class TestPerformance {
 	 */
 	public static readonly NUMBER_OF_THREADS: number =  1;
 
-    private static readonly sharedLexers: (Lexer | undefined)[] =  new Array<Lexer>(TestPerformance.NUMBER_OF_THREADS);
-	private static readonly sharedLexerATNs: (ATN | undefined)[] =  new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
+    private static readonly sharedLexers: Array<Lexer | undefined> =  new Array<Lexer>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedLexerATNs: Array<ATN | undefined> =  new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
 
-    private static readonly sharedParsers: (AnyJavaParser | undefined)[] =  new Array<AnyJavaParser>(TestPerformance.NUMBER_OF_THREADS);
-	private static readonly sharedParserATNs: (ATN | undefined)[] =  new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
+    private static readonly sharedParsers: Array<AnyJavaParser | undefined> =  new Array<AnyJavaParser>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedParserATNs: Array<ATN | undefined> =  new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
 
-    private static readonly sharedListeners: (ParseTreeListener | undefined)[] =  new Array<ParseTreeListener>(TestPerformance.NUMBER_OF_THREADS);
+    private static readonly sharedListeners: Array<ParseTreeListener | undefined> =  new Array<ParseTreeListener>(TestPerformance.NUMBER_OF_THREADS);
 
 	private static readonly totalTransitionsPerFile: Uint32Array[] = new Array<Uint32Array>(TestPerformance.PASSES);
 	private static readonly computedTransitionsPerFile: Uint32Array[] = new Array<Uint32Array>(TestPerformance.PASSES);
@@ -889,7 +889,7 @@ export class TestPerformance {
         let inputSize: number =  0;
 		let inputCount: number =  0;
 
-		let results: (FileParseResult | undefined)[] = [];
+		let results: Array<FileParseResult | undefined> = [];
 		// let executorService: ExecutorService;
 		// if (TestPerformance.FILE_GRANULARITY) {
 		// 	executorService = Executors.newFixedThreadPool(TestPerformance.FILE_GRANULARITY ? TestPerformance.NUMBER_OF_THREADS : 1, new NumberedThreadFactory());

@@ -194,10 +194,10 @@ case <f.ruleIndex>:
 >>
 
 vocabulary(className, literalNames, symbolicNames) ::= <<
-private static readonly _LITERAL_NAMES: (string | undefined)[] = [
+private static readonly _LITERAL_NAMES: Array\<string | undefined> = [
 	<literalNames:{t | <t>}; null="undefined", separator=", ", wrap, anchor>
 ];
-private static readonly _SYMBOLIC_NAMES: (string | undefined)[] = [
+private static readonly _SYMBOLIC_NAMES: Array\<string | undefined> = [
 	<symbolicNames:{t | <t>}; null="undefined", separator=", ", wrap, anchor>
 ];
 public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._LITERAL_NAMES, <className>._SYMBOLIC_NAMES, []);

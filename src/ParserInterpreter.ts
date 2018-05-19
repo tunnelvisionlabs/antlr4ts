@@ -71,7 +71,7 @@ export class ParserInterpreter extends Parser {
 	 *  Those values are used to create new recursive rule invocation contexts
 	 *  associated with left operand of an alt like "expr '*' expr".
 	 */
-	protected readonly _parentContextStack: [ParserRuleContext, number][] = [];
+	protected readonly _parentContextStack: Array<[ParserRuleContext, number]> = [];
 
 	/** We need a map from (decision,inputIndex)->forced alt for computing ambiguous
 	 *  parse trees. For now, we allow exactly one override.

@@ -132,21 +132,21 @@ export class Trees {
 		return false;
 	}
 
-	static findAllTokenNodes(t: ParseTree, ttype: number): Array<ParseTree> {
+	static findAllTokenNodes(t: ParseTree, ttype: number): ParseTree[] {
 		return Trees.findAllNodes(t, ttype, true);
 	}
 
-	static findAllRuleNodes(t: ParseTree, ruleIndex: number): Array<ParseTree> {
+	static findAllRuleNodes(t: ParseTree, ruleIndex: number): ParseTree[] {
 		return Trees.findAllNodes(t, ruleIndex, false);
 	}
 
-	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): Array<ParseTree> {
+	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): ParseTree[] {
 		let nodes = [] as ParseTree[];
 		Trees._findAllNodes(t, index, findTokens, nodes);
 		return nodes;
 	}
 
-	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
+	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: ParseTree[]) {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
 			if (t.symbol.type === index) nodes.push(t);

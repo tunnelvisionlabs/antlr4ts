@@ -331,7 +331,7 @@ export class ParserRuleContext extends RuleContext {
 
 	/** Used for rule context info debugging during parse-time, not so much for ATN debugging */
 	toInfoString(recognizer: Parser): string {
-		let rules: Array<string> =
+		let rules: string[] =
 			recognizer.getRuleInvocationStack(this).reverse();
 		return "ParserRuleContext" + rules + "{" +
 			"start=" + this._start +

@@ -166,7 +166,7 @@ Concat(a,b) ::= "<a><b>"
 
 DeclareLocal(s,v) ::= "let <s> = <v>;"
 
-AssertIsList(v) ::= "let __ttt__: Array\<any> = <v>;" // just use static type system
+AssertIsList(v) ::= "let __ttt__: any[] = <v>;" // just use static type system
 
 AssignLocal(s,v) ::= "<s> = <v>;"
 
