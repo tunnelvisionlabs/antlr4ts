@@ -131,10 +131,10 @@ export class DFA {
 
 		// s0 and s0full are never null for a precedence DFA
 		if (fullContext) {
-			return (<DFAState>this.s0full).getTarget(precedence);
+			return (this.s0full as DFAState).getTarget(precedence);
 		}
 		else {
-			return (<DFAState>this.s0).getTarget(precedence);
+			return (this.s0 as DFAState).getTarget(precedence);
 		}
 	}
 
@@ -159,11 +159,11 @@ export class DFA {
 
 		if (fullContext) {
 			// s0full is never null for a precedence DFA
-			(<DFAState>this.s0full).setTarget(precedence, startState);
+			(this.s0full as DFAState).setTarget(precedence, startState);
 		}
 		else {
 			// s0 is never null for a precedence DFA
-			(<DFAState>this.s0).setTarget(precedence, startState);
+			(this.s0 as DFAState).setTarget(precedence, startState);
 		}
 	}
 
@@ -179,7 +179,7 @@ export class DFA {
 	get isContextSensitive(): boolean {
 		if (this.isPrecedenceDfa) {
 			// s0full is never null for a precedence DFA
-			return (<DFAState>this.s0full).getEdgeMap().size > 0;
+			return (this.s0full as DFAState).getEdgeMap().size > 0;
 		}
 
 		return this.s0full != null;

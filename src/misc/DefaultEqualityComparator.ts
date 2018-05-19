@@ -31,7 +31,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 		} else if (typeof obj === 'string' || typeof obj === 'number') {
 			return MurmurHash.hashCode([obj]);
 		} else {
-			return ObjectEqualityComparator.INSTANCE.hashCode(<Equatable>obj);
+			return ObjectEqualityComparator.INSTANCE.hashCode(obj as Equatable);
 		}
 	}
 
@@ -51,7 +51,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 		} else if (typeof a === 'string' || typeof a === 'number') {
 			return a === b;
 		} else {
-			return ObjectEqualityComparator.INSTANCE.equals(<Equatable>a, <Equatable>b);
+			return ObjectEqualityComparator.INSTANCE.equals(a as Equatable, b as Equatable);
 		}
 	}
 }

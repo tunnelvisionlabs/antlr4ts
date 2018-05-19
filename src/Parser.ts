@@ -157,7 +157,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		this._errHandler.reset(this);
-		this._ctx = <any>undefined;
+		this._ctx = undefined as any;
 		this._syntaxErrors = 0;
 		this.matchedEOF = false;
 		this.isTrace = false;

@@ -248,7 +248,7 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				t = <Transition>t;
+				t = t as Transition;
 				let set: IntervalSet | undefined = t.label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {

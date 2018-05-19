@@ -488,7 +488,7 @@ export class TestPerformance {
 	public compileJdk(): void {
 		let jdkSourceRoot: string | undefined = this.getSourceRoot("JDK");
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
-		jdkSourceRoot = <string>jdkSourceRoot;
+		jdkSourceRoot = jdkSourceRoot as string;
 
 		let lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
 		let parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
@@ -1714,7 +1714,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let llPredictions: BitSet =  this.getConflictingAlts(ambigAlts, configs);
 			let llPrediction: number =  llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
 			if (sllPrediction !== llPrediction) {
-				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
+				(recognizer.interpreter as StatisticsParserATNSimulator).nonSll[dfa.decision]++;
 			}
 		}
 
@@ -1751,7 +1751,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 			let sllPredictions: BitSet =  this.getConflictingAlts(this._sllConflict, this._sllConfigs);
 			let sllPrediction: number =  sllPredictions.nextSetBit(0);
 			if (sllPrediction !== prediction) {
-				(<StatisticsParserATNSimulator>recognizer.interpreter).nonSll[dfa.decision]++;
+				(recognizer.interpreter as StatisticsParserATNSimulator).nonSll[dfa.decision]++;
 			}
 		}
 

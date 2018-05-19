@@ -509,7 +509,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					assert(remainingOuterContext != null);
-					remainingOuterContext = (<ParserRuleContext>remainingOuterContext).parent;
+					remainingOuterContext = (remainingOuterContext as ParserRuleContext).parent;
 					s = next;
 				}
 			}
@@ -1004,7 +1004,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				assert(remainingGlobalContext != null);
-				remainingGlobalContext = (<ParserRuleContext>remainingGlobalContext).parent;
+				remainingGlobalContext = (remainingGlobalContext as ParserRuleContext).parent;
 				s = next;
 			}
 		}
@@ -1171,7 +1171,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				reach.clear();
 
 				// We know remainingGlobalContext is not undefined at this point (why?)
-				remainingGlobalContext = <ParserRuleContext>remainingGlobalContext;
+				remainingGlobalContext = remainingGlobalContext as ParserRuleContext;
 
 				remainingGlobalContext = this.skipTailCalls(remainingGlobalContext);
 				let nextContextElement: number = this.getReturnState(remainingGlobalContext);
@@ -1373,7 +1373,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			next.setContextSensitive(this.atn);
 
 			// We know remainingGlobalContext is not undefined at this point (why?)
-			remainingGlobalContext = <ParserRuleContext>remainingGlobalContext;
+			remainingGlobalContext = remainingGlobalContext as ParserRuleContext;
 
 			configs.clear();
 			remainingGlobalContext = this.skipTailCalls(remainingGlobalContext);
@@ -1569,7 +1569,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		// At this point we know `altToPred` doesn't contain any undefined entries
-		let result: SemanticContext[] | undefined = <SemanticContext[]>altToPred;
+		let result: SemanticContext[] | undefined = altToPred as SemanticContext[];
 
 		// nonambig alts are undefined in result
 		if (nPredAlts === 0) result = undefined;
@@ -1826,7 +1826,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					if (this.dfa != null && this.dfa.isPrecedenceDfa) {
-						let outermostPrecedenceReturn: number = (<EpsilonTransition>t).outermostPrecedenceReturn;
+						let outermostPrecedenceReturn: number = (t as EpsilonTransition).outermostPrecedenceReturn;
 						if (outermostPrecedenceReturn === this.dfa.atnStartState.ruleIndex) {
 							c.isPrecedenceFilterSuppressed = true;
 						}
@@ -1839,7 +1839,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					if (ParserATNSimulator.debug) console.log("dips into outer ctx: " + c);
 				}
 				else if (t instanceof RuleTransition) {
-					if (this.optimize_tail_calls && (<RuleTransition>t).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
+					if (this.optimize_tail_calls && (t as RuleTransition).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
 						assert(c.context === config.context);
 						if (newDepth === 0) {
 							// the pop/push of a tail call would keep the depth
@@ -1873,16 +1873,16 @@ export class ParserATNSimulator extends ATNSimulator {
 	protected getEpsilonTarget(@NotNull config: ATNConfig, @NotNull t: Transition, collectPredicates: boolean, inContext: boolean, contextCache: PredictionContextCache, treatEofAsEpsilon: boolean): ATNConfig | undefined {
 		switch (t.serializationType) {
 		case TransitionType.RULE:
-			return this.ruleTransition(config, <RuleTransition>t, contextCache);
+			return this.ruleTransition(config, t as RuleTransition, contextCache);
 
 		case TransitionType.PRECEDENCE:
-			return this.precedenceTransition(config, <PrecedencePredicateTransition>t, collectPredicates, inContext);
+			return this.precedenceTransition(config, t as PrecedencePredicateTransition, collectPredicates, inContext);
 
 		case TransitionType.PREDICATE:
-			return this.predTransition(config, <PredicateTransition>t, collectPredicates, inContext);
+			return this.predTransition(config, t as PredicateTransition, collectPredicates, inContext);
 
 		case TransitionType.ACTION:
-			return this.actionTransition(config, <ActionTransition>t);
+			return this.actionTransition(config, t as ActionTransition);
 
 		case TransitionType.EPSILON:
 			return config.transform(t.target, false);
@@ -2337,7 +2337,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 		let newState: DFAState = this.createDFAState(dfa, configs.clone(true));
 		// getDecisionState won't return undefined when we request a known valid decision
-		let decisionState: DecisionState = <DecisionState>this.atn.getDecisionState(dfa.decision);
+		let decisionState: DecisionState = this.atn.getDecisionState(dfa.decision) as DecisionState;
 		let predictedAlt: number = this.getUniqueAlt(configs);
 		if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
 			newState.acceptStateInfo = new AcceptStateInfo(predictedAlt);
@@ -2423,7 +2423,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		let state: ATNState = this.atn.states[context.invokingState];
-		let transition: RuleTransition = <RuleTransition>state.transition(0);
+		let transition: RuleTransition = state.transition(0) as RuleTransition;
 		return transition.followState.stateNumber;
 	}
 
@@ -2435,14 +2435,14 @@ export class ParserATNSimulator extends ATNSimulator {
 		while (!context.isEmpty) {
 			let state: ATNState = this.atn.states[context.invokingState];
 			assert(state.numberOfTransitions === 1 && state.transition(0).serializationType === TransitionType.RULE);
-			let transition: RuleTransition = <RuleTransition>state.transition(0);
+			let transition: RuleTransition = state.transition(0) as RuleTransition;
 			if (!transition.tailCall) {
 				break;
 			}
 
 			// This method requires that the root ancestor of the ParserRuleContext be empty. If we make it to this
 			// line, we know the current node is not empty, which means it does have a parent.
-			context = <ParserRuleContext>context.parent;
+			context = context.parent as ParserRuleContext;
 		}
 
 		return context;

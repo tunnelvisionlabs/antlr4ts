@@ -123,7 +123,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 				this.unmerged = undefined;
 			} else if (!set.isReadOnly) {
 				this.mergedConfigs = NewKeyedConfigMap(set.mergedConfigs);
-				this.unmerged = (<ATNConfig[]>set.unmerged).slice(0);
+				this.unmerged = (set.unmerged as ATNConfig[]).slice(0);
 			} else {
 				this.mergedConfigs = NewKeyedConfigMap();
 				this.unmerged = [];

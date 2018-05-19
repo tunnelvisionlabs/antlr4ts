@@ -440,7 +440,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		switch (t.serializationType) {
 		case TransitionType.RULE:
-			let ruleTransition: RuleTransition = <RuleTransition>t;
+			let ruleTransition: RuleTransition = t as RuleTransition;
 			if (this.optimize_tail_calls && ruleTransition.optimizedTailCall && !config.context.hasEmpty) {
 				c = config.transform(t.target, true);
 			}
@@ -473,7 +473,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				states reached by traversing predicates. Since this is when we
 				test them, we cannot cash the DFA state target of ID.
 			*/
-			let pt: PredicateTransition = <PredicateTransition>t;
+			let pt: PredicateTransition = t as PredicateTransition;
 			if (LexerATNSimulator.debug) {
 				console.log("EVAL rule " + pt.ruleIndex + ":" + pt.predIndex);
 			}
@@ -501,7 +501,7 @@ export class LexerATNSimulator extends ATNSimulator {
 				// getEpsilonTarget to return two configurations, so
 				// additional modifications are needed before we can support
 				// the split operation.
-				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.lexerActionExecutor, this.atn.lexerActions[(<ActionTransition>t).actionIndex]);
+				let lexerActionExecutor: LexerActionExecutor = LexerActionExecutor.append(config.lexerActionExecutor, this.atn.lexerActions[(t as ActionTransition).actionIndex]);
 				c = config.transform(t.target, true, lexerActionExecutor);
 				break;
 			}

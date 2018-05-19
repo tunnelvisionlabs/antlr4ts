@@ -12,7 +12,7 @@ import { StarLoopEntryState } from './StarLoopEntryState';
 
 export class StarLoopbackState extends ATNState {
 	get loopEntryState(): StarLoopEntryState {
-		return <StarLoopEntryState>this.transition(0).target;
+		return this.transition(0).target as StarLoopEntryState;
 	}
 
 	@Override
