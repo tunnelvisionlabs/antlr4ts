@@ -327,7 +327,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * @param listener the listener to remove
 	 */
 	removeParseListener(listener: ParseTreeListener): void {
-		let index = this._parseListeners.findIndex(l => l === listener);
+		let index = this._parseListeners.findIndex((l) => l === listener);
 		if (index != -1) {
 			this._parseListeners.splice(index, 1);
 		}

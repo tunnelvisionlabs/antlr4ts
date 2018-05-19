@@ -36,7 +36,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 		charPositionInLine: number,
 		@NotNull msg: string,
 		e: RecognitionException | undefined): void {
-		this.delegates.forEach(listener => {
+		this.delegates.forEach((listener) => {
 			if (listener.syntaxError) {
 				listener.syntaxError(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
 			}

@@ -99,7 +99,7 @@ function listFilesSync(directory: string, filter: FilenameFilter): string[] {
 		return filter.accept(directory, path.basename(value));
 	});
 
-	return files.map(value => path.join(directory, value));
+	return files.map((value) => path.join(directory, value));
 }
 
 function writeFileSync(directory: string, name: string, content: string): void {

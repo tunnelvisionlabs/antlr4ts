@@ -37,7 +37,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		ambigAlts: BitSet | undefined,
 		configs: ATNConfigSet): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportAmbiguity) {
 					listener.reportAmbiguity(
 						recognizer,
@@ -60,7 +60,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		conflictingAlts: BitSet | undefined,
 		conflictState: SimulatorState): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportAttemptingFullContext) {
 					listener.reportAttemptingFullContext(
 						recognizer,
@@ -81,7 +81,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		prediction: number,
 		acceptState: SimulatorState): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportContextSensitivity) {
 					listener.reportContextSensitivity(
 						recognizer,
