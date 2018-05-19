@@ -6,3 +6,4 @@ jdk: openjdk6
 script:
   # npm install is run automatically by Travis before 'script'
   - npm test
+  - npm run tslint

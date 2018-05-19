@@ -20,6 +20,9 @@
     "antlr4ts-benchmark-std-atn": "cd benchmark && antlr4ts -visitor -Xforce-atn Java.g4 -DbaseImportPath=../../../src -o gen/std-atn",
     "antlr4ts-benchmark-lr": "cd benchmark && antlr4ts -visitor JavaLR.g4 -DbaseImportPath=../../../src -o gen/lr",
     "antlr4ts-benchmark-lr-atn": "cd benchmark && antlr4ts -visitor -Xforce-atn JavaLR.g4 -DbaseImportPath=../../../src -o gen/lr-atn",
+    "tslint": "npm run tslint-runtime && npm run tslint-tests",
+    "tslint-runtime": "tslint -p ./tsconfig.json",
+    "tslint-tests": "tslint -p ./test/runtime/tsconfig.json",
     "tsc": "tsc",
     "buildrts": "cd test/runtime && tsc",
     "test": "mocha",
@@ -58,6 +61,7 @@
     "mocha-typescript": "^1.0.10",
     "source-map-support": "^0.4.3",
     "std-mocks": "^1.0.1",
+    "tslint": "5.10.0",
     "typedoc": "^0.5.1",
     "typescript": "^2.6.2"
   },
