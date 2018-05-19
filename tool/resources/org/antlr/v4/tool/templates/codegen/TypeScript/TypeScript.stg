@@ -33,7 +33,7 @@ import { ParseTreeListener } from '<basePath()>/tree/ParseTreeListener';
 import { ParseTreeVisitor } from '<basePath()>/tree/ParseTreeVisitor';
 import { RecognitionException } from '<basePath()>/RecognitionException';
 import { RuleContext } from '<basePath()>/RuleContext';
-import { RuleVersion } from '<basePath()>/RuleVersion';
+//import { RuleVersion } from '<basePath()>/RuleVersion';
 import { TerminalNode } from '<basePath()>/tree/TerminalNode';
 import { Token } from '<basePath()>/Token';
 import { TokenStream } from '<basePath()>/TokenStream';
@@ -272,7 +272,7 @@ case <index>:
 >>
 
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
-@RuleVersion(<namedActions.version; null="0">)
+//@RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
@@ -381,7 +381,7 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType>;
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p: number): <currentRule.ctxType>;
-@RuleVersion(<namedActions.version; null="0">)
+//@RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p?: number): <currentRule.ctxType> {
 	if (_p === undefined) {
 		_p = 0;
@@ -688,9 +688,9 @@ ThisRulePropertyRef_text(r)	 ::= "this._input.getTextFromRange(_localctx._start,
 ThisRulePropertyRef_ctx(r)	 ::= "_localctx"
 ThisRulePropertyRef_parser(r)	 ::= "this"
 
-NonLocalAttrRef(s)		 ::= "(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name>"
+NonLocalAttrRef(s)		 ::= "(\<<s.ruleName; format=\"cap\">Context>this.getInvokingContext(<s.ruleIndex>)).<s.name>"
 SetNonLocalAttr(s, rhsChunks)	  ::=
-	"(getInvokingContext(<s.ruleIndex>) as <s.ruleName; format=\"cap\">Context).<s.name> = <rhsChunks>;"
+	"(\<<s.ruleName; format=\"cap\">Context>this.getInvokingContext(<s.ruleIndex>)).<s.name> = <rhsChunks>;"
 
 AddToLabelList(a) ::= "<ctx(a.label)>._<a.listName>.push(<labelref(a.label)>);"
 
