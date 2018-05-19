@@ -273,7 +273,7 @@ export class ParseTreePatternMatcher {
 
 		// x and <ID>, x and y, or x and x; or could be mismatched types
 		if (tree instanceof TerminalNode && patternTree instanceof TerminalNode) {
-			let mismatchedNode: ParseTree | undefined = undefined;
+			let mismatchedNode: ParseTree | undefined;
 			// both are tokens and they have same type
 			if (tree.symbol.type === patternTree.symbol.type) {
 				if (patternTree.symbol instanceof TokenTagToken) { // x and <ID>
@@ -306,7 +306,7 @@ export class ParseTreePatternMatcher {
 
 		if (tree instanceof ParserRuleContext
 			&& patternTree instanceof ParserRuleContext) {
-			let mismatchedNode: ParseTree | undefined = undefined;
+			let mismatchedNode: ParseTree | undefined;
 			// (expr ...) and <expr>
 			let ruleTagToken = this.getRuleTagToken(patternTree);
 			if (ruleTagToken) {
@@ -475,7 +475,7 @@ export class ParseTreePatternMatcher {
 			// copy inside of <tag>
 			let tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
 			let ruleOrToken: string = tag;
-			let label: string | undefined = undefined;
+			let label: string | undefined;
 			let colon: number = tag.indexOf(':');
 			if (colon >= 0) {
 				label = tag.substring(0, colon);

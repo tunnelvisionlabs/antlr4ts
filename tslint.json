@@ -19,7 +19,6 @@
     "no-empty": false,
     "no-namespace": false,
     "no-shadowed-variable": false,
-    "no-unnecessary-initializer": false,
     "no-unused-expression": false,
     "no-trailing-whitespace": false,
     "no-var-requires": false,

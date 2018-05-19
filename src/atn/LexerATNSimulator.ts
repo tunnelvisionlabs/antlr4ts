@@ -652,7 +652,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		configs.optimizeConfigs(this);
 		let newState: DFAState = new DFAState(configs.clone(true));
 
-		let firstConfigWithRuleStopState: ATNConfig | undefined = undefined;
+		let firstConfigWithRuleStopState: ATNConfig | undefined;
 		for (let c of asIterable(configs)) {
 			if (c.state instanceof RuleStopState) {
 				firstConfigWithRuleStopState = c;
