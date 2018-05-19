@@ -143,7 +143,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		if (reachState == null) {
 			// no reach on current lookahead symbol. ERROR.
 			this.decisions[this.currentDecision].errors.push(
-				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index)
+				new ErrorInfo(this.currentDecision, previous, this._input, this._startIndex, this._input.index),
 			);
 		}
 
@@ -181,7 +181,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			if (existingTargetState === ATNSimulator.ERROR) {
 				let state: SimulatorState = new SimulatorState(this.currentState.outerContext, previousD, this.currentState.useContext, this.currentState.remainingOuterContext);
 				this.decisions[this.currentDecision].errors.push(
-					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index)
+					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index),
 				);
 			}
 		}
@@ -214,7 +214,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			let fullContext: boolean = this._llStopIndex >= 0;
 			let stopIndex: number = fullContext ? this._llStopIndex : this._sllStopIndex;
 			this.decisions[this.currentDecision].predicateEvals.push(
-				new PredicateEvalInfo(this.currentState, this.currentDecision, this._input, this._startIndex, stopIndex, pred, result, alt)
+				new PredicateEvalInfo(this.currentState, this.currentDecision, this._input, this._startIndex, stopIndex, pred, result, alt),
 			);
 		}
 
@@ -229,7 +229,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 		if (prediction !== this.conflictingAltResolvedBySLL) {
 			this.decisions[this.currentDecision].contextSensitivities.push(
-				new ContextSensitivityInfo(this.currentDecision, acceptState, this._input, startIndex, stopIndex)
+				new ContextSensitivityInfo(this.currentDecision, acceptState, this._input, startIndex, stopIndex),
 			);
 		}
 		super.reportContextSensitivity(dfa, prediction, acceptState, startIndex, stopIndex);
@@ -267,11 +267,11 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			// to different minimum alternatives we have also identified a
 			// context sensitivity.
 			this.decisions[this.currentDecision].contextSensitivities.push(
-				new ContextSensitivityInfo(this.currentDecision, this.currentState, this._input, startIndex, stopIndex)
+				new ContextSensitivityInfo(this.currentDecision, this.currentState, this._input, startIndex, stopIndex),
 			);
 		}
 		this.decisions[this.currentDecision].ambiguities.push(
-			new AmbiguityInfo(this.currentDecision, this.currentState, ambigAlts, this._input, startIndex, stopIndex)
+			new AmbiguityInfo(this.currentDecision, this.currentState, ambigAlts, this._input, startIndex, stopIndex),
 		);
 		super.reportAmbiguity(dfa, D, startIndex, stopIndex, exact, ambigAlts, configs);
 	}

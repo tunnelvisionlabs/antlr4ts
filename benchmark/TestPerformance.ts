@@ -1464,7 +1464,7 @@ export class TestPerformance {
 						console.error(e);
 						throw new Error("IllegalStateException: " + e);
 					}
-				}
+				},
 			};
 		// } catch (Exception e) {
 		//     e.printStackTrace(System.out);
@@ -1776,7 +1776,7 @@ namespace FilenameFilters {
 		// @Override
 		accept(dir: string, name: string): boolean {
 			return true;
-		}
+		},
 	};
 
 	export function extension(extension: string): FilenameFilter;

@@ -186,7 +186,7 @@ export class Trees {
 	*/
 	public static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
 		startTokenIndex: number, // inclusive
-		stopTokenIndex: number // inclusive
+		stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {
 		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {

@@ -29,7 +29,6 @@
     "prefer-for-of": false,
     "quotemark": false,
     "space-before-function-paren": false,
-    "trailing-comma": false,
     "typedef-whitespace": false,
     "unified-signatures": false,
     "variable-name": false,

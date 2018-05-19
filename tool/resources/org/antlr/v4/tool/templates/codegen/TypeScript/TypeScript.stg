@@ -149,7 +149,7 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 	<endif>
 	<parser.rules:{r | public static readonly RULE_<r.name> = <r.index>;}; separator="\n", wrap, anchor>
 	public static readonly ruleNames: string[] = [
-		<parser.ruleNames:{r | "<r>"}; separator=", ", wrap, anchor>
+		<parser.ruleNames:{r | "<r>",}; separator=" ", wrap, anchor>
 	];
 
 	<vocabulary(parser.name, parser.literalNames, parser.symbolicNames)>
@@ -195,10 +195,10 @@ case <f.ruleIndex>:
 
 vocabulary(className, literalNames, symbolicNames) ::= <<
 private static readonly _LITERAL_NAMES: Array\<string | undefined> = [
-	<literalNames:{t | <t>}; null="undefined", separator=", ", wrap, anchor>
+	<literalNames:{t | <t>,}; null="undefined,", separator=" ", wrap, anchor>
 ];
 private static readonly _SYMBOLIC_NAMES: Array\<string | undefined> = [
-	<symbolicNames:{t | <t>}; null="undefined", separator=", ", wrap, anchor>
+	<symbolicNames:{t | <t>,}; null="undefined,", separator=" ", wrap, anchor>
 ];
 public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._LITERAL_NAMES, <className>._SYMBOLIC_NAMES, []);
 
@@ -895,11 +895,11 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 	<endif>
 	<rest(lexer.modes):{m| public static readonly <m>=<i>;}; separator="\n">
 	public static readonly modeNames: string[] = [
-		<lexer.modes:{m| "<m>"}; separator=", ", wrap, anchor>
+		<lexer.modes:{m| "<m>",}; separator=" ", wrap, anchor>
 	];
 
 	public static readonly ruleNames: string[] = [
-		<lexer.ruleNames:{r | "<r>"}; separator=", ", wrap, anchor>
+		<lexer.ruleNames:{r | "<r>",}; separator=" ", wrap, anchor>
 	];
 
 	<vocabulary(lexer.name, lexer.literalNames, lexer.symbolicNames)>
@@ -936,9 +936,9 @@ private static readonly _serializedATNSegments: number = <length(model.segments)
 	"<segment; wrap={"+<\n><\t>"}>";}; separator="\n">
 public static readonly _serializedATN: string = Utils.join(
 	[
-		<model.segments:{segment | <className>._serializedATNSegment<i0>}; separator=",\n">
+		<model.segments:{segment | <className>._serializedATNSegment<i0>,}; separator="\n">
 	],
-	""
+	"",
 );
 <else>
 <! only one segment, can be inlined !>

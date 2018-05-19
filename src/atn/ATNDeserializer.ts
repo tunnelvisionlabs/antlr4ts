@@ -96,7 +96,7 @@ export class ATNDeserializer {
 	private static readonly SUPPORTED_UUIDS: UUID[] = [
 		ATNDeserializer.BASE_SERIALIZED_UUID,
 		ATNDeserializer.ADDED_LEXER_ACTIONS,
-		ATNDeserializer.ADDED_UNICODE_SMP
+		ATNDeserializer.ADDED_UNICODE_SMP,
 	];
 
 	/**
@@ -327,7 +327,7 @@ export class ATNDeserializer {
 				return a.stopState === b.stopState
 					&& a.returnState === b.returnState
 					&& a.outermostPrecedenceReturn === b.outermostPrecedenceReturn;
-			}
+			},
 		});
 		let returnTransitions: T[] = [];
 		for (let state of atn.states) {

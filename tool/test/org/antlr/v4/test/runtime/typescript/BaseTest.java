@@ -246,7 +246,7 @@ public abstract class BaseTest {
 				"		input: `<input>`,\n" +
 				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
-				"		showDFA: <showDFA>\n" +
+				"		showDFA: <showDFA>,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");
@@ -277,7 +277,7 @@ public abstract class BaseTest {
 				"		input: `<input>`,\n" +
 				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
-				"		showDFA: <showDFA>\n" +
+				"		showDFA: <showDFA>,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");

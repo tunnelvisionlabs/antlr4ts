@@ -84,7 +84,7 @@ export enum PredictionMode {
 	 * This prediction mode does not provide any guarantees for prediction
 	 * behavior for syntactically-incorrect inputs.</p>
 	 */
-	LL_EXACT_AMBIG_DETECTION
+	LL_EXACT_AMBIG_DETECTION,
 }
 
 export namespace PredictionMode {

@@ -34,7 +34,7 @@ export abstract class Transition {
 		"SET",
 		"NOT_SET",
 		"WILDCARD",
-		"PRECEDENCE"
+		"PRECEDENCE",
 	];
 
 	// @SuppressWarnings("serial")

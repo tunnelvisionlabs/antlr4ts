@@ -377,7 +377,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 
 			remove(): void {
 				throw new Error("Not supported");
-			}
+			},
 		};
 	}
 
