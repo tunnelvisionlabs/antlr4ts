@@ -62,7 +62,7 @@ import { Recognizer } from './Recognizer';
 import { RuleNode } from "./tree/RuleNode";
 import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators"
+import { Override } from "./Decorators";
 import { Trees } from "./tree/Trees";
 import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";

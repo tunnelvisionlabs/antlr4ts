@@ -51,7 +51,7 @@ describe("BitSet Tests", function() {
 
 		it("equals itself", ()=>{
 			assert( !empty.equals([1,3]));
-		})
+		});
 
 		it("equals itself", ()=>{
 			assert( empty.equals(empty));
@@ -64,7 +64,7 @@ describe("BitSet Tests", function() {
 			assert(o.isEmpty);
 			assert(o.equals(empty));
 			assert(empty.equals(o));
-		})
+		});
 
 		it("grows on deman", ()=>{
 			const a = primes.clone();
@@ -73,47 +73,47 @@ describe("BitSet Tests", function() {
 			a.flip(1004, 1050);
 			a.clear(2000,2003);
 			assert.equal(a, "{1000, 1001, 1002, 1003}");
-		})
+		});
 
 		it("oversize truncation", ()=>{
 			const o = new BitSet(100);
 			const p = new BitSet(200);
-			let a = o.clone()
+			let a = o.clone();
 			a.and(p);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = p.clone()
+			a = p.clone();
 			a.and(o);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = o.clone()
+			a = o.clone();
 			a.or(p);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = p.clone()
+			a = p.clone();
 			a.or(o);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = o.clone()
+			a = o.clone();
 			a.xor(p);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = p.clone()
+			a = p.clone();
 			a.xor(o);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = o.clone()
+			a = o.clone();
 			a.andNot(p);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
 
-			a = p.clone()
+			a = p.clone();
 			a.andNot(o);
 			assert(a.isEmpty);
 			assert.equal(a.size, 0);
@@ -127,7 +127,7 @@ describe("BitSet Tests", function() {
 			a.set(75);
 			a.xor(o);
 			assert.equal(a, "{75}");
-		})
+		});
 	});
 
 	describe("evens", ()=> {
@@ -186,7 +186,7 @@ describe("BitSet Tests", function() {
 			assert.equal(a.nextSetBit(71), -1);
 			assert.equal(a.previousSetBit(1000), 70);
 			assert.equal(a.previousSetBit(69), 50);
-		})
+		});
 
 
 		it("lengthy bit scans", () => {
@@ -198,14 +198,14 @@ describe("BitSet Tests", function() {
 			assert.equal(a.nextClearBit(71), -1);
 			assert.equal(a.previousClearBit(100), 70);
 			assert.equal(a.previousClearBit(69), 50);
-		})
+		});
 
 	});
 
 	describe("primes", () => {
 		it("length()", ()=>{
 			assert.equal(primes.length(), 98);
-			})
+			});
 		it("cardinality()", () => {
 			assert.equal(primes.cardinality(), 25);
 		});
@@ -227,7 +227,7 @@ describe("BitSet Tests", function() {
 
 		});
 		it("or operation", ()=> {
-			const a = new BitSet(evens)
+			const a = new BitSet(evens);
 			a.or(primes);
 			assert.equal(a.cardinality(), 74);
 			assert.equal(a.length(), 99);
@@ -265,7 +265,7 @@ describe("BitSet Tests", function() {
 			const b = ninetys.clone();
 			b.or(tens);
 			assert(a.equals(b));
-		})
+		});
 
 		it("primes and composites isEmpty", ()=>{
 			let a = primes.clone();
@@ -275,11 +275,11 @@ describe("BitSet Tests", function() {
 
 		it ("primes and composites do not intersect", ()=>{
 			assert(!primes.intersects(composites));
-		})
+		});
 
 		it("ninetys", ()=>{
 			assert.equal(ninetys, "{90, 91, 92, 93, 94, 95, 96, 97, 98, 99}");
-		})
+		});
 
 		it("ninetys and prime", ()=>{
 			const ninetySeven = new BitSet(primes);
@@ -294,7 +294,7 @@ describe("BitSet Tests", function() {
 
 		it("composites", ()=> {
 			assert.equal(composites, "{4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20, 21, 22, 24, 25, 26, 27, 28, 30, 32, 33, 34, 35, 36, 38, 39, 40, 42, 44, 45, 46, 48, 49, 50, 51, 52, 54, 55, 56, 57, 58, 60, 62, 63, 64, 65, 66, 68, 69, 70, 72, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86, 87, 88, 90, 91, 92, 93, 94, 95, 96, 98, 99}");
-		})
+		});
 
 		it("ninetys xor prime", ()=>{
 			const x = new BitSet(primes);
@@ -308,7 +308,7 @@ describe("BitSet Tests", function() {
 		it("prime andNot ninetys", ()=>{
 			const x = new BitSet(primes);
 			x.andNot(ninetys);
-			assert.equal(x, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89}")
+			assert.equal(x, "{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89}");
 		});
 
 		it("prime and composites ", ()=>{
@@ -322,17 +322,17 @@ describe("BitSet Tests", function() {
 			const x = new BitSet(primes);
 			x.clear(10,100);
 			x.clear(2);
-			assert.equal(x, "{3, 5, 7}")
+			assert.equal(x, "{3, 5, 7}");
 
 			const y = primes.clone();
 			y.clear();
-			assert.equal(y, "{}")
+			assert.equal(y, "{}");
 		});
 
 		it("primes.get(1,11)", ()=>{
 			const x = primes.get(1,11);
-			assert.equal(x, "{2, 3, 5, 7, 11}")
-		})
+			assert.equal(x, "{2, 3, 5, 7, 11}");
+		});
 
 		it("set(range) & and()", ()=> {
 			const a =ninetys.clone();
@@ -344,7 +344,7 @@ describe("BitSet Tests", function() {
 	describe("error cases", () => {
 		const dummy = evens.clone();
 		it("constructor throws", ()=>{
-			assert.throws(()=>{ let a = new BitSet(-1);})
+			assert.throws(()=>{ let a = new BitSet(-1);});
 		});
 
 		it("other throws", ()=>{

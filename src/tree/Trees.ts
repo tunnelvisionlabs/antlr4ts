@@ -67,7 +67,7 @@ export class Trees {
 			if (typeof payload.text === 'string') {
 				return payload.text;
 			}
-			return t.payload.toString();;
+			return t.payload.toString();
 		}
 
 		if (t instanceof RuleNode) {

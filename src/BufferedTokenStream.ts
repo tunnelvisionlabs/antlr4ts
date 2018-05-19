@@ -251,7 +251,7 @@ export class BufferedTokenStream implements TokenStream {
 	public tryLT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
-			throw new RangeError("0 is not a valid lookahead index")
+			throw new RangeError("0 is not a valid lookahead index");
 		}
 
 		if (k < 0) {

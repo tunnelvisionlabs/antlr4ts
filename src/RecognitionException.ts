@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.0697674-07:00
 import { CharStream } from "./CharStream";
-import { IntervalSet } from "./misc/IntervalSet"
+import { IntervalSet } from "./misc/IntervalSet";
 import { IntStream } from './IntStream';
 import { Lexer } from "./Lexer";
 import { Parser } from './Parser';

@@ -61,7 +61,7 @@ describe('EquatableTest', function() {
 describe('Array2DHashSet', function() {
 	let set: Array2DHashSet<EquatableTest>;
 
-	beforeEach(function() { set = new Array2DHashSet<EquatableTest>()});
+	beforeEach(function() { set = new Array2DHashSet<EquatableTest>();});
 
 	it('shoud count entities', function() {
 		assert( set.isEmpty );

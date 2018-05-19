@@ -190,7 +190,7 @@ export class ParserRuleContext extends RuleContext {
 	// Note: in TypeScript, order or arguments reversed
 	public getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
-			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
+			throw new RangeError("index parameter must be between >= 0 and <= number of children.");
 		}
 
 		if (ctxType == null) {

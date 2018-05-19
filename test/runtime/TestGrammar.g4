@@ -2,9 +2,9 @@ grammar TestGrammar;
 
 compilationUnit
 locals [
-	symbols: string[] = ['empty'];
+	symbols: string[] = ['empty']
 ]
-	: {console.log($symbols)} member* EOF
+	: {console.log($symbols);} member* EOF
 	;
 
 member

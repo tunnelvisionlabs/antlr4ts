@@ -26,7 +26,7 @@ import { SemanticContext } from './SemanticContext';
 import * as assert from 'assert';
 import * as Utils from '../misc/Utils';
 
-interface KeyType { state: number, alt: number }
+interface KeyType { state: number; alt: number; }
 
 class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
 	public hashCode(key: KeyType) {

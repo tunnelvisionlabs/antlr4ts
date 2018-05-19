@@ -725,7 +725,7 @@ export class SingletonPredictionContext extends PredictionContext {
 }
 
 export namespace PredictionContext {
-	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false)
+	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false);
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
 	export const EMPTY_LOCAL_STATE_KEY: number = -((1 << 31) >>> 0);
 	export const EMPTY_FULL_STATE_KEY: number = ((1 << 31) >>> 0) - 1;

@@ -30,7 +30,6 @@
     "prefer-const": false,
     "prefer-for-of": false,
     "quotemark": false,
-    "semicolon": false,
     "space-before-function-paren": false,
     "trailing-comma": false,
     "typedef-whitespace": false,

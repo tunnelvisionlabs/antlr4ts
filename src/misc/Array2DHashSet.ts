@@ -427,7 +427,7 @@ class SetIterator<T> implements JavaIterator<T>  {
 	}
 
 	public next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
+		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.");
 		this.removed = false;
 		return this.data[this.nextIndex++];
 	}

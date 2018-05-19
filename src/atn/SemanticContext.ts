@@ -297,7 +297,7 @@ export namespace SemanticContext {
 		public opnds: SemanticContext[];
 
 		constructor(@NotNull a: SemanticContext, @NotNull b: SemanticContext) {
-			super()
+			super();
 
 			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
 			if (a instanceof AND) operands.addAll(a.opnds);

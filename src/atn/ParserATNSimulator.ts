@@ -1518,7 +1518,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		nalts: number): DFAState.PredPrediction[] | undefined {
 		let conflictingAlts: BitSet | undefined = this.getConflictingAltsFromConfigSet(configs);
 		if (!conflictingAlts) {
-			throw new Error("This unhandled scenario is intended to be unreachable, but I'm currently not sure of why we know that's the case.")
+			throw new Error("This unhandled scenario is intended to be unreachable, but I'm currently not sure of why we know that's the case.");
 		}
 
 		if (ParserATNSimulator.debug) console.log("predicateDFAState " + D);
@@ -2004,7 +2004,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 
 			return 0;
-		};
+		}
 
 	private isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
 		if (configset.uniqueAlt !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
