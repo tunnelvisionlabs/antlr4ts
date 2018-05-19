@@ -25,7 +25,6 @@
     "object-literal-shorthand": false,
     "object-literal-sort-keys": false,
     "one-line": false,
-    "only-arrow-functions": false,
     "ordered-imports": false,
     "prefer-const": false,
     "prefer-for-of": false,

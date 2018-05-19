@@ -7,7 +7,7 @@ require('source-map-support').install();
 import * as assert from "assert";
 import { BitSet } from "../src/misc/BitSet";
 
-describe("BitSet Tests", function() {
+describe("BitSet Tests", () => {
 	const empty = new BitSet();
 	const evens = new BitSet(100);
 	for (let i=0; i<100; i+=2)
@@ -16,7 +16,7 @@ describe("BitSet Tests", function() {
 	const primes = new BitSet( [3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
 		59, 61, 67, 71, 73, 79, 83, 89, 97]);
 
-	describe("empty", function() {
+	describe("empty", () => {
 		it("has zero length", ()=>{
 			assert.equal(empty.length(), 0);
 		});

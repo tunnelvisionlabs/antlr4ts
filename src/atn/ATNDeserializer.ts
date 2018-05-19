@@ -323,7 +323,7 @@ export class ATNDeserializer {
 		let returnTransitionsSet = new Array2DHashSet<T>({
 			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
 
-			equals: function (a: T, b: T): boolean {
+			equals: (a: T, b: T): boolean => {
 				return a.stopState === b.stopState
 					&& a.returnState === b.returnState
 					&& a.outermostPrecedenceReturn === b.outermostPrecedenceReturn;
