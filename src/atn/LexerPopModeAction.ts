@@ -25,6 +25,7 @@ export class LexerPopModeAction implements LexerAction {
 	 * Constructs the singleton instance of the lexer {@code popMode} command.
 	 */
 	constructor() {
+		// intentionally empty
 	}
 
 	/**

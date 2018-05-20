@@ -217,6 +217,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 		_localctx: RuleContext | undefined,
 		ruleIndex: number,
 		actionIndex: number): void {
+		// intentionally empty
 	}
 
 	get state(): number {

@@ -25,6 +25,7 @@ export class LexerMoreAction implements LexerAction {
 	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
 	constructor() {
+		// intentionally empty
 	}
 
 	/**

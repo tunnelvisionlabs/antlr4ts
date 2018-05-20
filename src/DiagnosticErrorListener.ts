@@ -64,6 +64,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		msg: string,
 		e: RecognitionException | undefined): void
 	{
+		// intentionally empty
 	}
 
 	@Override

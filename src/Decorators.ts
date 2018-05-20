@@ -7,12 +7,14 @@ export function NotNull(
 	target: any,
 	propertyKey: PropertyKey,
 	propertyDescriptor?: PropertyDescriptor | number) {
+	// intentionally empty
 }
 
 export function Nullable(
 	target: any,
 	propertyKey: PropertyKey,
 	propertyDescriptor?: PropertyDescriptor | number) {
+	// intentionally empty
 }
 
 export function Override(target: any,
@@ -23,5 +25,6 @@ export function Override(target: any,
 
 export function SuppressWarnings(options: string) {
 	return (target: any, propertyKey: PropertyKey, descriptor?: PropertyDescriptor) => {
+		// intentionally empty
 	};
 }

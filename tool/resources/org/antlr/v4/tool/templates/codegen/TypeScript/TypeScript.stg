@@ -427,6 +427,9 @@ this.enterOuterAlt(_localctx, <currentOuterMostAltCodeBlock.alt.altNum>);
 >>
 
 CodeBlockForAlt(currentAltCodeBlock, locals, preamble, ops) ::= <<
+<if(!(locals || preamble || ops))>
+// tslint:disable-next-line:no-empty
+<endif>
 {
 <locals; separator="\n">
 <preamble; separator="\n">

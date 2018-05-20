@@ -125,8 +125,12 @@ export class ParserRuleContext extends RuleContext {
 
 	// Double dispatch methods for listeners
 
-	public enterRule(listener: ParseTreeListener): void { }
-	public exitRule(listener: ParseTreeListener): void { }
+	public enterRule(listener: ParseTreeListener): void {
+		// intentionally empty
+	}
+	public exitRule(listener: ParseTreeListener): void {
+		// intentionally empty
+	}
 
 	public addChild(t: TerminalNode): void;
 	public addChild(ruleInvocation: RuleContext): void;

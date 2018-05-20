@@ -740,6 +740,7 @@ export namespace PredictionContext {
 		public static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
+			// intentionally empty
 		}
 
 		@Override

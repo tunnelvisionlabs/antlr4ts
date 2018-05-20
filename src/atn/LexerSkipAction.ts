@@ -25,6 +25,7 @@ export class LexerSkipAction implements LexerAction {
 	 * Constructs the singleton instance of the lexer {@code skip} command.
 	 */
 	constructor() {
+		// intentionally empty
 	}
 
 	/**

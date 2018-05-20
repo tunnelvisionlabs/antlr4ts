@@ -100,6 +100,7 @@ export namespace PredictionMode {
 		public static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
+			// intentionally empty
 		}
 
 		/**
