@@ -593,7 +593,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		let stream = x ? x.inputStream : undefined;
 
 		return factory.create(
-			{ source: tokenSource, stream: stream },
+			{ source: tokenSource, stream },
 			expectedTokenType, tokenText,
 			Token.DEFAULT_CHANNEL,
 			-1, -1,

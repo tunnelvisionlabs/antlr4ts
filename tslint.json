@@ -21,7 +21,6 @@
     "no-unused-expression": false,
     "no-trailing-whitespace": false,
     "no-var-requires": false,
-    "object-literal-shorthand": false,
     "one-line": false,
     "prefer-const": false,
     "unified-signatures": false,

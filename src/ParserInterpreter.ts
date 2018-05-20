@@ -421,7 +421,7 @@ export class ParserInterpreter extends Parser {
 
 			let source = tok.tokenSource;
 			let stream = source !== undefined ? source.inputStream : undefined;
-			let sourcePair = { source: source, stream: stream };
+			let sourcePair = { source, stream };
 
 			if (e instanceof InputMismatchException) {
 				let expectedTokens = e.expectedTokens;

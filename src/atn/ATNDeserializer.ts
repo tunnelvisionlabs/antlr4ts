@@ -351,7 +351,7 @@ export class ATNDeserializer {
 					}
 				}
 
-				let current = { stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn: outermostPrecedenceReturn };
+				let current = { stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn };
 				if (returnTransitionsSet.add(current)) {
 					returnTransitions.push(current);
 				}
