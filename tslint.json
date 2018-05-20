@@ -1,7 +1,6 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "class-name": false,
     "comment-format": false,
     "indent": [true, "tabs"],
     "interface-name": false,
@@ -38,7 +37,13 @@
       "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_3/TParser.ts",
       "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_4/TParser.ts",
       "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_1/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_2/TParser.ts"
+      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_2/TParser.ts",
+
+      // Disabled due to uncontrollable rule names with underscores producing class names with underscores
+      "test/runtime/gen/TestCompositeParsers/testDelegatorRuleOverridesLookaheadInDelegate/MParser.ts",
+      "test/runtime/gen/TestParserExec/testPredictionIssue334/TParser.ts",
+      "test/runtime/gen/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_1/TParser.ts",
+      "test/runtime/gen/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_2/TParser.ts"
     ]
   }
 }
