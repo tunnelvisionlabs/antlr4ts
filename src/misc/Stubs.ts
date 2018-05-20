@@ -29,14 +29,14 @@ export interface JavaCollection<E> extends JavaIterable<E> {
 	addAll(collection: Collection<E>): boolean;
 	clear(): void;
 	contains(o: any): boolean;                         // Shouldn't argument be restricted to E?
-	containsAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
+	containsAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	equals(o: any): boolean;
 	hashCode(): number;
 	readonly isEmpty: boolean;
 	iterator(): JavaIterator<E>;
 	remove(o: any): boolean;                        // Shouldn't argument be restricted to E?
-	removeAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
-	retainAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
+	removeAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
+	retainAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	readonly size: number;
 	toArray(): any[];                               // Shouldn't return type be restricted to E[]?
 	toArray(a: E[]): E[];

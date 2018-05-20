@@ -19,7 +19,6 @@
     "prefer-const": false,
     "unified-signatures": false,
     "variable-name": false,
-    "whitespace": false,
 
     // Can't be reasonably enabled because the imports need to be per-file within this repository
     "ordered-imports": false
@@ -30,7 +29,16 @@
       "test/runtime/gen/TestParseTrees/testTokenAndRuleContextString/TParser.ts",
       "test/runtime/gen/TestSemPredEvalLexer/testIndent/L.ts",
       "test/runtime/gen/TestSemPredEvalLexer/testLexerInputPositionSensitivePredicates/L.ts",
-      "test/runtime/gen/TestSemPredEvalLexer/testPredicatedKeywords/L.ts"
+      "test/runtime/gen/TestSemPredEvalLexer/testPredicatedKeywords/L.ts",
+
+      // Disabled due to uncontrollable whitespace within action expressions
+      "test/runtime/gen/TestFullContextParsing/testLoopsSimulateTailRecursion/TParser.ts",
+      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_1/TParser.ts",
+      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_2/TParser.ts",
+      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_3/TParser.ts",
+      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_4/TParser.ts",
+      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_1/TParser.ts",
+      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_2/TParser.ts"
     ]
   }
 }

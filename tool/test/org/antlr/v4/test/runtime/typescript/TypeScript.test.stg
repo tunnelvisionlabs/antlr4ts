@@ -148,7 +148,7 @@ writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
 writeln(s) ::= <<console.log(<s>);>>
 write(s) ::= <<process.stdout.write(String(<s>));>>
-writeList(s) ::= <<console.log(<s; separator="+">);>>
+writeList(s) ::= <<console.log(<s; separator=" + ">);>>
 
 False() ::= "false"
 
@@ -215,7 +215,7 @@ InputText() ::= "this._input.getText()"
 
 LTEquals(i, v) ::= <%this._input.LT(<i>).text === <v>%>
 
-LANotEquals(i, v) ::= <%this._input.LA(<i>)!==<v>%>
+LANotEquals(i, v) ::= <%this._input.LA(<i>) !== <v>%>
 
 TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
@@ -604,13 +604,13 @@ public foo(s: SContext): void {
 >>
 
 Declare_foo() ::= <<
-	public foo(): void {console.log("foo");}
+	public foo(): void { console.log("foo"); }
 >>
 
 Invoke_foo() ::= "this.foo();"
 
 Declare_pred() ::= <<public pred(v: boolean): boolean {
-	console.log("eval="+v.toString().toLowerCase());
+	console.log("eval=" + v.toString().toLowerCase());
 	return v;
 }
 >>

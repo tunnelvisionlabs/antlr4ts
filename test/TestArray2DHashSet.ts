@@ -63,7 +63,7 @@ describe("EquatableTest", () => {
 describe("Array2DHashSet", () => {
 	let set: Array2DHashSet<EquatableTest>;
 
-	beforeEach(() => { set = new Array2DHashSet<EquatableTest>();});
+	beforeEach(() => { set = new Array2DHashSet<EquatableTest>(); });
 
 	it("shoud count entities", () => {
 		assert( set.isEmpty );

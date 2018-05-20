@@ -20,7 +20,7 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 
 const stdMocks = require("std-mocks");
 
-function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: ()=> void ) {
+function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: () => void ) {
 	try {
 		stdMocks.use();
 		testFunction();
@@ -32,7 +32,7 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 	let errors = streams.stderr.join("");
 
 	// Fixup for small behavioral difference at EOF...
-	if (output.length === expectedOutput.length - 1 && output[output.length-1] !== "\n") {
+	if (output.length === expectedOutput.length - 1 && output[output.length - 1] !== "\n") {
 		output += "\n";
 	}
 
@@ -70,9 +70,9 @@ export function lexerTest(options: LexerTestOptions) {
 	const inputStream: CharStream = new ANTLRInputStream(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
-	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
+	expectConsole( options.expectedOutput, options.expectedErrors, () => {
 		tokens.fill();
-		tokens.getTokens().forEach((t) =>console.log(t.toString()));
+		tokens.getTokens().forEach((t) => console.log(t.toString()));
 		if (options.showDFA) {
 			process.stdout.write(lex.interpreter.getDFA(Lexer.DEFAULT_MODE).toLexerString());
 		}
@@ -90,7 +90,7 @@ export function parserTest<TParser extends Parser>(options: ParserTestOptions<TP
 	}
 
 	parser.buildParseTree = true;
-	expectConsole( options.expectedOutput, options.expectedErrors, ()=> {
+	expectConsole( options.expectedOutput, options.expectedErrors, () => {
 		const tree = options.parserStartRule(parser);
 		ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);
 	});

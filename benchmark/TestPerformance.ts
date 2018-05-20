@@ -769,7 +769,7 @@ export class TestPerformance {
 	}
 
 	private getSourceRoot(prefix: string): string | undefined {
-		let sourceRoot =  process.env[prefix+"_SOURCE_ROOT"];
+		let sourceRoot =  process.env[prefix + "_SOURCE_ROOT"];
 		// if (sourceRoot == null) {
 		// 	sourceRoot = System.getProperty(prefix+"_SOURCE_ROOT");
 		// }
@@ -1382,9 +1382,9 @@ export class TestPerformance {
 							}
 
 							let sourceName: string =  tokens.sourceName;
-							sourceName = sourceName != null && sourceName.length > 0 ? sourceName+": " : "";
+							sourceName = sourceName != null && sourceName.length > 0 ? sourceName + ": " : "";
 							if (TestPerformance.REPORT_SECOND_STAGE_RETRY) {
-								console.error(sourceName+"Forced to retry with full context.");
+								console.error(sourceName + "Forced to retry with full context.");
 							}
 
 							if (!(ex instanceof ParseCancellationException)) {
@@ -1663,7 +1663,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 	public static INSTANCE: DescriptiveErrorListener =  new DescriptiveErrorListener();
 
 	@Override
-	public syntaxError<T extends Token>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
+	public syntaxError<T extends Token>(recognizer: Recognizer<T, any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1674,7 +1674,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
 
-		console.error(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
+		console.error(sourceName + "line " + line + ":" + charPositionInLine + " " + msg);
 	}
 
 }
@@ -1683,7 +1683,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 	public static INSTANCE: DescriptiveLexerErrorListener =  new DescriptiveLexerErrorListener();
 
 	@Override
-	public syntaxError<T extends number>(recognizer: Recognizer<T,any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
+	public syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
 		}
@@ -1694,7 +1694,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
 		}
 
-		process.stderr.write(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
+		process.stderr.write(sourceName + "line " + line + ":" + charPositionInLine + " " + msg);
 	}
 
 }

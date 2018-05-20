@@ -236,7 +236,7 @@ public abstract class BaseTest {
 				"import { <lexerName> } from \"./<lexerName>\";\n" +
 				"import { <parserName> } from \"./<parserName>\";\n" +
 				"\n" +
-				"it(`<className>.<testName>`, ()=> {\n" +
+				"it(`<className>.<testName>`, () => {\n" +
 				"	base.parserTest( {\n" +
 				"		debug: <debug>,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
@@ -272,7 +272,7 @@ public abstract class BaseTest {
 				"import * as base from \"../../../BaseTest\";\n" +
 				"import { <lexerName> } from \"./<lexerName>\";\n" +
 				"\n" +
-				"it(`<className>.<testName>`, ()=> {\n" +
+				"it(`<className>.<testName>`, () => {\n" +
 				"	base.lexerTest( {\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
 				"		// tslint:disable:no-trailing-whitespace\n" +
