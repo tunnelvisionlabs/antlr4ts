@@ -41,7 +41,7 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 
 export interface LexerTestOptions {
 	testName: string;
-	lexer: new(s:CharStream) => Lexer;
+	lexer: new(s: CharStream) => Lexer;
 	input: string;
 	expectedOutput: string;
 	expectedErrors: string;
