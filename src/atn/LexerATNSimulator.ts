@@ -260,7 +260,8 @@ export class LexerATNSimulator extends ATNSimulator {
 		return this.addDFAEdge(s, t, reach);
 	}
 
-	protected failOrAccept(prevAccept: LexerATNSimulator.SimState, input: CharStream,
+	protected failOrAccept(
+		prevAccept: LexerATNSimulator.SimState, input: CharStream,
 		reach: ATNConfigSet, t: number): number {
 		if (prevAccept.dfaState != null) {
 			let lexerActionExecutor: LexerActionExecutor | undefined = prevAccept.dfaState.lexerActionExecutor;
@@ -323,8 +324,9 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 	}
 
-	protected accept(@NotNull input: CharStream, lexerActionExecutor: LexerActionExecutor | undefined,
-						startIndex: number, index: number, line: number, charPos: number): void {
+	protected accept(
+		@NotNull input: CharStream, lexerActionExecutor: LexerActionExecutor | undefined,
+		startIndex: number, index: number, line: number, charPos: number): void {
 		if (LexerATNSimulator.debug) {
 			console.log(`ACTION ${lexerActionExecutor}`);
 		}
@@ -348,7 +350,8 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected computeStartState( @NotNull input: CharStream,
+	protected computeStartState(
+		@NotNull input: CharStream,
 		@NotNull p: ATNState): ATNConfigSet {
 		let initialContext: PredictionContext = PredictionContext.EMPTY_FULL;
 		let configs: ATNConfigSet = new OrderedATNConfigSet();
@@ -430,7 +433,8 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	// side-effect: can alter configs.hasSemanticContext
-	protected getEpsilonTarget(@NotNull input: CharStream,
+	protected getEpsilonTarget(
+		@NotNull input: CharStream,
 		@NotNull config: ATNConfig,
 		@NotNull t: Transition,
 		@NotNull configs: ATNConfigSet,
@@ -583,7 +587,8 @@ export class LexerATNSimulator extends ATNSimulator {
 		}
 	}
 
-	protected captureSimState(@NotNull settings: LexerATNSimulator.SimState,
+	protected captureSimState(
+		@NotNull settings: LexerATNSimulator.SimState,
 		@NotNull input: CharStream,
 		@NotNull dfaState: DFAState): void {
 		settings.index = input.index;

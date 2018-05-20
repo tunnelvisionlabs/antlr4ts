@@ -1,7 +1,6 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "align": false,
     "class-name": false,
     "comment-format": false,
     "indent": [true, "tabs"],

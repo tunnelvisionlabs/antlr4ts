@@ -44,7 +44,8 @@ export interface ANTLRErrorListener<TSymbol> {
 	 *        surrounding rule.
 	 */
 	syntaxError?: <T extends TSymbol>(
-		/*@NotNull*/ recognizer: Recognizer<T, any>,
+		/*@NotNull*/
+		recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,
 		charPositionInLine: number,

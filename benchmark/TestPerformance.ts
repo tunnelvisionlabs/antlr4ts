@@ -543,12 +543,12 @@ export class TestPerformance {
 		// passResults.add(executorService.submit(new Runnable() {
 		// 	@Override
 		// 	run(): void {
-				try {
-					this.parse1(0, factory, sources, TestPerformance.SHUFFLE_FILES_AT_START);
-				} catch (ex) {
-					//Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
-					console.error(ex);
-				}
+		try {
+			this.parse1(0, factory, sources, TestPerformance.SHUFFLE_FILES_AT_START);
+		} catch (ex) {
+			//Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
+			console.error(ex);
+		}
 		// 	}
 		// }));
 		for (let i = 0; i < TestPerformance.PASSES - 1; i++) {
@@ -556,30 +556,30 @@ export class TestPerformance {
 		// 	passResults.add(executorService.submit(new Runnable() {
 		// 		@Override
 		// 		run(): void {
-					if (TestPerformance.CLEAR_DFA) {
-						let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
-						if (TestPerformance.sharedLexers.length > 0 && TestPerformance.sharedLexers[index] != null) {
-							let atn: ATN = TestPerformance.sharedLexers[index]!.atn;
-							atn.clearDFA();
-						}
+			if (TestPerformance.CLEAR_DFA) {
+				let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
+				if (TestPerformance.sharedLexers.length > 0 && TestPerformance.sharedLexers[index] != null) {
+					let atn: ATN = TestPerformance.sharedLexers[index]!.atn;
+					atn.clearDFA();
+				}
 
-						if (TestPerformance.sharedParsers.length > 0 && TestPerformance.sharedParsers[index] != null) {
-							let atn: ATN = TestPerformance.sharedParsers[index]!.atn;
-							atn.clearDFA();
-						}
+				if (TestPerformance.sharedParsers.length > 0 && TestPerformance.sharedParsers[index] != null) {
+					let atn: ATN = TestPerformance.sharedParsers[index]!.atn;
+					atn.clearDFA();
+				}
 
-						if (TestPerformance.FILE_GRANULARITY) {
-							TestPerformance.sharedLexers.fill(undefined);
-							TestPerformance.sharedParsers.fill(undefined);
-						}
-					}
+				if (TestPerformance.FILE_GRANULARITY) {
+					TestPerformance.sharedLexers.fill(undefined);
+					TestPerformance.sharedParsers.fill(undefined);
+				}
+			}
 
-					try {
-						this.parse2(currentPass, factory, sources, TestPerformance.SHUFFLE_FILES_AFTER_ITERATIONS);
-					} catch (ex) {
-						// Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
-						console.error(ex);
-					}
+			try {
+				this.parse2(currentPass, factory, sources, TestPerformance.SHUFFLE_FILES_AFTER_ITERATIONS);
+			} catch (ex) {
+				// Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
+				console.error(ex);
+			}
 		// 		}
 		// 	}));
 		}
@@ -930,31 +930,31 @@ export class TestPerformance {
 			currentIndex++;
 			let fileChecksum: number =  0;
 			// try {
-				let fileResult: FileParseResult | undefined =  future;
-				if (fileResult == null) {
-					continue;
+			let fileResult: FileParseResult | undefined =  future;
+			if (fileResult == null) {
+				continue;
+			}
+
+			if (TestPerformance.COMPUTE_TRANSITION_STATS) {
+				TestPerformance.totalTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserTotalTransitions);
+				TestPerformance.computedTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserComputedTransitions);
+
+				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
+					TestPerformance.decisionInvocationsPerFile[currentPass][currentIndex] = fileResult.decisionInvocations;
+					TestPerformance.fullContextFallbackPerFile[currentPass][currentIndex] = fileResult.fullContextFallback;
+					TestPerformance.nonSllPerFile[currentPass][currentIndex] = fileResult.nonSll;
+					TestPerformance.totalTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserTotalTransitions;
+					TestPerformance.computedTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserComputedTransitions;
+					TestPerformance.fullContextTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserFullContextTransitions;
 				}
+			}
 
-				if (TestPerformance.COMPUTE_TRANSITION_STATS) {
-					TestPerformance.totalTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserTotalTransitions);
-					TestPerformance.computedTransitionsPerFile[currentPass][currentIndex] = TestPerformance.sum(fileResult.parserComputedTransitions);
+			if (TestPerformance.COMPUTE_TIMING_STATS) {
+				TestPerformance.timePerFile[currentPass][currentIndex] = fileResult.elapsedTime.totalMilliseconds;
+				TestPerformance.tokensPerFile[currentPass][currentIndex] = fileResult.tokenCount;
+			}
 
-					if (TestPerformance.DETAILED_DFA_STATE_STATS) {
-						TestPerformance.decisionInvocationsPerFile[currentPass][currentIndex] = fileResult.decisionInvocations;
-						TestPerformance.fullContextFallbackPerFile[currentPass][currentIndex] = fileResult.fullContextFallback;
-						TestPerformance.nonSllPerFile[currentPass][currentIndex] = fileResult.nonSll;
-						TestPerformance.totalTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserTotalTransitions;
-						TestPerformance.computedTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserComputedTransitions;
-						TestPerformance.fullContextTransitionsPerDecisionPerFile[currentPass][currentIndex] = fileResult.parserFullContextTransitions;
-					}
-				}
-
-				if (TestPerformance.COMPUTE_TIMING_STATS) {
-					TestPerformance.timePerFile[currentPass][currentIndex] = fileResult.elapsedTime.totalMilliseconds;
-					TestPerformance.tokensPerFile[currentPass][currentIndex] = fileResult.tokenCount;
-				}
-
-				fileChecksum = fileResult.checksum;
+			fileChecksum = fileResult.checksum;
 			// } catch (ExecutionException ex) {
 			// 	Logger.getLogger(TestPerformance.class.getName()).log(Level.SEVERE, null, ex);
 			// }

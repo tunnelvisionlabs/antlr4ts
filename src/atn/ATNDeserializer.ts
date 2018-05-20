@@ -1108,7 +1108,8 @@ export class ATNDeserializer {
 	}
 
 	@NotNull
-	protected edgeFactory(@NotNull atn: ATN,
+	protected edgeFactory(
+		@NotNull atn: ATN,
 		type: TransitionType, src: number, trg: number,
 		arg1: number, arg2: number, arg3: number,
 		sets: IntervalSet[]): Transition {

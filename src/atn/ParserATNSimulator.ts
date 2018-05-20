@@ -360,7 +360,8 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;
 	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined, useContext: boolean): number;
-	public adaptivePredict(@NotNull input: TokenStream,
+	public adaptivePredict(
+		@NotNull input: TokenStream,
 		decision: number,
 		outerContext: ParserRuleContext | undefined,
 		useContext?: boolean): number {
@@ -429,7 +430,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 	}
 
-	protected getStartState(@NotNull dfa: DFA,
+	protected getStartState(
+		@NotNull dfa: DFA,
 		@NotNull input: TokenStream,
 		@NotNull outerContext: ParserRuleContext,
 		useContext: boolean): SimulatorState | undefined {
@@ -486,9 +488,10 @@ export class ParserATNSimulator extends ATNSimulator {
 		return new SimulatorState(outerContext, s0, useContext, remainingContext);
 	}
 
-	protected execDFA(@NotNull dfa: DFA,
-					@NotNull input: TokenStream, startIndex: number,
-					@NotNull state: SimulatorState): number {
+	protected execDFA(
+		@NotNull dfa: DFA,
+		@NotNull input: TokenStream, startIndex: number,
+		@NotNull state: SimulatorState): number {
 		let outerContext: ParserRuleContext = state.outerContext;
 		if (ParserATNSimulator.dfa_debug) {
 			console.log("DFA decision " + dfa.decision +
@@ -759,9 +762,10 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * TODO: greedy + those
 	 */
-	protected execATN(@NotNull dfa: DFA,
-					@NotNull input: TokenStream, startIndex: number,
-					@NotNull initialState: SimulatorState): number {
+	protected execATN(
+		@NotNull dfa: DFA,
+		@NotNull input: TokenStream, startIndex: number,
+		@NotNull initialState: SimulatorState): number {
 		if (ParserATNSimulator.debug) {
 			console.log("execATN decision " + dfa.decision + " exec LA(1)==" + this.getLookaheadName(input));
 		}
@@ -1265,7 +1269,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected computeStartState(dfa: DFA,
+	protected computeStartState(
+		dfa: DFA,
 		globalContext: ParserRuleContext,
 		useContext: boolean): SimulatorState {
 		let s0: DFAState | undefined =
@@ -1543,7 +1548,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	/** collect and set D's semantic context */
-	protected predicateDFAState(D: DFAState,
+	protected predicateDFAState(
+		D: DFAState,
 		configs: ATNConfigSet,
 		nalts: number): DFAState.PredPrediction[] | undefined {
 		let conflictingAlts: BitSet | undefined = this.getConflictingAltsFromConfigSet(configs);
@@ -1566,7 +1572,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		return predPredictions;
 	}
 
-	protected getPredsForAmbigAlts(@NotNull ambigAlts: BitSet,
+	protected getPredsForAmbigAlts(
+		@NotNull ambigAlts: BitSet,
 		@NotNull configs: ATNConfigSet,
 		nalts: number): SemanticContext[] | undefined {
 		// REACH=[1|1|[]|0:0, 1|2|[]|0:1]
@@ -1648,7 +1655,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *  pairs that win. A {@code null} predicate indicates an alt containing an
 	 *  unpredicated config which behaves as "always true."
 	 */
-	protected evalSemanticContext(@NotNull predPredictions: DFAState.PredPrediction[],
+	protected evalSemanticContext(
+		@NotNull predPredictions: DFAState.PredPrediction[],
 		outerContext: ParserRuleContext,
 		complete: boolean): BitSet {
 		let predictions: BitSet = new BitSet();
@@ -1719,7 +1727,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		 ambig detection thought :(
 		  */
 
-	protected closure(sourceConfigs: ATNConfigSet,
+	protected closure(
+		sourceConfigs: ATNConfigSet,
 		@NotNull configs: ATNConfigSet,
 		collectPredicates: boolean,
 		hasMoreContext: boolean,
@@ -1741,7 +1750,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 	}
 
-	protected closureImpl(@NotNull config: ATNConfig,
+	protected closureImpl(
+		@NotNull config: ATNConfig,
 		@NotNull configs: ATNConfigSet,
 		@Nullable intermediate: ATNConfigSet,
 		@NotNull closureBusy: Array2DHashSet<ATNConfig>,
@@ -1962,7 +1972,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@Nullable
-	protected precedenceTransition(@NotNull config: ATNConfig,
+	protected precedenceTransition(
+		@NotNull config: ATNConfig,
 		@NotNull pt: PrecedencePredicateTransition,
 		collectPredicates: boolean,
 		inContext: boolean): ATNConfig {
@@ -1992,7 +2003,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@Nullable
-	protected predTransition(@NotNull config: ATNConfig,
+	protected predTransition(
+		@NotNull config: ATNConfig,
 		@NotNull pt: PredicateTransition,
 		collectPredicates: boolean,
 		inContext: boolean): ATNConfig {
@@ -2269,7 +2281,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected noViableAlt(@NotNull input: TokenStream,
+	protected noViableAlt(
+		@NotNull input: TokenStream,
 		@NotNull outerContext: ParserRuleContext,
 		@NotNull configs: ATNConfigSet,
 		startIndex: number): NoViableAltException {
@@ -2304,7 +2317,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	@NotNull
-	protected addDFAEdge(@NotNull dfa: DFA,
+	protected addDFAEdge(
+		@NotNull dfa: DFA,
 		@NotNull fromState: DFAState,
 		t: number,
 		contextTransitions: IntegerList | undefined,
@@ -2457,7 +2471,8 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	/** If context sensitive parsing, we know it's ambiguity not conflict */
-	protected reportAmbiguity(@NotNull dfa: DFA,
+	protected reportAmbiguity(
+		@NotNull dfa: DFA,
 		D: DFAState,  // the DFA state from execATN(): void that had SLL conflicts
 		startIndex: number,
 		stopIndex: number,

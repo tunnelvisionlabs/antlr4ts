@@ -17,7 +17,8 @@ export function Nullable(
 	// intentionally empty
 }
 
-export function Override(target: any,
+export function Override(
+	target: any,
 	propertyKey: PropertyKey,
 	propertyDescriptor?: PropertyDescriptor) {
 	// do something with 'target' ...

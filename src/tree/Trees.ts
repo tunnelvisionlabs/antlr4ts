@@ -196,7 +196,8 @@ export class Trees {
 	 *
 	 *  @since 4.5
 	 */
-	public static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
+	public static getRootOfSubtreeEnclosingRegion(
+		@NotNull t: ParseTree,
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {
@@ -227,7 +228,8 @@ export class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
-	public static stripChildrenOutOfRange(t: ParserRuleContext,
+	public static stripChildrenOutOfRange(
+		t: ParserRuleContext,
 		root: ParserRuleContext,
 		startIndex: number,
 		stopIndex: number): void {
