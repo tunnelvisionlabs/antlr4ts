@@ -24,13 +24,15 @@
     "object-literal-shorthand": false,
     "object-literal-sort-keys": false,
     "one-line": false,
-    "ordered-imports": false,
     "prefer-const": false,
     "prefer-for-of": false,
     "quotemark": false,
     "unified-signatures": false,
     "variable-name": false,
-    "whitespace": false
+    "whitespace": false,
+
+    // Can't be reasonably enabled because the imports need to be per-file within this repository
+    "ordered-imports": false
   },
   "linterOptions": {
     "exclude": [
