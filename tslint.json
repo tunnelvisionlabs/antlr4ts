@@ -16,7 +16,6 @@
     "no-namespace": false,
     "no-shadowed-variable": false,
     "no-unused-expression": false,
-    "no-trailing-whitespace": false,
     "no-var-requires": false,
     "one-line": false,
     "prefer-const": false,

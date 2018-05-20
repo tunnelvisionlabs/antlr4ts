@@ -13,7 +13,7 @@ import { Transition } from "./Transition";
 
 const INITIAL_NUM_TRANSITIONS: number = 4;
 
-/** 
+/**
  * The following images show the relation of states and
  * {@link ATNState#transitions} for various grammar constructs.
  *

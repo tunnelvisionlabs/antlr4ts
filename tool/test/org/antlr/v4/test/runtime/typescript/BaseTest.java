@@ -240,10 +240,12 @@ public abstract class BaseTest {
 				"	base.parserTest( {\n" +
 				"		debug: <debug>,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		// tslint:disable:no-trailing-whitespace\n" +
 				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		input: `<input>`,\n" +
-				"		lexer: <lexerName>, \n" +
-				"		parser: <parserName>, \n" +
+				"		// tslint:enable:no-trailing-whitespace\n" +
+				"		lexer: <lexerName>,\n" +
+				"		parser: <parserName>,\n" +
 				"		parserStartRule: (parser) => parser.<parserStartRuleName>(),\n" +
 				"		showDFA: <showDFA>,\n" +
 				"		testName: `<testName>`,\n" +
@@ -273,9 +275,11 @@ public abstract class BaseTest {
 				"it(`<className>.<testName>`, ()=> {\n" +
 				"	base.lexerTest( {\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		// tslint:disable:no-trailing-whitespace\n" +
 				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		input: `<input>`,\n" +
-				"		lexer: <lexerName>, \n" +
+				"		// tslint:enable:no-trailing-whitespace\n" +
+				"		lexer: <lexerName>,\n" +
 				"		showDFA: <showDFA>,\n" +
 				"		testName: `<testName>`,\n" +
 				"		});\n" +
