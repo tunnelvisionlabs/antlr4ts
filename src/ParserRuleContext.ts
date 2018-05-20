@@ -63,8 +63,8 @@ export class ParserRuleContext extends RuleContext {
 	 *
 	 *  The parser state property updates field s and adds it to this list
 	 *  if we are debugging/tracing.
-     *
-     *  This does not trace states visited during prediction.
+	 *
+	 *  This does not trace states visited during prediction.
 	 */
 //	public Array<number> states;
 
@@ -159,7 +159,7 @@ export class ParserRuleContext extends RuleContext {
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
 	 *  we entered a rule. If we have # label, we will need to remove
 	 *  generic ruleContext object.
- 	 */
+	 */
 	public removeLastChild(): void {
 		if (this.children) {
 			this.children.pop();

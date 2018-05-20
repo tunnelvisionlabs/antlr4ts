@@ -192,10 +192,10 @@ export class Trees {
 	}
 
 	/** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
-	*  inclusively using postorder traversal.  Recursive depth-first-search.
-	*
-	*  @since 4.5
-	*/
+	 *  inclusively using postorder traversal.  Recursive depth-first-search.
+	 *
+	 *  @since 4.5
+	 */
 	public static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number, // inclusive
@@ -220,13 +220,13 @@ export class Trees {
 	}
 
 	/** Replace any subtree siblings of root that are completely to left
-	*  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
-	*  node. The source interval for t is not altered to suit smaller range!
-	*
-	*  WARNING: destructive to t.
-	*
-	*  @since 4.5.1
-	*/
+	 *  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
+	 *  node. The source interval for t is not altered to suit smaller range!
+	 *
+	 *  WARNING: destructive to t.
+	 *
+	 *  @since 4.5.1
+	 */
 	public static stripChildrenOutOfRange(t: ParserRuleContext,
 		root: ParserRuleContext,
 		startIndex: number,

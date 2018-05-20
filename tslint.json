@@ -6,7 +6,6 @@
     "comment-format": false,
     "indent": [true, "tabs"],
     "interface-name": false,
-    "jsdoc-format": false,
     "max-classes-per-file": false,
     "max-line-length": false,
     "member-ordering": false,

@@ -320,9 +320,9 @@ export class ATNConfig implements Equatable {
 	}
 
 	/** An ATN configuration is equal to another if both have
-     *  the same state, they predict the same alternative, and
-     *  syntactic/semantic contexts are the same.
-     */
+	 *  the same state, they predict the same alternative, and
+	 *  syntactic/semantic contexts are the same.
+	 */
 	@Override
 	public equals(o: any): boolean {
 		if (this === o) {

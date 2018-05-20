@@ -634,9 +634,9 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	/** Add a new DFA state if there isn't one with this set of
-		configurations already. This method also detects the first
-		configuration containing an ATN rule stop state. Later, when
-		traversing the DFA, we will know which rule to accept.
+	 * 	configurations already. This method also detects the first
+	 * 	configuration containing an ATN rule stop state. Later, when
+	 * 	traversing the DFA, we will know which rule to accept.
 	 */
 	@NotNull
 	protected addDFAState(@NotNull configs: ATNConfigSet): DFAState {

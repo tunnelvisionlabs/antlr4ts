@@ -269,14 +269,14 @@ export class TokenStreamRewriter {
 
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter.
- 	 */
+	 */
 	public getText(): string;
 
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter in programName.
 	 *
 	 * @since 4.5
- 	 */
+	 */
 	public getText(programName: string): string;
 
 	/** Return the text associated with the tokens in the interval from the
@@ -287,7 +287,7 @@ export class TokenStreamRewriter {
 	 *  to the first and last token in the interval. So, if you did an
 	 *  insertBefore on the first token, you would get that insertion.
 	 *  The same is true if you do an insertAfter the stop token.
- 	 */
+	 */
 	public getText(interval: Interval): string;
 
 	public getText(interval: Interval, programName: string): string;
@@ -375,7 +375,7 @@ export class TokenStreamRewriter {
 	 *  D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
 	 *
 	 *  I.i.u R.x-y.v | i in (x+1)-y			delete I (since insert before
-	 *											we're not deleting i)
+	 * 											we're not deleting i)
 	 *  I.i.u R.x-y.v | i not in (x+1)-y		leave alone, nonoverlapping
 	 *  R.x-y.v I.i.u | i in x-y				ERROR
 	 *  R.x-y.v I.x.u 							R.x-y.uv (combine, delete I)
@@ -387,15 +387,15 @@ export class TokenStreamRewriter {
 	 *  First we need to examine replaces. For any replace op:
 	 *
 	 * 		1. wipe out any insertions before op within that range.
-	 *		2. Drop any replace op before that is contained completely within
-	 *	 that range.
-	 *		3. Throw exception upon boundary overlap with any previous replace.
+	 * 		2. Drop any replace op before that is contained completely within
+	 * 	 that range.
+	 * 		3. Throw exception upon boundary overlap with any previous replace.
 	 *
 	 *  Then we can deal with inserts:
 	 *
 	 * 		1. for any inserts to same index, combine even if not adjacent.
 	 * 		2. for any prior replace with same left boundary, combine this
-	 *	 insert with replace and delete this replace.
+	 * 	 insert with replace and delete this replace.
 	 * 		3. throw exception if index in same range as previous replace
 	 *
 	 *  Don't actually delete; make op null in list. Easier to walk list.

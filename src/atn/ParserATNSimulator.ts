@@ -718,45 +718,46 @@ export class ParserATNSimulator extends ATNSimulator {
 	/** Performs ATN simulation to compute a predicted alternative based
 	 *  upon the remaining input, but also updates the DFA cache to avoid
 	 *  having to traverse the ATN again for the same input sequence.
-
-	 There are some key conditions we're looking for after computing a new
-	 set of ATN configs (proposed DFA state):
-	       * if the set is empty, there is no viable alternative for current symbol
-	       * does the state uniquely predict an alternative?
-	       * does the state have a conflict that would prevent us from
-	         putting it on the work list?
-	       * if in non-greedy decision is there a config at a rule stop state?
-
-	 We also have some key operations to do:
-	       * add an edge from previous DFA state to potentially new DFA state, D,
-	         upon current symbol but only if adding to work list, which means in all
-	         cases except no viable alternative (and possibly non-greedy decisions?)
-	       * collecting predicates and adding semantic context to DFA accept states
-	       * adding rule context to context-sensitive DFA accept states
-	       * consuming an input symbol
-	       * reporting a conflict
-	       * reporting an ambiguity
-	       * reporting a context sensitivity
-	       * reporting insufficient predicates
-
-	 We should isolate those operations, which are side-effecting, to the
-	 main work loop. We can isolate lots of code into other functions, but
-	 they should be side effect free. They can return package that
-	 indicates whether we should report something, whether we need to add a
-	 DFA edge, whether we need to augment accept state with semantic
-	 context or rule invocation context. Actually, it seems like we always
-	 add predicates if they exist, so that can simply be done in the main
-	 loop for any accept state creation or modification request.
-
-	 cover these cases:
-	    dead end
-	    single alt
-	    single alt + preds
-	    conflict
-	    conflict + preds
-
-	 TODO: greedy + those
-
+	 *
+	 * There are some key conditions we're looking for after computing a new
+	 * set of ATN configs (proposed DFA state):
+	 *
+	 * * if the set is empty, there is no viable alternative for current symbol
+	 * * does the state uniquely predict an alternative?
+	 * * does the state have a conflict that would prevent us from
+	 *   putting it on the work list?
+	 * * if in non-greedy decision is there a config at a rule stop state?
+	 *
+	 * We also have some key operations to do:
+	 *
+	 * * add an edge from previous DFA state to potentially new DFA state, D,
+	 *   upon current symbol but only if adding to work list, which means in all
+	 *   cases except no viable alternative (and possibly non-greedy decisions?)
+	 * * collecting predicates and adding semantic context to DFA accept states
+	 * * adding rule context to context-sensitive DFA accept states
+	 * * consuming an input symbol
+	 * * reporting a conflict
+	 * * reporting an ambiguity
+	 * * reporting a context sensitivity
+	 * * reporting insufficient predicates
+	 *
+	 * We should isolate those operations, which are side-effecting, to the
+	 * main work loop. We can isolate lots of code into other functions, but
+	 * they should be side effect free. They can return package that
+	 * indicates whether we should report something, whether we need to add a
+	 * DFA edge, whether we need to augment accept state with semantic
+	 * context or rule invocation context. Actually, it seems like we always
+	 * add predicates if they exist, so that can simply be done in the main
+	 * loop for any accept state creation or modification request.
+	 *
+	 * cover these cases:
+	 *   dead end
+	 *   single alt
+	 *   single alt + preds
+	 *   conflict
+	 *   conflict + preds
+	 *
+	 * TODO: greedy + those
 	 */
 	protected execATN(@NotNull dfa: DFA,
 					@NotNull input: TokenStream, startIndex: number,

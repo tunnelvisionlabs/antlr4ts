@@ -485,10 +485,10 @@ export class IntervalSet implements IntSet {
 	}
 
 	/** Are two IntervalSets equal?  Because all intervals are sorted
-     *  and disjoint, equals is a simple linear walk over both lists
-     *  to make sure they are the same.  Interval.equals() is used
-     *  by the List.equals() method to check the ranges.
-     */
+	 *  and disjoint, equals is a simple linear walk over both lists
+	 *  to make sure they are the same.  Interval.equals() is used
+	 *  by the List.equals() method to check the ranges.
+	 */
 	@Override
 	public equals(o: any): boolean {
 		if (o == null || !(o instanceof IntervalSet)) {

@@ -204,7 +204,7 @@ export class TestIntervalSet {
 	}
 
 	/** The following was broken:
-	 	{0..113, 115..65534}-{0..115, 117..65534}=116..65534
+	 * 	{0..113, 115..65534}-{0..115, 117..65534}=116..65534
 	 */
 	@Test public testSubtractOfWackyRange(): void {
 		let s: IntervalSet =  IntervalSet.of(0,113);
@@ -380,11 +380,11 @@ export class TestIntervalSet {
 	}
 
 	/** The following was broken:
-	    {'\u0000'..'s', 'u'..'\uFFFE'} & {'\u0000'..'q', 's'..'\uFFFE'}=
-	    {'\u0000'..'q', 's'}!!!! broken...
-	 	'q' is 113 ascii
-	 	'u' is 117
-	*/
+	 *   {'\u0000'..'s', 'u'..'\uFFFE'} & {'\u0000'..'q', 's'..'\uFFFE'}=
+	 *   {'\u0000'..'q', 's'}!!!! broken...
+	 *   'q' is 113 ascii
+	 *   'u' is 117
+	 */
 	@Test public testNotRIntersectionNotT(): void {
 		let s: IntervalSet =  IntervalSet.of(0,"s".charCodeAt(0));
 		s.add("u".charCodeAt(0),200);

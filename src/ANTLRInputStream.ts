@@ -88,9 +88,9 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	/** Return the current input symbol index 0..n where n indicates the
-     *  last symbol has been read.  The index is the index of char to
+	 *  last symbol has been read.  The index is the index of char to
 	 *  be returned from LA(1).
-     */
+	 */
 	@Override
 	get index(): number {
 		return this.p;
