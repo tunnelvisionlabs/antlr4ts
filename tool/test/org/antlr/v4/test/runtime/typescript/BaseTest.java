@@ -238,15 +238,15 @@ public abstract class BaseTest {
 				"\n" +
 				"it(`<className>.<testName>`, ()=> {\n" +
 				"	base.parserTest( {\n" +
-				"		testName: `<testName>`,\n" +
+				"		debug: <debug>,\n" +
+				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		input: `<input>`,\n" +
 				"		lexer: <lexerName>, \n" +
 				"		parser: <parserName>, \n" +
 				"		parserStartRule: (parser) => parser.<parserStartRuleName>(),\n" +
-				"		debug: <debug>,\n" +
-				"		input: `<input>`,\n" +
-				"		expectedOutput: `<expectedOutput>`,\n" +
-				"		expectedErrors: `<expectedErrors>`,\n" +
 				"		showDFA: <showDFA>,\n" +
+				"		testName: `<testName>`,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");
@@ -272,12 +272,12 @@ public abstract class BaseTest {
 				"\n" +
 				"it(`<className>.<testName>`, ()=> {\n" +
 				"	base.lexerTest( {\n" +
-				"		testName: `<testName>`,\n" +
-				"		lexer: <lexerName>, \n" +
-				"		input: `<input>`,\n" +
-				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		input: `<input>`,\n" +
+				"		lexer: <lexerName>, \n" +
 				"		showDFA: <showDFA>,\n" +
+				"		testName: `<testName>`,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");

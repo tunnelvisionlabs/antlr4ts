@@ -22,7 +22,6 @@
     "no-trailing-whitespace": false,
     "no-var-requires": false,
     "object-literal-shorthand": false,
-    "object-literal-sort-keys": false,
     "one-line": false,
     "prefer-const": false,
     "prefer-for-of": false,
