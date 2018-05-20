@@ -80,8 +80,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		// LOOK FOR IT IN BUCKET
-		for (let i = 0; i < bucket.length; i++) {
-			let existing = bucket[i];
+		for (let existing of bucket) {
 			if (this.comparator.equals(existing, o)) {
 				return existing; // found existing, quit
 			}

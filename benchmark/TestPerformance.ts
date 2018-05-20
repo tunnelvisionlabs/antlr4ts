@@ -979,8 +979,7 @@ export class TestPerformance {
 				let configs: number =  0;
 				let uniqueConfigs: Array2DHashSet<ATNConfig> =  new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 
-				for (let i = 0; i < modeToDFA.length; i++) {
-					let dfa: DFA =  modeToDFA[i];
+				for (let dfa of modeToDFA) {
 					if (dfa == null) {
 						continue;
 					}
@@ -1026,8 +1025,7 @@ export class TestPerformance {
 				let configs: number =  0;
 				let uniqueConfigs: Array2DHashSet<ATNConfig> =  new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 
-				for (let i = 0; i < decisionToDFA.length; i++) {
-					let dfa: DFA =  decisionToDFA[i];
+				for (let dfa of decisionToDFA) {
 					if (dfa == null) {
 						continue;
 					}
@@ -1122,8 +1120,7 @@ export class TestPerformance {
 			let globalConfigCount: number =  0;
 			let contextsInDFAState: Int32Array =  new Int32Array(0);
 
-			for (let i = 0; i < decisionToDFA.length; i++) {
-				let dfa: DFA =  decisionToDFA[i];
+			for (let dfa of decisionToDFA) {
 				if (dfa == null) {
 					continue;
 				}
@@ -1197,8 +1194,8 @@ export class TestPerformance {
 
 	private static sum(array: Uint32Array): number {
 		let result: number =  0;
-		for (let i = 0; i < array.length; i++) {
-			result += array[i];
+		for (let value of array) {
+			result += value;
 		}
 
 		return result;

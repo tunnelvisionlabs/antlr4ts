@@ -193,8 +193,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return;
 		}
 
-		for (let i = 0; i < this.configs.length; i++) {
-			let config: ATNConfig = this.configs[i];
+		for (let config of this.configs) {
 			config.context = interpreter.atn.getCachedContext(config.context);
 		}
 	}

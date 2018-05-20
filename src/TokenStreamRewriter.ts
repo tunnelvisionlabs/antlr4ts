@@ -487,8 +487,7 @@ export class TokenStreamRewriter {
 		}
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
 		let m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
-		for (let i = 0; i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined = rewrites[i];
+		for (let op of rewrites) {
 			if ( op==null ) continue; // ignore deleted ops
 			if ( m.get(op.index)!=null ) {
 				throw new Error("should only be one op per index");

@@ -818,8 +818,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/** For debugging and other purposes. */
 	public getDFAStrings(): string[] {
 		let s: string[] = [];
-		for (let d = 0; d < this._interp.atn.decisionToDFA.length; d++) {
-			let dfa: DFA = this._interp.atn.decisionToDFA[d];
+		for (let dfa of this._interp.atn.decisionToDFA) {
 			s.push(dfa.toString(this.vocabulary, this.ruleNames));
 		}
 		return s;
@@ -828,8 +827,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/** For debugging and other purposes. */
 	public dumpDFA(): void {
 		let seenOne: boolean = false;
-		for (let d = 0; d < this._interp.atn.decisionToDFA.length; d++) {
-			let dfa: DFA = this._interp.atn.decisionToDFA[d];
+		for (let dfa of this._interp.atn.decisionToDFA) {
 			if (!dfa.isEmpty) {
 				if (seenOne) console.log();
 				console.log("Decision " + dfa.decision + ":");

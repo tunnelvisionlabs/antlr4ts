@@ -773,8 +773,7 @@ export class ATNDeserializer {
 			}
 		}
 
-		for (let stateNumber = 0; stateNumber < atn.states.length; stateNumber++) {
-			let state: ATNState = atn.states[stateNumber];
+		for (let state of atn.states) {
 			if (state.ruleIndex < 0) {
 				continue;
 			}
@@ -971,8 +970,7 @@ export class ATNDeserializer {
 
 			let blockEndState: ATNState = decision.getOptimizedTransition(setTransitions.minElement).target.getOptimizedTransition(0).target;
 			let matchSet: IntervalSet = new IntervalSet();
-			for (let i = 0; i < setTransitions.intervals.length; i++) {
-				let interval: Interval = setTransitions.intervals[i];
+			for (let interval of setTransitions.intervals) {
 				for (let j = interval.a; j <= interval.b; j++) {
 					let matchTransition: Transition = decision.getOptimizedTransition(j).target.getOptimizedTransition(0);
 					if (matchTransition instanceof NotSetTransition) {

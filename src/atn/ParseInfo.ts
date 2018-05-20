@@ -65,8 +65,8 @@ export class ParseInfo {
 	public getTotalTimeInPrediction(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let t: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			t += decisions[i].timeInPrediction;
+		for (let decision of decisions) {
+			t += decision.timeInPrediction;
 		}
 
 		return t;
@@ -80,8 +80,8 @@ export class ParseInfo {
 	public getTotalSLLLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let k: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			k += decisions[i].SLL_TotalLook;
+		for (let decision of decisions) {
+			k += decision.SLL_TotalLook;
 		}
 
 		return k;
@@ -95,8 +95,8 @@ export class ParseInfo {
 	public getTotalLLLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let k: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			k += decisions[i].LL_TotalLook;
+		for (let decision of decisions) {
+			k += decision.LL_TotalLook;
 		}
 
 		return k;
@@ -109,8 +109,8 @@ export class ParseInfo {
 	public getTotalSLLATNLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let k: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			k += decisions[i].SLL_ATNTransitions;
+		for (let decision of decisions) {
+			k += decision.SLL_ATNTransitions;
 		}
 
 		return k;
@@ -123,8 +123,8 @@ export class ParseInfo {
 	public getTotalLLATNLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let k: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			k += decisions[i].LL_ATNTransitions;
+		for (let decision of decisions) {
+			k += decision.LL_ATNTransitions;
 		}
 
 		return k;
@@ -141,9 +141,9 @@ export class ParseInfo {
 	public getTotalATNLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();
 		let k: number = 0;
-		for (let i = 0; i < decisions.length; i++) {
-			k += decisions[i].SLL_ATNTransitions;
-			k += decisions[i].LL_ATNTransitions;
+		for (let decision of decisions) {
+			k += decision.SLL_ATNTransitions;
+			k += decision.LL_ATNTransitions;
 		}
 
 		return k;
