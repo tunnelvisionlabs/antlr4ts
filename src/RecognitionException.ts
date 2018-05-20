@@ -6,11 +6,11 @@
 // ConvertTo-TS run at 2016-10-04T11:26:57.0697674-07:00
 import { CharStream } from "./CharStream";
 import { IntervalSet } from "./misc/IntervalSet";
-import { IntStream } from './IntStream';
+import { IntStream } from "./IntStream";
 import { Lexer } from "./Lexer";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { RuleContext } from "./RuleContext";
 import { Token } from "./Token";
 

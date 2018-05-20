@@ -11,7 +11,7 @@
  */
 import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 
 export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**

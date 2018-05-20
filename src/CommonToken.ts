@@ -5,14 +5,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.1614404-07:00
 
-import { ATNSimulator } from './atn/ATNSimulator';
-import { CharStream } from './CharStream';
-import { Interval } from './misc/Interval';
-import { NotNull, Override } from './Decorators';
-import { Recognizer } from './Recognizer';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
-import { WritableToken } from './WritableToken';
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { CharStream } from "./CharStream";
+import { Interval } from "./misc/Interval";
+import { NotNull, Override } from "./Decorators";
+import { Recognizer } from "./Recognizer";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
+import { WritableToken } from "./WritableToken";
 
 export class CommonToken implements WritableToken {
 	/**

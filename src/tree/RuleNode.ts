@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
 
-import { RuleContext } from '../RuleContext';
+import { RuleContext } from "../RuleContext";
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
 import { Parser } from "../Parser";

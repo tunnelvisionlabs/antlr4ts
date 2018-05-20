@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:58.1768850-07:00
 
-import { Interval } from './misc/Interval';
-import { Override } from './Decorators';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators";
+import { Token } from "./Token";
+import { TokenStream } from "./TokenStream";
 
-import * as Utils from './misc/Utils';
+import * as Utils from "./misc/Utils";
 
 /**
  * Useful for rewriting out a buffered input token stream after doing some
@@ -143,7 +143,7 @@ export class TokenStreamRewriter {
 	public insertAfter(index: number, text: any, programName: string): void;
 	public insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
-		if (typeof tokenOrIndex === 'number') {
+		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
 		} else {
 			index = tokenOrIndex.tokenIndex;
@@ -162,7 +162,7 @@ export class TokenStreamRewriter {
 	public insertBefore(index: number, text: any, programName: string): void;
 	public insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
-		if (typeof tokenOrIndex === 'number') {
+		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
 		} else {
 			index = tokenOrIndex.tokenIndex;
@@ -177,7 +177,7 @@ export class TokenStreamRewriter {
 	public replaceSingle(index: number, text: any): void;
 	public replaceSingle(indexT: Token, text: any): void;
 	public replaceSingle(index: Token | number, text: any): void {
-		if (typeof index === 'number') {
+		if (typeof index === "number") {
 			this.replace(index, index, text);
 		} else {
 			this.replace(index, index, text);
@@ -193,11 +193,11 @@ export class TokenStreamRewriter {
 	public replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
 
 	public replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
-		if (typeof from !== 'number') {
+		if (typeof from !== "number") {
 			from = from.tokenIndex;
 		}
 
-		if (typeof to !== 'number') {
+		if (typeof to !== "number") {
 			to = to.tokenIndex;
 		}
 
@@ -228,7 +228,7 @@ export class TokenStreamRewriter {
 			to = from;
 		}
 
-		if (typeof from === 'number') {
+		if (typeof from === "number") {
 			this.replace(from, to as number, undefined, programName);
 		} else {
 			this.replace(from, to as Token, undefined, programName);
@@ -300,7 +300,7 @@ export class TokenStreamRewriter {
 			interval = Interval.of(0, this.tokens.size - 1);
 		}
 
-		if (typeof intervalOrProgram === 'string') {
+		if (typeof intervalOrProgram === "string") {
 			programName = intervalOrProgram;
 		}
 
@@ -549,7 +549,7 @@ export class RewriteOperation {
 	@Override
 	public toString(): string {
 		let opName: string = this.constructor.name;
-		let $index = opName.indexOf('$');
+		let $index = opName.indexOf("$");
 		opName = opName.substring($index+1, opName.length);
 		return "<"+opName+"@"+this.tokens.get(this.index)+
 				":\""+this.text+"\">";

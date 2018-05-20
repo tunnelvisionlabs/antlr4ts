@@ -336,6 +336,6 @@ export class ParserRuleContext extends RuleContext {
 		return "ParserRuleContext" + rules + "{" +
 			"start=" + this._start +
 			", stop=" + this._stop +
-			'}';
+			"}";
 	}
 }

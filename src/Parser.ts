@@ -6,41 +6,41 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.4399193-07:00
 
 import * as assert from "assert";
-import * as Utils from './misc/Utils';
+import * as Utils from "./misc/Utils";
 
-import { ANTLRErrorListener } from './ANTLRErrorListener';
-import { ANTLRErrorStrategy } from './ANTLRErrorStrategy';
-import { ATN } from './atn/ATN';
-import { ATNDeserializationOptions } from './atn/ATNDeserializationOptions';
-import { ATNDeserializer } from './atn/ATNDeserializer';
-import { ATNSimulator } from './atn/ATNSimulator';
-import { ATNState } from './atn/ATNState';
-import { DefaultErrorStrategy } from './DefaultErrorStrategy';
-import { DFA } from './dfa/DFA';
-import { ErrorNode } from './tree/ErrorNode';
-import { IntegerStack } from './misc/IntegerStack';
-import { IntervalSet } from './misc/IntervalSet';
-import { IntStream } from './IntStream';
-import { Lexer } from './Lexer';
-import { Override, NotNull, Nullable } from './Decorators';
-import { ParseInfo } from './atn/ParseInfo';
-import { ParserATNSimulator } from './atn/ParserATNSimulator';
-import { ParserErrorListener } from './ParserErrorListener';
-import { ParserRuleContext } from './ParserRuleContext';
-import { ParseTreeListener } from './tree/ParseTreeListener';
-import { ParseTreePattern } from './tree/pattern/ParseTreePattern';
-// import { ParseTreePatternMatcher } from './tree/pattern/ParseTreePatternMatcher';
-// import { ProfilingATNSimulator } from './atn/ProfilingATNSimulator';
-import { ProxyParserErrorListener } from './ProxyParserErrorListener';
-import { RecognitionException } from './RecognitionException';
-import { Recognizer } from './Recognizer';
-import { RuleContext } from './RuleContext';
-import { RuleTransition } from './atn/RuleTransition';
-import { TerminalNode } from './tree/TerminalNode';
-import { Token } from './Token';
-import { TokenFactory } from './TokenFactory';
-import { TokenSource } from './TokenSource';
-import { TokenStream } from './TokenStream';
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
+import { ATN } from "./atn/ATN";
+import { ATNDeserializationOptions } from "./atn/ATNDeserializationOptions";
+import { ATNDeserializer } from "./atn/ATNDeserializer";
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { ATNState } from "./atn/ATNState";
+import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
+import { DFA } from "./dfa/DFA";
+import { ErrorNode } from "./tree/ErrorNode";
+import { IntegerStack } from "./misc/IntegerStack";
+import { IntervalSet } from "./misc/IntervalSet";
+import { IntStream } from "./IntStream";
+import { Lexer } from "./Lexer";
+import { Override, NotNull, Nullable } from "./Decorators";
+import { ParseInfo } from "./atn/ParseInfo";
+import { ParserATNSimulator } from "./atn/ParserATNSimulator";
+import { ParserErrorListener } from "./ParserErrorListener";
+import { ParserRuleContext } from "./ParserRuleContext";
+import { ParseTreeListener } from "./tree/ParseTreeListener";
+import { ParseTreePattern } from "./tree/pattern/ParseTreePattern";
+// import { ParseTreePatternMatcher } from "./tree/pattern/ParseTreePatternMatcher";
+// import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
+import { ProxyParserErrorListener } from "./ProxyParserErrorListener";
+import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from "./Recognizer";
+import { RuleContext } from "./RuleContext";
+import { RuleTransition } from "./atn/RuleTransition";
+import { TerminalNode } from "./tree/TerminalNode";
+import { Token } from "./Token";
+import { TokenFactory } from "./TokenFactory";
+import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
 
 class TraceListener implements ParseTreeListener {
 	constructor(private ruleNames: string[], private tokenStream: TokenStream) {

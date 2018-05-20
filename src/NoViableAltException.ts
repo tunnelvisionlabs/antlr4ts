@@ -11,11 +11,11 @@
  *  in the various paths when the error. Reported by reportNoViableAlternative()
  */
 
-import { ATNConfigSet } from './atn/ATNConfigSet';
-import { Parser } from './Parser';
-import { ParserRuleContext } from './ParserRuleContext';
+import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { Parser } from "./Parser";
+import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";

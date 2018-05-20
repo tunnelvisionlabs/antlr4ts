@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.6769122-07:00
 
-import { ATNState } from './ATNState';
-import { IntervalSet } from '../misc/IntervalSet';
-import { Override, NotNull } from '../Decorators';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+import { ATNState } from "./ATNState";
+import { IntervalSet } from "../misc/IntervalSet";
+import { Override, NotNull } from "../Decorators";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
 
 /** TODO: make all transitions sets? no, should remove set edges */
 export class AtomTransition extends Transition {

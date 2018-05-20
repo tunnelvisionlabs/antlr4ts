@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.1463816-07:00
 
-import * as assert from 'assert';
+import * as assert from "assert";
 import assertEquals = assert.equal;
-import { test as Test, suite } from 'mocha-typescript';
+import { test as Test, suite } from "mocha-typescript";
 
-import { PredictionContext } from '../../src/atn/PredictionContext';
-import { PredictionContextCache } from '../../src/atn/PredictionContextCache';
+import { PredictionContext } from "../../src/atn/PredictionContext";
+import { PredictionContextCache } from "../../src/atn/PredictionContextCache";
 
 /// Assuming that IdentityHashMap<K, V> == Map<K, V>;
 
@@ -808,7 +808,7 @@ function toDOTString(context: PredictionContext): string {
 	contextIds.set(context, contextIds.size);
 	workList.push(context);
 	for (let current = workList.pop(); !!current; current = workList.pop()) {
-		nodes += ("  s") + (contextIds.get(current)) + ('[');
+		nodes += ("  s") + (contextIds.get(current)) + ("[");
 
 		if (current.size > 1) {
 			nodes += ("shape=record, ");
@@ -817,19 +817,19 @@ function toDOTString(context: PredictionContext): string {
 		nodes += ("label=\"");
 
 		if (current.isEmpty) {
-			nodes += (PredictionContext.isEmptyLocal(current) ? '*' : '$');
+			nodes += (PredictionContext.isEmptyLocal(current) ? "*" : "$");
 		} else if (current.size > 1) {
 			for (let i = 0; i < current.size; i++) {
 				if (i > 0) {
-					nodes += ('|');
+					nodes += ("|");
 				}
 
-				nodes += ("<p") + (i) + ('>');
+				nodes += ("<p") + (i) + (">");
 				if (current.getReturnState(i) === PredictionContext.EMPTY_FULL_STATE_KEY) {
-					nodes += ('$');
+					nodes += ("$");
 				}
 				else if (current.getReturnState(i) === PredictionContext.EMPTY_LOCAL_STATE_KEY) {
-					nodes += ('*');
+					nodes += ("*");
 				}
 			}
 		} else {
@@ -857,7 +857,7 @@ function toDOTString(context: PredictionContext): string {
 			}
 
 			edges += ("->");
-			edges += ('s') + (contextIds.get(current.getParent(i)));
+			edges += ("s") + (contextIds.get(current.getParent(i)));
 			edges += ("[label=\"") + (current.getReturnState(i)) + ("\"]");
 			edges += (";\n");
 		}

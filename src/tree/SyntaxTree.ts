@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9953174-07:00
 
-import { Tree } from './Tree';
-import { Interval } from '../misc/Interval';
+import { Tree } from "./Tree";
+import { Interval } from "../misc/Interval";
 
 /** A tree that knows about an interval in a token stream
  *  is some kind of syntax tree. Subinterfaces distinguish

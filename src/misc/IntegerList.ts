@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.5099429-07:00
 
-import { Arrays } from './Arrays';
-import { NotNull, Override } from '../Decorators';
-import { JavaCollection } from './Stubs';
+import { Arrays } from "./Arrays";
+import { NotNull, Override } from "../Decorators";
+import { JavaCollection } from "./Stubs";
 
 const EMPTY_DATA: Int32Array = new Int32Array(0);
 
@@ -31,7 +31,7 @@ export class IntegerList {
 		} else if (arg instanceof IntegerList) {
 			this._data = arg._data.slice(0);
 			this._size = arg._size;
-		} else if (typeof arg === 'number') {
+		} else if (typeof arg === "number") {
 			if (arg === 0) {
 				this._data = EMPTY_DATA;
 				this._size = 0;

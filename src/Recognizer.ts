@@ -18,7 +18,7 @@ import { Token } from "./Token";
 import { Vocabulary } from "./Vocabulary";
 import { VocabularyImpl } from "./VocabularyImpl";
 
-import * as Utils from './misc/Utils';
+import * as Utils from "./misc/Utils";
 
 export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	public static readonly EOF: number = -1;

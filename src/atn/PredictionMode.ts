@@ -5,20 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { asIterable } from '../misc/Stubs';
-import { ATN } from './ATN';
-import { ATNConfig } from './ATNConfig';
-import { ATNConfigSet } from './ATNConfigSet';
-import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { Collection } from '../misc/Stubs';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { MurmurHash } from '../misc/MurmurHash';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { Override } from '../Decorators';
-import { RuleStopState } from './RuleStopState';
-import { SemanticContext } from './SemanticContext';
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { asIterable } from "../misc/Stubs";
+import { ATN } from "./ATN";
+import { ATNConfig } from "./ATNConfig";
+import { ATNConfigSet } from "./ATNConfigSet";
+import { ATNState } from "./ATNState";
+import { BitSet } from "../misc/BitSet";
+import { Collection } from "../misc/Stubs";
+import { EqualityComparator } from "../misc/EqualityComparator";
+import { MurmurHash } from "../misc/MurmurHash";
+import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
+import { Override } from "../Decorators";
+import { RuleStopState } from "./RuleStopState";
+import { SemanticContext } from "./SemanticContext";
 
 /**
  * This enumeration defines the prediction modes available in ANTLR 4 along with

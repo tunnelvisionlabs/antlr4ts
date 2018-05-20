@@ -3,22 +3,22 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import * as assert from 'assert';
-import { ANTLRInputStream } from 'antlr4ts/ANTLRInputStream';
-import { CharStream } from 'antlr4ts/CharStream';
-import { CommonTokenStream } from 'antlr4ts/CommonTokenStream';
-import { DiagnosticErrorListener } from 'antlr4ts/DiagnosticErrorListener';
-import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
-import { Lexer } from 'antlr4ts/Lexer';
-import { Parser } from 'antlr4ts/Parser';
-import { ParserRuleContext } from 'antlr4ts/ParserRuleContext';
-import { ParseTree } from 'antlr4ts/tree/ParseTree';
-import { ParseTreeListener } from 'antlr4ts/tree/ParseTreeListener';
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
-import { RuleNode } from 'antlr4ts/tree/RuleNode';
-import { TerminalNode } from 'antlr4ts/tree/TerminalNode';
+import * as assert from "assert";
+import { ANTLRInputStream } from "antlr4ts/ANTLRInputStream";
+import { CharStream } from "antlr4ts/CharStream";
+import { CommonTokenStream } from "antlr4ts/CommonTokenStream";
+import { DiagnosticErrorListener } from "antlr4ts/DiagnosticErrorListener";
+import { ErrorNode } from "antlr4ts/tree/ErrorNode";
+import { Lexer } from "antlr4ts/Lexer";
+import { Parser } from "antlr4ts/Parser";
+import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import { ParseTree } from "antlr4ts/tree/ParseTree";
+import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
+import { RuleNode } from "antlr4ts/tree/RuleNode";
+import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 
-const stdMocks = require('std-mocks');
+const stdMocks = require("std-mocks");
 
 function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: ()=> void ) {
 	try {
@@ -28,8 +28,8 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 		stdMocks.restore();
 	}
 	let streams = stdMocks.flush();
-	let output = streams.stdout.join('');
-	let errors = streams.stderr.join('');
+	let output = streams.stdout.join("");
+	let errors = streams.stderr.join("");
 
 	// Fixup for small behavioral difference at EOF...
 	if (output.length === expectedOutput.length - 1 && output[output.length-1] !== "\n")

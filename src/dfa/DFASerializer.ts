@@ -5,17 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.5097925-07:00
 
-import { asIterable } from '../misc/Stubs';
-import { ATN } from '../atn/ATN';
-import { ATNSimulator } from '../atn/ATNSimulator';
-import { ATNState } from '../atn/ATNState';
-import { DFA } from './DFA';
-import { DFAState } from './DFAState';
-import { NotNull, Override } from '../Decorators';
-import { PredictionContext } from '../atn/PredictionContext';
-import { Recognizer } from '../Recognizer';
-import { Vocabulary } from '../Vocabulary';
-import { VocabularyImpl } from '../VocabularyImpl';
+import { asIterable } from "../misc/Stubs";
+import { ATN } from "../atn/ATN";
+import { ATNSimulator } from "../atn/ATNSimulator";
+import { ATNState } from "../atn/ATNState";
+import { DFA } from "./DFA";
+import { DFAState } from "./DFAState";
+import { NotNull, Override } from "../Decorators";
+import { PredictionContext } from "../atn/PredictionContext";
+import { Recognizer } from "../Recognizer";
+import { Vocabulary } from "../Vocabulary";
+import { VocabularyImpl } from "../VocabularyImpl";
 
 /** A DFA walker that knows how to dump them to serialized strings. */
 export class DFASerializer {
@@ -78,7 +78,7 @@ export class DFASerializer {
 
 					let t: DFAState | undefined = value;
 					if (t && t.stateNumber !== ATNSimulator.ERROR.stateNumber) {
-						buf += (this.getStateString(t)) + ('\n');
+						buf += (this.getStateString(t)) + ("\n");
 					}
 					else if (contextSymbol) {
 						buf += ("ctx\n");

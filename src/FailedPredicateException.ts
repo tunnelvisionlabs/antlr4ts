@@ -11,14 +11,14 @@
  *  prediction.
  */
 
-import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
-import { ATN } from './atn/ATN';
-import { ATNState } from './atn/ATNState';
-import { Parser } from './Parser';
+import { AbstractPredicateTransition } from "./atn/AbstractPredicateTransition";
+import { ATN } from "./atn/ATN";
+import { ATNState } from "./atn/ATNState";
+import { Parser } from "./Parser";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { NotNull } from "./Decorators";
-import { PredicateTransition } from './atn/PredicateTransition';
+import { PredicateTransition } from "./atn/PredicateTransition";
 
 export class FailedPredicateException extends RecognitionException {
 	//private static serialVersionUID: number =  5379330841495778709L;

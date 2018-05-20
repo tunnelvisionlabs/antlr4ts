@@ -223,27 +223,29 @@ ImportListener(X) ::= ""
 
 ImportVisitor(grammarName) ::= <<
 @parser::header {
-import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
-import { RuleNode } from 'antlr4ts/tree/RuleNode';
-import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
+import { AbstractParseTreeVisitor } from "antlr4ts/tree/AbstractParseTreeVisitor";
+import { RuleNode } from "antlr4ts/tree/RuleNode";
+import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 }
 >>
 
 ImportPredictionMode() ::= <<
 @beforeParser {
-import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
+import { PredictionMode } from "antlr4ts/atn/PredictionMode";
 }
 >>
 
 ImportBailErrorStrategy() ::= <<
 @beforeParser {
-import { BailErrorStrategy } from 'antlr4ts/BailErrorStrategy';
+import { BailErrorStrategy } from "antlr4ts/BailErrorStrategy";
 }
 >>
 
 GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.vocabulary)"
 
-RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
+RuleInvocationStack() ::= <%
+"[" + Utils.join(this.getRuleInvocationStack(), ", ") + "]"
+%>
 
 FULL_CONTEXT_DFA() ::= "this.interpreter.enable_global_context_dfa = true;"
 LL_EXACT_AMBIG_DETECTION() ::= <<this.interpreter.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
@@ -327,7 +329,7 @@ private static isIdentifierChar(c: string): boolean {
 }
 
 @beforeLexer {
-import { Token } from 'antlr4ts';
+import { Token } from "antlr4ts";
 }
 
 @afterLexer {
@@ -350,7 +352,7 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
 BasicListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
@@ -368,7 +370,7 @@ ParseTreeWalker.DEFAULT.walk\<TListener>(new LeafListener(), <s>);
 
 TreeNodeWithAltNumField(X) ::= <<
 @parser::beforeParser {
-import { ParserRuleContext as PRC } from 'antlr4ts/ParserRuleContext';
+import { ParserRuleContext as PRC } from "antlr4ts/ParserRuleContext";
 
 export class MyRuleNode extends PRC {
 	private altNum: number;
@@ -384,7 +386,7 @@ export class MyRuleNode extends PRC {
 
 TokenGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
@@ -403,7 +405,7 @@ export class LeafListener implements TListener {
 
 RuleGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
@@ -422,7 +424,7 @@ export class LeafListener implements TListener {
 
 LRListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
@@ -441,7 +443,7 @@ export class LeafListener implements TListener {
 
 LRWithLabelsListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {

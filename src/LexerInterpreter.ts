@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.9954566-07:00
 
-import { ATN } from './atn/ATN';
-import { ATNType } from './atn/ATNType';
-import { CharStream } from './CharStream';
-import { Collection } from './misc/Stubs';
-import { Lexer } from './Lexer';
-import { LexerATNSimulator } from './atn/LexerATNSimulator';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Vocabulary } from './Vocabulary';
+import { ATN } from "./atn/ATN";
+import { ATNType } from "./atn/ATNType";
+import { CharStream } from "./CharStream";
+import { Collection } from "./misc/Stubs";
+import { Lexer } from "./Lexer";
+import { LexerATNSimulator } from "./atn/LexerATNSimulator";
+import { NotNull } from "./Decorators";
+import { Override } from "./Decorators";
+import { Vocabulary } from "./Vocabulary";
 
 export class LexerInterpreter extends Lexer {
 	protected _grammarFileName: string;

@@ -11,66 +11,66 @@
 // import static org.hamcrest.CoreMatchers.instanceOf;
 // import static org.junit.Assert.assertThat;
 // import static org.junit.Assert.assertTrue;
-require('source-map-support').install();
-import { ANTLRErrorListener } from '../src/ANTLRErrorListener';
-import { ANTLRInputStream } from '../src/ANTLRInputStream';
-import { Array2DHashSet } from '../src/misc/Array2DHashSet';
-import { asIterable } from '../src/misc/Stubs';
-import { ATN } from '../src/atn/ATN';
-import { ATNConfig } from '../src/atn/ATNConfig';
-import { ATNConfigSet } from '../src/atn/ATNConfigSet';
-import { ATNDeserializer } from '../src/atn/ATNDeserializer';
-import { BailErrorStrategy } from '../src/BailErrorStrategy';
-import { BitSet } from '../src/misc/BitSet';
-import { CharStream } from '../src/CharStream';
-import { CommonTokenStream } from '../src/CommonTokenStream';
-import { DefaultErrorStrategy } from '../src/DefaultErrorStrategy';
-import { DFA } from '../src/dfa/DFA';
-import { DFAState } from '../src/dfa/DFAState';
-import { DiagnosticErrorListener } from '../src/DiagnosticErrorListener';
-import { ErrorNode } from '../src/tree/ErrorNode';
-import { Interval } from '../src/misc/Interval';
-import { JavaUnicodeInputStream } from './JavaUnicodeInputStream';
-import { Lexer } from '../src/Lexer';
-import { LexerATNSimulator } from '../src/atn/LexerATNSimulator';
-import { MurmurHash } from '../src/misc/MurmurHash';
-import { NotNull } from '../src/Decorators';
-import { ObjectEqualityComparator } from '../src/misc/ObjectEqualityComparator';
-import { Override } from '../src/Decorators';
-import { ParseCancellationException } from '../src/misc/ParseCancellationException';
-import { Parser } from '../src/Parser';
-import { ParserATNSimulator } from '../src/atn/ParserATNSimulator';
-import { ParserErrorListener } from '../src/ParserErrorListener';
-import { ParserInterpreter } from '../src/ParserInterpreter';
-import { ParserRuleContext } from '../src/ParserRuleContext';
-import { ParseTree } from '../src/tree/ParseTree';
-import { ParseTreeListener } from '../src/tree/ParseTreeListener';
-import { ParseTreeWalker } from '../src/tree/ParseTreeWalker';
-import { PredictionContextCache } from '../src/atn/PredictionContextCache';
-import { PredictionMode } from '../src/atn/PredictionMode';
-import { RecognitionException } from '../src/RecognitionException';
-import { Recognizer } from '../src/Recognizer';
-import { SimulatorState } from '../src/atn/SimulatorState';
-import { TerminalNode } from '../src/tree/TerminalNode';
-import { Token } from '../src/Token';
-import { TokenSource } from '../src/TokenSource';
-import { TokenStream } from '../src/TokenStream';
+require("source-map-support").install();
+import { ANTLRErrorListener } from "../src/ANTLRErrorListener";
+import { ANTLRInputStream } from "../src/ANTLRInputStream";
+import { Array2DHashSet } from "../src/misc/Array2DHashSet";
+import { asIterable } from "../src/misc/Stubs";
+import { ATN } from "../src/atn/ATN";
+import { ATNConfig } from "../src/atn/ATNConfig";
+import { ATNConfigSet } from "../src/atn/ATNConfigSet";
+import { ATNDeserializer } from "../src/atn/ATNDeserializer";
+import { BailErrorStrategy } from "../src/BailErrorStrategy";
+import { BitSet } from "../src/misc/BitSet";
+import { CharStream } from "../src/CharStream";
+import { CommonTokenStream } from "../src/CommonTokenStream";
+import { DefaultErrorStrategy } from "../src/DefaultErrorStrategy";
+import { DFA } from "../src/dfa/DFA";
+import { DFAState } from "../src/dfa/DFAState";
+import { DiagnosticErrorListener } from "../src/DiagnosticErrorListener";
+import { ErrorNode } from "../src/tree/ErrorNode";
+import { Interval } from "../src/misc/Interval";
+import { JavaUnicodeInputStream } from "./JavaUnicodeInputStream";
+import { Lexer } from "../src/Lexer";
+import { LexerATNSimulator } from "../src/atn/LexerATNSimulator";
+import { MurmurHash } from "../src/misc/MurmurHash";
+import { NotNull } from "../src/Decorators";
+import { ObjectEqualityComparator } from "../src/misc/ObjectEqualityComparator";
+import { Override } from "../src/Decorators";
+import { ParseCancellationException } from "../src/misc/ParseCancellationException";
+import { Parser } from "../src/Parser";
+import { ParserATNSimulator } from "../src/atn/ParserATNSimulator";
+import { ParserErrorListener } from "../src/ParserErrorListener";
+import { ParserInterpreter } from "../src/ParserInterpreter";
+import { ParserRuleContext } from "../src/ParserRuleContext";
+import { ParseTree } from "../src/tree/ParseTree";
+import { ParseTreeListener } from "../src/tree/ParseTreeListener";
+import { ParseTreeWalker } from "../src/tree/ParseTreeWalker";
+import { PredictionContextCache } from "../src/atn/PredictionContextCache";
+import { PredictionMode } from "../src/atn/PredictionMode";
+import { RecognitionException } from "../src/RecognitionException";
+import { Recognizer } from "../src/Recognizer";
+import { SimulatorState } from "../src/atn/SimulatorState";
+import { TerminalNode } from "../src/tree/TerminalNode";
+import { Token } from "../src/Token";
+import { TokenSource } from "../src/TokenSource";
+import { TokenStream } from "../src/TokenStream";
 
-import * as Utils from '../src/misc/Utils';
+import * as Utils from "../src/misc/Utils";
 
-import { JavaLexer as JavaLexer } from './gen/std/JavaLexer';
-import { JavaLexer as JavaLexerAtn } from './gen/std-atn/JavaLexer';
-import { JavaLRLexer as JavaLRLexer } from './gen/lr/JavaLRLexer';
-import { JavaLRLexer as JavaLRLexerAtn } from './gen/lr-atn/JavaLRLexer';
+import { JavaLexer as JavaLexer } from "./gen/std/JavaLexer";
+import { JavaLexer as JavaLexerAtn } from "./gen/std-atn/JavaLexer";
+import { JavaLRLexer as JavaLRLexer } from "./gen/lr/JavaLRLexer";
+import { JavaLRLexer as JavaLRLexerAtn } from "./gen/lr-atn/JavaLRLexer";
 
-import { JavaParser as JavaParser } from './gen/std/JavaParser';
-import { JavaParser as JavaParserAtn } from './gen/std-atn/JavaParser';
-import { JavaLRParser as JavaLRParser } from './gen/lr/JavaLRParser';
-import { JavaLRParser as JavaLRParserAtn } from './gen/lr-atn/JavaLRParser';
+import { JavaParser as JavaParser } from "./gen/std/JavaParser";
+import { JavaParser as JavaParserAtn } from "./gen/std-atn/JavaParser";
+import { JavaLRParser as JavaLRParser } from "./gen/lr/JavaLRParser";
+import { JavaLRParser as JavaLRParserAtn } from "./gen/lr-atn/JavaLRParser";
 
 import * as assert from "assert";
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from "fs";
+import * as path from "path";
 
 type AnyJavaParser = JavaParser | JavaParserAtn | JavaLRParser | JavaLRParserAtn | ParserInterpreter;
 
@@ -505,7 +505,7 @@ export class TestPerformance {
 		let factory: ParserFactory = this.getParserFactory(lexerCtor, parserCtor, EmptyListener, JavaLRParser.prototype.compilationUnit.name, (parser) => parser.compilationUnit());
 
 		if (TestPerformance.TOP_PACKAGE.length > 0) {
-			jdkSourceRoot = jdkSourceRoot + '/' + TestPerformance.TOP_PACKAGE.replace(/\./g, '/');
+			jdkSourceRoot = jdkSourceRoot + "/" + TestPerformance.TOP_PACKAGE.replace(/\./g, "/");
 		}
 
 		let directory: string = jdkSourceRoot;
@@ -799,24 +799,24 @@ export class TestPerformance {
 		builder += (", Lexer:") + (TestPerformance.ENABLE_LEXER_DFA ? "DFA" : "ATN");
 		builder += (", Parser:") + (TestPerformance.ENABLE_PARSER_DFA ? "DFA" : "ATN");
 
-		builder += ('\n');
+		builder += ("\n");
 
 		builder += ("Op=Lex") + (TestPerformance.RUN_PARSER ? "+Parse" : " only");
 		builder += (", Strategy=") + (TestPerformance.BAIL_ON_ERROR ? BailErrorStrategy.name : DefaultErrorStrategy.name);
 		builder += (", BuildParseTree=") + (TestPerformance.BUILD_PARSE_TREES);
 		builder += (", WalkBlankListener=") + (TestPerformance.BLANK_LISTENER);
 
-		builder += ('\n');
+		builder += ("\n");
 
 		builder += ("Lexer=") + (TestPerformance.REUSE_LEXER ? "setInputStream" : "newInstance");
 		builder += (", Parser=") + (TestPerformance.REUSE_PARSER ? "setInputStream" : "newInstance");
 		builder += (", AfterPass=") + (TestPerformance.CLEAR_DFA ? "newInstance" : "setInputStream");
 
-		builder += ('\n');
+		builder += ("\n");
 
 		builder += ("UniqueClosure=") + (TestPerformance.OPTIMIZE_UNIQUE_CLOSURE ? "optimize" : "complete");
 
-		builder += ('\n');
+		builder += ("\n");
 
 		return builder.toString();
 	}
@@ -967,7 +967,7 @@ export class TestPerformance {
 		// executorService.shutdown();
 		// executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 
-		console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ''}): ${Math.round(startTime.elapsedMillis())}ms`);
+		console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ""}): ${Math.round(startTime.elapsedMillis())}ms`);
 
 		if (TestPerformance.sharedLexers.length > 0) {
 			let index: number =  TestPerformance.FILE_GRANULARITY ? 0 : 0;
@@ -1205,7 +1205,7 @@ export class TestPerformance {
 	}
 
 	public static updateChecksum(checksum: MurmurHashChecksum, value: number | Token | undefined): void {
-		if (typeof value === 'number') {
+		if (typeof value === "number") {
 			checksum.update(value);
 		} else {
 			let token: Token | undefined = value;
@@ -1814,7 +1814,7 @@ class FileExtensionFilenameFilter implements FilenameFilter {
 
 	constructor(extension: string, caseSensitive: boolean) {
 		if (!extension.startsWith(".")) {
-			extension = '.' + extension;
+			extension = "." + extension;
 		}
 
 		this.extension = extension;

@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.8187912-07:00
 
-import { NotNull } from '../Decorators';
+import { NotNull } from "../Decorators";
 
 /**
  *

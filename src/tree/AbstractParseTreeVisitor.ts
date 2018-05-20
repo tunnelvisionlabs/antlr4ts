@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.3092279-07:00
 
-import { ErrorNode } from './ErrorNode';
-import { NotNull, Override } from '../Decorators';
-import { ParseTree } from './ParseTree';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { RuleNode } from './RuleNode';
-import { TerminalNode } from './TerminalNode';
+import { ErrorNode } from "./ErrorNode";
+import { NotNull, Override } from "../Decorators";
+import { ParseTree } from "./ParseTree";
+import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { RuleNode } from "./RuleNode";
+import { TerminalNode } from "./TerminalNode";
 
 export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
 	/**

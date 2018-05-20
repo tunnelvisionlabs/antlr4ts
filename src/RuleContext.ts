@@ -56,9 +56,9 @@
  *  @see ParserRuleContext
  */
 
-import { ATN } from './atn/ATN';
-import { Parser } from './Parser';
-import { Recognizer } from './Recognizer';
+import { ATN } from "./atn/ATN";
+import { Parser } from "./Parser";
+import { Recognizer } from "./Recognizer";
 import { RuleNode } from "./tree/RuleNode";
 import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";

@@ -2,14 +2,14 @@ grammar TestGrammar;
 
 compilationUnit
 locals [
-	symbols: string[] = ['empty']
+	symbols: string[] = ["empty"]
 ]
 	: {console.log($symbols);} member* EOF
 	;
 
 member
 	: 'data' {console.log($compilationUnit::symbols);}
-		{$compilationUnit::symbols = ['full'];}
+		{$compilationUnit::symbols = ["full"];}
 	;
 
 WS : [ \t]+;

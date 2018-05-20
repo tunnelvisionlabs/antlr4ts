@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.6934341-07:00
 
-require('source-map-support').install();
-import { IntervalSet } from '../../src/misc/IntervalSet';
-import { Lexer } from '../../src/Lexer';
-import { Token } from '../../src/Token';
+require("source-map-support").install();
+import { IntervalSet } from "../../src/misc/IntervalSet";
+import { Lexer } from "../../src/Lexer";
+import { Token } from "../../src/Token";
 
-import { suite, test as Test } from 'mocha-typescript';
+import { suite, test as Test } from "mocha-typescript";
 import * as assert from "assert";
 
 function assertEquals<T>(expected: T, actual: T): void {
@@ -42,8 +42,8 @@ export class TestIntervalSet {
 	@Test public testIsolatedElements(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(1);
-		s.add('z'.charCodeAt(0));
-		s.add('\uFFF0'.charCodeAt(0));
+		s.add("z".charCodeAt(0));
+		s.add("\uFFF0".charCodeAt(0));
 		let expecting: string =  "{1, 122, 65520}";
 		assertEquals(s.toString(), expecting);
 	}
@@ -51,8 +51,8 @@ export class TestIntervalSet {
 	@Test public testMixedRangesAndElements(): void {
 		let s: IntervalSet =  new IntervalSet();
 		s.add(1);
-		s.add('a'.charCodeAt(0),'z'.charCodeAt(0));
-		s.add('0'.charCodeAt(0),'9'.charCodeAt(0));
+		s.add("a".charCodeAt(0),"z".charCodeAt(0));
+		s.add("0".charCodeAt(0),"9".charCodeAt(0));
 		let expecting: string =  "{1, 48..57, 97..122}";
 		assertEquals(s.toString(), expecting);
 	}
@@ -66,24 +66,24 @@ export class TestIntervalSet {
 	}
 
 	@Test public testRangeAndIsolatedElement(): void {
-		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
-		let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
+		let s: IntervalSet =  IntervalSet.of("a".charCodeAt(0),"z".charCodeAt(0));
+		let s2: IntervalSet =  IntervalSet.of("d".charCodeAt(0));
 		let expecting: string =  "100";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
 	}
 
 	@Test public testEmptyIntersection(): void {
-		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0),'z'.charCodeAt(0));
-		let s2: IntervalSet =  IntervalSet.of('0'.charCodeAt(0),'9'.charCodeAt(0));
+		let s: IntervalSet =  IntervalSet.of("a".charCodeAt(0),"z".charCodeAt(0));
+		let s2: IntervalSet =  IntervalSet.of("0".charCodeAt(0),"9".charCodeAt(0));
 		let expecting: string =  "{}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
 	}
 
 	@Test public testEmptyIntersectionSingleElements(): void {
-		let s: IntervalSet =  IntervalSet.of('a'.charCodeAt(0));
-		let s2: IntervalSet =  IntervalSet.of('d'.charCodeAt(0));
+		let s: IntervalSet =  IntervalSet.of("a".charCodeAt(0));
+		let s2: IntervalSet =  IntervalSet.of("d".charCodeAt(0));
 		let expecting: string =  "{}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);
@@ -386,10 +386,10 @@ export class TestIntervalSet {
 	 	'u' is 117
 	*/
 	@Test public testNotRIntersectionNotT(): void {
-		let s: IntervalSet =  IntervalSet.of(0,'s'.charCodeAt(0));
-		s.add('u'.charCodeAt(0),200);
-		let s2: IntervalSet =  IntervalSet.of(0,'q'.charCodeAt(0));
-		s2.add('s'.charCodeAt(0),200);
+		let s: IntervalSet =  IntervalSet.of(0,"s".charCodeAt(0));
+		s.add("u".charCodeAt(0),200);
+		let s2: IntervalSet =  IntervalSet.of(0,"q".charCodeAt(0));
+		s2.add("s".charCodeAt(0),200);
 		let expecting: string =  "{0..113, 115, 117..200}";
 		let result: string =  (s.and(s2)).toString();
 		assertEquals(expecting, result);

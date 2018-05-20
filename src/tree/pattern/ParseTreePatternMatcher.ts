@@ -9,12 +9,12 @@ import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
 import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from '../../Lexer';
+import { Lexer } from "../../Lexer";
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { Parser } from '../../Parser';
+import { Parser } from "../../Parser";
 import { ParserInterpreter } from "../../ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
@@ -140,7 +140,7 @@ export class ParseTreePatternMatcher {
 		this.start = start;
 		this.stop = stop;
 		this.escape = escapeLeft;
-		this.escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g");
+		this.escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
 	}
 
 	/** Does {@code pattern} matched as rule {@code patternRuleIndex} match {@code tree}? */
@@ -476,7 +476,7 @@ export class ParseTreePatternMatcher {
 			let tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
 			let ruleOrToken: string = tag;
 			let label: string | undefined;
-			let colon: number = tag.indexOf(':');
+			let colon: number = tag.indexOf(":");
 			if (colon >= 0) {
 				label = tag.substring(0, colon);
 				ruleOrToken = tag.substring(colon + 1, tag.length);

@@ -4,7 +4,7 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.1239660-07:00
-import { Equatable } from './Stubs';
+import { Equatable } from "./Stubs";
 
 /**
  *
@@ -42,9 +42,9 @@ export namespace MurmurHash {
 
 		if (value == null) {
 			value = 0;
-		} else if (typeof value === 'string') {
+		} else if (typeof value === "string") {
 			value = hashString(value);
-		} else if (typeof value === 'object') {
+		} else if (typeof value === "object") {
 			value = (value as Equatable).hashCode();
 		}
 

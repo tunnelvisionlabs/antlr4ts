@@ -10,19 +10,19 @@
  * error reporting and recovery in ANTLR parsers.
  */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
-import { ATN } from './atn/ATN';
-import { ATNState } from './atn/ATNState';
+import { ATN } from "./atn/ATN";
+import { ATNState } from "./atn/ATNState";
 import { ATNStateType } from "./atn/ATNStateType";
 import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { IntervalSet } from "./misc/IntervalSet";
 import { NoViableAltException } from "./NoViableAltException";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
-import { PredictionContext } from './atn/PredictionContext';
+import { PredictionContext } from "./atn/PredictionContext";
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
-import { RuleTransition } from './atn/RuleTransition';
+import { RuleTransition } from "./atn/RuleTransition";
 import { TokenStream } from "./TokenStream";
 import { Token } from "./Token";
 import { TokenFactory } from "./TokenFactory";

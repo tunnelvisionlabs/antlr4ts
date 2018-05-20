@@ -25,7 +25,6 @@
     "one-line": false,
     "prefer-const": false,
     "prefer-for-of": false,
-    "quotemark": false,
     "unified-signatures": false,
     "variable-name": false,
     "whitespace": false,

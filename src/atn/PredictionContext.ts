@@ -6,21 +6,21 @@
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { Array2DHashSet } from '../misc/Array2DHashSet';
-import { Arrays } from '../misc/Arrays';
-import { ATN } from './ATN';
-import { ATNState } from './ATNState';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { MurmurHash } from '../misc/MurmurHash';
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { Arrays } from "../misc/Arrays";
+import { ATN } from "./ATN";
+import { ATNState } from "./ATNState";
+import { EqualityComparator } from "../misc/EqualityComparator";
+import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
-import { Equatable, JavaSet } from '../misc/Stubs';
-import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Recognizer';
-import { RuleContext } from '../RuleContext';
-import { RuleTransition } from './RuleTransition';
+import { Equatable, JavaSet } from "../misc/Stubs";
+import { PredictionContextCache } from "./PredictionContextCache";
+import { Recognizer } from "../Recognizer";
+import { RuleContext } from "../RuleContext";
+import { RuleTransition } from "./RuleTransition";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
 const INITIAL_HASH: number = 1;
 
@@ -332,7 +332,7 @@ export abstract class PredictionContext implements Equatable {
 				if (recognizer) {
 					if (localBuffer.length > 1) {
 						// first char is '[', if more than that this isn't the first rule
-						localBuffer += ' ';
+						localBuffer += " ";
 					}
 
 					let atn: ATN = recognizer.atn;
@@ -343,7 +343,7 @@ export abstract class PredictionContext implements Equatable {
 					if (!p.isEmpty) {
 						if (localBuffer.length > 1) {
 							// first char is '[', if more than that this isn't the first rule
-							localBuffer += ' ';
+							localBuffer += " ";
 						}
 
 						localBuffer += p.getReturnState(index);

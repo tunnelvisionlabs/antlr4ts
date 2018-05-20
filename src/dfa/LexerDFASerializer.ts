@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:39.2167238-07:00
 
-import { DFA } from './DFA';
-import { DFASerializer } from './DFASerializer';
-import { NotNull, Override } from '../Decorators';
-import { VocabularyImpl } from '../VocabularyImpl';
+import { DFA } from "./DFA";
+import { DFASerializer } from "./DFASerializer";
+import { NotNull, Override } from "../Decorators";
+import { VocabularyImpl } from "../VocabularyImpl";
 
 export class LexerDFASerializer extends DFASerializer {
 	constructor( @NotNull dfa: DFA) {

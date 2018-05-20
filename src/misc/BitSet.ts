@@ -563,7 +563,7 @@ export class BitSet implements Iterable<number>{
 		if (toIndex === undefined) {
 			toIndex = fromIndex;
 			value = true;
-		} else if (typeof toIndex === 'boolean') {
+		} else if (typeof toIndex === "boolean") {
 			value = toIndex;
 			toIndex = fromIndex;
 		}

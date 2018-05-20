@@ -231,10 +231,10 @@ public abstract class BaseTest {
 									 boolean debug)
 	{
 		ST outputFileST = new ST(
-				"import 'mocha';\n" +
-				"import * as base from '../../../BaseTest';\n" +
-				"import { <lexerName> } from './<lexerName>';\n" +
-				"import { <parserName> } from './<parserName>';\n" +
+				"import \"mocha\";\n" +
+				"import * as base from \"../../../BaseTest\";\n" +
+				"import { <lexerName> } from \"./<lexerName>\";\n" +
+				"import { <parserName> } from \"./<parserName>\";\n" +
 				"\n" +
 				"it(`<className>.<testName>`, ()=> {\n" +
 				"	base.parserTest( {\n" +
@@ -266,9 +266,9 @@ public abstract class BaseTest {
 
 	private void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-				"import 'mocha';\n" +
-				"import * as base from '../../../BaseTest';\n" +
-				"import { <lexerName> } from './<lexerName>';\n" +
+				"import \"mocha\";\n" +
+				"import * as base from \"../../../BaseTest\";\n" +
+				"import { <lexerName> } from \"./<lexerName>\";\n" +
 				"\n" +
 				"it(`<className>.<testName>`, ()=> {\n" +
 				"	base.lexerTest( {\n" +

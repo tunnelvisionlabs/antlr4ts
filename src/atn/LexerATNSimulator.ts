@@ -5,32 +5,32 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.1083066-07:00
 
-import { AcceptStateInfo } from '../dfa/AcceptStateInfo';
-import { ActionTransition } from './ActionTransition';
-import { asIterable } from '../misc/Stubs';
-import { ATN } from './ATN';
-import { ATNConfig } from './ATNConfig';
-import { ATNConfigSet } from './ATNConfigSet';
-import { ATNSimulator } from './ATNSimulator';
-import { ATNState } from './ATNState';
-import { CharStream } from '../CharStream';
-import { DFA } from '../dfa/DFA';
-import { DFAState } from '../dfa/DFAState';
-import { Interval } from '../misc/Interval';
-import { IntStream } from '../IntStream';
-import { Lexer } from '../Lexer';
-import { LexerActionExecutor } from './LexerActionExecutor';
-import { LexerNoViableAltException } from '../LexerNoViableAltException';
-import { NotNull, Override } from '../Decorators';
-import { OrderedATNConfigSet } from './OrderedATNConfigSet';
-import { PredictionContext } from './PredictionContext';
-import { PredicateTransition } from './PredicateTransition';
-import { RuleStopState } from './RuleStopState';
-import { RuleTransition } from './RuleTransition';
-import { Token } from '../Token';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
-import * as assert from 'assert';
+import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
+import { ActionTransition } from "./ActionTransition";
+import { asIterable } from "../misc/Stubs";
+import { ATN } from "./ATN";
+import { ATNConfig } from "./ATNConfig";
+import { ATNConfigSet } from "./ATNConfigSet";
+import { ATNSimulator } from "./ATNSimulator";
+import { ATNState } from "./ATNState";
+import { CharStream } from "../CharStream";
+import { DFA } from "../dfa/DFA";
+import { DFAState } from "../dfa/DFAState";
+import { Interval } from "../misc/Interval";
+import { IntStream } from "../IntStream";
+import { Lexer } from "../Lexer";
+import { LexerActionExecutor } from "./LexerActionExecutor";
+import { LexerNoViableAltException } from "../LexerNoViableAltException";
+import { NotNull, Override } from "../Decorators";
+import { OrderedATNConfigSet } from "./OrderedATNConfigSet";
+import { PredictionContext } from "./PredictionContext";
+import { PredicateTransition } from "./PredicateTransition";
+import { RuleStopState } from "./RuleStopState";
+import { RuleTransition } from "./RuleTransition";
+import { Token } from "../Token";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
+import * as assert from "assert";
 
 /** "dup" of ParserInterpreter */
 export class LexerATNSimulator extends ATNSimulator {
@@ -700,7 +700,7 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	public consume(@NotNull input: CharStream): void {
 		let curChar: number = input.LA(1);
-		if (curChar === '\n'.charCodeAt(0)) {
+		if (curChar === "\n".charCodeAt(0)) {
 			this._line++;
 			this._charPositionInLine = 0;
 		} else {

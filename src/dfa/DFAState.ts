@@ -5,17 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.7771056-07:00
 
-import { AcceptStateInfo } from './AcceptStateInfo';
-import { ATN } from '../atn/ATN';
-import { ATNConfigSet } from '../atn/ATNConfigSet';
-import { BitSet } from '../misc/BitSet';
-import { LexerActionExecutor } from '../atn/LexerActionExecutor';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
-import { PredictionContext } from '../atn/PredictionContext';
-import { SemanticContext } from '../atn/SemanticContext';
+import { AcceptStateInfo } from "./AcceptStateInfo";
+import { ATN } from "../atn/ATN";
+import { ATNConfigSet } from "../atn/ATNConfigSet";
+import { BitSet } from "../misc/BitSet";
+import { LexerActionExecutor } from "../atn/LexerActionExecutor";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
+import { PredictionContext } from "../atn/PredictionContext";
+import { SemanticContext } from "../atn/SemanticContext";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
 /** A DFA state represents a set of possible ATN configurations.
  *  As Aho, Sethi, Ullman p. 117 says "The DFA uses its state

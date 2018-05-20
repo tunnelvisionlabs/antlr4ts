@@ -3,8 +3,8 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { Equatable } from './Stubs';
-import { MurmurHash } from './MurmurHash';
+import { Equatable } from "./Stubs";
+import { MurmurHash } from "./MurmurHash";
 
 export class UUID implements Equatable {
 	private readonly data: Uint32Array;
@@ -22,7 +22,7 @@ export class UUID implements Equatable {
 			throw new Error("Incorrectly formatted UUID");
 		}
 
-		let segments = data.split('-');
+		let segments = data.split("-");
 		let mostSigBits = parseInt(segments[0], 16);
 		let moreSigBits = ((parseInt(segments[1], 16) << 16) >>> 0) + parseInt(segments[2], 16);
 		let lessSigBits = ((parseInt(segments[3], 16) << 16) >>> 0) + parseInt(segments[4].substr(0, 4), 16);

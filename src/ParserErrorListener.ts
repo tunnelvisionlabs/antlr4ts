@@ -4,13 +4,13 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
-import { ANTLRErrorListener } from './ANTLRErrorListener';
-import { ATNConfigSet } from './atn/ATNConfigSet';
-import { BitSet } from './misc/BitSet';
-import { DFA } from './dfa/DFA';
-import { Parser } from './Parser';
-import { SimulatorState } from './atn/SimulatorState';
-import { Token } from './Token';
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { BitSet } from "./misc/BitSet";
+import { DFA } from "./dfa/DFA";
+import { Parser } from "./Parser";
+import { SimulatorState } from "./atn/SimulatorState";
+import { Token } from "./Token";
 import * as Stubs from "./misc/Stubs";
 import * as Exception from "./RecognitionException";
 

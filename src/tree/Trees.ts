@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 import { Arrays } from "../misc/Arrays";
-import { ATN } from '../atn/ATN';
+import { ATN } from "../atn/ATN";
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
 import { NotNull } from "../Decorators";
-import { Parser } from '../Parser';
+import { Parser } from "../Parser";
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
@@ -46,9 +46,9 @@ export class Trees {
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
-		buf += (' ');
+		buf += (" ");
 		for (let i = 0; i < t.childCount; i++) {
-			if (i > 0) buf += (' ');
+			if (i > 0) buf += (" ");
 			buf += (this.toStringTree(t.getChild(i), ruleNames));
 		}
 		buf += (")");
@@ -64,7 +64,7 @@ export class Trees {
 		} else {
 			// no recog or rule names
 			let payload = t.payload;
-			if (typeof payload.text === 'string') {
+			if (typeof payload.text === "string") {
 				return payload.text;
 			}
 			return t.payload.toString();

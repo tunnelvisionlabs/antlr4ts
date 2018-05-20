@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.2401032-07:00
 
-import { NotNull } from '../Decorators';
-import { SimulatorState } from './SimulatorState';
-import { TokenStream } from '../TokenStream';
+import { NotNull } from "../Decorators";
+import { SimulatorState } from "./SimulatorState";
+import { TokenStream } from "../TokenStream";
 
 /**
  * This is the base class for gathering detailed information about prediction

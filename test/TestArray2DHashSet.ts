@@ -3,11 +3,11 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-require('source-map-support').install();
-import {Equatable} from '../src/misc/Stubs';
-import {Array2DHashSet} from '../src/misc/Array2DHashSet';
-import {MurmurHash} from '../src/misc/MurmurHash';
-import { suite, test } from 'mocha-typescript';
+require("source-map-support").install();
+import {Equatable} from "../src/misc/Stubs";
+import {Array2DHashSet} from "../src/misc/Array2DHashSet";
+import {MurmurHash} from "../src/misc/MurmurHash";
+import { suite, test } from "mocha-typescript";
 import * as assert from "assert";
 
 class EquatableTest implements Equatable {
@@ -32,38 +32,38 @@ const alpha = new EquatableTest("alpha", "1");
 const alpha_again = new EquatableTest("alpha", "1");
 const beta = new EquatableTest("beta", "1");
 
-describe('EquatableTest', () => {
+describe("EquatableTest", () => {
 
-	it('should respect identity', () => {
+	it("should respect identity", () => {
 		assert( alpha.equals(alpha));
 		assert( alpha_again.equals(alpha_again));
 		assert( beta.equals(beta));
 	});
 
-	it('should compare equality by value', () => {
+	it("should compare equality by value", () => {
 		assert( alpha.equals(alpha_again));
 		assert( alpha_again.equals(alpha));
 	});
 
-	it('should detect difference by value', () => {
+	it("should detect difference by value", () => {
 		assert( !alpha.equals(beta));
 	});
 
-	it('should hash identical values the same', () => {
+	it("should hash identical values the same", () => {
 		assert.equal(alpha.hashCode(), alpha_again.hashCode());
 	});
 
-	it('should hash different values differently', () => {
+	it("should hash different values differently", () => {
 		assert.notEqual(alpha.hashCode(), beta.hashCode());
 	});
 });
 
-describe('Array2DHashSet', () => {
+describe("Array2DHashSet", () => {
 	let set: Array2DHashSet<EquatableTest>;
 
 	beforeEach(() => { set = new Array2DHashSet<EquatableTest>();});
 
-	it('shoud count entities', () => {
+	it("shoud count entities", () => {
 		assert( set.isEmpty );
 		assert.equal( set.size, 0 );
 		set.add(alpha);
@@ -73,7 +73,7 @@ describe('Array2DHashSet', () => {
 		assert.equal(set.size, 2);
 	});
 
-	it('should check entries by value', () => {
+	it("should check entries by value", () => {
 		assert(set.isEmpty);
 		set.add(alpha);
 		assert(set.contains(alpha), "identity match failed");

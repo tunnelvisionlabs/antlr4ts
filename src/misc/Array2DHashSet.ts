@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
 import * as assert from "assert";
-import { DefaultEqualityComparator } from './DefaultEqualityComparator';
-import { EqualityComparator } from './EqualityComparator';
-import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
-import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from './Stubs';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
-import { MurmurHash } from './MurmurHash';
+import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
+import { EqualityComparator } from "./EqualityComparator";
+import { NotNull, Nullable, Override, SuppressWarnings } from "../Decorators";
+import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from "./Stubs";
+import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
+import { MurmurHash } from "./MurmurHash";
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 
@@ -350,7 +350,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	public toString(): string {
 		if (this.size === 0) return "{}";
 
-		let buf = '{';
+		let buf = "{";
 		let first: boolean = true;
 		for (let bucket of this.buckets) {
 			if (bucket == null) continue;
@@ -361,7 +361,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				buf += o.toString();
 			}
 		}
-		buf += '}';
+		buf += "}";
 		return buf;
 	}
 
@@ -372,7 +372,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				buf += "null\n";
 				continue;
 			}
-			buf += '[';
+			buf += "[";
 			let first: boolean = true;
 			for (let o of bucket) {
 				if (first) first = false;

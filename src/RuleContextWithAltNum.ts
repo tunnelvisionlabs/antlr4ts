@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.4741196-07:00
 
-import { ATN } from './atn/ATN';
-import { Override } from './Decorators';
-import { ParserRuleContext } from './ParserRuleContext';
+import { ATN } from "./atn/ATN";
+import { Override } from "./Decorators";
+import { ParserRuleContext } from "./ParserRuleContext";
 
 /** A handy class for use with
  *

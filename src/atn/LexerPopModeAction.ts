@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.0449220-07:00
 
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
  * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.

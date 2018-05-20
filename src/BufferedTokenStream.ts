@@ -5,16 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:49.6074365-07:00
 
-import assert = require('assert');
-import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Lexer } from './Lexer';
-import { NotNull, Override } from './Decorators';
-import { RuleContext } from './RuleContext';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
-import { TokenStream } from './TokenStream';
-import { WritableToken } from './WritableToken';
+import assert = require("assert");
+import { CommonToken } from "./CommonToken";
+import { Interval } from "./misc/Interval";
+import { Lexer } from "./Lexer";
+import { NotNull, Override } from "./Decorators";
+import { RuleContext } from "./RuleContext";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
+import { WritableToken } from "./WritableToken";
 
 /**
  * This implementation of {@link TokenStream} loads tokens from a
@@ -321,7 +321,7 @@ export class BufferedTokenStream implements TokenStream {
 
 		if (types == null) {
 			return this.tokens.slice(start, stop + 1);
-		} else if (typeof types === 'number') {
+		} else if (typeof types === "number") {
 			types = new Set<number>().add(types);
 		}
 

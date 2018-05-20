@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.7862802-07:00
 
-import { CharStream } from './CharStream';
-import { IntStream } from './IntStream';
-import { TokenSource } from './TokenSource';
-import { TokenStream } from './TokenStream';
+import { CharStream } from "./CharStream";
+import { IntStream } from "./IntStream";
+import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
 
 /** A token has properties: text, type, line, character position in the line
  *  (so we can ignore tabs), token channel, index, and source from which

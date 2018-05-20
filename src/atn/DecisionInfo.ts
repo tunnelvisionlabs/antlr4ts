@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.3330673-07:00
 
-import { AmbiguityInfo } from './AmbiguityInfo';
-import { ContextSensitivityInfo } from './ContextSensitivityInfo';
-import { ErrorInfo } from './ErrorInfo';
-import { LookaheadEventInfo } from './LookaheadEventInfo';
-import { Override } from '../Decorators';
-import { PredicateEvalInfo } from './PredicateEvalInfo';
+import { AmbiguityInfo } from "./AmbiguityInfo";
+import { ContextSensitivityInfo } from "./ContextSensitivityInfo";
+import { ErrorInfo } from "./ErrorInfo";
+import { LookaheadEventInfo } from "./LookaheadEventInfo";
+import { Override } from "../Decorators";
+import { PredicateEvalInfo } from "./PredicateEvalInfo";
 
 /**
  * This class contains profiling gathered for a particular decision.
@@ -242,6 +242,6 @@ export class DecisionInfo {
 			", LL_Fallback=" + this.LL_Fallback +
 			", LL_lookahead=" + this.LL_TotalLook +
 			", LL_ATNTransitions=" + this.LL_ATNTransitions +
-			'}';
+			"}";
 	}
 }

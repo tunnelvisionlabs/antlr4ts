@@ -5,33 +5,33 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:53.1043451-07:00
 
-import { ActionTransition } from './atn/ActionTransition';
-import { ATN } from './atn/ATN';
-import { ATNState } from './atn/ATNState';
-import { ATNStateType } from './atn/ATNStateType';
-import { AtomTransition } from './atn/AtomTransition';
-import { BitSet } from './misc/BitSet';
-import { DecisionState } from './atn/DecisionState';
-import { FailedPredicateException } from './FailedPredicateException';
-import { InputMismatchException } from './InputMismatchException';
-import { InterpreterRuleContext } from './InterpreterRuleContext';
-import { LoopEndState } from './atn/LoopEndState';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Parser } from './Parser';
-import { ParserATNSimulator } from './atn/ParserATNSimulator';
-import { ParserRuleContext } from './ParserRuleContext';
-import { PrecedencePredicateTransition } from './atn/PrecedencePredicateTransition';
-import { PredicateTransition } from './atn/PredicateTransition';
-import { RecognitionException } from './RecognitionException';
-import { RuleStartState } from './atn/RuleStartState';
-import { RuleTransition } from './atn/RuleTransition';
-import { StarLoopEntryState } from './atn/StarLoopEntryState';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
-import { Transition } from './atn/Transition';
-import { TransitionType } from './atn/TransitionType';
-import { Vocabulary } from './Vocabulary';
+import { ActionTransition } from "./atn/ActionTransition";
+import { ATN } from "./atn/ATN";
+import { ATNState } from "./atn/ATNState";
+import { ATNStateType } from "./atn/ATNStateType";
+import { AtomTransition } from "./atn/AtomTransition";
+import { BitSet } from "./misc/BitSet";
+import { DecisionState } from "./atn/DecisionState";
+import { FailedPredicateException } from "./FailedPredicateException";
+import { InputMismatchException } from "./InputMismatchException";
+import { InterpreterRuleContext } from "./InterpreterRuleContext";
+import { LoopEndState } from "./atn/LoopEndState";
+import { NotNull } from "./Decorators";
+import { Override } from "./Decorators";
+import { Parser } from "./Parser";
+import { ParserATNSimulator } from "./atn/ParserATNSimulator";
+import { ParserRuleContext } from "./ParserRuleContext";
+import { PrecedencePredicateTransition } from "./atn/PrecedencePredicateTransition";
+import { PredicateTransition } from "./atn/PredicateTransition";
+import { RecognitionException } from "./RecognitionException";
+import { RuleStartState } from "./atn/RuleStartState";
+import { RuleTransition } from "./atn/RuleTransition";
+import { StarLoopEntryState } from "./atn/StarLoopEntryState";
+import { Token } from "./Token";
+import { TokenStream } from "./TokenStream";
+import { Transition } from "./atn/Transition";
+import { TransitionType } from "./atn/TransitionType";
+import { Vocabulary } from "./Vocabulary";
 
 /** A parser simulator that mimics what ANTLR's generated
  *  parser code does. A ParserATNSimulator is used to make

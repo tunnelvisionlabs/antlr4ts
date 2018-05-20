@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.5349010-07:00
 
-import { Parser } from '../Parser';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { SyntaxTree } from './SyntaxTree';
+import { Parser } from "../Parser";
+import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { SyntaxTree } from "./SyntaxTree";
 
 /** An interface to access the tree of {@link RuleContext} objects created
  *  during a parse that makes the data structure look like a simple parse tree.

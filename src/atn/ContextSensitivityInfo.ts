@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.1575933-07:00
 
-import { DecisionEventInfo } from './DecisionEventInfo';
-import { NotNull } from '../Decorators';
-import { SimulatorState } from './SimulatorState';
-import { TokenStream } from '../TokenStream';
+import { DecisionEventInfo } from "./DecisionEventInfo";
+import { NotNull } from "../Decorators";
+import { SimulatorState } from "./SimulatorState";
+import { TokenStream } from "../TokenStream";
 
 /**
  * This class represents profiling event information for a context sensitivity.

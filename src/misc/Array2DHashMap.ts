@@ -3,13 +3,13 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { Array2DHashSet } from './Array2DHashSet';
-import { asIterable } from './Stubs';
-import { Collection } from './Stubs';
-import { DefaultEqualityComparator } from './DefaultEqualityComparator';
-import { EqualityComparator } from './EqualityComparator';
-import { Equatable, JavaCollection, JavaMap, JavaSet } from './Stubs';
-import { JavaIterator } from './Stubs';
+import { Array2DHashSet } from "./Array2DHashSet";
+import { asIterable } from "./Stubs";
+import { Collection } from "./Stubs";
+import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
+import { EqualityComparator } from "./EqualityComparator";
+import { Equatable, JavaCollection, JavaMap, JavaSet } from "./Stubs";
+import { JavaIterator } from "./Stubs";
 
 // Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
 // key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.

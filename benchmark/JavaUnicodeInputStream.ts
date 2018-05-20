@@ -5,22 +5,22 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:01.9391717-07:00
 
-import { CharStream } from '../src/CharStream';
-import { IntegerList } from '../src/misc/IntegerList';
-import { Interval } from '../src/misc/Interval';
-import { NotNull } from '../src/Decorators';
-import { Override } from '../src/Decorators';
+import { CharStream } from "../src/CharStream";
+import { IntegerList } from "../src/misc/IntegerList";
+import { Interval } from "../src/misc/Interval";
+import { NotNull } from "../src/Decorators";
+import { Override } from "../src/Decorators";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
-const BACKSLASH = '\\'.charCodeAt(0);
-const LOWER_U = 'u'.charCodeAt(0);
-const UPPER_A = 'A'.charCodeAt(0);
-const LOWER_A = 'a'.charCodeAt(0);
-const UPPER_F = 'F'.charCodeAt(0);
-const LOWER_F = 'f'.charCodeAt(0);
-const DIGIT_0 = '0'.charCodeAt(0);
-const DIGIT_9 = '9'.charCodeAt(0);
+const BACKSLASH = "\\".charCodeAt(0);
+const LOWER_U = "u".charCodeAt(0);
+const UPPER_A = "A".charCodeAt(0);
+const LOWER_A = "a".charCodeAt(0);
+const UPPER_F = "F".charCodeAt(0);
+const LOWER_F = "f".charCodeAt(0);
+const DIGIT_0 = "0".charCodeAt(0);
+const DIGIT_9 = "9".charCodeAt(0);
 
 /**
  *

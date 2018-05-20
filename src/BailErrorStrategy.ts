@@ -34,7 +34,7 @@
  * @see Parser.errorHandler
  */
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
 import { ParseCancellationException } from "./misc/ParseCancellationException";

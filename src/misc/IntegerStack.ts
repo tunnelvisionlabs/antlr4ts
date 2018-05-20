@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.6647101-07:00
 
-import { IntegerList } from './IntegerList';
+import { IntegerList } from "./IntegerList";
 
 /**
  *

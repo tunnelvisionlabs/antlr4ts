@@ -11,20 +11,20 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertNotNull;
 
-import { ANTLRInputStream } from '../../src/ANTLRInputStream';
-import { CharStream } from '../../src/CharStream';
-import { CommonTokenStream } from '../../src/CommonTokenStream';
-import { Interval } from '../../src/misc/Interval';
-import { Lexer } from '../../src/Lexer';
-import { LexerInterpreter } from '../../src/LexerInterpreter';
-import { TokenStreamRewriter } from '../../src/TokenStreamRewriter';
+import { ANTLRInputStream } from "../../src/ANTLRInputStream";
+import { CharStream } from "../../src/CharStream";
+import { CommonTokenStream } from "../../src/CommonTokenStream";
+import { Interval } from "../../src/misc/Interval";
+import { Lexer } from "../../src/Lexer";
+import { LexerInterpreter } from "../../src/LexerInterpreter";
+import { TokenStreamRewriter } from "../../src/TokenStreamRewriter";
 
-import { RewriterLexer1 } from './gen/rewriter/RewriterLexer1';
-import { RewriterLexer2 } from './gen/rewriter/RewriterLexer2';
-import { RewriterLexer3 } from './gen/rewriter/RewriterLexer3';
+import { RewriterLexer1 } from "./gen/rewriter/RewriterLexer1";
+import { RewriterLexer2 } from "./gen/rewriter/RewriterLexer2";
+import { RewriterLexer3 } from "./gen/rewriter/RewriterLexer3";
 
-import * as assert from 'assert';
-import { suite, test as Test, skip as Ignore } from 'mocha-typescript';
+import * as assert from "assert";
+import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
 @suite
 export class TestTokenStreamRewriter {
