@@ -647,7 +647,9 @@ export class LexerATNSimulator extends ATNSimulator {
 
 		let proposed: DFAState = new DFAState(configs);
 		let existing: DFAState | undefined = this.atn.modeToDFA[this.mode].states.get(proposed);
-		if (existing != null) return existing;
+		if (existing != null) {
+			return existing;
+		}
 
 		configs.optimizeConfigs(this);
 		let newState: DFAState = new DFAState(configs.clone(true));
@@ -711,7 +713,9 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	@NotNull
 	public getTokenName(t: number): string {
-		if (t === -1) return "EOF";
+		if (t === -1) {
+			return "EOF";
+		}
 		//if ( atn.g!=null ) return atn.g.getTokenDisplayName(t);
 		return "'" + String.fromCharCode(t) + "'";
 	}

@@ -96,7 +96,9 @@ export type Collection<T> = JavaCollection<T> | Iterable<T>;
  */
 
 export function asIterable<T>(collection: Collection<T>): Iterable<T> {
-	if ((collection as any)[Symbol.iterator]) return collection as Iterable<T>;
+	if ((collection as any)[Symbol.iterator]) {
+		return collection as Iterable<T>;
+	}
 	return new IterableAdapter(collection as JavaCollection<T>);
 }
 

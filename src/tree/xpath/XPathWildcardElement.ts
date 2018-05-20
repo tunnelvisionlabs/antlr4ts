@@ -19,7 +19,10 @@ export class XPathWildcardElement extends XPathElement {
 	@Override
 	public evaluate(t: ParseTree): ParseTree[] {
 		let kids: ParseTree[] = [];
-		if (this.invert) return kids; // !* is weird but valid (empty)
+		if (this.invert) {
+			// !* is weird but valid (empty)
+			return kids;
+		}
 		for (let c of Trees.getChildren(t)) {
 			kids.push(c);
 		}

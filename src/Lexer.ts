@@ -165,12 +165,16 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 					if (this._input.LA(1) === IntStream.EOF) {
 						this._hitEOF = true;
 					}
-					if (this._type === Token.INVALID_TYPE) this._type = ttype;
+					if (this._type === Token.INVALID_TYPE) {
+						this._type = ttype;
+					}
 					if (this._type === Lexer.SKIP) {
 						continue outer;
 					}
 				} while (this._type === Lexer.MORE);
-				if (this._token == null) return this.emit();
+				if (this._token == null) {
+					return this.emit();
+				}
 				return this._token;
 			}
 		}
@@ -200,14 +204,20 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	public pushMode(m: number): void {
-		if (LexerATNSimulator.debug) console.log("pushMode " + m);
+		if (LexerATNSimulator.debug) {
+			console.log("pushMode " + m);
+		}
 		this._modeStack.push(this._mode);
 		this.mode(m);
 	}
 
 	public popMode(): number {
-		if (this._modeStack.isEmpty) throw new Error("EmptyStackException");
-		if (LexerATNSimulator.debug) console.log("popMode back to " + this._modeStack.peek());
+		if (this._modeStack.isEmpty) {
+			throw new Error("EmptyStackException");
+		}
+		if (LexerATNSimulator.debug) {
+			console.log("popMode back to " + this._modeStack.peek());
+		}
 		this.mode(this._modeStack.pop());
 		return this._mode;
 	}
@@ -256,10 +266,12 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	public emit(): Token;
 
 	public emit(token?: Token): Token {
-		if (!token) token = this._factory.create(
-			this._tokenFactorySourcePair, this._type, this._text, this._channel,
-			this._tokenStartCharIndex, this.charIndex - 1, this._tokenStartLine,
-			this._tokenStartCharPositionInLine);
+		if (!token) {
+			token = this._factory.create(
+				this._tokenFactorySourcePair, this._type, this._text, this._channel,
+				this._tokenStartCharIndex, this.charIndex - 1, this._tokenStartLine,
+				this._tokenStartCharPositionInLine);
+		}
 		this._token = token;
 		return token;
 	}

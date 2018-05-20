@@ -572,7 +572,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		this.state = state;
 		this._ctx = localctx;
 		this._ctx._start = this._input.LT(1);
-		if (this._buildParseTrees) this.addContextToParseTree();
+		if (this._buildParseTrees) {
+			this.addContextToParseTree();
+		}
 		this.triggerEnterRuleEvent();
 	}
 
@@ -742,7 +744,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			return true;
 		}
 //        System.out.println("following "+s+"="+following);
-		if (!following.contains(Token.EPSILON)) return false;
+		if (!following.contains(Token.EPSILON)) {
+			return false;
+		}
 
 		while (ctx != null && ctx.invokingState >= 0 && following.contains(Token.EPSILON)) {
 			let invokingState: ATNState = atn.states[ctx.invokingState];
@@ -788,7 +792,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/** Get a rule's index (i.e., {@code RULE_ruleName} field) or -1 if not found. */
 	public getRuleIndex(ruleName: string): number {
 		let ruleIndex = this.getRuleIndexMap().get(ruleName);
-		if (ruleIndex != null) return ruleIndex;
+		if (ruleIndex != null) {
+			return ruleIndex;
+		}
 		return -1;
 	}
 
@@ -809,8 +815,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		while (p != null) {
 			// compute what follows who invoked us
 			let ruleIndex: number = p.ruleIndex;
-			if (ruleIndex < 0) stack.push("n/a");
-			else stack.push(ruleNames[ruleIndex]);
+			if (ruleIndex < 0) {
+				stack.push("n/a");
+			} else {
+				stack.push(ruleNames[ruleIndex]);
+			}
 			p = p._parent as RuleContext;
 		}
 		return stack;
@@ -830,7 +839,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let seenOne: boolean = false;
 		for (let dfa of this._interp.atn.decisionToDFA) {
 			if (!dfa.isEmpty) {
-				if (seenOne) console.log();
+				if (seenOne) {
+					console.log();
+				}
 				console.log("Decision " + dfa.decision + ":");
 				process.stdout.write(dfa.toString(this.vocabulary, this.ruleNames));
 				seenOne = true;

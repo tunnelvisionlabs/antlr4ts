@@ -4,7 +4,6 @@
     "align": false,
     "class-name": false,
     "comment-format": false,
-    "curly": false,
     "indent": [true, "tabs"],
     "interface-name": false,
     "jsdoc-format": false,

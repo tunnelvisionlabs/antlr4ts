@@ -207,7 +207,9 @@ export class DFAState {
 	@Override
 	public equals(o: any): boolean {
 		// compare set of ATN configurations in this set with other
-		if (this === o) return true;
+		if (this === o) {
+			return true;
+		}
 
 		if (!(o instanceof DFAState)) {
 			return false;

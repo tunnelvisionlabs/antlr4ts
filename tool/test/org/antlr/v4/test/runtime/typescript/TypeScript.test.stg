@@ -156,7 +156,7 @@ True() ::= "true"
 
 Not(v) ::= "!<v>"
 
-Assert(s) ::= <<if (!(<s>)) throw new Error("InvalidOperationException: Assertion failed");>>
+Assert(s) ::= <<if (!(<s>)) { throw new Error("InvalidOperationException: Assertion failed"); }>>
 
 Cast(t,v) ::= "(<v> as <t>)"
 

@@ -63,7 +63,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * the return value.
 	 */
 	public getOrAdd(o: T): T {
-		if (this.n > this.threshold) this.expand();
+		if (this.n > this.threshold) {
+			this.expand();
+		}
 		return this.getOrAddImpl(o);
 	}
 
@@ -93,7 +95,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	public get(o: T): T | undefined {
-		if (o == null) return o;
+		if (o == null) {
+			return o;
+		}
 		let b: number = this.getBucket(o);
 		let bucket = this.buckets[b];
 		if (!bucket) {
@@ -120,9 +124,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) {
+				continue;
+			}
 			for (let o of bucket) {
-				if (o == null) break;
+				if (o == null) {
+					break;
+				}
 				hash = MurmurHash.update(hash, this.comparator.hashCode(o));
 			}
 		}
@@ -133,9 +141,15 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	public equals(o: any): boolean {
-		if (o === this) return true;
-		if (!(o instanceof Array2DHashSet)) return false;
-		if (o.size !== this.size) return false;
+		if (o === this) {
+			return true;
+		}
+		if (!(o instanceof Array2DHashSet)) {
+			return false;
+		}
+		if (o.size !== this.size) {
+			return false;
+		}
 		let same: boolean = this.containsAll(o);
 		return same;
 	}
@@ -264,16 +278,24 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		if (collection instanceof Array2DHashSet) {
 			let s = collection as any as Array2DHashSet<T>;
 			for (let bucket of s.buckets) {
-				if (bucket == null) continue;
+				if (bucket == null) {
+					continue;
+				}
 				for (let o of bucket) {
-					if (o == null) break;
-					if (!this.containsFast(this.asElementType(o))) return false;
+					if (o == null) {
+						break;
+					}
+					if (!this.containsFast(this.asElementType(o))) {
+						return false;
+					}
 				}
 			}
 		}
 		else {
 			for (let o of asIterable(collection)) {
-				if (!this.containsFast(this.asElementType(o))) return false;
+				if (!this.containsFast(this.asElementType(o))) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -285,7 +307,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 		for (let o of asIterable(c)) {
 			let existing: T = this.getOrAdd(o);
-			if (existing !== o) changed = true;
+			if (existing !== o) {
+				changed = true;
+			}
 		}
 		return changed;
 	}
@@ -332,7 +356,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	public removeAll(c: Collection<T>): boolean {
 		let changed = false;
 		for (let o of asIterable(c)) {
-			if (this.removeFast(this.asElementType(o))) changed = true;
+			if (this.removeFast(this.asElementType(o))) {
+				changed = true;
+			}
 		}
 
 		return changed;
@@ -347,16 +373,25 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	@Override
 	public toString(): string {
-		if (this.size === 0) return "{}";
+		if (this.size === 0) {
+			return "{}";
+		}
 
 		let buf = "{";
 		let first: boolean = true;
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) {
+				continue;
+			}
 			for (let o of bucket) {
-				if (o == null) break;
-				if (first) first = false;
-				else buf += ", ";
+				if (o == null) {
+					break;
+				}
+				if (first) {
+					first = false;
+				} else {
+					buf += ", ";
+				}
 				buf += o.toString();
 			}
 		}
@@ -374,10 +409,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			buf += "[";
 			let first: boolean = true;
 			for (let o of bucket) {
-				if (first) first = false;
-				else buf += " ";
-				if (o == null) buf += "_";
-				else buf += o.toString();
+				if (first) {
+					first = false;
+				} else {
+					buf += " ";
+				}
+				if (o == null) {
+					buf += "_";
+				} else {
+					buf += o.toString();
+				}
 			}
 			buf += "]\n";
 		}
@@ -426,7 +467,9 @@ class SetIterator<T> implements JavaIterator<T>  {
 	}
 
 	public next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.");
+		if (this.nextIndex >= this.data.length) {
+			throw new RangeError("Attempted to iterate past end.");
+		}
 		this.removed = false;
 		return this.data[this.nextIndex++];
 	}

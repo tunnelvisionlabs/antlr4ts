@@ -114,8 +114,12 @@ export abstract class SemanticContext implements Equatable {
 	public abstract equals(obj: any): boolean;
 
 	public static and(a: SemanticContext | undefined, b: SemanticContext): SemanticContext {
-		if (!a || a === SemanticContext.NONE) return b;
-		if (b === SemanticContext.NONE) return a;
+		if (!a || a === SemanticContext.NONE) {
+			return b;
+		}
+		if (b === SemanticContext.NONE) {
+			return a;
+		}
 		let result: SemanticContext.AND = new SemanticContext.AND(a, b);
 		if (result.opnds.length === 1) {
 			return result.opnds[0];
@@ -133,7 +137,9 @@ export abstract class SemanticContext implements Equatable {
 			return b;
 		}
 
-		if (a === SemanticContext.NONE || b === SemanticContext.NONE) return SemanticContext.NONE;
+		if (a === SemanticContext.NONE || b === SemanticContext.NONE) {
+			return SemanticContext.NONE;
+		}
 		let result: SemanticContext.OR = new SemanticContext.OR(a, b);
 		if (result.opnds.length === 1) {
 			return result.opnds[0];
@@ -202,8 +208,12 @@ export namespace SemanticContext {
 
 		@Override
 		public equals(obj: any): boolean {
-			if (!(obj instanceof Predicate)) return false;
-			if (this === obj) return true;
+			if (!(obj instanceof Predicate)) {
+				return false;
+			}
+			if (this === obj) {
+				return true;
+			}
 			return this.ruleIndex === obj.ruleIndex &&
 				this.predIndex === obj.predIndex &&
 				this.isCtxDependent === obj.isCtxDependent;
@@ -300,10 +310,17 @@ export namespace SemanticContext {
 			super();
 
 			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
-			if (a instanceof AND) operands.addAll(a.opnds);
-			else operands.add(a);
-			if (b instanceof AND) operands.addAll(b.opnds);
-			else operands.add(b);
+			if (a instanceof AND) {
+				operands.addAll(a.opnds);
+			} else {
+				operands.add(a);
+			}
+
+			if (b instanceof AND) {
+				operands.addAll(b.opnds);
+			} else {
+				operands.add(b);
+			}
 
 			this.opnds = operands.toArray();
 			let precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
@@ -322,8 +339,12 @@ export namespace SemanticContext {
 
 		@Override
 		public equals(obj: any): boolean {
-			if (this === obj) return true;
-			if (!(obj instanceof AND)) return false;
+			if (this === obj) {
+				return true;
+			}
+			if (!(obj instanceof AND)) {
+				return false;
+			}
 			return ArrayEqualityComparator.INSTANCE.equals(this.opnds, obj.opnds);
 		}
 
@@ -342,7 +363,9 @@ export namespace SemanticContext {
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
 			for (let opnd of this.opnds) {
-				if (!opnd.eval(parser, parserCallStack)) return false;
+				if (!opnd.eval(parser, parserCallStack)) {
+					return false;
+				}
 			}
 
 			return true;
@@ -399,10 +422,17 @@ export namespace SemanticContext {
 			super();
 
 			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
-			if (a instanceof OR) operands.addAll(a.opnds);
-			else operands.add(a);
-			if (b instanceof OR) operands.addAll(b.opnds);
-			else operands.add(b);
+			if (a instanceof OR) {
+				operands.addAll(a.opnds);
+			} else {
+				operands.add(a);
+			}
+
+			if (b instanceof OR) {
+				operands.addAll(b.opnds);
+			} else {
+				operands.add(b);
+			}
 
 			this.opnds = operands.toArray();
 			let precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
@@ -421,8 +451,12 @@ export namespace SemanticContext {
 
 		@Override
 		public equals(obj: any): boolean {
-			if (this === obj) return true;
-			if (!(obj instanceof OR)) return false;
+			if (this === obj) {
+				return true;
+			}
+			if (!(obj instanceof OR)) {
+				return false;
+			}
 			return ArrayEqualityComparator.INSTANCE.equals(this.opnds, obj.opnds);
 		}
 
@@ -441,7 +475,9 @@ export namespace SemanticContext {
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
 			for (let opnd of this.opnds) {
-				if (opnd.eval(parser, parserCallStack)) return true;
+				if (opnd.eval(parser, parserCallStack)) {
+					return true;
+				}
 			}
 
 			return false;

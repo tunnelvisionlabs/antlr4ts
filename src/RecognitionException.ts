@@ -62,7 +62,9 @@ export class RecognitionException extends Error {
 		this._recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if (recognizer) this._offendingState = recognizer.state;
+		if (recognizer) {
+			this._offendingState = recognizer.state;
+		}
 	}
 
 	/**
@@ -127,7 +129,9 @@ export class RecognitionException extends Error {
 	}
 
 	public getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
-		if (recognizer && recognizer !== this._recognizer) return undefined;
+		if (recognizer && recognizer !== this._recognizer) {
+			return undefined;
+		}
 		return this.offendingToken;
 	}
 

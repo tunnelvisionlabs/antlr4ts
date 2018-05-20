@@ -10,8 +10,9 @@ import { BitSet } from "../src/misc/BitSet";
 describe("BitSet Tests", () => {
 	const empty = new BitSet();
 	const evens = new BitSet(100);
-	for (let i=0; i<100; i+=2)
+	for (let i=0; i<100; i+=2) {
 		evens.set(i);
+	}
 
 	const primes = new BitSet( [3, 2, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
 		59, 61, 67, 71, 73, 79, 83, 89, 97]);
@@ -132,13 +133,15 @@ describe("BitSet Tests", () => {
 
 	describe("evens", ()=> {
 		it("has bits set", ()=>{
-			for (let i=0; i<100; i += 2)
+			for (let i=0; i<100; i += 2) {
 				assert.equal( evens.get(i), true );
+			}
 			});
 
 		it("has bits clear", ()=>{
-			for (let i=1; i<100; i+= 2)
+			for (let i=1; i<100; i+= 2) {
 			assert.equal( evens.get(i), false );
+			}
 		});
 
 		it("JavaScript style iteration works", () => {
@@ -163,8 +166,12 @@ describe("BitSet Tests", () => {
 
 		it("copy constructor", () => {
 			const a = new BitSet( evens );
-			for (let i=0; i<100; i += 2) assert.equal( a.get(i), true );
-			for (let i=1; i<100; i+= 2) assert.equal( a.get(i), false );
+			for (let i=0; i<100; i += 2) {
+				assert.equal( a.get(i), true );
+			}
+			for (let i=1; i<100; i+= 2) {
+				assert.equal( a.get(i), false );
+			}
 		});
 
 		it ("set bits and clear bits", ()=>{
@@ -301,8 +308,9 @@ describe("BitSet Tests", () => {
 			x.xor(composites);
 			assert.equal(x.get(0), false);
 			assert.equal(x.get(1), false);
-			for (let i=2; i<100; i++)
+			for (let i=2; i<100; i++) {
 				assert.equal(x.get(i), true, `x[${i}]`);
+			}
 		});
 
 		it("prime andNot ninetys", ()=>{

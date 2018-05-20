@@ -100,7 +100,9 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 
 	public getTokenType(tokenName: string): number {
 		let ttype = this.getTokenTypeMap().get(tokenName);
-		if (ttype != null) return ttype;
+		if (ttype != null) {
+			return ttype;
+		}
 		return Token.INVALID_TYPE;
 	}
 
@@ -164,7 +166,9 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	@NotNull
 	public getErrorHeader(@NotNull e: RecognitionException): string {
 		let token = e.getOffendingToken();
-		if (!token) return "";
+		if (!token) {
+			return "";
+		}
 		let line = token.line;
 		let charPositionInLine: number = token.charPositionInLine;
 		return "line " + line + ":" + charPositionInLine;
@@ -174,7 +178,9 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 * @exception NullPointerException if {@code listener} is {@code null}.
 	 */
 	public addErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
-		if (!listener) throw new TypeError("listener must not be null");
+		if (!listener) {
+			throw new TypeError("listener must not be null");
+		}
 		this._listeners.push(listener);
 	}
 

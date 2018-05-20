@@ -15,7 +15,9 @@ class EquatableTest implements Equatable {
 	constructor( public a: string, public b: string ){}
 
 	public equals(o: any) {
-		if (this === o) return true;
+		if (this === o) {
+			return true;
+		}
 		if (o instanceof EquatableTest) {
 			return this.a === o.a && this.b === o.b;
 		}

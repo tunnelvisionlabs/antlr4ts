@@ -32,8 +32,9 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 	let errors = streams.stderr.join("");
 
 	// Fixup for small behavioral difference at EOF...
-	if (output.length === expectedOutput.length - 1 && output[output.length-1] !== "\n")
+	if (output.length === expectedOutput.length - 1 && output[output.length-1] !== "\n") {
 		output += "\n";
+	}
 
 	assert.equal( output, expectedOutput);
 	assert.equal( errors, expectedErrors);
