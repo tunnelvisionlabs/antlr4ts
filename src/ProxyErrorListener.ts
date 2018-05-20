@@ -16,7 +16,7 @@ import { Override, NotNull } from "./Decorators";
  *
  * @author Sam Harwell
  */
-export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Symbol>> implements ANTLRErrorListener<Symbol> {
+export class ProxyErrorListener<TSymbol, TListener extends ANTLRErrorListener<TSymbol>> implements ANTLRErrorListener<TSymbol> {
 
 	constructor(private delegates: TListener[]) {
 		if (!delegates) {
@@ -29,7 +29,7 @@ export class ProxyErrorListener<Symbol, TListener extends ANTLRErrorListener<Sym
 	}
 
 	@Override
-	public syntaxError<T extends Symbol>(
+	public syntaxError<T extends TSymbol>(
 		@NotNull recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,

@@ -17,7 +17,7 @@ import { Parser } from "./Parser";
  * @author Sam Harwell
  */
 export function RuleDependency(dependency: DependencySpecification) {
-	return (target: Object, propertyKey: PropertyKey, propertyDescriptor: PropertyDescriptor) => {
+	return (target: object, propertyKey: PropertyKey, propertyDescriptor: PropertyDescriptor) => {
 	};
 }
 

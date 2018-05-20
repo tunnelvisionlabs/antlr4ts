@@ -20,7 +20,7 @@ import { VocabularyImpl } from "./VocabularyImpl";
 
 import * as Utils from "./misc/Utils";
 
-export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
+export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	public static readonly EOF: number = -1;
 
 	private static tokenTypeMapCache =
@@ -30,7 +30,7 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 
 	@SuppressWarnings("serial")
 	@NotNull
-	private readonly _listeners: Array<ANTLRErrorListener<Symbol>> = [ConsoleErrorListener.INSTANCE];
+	private readonly _listeners: Array<ANTLRErrorListener<TSymbol>> = [ConsoleErrorListener.INSTANCE];
 
 	protected _interp: ATNInterpreter;
 
@@ -173,12 +173,12 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * @exception NullPointerException if {@code listener} is {@code null}.
 	 */
-	public addErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	public addErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
 		if (!listener) throw new TypeError("listener must not be null");
 		this._listeners.push(listener);
 	}
 
-	public removeErrorListener(@NotNull listener: ANTLRErrorListener<Symbol>): void {
+	public removeErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
 		let position = this._listeners.indexOf(listener);
 		if (position !== -1) {
 			this._listeners.splice(position, 1);
@@ -190,12 +190,12 @@ export abstract class Recognizer<Symbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	@NotNull
-	public getErrorListeners(): Array<ANTLRErrorListener<Symbol>> {
+	public getErrorListeners(): Array<ANTLRErrorListener<TSymbol>> {
 		return this._listeners.slice(0);
 	}
 
-	public getErrorListenerDispatch(): ANTLRErrorListener<Symbol> {
-		return new ProxyErrorListener<Symbol, ANTLRErrorListener<Symbol>>(this.getErrorListeners());
+	public getErrorListenerDispatch(): ANTLRErrorListener<TSymbol> {
+		return new ProxyErrorListener<TSymbol, ANTLRErrorListener<TSymbol>>(this.getErrorListeners());
 	}
 
 	// subclass needs to override these if there are sempreds or actions

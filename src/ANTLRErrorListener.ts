@@ -9,7 +9,7 @@
 import { Recognizer } from "./Recognizer";
 import { RecognitionException } from "./RecognitionException";
 
-export interface ANTLRErrorListener<Symbol> {
+export interface ANTLRErrorListener<TSymbol> {
 	/**
 	 * Upon syntax error, notify any interested parties. This is not how to
 	 * recover from errors or compute error messages. {@link ANTLRErrorStrategy}
@@ -43,7 +43,7 @@ export interface ANTLRErrorListener<Symbol> {
 	 *        the parser was able to recover in line without exiting the
 	 *        surrounding rule.
 	 */
-	syntaxError?: <T extends Symbol>(
+	syntaxError?: <T extends TSymbol>(
 		/*@NotNull*/ recognizer: Recognizer<T, any>,
 		offendingSymbol: T | undefined,
 		line: number,

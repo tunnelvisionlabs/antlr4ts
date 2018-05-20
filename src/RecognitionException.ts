@@ -131,9 +131,9 @@ export class RecognitionException extends Error {
 		return this.offendingToken;
 	}
 
-	protected setOffendingToken<Symbol extends Token>(
-		recognizer: Recognizer<Symbol, any>,
-		offendingToken?: Symbol): void {
+	protected setOffendingToken<TSymbol extends Token>(
+		recognizer: Recognizer<TSymbol, any>,
+		offendingToken?: TSymbol): void {
 		if (recognizer === this._recognizer) {
 			this.offendingToken = offendingToken;
 		}

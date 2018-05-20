@@ -231,10 +231,10 @@ export class CommonToken implements WritableToken {
 	}
 
 	public toString(): string;
-	public toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<TSymbol, ATNInterpreter> | undefined): string;
 
 	@Override
-	public toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<TSymbol, ATNInterpreter>): string {
 		let channelStr: string = "";
 		if (this._channel > 0) {
 			channelStr = ",channel=" + this._channel;
