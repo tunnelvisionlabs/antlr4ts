@@ -5,14 +5,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.1614404-07:00
 
-import { ATNSimulator } from './atn/ATNSimulator';
-import { CharStream } from './CharStream';
-import { Interval } from './misc/Interval';
-import { NotNull, Override } from './Decorators';
-import { Recognizer } from './Recognizer';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
-import { WritableToken } from './WritableToken';
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { CharStream } from "./CharStream";
+import { Interval } from "./misc/Interval";
+import { NotNull, Override } from "./Decorators";
+import { Recognizer } from "./Recognizer";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
+import { WritableToken } from "./WritableToken";
 
 export class CommonToken implements WritableToken {
 	/**
@@ -102,7 +102,7 @@ export class CommonToken implements WritableToken {
 	 *
 	 * @param oldToken The token to copy.
 	 */
-	static fromToken(@NotNull oldToken: Token): CommonToken {
+	public static fromToken(@NotNull oldToken: Token): CommonToken {
 		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.tokenIndex;
@@ -122,6 +122,16 @@ export class CommonToken implements WritableToken {
 	@Override
 	get type(): number {
 		return this._type;
+	}
+
+	// @Override
+	set type(type: number) {
+		this._type = type;
+	}
+
+	@Override
+	get line(): number {
+		return this._line;
 	}
 
 	// @Override
@@ -163,11 +173,6 @@ export class CommonToken implements WritableToken {
 	}
 
 	@Override
-	get line(): number {
-		return this._line;
-	}
-
-	@Override
 	get charPositionInLine(): number {
 		return this._charPositionInLine;
 	}
@@ -185,11 +190,6 @@ export class CommonToken implements WritableToken {
 	// @Override
 	set channel(channel: number) {
 		this._channel = channel;
-	}
-
-	// @Override
-	set type(type: number) {
-		this._type = type;
 	}
 
 	@Override
@@ -230,11 +230,11 @@ export class CommonToken implements WritableToken {
 		return this.source.stream;
 	}
 
-	toString(): string;
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
+	public toString(): string;
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<TSymbol, ATNInterpreter> | undefined): string;
 
 	@Override
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<TSymbol, ATNInterpreter>): string {
 		let channelStr: string = "";
 		if (this._channel > 0) {
 			channelStr = ",channel=" + this._channel;

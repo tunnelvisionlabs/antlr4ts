@@ -148,7 +148,7 @@ writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
 
 writeln(s) ::= <<console.log(<s>);>>
 write(s) ::= <<process.stdout.write(String(<s>));>>
-writeList(s) ::= <<console.log(<s; separator="+">);>>
+writeList(s) ::= <<console.log(<s; separator=" + ">);>>
 
 False() ::= "false"
 
@@ -156,7 +156,7 @@ True() ::= "true"
 
 Not(v) ::= "!<v>"
 
-Assert(s) ::= <<if (!(<s>)) throw new Error("InvalidOperationException: Assertion failed");>>
+Assert(s) ::= <<if (!(<s>)) { throw new Error("InvalidOperationException: Assertion failed"); }>>
 
 Cast(t,v) ::= "(<v> as <t>)"
 
@@ -166,14 +166,14 @@ Concat(a,b) ::= "<a><b>"
 
 DeclareLocal(s,v) ::= "let <s> = <v>;"
 
-AssertIsList(v) ::= "let __ttt__: Array\<any> = <v>;" // just use static type system
+AssertIsList(v) ::= "let __ttt__: any[] = <v>;" // just use static type system
 
 AssignLocal(s,v) ::= "<s> = <v>;"
 
-InitIntMember(n,v) ::= <%<n>: number = <v>;%>
+InitIntMember(n,v) ::= <%public <n>: number = <v>;%>
 InitLocalIntMember(n, v) ::= <%let <n>: number = <v>;%>
 
-InitBooleanMember(n,v) ::= <%<n>: boolean = <v>;%>
+InitBooleanMember(n,v) ::= <%public <n>: boolean = <v>;%>
 
 GetMember(n) ::= <%this.<n>%>
 
@@ -183,11 +183,11 @@ AddMember(n,v) ::= <%this.<n> += <v>;%>
 
 PlusMember(v,n) ::= <%<v> + this.<n>%>
 
-MemberEquals(n,v) ::= <%this.<n> == <v>%>
+MemberEquals(n,v) ::= <%this.<n> === <v>%>
 
-ModMemberEquals(n,m,v) ::= <%this.<n> % <m> == <v>%>
+ModMemberEquals(n,m,v) ::= <%this.<n> % <m> === <v>%>
 
-ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> != <v>%>
+ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> !== <v>%>
 
 DumpDFA() ::= "this.dumpDFA();"
 
@@ -215,7 +215,7 @@ InputText() ::= "this._input.getText()"
 
 LTEquals(i, v) ::= <%this._input.LT(<i>).text === <v>%>
 
-LANotEquals(i, v) ::= <%this._input.LA(<i>)!==<v>%>
+LANotEquals(i, v) ::= <%this._input.LA(<i>) !== <v>%>
 
 TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
 
@@ -223,27 +223,29 @@ ImportListener(X) ::= ""
 
 ImportVisitor(grammarName) ::= <<
 @parser::header {
-import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
-import { RuleNode } from 'antlr4ts/tree/RuleNode';
-import { ErrorNode } from 'antlr4ts/tree/ErrorNode';
+import { AbstractParseTreeVisitor } from "antlr4ts/tree/AbstractParseTreeVisitor";
+import { RuleNode } from "antlr4ts/tree/RuleNode";
+import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 }
 >>
 
 ImportPredictionMode() ::= <<
 @beforeParser {
-import { PredictionMode } from 'antlr4ts/atn/PredictionMode';
+import { PredictionMode } from "antlr4ts/atn/PredictionMode";
 }
 >>
 
 ImportBailErrorStrategy() ::= <<
 @beforeParser {
-import { BailErrorStrategy } from 'antlr4ts/BailErrorStrategy';
+import { BailErrorStrategy } from "antlr4ts/BailErrorStrategy";
 }
 >>
 
 GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.vocabulary)"
 
-RuleInvocationStack() ::= "'[' + Utils.join(this.getRuleInvocationStack(), ', ') + ']'"
+RuleInvocationStack() ::= <%
+"[" + Utils.join(this.getRuleInvocationStack(), ", ") + "]"
+%>
 
 FULL_CONTEXT_DFA() ::= "this.interpreter.enable_global_context_dfa = true;"
 LL_EXACT_AMBIG_DETECTION() ::= <<this.interpreter.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
@@ -256,8 +258,8 @@ Result(r) ::= <%<r>%>
 
 ParserPropertyMember() ::= <<
 @members {
-Property(): boolean {
-  return true;
+public Property(): boolean {
+	return true;
 }
 }
 >>
@@ -266,7 +268,7 @@ ParserPropertyCall(p, call) ::= "<p>.<call>"
 
 PositionAdjustingLexer() ::= <<
 @members {
-nextToken(): Token {
+public nextToken(): Token {
 	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
 		this._interp = new PositionAdjustingLexerATNSimulator(PositionAdjustingLexer._ATN, this);
 	}
@@ -274,7 +276,7 @@ nextToken(): Token {
 	return super.nextToken();
 }
 
-emit(): Token {
+public emit(): Token {
 	switch (this._type) {
 	case PositionAdjustingLexer.TOKENS:
 		this.handleAcceptPositionForKeyword("tokens");
@@ -327,7 +329,7 @@ private static isIdentifierChar(c: string): boolean {
 }
 
 @beforeLexer {
-import { Token } from 'antlr4ts';
+import { Token } from "antlr4ts";
 }
 
 @afterLexer {
@@ -337,7 +339,7 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 		super(atn, recog);
 	}
 
-	resetAcceptPosition(input: CharStream, index: number, line: number, charPositionInLine: number): void {
+	public resetAcceptPosition(input: CharStream, index: number, line: number, charPositionInLine: number): void {
 		input.seek(index);
 		this.line = line;
 		this.charPositionInLine = charPositionInLine;
@@ -350,12 +352,12 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
 BasicListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
 export class LeafListener implements TListener {
-	visitTerminal(node: TerminalNode): void {
+	public visitTerminal(node: TerminalNode): void {
 		console.log(node.symbol.text);
 	}
 }
@@ -368,10 +370,10 @@ ParseTreeWalker.DEFAULT.walk\<TListener>(new LeafListener(), <s>);
 
 TreeNodeWithAltNumField(X) ::= <<
 @parser::beforeParser {
-import { ParserRuleContext as PRC } from 'antlr4ts/ParserRuleContext';
+import { ParserRuleContext as PRC } from "antlr4ts/ParserRuleContext";
 
 export class MyRuleNode extends PRC {
-	altNum: number;
+	private altNum: number;
 	constructor(parent: PRC, invokingStateNumber: number) {
 		super(parent, invokingStateNumber);
 	}
@@ -384,12 +386,12 @@ export class MyRuleNode extends PRC {
 
 TokenGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: AContext): void {
+	public exitA(ctx: AContext): void {
 		if (ctx.childCount === 2 && ctx.INT().length === 2) {
 			console.log(ctx.INT(0).symbol.text + " " +
 				ctx.INT(1).symbol.text + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
@@ -403,12 +405,12 @@ export class LeafListener implements TListener {
 
 RuleGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitA(ctx: AContext): void {
+	public exitA(ctx: AContext): void {
 		if (ctx.childCount === 2) {
 			console.log(ctx.b(0).start.text + " " +
 				ctx.b(1).start.text + " " + ctx.b()[0].start.text);
@@ -422,12 +424,12 @@ export class LeafListener implements TListener {
 
 LRListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitE(ctx: EContext): void {
+	public exitE(ctx: EContext): void {
 		if (ctx.childCount === 3) {
 			console.log(ctx.e(0).start.text + " " +
 				ctx.e(1).start.text + " " + ctx.e()[0].start.text);
@@ -441,15 +443,15 @@ export class LeafListener implements TListener {
 
 LRWithLabelsListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker';
+import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 }
 
 @parser::afterParser {
 export class LeafListener implements TListener {
-	exitCall(ctx: CallContext): void {
+	public exitCall(ctx: CallContext): void {
 		console.log(ctx.e().start.text + " " + ctx.eList());
 	}
-	exitInt(ctx: IntContext): void {
+	public exitInt(ctx: IntContext): void {
 		console.log(ctx.INT().symbol.text);
 	}
 }
@@ -464,7 +466,7 @@ TerminalVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
 	@Override
-	visitTerminal(node: TerminalNode): string {
+	public visitTerminal(node: TerminalNode): string {
 		return node.symbol.toString() + "\n";
 	}
 
@@ -485,7 +487,7 @@ ErrorVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
 	@Override
-	visitErrorNode(node: ErrorNode): string {
+	public visitErrorNode(node: ErrorNode): string {
 		return "Error encountered: " + node.symbol.toString();
 	}
 
@@ -506,7 +508,7 @@ ShouldNotVisitEOFVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
 	@Override
-	visitTerminal(node: TerminalNode): string {
+	public visitTerminal(node: TerminalNode): string {
 		return node.symbol.toString() + "\n";
 	}
 
@@ -527,7 +529,7 @@ ShouldNotVisitTerminalVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
 	@Override
-	visitTerminal(node: TerminalNode): never {
+	public visitTerminal(node: TerminalNode): never {
 		throw new Error("Should not be reachable");
 	}
 
@@ -548,17 +550,17 @@ CalculatorVisitor(grammarName) ::= <<
 @parser::afterParser {
 export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <grammarName>Visitor\<number> {
 	@Override
-	visitS(context: SContext): number {
+	public visitS(context: SContext): number {
 		return this.visit(context.expr());
 	}
 
 	@Override
-	visitNumber(context: NumberContext): number {
+	public visitNumber(context: NumberContext): number {
 		return Number(context.INT().text);
 	}
 
 	@Override
-	visitMultiply(context: MultiplyContext): number {
+	public visitMultiply(context: MultiplyContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
 		if (context.MUL() !== undefined) {
@@ -570,7 +572,7 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 	}
 
 	@Override
-	visitAdd(context: AddContext): number {
+	public visitAdd(context: AddContext): number {
 		let left: number = this.visit(context.expr(0));
 		let right: number = this.visit(context.expr(1));
 		if (context.ADD() !== undefined) {
@@ -595,20 +597,20 @@ export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <g
 >>
 
 DeclareContextListGettersFunction() ::= <<
-foo(s: SContext): void {
+public foo(s: SContext): void {
 	let a: AContext[] = s.a();
 	let b: BContext[] = s.b();
 }
 >>
 
 Declare_foo() ::= <<
-	foo(): void {console.log("foo");}
+	public foo(): void { console.log("foo"); }
 >>
 
 Invoke_foo() ::= "this.foo();"
 
-Declare_pred() ::= <<pred(v: boolean): boolean {
-	console.log("eval="+v.toString().toLowerCase());
+Declare_pred() ::= <<public pred(v: boolean): boolean {
+	console.log("eval=" + v.toString().toLowerCase());
 	return v;
 }
 >>

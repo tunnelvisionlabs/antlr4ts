@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.7513856-07:00
 
-import { ATNState } from './ATNState';
-import { ATNStateType } from './ATNStateType';
-import { Override } from '../Decorators';
+import { ATNState } from "./ATNState";
+import { ATNStateType } from "./ATNStateType";
+import { Override } from "../Decorators";
 
 /** The last node in the ATN for a rule, unless that rule is the start symbol.
  *  In that case, there is one transition to EOF. Later, we might encode

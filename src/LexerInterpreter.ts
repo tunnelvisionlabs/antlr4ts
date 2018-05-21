@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.9954566-07:00
 
-import { ATN } from './atn/ATN';
-import { ATNType } from './atn/ATNType';
-import { CharStream } from './CharStream';
-import { Collection } from './misc/Stubs';
-import { Lexer } from './Lexer';
-import { LexerATNSimulator } from './atn/LexerATNSimulator';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Vocabulary } from './Vocabulary';
+import { ATN } from "./atn/ATN";
+import { ATNType } from "./atn/ATNType";
+import { CharStream } from "./CharStream";
+import { Collection } from "./misc/Stubs";
+import { Lexer } from "./Lexer";
+import { LexerATNSimulator } from "./atn/LexerATNSimulator";
+import { NotNull } from "./Decorators";
+import { Override } from "./Decorators";
+import { Vocabulary } from "./Vocabulary";
 
 export class LexerInterpreter extends Lexer {
 	protected _grammarFileName: string;
@@ -27,7 +27,7 @@ export class LexerInterpreter extends Lexer {
 	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
 		super(input);
 
-		if (atn.grammarType != ATNType.LEXER) {
+		if (atn.grammarType !== ATNType.LEXER) {
 			throw new Error("IllegalArgumentException: The ATN must be a lexer ATN.");
 		}
 

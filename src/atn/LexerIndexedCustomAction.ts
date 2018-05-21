@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.7613038-07:00
 
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
  * This implementation of {@link LexerAction} is used for tracking input offsets
@@ -95,13 +95,13 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * using the provided {@code lexer}.</p>
 	 */
 	@Override
-	execute(lexer: Lexer): void {
+	public execute(lexer: Lexer): void {
 		// assume the input stream position was properly set by the calling code
 		this._action.execute(lexer);
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this._offset);
 		hash = MurmurHash.update(hash, this._action);
@@ -109,7 +109,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerIndexedCustomAction)) {

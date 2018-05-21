@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:58.1768850-07:00
 
-import { Interval } from './misc/Interval';
-import { Override } from './Decorators';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators";
+import { Token } from "./Token";
+import { TokenStream } from "./TokenStream";
 
-import * as Utils from './misc/Utils';
+import * as Utils from "./misc/Utils";
 
 /**
  * Useful for rewriting out a buffered input token stream after doing some
@@ -89,9 +89,9 @@ import * as Utils from './misc/Utils';
  * first example shows.</p>
  */
 export class TokenStreamRewriter {
-	static readonly DEFAULT_PROGRAM_NAME: string =  "default";
-	static readonly PROGRAM_INIT_SIZE: number =  100;
-	static readonly MIN_TOKEN_INDEX: number =  0;
+	public static readonly DEFAULT_PROGRAM_NAME: string =  "default";
+	public static readonly PROGRAM_INIT_SIZE: number =  100;
+	public static readonly MIN_TOKEN_INDEX: number =  0;
 
 	/** Our source stream */
 	protected tokens: TokenStream;
@@ -105,45 +105,45 @@ export class TokenStreamRewriter {
 	/** Map String (program name) &rarr; Integer index */
 	protected lastRewriteTokenIndexes: Map<string, number>;
 
-	 constructor(tokens: TokenStream)  {
+	constructor(tokens: TokenStream)  {
 		this.tokens = tokens;
 		this.programs = new Map<string, RewriteOperation[]>();
 		this.programs.set(TokenStreamRewriter.DEFAULT_PROGRAM_NAME, []);
 		this.lastRewriteTokenIndexes = new Map<string, number>();
 	}
 
-	getTokenStream(): TokenStream {
+	public getTokenStream(): TokenStream {
 		return this.tokens;
 	}
 
-	rollback(instructionIndex: number): void;
+	public rollback(instructionIndex: number): void;
 	/** Rollback the instruction stream for a program so that
 	 *  the indicated instruction (via instructionIndex) is no
 	 *  longer in the stream. UNTESTED!
 	 */
-	rollback(instructionIndex: number, programName: string): void;
-	rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public rollback(instructionIndex: number, programName: string): void;
+	public rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let is: RewriteOperation[] | undefined =  this.programs.get(programName);
-		if ( is!=null ) {
-			this.programs.set(programName, is.slice(TokenStreamRewriter.MIN_TOKEN_INDEX,instructionIndex));
+		if ( is != null ) {
+			this.programs.set(programName, is.slice(TokenStreamRewriter.MIN_TOKEN_INDEX, instructionIndex));
 		}
 	}
 
-	deleteProgram(): void;
+	public deleteProgram(): void;
 
 	/** Reset the program so that no instructions exist */
-	deleteProgram(programName: string): void;
-	deleteProgram(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public deleteProgram(programName: string): void;
+	public deleteProgram(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		this.rollback(TokenStreamRewriter.MIN_TOKEN_INDEX, programName);
 	}
 
-	insertAfter(t: Token, text: any): void;
-	insertAfter(index: number, text: any): void;
-	insertAfter(t: Token, text: any, programName: string): void;
-	insertAfter(index: number, text: any, programName: string): void;
-	insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertAfter(t: Token, text: any): void;
+	public insertAfter(index: number, text: any): void;
+	public insertAfter(t: Token, text: any, programName: string): void;
+	public insertAfter(index: number, text: any, programName: string): void;
+	public insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
-		if (typeof tokenOrIndex === 'number') {
+		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
 		} else {
 			index = tokenOrIndex.tokenIndex;
@@ -156,13 +156,13 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	insertBefore(t: Token, text: any): void;
-	insertBefore(index: number, text: any): void;
-	insertBefore(t: Token, text: any, programName: string): void;
-	insertBefore(index: number, text: any, programName: string): void;
-	insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertBefore(t: Token, text: any): void;
+	public insertBefore(index: number, text: any): void;
+	public insertBefore(t: Token, text: any, programName: string): void;
+	public insertBefore(index: number, text: any, programName: string): void;
+	public insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
-		if (typeof tokenOrIndex === 'number') {
+		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
 		} else {
 			index = tokenOrIndex.tokenIndex;
@@ -174,34 +174,34 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	replaceSingle(index: number, text: any): void;
-	replaceSingle(indexT: Token, text: any): void;
-	replaceSingle(index: Token | number, text: any): void {
-		if (typeof index === 'number') {
+	public replaceSingle(index: number, text: any): void;
+	public replaceSingle(indexT: Token, text: any): void;
+	public replaceSingle(index: Token | number, text: any): void {
+		if (typeof index === "number") {
 			this.replace(index, index, text);
 		} else {
 			this.replace(index, index, text);
 		}
 	}
 
-	replace(from: number, to: number, text: any): void;
+	public replace(from: number, to: number, text: any): void;
 
-	replace(from: Token, to: Token, text: any): void;
+	public replace(from: Token, to: Token, text: any): void;
 
-	replace(from: number, to: number, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: number, to: number, /*@Nullable*/ text: any, programName: string): void;
 
-	replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
 
-	replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
-		if (typeof from !== 'number') {
+	public replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+		if (typeof from !== "number") {
 			from = from.tokenIndex;
 		}
 
-		if (typeof to !== 'number') {
+		if (typeof to !== "number") {
 			to = to.tokenIndex;
 		}
 
-		if ( from > to || from<0 || to<0 || to >= this.tokens.size ) {
+		if ( from > to || from < 0 || to < 0 || to >= this.tokens.size ) {
 			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size})`);
 		}
 
@@ -211,24 +211,24 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	delete(index: number): void;
+	public delete(index: number): void;
 
-	delete(from: number, to: number): void;
+	public delete(from: number, to: number): void;
 
-	delete(indexT: Token): void;
+	public delete(indexT: Token): void;
 
-	delete(from: Token, to: Token): void;
+	public delete(from: Token, to: Token): void;
 
-	delete(from: number, to: number, programName: string): void;
+	public delete(from: number, to: number, programName: string): void;
 
-	delete(from: Token, to: Token, programName: string): void;
+	public delete(from: Token, to: Token, programName: string): void;
 
-	delete(from: Token | number, to?: Token | number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public delete(from: Token | number, to?: Token | number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (to === undefined) {
 			to = from;
 		}
 
-		if (typeof from === 'number') {
+		if (typeof from === "number") {
 			this.replace(from, to as number, undefined, programName);
 		} else {
 			this.replace(from, to as Token, undefined, programName);
@@ -241,7 +241,7 @@ export class TokenStreamRewriter {
 
 	protected getLastRewriteTokenIndex(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): number {
 		let I: number | undefined = this.lastRewriteTokenIndexes.get(programName);
-		if ( I==null ) {
+		if ( I == null ) {
 			return -1;
 		}
 
@@ -254,7 +254,7 @@ export class TokenStreamRewriter {
 
 	protected getProgram(name: string): RewriteOperation[] {
 		let is: RewriteOperation[] | undefined = this.programs.get(name);
-		if ( is==null ) {
+		if ( is == null ) {
 			is = this.initializeProgram(name);
 		}
 
@@ -269,15 +269,15 @@ export class TokenStreamRewriter {
 
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter.
- 	 */
-	getText(): string;
+	 */
+	public getText(): string;
 
 	/** Return the text from the original tokens altered per the
 	 *  instructions given to this rewriter in programName.
 	 *
 	 * @since 4.5
- 	 */
-	getText(programName: string): string;
+	 */
+	public getText(programName: string): string;
 
 	/** Return the text associated with the tokens in the interval from the
 	 *  original token stream but with the alterations given to this rewriter.
@@ -287,12 +287,12 @@ export class TokenStreamRewriter {
 	 *  to the first and last token in the interval. So, if you did an
 	 *  insertBefore on the first token, you would get that insertion.
 	 *  The same is true if you do an insertAfter the stop token.
- 	 */
-	getText(interval: Interval): string;
+	 */
+	public getText(interval: Interval): string;
 
-	getText(interval: Interval, programName: string): string;
+	public getText(interval: Interval, programName: string): string;
 
-	getText(intervalOrProgram?: Interval | string, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): string {
+	public getText(intervalOrProgram?: Interval | string, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): string {
 		let interval: Interval;
 		if (intervalOrProgram instanceof Interval) {
 			interval = intervalOrProgram;
@@ -300,7 +300,7 @@ export class TokenStreamRewriter {
 			interval = Interval.of(0, this.tokens.size - 1);
 		}
 
-		if (typeof intervalOrProgram === 'string') {
+		if (typeof intervalOrProgram === "string") {
 			programName = intervalOrProgram;
 		}
 
@@ -309,10 +309,14 @@ export class TokenStreamRewriter {
 		let stop: number =  interval.b;
 
 		// ensure start/end are in range
-		if ( stop > this.tokens.size-1 ) stop = this.tokens.size-1;
-		if ( start<0 ) start = 0;
+		if ( stop > this.tokens.size - 1 ) {
+			stop = this.tokens.size - 1;
+		}
+		if ( start < 0 ) {
+			start = 0;
+		}
 
-		if ( rewrites==null || rewrites.length === 0 ) {
+		if ( rewrites == null || rewrites.length === 0 ) {
 			return this.tokens.getText(interval); // no instructions to execute
 		}
 
@@ -327,9 +331,11 @@ export class TokenStreamRewriter {
 			let op: RewriteOperation | undefined =  indexToOp.get(i);
 			indexToOp.delete(i); // remove so any left have index size-1
 			let t: Token = this.tokens.get(i);
-			if ( op==null ) {
+			if ( op == null ) {
 				// no operation at that index, just dump token
-				if ( t.type!==Token.EOF ) buf.push(String(t.text));
+				if ( t.type !== Token.EOF ) {
+					buf.push(String(t.text));
+				}
 				i++; // move to next token
 			}
 			else {
@@ -340,11 +346,13 @@ export class TokenStreamRewriter {
 		// include stuff after end if it's last index in buffer
 		// So, if they did an insertAfter(lastValidIndex, "foo"), include
 		// foo if end==lastValidIndex.
-		if ( stop===this.tokens.size-1 ) {
+		if ( stop === this.tokens.size - 1 ) {
 			// Scan any remaining operations after last token
 			// should be included (they will be inserts).
 			for (let op of indexToOp.values()) {
-				if ( op.index >= this.tokens.size-1 ) buf += op.text;
+				if ( op.index >= this.tokens.size - 1 ) {
+					buf += op.text;
+				}
 			}
 		}
 
@@ -367,7 +375,7 @@ export class TokenStreamRewriter {
 	 *  D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
 	 *
 	 *  I.i.u R.x-y.v | i in (x+1)-y			delete I (since insert before
-	 *											we're not deleting i)
+	 * 											we're not deleting i)
 	 *  I.i.u R.x-y.v | i not in (x+1)-y		leave alone, nonoverlapping
 	 *  R.x-y.v I.i.u | i in x-y				ERROR
 	 *  R.x-y.v I.x.u 							R.x-y.uv (combine, delete I)
@@ -379,15 +387,15 @@ export class TokenStreamRewriter {
 	 *  First we need to examine replaces. For any replace op:
 	 *
 	 * 		1. wipe out any insertions before op within that range.
-	 *		2. Drop any replace op before that is contained completely within
-	 *	 that range.
-	 *		3. Throw exception upon boundary overlap with any previous replace.
+	 * 		2. Drop any replace op before that is contained completely within
+	 * 	 that range.
+	 * 		3. Throw exception upon boundary overlap with any previous replace.
 	 *
 	 *  Then we can deal with inserts:
 	 *
 	 * 		1. for any inserts to same index, combine even if not adjacent.
 	 * 		2. for any prior replace with same left boundary, combine this
-	 *	 insert with replace and delete this replace.
+	 * 	 insert with replace and delete this replace.
 	 * 		3. throw exception if index in same range as previous replace
 	 *
 	 *  Don't actually delete; make op null in list. Easier to walk list.
@@ -400,23 +408,27 @@ export class TokenStreamRewriter {
 	 *
 	 *  Return a map from token index to operation.
 	 */
-	protected reduceToSingleOperationPerIndex(rewrites: (RewriteOperation | undefined)[]): Map<number, RewriteOperation> {
+	protected reduceToSingleOperationPerIndex(rewrites: Array<RewriteOperation | undefined>): Map<number, RewriteOperation> {
 		// console.log(`rewrites=[${Utils.join(rewrites, ", ")}]`);
 
 		// WALK REPLACES
 		for (let i = 0; i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined = rewrites[i];
-			if ( op==null ) continue;
-			if ( !(op instanceof ReplaceOp) ) continue;
+			if ( op == null ) {
+				continue;
+			}
+			if ( !(op instanceof ReplaceOp) ) {
+				continue;
+			}
 			let rop: ReplaceOp = op;
 			// Wipe prior inserts within range
 			let inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (let iop of inserts) {
-				if ( iop.index == rop.index ) {
+				if ( iop.index === rop.index ) {
 					// E.g., insert before 2, delete 2..2; update replace
 					// text to include insert before, kill insert
 					rewrites[iop.instructionIndex] = undefined;
-					rop.text = iop.text.toString() + (rop.text!=null?rop.text.toString():"");
+					rop.text = iop.text.toString() + (rop.text != null ? rop.text.toString() : "");
 				}
 				else if ( iop.index > rop.index && iop.index <= rop.lastIndex ) {
 					// delete insert as it's a no-op.
@@ -426,17 +438,17 @@ export class TokenStreamRewriter {
 			// Drop any prior replaces contained within
 			let prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
 			for (let prevRop of prevReplaces) {
-				if ( prevRop.index>=rop.index && prevRop.lastIndex <= rop.lastIndex ) {
+				if ( prevRop.index >= rop.index && prevRop.lastIndex <= rop.lastIndex ) {
 					// delete replace as it's a no-op.
 					rewrites[prevRop.instructionIndex] = undefined;
 					continue;
 				}
 				// throw exception unless disjoint or identical
 				let disjoint: boolean =
-					prevRop.lastIndex<rop.index || prevRop.index > rop.lastIndex;
+					prevRop.lastIndex < rop.index || prevRop.index > rop.lastIndex;
 				// Delete special case of replace (text==null):
 				// D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
-				if ( prevRop.text==null && rop.text==null && !disjoint ) {
+				if ( prevRop.text == null && rop.text == null && !disjoint ) {
 					// console.log(`overlapping deletes: ${prevRop}, ${rop}`);
 					rewrites[prevRop.instructionIndex] = undefined; // kill first delete
 					rop.index = Math.min(prevRop.index, rop.index);
@@ -452,8 +464,12 @@ export class TokenStreamRewriter {
 		// WALK INSERTS
 		for (let i = 0; i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined = rewrites[i];
-			if ( op==null ) continue;
-			if ( !(op instanceof InsertBeforeOp) ) continue;
+			if ( op == null ) {
+				continue;
+			}
+			if ( !(op instanceof InsertBeforeOp) ) {
+				continue;
+			}
 			let iop: InsertBeforeOp =  op;
 			// combine current insert with prior if any at same index
 			let prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
@@ -466,7 +482,7 @@ export class TokenStreamRewriter {
 					else if (prevIop instanceof InsertBeforeOp) { // combine objects
 						// convert to strings...we're in process of toString'ing
 						// whole token buffer so no lazy eval issue with any templates
-						iop.text = this.catOpText(iop.text,prevIop.text);
+						iop.text = this.catOpText(iop.text, prevIop.text);
 						// delete redundant prior insert
 						rewrites[prevIop.instructionIndex] = undefined;
 					}
@@ -475,8 +491,8 @@ export class TokenStreamRewriter {
 			// look for replaces where iop.index is in range; error
 			let prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
 			for (let rop of prevReplaces) {
-				if ( iop.index == rop.index ) {
-					rop.text = this.catOpText(iop.text,rop.text);
+				if ( iop.index === rop.index ) {
+					rop.text = this.catOpText(iop.text, rop.text);
 					rewrites[i] = undefined;	// delete current insert
 					continue;
 				}
@@ -487,10 +503,12 @@ export class TokenStreamRewriter {
 		}
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
 		let m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
-		for (let i = 0; i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined = rewrites[i];
-			if ( op==null ) continue; // ignore deleted ops
-			if ( m.get(op.index)!=null ) {
+		for (let op of rewrites) {
+			if ( op == null ) {
+				// ignore deleted ops
+				continue;
+			}
+			if ( m.get(op.index) != null ) {
 				throw new Error("should only be one op per index");
 			}
 			m.set(op.index, op);
@@ -502,17 +520,24 @@ export class TokenStreamRewriter {
 	protected catOpText(a: any, b: any): string {
 		let x: string =  "";
 		let y: string =  "";
-		if ( a!=null ) x = a.toString();
-		if ( b!=null ) y = b.toString();
-		return x+y;
+		if ( a != null ) {
+			x = a.toString();
+		}
+		if ( b != null ) {
+			y = b.toString();
+		}
+		return x + y;
 	}
 
 	/** Get all operations before an index of a particular kind */
-	protected getKindOfOps<T extends RewriteOperation>(rewrites: (RewriteOperation | undefined)[], kind: {new(...args: any[]): T}, before: number): T[] {
+	protected getKindOfOps<T extends RewriteOperation>(rewrites: Array<RewriteOperation | undefined>, kind: {new(...args: any[]): T}, before: number): T[] {
 		let ops: T[] = [];
-		for (let i=0; i<before && i<rewrites.length; i++) {
+		for (let i = 0; i < before && i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined =  rewrites[i];
-			if ( op==null ) continue; // ignore deleted
+			if ( op == null ) {
+				// ignore deleted
+				continue;
+			}
 			if ( op instanceof kind ) {
 				ops.push(op);
 			}
@@ -542,32 +567,32 @@ export class RewriteOperation {
 	/** Execute the rewrite operation by possibly adding to the buffer.
 	 *  Return the index of the next token to operate on.
 	 */
-	execute(buf: string[]): number {
+	public execute(buf: string[]): number {
 		return this.index;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let opName: string = this.constructor.name;
-		let $index = opName.indexOf('$');
-		opName = opName.substring($index+1, opName.length);
-		return "<"+opName+"@"+this.tokens.get(this.index)+
-				":\""+this.text+"\">";
+		let $index = opName.indexOf("$");
+		opName = opName.substring($index + 1, opName.length);
+		return "<" + opName + "@" + this.tokens.get(this.index) +
+				":\"" + this.text + "\">";
 	}
 }
 
 class InsertBeforeOp extends RewriteOperation {
 	constructor(tokens: TokenStream, index: number, text: any) {
-		super(tokens,index,text);
+		super(tokens, index, text);
 	}
 
 	@Override
-	execute(buf: string[]): number {
+	public execute(buf: string[]): number {
 		buf.push(this.text);
 		if ( this.tokens.get(this.index).type !== Token.EOF ) {
 			buf.push(String(this.tokens.get(this.index).text));
 		}
-		return this.index+1;
+		return this.index + 1;
 	}
 }
 
@@ -587,25 +612,25 @@ class InsertAfterOp extends InsertBeforeOp {
 class ReplaceOp extends RewriteOperation {
 	public lastIndex: number;
 	constructor(tokens: TokenStream, from: number, to: number, text: any) {
-		super(tokens, from,text);
+		super(tokens, from, text);
 		this.lastIndex = to;
 	}
 
 	@Override
-	execute(buf: string[]): number {
-		if ( this.text!=null ) {
+	public execute(buf: string[]): number {
+		if ( this.text != null ) {
 			buf.push(this.text);
 		}
-		return this.lastIndex+1;
+		return this.lastIndex + 1;
 	}
 
 	@Override
-	toString(): string {
-		if ( this.text==null ) {
-			return "<DeleteOp@"+this.tokens.get(this.index)+
-					".."+this.tokens.get(this.lastIndex)+">";
+	public toString(): string {
+		if ( this.text == null ) {
+			return "<DeleteOp@" + this.tokens.get(this.index) +
+					".." + this.tokens.get(this.lastIndex) + ">";
 		}
-		return "<ReplaceOp@"+this.tokens.get(this.index)+
-				".."+this.tokens.get(this.lastIndex)+":\""+this.text+"\">";
+		return "<ReplaceOp@" + this.tokens.get(this.index) +
+				".." + this.tokens.get(this.lastIndex) + ":\"" + this.text + "\">";
 	}
 }

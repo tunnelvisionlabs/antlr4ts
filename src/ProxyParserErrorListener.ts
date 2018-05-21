@@ -4,17 +4,17 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:56.9812284-07:00
-import { ANTLRErrorListener } from './ANTLRErrorListener';
-import { ATNConfigSet } from './atn/ATNConfigSet';
-import { BitSet } from './misc/BitSet';
-import { DFA } from './dfa/DFA';
-import { Parser } from './Parser';
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { BitSet } from "./misc/BitSet";
+import { DFA } from "./dfa/DFA";
+import { Parser } from "./Parser";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { ProxyErrorListener } from "./ProxyErrorListener";
 import { ParserErrorListener } from "./ParserErrorListener";
-import { SimulatorState } from './atn/SimulatorState';
-import { Token } from './Token';
+import { SimulatorState } from "./atn/SimulatorState";
+import { Token } from "./Token";
 import { Override } from "./Decorators";
 
 /**
@@ -28,7 +28,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportAmbiguity(
+	public reportAmbiguity(
 		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
@@ -37,7 +37,7 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 		ambigAlts: BitSet | undefined,
 		configs: ATNConfigSet): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportAmbiguity) {
 					listener.reportAmbiguity(
 						recognizer,
@@ -53,14 +53,15 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportAttemptingFullContext(recognizer: Parser,
+	public reportAttemptingFullContext(
+		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		conflictingAlts: BitSet | undefined,
 		conflictState: SimulatorState): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportAttemptingFullContext) {
 					listener.reportAttemptingFullContext(
 						recognizer,
@@ -74,14 +75,15 @@ export class ProxyParserErrorListener extends ProxyErrorListener<Token, ParserEr
 	}
 
 	@Override
-	reportContextSensitivity(recognizer: Parser,
+	public reportContextSensitivity(
+		recognizer: Parser,
 		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		prediction: number,
 		acceptState: SimulatorState): void {
 		this.getDelegates()
-			.forEach(listener => {
+			.forEach((listener) => {
 				if (listener.reportContextSensitivity) {
 					listener.reportContextSensitivity(
 						recognizer,

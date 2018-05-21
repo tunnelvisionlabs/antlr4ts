@@ -5,20 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.2796692-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { ATNState } from './ATNState';
-import { DecisionState } from './DecisionState';
-import { Equatable } from '../misc/Stubs';
-import { LexerActionExecutor } from './LexerActionExecutor';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { PredictionContext } from './PredictionContext';
-import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Recognizer';
-import { SemanticContext } from './SemanticContext';
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { ATNState } from "./ATNState";
+import { DecisionState } from "./DecisionState";
+import { Equatable } from "../misc/Stubs";
+import { LexerActionExecutor } from "./LexerActionExecutor";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
+import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
+import { PredictionContext } from "./PredictionContext";
+import { PredictionContextCache } from "./PredictionContextCache";
+import { Recognizer } from "../Recognizer";
+import { SemanticContext } from "./SemanticContext";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
 /**
  * This field stores the bit mask for implementing the
@@ -83,8 +83,8 @@ export class ATNConfig implements Equatable {
 	constructor(/*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, /*@NotNull*/ context: PredictionContext);
 
 	constructor(@NotNull state: ATNState, altOrConfig: number | ATNConfig, @NotNull context: PredictionContext) {
-		if (typeof altOrConfig === 'number') {
-			assert((altOrConfig & 0xFFFFFF) == altOrConfig);
+		if (typeof altOrConfig === "number") {
+			assert((altOrConfig & 0xFFFFFF) === altOrConfig);
 			this._state = state;
 			this.altAndOuterContextDepth = altOrConfig;
 			this._context = context;
@@ -95,14 +95,14 @@ export class ATNConfig implements Equatable {
 		}
 	}
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext): ATNConfig;
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
 
-	static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@*/ semanticContext: SemanticContext, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig;
+	public static create(/*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, /*@*/ semanticContext: SemanticContext, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig;
 
-	static create(@NotNull state: ATNState, alt: number, context: PredictionContext, @NotNull semanticContext: SemanticContext = SemanticContext.NONE, lexerActionExecutor?: LexerActionExecutor): ATNConfig {
-		if (semanticContext != SemanticContext.NONE) {
+	public static create(@NotNull state: ATNState, alt: number, context: PredictionContext, @NotNull semanticContext: SemanticContext = SemanticContext.NONE, lexerActionExecutor?: LexerActionExecutor): ATNConfig {
+		if (semanticContext !== SemanticContext.NONE) {
 			if (lexerActionExecutor != null) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, alt, context, false);
 			}
@@ -179,15 +179,15 @@ export class ATNConfig implements Equatable {
 	}
 
 	@Override
-	clone(): ATNConfig {
+	public clone(): ATNConfig {
 		return this.transform(this.state, false);
 	}
 
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, context: PredictionContext): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor): ATNConfig;
-	transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, arg2?: SemanticContext | PredictionContext | LexerActionExecutor): ATNConfig {
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, /*@NotNull*/ semanticContext: SemanticContext): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, context: PredictionContext): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor): ATNConfig;
+	public transform(/*@NotNull*/ state: ATNState, checkNonGreedy: boolean, arg2?: SemanticContext | PredictionContext | LexerActionExecutor): ATNConfig {
 		if (arg2 == null) {
 			return this.transformImpl(state, this._context, this.semanticContext, checkNonGreedy, this.lexerActionExecutor);
 		} else if (arg2 instanceof PredictionContext) {
@@ -201,7 +201,7 @@ export class ATNConfig implements Equatable {
 
 	private transformImpl(@NotNull state: ATNState, context: PredictionContext, @NotNull semanticContext: SemanticContext, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig {
 		let passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig.checkNonGreedyDecision(this, state);
-		if (semanticContext != SemanticContext.NONE) {
+		if (semanticContext !== SemanticContext.NONE) {
 			if (lexerActionExecutor != null || passedThroughNonGreedy) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, this, context, passedThroughNonGreedy);
 			}
@@ -222,10 +222,10 @@ export class ATNConfig implements Equatable {
 			|| target instanceof DecisionState && target.nonGreedy;
 	}
 
-	appendContext(context: number, contextCache: PredictionContextCache): ATNConfig;
-	appendContext(context: PredictionContext, contextCache: PredictionContextCache): ATNConfig;
-	appendContext(context: number | PredictionContext, contextCache: PredictionContextCache): ATNConfig {
-		if (typeof context === 'number') {
+	public appendContext(context: number, contextCache: PredictionContextCache): ATNConfig;
+	public appendContext(context: PredictionContext, contextCache: PredictionContextCache): ATNConfig;
+	public appendContext(context: number | PredictionContext, contextCache: PredictionContextCache): ATNConfig {
+		if (typeof context === "number") {
 			let appendedContext: PredictionContext = this.context.appendSingleContext(context, contextCache);
 			let result: ATNConfig = this.transform(this.state, false, appendedContext);
 			return result;
@@ -261,7 +261,7 @@ export class ATNConfig implements Equatable {
 	 * @param subconfig The sub configuration.
 	 * @return `true` if this configuration contains `subconfig`; otherwise, `false`.
 	 */
-	contains(subconfig: ATNConfig): boolean {
+	public contains(subconfig: ATNConfig): boolean {
 		if (this.state.stateNumber !== subconfig.state.stateNumber
 			|| this.alt !== subconfig.alt
 			|| !this.semanticContext.equals(subconfig.semanticContext)) {
@@ -320,29 +320,29 @@ export class ATNConfig implements Equatable {
 	}
 
 	/** An ATN configuration is equal to another if both have
-     *  the same state, they predict the same alternative, and
-     *  syntactic/semantic contexts are the same.
-     */
+	 *  the same state, they predict the same alternative, and
+	 *  syntactic/semantic contexts are the same.
+	 */
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (this === o) {
 			return true;
 		} else if (!(o instanceof ATNConfig)) {
 			return false;
 		}
 
-		return this.state.stateNumber == o.state.stateNumber
-			&& this.alt == o.alt
-			&& this.reachesIntoOuterContext == o.reachesIntoOuterContext
+		return this.state.stateNumber === o.state.stateNumber
+			&& this.alt === o.alt
+			&& this.reachesIntoOuterContext === o.reachesIntoOuterContext
 			&& this.context.equals(o.context)
 			&& this.semanticContext.equals(o.semanticContext)
-			&& this.isPrecedenceFilterSuppressed == o.isPrecedenceFilterSuppressed
-			&& this.hasPassedThroughNonGreedyDecision == o.hasPassedThroughNonGreedyDecision
+			&& this.isPrecedenceFilterSuppressed === o.isPrecedenceFilterSuppressed
+			&& this.hasPassedThroughNonGreedyDecision === o.hasPassedThroughNonGreedyDecision
 			&& ObjectEqualityComparator.INSTANCE.equals(this.lexerActionExecutor, o.lexerActionExecutor);
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hashCode: number = MurmurHash.initialize(7);
 		hashCode = MurmurHash.update(hashCode, this.state.stateNumber);
 		hashCode = MurmurHash.update(hashCode, this.alt);
@@ -363,7 +363,7 @@ export class ATNConfig implements Equatable {
 	 *
 	 * @see http://www.graphviz.org/
 	 */
-	toDotString(): string {
+	public toDotString(): string {
 		let builder = "";
 		builder += ("digraph G {\n");
 		builder += ("rankdir=LR;\n");
@@ -402,10 +402,10 @@ export class ATNConfig implements Equatable {
 		return builder.toString();
 	}
 
-	toString(): string;
-	toString(recog: Recognizer<any, any> | undefined, showAlt: boolean): string;
-	toString(recog: Recognizer<any, any> | undefined, showAlt: boolean, showContext: boolean): string;
-	toString(recog?: Recognizer<any, any>, showAlt?: boolean, showContext?: boolean): string {
+	public toString(): string;
+	public toString(recog: Recognizer<any, any> | undefined, showAlt: boolean): string;
+	public toString(recog: Recognizer<any, any> | undefined, showAlt: boolean, showContext: boolean): string;
+	public toString(recog?: Recognizer<any, any>, showAlt?: boolean, showContext?: boolean): string {
 		// Must check showContext before showAlt to preserve original overload behavior
 		if (showContext == null) {
 			showContext = showAlt != null;
@@ -440,7 +440,7 @@ export class ATNConfig implements Equatable {
 				buf += (", ");
 			}
 
-			buf += ('(');
+			buf += ("(");
 			buf += (this.state);
 			if (showAlt) {
 				buf += (",");
@@ -457,7 +457,7 @@ export class ATNConfig implements Equatable {
 			if (this.reachesIntoOuterContext) {
 				buf += (",up=") + (this.outerContextDepth);
 			}
-			buf += (')');
+			buf += (")");
 		}
 		return buf.toString();
 	}
@@ -477,7 +477,7 @@ class SemanticContextATNConfig extends ATNConfig {
 	constructor(semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, alt: number, context: PredictionContext);
 	constructor(semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, context: PredictionContext);
 	constructor(semanticContext: SemanticContext, @NotNull state: ATNState, @NotNull altOrConfig: number | ATNConfig, context: PredictionContext) {
-		if (typeof altOrConfig === 'number') {
+		if (typeof altOrConfig === "number") {
 			super(state, altOrConfig, context);
 		} else {
 			super(state, altOrConfig, context);
@@ -507,7 +507,7 @@ class ActionATNConfig extends ATNConfig {
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull state: ATNState, @NotNull altOrConfig: number | ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean) {
-		if (typeof altOrConfig === 'number') {
+		if (typeof altOrConfig === "number") {
 			super(state, altOrConfig, context);
 		} else {
 			super(state, altOrConfig, context);
@@ -545,7 +545,7 @@ class ActionSemanticContextATNConfig extends SemanticContextATNConfig {
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, alt: number, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, /*@NotNull*/ semanticContext: SemanticContext, /*@NotNull*/ state: ATNState, /*@NotNull*/ c: ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean);
 	constructor(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull semanticContext: SemanticContext, @NotNull state: ATNState, altOrConfig: number | ATNConfig, context: PredictionContext, passedThroughNonGreedyDecision: boolean) {
-		if (typeof altOrConfig === 'number') {
+		if (typeof altOrConfig === "number") {
 			super(semanticContext, state, altOrConfig, context);
 		} else {
 			super(semanticContext, state, altOrConfig, context);

@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.0343500-07:00
 
-import { CharStream } from '../../CharStream';
-import { NotNull, Override } from '../../Decorators';
-import { Token } from '../../Token';
-import { TokenSource } from '../../TokenSource';
+import { CharStream } from "../../CharStream";
+import { NotNull, Override } from "../../Decorators";
+import { Token } from "../../Token";
+import { TokenSource } from "../../TokenSource";
 
 /**
  * A {@link Token} object representing an entire subtree matched by a parser
@@ -185,7 +185,7 @@ export class RuleTagToken implements Token {
 	 * {@code ruleName:bypassTokenType}.</p>
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this._ruleName + ":" + this.bypassTokenType;
 	}
 }

@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-import { ATN } from './ATN';
-import { ATNStateType } from './ATNStateType';
-import { IntervalSet } from '../misc/IntervalSet';
-import { Override } from '../Decorators';
-import { Transition } from './Transition';
+import { ATN } from "./ATN";
+import { ATNStateType } from "./ATNStateType";
+import { IntervalSet } from "../misc/IntervalSet";
+import { Override } from "../Decorators";
+import { Transition } from "./Transition";
 
 const INITIAL_NUM_TRANSITIONS: number = 4;
 
-/** 
+/**
  * The following images show the relation of states and
  * {@link ATNState#transitions} for various grammar constructs.
  *
@@ -76,13 +76,13 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
 export abstract class ATNState {
 
 	/** Which ATN are we in? */
-	atn?: ATN;
+	public atn?: ATN;
 
-	stateNumber: number = ATNState.INVALID_STATE_NUMBER;
+	public stateNumber: number = ATNState.INVALID_STATE_NUMBER;
 
-	ruleIndex: number = 0;  // at runtime, we don't have Rule objects
+	public ruleIndex: number = 0;  // at runtime, we don't have Rule objects
 
-	epsilonOnlyTransitions: boolean = false;
+	public epsilonOnlyTransitions: boolean = false;
 
 	/** Track the transitions emanating from this ATN state. */
 	protected transitions: Transition[] = [];
@@ -90,14 +90,14 @@ export abstract class ATNState {
 	protected optimizedTransitions: Transition[] = this.transitions;
 
 	/** Used to cache lookahead during parsing, not used during construction */
-	nextTokenWithinRule?: IntervalSet;
+	public nextTokenWithinRule?: IntervalSet;
 
 	/**
 	 * Gets the state number.
 	 *
 	 * @return the state number
 	 */
-	getStateNumber(): number {
+	public getStateNumber(): number {
 		return this.stateNumber;
 	}
 
@@ -112,12 +112,12 @@ export abstract class ATNState {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		return this.stateNumber;
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		// are these states same object?
 		if (o instanceof ATNState) {
 			return this.stateNumber === o.stateNumber;
@@ -131,11 +131,11 @@ export abstract class ATNState {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return String(this.stateNumber);
 	}
 
-	getTransitions(): Transition[] {
+	public getTransitions(): Transition[] {
 		return this.transitions.slice(0);
 	}
 
@@ -143,7 +143,7 @@ export abstract class ATNState {
 		return this.transitions.length;
 	}
 
-	addTransition(e: Transition, index?: number): void {
+	public addTransition(e: Transition, index?: number): void {
 		if (this.transitions.length === 0) {
 			this.epsilonOnlyTransitions = e.isEpsilon;
 		}
@@ -155,25 +155,25 @@ export abstract class ATNState {
 		this.transitions.splice(index !== undefined ? index : this.transitions.length, 0, e);
 	}
 
-	transition(i: number): Transition {
+	public transition(i: number): Transition {
 		return this.transitions[i];
 	}
 
-	setTransition(i: number, e: Transition): void {
+	public setTransition(i: number, e: Transition): void {
 		this.transitions[i] = e;
 	}
 
-	removeTransition(index: number): Transition {
+	public removeTransition(index: number): Transition {
 		return this.transitions.splice(index, 1)[0];
 	}
 
-	abstract readonly stateType: ATNStateType;
+	public abstract readonly stateType: ATNStateType;
 
 	get onlyHasEpsilonTransitions(): boolean {
 		return this.epsilonOnlyTransitions;
 	}
 
-	setRuleIndex(ruleIndex: number): void {
+	public setRuleIndex(ruleIndex: number): void {
 		this.ruleIndex = ruleIndex;
 	}
 
@@ -185,11 +185,11 @@ export abstract class ATNState {
 		return this.optimizedTransitions.length;
 	}
 
-	getOptimizedTransition(i: number): Transition {
+	public getOptimizedTransition(i: number): Transition {
 		return this.optimizedTransitions[i];
 	}
 
-	addOptimizedTransition(e: Transition): void {
+	public addOptimizedTransition(e: Transition): void {
 		if (!this.isOptimized) {
 			this.optimizedTransitions = new Array<Transition>();
 		}
@@ -197,7 +197,7 @@ export abstract class ATNState {
 		this.optimizedTransitions.push(e);
 	}
 
-	setOptimizedTransition(i: number, e: Transition): void {
+	public setOptimizedTransition(i: number, e: Transition): void {
 		if (!this.isOptimized) {
 			throw new Error("This ATNState is not optimized.");
 		}
@@ -205,7 +205,7 @@ export abstract class ATNState {
 		this.optimizedTransitions[i] = e;
 	}
 
-	removeOptimizedTransition(i: number): void {
+	public removeOptimizedTransition(i: number): void {
 		if (!this.isOptimized) {
 			throw new Error("This ATNState is not optimized.");
 		}

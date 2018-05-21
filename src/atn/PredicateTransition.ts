@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.2826960-07:00
 
-import { AbstractPredicateTransition } from './AbstractPredicateTransition';
-import { ATNState } from './ATNState';
-import { NotNull, Override } from '../Decorators';
-import { SemanticContext } from './SemanticContext';
-import { TransitionType } from './TransitionType';
+import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
+import { ATNState } from "./ATNState";
+import { NotNull, Override } from "../Decorators";
+import { SemanticContext } from "./SemanticContext";
+import { TransitionType } from "./TransitionType";
 
 /** TODO: this is old comment:
  *  A tree of semantic predicates from the grammar AST if label==SEMPRED.
@@ -18,9 +18,9 @@ import { TransitionType } from './TransitionType';
  *  multiple ATN configurations into a single DFA state.
  */
 export class PredicateTransition extends AbstractPredicateTransition {
-	ruleIndex: number;
-	predIndex: number;
-	isCtxDependent: boolean;   // e.g., $i ref in pred
+	public ruleIndex: number;
+	public predIndex: number;
+	public isCtxDependent: boolean;   // e.g., $i ref in pred
 
 	constructor(@NotNull target: ATNState, ruleIndex: number, predIndex: number, isCtxDependent: boolean) {
 		super(target);
@@ -38,7 +38,7 @@ export class PredicateTransition extends AbstractPredicateTransition {
 	get isEpsilon(): boolean { return true; }
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
@@ -48,7 +48,7 @@ export class PredicateTransition extends AbstractPredicateTransition {
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return "pred_" + this.ruleIndex + ":" + this.predIndex;
 	}
 }

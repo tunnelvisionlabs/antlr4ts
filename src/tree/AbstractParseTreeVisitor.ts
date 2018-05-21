@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.3092279-07:00
 
-import { ErrorNode } from './ErrorNode';
-import { NotNull, Override } from '../Decorators';
-import { ParseTree } from './ParseTree';
-import { ParseTreeVisitor } from './ParseTreeVisitor';
-import { RuleNode } from './RuleNode';
-import { TerminalNode } from './TerminalNode';
+import { ErrorNode } from "./ErrorNode";
+import { NotNull, Override } from "../Decorators";
+import { ParseTree } from "./ParseTree";
+import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { RuleNode } from "./RuleNode";
+import { TerminalNode } from "./TerminalNode";
 
 export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
 	/**
@@ -20,7 +20,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * specified tree.</p>
 	 */
 	@Override
-	visit(@NotNull tree: ParseTree): Result {
+	public visit(@NotNull tree: ParseTree): Result {
 		return tree.accept(this);
 	}
 
@@ -40,7 +40,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * method to behave properly in respect to the specific algorithm in use.</p>
 	 */
 	@Override
-	visitChildren(@NotNull node: RuleNode): Result {
+	public visitChildren(@NotNull node: RuleNode): Result {
 		let result: Result = this.defaultResult();
 		let n: number = node.childCount;
 		for (let i = 0; i < n; i++) {
@@ -63,7 +63,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * {@link #defaultResult defaultResult}.</p>
 	 */
 	@Override
-	visitTerminal(@NotNull node: TerminalNode): Result {
+	public visitTerminal(@NotNull node: TerminalNode): Result {
 		return this.defaultResult();
 	}
 
@@ -74,7 +74,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * {@link #defaultResult defaultResult}.</p>
 	 */
 	@Override
-	visitErrorNode(@NotNull node: ErrorNode): Result {
+	public visitErrorNode(@NotNull node: ErrorNode): Result {
 		return this.defaultResult();
 	}
 

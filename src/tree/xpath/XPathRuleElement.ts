@@ -18,7 +18,7 @@ export class XPathRuleElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {

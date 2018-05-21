@@ -56,20 +56,20 @@
  *  @see ParserRuleContext
  */
 
-import { ATN } from './atn/ATN';
-import { Parser } from './Parser';
-import { Recognizer } from './Recognizer';
+import { ATN } from "./atn/ATN";
+import { Parser } from "./Parser";
+import { Recognizer } from "./Recognizer";
 import { RuleNode } from "./tree/RuleNode";
 import { ParseTree } from "./tree/ParseTree";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators"
+import { Override } from "./Decorators";
 import { Trees } from "./tree/Trees";
 import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { ParserRuleContext } from "./ParserRuleContext";
 
 export class RuleContext extends RuleNode {
-	_parent: RuleContext | undefined;
-	invokingState: number;
+	public _parent: RuleContext | undefined;
+	public invokingState: number;
 
 	constructor();
 	constructor(parent: RuleContext | undefined, invokingState: number);
@@ -79,11 +79,11 @@ export class RuleContext extends RuleNode {
 		this.invokingState = invokingState != null ? invokingState : -1;
 	}
 
-	static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
+	public static getChildContext(parent: RuleContext, invokingState: number): RuleContext {
 		return new RuleContext(parent, invokingState);
 	}
 
-	depth(): number {
+	public depth(): number {
 		let n = 0;
 		let p: RuleContext | undefined = this;
 		while (p) {
@@ -153,15 +153,17 @@ export class RuleContext extends RuleNode {
 	/** Set the outer alternative number for this context node. Default
 	 *  implementation does nothing to avoid backing field overhead for
 	 *  trees that don't need it.  Create
-     *  a subclass of ParserRuleContext with backing field and set
-     *  option contextSuperClass.
+	 *  a subclass of ParserRuleContext with backing field and set
+	 *  option contextSuperClass.
 	 *
 	 *  @since 4.5.3
 	 */
-	set altNumber(altNumber: number) { }
+	set altNumber(altNumber: number) {
+		// intentionally ignored by the base implementation
+	}
 
 	@Override
-	getChild(i: number): ParseTree {
+	public getChild(i: number): ParseTree {
 		throw new RangeError("i must be greater than or equal to 0 and less than childCount");
 	}
 
@@ -171,7 +173,7 @@ export class RuleContext extends RuleNode {
 	}
 
 	@Override
-	accept<T>(visitor: ParseTreeVisitor<T>): T {
+	public accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitChildren(this);
 	}
 
@@ -179,30 +181,30 @@ export class RuleContext extends RuleNode {
 	 *  (root child1 .. childN). Print just a node if this is a leaf.
 	 *  We have to know the recognizer so we can get rule names.
 	 */
-	toStringTree(recog: Parser): string;
+	public toStringTree(recog: Parser): string;
 
 	/** Print out a whole tree, not just a node, in LISP format
 	 *  (root child1 .. childN). Print just a node if this is a leaf.
 	 */
-	toStringTree(ruleNames: string[] | undefined): string;
+	public toStringTree(ruleNames: string[] | undefined): string;
 
-	toStringTree(): string;
+	public toStringTree(): string;
 
 	@Override
-	toStringTree(recog?: Parser | string[]): string {
+	public toStringTree(recog?: Parser | string[]): string {
 		return Trees.toStringTree(this, recog);
 	}
 
-	toString(): string;
-	toString(recog: Recognizer<any, any> | undefined): string;
-	toString(ruleNames: string[] | undefined): string;
+	public toString(): string;
+	public toString(recog: Recognizer<any, any> | undefined): string;
+	public toString(ruleNames: string[] | undefined): string;
 
 	// // recog null unless ParserRuleContext, in which case we use subclass toString(...)
-	toString(recog: Recognizer<any, any> | undefined, stop: RuleContext | undefined): string;
+	public toString(recog: Recognizer<any, any> | undefined, stop: RuleContext | undefined): string;
 
-	toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
+	public toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;
 
-	toString(
+	public toString(
 		arg1?: Recognizer<any, any> | string[],
 		stop?: RuleContext)
 		: string {

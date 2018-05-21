@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3010112-07:00
 
-import { CharStream } from './CharStream';
-import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Override } from './Decorators';
-import { TokenFactory } from './TokenFactory';
-import { TokenSource } from './TokenSource';
+import { CharStream } from "./CharStream";
+import { CommonToken } from "./CommonToken";
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators";
+import { TokenFactory } from "./TokenFactory";
+import { TokenSource } from "./TokenSource";
 
 /**
  * This default implementation of {@link TokenFactory} creates
@@ -49,7 +49,7 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	create(
+	public create(
 		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
 		text: string,
@@ -70,7 +70,7 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	createSimple(type: number, text: string): CommonToken {
+	public createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}
 }

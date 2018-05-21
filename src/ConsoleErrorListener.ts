@@ -11,13 +11,13 @@
  */
 import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 
 export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**
 	 * Provides a default instance of {@link ConsoleErrorListener}.
 	 */
-	static readonly INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
+	public static readonly INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
 
 	/**
 	 * {@inheritDoc}
@@ -31,7 +31,7 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
 	 * </pre>
 	 */
-	syntaxError<T>(
+	public syntaxError<T>(
 		recognizer: Recognizer<T, any>,
 		offendingSymbol: T,
 		line: number,

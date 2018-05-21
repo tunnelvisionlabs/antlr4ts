@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.5959980-07:00
 
-import { ATNState } from './ATNState';
-import { IntervalSet } from '../misc/IntervalSet'
-import { Override, NotNull } from '../Decorators';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+import { ATNState } from "./ATNState";
+import { IntervalSet } from "../misc/IntervalSet";
+import { Override, NotNull } from "../Decorators";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
 
 export class RangeTransition extends Transition {
-	from: number;
-	to: number;
+	public from: number;
+	public to: number;
 
 	constructor(@NotNull target: ATNState, from: number, to: number) {
 		super(target);
@@ -33,13 +33,13 @@ export class RangeTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return symbol >= this.from && symbol <= this.to;
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return "'" + String.fromCharCode(this.from) + "'..'" + String.fromCharCode(this.to) + "'";
 	}
 }

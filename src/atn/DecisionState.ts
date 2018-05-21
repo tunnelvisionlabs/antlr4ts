@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.4381103-07:00
 
-import { ATNState } from './ATNState';
+import { ATNState } from "./ATNState";
 
 export abstract class DecisionState extends ATNState {
-	decision: number = -1;
-	nonGreedy: boolean = false;
-	sll: boolean = false;
+	public decision: number = -1;
+	public nonGreedy: boolean = false;
+	public sll: boolean = false;
 }

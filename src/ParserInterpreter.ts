@@ -5,33 +5,33 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:53.1043451-07:00
 
-import { ActionTransition } from './atn/ActionTransition';
-import { ATN } from './atn/ATN';
-import { ATNState } from './atn/ATNState';
-import { ATNStateType } from './atn/ATNStateType';
-import { AtomTransition } from './atn/AtomTransition';
-import { BitSet } from './misc/BitSet';
-import { DecisionState } from './atn/DecisionState';
-import { FailedPredicateException } from './FailedPredicateException';
-import { InputMismatchException } from './InputMismatchException';
-import { InterpreterRuleContext } from './InterpreterRuleContext';
-import { LoopEndState } from './atn/LoopEndState';
-import { NotNull } from './Decorators';
-import { Override } from './Decorators';
-import { Parser } from './Parser';
-import { ParserATNSimulator } from './atn/ParserATNSimulator';
-import { ParserRuleContext } from './ParserRuleContext';
-import { PrecedencePredicateTransition } from './atn/PrecedencePredicateTransition';
-import { PredicateTransition } from './atn/PredicateTransition';
-import { RecognitionException } from './RecognitionException';
-import { RuleStartState } from './atn/RuleStartState';
-import { RuleTransition } from './atn/RuleTransition';
-import { StarLoopEntryState } from './atn/StarLoopEntryState';
-import { Token } from './Token';
-import { TokenStream } from './TokenStream';
-import { Transition } from './atn/Transition';
-import { TransitionType } from './atn/TransitionType';
-import { Vocabulary } from './Vocabulary';
+import { ActionTransition } from "./atn/ActionTransition";
+import { ATN } from "./atn/ATN";
+import { ATNState } from "./atn/ATNState";
+import { ATNStateType } from "./atn/ATNStateType";
+import { AtomTransition } from "./atn/AtomTransition";
+import { BitSet } from "./misc/BitSet";
+import { DecisionState } from "./atn/DecisionState";
+import { FailedPredicateException } from "./FailedPredicateException";
+import { InputMismatchException } from "./InputMismatchException";
+import { InterpreterRuleContext } from "./InterpreterRuleContext";
+import { LoopEndState } from "./atn/LoopEndState";
+import { NotNull } from "./Decorators";
+import { Override } from "./Decorators";
+import { Parser } from "./Parser";
+import { ParserATNSimulator } from "./atn/ParserATNSimulator";
+import { ParserRuleContext } from "./ParserRuleContext";
+import { PrecedencePredicateTransition } from "./atn/PrecedencePredicateTransition";
+import { PredicateTransition } from "./atn/PredicateTransition";
+import { RecognitionException } from "./RecognitionException";
+import { RuleStartState } from "./atn/RuleStartState";
+import { RuleTransition } from "./atn/RuleTransition";
+import { StarLoopEntryState } from "./atn/StarLoopEntryState";
+import { Token } from "./Token";
+import { TokenStream } from "./TokenStream";
+import { Transition } from "./atn/Transition";
+import { TransitionType } from "./atn/TransitionType";
+import { Vocabulary } from "./Vocabulary";
 
 /** A parser simulator that mimics what ANTLR's generated
  *  parser code does. A ParserATNSimulator is used to make
@@ -71,7 +71,7 @@ export class ParserInterpreter extends Parser {
 	 *  Those values are used to create new recursive rule invocation contexts
 	 *  associated with left operand of an alt like "expr '*' expr".
 	 */
-	protected readonly _parentContextStack: [ParserRuleContext, number][] = [];
+	protected readonly _parentContextStack: Array<[ParserRuleContext, number]> = [];
 
 	/** We need a map from (decision,inputIndex)->forced alt for computing ambiguous
 	 *  parse trees. For now, we allow exactly one override.
@@ -97,10 +97,12 @@ export class ParserInterpreter extends Parser {
 	 *  @since 4.5
 	 */
 	constructor(/*@NotNull*/ old: ParserInterpreter);
-	constructor(grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
-							 ruleNames: string[], atn: ATN, input: TokenStream);
-	constructor(grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
-							 ruleNames?: string[], atn?: ATN, input?: TokenStream) {
+	constructor(
+		grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
+		ruleNames: string[], atn: ATN, input: TokenStream);
+	constructor(
+		grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
+		ruleNames?: string[], atn?: ATN, input?: TokenStream) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
 			let old: ParserInterpreter = grammarFileName;
@@ -139,7 +141,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	@Override
-	reset(resetInput?: boolean): void {
+	public reset(resetInput?: boolean): void {
 		if (resetInput === undefined) {
 			super.reset();
 		} else {
@@ -171,7 +173,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	/** Begin parsing at startRuleIndex */
-	parse(startRuleIndex: number): ParserRuleContext {
+	public parse(startRuleIndex: number): ParserRuleContext {
 		let startRuleStartState: RuleStartState = this._atn.ruleToStartState[startRuleIndex];
 
 		this._rootContext = this.createInterpreterRuleContext(undefined, ATNState.INVALID_STATE_NUMBER, startRuleIndex);
@@ -224,7 +226,7 @@ export class ParserInterpreter extends Parser {
 	}
 
 	@Override
-	enterRecursionRule(localctx: ParserRuleContext, state: number, ruleIndex: number, precedence: number): void {
+	public enterRecursionRule(localctx: ParserRuleContext, state: number, ruleIndex: number, precedence: number): void {
 		this._parentContextStack.push([this._ctx, localctx.invokingState]);
 		super.enterRecursionRule(localctx, state, ruleIndex, precedence);
 	}
@@ -395,7 +397,7 @@ export class ParserInterpreter extends Parser {
 	 *
 	 *  @since 4.5
 	 */
-	addDecisionOverride(decision: number, tokenIndex: number, forcedAlt: number): void {
+	public addDecisionOverride(decision: number, tokenIndex: number, forcedAlt: number): void {
 		this.overrideDecision = decision;
 		this.overrideDecisionInputIndex = tokenIndex;
 		this.overrideDecisionAlt = forcedAlt;
@@ -421,7 +423,7 @@ export class ParserInterpreter extends Parser {
 
 			let source = tok.tokenSource;
 			let stream = source !== undefined ? source.inputStream : undefined;
-			let sourcePair = { source: source, stream: stream };
+			let sourcePair = { source, stream };
 
 			if (e instanceof InputMismatchException) {
 				let expectedTokens = e.expectedTokens;

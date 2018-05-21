@@ -18,13 +18,13 @@ export class XPathTokenElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
 		let nodes: ParseTree[] = [];
 		for (let c of Trees.getChildren(t)) {
 			if (c instanceof TerminalNode) {
-				if ((c.symbol.type == this.tokenType && !this.invert) ||
-					(c.symbol.type != this.tokenType && this.invert)) {
+				if ((c.symbol.type === this.tokenType && !this.invert) ||
+					(c.symbol.type !== this.tokenType && this.invert)) {
 					nodes.push(c);
 				}
 			}

@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3953157-07:00
 
-import { BufferedTokenStream } from './BufferedTokenStream';
-import { NotNull, Override } from './Decorators';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
+import { BufferedTokenStream } from "./BufferedTokenStream";
+import { NotNull, Override } from "./Decorators";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
 
 /**
  * This class extends {@link BufferedTokenStream} with functionality to filter
@@ -87,7 +87,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	@Override
-	tryLT(k: number): Token | undefined {
+	public tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();
 		if (k === 0) {
@@ -114,11 +114,10 @@ export class CommonTokenStream extends BufferedTokenStream {
 	}
 
 	/** Count EOF just once. */
-	getNumberOfOnChannelTokens(): number {
+	public getNumberOfOnChannelTokens(): number {
 		let n: number = 0;
 		this.fill();
-		for (let i = 0; i < this.tokens.length; i++) {
-			let t: Token = this.tokens[i];
+		for (let t of this.tokens) {
 			if (t.channel === this.channel) {
 				n++;
 			}

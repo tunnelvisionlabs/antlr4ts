@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.7402214-07:00
 
-import { Override } from '../Decorators';
-import { Equatable } from './Stubs';
+import { Override } from "../Decorators";
+import { Equatable } from "./Stubs";
 
 const INTERVAL_POOL_MAX_VALUE: number = 1000;
 
@@ -32,7 +32,7 @@ export class Interval implements Equatable {
 	 *  Interval object with a..a in it.  On Java.g4, 218623 IntervalSets
 	 *  have a..a (set with 1 element).
 	 */
-	static of(a: number, b: number): Interval {
+	public static of(a: number, b: number): Interval {
 		// cache just a..a
 		if (a !== b || a < 0 || a > INTERVAL_POOL_MAX_VALUE) {
 			return new Interval(a, b);
@@ -57,7 +57,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		}
@@ -70,7 +70,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = 23;
 		hash = hash * 31 + this.a;
 		hash = hash * 31 + this.b;
@@ -78,51 +78,51 @@ export class Interval implements Equatable {
 	}
 
 	/** Does this start completely before other? Disjoint */
-	startsBeforeDisjoint(other: Interval): boolean {
+	public startsBeforeDisjoint(other: Interval): boolean {
 		return this.a < other.a && this.b < other.a;
 	}
 
 	/** Does this start at or before other? Nondisjoint */
-	startsBeforeNonDisjoint(other: Interval): boolean {
+	public startsBeforeNonDisjoint(other: Interval): boolean {
 		return this.a <= other.a && this.b >= other.a;
 	}
 
 	/** Does this.a start after other.b? May or may not be disjoint */
-	startsAfter(other: Interval): boolean {
+	public startsAfter(other: Interval): boolean {
 		return this.a > other.a;
 	}
 
 	/** Does this start completely after other? Disjoint */
-	startsAfterDisjoint(other: Interval): boolean {
+	public startsAfterDisjoint(other: Interval): boolean {
 		return this.a > other.b;
 	}
 
 	/** Does this start after other? NonDisjoint */
-	startsAfterNonDisjoint(other: Interval): boolean {
+	public startsAfterNonDisjoint(other: Interval): boolean {
 		return this.a > other.a && this.a <= other.b; // this.b>=other.b implied
 	}
 
 	/** Are both ranges disjoint? I.e., no overlap? */
-	disjoint(other: Interval): boolean {
+	public disjoint(other: Interval): boolean {
 		return this.startsBeforeDisjoint(other) || this.startsAfterDisjoint(other);
 	}
 
 	/** Are two intervals adjacent such as 0..41 and 42..42? */
-	adjacent(other: Interval): boolean {
+	public adjacent(other: Interval): boolean {
 		return this.a === other.b + 1 || this.b === other.a - 1;
 	}
 
-	properlyContains(other: Interval): boolean {
+	public properlyContains(other: Interval): boolean {
 		return other.a >= this.a && other.b <= this.b;
 	}
 
 	/** Return the interval computed from combining this and other */
-	union(other: Interval): Interval {
+	public union(other: Interval): Interval {
 		return Interval.of(Math.min(this.a, other.a), Math.max(this.b, other.b));
 	}
 
 	/** Return the interval in common between this and o */
-	intersection(other: Interval): Interval {
+	public intersection(other: Interval): Interval {
 		return Interval.of(Math.max(this.a, other.a), Math.min(this.b, other.b));
 	}
 
@@ -131,7 +131,7 @@ export class Interval implements Equatable {
 	 *  within {@code this}, which would result in two disjoint intervals
 	 *  instead of the single one returned by this method.
 	 */
-	differenceNotProperlyContained(other: Interval): Interval | undefined {
+	public differenceNotProperlyContained(other: Interval): Interval | undefined {
 		let diff: Interval | undefined;
 		if (other.startsBeforeNonDisjoint(this)) {
 			// other.a to left of this.a (or same)
@@ -145,7 +145,7 @@ export class Interval implements Equatable {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this.a + ".." + this.b;
 	}
 }

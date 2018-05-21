@@ -87,7 +87,7 @@ export class ParseTreeMatch {
 	 * @return The last {@link ParseTree} to match a tag with the specified
 	 * label, or {@code null} if no parse tree matched a tag with the label.
 	 */
-	get(label: string): ParseTree | undefined {
+	public get(label: string): ParseTree | undefined {
 		let parseTrees = this._labels.get(label);
 		if (!parseTrees || parseTrees.length === 0) {
 			return undefined;
@@ -120,7 +120,7 @@ export class ParseTreeMatch {
 	 * is returned.
 	 */
 	@NotNull
-	getAll(@NotNull label: string): ParseTree[] {
+	public getAll(@NotNull label: string): ParseTree[] {
 		const nodes = this._labels.get(label);
 		if (!nodes) {
 			return [];
@@ -187,7 +187,7 @@ export class ParseTreeMatch {
 	 * {@inheritDoc}
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return `Match ${
 			this.succeeded ? "succeeded" : "failed"}; found ${
 			this.labels.size} labels`;

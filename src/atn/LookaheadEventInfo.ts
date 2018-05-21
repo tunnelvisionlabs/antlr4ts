@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.6852565-07:00
 
-import { DecisionEventInfo } from './DecisionEventInfo';
-import { NotNull } from '../Decorators';
-import { SimulatorState } from './SimulatorState';
-import { TokenStream } from '../TokenStream';
+import { DecisionEventInfo } from "./DecisionEventInfo";
+import { NotNull } from "../Decorators";
+import { SimulatorState } from "./SimulatorState";
+import { TokenStream } from "../TokenStream";
 
 /**
  * This class represents profiling event information for tracking the lookahead
@@ -22,7 +22,7 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 *  user-level alts that differ from the rewritten rule with a (...) block
 	 *  and a (..)* loop.
 	 */
-	predictedAlt: number;
+	public predictedAlt: number;
 
 	/**
 	 * Constructs a new instance of the {@link LookaheadEventInfo} class with
@@ -39,7 +39,8 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 * prediction; otherwise, {@code false} if the current lookahead is part of
 	 * an SLL prediction
 	 */
-	constructor(decision: number,
+	constructor(
+		decision: number,
 		state: SimulatorState | undefined,
 		predictedAlt: number,
 		@NotNull input: TokenStream,

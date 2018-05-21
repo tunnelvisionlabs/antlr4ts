@@ -30,15 +30,15 @@ export class ParseTreeProperty<V> {
 		this._symbol = Symbol(name);
 	}
 
-	get(node: ParseTree): V {
+	public get(node: ParseTree): V {
 		return (node as any)[this._symbol] as V;
 	}
 
-	set(node: ParseTree, value: V): void {
+	public set(node: ParseTree, value: V): void {
 		(node as any)[this._symbol] = value;
 	}
 
-	removeFrom(node: ParseTree): V {
+	public removeFrom(node: ParseTree): V {
 		let result = (node as any)[this._symbol] as V;
 		delete (node as any)[this._symbol];
 		return result;

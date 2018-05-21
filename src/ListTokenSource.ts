@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.1916955-07:00
 
-import { CharStream } from './CharStream';
-import { CommonTokenFactory } from './CommonTokenFactory';
-import { NotNull, Override } from './Decorators';
-import { Token } from './Token';
-import { TokenFactory } from './TokenFactory';
-import { TokenSource } from './TokenSource';
+import { CharStream } from "./CharStream";
+import { CommonTokenFactory } from "./CommonTokenFactory";
+import { NotNull, Override } from "./Decorators";
+import { Token } from "./Token";
+import { TokenFactory } from "./TokenFactory";
+import { TokenSource } from "./TokenSource";
 
 /**
  * Provides an implementation of {@link TokenSource} as a wrapper around a list
@@ -89,7 +89,7 @@ export class ListTokenSource implements TokenSource {
 			let lastToken: Token = this.tokens[this.tokens.length - 1];
 			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
-				let lastNewLine: number = tokenText.lastIndexOf('\n');
+				let lastNewLine: number = tokenText.lastIndexOf("\n");
 				if (lastNewLine >= 0) {
 					return tokenText.length - lastNewLine - 1;
 				}
@@ -107,7 +107,7 @@ export class ListTokenSource implements TokenSource {
 	 * {@inheritDoc}
 	 */
 	@Override
-	nextToken(): Token {
+	public nextToken(): Token {
 		if (this.i >= this.tokens.length) {
 			if (this.eofToken == null) {
 				let start: number = -1;
@@ -152,7 +152,7 @@ export class ListTokenSource implements TokenSource {
 			let tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				for (let i = 0; i < tokenText.length; i++) {
-					if (tokenText.charAt(i) == '\n') {
+					if (tokenText.charAt(i) === "\n") {
 						line++;
 					}
 				}

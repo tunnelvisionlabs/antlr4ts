@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.0697674-07:00
 import { CharStream } from "./CharStream";
-import { IntervalSet } from "./misc/IntervalSet"
-import { IntStream } from './IntStream';
+import { IntervalSet } from "./misc/IntervalSet";
+import { IntStream } from "./IntStream";
 import { Lexer } from "./Lexer";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { RuleContext } from "./RuleContext";
 import { Token } from "./Token";
 
@@ -40,14 +40,17 @@ export class RecognitionException extends Error {
 
 	private _offendingState: number = -1;
 
-	constructor(lexer: Lexer | undefined,
+	constructor(
+		lexer: Lexer | undefined,
 		input: CharStream);
 
-	constructor(recognizer: Recognizer<Token, any> | undefined,
+	constructor(
+		recognizer: Recognizer<Token, any> | undefined,
 		input: IntStream | undefined,
 		ctx: ParserRuleContext | undefined);
 
-	constructor(recognizer: Recognizer<Token, any> | undefined,
+	constructor(
+		recognizer: Recognizer<Token, any> | undefined,
 		input: IntStream | undefined,
 		ctx: ParserRuleContext | undefined,
 		message: string);
@@ -62,7 +65,9 @@ export class RecognitionException extends Error {
 		this._recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if (recognizer) this._offendingState = recognizer.state;
+		if (recognizer) {
+			this._offendingState = recognizer.state;
+		}
 	}
 
 	/**
@@ -126,14 +131,16 @@ export class RecognitionException extends Error {
 		return this.input;
 	}
 
-	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
-		if (recognizer && recognizer !== this._recognizer) return undefined;
+	public getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
+		if (recognizer && recognizer !== this._recognizer) {
+			return undefined;
+		}
 		return this.offendingToken;
 	}
 
-	protected setOffendingToken<Symbol extends Token>(
-		recognizer: Recognizer<Symbol, any>,
-		offendingToken?: Symbol): void {
+	protected setOffendingToken<TSymbol extends Token>(
+		recognizer: Recognizer<TSymbol, any>,
+		offendingToken?: TSymbol): void {
 		if (recognizer === this._recognizer) {
 			this.offendingToken = offendingToken;
 		}

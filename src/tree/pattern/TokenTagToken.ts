@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.3281988-07:00
 
-import { CommonToken } from '../../CommonToken';
-import { NotNull, Override } from '../../Decorators';
+import { CommonToken } from "../../CommonToken";
+import { NotNull, Override } from "../../Decorators";
 
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,
@@ -80,7 +80,7 @@ export class TokenTagToken extends CommonToken {
 	 * {@code tokenName:type}.</p>
 	 */
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this._tokenName + ":" + this.type;
 	}
 }

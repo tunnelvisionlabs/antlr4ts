@@ -29,14 +29,14 @@ export interface JavaCollection<E> extends JavaIterable<E> {
 	addAll(collection: Collection<E>): boolean;
 	clear(): void;
 	contains(o: any): boolean;                         // Shouldn't argument be restricted to E?
-	containsAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
+	containsAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	equals(o: any): boolean;
 	hashCode(): number;
 	readonly isEmpty: boolean;
 	iterator(): JavaIterator<E>;
 	remove(o: any): boolean;                        // Shouldn't argument be restricted to E?
-	removeAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
-	retainAll(collection: Collection<any>): boolean;// Shouldn't argument be restricted to Collection<E>?
+	removeAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
+	retainAll(collection: Collection<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	readonly size: number;
 	toArray(): any[];                               // Shouldn't return type be restricted to E[]?
 	toArray(a: E[]): E[];
@@ -96,24 +96,26 @@ export type Collection<T> = JavaCollection<T> | Iterable<T>;
  */
 
 export function asIterable<T>(collection: Collection<T>): Iterable<T> {
-	if ((collection as any)[Symbol.iterator]) return collection as Iterable<T>;
+	if ((collection as any)[Symbol.iterator]) {
+		return collection as Iterable<T>;
+	}
 	return new IterableAdapter(collection as JavaCollection<T>);
 }
 
 // implementation detail of above...
 
 class IterableAdapter<T> implements Iterable<T>, IterableIterator<T> {
-	private _iterator: JavaIterator<T>
+	private _iterator: JavaIterator<T>;
 	constructor(private collection: JavaCollection<T>) { }
 
-	[Symbol.iterator]() { this._iterator = this.collection.iterator(); return this; }
+	public [Symbol.iterator]() { this._iterator = this.collection.iterator(); return this; }
 
-	next(): IteratorResult<T> {
+	public next(): IteratorResult<T> {
 		if (!this._iterator.hasNext()) {
 			// A bit of a hack needed here, tracking under https://github.com/Microsoft/TypeScript/issues/11375
 			return { done: true, value: undefined } as any as IteratorResult<T>;
 		}
 
-		return { done: false, value: this._iterator.next() }
+		return { done: false, value: this._iterator.next() };
 	}
 }

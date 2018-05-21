@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:24.6596177-07:00
 
-import { ATNState } from './ATNState';
-import { Transition } from './Transition';
+import { ATNState } from "./ATNState";
+import { Transition } from "./Transition";
 
 /**
  *

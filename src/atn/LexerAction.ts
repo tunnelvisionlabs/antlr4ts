@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.7973969-07:00
 
-import { Equatable } from '../misc/Stubs';
-import { Lexer } from '../Lexer';
-import { LexerActionType } from './LexerActionType';
+import { Equatable } from "../misc/Stubs";
+import { Lexer } from "../Lexer";
+import { LexerActionType } from "./LexerActionType";
 
 /**
  * Represents a single action which can be executed following the successful

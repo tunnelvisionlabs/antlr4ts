@@ -5,11 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.9613221-07:00
 
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
  * Implements the {@code more} lexer action by calling {@link Lexer#more}.
@@ -25,6 +25,7 @@ export class LexerMoreAction implements LexerAction {
 	 * Constructs the singleton instance of the lexer {@code more} command.
 	 */
 	constructor() {
+		// intentionally empty
 	}
 
 	/**
@@ -51,24 +52,24 @@ export class LexerMoreAction implements LexerAction {
 	 * <p>This action is implemented by calling {@link Lexer#more}.</p>
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.more();
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		return obj === this;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return "more";
 	}
 }

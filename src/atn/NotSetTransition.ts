@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.8483617-07:00
 
-import { ATNState } from './ATNState';
-import { IntervalSet } from '../misc/IntervalSet';
-import { Override, NotNull, Nullable } from '../Decorators';
-import { SetTransition } from './SetTransition';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+import { ATNState } from "./ATNState";
+import { IntervalSet } from "../misc/IntervalSet";
+import { Override, NotNull, Nullable } from "../Decorators";
+import { SetTransition } from "./SetTransition";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
 
 export class NotSetTransition extends SetTransition {
 	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
@@ -23,14 +23,14 @@ export class NotSetTransition extends SetTransition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return symbol >= minVocabSymbol
 			&& symbol <= maxVocabSymbol
 			&& !super.matches(symbol, minVocabSymbol, maxVocabSymbol);
 	}
 
 	@Override
-	toString(): string {
-		return '~' + super.toString();
+	public toString(): string {
+		return "~" + super.toString();
 	}
 }

@@ -3,14 +3,14 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { ANTLRInputStream } from '../src/ANTLRInputStream';
-import { BufferedTokenStream } from '../src/BufferedTokenStream';
-import { Token } from '../src/Token';
-import { XPathLexer } from '../src/tree/xpath/XPathLexer';
+import { ANTLRInputStream } from "../src/ANTLRInputStream";
+import { BufferedTokenStream } from "../src/BufferedTokenStream";
+import { Token } from "../src/Token";
+import { XPathLexer } from "../src/tree/xpath/XPathLexer";
 
-import { suite, test } from 'mocha-typescript';
+import { suite, test } from "mocha-typescript";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
 /**
  * This class contains tests for specific API functionality in `TokenStream` and derived types.
@@ -22,7 +22,7 @@ export class TestTokenStream {
 	 * This is a targeted regression test for antlr/antlr4#1584 (`BufferedTokenStream` cannot be reused after EOF).
 	 */
 	@test
-	testBufferedTokenStreamReuseAfterFill(): void {
+	public testBufferedTokenStreamReuseAfterFill(): void {
 		let firstInput = new ANTLRInputStream("A");
 		let tokenStream = new BufferedTokenStream(new XPathLexer(firstInput));
 		tokenStream.fill();

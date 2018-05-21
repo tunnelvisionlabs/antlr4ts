@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.2401032-07:00
 
-import { NotNull } from '../Decorators';
-import { SimulatorState } from './SimulatorState';
-import { TokenStream } from '../TokenStream';
+import { NotNull } from "../Decorators";
+import { SimulatorState } from "./SimulatorState";
+import { TokenStream } from "../TokenStream";
 
 /**
  * This is the base class for gathering detailed information about prediction
@@ -30,37 +30,37 @@ export class DecisionEventInfo {
 	 *
 	 * @see ATN#decisionToState
 	 */
-	decision: number;
+	public decision: number;
 
 	/**
 	 * The simulator state containing additional information relevant to the
 	 * prediction state when the current event occurred, or {@code null} if no
 	 * additional information is relevant or available.
 	 */
-	state: SimulatorState | undefined;
+	public state: SimulatorState | undefined;
 
 	/**
 	 * The input token stream which is being parsed.
 	 */
 	@NotNull
-	input: TokenStream;
+	public input: TokenStream;
 
 	/**
 	 * The token index in the input stream at which the current prediction was
 	 * originally invoked.
 	 */
-	startIndex: number;
+	public startIndex: number;
 
 	/**
 	 * The token index in the input stream at which the current event occurred.
 	 */
-	stopIndex: number;
+	public stopIndex: number;
 
 	/**
 	 * {@code true} if the current event occurred during LL prediction;
 	 * otherwise, {@code false} if the input occurred during SLL prediction.
 	 */
-	fullCtx: boolean;
+	public fullCtx: boolean;
 
 	constructor(
 		decision: number,

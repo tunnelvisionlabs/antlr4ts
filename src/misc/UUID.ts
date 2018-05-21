@@ -3,8 +3,8 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { Equatable } from './Stubs';
-import { MurmurHash } from './MurmurHash';
+import { Equatable } from "./Stubs";
+import { MurmurHash } from "./MurmurHash";
 
 export class UUID implements Equatable {
 	private readonly data: Uint32Array;
@@ -17,12 +17,12 @@ export class UUID implements Equatable {
 		this.data[3] = leastSigBits;
 	}
 
-	static fromString(data: string): UUID {
+	public static fromString(data: string): UUID {
 		if (!/^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/.test(data)) {
 			throw new Error("Incorrectly formatted UUID");
 		}
 
-		let segments = data.split('-');
+		let segments = data.split("-");
 		let mostSigBits = parseInt(segments[0], 16);
 		let moreSigBits = ((parseInt(segments[1], 16) << 16) >>> 0) + parseInt(segments[2], 16);
 		let lessSigBits = ((parseInt(segments[3], 16) << 16) >>> 0) + parseInt(segments[4].substr(0, 4), 16);
@@ -30,11 +30,11 @@ export class UUID implements Equatable {
 		return new UUID(mostSigBits, moreSigBits, lessSigBits, leastSigBits);
 	}
 
-	hashCode(): number {
+	public hashCode(): number {
 		return MurmurHash.hashCode([this.data[0], this.data[1], this.data[2], this.data[3]]);
 	}
 
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof UUID)) {
@@ -47,7 +47,7 @@ export class UUID implements Equatable {
 			&& this.data[3] === obj.data[3];
 	}
 
-	toString(): string {
+	public toString(): string {
 		return ("00000000" + this.data[0].toString(16)).substr(-8)
 			+ "-" + ("0000" + (this.data[1] >>> 16).toString(16)).substr(-4)
 			+ "-" + ("0000" + this.data[1].toString(16)).substr(-4)

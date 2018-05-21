@@ -5,57 +5,57 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
 
-import { ActionTransition } from './ActionTransition';
-import { Array2DHashSet } from '../misc/Array2DHashSet';
-import { ATN } from './ATN';
-import { ATNDeserializationOptions } from './ATNDeserializationOptions';
-import { ATNState } from './ATNState';
-import { ATNStateType } from './ATNStateType';
-import { ATNType } from './ATNType';
-import { AtomTransition } from './AtomTransition';
-import { BasicBlockStartState } from './BasicBlockStartState';
-import { BasicState } from './BasicState';
-import { BitSet } from '../misc/BitSet';
-import { BlockEndState } from './BlockEndState';
-import { BlockStartState } from './BlockStartState';
-import { DecisionState } from './DecisionState';
-import { DFA } from '../dfa/DFA';
-import { EpsilonTransition } from './EpsilonTransition';
-import { Interval } from '../misc/Interval';
-import { IntervalSet } from '../misc/IntervalSet';
-import { InvalidState } from './InvalidState';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { LexerChannelAction } from './LexerChannelAction';
-import { LexerCustomAction } from './LexerCustomAction';
-import { LexerModeAction } from './LexerModeAction';
-import { LexerMoreAction } from './LexerMoreAction';
-import { LexerPopModeAction } from './LexerPopModeAction';
-import { LexerPushModeAction } from './LexerPushModeAction';
-import { LexerSkipAction } from './LexerSkipAction';
-import { LexerTypeAction } from './LexerTypeAction';
-import { LoopEndState } from './LoopEndState';
-import { NotNull } from '../Decorators';
-import { NotSetTransition } from './NotSetTransition';
-import { ParserATNSimulator } from './ParserATNSimulator';
-import { PlusBlockStartState } from './PlusBlockStartState';
-import { PlusLoopbackState } from './PlusLoopbackState';
-import { PrecedencePredicateTransition } from './PrecedencePredicateTransition';
-import { PredicateTransition } from './PredicateTransition';
-import { RangeTransition } from './RangeTransition';
-import { RuleStartState } from './RuleStartState';
-import { RuleStopState } from './RuleStopState';
-import { RuleTransition } from './RuleTransition';
-import { SetTransition } from './SetTransition';
-import { StarBlockStartState } from './StarBlockStartState';
-import { StarLoopbackState } from './StarLoopbackState';
-import { StarLoopEntryState } from './StarLoopEntryState';
-import { Token } from '../Token';
-import { TokensStartState } from './TokensStartState';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
-import { UUID } from '../misc/UUID';
-import { WildcardTransition } from './WildcardTransition';
+import { ActionTransition } from "./ActionTransition";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { ATN } from "./ATN";
+import { ATNDeserializationOptions } from "./ATNDeserializationOptions";
+import { ATNState } from "./ATNState";
+import { ATNStateType } from "./ATNStateType";
+import { ATNType } from "./ATNType";
+import { AtomTransition } from "./AtomTransition";
+import { BasicBlockStartState } from "./BasicBlockStartState";
+import { BasicState } from "./BasicState";
+import { BitSet } from "../misc/BitSet";
+import { BlockEndState } from "./BlockEndState";
+import { BlockStartState } from "./BlockStartState";
+import { DecisionState } from "./DecisionState";
+import { DFA } from "../dfa/DFA";
+import { EpsilonTransition } from "./EpsilonTransition";
+import { Interval } from "../misc/Interval";
+import { IntervalSet } from "../misc/IntervalSet";
+import { InvalidState } from "./InvalidState";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { LexerChannelAction } from "./LexerChannelAction";
+import { LexerCustomAction } from "./LexerCustomAction";
+import { LexerModeAction } from "./LexerModeAction";
+import { LexerMoreAction } from "./LexerMoreAction";
+import { LexerPopModeAction } from "./LexerPopModeAction";
+import { LexerPushModeAction } from "./LexerPushModeAction";
+import { LexerSkipAction } from "./LexerSkipAction";
+import { LexerTypeAction } from "./LexerTypeAction";
+import { LoopEndState } from "./LoopEndState";
+import { NotNull } from "../Decorators";
+import { NotSetTransition } from "./NotSetTransition";
+import { ParserATNSimulator } from "./ParserATNSimulator";
+import { PlusBlockStartState } from "./PlusBlockStartState";
+import { PlusLoopbackState } from "./PlusLoopbackState";
+import { PrecedencePredicateTransition } from "./PrecedencePredicateTransition";
+import { PredicateTransition } from "./PredicateTransition";
+import { RangeTransition } from "./RangeTransition";
+import { RuleStartState } from "./RuleStartState";
+import { RuleStopState } from "./RuleStopState";
+import { RuleTransition } from "./RuleTransition";
+import { SetTransition } from "./SetTransition";
+import { StarBlockStartState } from "./StarBlockStartState";
+import { StarLoopbackState } from "./StarLoopbackState";
+import { StarLoopEntryState } from "./StarLoopEntryState";
+import { Token } from "../Token";
+import { TokensStartState } from "./TokensStartState";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
+import { UUID } from "../misc/UUID";
+import { WildcardTransition } from "./WildcardTransition";
 
 /**
  *
@@ -96,7 +96,7 @@ export class ATNDeserializer {
 	private static readonly SUPPORTED_UUIDS: UUID[] = [
 		ATNDeserializer.BASE_SERIALIZED_UUID,
 		ATNDeserializer.ADDED_LEXER_ACTIONS,
-		ATNDeserializer.ADDED_UNICODE_SMP
+		ATNDeserializer.ADDED_UNICODE_SMP,
 	];
 
 	/**
@@ -129,15 +129,15 @@ export class ATNDeserializer {
 	 * introduced; otherwise, {@code false}.
 	 */
 	protected isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
-		let featureIndex: number = ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(feature));
+		let featureIndex: number = ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(feature));
 		if (featureIndex < 0) {
 			return false;
 		}
 
-		return ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(actualUuid)) >= featureIndex;
+		return ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(actualUuid)) >= featureIndex;
 	}
 
-	deserialize(@NotNull data: Uint16Array): ATN {
+	public deserialize(@NotNull data: Uint16Array): ATN {
 		data = data.slice(0);
 
 		// Each Uint16 value in data is shifted by +2 at the entry to this method. This is an encoding optimization
@@ -155,14 +155,14 @@ export class ATNDeserializer {
 
 		let p: number = 0;
 		let version: number = ATNDeserializer.toInt(data[p++]);
-		if (version != ATNDeserializer.SERIALIZED_VERSION) {
+		if (version !== ATNDeserializer.SERIALIZED_VERSION) {
 			let reason = `Could not deserialize ATN with version ${version} (expected ${ATNDeserializer.SERIALIZED_VERSION}).`;
 			throw new Error(reason);
 		}
 
 		let uuid: UUID = ATNDeserializer.toUUID(data, p);
 		p += 8;
-		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex(e => e.equals(uuid)) < 0) {
+		if (ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(uuid)) < 0) {
 			let reason = `Could not deserialize ATN with UUID ${uuid} (expected ${ATNDeserializer.SERIALIZED_UUID} or a legacy UUID).`;
 			throw new Error(reason);
 		}
@@ -176,8 +176,8 @@ export class ATNDeserializer {
 		//
 		// STATES
 		//
-		let loopBackStateNumbers: [LoopEndState, number][] = [];
-		let endStateNumbers: [BlockStartState, number][] = [];
+		let loopBackStateNumbers: Array<[LoopEndState, number]> = [];
+		let endStateNumbers: Array<[BlockStartState, number]> = [];
 		let nstates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < nstates; i++) {
 			let stype: ATNStateType = ATNDeserializer.toInt(data[p++]);
@@ -195,7 +195,7 @@ export class ATNDeserializer {
 			let s: ATNState = this.stateFactory(stype, ruleIndex);
 			if (stype === ATNStateType.LOOP_END) { // special case
 				let loopBackStateNumber: number = ATNDeserializer.toInt(data[p++]);
-				loopBackStateNumbers.push([<LoopEndState>s, loopBackStateNumber]);
+				loopBackStateNumbers.push([s as LoopEndState, loopBackStateNumber]);
 			}
 			else if (s instanceof BlockStartState) {
 				let endStateNumber: number = ATNDeserializer.toInt(data[p++]);
@@ -210,25 +210,25 @@ export class ATNDeserializer {
 		}
 
 		for (let pair of endStateNumbers) {
-			pair[0].endState = <BlockEndState>atn.states[pair[1]];
+			pair[0].endState = atn.states[pair[1]] as BlockEndState;
 		}
 
 		let numNonGreedyStates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numNonGreedyStates; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<DecisionState>atn.states[stateNumber]).nonGreedy = true;
+			(atn.states[stateNumber] as DecisionState).nonGreedy = true;
 		}
 
 		let numSllDecisions: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numSllDecisions; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<DecisionState>atn.states[stateNumber]).sll = true;
+			(atn.states[stateNumber] as DecisionState).sll = true;
 		}
 
 		let numPrecedenceStates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < numPrecedenceStates; i++) {
 			let stateNumber: number = ATNDeserializer.toInt(data[p++]);
-			(<RuleStartState>atn.states[stateNumber]).isPrecedenceRule = true;
+			(atn.states[stateNumber] as RuleStartState).isPrecedenceRule = true;
 		}
 
 		//
@@ -242,8 +242,8 @@ export class ATNDeserializer {
 		atn.ruleToStartState = new Array<RuleStartState>(nrules);
 		for (let i = 0; i < nrules; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			let startState: RuleStartState = <RuleStartState>atn.states[s];
-			startState.leftFactored = ATNDeserializer.toInt(data[p++]) != 0;
+			let startState: RuleStartState = atn.states[s] as RuleStartState;
+			startState.leftFactored = ATNDeserializer.toInt(data[p++]) !== 0;
 			atn.ruleToStartState[i] = startState;
 			if (atn.grammarType === ATNType.LEXER) {
 				let tokenType: number = ATNDeserializer.toInt(data[p++]);
@@ -280,7 +280,7 @@ export class ATNDeserializer {
 		let nmodes: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < nmodes; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			atn.modeToStartState.push(<TokensStartState>atn.states[s]);
+			atn.modeToStartState.push(atn.states[s] as TokensStartState);
 		}
 
 		atn.modeToDFA = new Array<DFA>(nmodes);
@@ -319,15 +319,15 @@ export class ATNDeserializer {
 		}
 
 		// edges for rule stop states can be derived, so they aren't serialized
-		type T = { stopState: number, returnState: number, outermostPrecedenceReturn: number };
+		interface T { stopState: number; returnState: number; outermostPrecedenceReturn: number; }
 		let returnTransitionsSet = new Array2DHashSet<T>({
 			hashCode: (o: T) => o.stopState ^ o.returnState ^ o.outermostPrecedenceReturn,
 
-			equals: function (a: T, b: T): boolean {
+			equals: (a: T, b: T): boolean => {
 				return a.stopState === b.stopState
 					&& a.returnState === b.returnState
 					&& a.outermostPrecedenceReturn === b.outermostPrecedenceReturn;
-			}
+			},
 		});
 		let returnTransitions: T[] = [];
 		for (let state of atn.states) {
@@ -351,7 +351,7 @@ export class ATNDeserializer {
 					}
 				}
 
-				let current = { stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn: outermostPrecedenceReturn };
+				let current = { stopState: ruleTransition.target.ruleIndex, returnState: ruleTransition.followState.stateNumber, outermostPrecedenceReturn };
 				if (returnTransitionsSet.add(current)) {
 					returnTransitions.push(current);
 				}
@@ -405,7 +405,7 @@ export class ATNDeserializer {
 		let ndecisions: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 1; i <= ndecisions; i++) {
 			let s: number = ATNDeserializer.toInt(data[p++]);
-			let decState: DecisionState = <DecisionState>atn.states[s];
+			let decState: DecisionState = atn.states[s] as DecisionState;
 			atn.decisionToState.push(decState);
 			decState.decision = i - 1;
 		}
@@ -419,12 +419,12 @@ export class ATNDeserializer {
 				for (let i = 0; i < atn.lexerActions.length; i++) {
 					let actionType: LexerActionType = ATNDeserializer.toInt(data[p++]);
 					let data1: number = ATNDeserializer.toInt(data[p++]);
-					if (data1 == 0xFFFF) {
+					if (data1 === 0xFFFF) {
 						data1 = -1;
 					}
 
 					let data2: number = ATNDeserializer.toInt(data[p++]);
-					if (data2 == 0xFFFF) {
+					if (data2 === 0xFFFF) {
 						data2 = -1;
 					}
 
@@ -517,7 +517,7 @@ export class ATNDeserializer {
 						throw new Error("Couldn't identify final state of the precedence rule prefix section.");
 					}
 
-					excludeTransition = (<StarLoopEntryState>endState).loopBackState.transition(0);
+					excludeTransition = (endState as StarLoopEntryState).loopBackState.transition(0);
 				}
 				else {
 					endState = atn.ruleToStopState[i];
@@ -590,7 +590,7 @@ export class ATNDeserializer {
 			let set: IntervalSet = new IntervalSet();
 			sets.push(set);
 
-			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) != 0;
+			let containsEof: boolean = ATNDeserializer.toInt(data[p++]) !== 0;
 			if (containsEof) {
 				set.add(-1);
 			}
@@ -773,8 +773,7 @@ export class ATNDeserializer {
 			}
 		}
 
-		for (let stateNumber = 0; stateNumber < atn.states.length; stateNumber++) {
-			let state: ATNState = atn.states[stateNumber];
+		for (let state of atn.states) {
 			if (state.ruleIndex < 0) {
 				continue;
 			}
@@ -816,15 +815,15 @@ export class ATNDeserializer {
 
 				switch (effective.serializationType) {
 				case TransitionType.ATOM:
-					intermediateState.addTransition(new AtomTransition(target, (<AtomTransition>effective)._label));
+					intermediateState.addTransition(new AtomTransition(target, (effective as AtomTransition)._label));
 					break;
 
 				case TransitionType.RANGE:
-					intermediateState.addTransition(new RangeTransition(target, (<RangeTransition>effective).from, (<RangeTransition>effective).to));
+					intermediateState.addTransition(new RangeTransition(target, (effective as RangeTransition).from, (effective as RangeTransition).to));
 					break;
 
 				case TransitionType.SET:
-					intermediateState.addTransition(new SetTransition(target, (<SetTransition>effective).label));
+					intermediateState.addTransition(new SetTransition(target, (effective as SetTransition).label));
 					break;
 
 				default:
@@ -866,7 +865,7 @@ export class ATNDeserializer {
 				let transition: Transition = state.getOptimizedTransition(i);
 				let intermediate: ATNState = transition.target;
 				if (transition.serializationType !== TransitionType.EPSILON
-					|| (<EpsilonTransition>transition).outermostPrecedenceReturn !== -1
+					|| (transition as EpsilonTransition).outermostPrecedenceReturn !== -1
 					|| intermediate.stateType !== ATNStateType.BASIC
 					|| !intermediate.onlyHasEpsilonTransitions) {
 					if (optimizedTransitions != null) {
@@ -878,7 +877,7 @@ export class ATNDeserializer {
 
 				for (let j = 0; j < intermediate.numberOfOptimizedTransitions; j++) {
 					if (intermediate.getOptimizedTransition(j).serializationType !== TransitionType.EPSILON
-						|| (<EpsilonTransition>intermediate.getOptimizedTransition(j)).outermostPrecedenceReturn !== -1) {
+						|| (intermediate.getOptimizedTransition(j) as EpsilonTransition).outermostPrecedenceReturn !== -1) {
 						if (optimizedTransitions != null) {
 							optimizedTransitions.push(transition);
 						}
@@ -971,14 +970,13 @@ export class ATNDeserializer {
 
 			let blockEndState: ATNState = decision.getOptimizedTransition(setTransitions.minElement).target.getOptimizedTransition(0).target;
 			let matchSet: IntervalSet = new IntervalSet();
-			for (let i = 0; i < setTransitions.intervals.length; i++) {
-				let interval: Interval = setTransitions.intervals[i];
+			for (let interval of setTransitions.intervals) {
 				for (let j = interval.a; j <= interval.b; j++) {
 					let matchTransition: Transition = decision.getOptimizedTransition(j).target.getOptimizedTransition(0);
 					if (matchTransition instanceof NotSetTransition) {
 						throw new Error("Not yet implemented.");
 					} else {
-						matchSet.addAll(<IntervalSet>matchTransition.label);
+						matchSet.addAll(matchTransition.label as IntervalSet);
 					}
 				}
 			}
@@ -1110,7 +1108,8 @@ export class ATNDeserializer {
 	}
 
 	@NotNull
-	protected edgeFactory(@NotNull atn: ATN,
+	protected edgeFactory(
+		@NotNull atn: ATN,
 		type: TransitionType, src: number, trg: number,
 		arg1: number, arg2: number, arg3: number,
 		sets: IntervalSet[]): Transition {
@@ -1125,7 +1124,7 @@ export class ATNDeserializer {
 					return new RangeTransition(target, arg1, arg2);
 				}
 			case TransitionType.RULE:
-				let rt: RuleTransition = new RuleTransition(<RuleStartState>atn.states[arg1], arg2, arg3, target);
+				let rt: RuleTransition = new RuleTransition(atn.states[arg1] as RuleStartState, arg2, arg3, target);
 				return rt;
 			case TransitionType.PREDICATE:
 				let pt: PredicateTransition = new PredicateTransition(target, arg1, arg2, arg3 !== 0);

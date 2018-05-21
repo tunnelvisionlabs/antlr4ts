@@ -4,13 +4,13 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.9471863-07:00
-import { ANTLRErrorListener } from './ANTLRErrorListener';
-import { ATNConfigSet } from './atn/ATNConfigSet';
-import { BitSet } from './misc/BitSet';
-import { DFA } from './dfa/DFA';
-import { Parser } from './Parser';
-import { SimulatorState } from './atn/SimulatorState';
-import { Token } from './Token';
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { BitSet } from "./misc/BitSet";
+import { DFA } from "./dfa/DFA";
+import { Parser } from "./Parser";
+import { SimulatorState } from "./atn/SimulatorState";
+import { Token } from "./Token";
 import * as Stubs from "./misc/Stubs";
 import * as Exception from "./RecognitionException";
 
@@ -58,13 +58,16 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * identified
 	 */
 	reportAmbiguity?: (
-		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/ dfa: DFA,
+		/*@NotNull*/
+		recognizer: Parser,
+		/*@NotNull*/
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
 		ambigAlts: BitSet | undefined,
-		/*@NotNull*/ configs: ATNConfigSet) => void;
+		/*@NotNull*/
+		configs: ATNConfigSet) => void;
 
 	/**
 	 * This method is called when an SLL conflict occurs and the parser is about
@@ -86,12 +89,15 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * detected
 	 */
 	reportAttemptingFullContext?: (
-		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/ dfa: DFA,
+		/*@NotNull*/
+		recognizer: Parser,
+		/*@NotNull*/
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		conflictingAlts: BitSet | undefined,
-		/*@NotNull*/ conflictState: SimulatorState) => void;
+		/*@NotNull*/
+		conflictState: SimulatorState) => void;
 
 	/**
 	 * This method is called by the parser when a full-context prediction has a
@@ -130,10 +136,13 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * was determined
 	 */
 	reportContextSensitivity?: (
-		/*@NotNull*/ recognizer: Parser,
-		/*@NotNull*/ dfa: DFA,
+		/*@NotNull*/
+		recognizer: Parser,
+		/*@NotNull*/
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		prediction: number,
-		/*@NotNull*/ acceptState: SimulatorState) => void;
+		/*@NotNull*/
+		acceptState: SimulatorState) => void;
 }

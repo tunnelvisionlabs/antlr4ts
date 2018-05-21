@@ -34,7 +34,7 @@
  * @see Parser.errorHandler
  */
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { InputMismatchException } from "./InputMismatchException";
 import { Override } from "./Decorators";
 import { ParseCancellationException } from "./misc/ParseCancellationException";
@@ -43,13 +43,13 @@ import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token";
 
 export class BailErrorStrategy extends DefaultErrorStrategy {
-    /** Instead of recovering from exception {@code e}, re-throw it wrapped
-     *  in a {@link ParseCancellationException} so it is not caught by the
-     *  rule function catches.  Use {@link Exception#getCause()} to get the
+	/** Instead of recovering from exception {@code e}, re-throw it wrapped
+	 *  in a {@link ParseCancellationException} so it is not caught by the
+	 *  rule function catches.  Use {@link Exception#getCause()} to get the
 	 *  original {@link RecognitionException}.
-     */
+	 */
 	@Override
-	recover(recognizer: Parser, e: RecognitionException): void {
+	public recover(recognizer: Parser, e: RecognitionException): void {
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
 		}
@@ -57,11 +57,11 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 		throw new ParseCancellationException(e);
 	}
 
-    /** Make sure we don't attempt to recover inline; if the parser
-     *  successfully recovers, it won't throw an exception.
-     */
+	/** Make sure we don't attempt to recover inline; if the parser
+	 *  successfully recovers, it won't throw an exception.
+	 */
 	@Override
-	recoverInline(recognizer: Parser): Token {
+	public recoverInline(recognizer: Parser): Token {
 		let e = new InputMismatchException(recognizer);
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
@@ -72,5 +72,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 
 	/** Make sure we don't attempt to recover from problems in subrules. */
 	@Override
-	sync(recognizer: Parser): void { }
+	public sync(recognizer: Parser): void {
+		// intentionally empty
+	}
 }

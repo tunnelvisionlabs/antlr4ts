@@ -23,10 +23,10 @@ export abstract class XPathElement {
 	 * Given tree rooted at {@code t} return all nodes matched by this path
 	 * element.
 	 */
-	abstract evaluate(t: ParseTree): ParseTree[];
+	public abstract evaluate(t: ParseTree): ParseTree[];
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let inv: string = this.invert ? "!" : "";
 		let className: string = Object.constructor.name;
 		return className + "[" + inv + this.nodeName + "]";

@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.8783640-07:00
 
-import { CharStream } from './CharStream';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
+import { CharStream } from "./CharStream";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
 
 /** The default mechanism for creating tokens. It's used by default in Lexer and
  *  the error handling strategy (to create missing tokens).  Notifying the parser
@@ -20,7 +20,8 @@ export interface TokenFactory {
 	 */
 	//@NotNull
 	create(
-		/*@NotNull*/ source: { source?: TokenSource, stream?: CharStream },
+		/*@NotNull*/
+		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
 		text: string | undefined,
 		channel: number,

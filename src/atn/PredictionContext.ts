@@ -6,21 +6,21 @@
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { Array2DHashSet } from '../misc/Array2DHashSet';
-import { Arrays } from '../misc/Arrays';
-import { ATN } from './ATN';
-import { ATNState } from './ATNState';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { MurmurHash } from '../misc/MurmurHash';
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { Arrays } from "../misc/Arrays";
+import { ATN } from "./ATN";
+import { ATNState } from "./ATNState";
+import { EqualityComparator } from "../misc/EqualityComparator";
+import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
-import { Equatable, JavaSet } from '../misc/Stubs';
-import { PredictionContextCache } from './PredictionContextCache';
-import { Recognizer } from '../Recognizer';
-import { RuleContext } from '../RuleContext';
-import { RuleTransition } from './RuleTransition';
+import { Equatable, JavaSet } from "../misc/Stubs";
+import { PredictionContextCache } from "./PredictionContextCache";
+import { Recognizer } from "../Recognizer";
+import { RuleContext } from "../RuleContext";
+import { RuleTransition } from "./RuleTransition";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
 const INITIAL_HASH: number = 1;
 
@@ -81,20 +81,20 @@ export abstract class PredictionContext implements Equatable {
 		return hash;
 	}
 
-	abstract readonly size: number;
+	public abstract readonly size: number;
 
-	abstract getReturnState(index: number): number;
+	public abstract getReturnState(index: number): number;
 
-	abstract findReturnState(returnState: number): number;
+	public abstract findReturnState(returnState: number): number;
 
 	// @NotNull
-	abstract getParent(index: number): PredictionContext;
+	public abstract getParent(index: number): PredictionContext;
 
 	protected abstract addEmptyContext(): PredictionContext;
 
 	protected abstract removeEmptyContext(): PredictionContext;
 
-	static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
+	public static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
 		if (outerContext.isEmpty) {
 			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
@@ -119,8 +119,8 @@ export abstract class PredictionContext implements Equatable {
 		return context.removeEmptyContext();
 	}
 
-	static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
-		if (context0 == context1) {
+	public static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
+		if (context0 === context1) {
 			return context0;
 		}
 
@@ -211,11 +211,11 @@ export abstract class PredictionContext implements Equatable {
 		}
 	}
 
-	static isEmptyLocal(context: PredictionContext): boolean {
+	public static isEmptyLocal(context: PredictionContext): boolean {
 		return context === PredictionContext.EMPTY_LOCAL;
 	}
 
-	static getCachedContext(
+	public static getCachedContext(
 		@NotNull context: PredictionContext,
 		@NotNull contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
 		@NotNull visited: PredictionContext.IdentityHashMap): PredictionContext {
@@ -278,29 +278,29 @@ export abstract class PredictionContext implements Equatable {
 		return updated;
 	}
 
-	appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
+	public appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
 		return this.appendContext(PredictionContext.EMPTY_FULL.getChild(returnContext), contextCache);
 	}
 
-	abstract appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext;
+	public abstract appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext;
 
-	getChild(returnState: number): PredictionContext {
+	public getChild(returnState: number): PredictionContext {
 		return new SingletonPredictionContext(this, returnState);
 	}
 
-	abstract readonly isEmpty: boolean;
+	public abstract readonly isEmpty: boolean;
 
-	abstract readonly hasEmpty: boolean;
+	public abstract readonly hasEmpty: boolean;
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		return this.cachedHashCode;
 	}
 
 	// @Override
-	abstract equals(o: any): boolean;
+	public abstract equals(o: any): boolean;
 
-	toStrings(recognizer: Recognizer<any, any> | undefined, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
+	public toStrings(recognizer: Recognizer<any, any> | undefined, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
 		let result: string[] = [];
 
 		outer:
@@ -332,7 +332,7 @@ export abstract class PredictionContext implements Equatable {
 				if (recognizer) {
 					if (localBuffer.length > 1) {
 						// first char is '[', if more than that this isn't the first rule
-						localBuffer += ' ';
+						localBuffer += " ";
 					}
 
 					let atn: ATN = recognizer.atn;
@@ -343,7 +343,7 @@ export abstract class PredictionContext implements Equatable {
 					if (!p.isEmpty) {
 						if (localBuffer.length > 1) {
 							// first char is '[', if more than that this isn't the first rule
-							localBuffer += ' ';
+							localBuffer += " ";
 						}
 
 						localBuffer += p.getReturnState(index);
@@ -389,17 +389,17 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	getParent(index: number): PredictionContext {
+	public getParent(index: number): PredictionContext {
 		throw new Error("index out of bounds");
 	}
 
 	@Override
-	getReturnState(index: number): number {
+	public getReturnState(index: number): number {
 		throw new Error("index out of bounds");
 	}
 
 	@Override
-	findReturnState(returnState: number): number {
+	public findReturnState(returnState: number): number {
 		return -1;
 	}
 
@@ -409,12 +409,12 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
+	public appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
 		return contextCache.getChild(this, returnContext);
 	}
 
 	@Override
-	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
+	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return suffix;
 	}
 
@@ -429,12 +429,12 @@ class EmptyPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		return this === o;
 	}
 
 	@Override
-	toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
+	public toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
 		return ["[]"];
 	}
 
@@ -442,10 +442,10 @@ class EmptyPredictionContext extends PredictionContext {
 
 class ArrayPredictionContext extends PredictionContext {
 	@NotNull
-	parents: PredictionContext[];
+	public parents: PredictionContext[];
 
 	@NotNull
-	returnStates: number[];
+	public returnStates: number[];
 
 	constructor( @NotNull parents: PredictionContext[], returnStates: number[], hashCode?: number) {
 		super(hashCode || PredictionContext.calculateHashCode(parents, returnStates));
@@ -457,17 +457,17 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	getParent(index: number): PredictionContext {
+	public getParent(index: number): PredictionContext {
 		return this.parents[index];
 	}
 
 	@Override
-	getReturnState(index: number): number {
+	public getReturnState(index: number): number {
 		return this.returnStates[index];
 	}
 
 	@Override
-	findReturnState(returnState: number): number {
+	public findReturnState(returnState: number): number {
 		return Arrays.binarySearch(this.returnStates, returnState);
 	}
 
@@ -515,7 +515,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
+	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return ArrayPredictionContext.appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
 	}
 
@@ -575,7 +575,7 @@ class ArrayPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (this === o) {
 			return true;
 		} else if (!(o instanceof ArrayPredictionContext)) {
@@ -647,8 +647,8 @@ class ArrayPredictionContext extends PredictionContext {
 export class SingletonPredictionContext extends PredictionContext {
 
 	@NotNull
-	parent: PredictionContext;
-	returnState: number;
+	public parent: PredictionContext;
+	public returnState: number;
 
 	constructor(@NotNull parent: PredictionContext, returnState: number) {
 		super(PredictionContext.calculateSingleHashCode(parent, returnState));
@@ -658,19 +658,19 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	getParent(index: number): PredictionContext {
+	public getParent(index: number): PredictionContext {
 		// assert(index == 0);
 		return this.parent;
 	}
 
 	@Override
-	getReturnState(index: number): number {
+	public getReturnState(index: number): number {
 		// assert(index == 0);
 		return this.returnState;
 	}
 
 	@Override
-	findReturnState(returnState: number): number {
+	public findReturnState(returnState: number): number {
 		return this.returnState === returnState ? 0 : -1;
 	}
 
@@ -690,7 +690,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
+	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return contextCache.getChild(this.parent.appendContext(suffix, contextCache), this.returnState);
 	}
 
@@ -707,7 +707,7 @@ export class SingletonPredictionContext extends PredictionContext {
 	}
 
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
 		} else if (!(o instanceof SingletonPredictionContext)) {
@@ -725,7 +725,7 @@ export class SingletonPredictionContext extends PredictionContext {
 }
 
 export namespace PredictionContext {
-	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false)
+	export const EMPTY_LOCAL: PredictionContext = new EmptyPredictionContext(false);
 	export const EMPTY_FULL: PredictionContext = new EmptyPredictionContext(true);
 	export const EMPTY_LOCAL_STATE_KEY: number = -((1 << 31) >>> 0);
 	export const EMPTY_FULL_STATE_KEY: number = ((1 << 31) >>> 0) - 1;
@@ -737,18 +737,19 @@ export namespace PredictionContext {
 	}
 
 	export class IdentityEqualityComparator implements EqualityComparator<PredictionContext> {
-		static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
+		public static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
 		private IdentityEqualityComparator() {
+			// intentionally empty
 		}
 
 		@Override
-		hashCode(obj: PredictionContext): number {
+		public hashCode(obj: PredictionContext): number {
 			return obj.hashCode();
 		}
 
 		@Override
-		equals(a: PredictionContext, b: PredictionContext): boolean {
+		public equals(a: PredictionContext, b: PredictionContext): boolean {
 			return a === b;
 		}
 	}

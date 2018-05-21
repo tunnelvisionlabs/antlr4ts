@@ -68,7 +68,7 @@ export class ParseTreePattern {
 	 * used to determine whether or not the match was successful.
 	 */
 	@NotNull
-	match(@NotNull tree: ParseTree): ParseTreeMatch {
+	public match(@NotNull tree: ParseTree): ParseTreeMatch {
 		return this._matcher.match(tree, this);
 	}
 
@@ -79,7 +79,7 @@ export class ParseTreePattern {
 	 * @return {@code true} if {@code tree} is a match for the current tree
 	 * pattern; otherwise, {@code false}.
 	 */
-	matches(@NotNull tree: ParseTree): boolean {
+	public matches(@NotNull tree: ParseTree): boolean {
 		return this._matcher.match(tree, this).succeeded;
 	}
 
@@ -95,7 +95,7 @@ export class ParseTreePattern {
 	 * regardless of the reason for the failure.
 	 */
 	@NotNull
-	findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
+	public findAll(@NotNull tree: ParseTree, @NotNull xpath: string): ParseTreeMatch[] {
 		let subtrees: ParseTree[] = XPath.findAll(tree, xpath, this._matcher.parser);
 		let matches: ParseTreeMatch[] = [];
 		for (let t of subtrees) {

@@ -5,17 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.3060135-07:00
 
-import { ATNState } from './ATNState';
-import { IntervalSet } from '../misc/IntervalSet';
-import { Override, NotNull, Nullable } from '../Decorators';
-import { Token } from '../Token';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+import { ATNState } from "./ATNState";
+import { IntervalSet } from "../misc/IntervalSet";
+import { Override, NotNull, Nullable } from "../Decorators";
+import { Token } from "../Token";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
 
 /** A transition containing a set of values. */
 export class SetTransition extends Transition {
 	@NotNull
-	set: IntervalSet;
+	public set: IntervalSet;
 
 	// TODO (sam): should we really allow null here?
 	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
@@ -39,13 +39,13 @@ export class SetTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return this.set.contains(symbol);
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return this.set.toString();
 	}
 }

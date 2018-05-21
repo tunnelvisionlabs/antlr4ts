@@ -21,7 +21,7 @@ export class XPathRuleAnywhereElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): ParseTree[] {
 		return Trees.findAllRuleNodes(t, this.ruleIndex);
 	}
 }

@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.6283213-07:00
 
-import { ATNState } from './ATNState';
-import { Override, NotNull } from '../Decorators';
-import { Transition } from './Transition';
-import { TransitionType } from './TransitionType';
+import { ATNState } from "./ATNState";
+import { Override, NotNull } from "../Decorators";
+import { Transition } from "./Transition";
+import { TransitionType } from "./TransitionType";
 
 export class EpsilonTransition extends Transition {
 
@@ -42,13 +42,13 @@ export class EpsilonTransition extends Transition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
 	@Override
 	@NotNull
-	toString(): string {
+	public toString(): string {
 		return "epsilon";
 	}
 }

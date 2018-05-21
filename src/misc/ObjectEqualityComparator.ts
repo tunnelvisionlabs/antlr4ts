@@ -4,9 +4,9 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
-import { EqualityComparator } from './EqualityComparator';
-import { Override } from '../Decorators';
-import { Equatable } from './Stubs';
+import { EqualityComparator } from "./EqualityComparator";
+import { Override } from "../Decorators";
+import { Equatable } from "./Stubs";
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -15,7 +15,7 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 export class ObjectEqualityComparator implements EqualityComparator<Equatable | null | undefined> {
-	static readonly INSTANCE: ObjectEqualityComparator = new ObjectEqualityComparator();
+	public static readonly INSTANCE: ObjectEqualityComparator = new ObjectEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
@@ -24,7 +24,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable | 
 	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
 	 */
 	@Override
-	hashCode(obj: Equatable | null | undefined): number {
+	public hashCode(obj: Equatable | null | undefined): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -42,7 +42,7 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable | 
 	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
 	 */
 	@Override
-	equals(a: Equatable | null | undefined, b: Equatable | null | undefined): boolean {
+	public equals(a: Equatable | null | undefined, b: Equatable | null | undefined): boolean {
 		if (a == null) {
 			return b == null;
 		}

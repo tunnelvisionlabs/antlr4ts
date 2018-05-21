@@ -40,18 +40,17 @@ export namespace Arrays {
 		return -(low + 1);
 	}
 
-	export function toString<T>(array: ArrayLike<T>) {
+	export function toString<T>(array: Iterable<T>) {
 		let result = "[";
 
 		let first = true;
-		for (let i = 0; i < array.length; i++) {
+		for (let element of array) {
 			if (first) {
 				first = false;
 			} else {
 				result += ", ";
 			}
 
-			let element = array[i];
 			if (element === null) {
 				result += "null";
 			} else if (element === undefined) {

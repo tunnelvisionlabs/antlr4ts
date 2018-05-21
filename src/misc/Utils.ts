@@ -12,7 +12,7 @@
 import { NotNull } from "../Decorators";
 
 export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
-	return escapeSpaces ? s.replace(/ /, '\u00B7') : s
+	return escapeSpaces ? s.replace(/ /, "\u00B7") : s
 		.replace(/\t/, "\\t")
 		.replace(/\n/, "\\n")
 		.replace(/\r/, "\\r");

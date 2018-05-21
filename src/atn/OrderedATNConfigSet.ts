@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.9444556-07:00
 
-import { ATNConfig } from './ATNConfig';
-import { ATNConfigSet } from './ATNConfigSet';
-import { Override } from '../Decorators';
+import { ATNConfig } from "./ATNConfig";
+import { ATNConfigSet } from "./ATNConfigSet";
+import { Override } from "../Decorators";
 
 /**
  *
@@ -26,7 +26,7 @@ export class OrderedATNConfigSet extends ATNConfigSet {
 	}
 
 	@Override
-	clone(readonly: boolean): ATNConfigSet {
+	public clone(readonly: boolean): ATNConfigSet {
 		let copy: OrderedATNConfigSet = new OrderedATNConfigSet(this, readonly);
 		if (!readonly && this.isReadOnly) {
 			copy.addAll(this);

@@ -5,32 +5,32 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.4445360-07:00
 
-import { AbstractPredicateTransition } from './AbstractPredicateTransition';
-import { Array2DHashSet } from '../misc/Array2DHashSet';
-import { ATN } from './ATN';
-import { ATNConfig } from './ATNConfig';
-import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { IntervalSet } from '../misc/IntervalSet';
-import { NotNull } from '../Decorators';
-import { NotSetTransition } from './NotSetTransition';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { PredictionContext } from './PredictionContext';
-import { RuleStopState } from './RuleStopState';
-import { RuleTransition } from './RuleTransition';
-import { SetTransition } from './SetTransition';
-import { Token } from '../Token';
-import { Transition } from './Transition';
-import { WildcardTransition } from './WildcardTransition';
+import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { ATN } from "./ATN";
+import { ATNConfig } from "./ATNConfig";
+import { ATNState } from "./ATNState";
+import { BitSet } from "../misc/BitSet";
+import { IntervalSet } from "../misc/IntervalSet";
+import { NotNull } from "../Decorators";
+import { NotSetTransition } from "./NotSetTransition";
+import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
+import { PredictionContext } from "./PredictionContext";
+import { RuleStopState } from "./RuleStopState";
+import { RuleTransition } from "./RuleTransition";
+import { SetTransition } from "./SetTransition";
+import { Token } from "../Token";
+import { Transition } from "./Transition";
+import { WildcardTransition } from "./WildcardTransition";
 
 export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit
 	 *  a predicate during analysis if {@code seeThruPreds==false}.
 	 */
-	static readonly HIT_PRED: number = Token.INVALID_TYPE;
+	public static readonly HIT_PRED: number = Token.INVALID_TYPE;
 
 	@NotNull
-	atn: ATN;
+	public atn: ATN;
 
 	constructor(@NotNull atn: ATN) { this.atn = atn; }
 
@@ -44,13 +44,13 @@ export class LL1Analyzer {
 	 * @param s the ATN state
 	 * @return the expected symbols for each outgoing transition of {@code s}.
 	 */
-	getDecisionLookahead(s: ATNState | undefined): (IntervalSet | undefined)[] | undefined {
+	public getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
 		if (s == null) {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
+		let look: Array<IntervalSet | undefined> = new Array<IntervalSet>(s.numberOfTransitions);
 		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
@@ -85,7 +85,7 @@ export class LL1Analyzer {
 	 * specified {@code ctx}.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
 	/**
 	 * Compute set of tokens that can follow {@code s} in the ATN in the
@@ -106,10 +106,10 @@ export class LL1Analyzer {
 	 * specified {@code ctx}.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
 
 	@NotNull
-	LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
+	public LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
 		if (stopState === undefined) {
 			if (s.atn == null) {
 				throw new Error("Illegal state");
@@ -160,7 +160,8 @@ export class LL1Analyzer {
 	 * outermost context is reached. This parameter has no effect if {@code ctx}
 	 * is {@link PredictionContext#EMPTY_LOCAL}.
 	 */
-	protected _LOOK(@NotNull s: ATNState,
+	protected _LOOK(
+		@NotNull s: ATNState,
 		stopState: ATNState | undefined,
 		@NotNull ctx: PredictionContext,
 		@NotNull look: IntervalSet,
@@ -170,7 +171,9 @@ export class LL1Analyzer {
 		addEOF: boolean): void {
 //		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
 		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
-		if (!lookBusy.add(c)) return;
+		if (!lookBusy.add(c)) {
+			return;
+		}
 
 		if (s === stopState) {
 			if (PredictionContext.isEmptyLocal(ctx)) {
@@ -248,7 +251,7 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				t = <Transition>t;
+				t = t as Transition;
 				let set: IntervalSet | undefined = t.label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {

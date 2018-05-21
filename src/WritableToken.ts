@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:59.7015751-07:00
 
-import { Token } from './Token';
+import { Token } from "./Token";
 
 export interface WritableToken extends Token {
 	text: string | undefined;
