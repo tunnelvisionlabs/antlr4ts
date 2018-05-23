@@ -29,7 +29,6 @@ import { ParserErrorListener } from "./ParserErrorListener";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
 import { ParseTreePattern } from "./tree/pattern/ParseTreePattern";
-// import { ParseTreePatternMatcher } from "./tree/pattern/ParseTreePatternMatcher";
 import { ProxyParserErrorListener } from "./ProxyParserErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
@@ -417,22 +416,22 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * The preferred method of getting a tree pattern. For example, here's a
 	 * sample use:
 	 *
-	 * <pre>
-	 * ParseTree t = parser.expr();
-	 * ParseTreePattern p = parser.compileParseTreePattern("&lt;ID&gt;+0", MyParser.RULE_expr);
-	 * ParseTreeMatch m = p.match(t);
-	 * String id = m.get("ID");
-	 * </pre>
+	 * ```
+	 * let t: ParseTree = parser.expr();
+	 * let p: ParseTreePattern = await parser.compileParseTreePattern("<ID>+0", MyParser.RULE_expr);
+	 * let m: ParseTreeMatch = p.match(t);
+	 * let id: string = m.get("ID");
+	 * ```
 	 */
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number): ParseTreePattern;
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number): Promise<ParseTreePattern>;
 
 	/**
 	 * The same as {@link #compileParseTreePattern(String, int)} but specify a
 	 * {@link Lexer} rather than trying to deduce it from this parser.
 	 */
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern;
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern>;
 
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern {
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern> {
 		if (!lexer) {
 			if (this.inputStream) {
 				let tokenSource = this.inputStream.tokenSource;
@@ -446,9 +445,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			}
 		}
 
-		throw new Error("Not implemented");
-		// let m: ParseTreePatternMatcher =  new ParseTreePatternMatcher(lexer, this);
-		// return m.compile(pattern, patternRuleIndex);
+		let currentLexer = lexer;
+		return import("./tree/pattern/ParseTreePatternMatcher").then((m) => {
+			let matcher = new m.ParseTreePatternMatcher(currentLexer, this);
+			return matcher.compile(pattern, patternRuleIndex);
+		});
 	}
 
 	@NotNull
