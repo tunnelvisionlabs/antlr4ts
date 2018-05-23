@@ -4,6 +4,7 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
+
 import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { CommonTokenStream } from "../../CommonTokenStream";
 import { Lexer } from "../../Lexer";
@@ -27,44 +28,38 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
  * parse trees.
  *
- * <p>
- * Split path into words and separators {@code /} and {@code //} via ANTLR
+ * Split path into words and separators `/` and `//` via ANTLR
  * itself then walk path elements from left to right. At each separator-word
- * pair, find set of nodes. Next stage uses those as work list.</p>
+ * pair, find set of nodes. Next stage uses those as work list.
  *
- * <p>
  * The basic interface is
- * {@link XPath#findAll ParseTree.findAll}{@code (tree, pathString, parser)}.
- * But that is just shorthand for:</p>
+ * {@link XPath#findAll ParseTree.findAll}`(tree, pathString, parser)`.
+ * But that is just shorthand for:
  *
- * <pre>
- * {@link XPath} p = new {@link XPath#XPath XPath}(parser, pathString);
- * return p.{@link #evaluate evaluate}(tree);
- * </pre>
+ * ```
+ * let p = new XPath(parser, pathString);
+ * return p.evaluate(tree);
+ * ```
  *
- * <p>
- * See {@code org.antlr.v4.test.TestXPath} for descriptions. In short, this
- * allows operators:</p>
+ * See `TestXPath` for descriptions. In short, this
+ * allows operators:
  *
- * <dl>
- * <dt>/</dt> <dd>root</dd>
- * <dt>//</dt> <dd>anywhere</dd>
- * <dt>!</dt> <dd>invert; this must appear directly after root or anywhere
- * operator</dd>
- * </dl>
+ * | | |
+ * | --- | --- |
+ * | `/` | root |
+ * | `//` | anywhere |
+ * | `!` | invert; this much appear directly after root or anywhere operator |
  *
- * <p>
- * and path elements:</p>
+ * and path elements:
  *
- * <dl>
- * <dt>ID</dt> <dd>token name</dd>
- * <dt>'string'</dt> <dd>any string literal token from the grammar</dd>
- * <dt>expr</dt> <dd>rule name</dd>
- * <dt>*</dt> <dd>wildcard matching any node</dd>
- * </dl>
+ * | | |
+ * | --- | --- |
+ * | `ID` | token name |
+ * | `'string'` | any string literal token from the grammar |
+ * | `expr` | rule name |
+ * | `*` | wildcard matching any node |
  *
- * <p>
- * Whitespace is not allowed.</p>
+ * Whitespace is not allowed.
  */
 export class XPath {
 	public static readonly WILDCARD: string = "*"; // word not operator/separator
@@ -78,7 +73,7 @@ export class XPath {
 		this.parser = parser;
 		this.path = path;
 		this.elements = this.split(path);
-//		System.out.println(Arrays.toString(elements));
+		// console.log(this.elements.toString());
 	}
 
 	// TODO: check for invalid token/rule names, bad syntax
@@ -104,7 +99,7 @@ export class XPath {
 		}
 
 		let tokens: Token[] = tokenStream.getTokens();
-//		System.out.println("path="+path+"=>"+tokens);
+		// console.log("path=" + path + "=>" + tokens);
 		let elements: XPathElement[] = [];
 		let n: number = tokens.length;
 		let i: number = 0;
@@ -147,8 +142,8 @@ export class XPath {
 	}
 
 	/**
-	 * Convert word like {@code *} or {@code ID} or {@code expr} to a path
-	 * element. {@code anywhere} is {@code true} if {@code //} precedes the
+	 * Convert word like `*` or `ID` or `expr` to a path
+	 * element. `anywhere` is `true` if `//` precedes the
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
@@ -196,9 +191,8 @@ export class XPath {
 	}
 
 	/**
-	 * Return a list of all nodes starting at {@code t} as root that satisfy the
-	 * path. The root {@code /} is relative to the node passed to
-	 * {@link #evaluate}.
+	 * Return a list of all nodes starting at `t` as root that satisfy the
+	 * path. The root `/` is relative to the node passed to {@link evaluate}.
 	 */
 	public evaluate(t: ParseTree): Set<ParseTree> {
 		let dummyRoot = new ParserRuleContext();
