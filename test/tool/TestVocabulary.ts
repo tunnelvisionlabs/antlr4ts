@@ -3,50 +3,24 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-// ConvertTo-TS run at 2016-10-04T11:27:38.7623397-07:00
+import { Token } from "../../src/Token";
+import { Vocabulary } from "../../src/Vocabulary";
+import { VocabularyImpl } from "../../src/VocabularyImpl";
 
-// import org.junit.Assert;
-// import org.junit.Test;
+import * as assert from "assert";
+import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
 /**
  *
  * @author Sam Harwell
  */
-export class TestVocabulary extends BaseTest {
+@suite
+export class TestVocabulary {
 
-	@Test
-	testEmptyVocabulary(): void {
-		Assert.assertNotNull(VocabularyImpl.EMPTY_VOCABULARY);
-		Assert.assertEquals("EOF", VocabularyImpl.EMPTY_VOCABULARY.getSymbolicName(Token.EOF));
-		Assert.assertEquals("0", VocabularyImpl.EMPTY_VOCABULARY.getDisplayName(Token.INVALID_TYPE));
-	}
-
-	@Test
-	testVocabularyFromTokenNames(): void {
-		let tokenNames: string[] =  {
-			"<INVALID>",
-			"TOKEN_REF", "RULE_REF", "'//'", "'/'", "'*'", "'!'", "ID", "STRING"
-		};
-
-		let vocabulary: Vocabulary =  VocabularyImpl.fromTokenNames(tokenNames);
-		Assert.assertNotNull(vocabulary);
-		Assert.assertEquals("EOF", vocabulary.getSymbolicName(Token.EOF));
-		for (let i = 0; i < tokenNames.length; i++) {
-			Assert.assertEquals(tokenNames[i], vocabulary.getDisplayName(i));
-
-			if (tokenNames[i].startsWith("'")) {
-				Assert.assertEquals(tokenNames[i], vocabulary.getLiteralName(i));
-				Assert.assertNull(vocabulary.getSymbolicName(i));
-			}
-			else if (Character.isUpperCase(tokenNames[i].charAt(0))) {
-				Assert.assertNull(vocabulary.getLiteralName(i));
-				Assert.assertEquals(tokenNames[i], vocabulary.getSymbolicName(i));
-			}
-			else {
-				Assert.assertNull(vocabulary.getLiteralName(i));
-				Assert.assertNull(vocabulary.getSymbolicName(i));
-			}
-		}
+	@Test public testEmptyVocabulary(): void {
+		assert.notStrictEqual(VocabularyImpl.EMPTY_VOCABULARY, undefined);
+		assert.strictEqual("EOF", VocabularyImpl.EMPTY_VOCABULARY.getSymbolicName(Token.EOF));
+		assert.strictEqual("0", VocabularyImpl.EMPTY_VOCABULARY.getDisplayName(Token.INVALID_TYPE));
 	}
 
 }
