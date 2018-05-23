@@ -30,7 +30,7 @@ import { ParserRuleContext } from "./ParserRuleContext";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
 import { ParseTreePattern } from "./tree/pattern/ParseTreePattern";
 // import { ParseTreePatternMatcher } from "./tree/pattern/ParseTreePatternMatcher";
-// import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
+import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
 import { ProxyParserErrorListener } from "./ProxyParserErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
@@ -855,29 +855,28 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	@Override
 	get parseInfo(): ParseInfo | undefined {
-		throw new Error("Not implemented");
-		// let interp: ParserATNSimulator = this.interpreter;
-		// if (interp instanceof ProfilingATNSimulator) {
-		// 	return new ParseInfo(interp);
-		// }
-		// return undefined;
+		let interp: ParserATNSimulator = this.interpreter;
+		if (interp instanceof ProfilingATNSimulator) {
+			return new ParseInfo(interp);
+		}
+
+		return undefined;
 	}
 
 	/**
 	 * @since 4.3
 	 */
 	public setProfile(profile: boolean): void {
-		throw new Error("Not implemented");
-		// let interp: ParserATNSimulator = this.interpreter;
-		// if ( profile ) {
-		// 	if (!(interp instanceof ProfilingATNSimulator)) {
-		// 		this.interpreter = new ProfilingATNSimulator(this);
-		// 	}
-		// }
-		// else if (interp instanceof ProfilingATNSimulator) {
-		// 	this.interpreter = new ParserATNSimulator(this.atn, this);
-		// }
-		// this.interpreter.setPredictionMode(interp.getPredictionMode());
+		let interp: ParserATNSimulator = this.interpreter;
+		if (profile) {
+			if (!(interp instanceof ProfilingATNSimulator)) {
+				this.interpreter = new ProfilingATNSimulator(this);
+			}
+		} else if (interp instanceof ProfilingATNSimulator) {
+			this.interpreter = new ParserATNSimulator(this.atn, this);
+		}
+
+		this.interpreter.setPredictionMode(interp.getPredictionMode());
 	}
 
 	/** During a parse is sometimes useful to listen in on the rule entry and exit
