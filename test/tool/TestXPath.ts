@@ -5,54 +5,33 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:38.8508887-07:00
 
-// import org.junit.Test;
+import { ANTLRInputStream } from "../../src/ANTLRInputStream";
+import { CharStream } from "../../src/CharStream";
+import { CommonTokenStream } from "../../src/CommonTokenStream";
+import { Lexer } from "../../src/Lexer";
+import { Parser } from "../../src/Parser";
+import { ParseTree } from "../../src/tree/ParseTree";
+import { RuleContext } from "../../src/RuleContext";
+import { TerminalNode } from "../../src/tree";
+import { TokenStream } from "../../src/TokenStream";
+import { XPath } from "../../src/tree/xpath/XPath";
 
-// import static org.junit.Assert.assertEquals;
-// import static org.junit.Assert.assertNotNull;
-// import static org.junit.Assert.assertTrue;
+import { TestXPathLexer } from "./gen/xpath/TestXPathLexer";
+import { TestXPathParser } from "./gen/xpath/TestXPathParser";
 
-export class TestXPath extends BaseTest {
-	static grammar: string = 
-		"grammar Expr;\n" +
-		"prog:   func+ ;\n" +
-		"func:  'def' ID '(' arg (',' arg)* ')' body ;\n" +
-		"body:  '{' stat+ '}' ;\n" +
-		"arg :  ID ;\n" +
-		"stat:   expr ';'                 # printExpr\n" +
-		"    |   ID '=' expr ';'          # assign\n" +
-		"    |   'return' expr ';'        # ret\n" +
-		"    |   ';'                      # blank\n" +
-		"    ;\n" +
-		"expr:   expr ('*'|'/') expr      # MulDiv\n" +
-		"    |   expr ('+'|'-') expr      # AddSub\n" +
-		"    |   primary                  # prim\n" +
-		"    ;\n" +
-		"primary" +
-		"    :   INT                      # int\n" +
-		"    |   ID                       # id\n" +
-		"    |   '(' expr ')'             # parens\n" +
-		"	 ;" +
-		"\n" +
-		"MUL :   '*' ; // assigns token name to '*' used above in grammar\n" +
-		"DIV :   '/' ;\n" +
-		"ADD :   '+' ;\n" +
-		"SUB :   '-' ;\n" +
-		"RETURN : 'return' ;\n" +
-		"ID  :   [a-zA-Z]+ ;      // match identifiers\n" +
-		"INT :   [0-9]+ ;         // match integers\n" +
-		"NEWLINE:'\\r'? '\\n' -> skip;     // return newlines to parser (is end-statement signal)\n" +
-		"WS  :   [ \\t]+ -> skip ; // toss out whitespace\n";
-	static SAMPLE_PROGRAM: string = 
-			"def f(x,y) { x = 3+4; y; ; }\n" +
-			"def g(x) { return 1+2*x; }\n";
+import * as assert from "assert";
+import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
-	@Test testValidPaths(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
 
-		String xpath[] = {
+const SAMPLE_PROGRAM: string =
+	"def f(x,y) { x = 3+4; y; ; }\n" +
+	"def g(x) { return 1+2*x; }\n";
+
+@suite
+export class TestXPath {
+
+	@Test public testValidPaths(): void {
+		let xpath: string[] = [
 			"/prog/func",		// all funcs under prog at root
 			"/prog/*",			// all children of prog at root
 			"/*/func",			// all func kids of any root node
@@ -61,7 +40,7 @@ export class TestXPath extends BaseTest {
 			"/*",				// any root
 			"*",				// any root
 			"//ID",				// any ID in tree
-			"//expr/primary/ID",// any ID child of a primary under any expr
+			"//expr/primary/ID", // any ID child of a primary under any expr
 			"//body//ID",		// any ID under a body
 			"//'return'",		// any 'return' literal in tree, matched by literal name
 			"//RETURN",			// any 'return' literal in tree, matched by symbolic name
@@ -74,150 +53,113 @@ export class TestXPath extends BaseTest {
 			"//!*",				// nothing anywhere
 			"/!*",				// nothing at root
 			"//expr//ID",		// any ID under any expression (tests antlr/antlr4#370)
-		};
-		String expected[] = {
-			"[func, func]",
-			"[func, func]",
-			"[func, func]",
-			"[prog]",
-			"[prog]",
-			"[prog]",
-			"[prog]",
-			"[f, x, y, x, y, g, x, x]",
-			"[y, x]",
-			"[x, y, x]",
-			"[return]",
-			"[return]",
-			"[3, 4, y, 1, 2, x]",
-			"[stat, stat, stat, stat]",
-			"[def, def]",
-			"[;, ;, ;, ;]",
-			"[3, 4, 1, 2]",
-			"[expr, expr, expr, expr, expr, expr]",
-			"[]",
-			"[]",
-			"[y, x]",
-		};
+		];
+		let expected: string[] = [
+			"func,func",
+			"func,func",
+			"func,func",
+			"prog",
+			"prog",
+			"prog",
+			"prog",
+			"f,x,y,x,y,g,x,x",
+			"y,x",
+			"x,y,x",
+			"return",
+			"return",
+			"3,4,y,1,2,x",
+			"stat,stat,stat,stat",
+			"def,def",
+			";,;,;,;",
+			"3,4,1,2",
+			"expr,expr,expr,expr,expr,expr",
+			"",
+			"",
+			"y,x",
+		];
 
-		for (let i=0; i<xpath.length; i++) {
-			let nodes: List<string> =  getNodeStrings(SAMPLE_PROGRAM, xpath[i], "prog", "ExprParser", "ExprLexer");
-			let result: string =  nodes.toString();
-			assertEquals("path "+xpath[i]+" failed", expected[i], result);
+		for (let i = 0; i < xpath.length; i++) {
+			let nodes: string[] = this.getNodeStrings(SAMPLE_PROGRAM, xpath[i], (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+			let result: string = nodes.toString();
+			assert.strictEqual(result, expected[i], "path " + xpath[i] + " failed");
 		}
 	}
 
-	@Test testWeirdChar(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testWeirdChar(): void {
+		let path: string = "&";
+		let expected: string = "Invalid tokens or characters at index 0 in path '&'";
 
-		let path: string =  "&";
-		let expected: string =  "Invalid tokens or characters at index 0 in path '&'";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	@Test testWeirdChar2(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testWeirdChar2(): void {
+		let path: string = "//w&e/";
+		let expected: string = "Invalid tokens or characters at index 3 in path '//w&e/'";
 
-		let path: string =  "//w&e/";
-		let expected: string =  "Invalid tokens or characters at index 3 in path '//w&e/'";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	@Test testBadSyntax(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testBadSyntax(): void {
+		let path: string = "///";
+		let expected: string = "/ at index 2 isn't a valid rule name";
 
-		let path: string =  "///";
-		let expected: string =  "/ at index 2 isn't a valid rule name";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	@Test testMissingWordAtEnd(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testMissingWordAtEnd(): void {
+		let path: string = "//";
+		let expected: string = "Missing path element at end of path";
 
-		let path: string =  "//";
-		let expected: string =  "Missing path element at end of path";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	@Test testBadTokenName(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testBadTokenName(): void {
+		let path: string = "//Ick";
+		let expected: string = "Ick at index 2 isn't a valid token name";
 
-		let path: string =  "//Ick";
-		let expected: string =  "Ick at index 2 isn't a valid token name";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	@Test testBadRuleName(): void {
-		let ok: boolean = 
-			rawGenerateAndBuildRecognizer("Expr.g4", grammar, "ExprParser",
-										  "ExprLexer", false);
-		assertTrue(ok);
+	@Test public testBadRuleName(): void {
+		let path: string = "/prog/ick";
+		let expected: string = "ick at index 6 isn't a valid rule name";
 
-		let path: string =  "/prog/ick";
-		let expected: string =  "ick at index 6 isn't a valid rule name";
-
-		testError(SAMPLE_PROGRAM, path, expected, "prog", "ExprParser", "ExprLexer");
+		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
-	protected testError(input: string, path: string, expected: string, 
-							 startRuleName: string,
-							 parserName: string, lexerName: string): void
+	protected testError<TParser extends Parser>(
+		input: string, path: string, expected: string,
+		startRule: (parser: TParser) => ParseTree,
+		lexerCtor: {new(stream: CharStream): Lexer},
+		parserCtor: {new(stream: TokenStream): TParser}): void {
 
-	{
-		let pl: Tuple2<Parser, Lexer> =  getParserAndLexer(input, parserName, lexerName);
-		let parser: Parser =  pl.getItem1();
-		let tree: ParseTree =  execStartRule(startRuleName, parser);
+		let lexer = new lexerCtor(new ANTLRInputStream(input));
+		let parser = new parserCtor(new CommonTokenStream(lexer));
+		let tree: ParseTree = startRule(parser);
 
-		let e: IllegalArgumentException =  null;
-		try {
-			XPath.findAll(tree, path, parser);
-		}
-		catch (IllegalArgumentException iae) {
-			e = iae;
-		}
-		assertNotNull(e);
-		assertEquals(expected, e.getMessage());
+		assert.throws(() => XPath.findAll(tree, path, parser), expected);
 	}
 
-	getNodeStrings(input: string, xpath: string, 
-									   startRuleName: string,
-									   parserName: string, lexerName: string): List<string>
+	private getNodeStrings<TParser extends Parser>(
+		input: string, xpath: string,
+		startRule: (parser: TParser) => ParseTree,
+		lexerCtor: {new(stream: CharStream): Lexer},
+		parserCtor: {new(stream: TokenStream): TParser}): string[] {
 
-	{
-		let pl: Tuple2<Parser, Lexer> =  getParserAndLexer(input, parserName, lexerName);
-		let parser: Parser =  pl.getItem1();
-		let tree: ParseTree =  execStartRule(startRuleName, parser);
+		let lexer = new lexerCtor(new ANTLRInputStream(input));
+		let parser = new parserCtor(new CommonTokenStream(lexer));
+		let tree: ParseTree = startRule(parser);
 
-		let nodes: List<string> =  new ArrayList<String>();
+		let nodes: string[] = [];
 		for (let t of XPath.findAll(tree, xpath, parser) ) {
-			if ( t instanceof RuleContext) {
-				let r: RuleContext =  (RuleContext)t;
-				nodes.add(parser.ruleNames[r.ruleIndex]);
-			}
-			else {
-				let token: TerminalNode =  (TerminalNode)t;
-				nodes.add(token.text);
+			if (t instanceof RuleContext) {
+				nodes.push(parser.ruleNames[t.ruleIndex]);
+			} else {
+				let token: TerminalNode = t as TerminalNode;
+				nodes.push(token.text);
 			}
 		}
+
 		return nodes;
 	}
 }

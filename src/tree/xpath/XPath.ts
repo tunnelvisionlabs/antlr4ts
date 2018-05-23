@@ -190,7 +190,7 @@ export class XPath {
 		}
 	}
 
-	public static findAll(tree: ParseTree, xpath: string, parser: Parser): ParseTree[] {
+	public static findAll(tree: ParseTree, xpath: string, parser: Parser): Set<ParseTree> {
 		let p: XPath = new XPath(parser, xpath);
 		return p.evaluate(tree);
 	}
@@ -200,22 +200,22 @@ export class XPath {
 	 * path. The root {@code /} is relative to the node passed to
 	 * {@link #evaluate}.
 	 */
-	public evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): Set<ParseTree> {
 		let dummyRoot = new ParserRuleContext();
 		dummyRoot.addChild(t as ParserRuleContext);
 
-		let work = [dummyRoot] as ParseTree[];
+		let work = new Set<ParseTree>([dummyRoot]);
 
 		let i: number = 0;
 		while (i < this.elements.length) {
-			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
+			let next = new Set<ParseTree>();
 			for (let node of work) {
 				if (node.childCount > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.
 					let matching = this.elements[i].evaluate(node);
-					next = next.concat(matching);
+					matching.forEach(next.add, next);
 				}
 			}
 			i++;
