@@ -135,53 +135,60 @@ export class TestParseTreeMatcher {
 		let input: string = "x ;";
 		let pattern: string = "<id:ID>;";
 		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX5Parser.RULE_s, input, pattern, ParseTreeMatcherX5Lexer, ParseTreeMatcherX5Parser);
-		assert.strictEqual(m.labels.toString(), "{ID=[x], id=[x]}");
+		assert.strictEqual([...m.labels.keys()].toString(), "ID,id");
+		assert.strictEqual(m.labels.get("ID")!.toString(), "x");
+		assert.strictEqual(m.labels.get("id")!.toString(), "x");
 		assert.notStrictEqual(m.get("id"), undefined);
 		assert.notStrictEqual(m.get("ID"), undefined);
 		assert.strictEqual(m.get("id")!.text, "x");
 		assert.strictEqual(m.get("ID")!.text, "x");
-		assert.strictEqual(m.getAll("id").toString(), "[x]");
-		assert.strictEqual(m.getAll("ID").toString(), "[x]");
+		assert.strictEqual(m.getAll("id").toString(), "x");
+		assert.strictEqual(m.getAll("ID").toString(), "x");
 
 		assert.strictEqual(m.get("undefined"), undefined);
-		assert.strictEqual(m.getAll("undefined").toString(), "[]");
+		assert.strictEqual(m.getAll("undefined").toString(), "");
 	}
 
 	@Test public async testLabelGetsLastIDNode(): Promise<void> {
 		let input: string = "x y;";
 		let pattern: string = "<id:ID> <id:ID>;";
 		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX6Parser.RULE_s, input, pattern, ParseTreeMatcherX6Lexer, ParseTreeMatcherX6Parser);
-		assert.strictEqual(m.labels.toString(), "{ID=[x, y], id=[x, y]}");
+		assert.strictEqual([...m.labels.keys()].toString(), "ID,id");
+		assert.strictEqual(m.labels.get("ID")!.toString(), "x,y");
+		assert.strictEqual(m.labels.get("id")!.toString(), "x,y");
 		assert.notStrictEqual(m.get("id"), undefined);
 		assert.notStrictEqual(m.get("ID"), undefined);
 		assert.strictEqual(m.get("id")!.text, "y");
 		assert.strictEqual(m.get("ID")!.text, "y");
-		assert.strictEqual(m.getAll("id").toString(), "[x, y]");
-		assert.strictEqual(m.getAll("ID").toString(), "[x, y]");
+		assert.strictEqual(m.getAll("id").toString(), "x,y");
+		assert.strictEqual(m.getAll("ID").toString(), "x,y");
 
 		assert.strictEqual(m.get("undefined"), undefined);
-		assert.strictEqual(m.getAll("undefined").toString(), "[]");
+		assert.strictEqual(m.getAll("undefined").toString(), "");
 	}
 
 	@Test public async testIDNodeWithMultipleLabelMatches(): Promise<void> {
 		let input: string = "x y z;";
 		let pattern: string = "<a:ID> <b:ID> <a:ID>;";
 		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX7Parser.RULE_s, input, pattern, ParseTreeMatcherX7Lexer, ParseTreeMatcherX7Parser);
-		assert.strictEqual(m.labels.toString(), "{ID=[x, y, z], a=[x, z], b=[y]}");
+		assert.strictEqual([...m.labels.keys()].toString(), "ID,a,b");
+		assert.strictEqual(m.labels.get("ID")!.toString(), "x,y,z");
+		assert.strictEqual(m.labels.get("a")!.toString(), "x,z");
+		assert.strictEqual(m.labels.get("b")!.toString(), "y");
 		assert.notStrictEqual(m.get("a"), undefined); // get first
 		assert.notStrictEqual(m.get("b"), undefined);
 		assert.notStrictEqual(m.get("ID"), undefined);
 		assert.strictEqual(m.get("a")!.text, "z");
 		assert.strictEqual(m.get("b")!.text, "y");
 		assert.strictEqual(m.get("ID")!.text, "z"); // get last
-		assert.strictEqual(m.getAll("a").toString(), "[x, z]");
-		assert.strictEqual(m.getAll("b").toString(), "[y]");
-		assert.strictEqual(m.getAll("ID").toString(), "[x, y, z]"); // ordered
+		assert.strictEqual(m.getAll("a").toString(), "x,z");
+		assert.strictEqual(m.getAll("b").toString(), "y");
+		assert.strictEqual(m.getAll("ID").toString(), "x,y,z"); // ordered
 
 		assert.strictEqual(m.tree.text, "xyz;"); // whitespace stripped by lexer
 
 		assert.strictEqual(m.get("undefined"), undefined);
-		assert.strictEqual(m.getAll("undefined").toString(), "[]");
+		assert.strictEqual(m.getAll("undefined").toString(), "");
 	}
 
 	@Test public async testTokenAndRuleMatch(): Promise<void> {
