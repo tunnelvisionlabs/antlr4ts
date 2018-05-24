@@ -431,7 +431,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 */
 	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern>;
 
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern> {
+	public async compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern> {
 		if (!lexer) {
 			if (this.inputStream) {
 				let tokenSource = this.inputStream.tokenSource;
@@ -446,10 +446,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		let currentLexer = lexer;
-		return import("./tree/pattern/ParseTreePatternMatcher").then((m) => {
-			let matcher = new m.ParseTreePatternMatcher(currentLexer, this);
-			return matcher.compile(pattern, patternRuleIndex);
-		});
+		let m = await import("./tree/pattern/ParseTreePatternMatcher");
+		let matcher = new m.ParseTreePatternMatcher(currentLexer, this);
+		return matcher.compile(pattern, patternRuleIndex);
 	}
 
 	@NotNull
@@ -868,19 +867,18 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * @since 4.3
 	 */
-	public setProfile(profile: boolean): Promise<void> {
-		return import("./atn/ProfilingATNSimulator").then((m) => {
-			let interp: ParserATNSimulator = this.interpreter;
-			if (profile) {
-				if (!(interp instanceof m.ProfilingATNSimulator)) {
-					this.interpreter = new m.ProfilingATNSimulator(this);
-				}
-			} else if (interp instanceof m.ProfilingATNSimulator) {
-				this.interpreter = new ParserATNSimulator(this.atn, this);
+	public async setProfile(profile: boolean): Promise<void> {
+		let m = await import("./atn/ProfilingATNSimulator");
+		let interp: ParserATNSimulator = this.interpreter;
+		if (profile) {
+			if (!(interp instanceof m.ProfilingATNSimulator)) {
+				this.interpreter = new m.ProfilingATNSimulator(this);
 			}
+		} else if (interp instanceof m.ProfilingATNSimulator) {
+			this.interpreter = new ParserATNSimulator(this.atn, this);
+		}
 
-			this.interpreter.setPredictionMode(interp.getPredictionMode());
-		});
+		this.interpreter.setPredictionMode(interp.getPredictionMode());
 	}
 
 	/** During a parse is sometimes useful to listen in on the rule entry and exit
