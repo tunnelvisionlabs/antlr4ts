@@ -251,20 +251,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		yield* this.configs;
 	}
 
-	public toArray(): ATNConfig[];
-	public toArray(a?: ATNConfig[]): ATNConfig[];
-
 	@Override
-	public toArray(a?: ATNConfig[]): ATNConfig[] {
-		if (!a || a.length < this.configs.length) {
-			return this.configs;
-		}
-
-		for (let i = 0; i < this.configs.length; i++) {
-			a[i] = this.configs[i];
-		}
-
-		return a;
+	public toArray(): ATNConfig[] {
+		return this.configs;
 	}
 
 	public add(e: ATNConfig): boolean;

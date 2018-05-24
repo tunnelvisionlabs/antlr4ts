@@ -218,12 +218,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	public toArray(a?: any[]): T[] {
-
-		// Check if the array argument was provided
-		if (!a || a.length < this.size) {
-			a = new Array<T>(this.size);
-		}
+	public toArray(): T[] {
+		const a = new Array<T>(this.size);
 
 		// Copy elements from the nested arrays into the destination array
 		let i: number = 0; // Position within destination array

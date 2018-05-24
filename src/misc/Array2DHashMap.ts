@@ -187,9 +187,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.size;
 	}
 
-	public toArray(): Array<JavaMap.Entry<K, V>>;
-	public toArray(a: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>>;
-	public toArray(a?: Array<JavaMap.Entry<K, V>>): Array<JavaMap.Entry<K, V>> {
+	public toArray(): Array<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 }
@@ -255,9 +253,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.size;
 	}
 
-	public toArray(): K[];
-	public toArray(a: K[]): K[];
-	public toArray(a?: K[]): K[] {
+	public toArray(): K[] {
 		throw new Error("Not implemented");
 	}
 }
@@ -331,12 +327,8 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.size;
 	}
 
-	public toArray(): V[];
-	public toArray(a: V[]): V[];
-	public toArray(a?: V[]): V[] {
-		if (a === undefined || a.length < this.backingStore.size) {
-			a = new Array<V>(this.backingStore.size);
-		}
+	public toArray(): V[] {
+		const a = new Array<V>(this.backingStore.size);
 
 		let i = 0;
 		for (let bucket of this.backingStore) {

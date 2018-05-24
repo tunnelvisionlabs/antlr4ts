@@ -370,12 +370,12 @@ export class TestIntervalSet {
 		assertEquals(expecting, result);
 	}
 
-	@Test public testToList(): void {
+	@Test public testToArray(): void {
 		let s: IntervalSet =  IntervalSet.of(20, 25);
 		s.add(50, 55);
 		s.add(5, 5);
 		let expecting: string =  "5,20,21,22,23,24,25,50,51,52,53,54,55";
-		let result: string =  String(s.toList());
+		let result: string =  String(s.toArray());
 		assertEquals(expecting, result);
 	}
 

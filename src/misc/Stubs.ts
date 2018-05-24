@@ -22,8 +22,7 @@ export interface JavaCollection<E> extends Iterable<E>, Equatable {
 	containsAll(collection: Iterable<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	readonly isEmpty: boolean;
 	readonly size: number;
-	toArray(): any[];                               // Shouldn't return type be restricted to E[]?
-	toArray(a: E[]): E[];
+	toArray(): E[];
 }
 
 export interface JavaSet<E> extends JavaCollection<E> {
@@ -36,8 +35,7 @@ export interface JavaSet<E> extends JavaCollection<E> {
 	// containsAll(collection: Iterable<any>)  // Shouldn't argument be restricted to E?
 	// readonly isEmpty: boolean;
 	// readonly size: number;
-	// toArray(): any[];                       // Shouldn't return type be restricted to E?
-	// toArray(a: E[]): E[];
+	// toArray(): E[];
 }
 
 export interface JavaMap<K, V> extends Equatable {
