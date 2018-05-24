@@ -158,8 +158,8 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 *
 	 * @since 4.3
 	 */
-	get parseInfo(): ParseInfo | undefined {
-		return undefined;
+	get parseInfo(): Promise<ParseInfo | undefined> {
+		return Promise.resolve(undefined);
 	}
 
 	/** What is the error header, normally line/character position information? */
