@@ -105,12 +105,6 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 		}
 	}
 
-	public remove(key: K): V | undefined {
-		let value = this.get(key);
-		this.backingStore.remove({ key });
-		return value;
-	}
-
 	get size(): number {
 		return this.backingStore.size;
 	}
@@ -189,23 +183,6 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	public remove(o: any): boolean {
-		throw new Error("Not implemented");
-	}
-
-	public removeAll(collection: Iterable<any>): boolean {
-		let removedAny = false;
-		for (let key of collection) {
-			removedAny = this.remove(key) || removedAny;
-		}
-
-		return removedAny;
-	}
-
-	public retainAll(collection: Iterable<any>): boolean {
-		throw new Error("Not implemented");
-	}
-
 	get size(): number {
 		return this.backingStore.size;
 	}
@@ -271,23 +248,6 @@ class KeySet<K, V> implements JavaSet<K> {
 	}
 
 	public [Symbol.iterator](): IterableIterator<K> {
-		throw new Error("Not implemented");
-	}
-
-	public remove(o: any): boolean {
-		return this.backingStore.remove({ key: o });
-	}
-
-	public removeAll(collection: Iterable<any>): boolean {
-		let removedAny = false;
-		for (let key of collection) {
-			removedAny = this.remove(key) || removedAny;
-		}
-
-		return removedAny;
-	}
-
-	public retainAll(collection: Iterable<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -365,23 +325,6 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		for (let bucket of this.backingStore) {
 			yield bucket.value!;
 		}
-	}
-
-	public remove(o: any): boolean {
-		throw new Error("Not implemented");
-	}
-
-	public removeAll(collection: Iterable<any>): boolean {
-		let removedAny = false;
-		for (let key of collection) {
-			removedAny = this.remove(key) || removedAny;
-		}
-
-		return removedAny;
-	}
-
-	public retainAll(collection: Iterable<any>): boolean {
-		throw new Error("Not implemented");
 	}
 
 	get size(): number {

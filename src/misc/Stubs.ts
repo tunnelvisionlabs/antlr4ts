@@ -14,18 +14,13 @@ export interface Comparable<T> {
 
 // This has been tweaked to fore implemenations to support either Java or JavaScript collections passed in...
 
-export interface JavaCollection<E> extends Iterable<E> {
+export interface JavaCollection<E> extends Iterable<E>, Equatable {
 	add(e: E): boolean;
 	addAll(collection: Iterable<E>): boolean;
 	clear(): void;
 	contains(o: any): boolean;                         // Shouldn't argument be restricted to E?
 	containsAll(collection: Iterable<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
-	equals(o: any): boolean;
-	hashCode(): number;
 	readonly isEmpty: boolean;
-	remove(o: any): boolean;                        // Shouldn't argument be restricted to E?
-	removeAll(collection: Iterable<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
-	retainAll(collection: Iterable<any>): boolean; // Shouldn't argument be restricted to Collection<E>?
 	readonly size: number;
 	toArray(): any[];                               // Shouldn't return type be restricted to E[]?
 	toArray(a: E[]): E[];
@@ -39,12 +34,7 @@ export interface JavaSet<E> extends JavaCollection<E> {
 	// clear(): void;
 	// contains(o:any): boolean;               // Shouldn't argument be restricted to E?
 	// containsAll(collection: Iterable<any>)  // Shouldn't argument be restricted to E?
-	// equals(o:any): boolean;
-	// hashCode(): number;
 	// readonly isEmpty: boolean;
-	// remove(o: any);                         // Shouldn't argument be restricted to E?
-	// removeAll(collection: Iterable<any>);   // Shouldn't argument be restricted to E?
-	// retainAll(collection: Iterable<any>);   // Shouldn't argument be restricted to E?
 	// readonly size: number;
 	// toArray(): any[];                       // Shouldn't return type be restricted to E?
 	// toArray(a: E[]): E[];
@@ -60,7 +50,6 @@ export interface JavaMap<K, V> extends Equatable {
 	keySet(): JavaSet<K>;
 	put(key: K, value: V): V | undefined;
 	putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void;
-	remove(key: K): V | undefined;
 	readonly size: number;
 	values(): JavaCollection<V>;
 }
