@@ -15,7 +15,6 @@ require("source-map-support").install();
 import { ANTLRErrorListener } from "../src/ANTLRErrorListener";
 import { ANTLRInputStream } from "../src/ANTLRInputStream";
 import { Array2DHashSet } from "../src/misc/Array2DHashSet";
-import { asIterable } from "../src/misc/Stubs";
 import { ATN } from "../src/atn/ATN";
 import { ATNConfig } from "../src/atn/ATNConfig";
 import { ATNConfigSet } from "../src/atn/ATNConfigSet";
@@ -985,7 +984,7 @@ export class TestPerformance {
 					}
 
 					states += dfa.states.size;
-					for (let state of asIterable<DFAState>(dfa.states)) {
+					for (let state of dfa.states) {
 						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -1002,7 +1001,7 @@ export class TestPerformance {
 						}
 
 						let modeConfigs: number =  0;
-						for (let state of asIterable<DFAState>(dfa.states)) {
+						for (let state of dfa.states) {
 							modeConfigs += state.configs.size;
 						}
 
@@ -1031,7 +1030,7 @@ export class TestPerformance {
 					}
 
 					states += dfa.states.size;
-					for (let state of asIterable<DFAState>(dfa.states)) {
+					for (let state of dfa.states) {
 						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -1054,7 +1053,7 @@ export class TestPerformance {
 						}
 
 						let decisionConfigs: number =  0;
-						for (let state of asIterable<DFAState>(dfa.states)) {
+						for (let state of dfa.states) {
 							decisionConfigs += state.configs.size;
 						}
 
@@ -1126,7 +1125,7 @@ export class TestPerformance {
 				}
 
 				if (TestPerformance.SHOW_CONFIG_STATS) {
-					for (let state of asIterable<DFAState>(dfa.states)) {
+					for (let state of dfa.states) {
 						if (state.configs.size >= contextsInDFAState.length) {
 							let contextsInDFAState2 = new Int32Array(state.configs.size + 1);
 							contextsInDFAState2.set(contextsInDFAState);
@@ -1135,7 +1134,7 @@ export class TestPerformance {
 
 						if (state.isAcceptState) {
 							let hasGlobal: boolean =  false;
-							for (let config of asIterable(state.configs)) {
+							for (let config of state.configs) {
 								if (config.reachesIntoOuterContext) {
 									globalConfigCount++;
 									hasGlobal = true;
@@ -1156,8 +1155,8 @@ export class TestPerformance {
 				}
 
 				if (TestPerformance.EXPORT_LARGEST_CONFIG_CONTEXTS) {
-					for (let state of asIterable<DFAState>(dfa.states)) {
-						for (let config of asIterable(state.configs)) {
+					for (let state of dfa.states) {
+						for (let config of state.configs) {
 							let configOutput: string =  config.toDotString();
 							if (configOutput.length <= this.configOutputSize) {
 								continue;

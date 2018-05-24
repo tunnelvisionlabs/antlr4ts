@@ -39,7 +39,6 @@ import { SimulatorState } from "./atn/SimulatorState";
 import { Token } from "./Token";
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
-import { asIterable } from "./misc/Stubs";
 
 export class DiagnosticErrorListener implements ParserErrorListener {
 
@@ -155,7 +154,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		}
 
 		let result: BitSet = new BitSet();
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			result.set(config.alt);
 		}
 

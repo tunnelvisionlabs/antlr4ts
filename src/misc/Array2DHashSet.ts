@@ -9,7 +9,7 @@ import * as assert from "assert";
 import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
 import { EqualityComparator } from "./EqualityComparator";
 import { NotNull, Nullable, Override, SuppressWarnings } from "../Decorators";
-import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from "./Stubs";
+import { JavaCollection, JavaSet } from "./Stubs";
 import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
 import { MurmurHash } from "./MurmurHash";
 
@@ -213,8 +213,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	public iterator(): JavaIterator<T> {
-		return new SetIterator<T>(this.toArray(), this);
+	public *[Symbol.iterator](): IterableIterator<T> {
+		yield* this.toArray();
 	}
 
 	@Override
@@ -292,7 +292,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 		}
 		else {
-			for (let o of asIterable(collection)) {
+			for (let o of collection) {
 				if (!this.containsFast(this.asElementType(o))) {
 					return false;
 				}
@@ -302,10 +302,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	public addAll(c: Collection<T>): boolean {
+	public addAll(c: Iterable<T>): boolean {
 		let changed: boolean = false;
 
-		for (let o of asIterable(c)) {
+		for (let o of c) {
 			let existing: T = this.getOrAdd(o);
 			if (existing !== o) {
 				changed = true;
@@ -353,9 +353,9 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	public removeAll(c: Collection<T>): boolean {
+	public removeAll(c: Iterable<T>): boolean {
 		let changed = false;
-		for (let o of asIterable(c)) {
+		for (let o of c) {
 			if (this.removeFast(this.asElementType(o))) {
 				changed = true;
 			}
@@ -453,34 +453,5 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@SuppressWarnings("unchecked")
 	protected createBuckets(capacity: number): Array<T[] | undefined> {
 		return new Array<T[]>(capacity);
-	}
-}
-
-class SetIterator<T> implements JavaIterator<T>  {
-	public nextIndex: number = 0;
-	public removed: boolean = true;
-
-	constructor(private data: T[], private set: Array2DHashSet<T>) { }
-
-	public hasNext(): boolean {
-		return this.nextIndex < this.data.length;
-	}
-
-	public next(): T {
-		if (this.nextIndex >= this.data.length) {
-			throw new RangeError("Attempted to iterate past end.");
-		}
-		this.removed = false;
-		return this.data[this.nextIndex++];
-	}
-
-	// Note: this is an untested extension to the JavaScript iterator interface
-	public remove(): void {
-		if (this.removed) {
-			throw new Error("This entry has already been removed");
-		}
-
-		this.set.remove(this.data[this.nextIndex - 1]);
-		this.removed = true;
 	}
 }

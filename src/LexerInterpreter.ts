@@ -8,7 +8,6 @@
 import { ATN } from "./atn/ATN";
 import { ATNType } from "./atn/ATNType";
 import { CharStream } from "./CharStream";
-import { Collection } from "./misc/Stubs";
 import { Lexer } from "./Lexer";
 import { LexerATNSimulator } from "./atn/LexerATNSimulator";
 import { NotNull } from "./Decorators";

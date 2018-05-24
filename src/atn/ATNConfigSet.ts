@@ -13,7 +13,6 @@ import { ATNConfig } from "./ATNConfig";
 import { ATNSimulator } from "./ATNSimulator";
 import { ATNState } from "./ATNState";
 import { BitSet } from "../misc/BitSet";
-import { Collection, JavaIterator, asIterable } from "../misc/Stubs";
 import { ConflictInfo } from "./ConflictInfo";
 import { EqualityComparator } from "../misc/EqualityComparator";
 import { JavaSet } from "../misc/Stubs";
@@ -155,7 +154,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		let alts: BitSet = new BitSet();
-		for (let config of asIterable(this)) {
+		for (let config of this) {
 			alts.set(config.alt);
 		}
 
@@ -248,8 +247,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	public iterator(): JavaIterator<ATNConfig> {
-		return new ATNConfigSetIterator(this, this.configs);
+	public *[Symbol.iterator](): IterableIterator<ATNConfig> {
+		yield* this.configs;
 	}
 
 	public toArray(): ATNConfig[];
@@ -373,8 +372,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	public containsAll(c: Collection<any>): boolean {
-		for (let o of asIterable(c)) {
+	public containsAll(c: Iterable<any>): boolean {
+		for (let o of c) {
 			if (!(o instanceof ATNConfig)) {
 				return false;
 			}
@@ -387,13 +386,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return true;
 	}
 
-	public addAll(c: Collection<ATNConfig>): boolean;
-	public addAll(c: Collection<ATNConfig>, contextCache: PredictionContextCache): boolean;
-	public addAll(c: Collection<ATNConfig>, contextCache?: PredictionContextCache): boolean {
+	public addAll(c: Iterable<ATNConfig>): boolean;
+	public addAll(c: Iterable<ATNConfig>, contextCache: PredictionContextCache): boolean;
+	public addAll(c: Iterable<ATNConfig>, contextCache?: PredictionContextCache): boolean {
 		this.ensureWritable();
 
 		let changed: boolean = false;
-		for (let group of asIterable(c)) {
+		for (let group of c) {
 			if (this.add(group, contextCache)) {
 				changed = true;
 			}
@@ -403,13 +402,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	public retainAll(c: Collection<any>): boolean {
+	public retainAll(c: Iterable<any>): boolean {
 		this.ensureWritable();
 		throw new Error("Not supported yet.");
 	}
 
 	@Override
-	public removeAll(c: Collection<any>): boolean {
+	public removeAll(c: Iterable<any>): boolean {
 		this.ensureWritable();
 		throw new Error("Not supported yet.");
 	}
@@ -596,42 +595,5 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		if (this.isReadOnly) {
 			throw new Error("This ATNConfigSet is read only.");
 		}
-	}
-}
-
-class ATNConfigSetIterator implements JavaIterator<ATNConfig> {
-	public index: number = -1;
-	public removed: boolean = false;
-	public set: ATNConfigSet;
-	public configs: ATNConfig[];
-
-	constructor(set: ATNConfigSet, configs: ATNConfig[]) {
-		this.configs = configs;
-	}
-
-	@Override
-	public hasNext(): boolean {
-		return this.index + 1 < this.configs.length;
-	}
-
-	@Override
-	public next(): ATNConfig {
-		if (!this.hasNext()) {
-			throw new Error("NoSuchElementException");
-		}
-
-		this.index++;
-		this.removed = false;
-		return this.configs[this.index];
-	}
-
-	@Override
-	public remove(): void {
-		if (this.removed || this.index < 0 || this.index >= this.configs.length) {
-			throw new Error("IllegalStateException");
-		}
-
-		this.set.remove(this.index);
-		this.removed = true;
 	}
 }

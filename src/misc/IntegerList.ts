@@ -71,8 +71,8 @@ export class IntegerList {
 			// list is JavaCollection<number>
 			this.ensureCapacity(this._size + list.size);
 			let current: number = 0;
-			for (let xi = list.iterator(); xi.hasNext(); /*empty*/) {
-				this._data[this._size + current] = xi.next();
+			for (let xi of list) {
+				this._data[this._size + current] = xi;
 				current++;
 			}
 

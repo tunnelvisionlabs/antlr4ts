@@ -6,13 +6,11 @@
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
 import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { asIterable } from "../misc/Stubs";
 import { ATN } from "./ATN";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { ATNState } from "./ATNState";
 import { BitSet } from "../misc/BitSet";
-import { Collection } from "../misc/Stubs";
 import { EqualityComparator } from "../misc/EqualityComparator";
 import { MurmurHash } from "../misc/MurmurHash";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
@@ -140,7 +138,7 @@ export namespace PredictionMode {
 	 * {@link RuleStopState}, otherwise {@code false}
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
-		for (let c of asIterable(configs)) {
+		for (let c of configs) {
 			if (c.state instanceof RuleStopState) {
 				return true;
 			}
@@ -160,7 +158,7 @@ export namespace PredictionMode {
 	 * {@link RuleStopState}, otherwise {@code false}
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			if (!(config.state instanceof RuleStopState)) {
 				return false;
 			}

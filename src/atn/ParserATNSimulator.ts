@@ -9,7 +9,6 @@ import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
 import { ActionTransition } from "./ActionTransition";
 import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { Arrays } from "../misc/Arrays";
-import { asIterable } from "../misc/Stubs";
 import { ATN } from "./ATN";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
@@ -18,7 +17,6 @@ import { ATNState } from "./ATNState";
 import { ATNStateType } from "./ATNStateType";
 import { AtomTransition } from "./AtomTransition";
 import { BitSet } from "../misc/BitSet";
-import { Collection } from "../misc/Stubs";
 import { ConflictInfo } from "./ConflictInfo";
 import { DecisionState } from "./DecisionState";
 import { DFA } from "../dfa/DFA";
@@ -953,7 +951,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		if (previous.s0 != null) {
 			let alts: BitSet = new BitSet();
 			let maxAlt: number = 0;
-			for (let config of asIterable(previous.s0.configs)) {
+			for (let config of previous.s0.configs) {
 				if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
 					alts.set(config.alt);
 					maxAlt = Math.max(maxAlt, config.alt);
@@ -979,7 +977,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				 * context, but also isn't eliminated by a predicate.
 				 */
 				let filteredConfigs: ATNConfigSet = new ATNConfigSet();
-				for (let config of asIterable(previous.s0.configs)) {
+				for (let config of previous.s0.configs) {
 					if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
 						filteredConfigs.add(config);
 					}
@@ -1257,7 +1255,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 		let result: ATNConfigSet = new ATNConfigSet();
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			if (!(config.state instanceof RuleStopState)) {
 				continue;
 			}
@@ -1494,7 +1492,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	protected applyPrecedenceFilter(@NotNull configs: ATNConfigSet, globalContext: ParserRuleContext, contextCache: PredictionContextCache): ATNConfigSet {
 		let statesFromAlt1: Map<number, PredictionContext> = new Map<number, PredictionContext>();
 		let configSet: ATNConfigSet = new ATNConfigSet();
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			// handle alt 1 first
 			if (config.alt !== 1) {
 				continue;
@@ -1515,7 +1513,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 		}
 
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			if (config.alt === 1) {
 				// already handled
 				continue;
@@ -1591,7 +1589,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		 */
 		let altToPred: Array<SemanticContext | undefined> | undefined = new Array<SemanticContext>(nalts + 1);
 		let n: number = altToPred.length;
-		for (let c of asIterable(configs)) {
+		for (let c of configs) {
 			if (ambigAlts.get(c.alt)) {
 				altToPred[c.alt] = SemanticContext.or(altToPred[c.alt], c.semanticContext);
 			}
@@ -1742,7 +1740,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		let closureBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 		while (currentConfigs.size > 0) {
 			let intermediate: ATNConfigSet = new ATNConfigSet();
-			for (let config of asIterable(currentConfigs)) {
+			for (let config of currentConfigs) {
 				this.closureImpl(config, configs, intermediate, closureBusy, collectPredicates, hasMoreContext, contextCache, 0, treatEofAsEpsilon);
 			}
 
@@ -2264,7 +2262,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return;
 		}
 
-		for (let c of asIterable(deadEndConfigs)) {
+		for (let c of deadEndConfigs) {
 			let trans: string = "no edges";
 			if (c.state.numberOfOptimizedTransitions > 0) {
 				let t: Transition = c.state.getOptimizedTransition(0);
@@ -2292,9 +2290,9 @@ export class ParserATNSimulator extends ATNSimulator {
 			configs, outerContext);
 	}
 
-	protected getUniqueAlt(@NotNull configs: Collection<ATNConfig>): number {
+	protected getUniqueAlt(@NotNull configs: Iterable<ATNConfig>): number {
 		let alt: number = ATN.INVALID_ALT_NUMBER;
-		for (let c of asIterable(configs)) {
+		for (let c of configs) {
 			if (alt === ATN.INVALID_ALT_NUMBER) {
 				alt = c.alt; // found first alt
 			}
@@ -2305,8 +2303,8 @@ export class ParserATNSimulator extends ATNSimulator {
 		return alt;
 	}
 
-	protected configWithAltAtStopState(@NotNull configs: Collection<ATNConfig>, alt: number): boolean {
-		for (let c of asIterable(configs)) {
+	protected configWithAltAtStopState(@NotNull configs: Iterable<ATNConfig>, alt: number): boolean {
+		for (let c of configs) {
 			if (c.alt === alt) {
 				if (c.state instanceof RuleStopState) {
 					return true;
@@ -2373,7 +2371,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	protected addDFAContextState(@NotNull dfa: DFA, @NotNull configs: ATNConfigSet, returnContext: number, contextCache: PredictionContextCache): DFAState {
 		if (returnContext !== PredictionContext.EMPTY_FULL_STATE_KEY) {
 			let contextConfigs: ATNConfigSet = new ATNConfigSet();
-			for (let config of asIterable(configs)) {
+			for (let config of configs) {
 				contextConfigs.add(config.appendContext(returnContext, contextCache));
 			}
 
