@@ -11,7 +11,10 @@
 // import static org.hamcrest.CoreMatchers.instanceOf;
 // import static org.junit.Assert.assertThat;
 // import static org.junit.Assert.assertTrue;
-require("source-map-support").install();
+
+import * as sourceMapSupport from "source-map-support";
+sourceMapSupport.install();
+
 import { ANTLRErrorListener } from "../src/ANTLRErrorListener";
 import { ANTLRInputStream } from "../src/ANTLRInputStream";
 import { Array2DHashSet } from "../src/misc/Array2DHashSet";
