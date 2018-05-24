@@ -1,7 +1,0 @@
-/*!
- * Copyright 2016 The ANTLR Project. All rights reserved.
- * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
- */
-
-// This file shouldn't be needed by the TypeScript target. It wasn't maintained during upgrades of the
-// tunnelvisionlabs/antlr4 reference repository so it will need to be generated fresh if desired.
