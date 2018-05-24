@@ -137,11 +137,11 @@ export class TokenStreamRewriter {
 		this.rollback(TokenStreamRewriter.MIN_TOKEN_INDEX, programName);
 	}
 
-	public insertAfter(t: Token, text: any): void;
-	public insertAfter(index: number, text: any): void;
-	public insertAfter(t: Token, text: any, programName: string): void;
-	public insertAfter(index: number, text: any, programName: string): void;
-	public insertAfter(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertAfter(t: Token, text: {}): void;
+	public insertAfter(index: number, text: {}): void;
+	public insertAfter(t: Token, text: {}, programName: string): void;
+	public insertAfter(index: number, text: {}, programName: string): void;
+	public insertAfter(tokenOrIndex: Token | number, text: {}, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
 		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
@@ -156,11 +156,11 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	public insertBefore(t: Token, text: any): void;
-	public insertBefore(index: number, text: any): void;
-	public insertBefore(t: Token, text: any, programName: string): void;
-	public insertBefore(index: number, text: any, programName: string): void;
-	public insertBefore(tokenOrIndex: Token | number, text: any, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public insertBefore(t: Token, text: {}): void;
+	public insertBefore(index: number, text: {}): void;
+	public insertBefore(t: Token, text: {}, programName: string): void;
+	public insertBefore(index: number, text: {}, programName: string): void;
+	public insertBefore(tokenOrIndex: Token | number, text: {}, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		let index: number;
 		if (typeof tokenOrIndex === "number") {
 			index = tokenOrIndex;
@@ -174,9 +174,9 @@ export class TokenStreamRewriter {
 		rewrites.push(op);
 	}
 
-	public replaceSingle(index: number, text: any): void;
-	public replaceSingle(indexT: Token, text: any): void;
-	public replaceSingle(index: Token | number, text: any): void {
+	public replaceSingle(index: number, text: {}): void;
+	public replaceSingle(indexT: Token, text: {}): void;
+	public replaceSingle(index: Token | number, text: {}): void {
 		if (typeof index === "number") {
 			this.replace(index, index, text);
 		} else {
@@ -184,15 +184,15 @@ export class TokenStreamRewriter {
 		}
 	}
 
-	public replace(from: number, to: number, text: any): void;
+	public replace(from: number, to: number, text: {}): void;
 
-	public replace(from: Token, to: Token, text: any): void;
+	public replace(from: Token, to: Token, text: {}): void;
 
-	public replace(from: number, to: number, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: number, to: number, text: {}, programName: string): void;
 
-	public replace(from: Token, to: Token, /*@Nullable*/ text: any, programName: string): void;
+	public replace(from: Token, to: Token, text: {}, programName: string): void;
 
-	public replace(from: Token | number, to: Token | number, text?: any | undefined, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
+	public replace(from: Token | number, to: Token | number, text: {}, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
 		if (typeof from !== "number") {
 			from = from.tokenIndex;
 		}
@@ -229,9 +229,9 @@ export class TokenStreamRewriter {
 		}
 
 		if (typeof from === "number") {
-			this.replace(from, to as number, undefined, programName);
+			this.replace(from, to as number, "", programName);
 		} else {
-			this.replace(from, to as Token, undefined, programName);
+			this.replace(from, to as Token, "", programName);
 		}
 	}
 
@@ -351,7 +351,7 @@ export class TokenStreamRewriter {
 			// should be included (they will be inserts).
 			for (let op of indexToOp.values()) {
 				if ( op.index >= this.tokens.size - 1 ) {
-					buf += op.text;
+					buf.push(op.text.toString());
 				}
 			}
 		}
@@ -517,7 +517,7 @@ export class TokenStreamRewriter {
 		return m;
 	}
 
-	protected catOpText(a: any, b: any): string {
+	protected catOpText(a: {}, b: {}): string {
 		let x: string =  "";
 		let y: string =  "";
 		if ( a != null ) {
@@ -554,14 +554,14 @@ export class RewriteOperation {
 	public instructionIndex: number;
 	/** Token buffer index. */
 	public index: number;
-	public text: any;
+	public text: {};
 
 	constructor(tokens: TokenStream, index: number);
-	constructor(tokens: TokenStream, index: number, text: any);
-	constructor(tokens: TokenStream, index: number, text?: any) {
+	constructor(tokens: TokenStream, index: number, text: {});
+	constructor(tokens: TokenStream, index: number, text?: {}) {
 		this.tokens = tokens;
 		this.index = index;
-		this.text = text;
+		this.text = text === undefined ? "" : text;
 	}
 
 	/** Execute the rewrite operation by possibly adding to the buffer.
@@ -582,13 +582,13 @@ export class RewriteOperation {
 }
 
 class InsertBeforeOp extends RewriteOperation {
-	constructor(tokens: TokenStream, index: number, text: any) {
+	constructor(tokens: TokenStream, index: number, text: {}) {
 		super(tokens, index, text);
 	}
 
 	@Override
 	public execute(buf: string[]): number {
-		buf.push(this.text);
+		buf.push(this.text.toString());
 		if ( this.tokens.get(this.index).type !== Token.EOF ) {
 			buf.push(String(this.tokens.get(this.index).text));
 		}
@@ -601,7 +601,7 @@ class InsertBeforeOp extends RewriteOperation {
  *  of "insert after" is "insert before index+1".
  */
 class InsertAfterOp extends InsertBeforeOp {
-	constructor(tokens: TokenStream, index: number, text: any) {
+	constructor(tokens: TokenStream, index: number, text: {}) {
 		super(tokens, index + 1, text); // insert after is insert before index+1
 	}
 }
@@ -611,7 +611,7 @@ class InsertAfterOp extends InsertBeforeOp {
  */
 class ReplaceOp extends RewriteOperation {
 	public lastIndex: number;
-	constructor(tokens: TokenStream, from: number, to: number, text: any) {
+	constructor(tokens: TokenStream, from: number, to: number, text: {}) {
 		super(tokens, from, text);
 		this.lastIndex = to;
 	}
@@ -619,7 +619,7 @@ class ReplaceOp extends RewriteOperation {
 	@Override
 	public execute(buf: string[]): number {
 		if ( this.text != null ) {
-			buf.push(this.text);
+			buf.push(this.text.toString());
 		}
 		return this.lastIndex + 1;
 	}
