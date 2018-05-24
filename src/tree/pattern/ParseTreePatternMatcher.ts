@@ -217,8 +217,10 @@ export class ParseTreePatternMatcher {
 				throw e.getCause();
 			} else if (e instanceof RecognitionException) {
 				throw e;
-			} else {
+			} else if (e instanceof Error) {
 				throw new ParseTreePatternMatcher.CannotInvokeStartRule(e);
+			} else {
+				throw e;
 			}
 		}
 

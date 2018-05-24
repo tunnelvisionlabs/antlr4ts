@@ -21,6 +21,7 @@
     // Enabled with specific or customized configuration
     "indent": [true, "tabs"],
     "promise-function-async": true,
+    "no-unsafe-any": true,
 
     // Can't be reasonably enabled because the imports need to be per-file within this repository
     "ordered-imports": false
