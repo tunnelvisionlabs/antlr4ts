@@ -2,7 +2,6 @@
   "extends": "tslint:recommended",
   "rules": {
     "comment-format": false,
-    "indent": [true, "tabs"],
     "interface-name": false,
     "max-classes-per-file": false,
     "max-line-length": false,
@@ -20,6 +19,7 @@
     "variable-name": false,
 
     // Enabled with specific or customized configuration
+    "indent": [true, "tabs"],
     "promise-function-async": true,
 
     // Can't be reasonably enabled because the imports need to be per-file within this repository
