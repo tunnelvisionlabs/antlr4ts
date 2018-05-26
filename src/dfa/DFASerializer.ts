@@ -5,7 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.5097925-07:00
 
-import { asIterable } from "../misc/Stubs";
 import { ATN } from "../atn/ATN";
 import { ATNSimulator } from "../atn/ATNSimulator";
 import { ATNState } from "../atn/ATNState";
@@ -146,7 +145,7 @@ export class DFASerializer {
 
 		if (s.isContextSensitive) {
 			stateStr += "*";
-			for (let config of asIterable(s.configs)) {
+			for (let config of s.configs) {
 				if (config.reachesIntoOuterContext) {
 					stateStr += "*";
 					break;

@@ -7,7 +7,6 @@
 
 import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
 import { ActionTransition } from "./ActionTransition";
-import { asIterable } from "../misc/Stubs";
 import { ATN } from "./ATN";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
@@ -287,7 +286,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		// this is used to skip processing for configs which have a lower priority
 		// than a config that already reached an accept state for the same rule
 		let skipAlt: number = ATN.INVALID_ALT_NUMBER;
-		for (let c of asIterable(closure)) {
+		for (let c of closure) {
 			let currentAltReachedAcceptState: boolean = c.alt === skipAlt;
 			if (currentAltReachedAcceptState && c.hasPassedThroughNonGreedyDecision) {
 				continue;
@@ -660,7 +659,7 @@ export class LexerATNSimulator extends ATNSimulator {
 		let newState: DFAState = new DFAState(configs.clone(true));
 
 		let firstConfigWithRuleStopState: ATNConfig | undefined;
-		for (let c of asIterable(configs)) {
+		for (let c of configs) {
 			if (c.state instanceof RuleStopState) {
 				firstConfigWithRuleStopState = c;
 				break;

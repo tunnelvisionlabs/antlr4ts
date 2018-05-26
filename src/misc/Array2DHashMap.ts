@@ -4,12 +4,9 @@
  */
 
 import { Array2DHashSet } from "./Array2DHashSet";
-import { asIterable } from "./Stubs";
-import { Collection } from "./Stubs";
 import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
 import { EqualityComparator } from "./EqualityComparator";
 import { Equatable, JavaCollection, JavaMap, JavaSet } from "./Stubs";
-import { JavaIterator } from "./Stubs";
 
 // Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
 // key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.
@@ -103,7 +100,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	public putAll<K2 extends K, V2 extends V>(m: JavaMap<K2, V2>): void {
-		for (let entry of asIterable(m.entrySet())) {
+		for (let entry of m.entrySet()) {
 			this.put(entry.getKey(), entry.getValue());
 		}
 	}
@@ -148,7 +145,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	public addAll(collection: Collection<JavaMap.Entry<K, V>>): boolean {
+	public addAll(collection: Iterable<JavaMap.Entry<K, V>>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -160,8 +157,8 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	public containsAll(collection: Collection<any>): boolean {
-		for (let key of asIterable(collection)) {
+	public containsAll(collection: Iterable<any>): boolean {
+		for (let key of collection) {
 			if (!this.contains(key)) {
 				return false;
 			}
@@ -188,7 +185,7 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		return this.backingStore.isEmpty;
 	}
 
-	public iterator(): JavaIterator<JavaMap.Entry<K, V>> {
+	public [Symbol.iterator](): IterableIterator<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
@@ -196,16 +193,16 @@ class EntrySet<K, V> implements JavaSet<JavaMap.Entry<K, V>> {
 		throw new Error("Not implemented");
 	}
 
-	public removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Iterable<any>): boolean {
 		let removedAny = false;
-		for (let key of asIterable(collection)) {
+		for (let key of collection) {
 			removedAny = this.remove(key) || removedAny;
 		}
 
 		return removedAny;
 	}
 
-	public retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Iterable<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -233,7 +230,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		throw new Error("Not supported");
 	}
 
-	public addAll(collection: Collection<K>): boolean {
+	public addAll(collection: Iterable<K>): boolean {
 		throw new Error("Not supported");
 	}
 
@@ -245,8 +242,8 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.contains({ key: o });
 	}
 
-	public containsAll(collection: Collection<any>): boolean {
-		for (let key of asIterable(collection)) {
+	public containsAll(collection: Iterable<any>): boolean {
+		for (let key of collection) {
 			if (!this.contains(key)) {
 				return false;
 			}
@@ -273,7 +270,7 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.isEmpty;
 	}
 
-	public iterator(): JavaIterator<K> {
+	public [Symbol.iterator](): IterableIterator<K> {
 		throw new Error("Not implemented");
 	}
 
@@ -281,16 +278,16 @@ class KeySet<K, V> implements JavaSet<K> {
 		return this.backingStore.remove({ key: o });
 	}
 
-	public removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Iterable<any>): boolean {
 		let removedAny = false;
-		for (let key of asIterable(collection)) {
+		for (let key of collection) {
 			removedAny = this.remove(key) || removedAny;
 		}
 
 		return removedAny;
 	}
 
-	public retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Iterable<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -318,7 +315,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		throw new Error("Not supported");
 	}
 
-	public addAll(collection: Collection<V>): boolean {
+	public addAll(collection: Iterable<V>): boolean {
 		throw new Error("Not supported");
 	}
 
@@ -327,7 +324,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 	}
 
 	public contains(o: any): boolean {
-		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
+		for (let bucket of this.backingStore) {
 			if (DefaultEqualityComparator.INSTANCE.equals(o, bucket.value)) {
 				return true;
 			}
@@ -336,8 +333,8 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return false;
 	}
 
-	public containsAll(collection: Collection<any>): boolean {
-		for (let key of asIterable(collection)) {
+	public containsAll(collection: Iterable<any>): boolean {
+		for (let key of collection) {
 			if (!this.contains(key)) {
 				return false;
 			}
@@ -364,37 +361,26 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		return this.backingStore.isEmpty;
 	}
 
-	public iterator(): JavaIterator<V> {
-		let delegate: JavaIterator<Bucket<K, V>> = this.backingStore.iterator();
-		return {
-			hasNext(): boolean {
-				return delegate.hasNext();
-			},
-
-			next(): V {
-				return delegate.next().value!;
-			},
-
-			remove(): void {
-				throw new Error("Not supported");
-			},
-		};
+	public *[Symbol.iterator](): IterableIterator<V> {
+		for (let bucket of this.backingStore) {
+			yield bucket.value!;
+		}
 	}
 
 	public remove(o: any): boolean {
 		throw new Error("Not implemented");
 	}
 
-	public removeAll(collection: Collection<any>): boolean {
+	public removeAll(collection: Iterable<any>): boolean {
 		let removedAny = false;
-		for (let key of asIterable(collection)) {
+		for (let key of collection) {
 			removedAny = this.remove(key) || removedAny;
 		}
 
 		return removedAny;
 	}
 
-	public retainAll(collection: Collection<any>): boolean {
+	public retainAll(collection: Iterable<any>): boolean {
 		throw new Error("Not implemented");
 	}
 
@@ -410,7 +396,7 @@ class ValueCollection<K, V> implements JavaCollection<V> {
 		}
 
 		let i = 0;
-		for (let bucket of asIterable<Bucket<K, V>>(this.backingStore)) {
+		for (let bucket of this.backingStore) {
 			a[i++] = bucket.value!;
 		}
 
