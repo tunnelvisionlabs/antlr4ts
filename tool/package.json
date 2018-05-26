@@ -13,7 +13,7 @@
     "antlr4ts": "./antlr4ts"
   },
   "scripts": {
-    "prepublish": "mvn verify",
+    "prepare": "mvn verify",
     "postpack": "mv %npm_package_name%-%npm_package_version%.tgz ../%npm_package_name%.tgz"
   },
   "repository": {

@@ -3,6 +3,8 @@ language: node_js
 node_js:
   - "6"
 jdk: openjdk6
+before_install:
+  - npm install -g npm@6
 script:
   # npm install is run automatically by Travis before 'script'
   - npm test
