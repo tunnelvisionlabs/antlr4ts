@@ -741,4 +741,19 @@ export class TestTokenStreamRewriter {
 		let expecting: string = "<div><b><p>a</p></b></div>!b";
 		assert.strictEqual(result, expecting);
 	}
+
+	@Test public testInsertLiterals(): void {
+		let lexEngine: LexerInterpreter =  this.createLexerInterpreter("abc", RewriterLexer1);
+		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		stream.fill();
+		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
+		tokens.insertBefore(0, false);
+		tokens.insertBefore(0, 0);
+		tokens.insertBefore(0, {});
+		tokens.insertBefore(0, []);
+		tokens.insertBefore(0, "");
+		let result: string =  tokens.getText();
+		let expecting: string =  "[object Object]0falseabc";
+		assert.strictEqual(result, expecting);
+	}
 }

@@ -10,6 +10,7 @@
 // substantial rethink
 
 import { NotNull } from "../Decorators";
+import { Equatable } from "./Stubs";
 
 export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 	return escapeSpaces ? s.replace(/ /, "\u00B7") : s
@@ -35,12 +36,12 @@ export function join(collection: Iterable<any>, separator: string): string {
 	return buf;
 }
 
-export function equals(x: any, y: any): boolean {
+export function equals(x: Equatable | undefined, y: Equatable | undefined): boolean {
 	if (x === y) {
 		return true;
 	}
 
-	if (x == null || y == null) {
+	if (x === undefined || y === undefined) {
 		return false;
 	}
 

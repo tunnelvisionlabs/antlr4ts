@@ -3,7 +3,6 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-require("source-map-support").install();
 import {Equatable} from "../src/misc/Stubs";
 import {Array2DHashSet} from "../src/misc/Array2DHashSet";
 import {MurmurHash} from "../src/misc/MurmurHash";

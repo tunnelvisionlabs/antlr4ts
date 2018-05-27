@@ -5,7 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.6934341-07:00
 
-require("source-map-support").install();
 import { IntervalSet } from "../../src/misc/IntervalSet";
 import { Lexer } from "../../src/Lexer";
 import { Token } from "../../src/Token";

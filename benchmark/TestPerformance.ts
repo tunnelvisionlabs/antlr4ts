@@ -11,7 +11,10 @@
 // import static org.hamcrest.CoreMatchers.instanceOf;
 // import static org.junit.Assert.assertThat;
 // import static org.junit.Assert.assertTrue;
-require("source-map-support").install();
+
+import * as sourceMapSupport from "source-map-support";
+sourceMapSupport.install();
+
 import { ANTLRErrorListener } from "../src/ANTLRErrorListener";
 import { ANTLRInputStream } from "../src/ANTLRInputStream";
 import { Array2DHashSet } from "../src/misc/Array2DHashSet";
@@ -1230,18 +1233,18 @@ export class TestPerformance {
 		//     parserCtor: Constructor<? extends Parser> =  parserClass.getConstructor(TokenStream.class);
 
 			// construct initial instances of the lexer and parser to deserialize their ATNs
-			let tokenSource =  new lexerCtor(new ANTLRInputStream(""));
-			new parserCtor(new CommonTokenStream(tokenSource));
+			let lexerInstance =  new lexerCtor(new ANTLRInputStream(""));
+			let parserInstance = new parserCtor(new CommonTokenStream(lexerInstance));
 
 			if (!TestPerformance.REUSE_LEXER_DFA) {
-				let lexerSerializedATN: string = lexerCtor.prototype._serializedATN;
+				let lexerSerializedATN: string = lexerInstance.serializedATN;
 				for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 					TestPerformance.sharedLexerATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(lexerSerializedATN));
 				}
 			}
 
 			if (TestPerformance.RUN_PARSER && !TestPerformance.REUSE_PARSER_DFA) {
-				let parserSerializedATN: string = parserCtor.prototype._serializedATN;
+				let parserSerializedATN: string = parserInstance.serializedATN;
 				for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 					TestPerformance.sharedParserATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(parserSerializedATN));
 				}

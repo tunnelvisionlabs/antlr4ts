@@ -4,6 +4,8 @@
  */
 
 import * as assert from "assert";
+import * as stdMocks from "std-mocks";
+
 import { ANTLRInputStream } from "antlr4ts/ANTLRInputStream";
 import { CharStream } from "antlr4ts/CharStream";
 import { CommonTokenStream } from "antlr4ts/CommonTokenStream";
@@ -17,8 +19,6 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-
-const stdMocks = require("std-mocks");
 
 function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: () => void ) {
 	try {
