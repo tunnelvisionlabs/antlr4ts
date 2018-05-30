@@ -218,12 +218,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	public toArray(a?: any[]): T[] {
-
-		// Check if the array argument was provided
-		if (!a || a.length < this.size) {
-			a = new Array<T>(this.size);
-		}
+	public toArray(): T[] {
+		const a = new Array<T>(this.size);
 
 		// Copy elements from the nested arrays into the destination array
 		let i: number = 0; // Position within destination array
@@ -240,37 +236,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 			}
 		}
 		return a;
-	}
-
-	@Override
-	public remove(o: any): boolean {
-		return this.removeFast(this.asElementType(o));
-	}
-
-	public removeFast(@Nullable obj: T): boolean {
-		if (obj == null) {
-			return false;
-		}
-
-		let b: number = this.getBucket(obj);
-		let bucket = this.buckets[b];
-		if (!bucket) {
-			// no bucket
-			return false;
-		}
-
-		for (let i = 0; i < bucket.length; i++) {
-			let e = bucket[i];
-			if (this.comparator.equals(e, obj)) {          // found it
-				// shift all elements to the right down one
-				bucket.copyWithin(i, i + 1);
-				bucket.length--;
-				this.n--;
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	@Override
@@ -311,56 +276,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				changed = true;
 			}
 		}
-		return changed;
-	}
-
-	@Override
-	public retainAll(c: JavaCollection<T>): boolean {
-		let newsize: number = 0;
-		for (let bucket of this.buckets) {
-			if (bucket == null) {
-				continue;
-			}
-
-			let i: number;
-			let j: number;
-			for (i = 0, j = 0; i < bucket.length; i++) {
-				if (bucket[i] == null) {
-					break;
-				}
-
-				if (!c.contains(bucket[i])) {
-					// removed
-					continue;
-				}
-
-				// keep
-				if (i !== j) {
-					bucket[j] = bucket[i];
-				}
-
-				j++;
-				newsize++;
-			}
-
-			newsize += j;
-			bucket.length = j;
-		}
-
-		let changed: boolean = newsize !== this.n;
-		this.n = newsize;
-		return changed;
-	}
-
-	@Override
-	public removeAll(c: Iterable<T>): boolean {
-		let changed = false;
-		for (let o of c) {
-			if (this.removeFast(this.asElementType(o))) {
-				changed = true;
-			}
-		}
-
 		return changed;
 	}
 

@@ -251,20 +251,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		yield* this.configs;
 	}
 
-	public toArray(): ATNConfig[];
-	public toArray(a?: ATNConfig[]): ATNConfig[];
-
 	@Override
-	public toArray(a?: ATNConfig[]): ATNConfig[] {
-		if (!a || a.length < this.configs.length) {
-			return this.configs;
-		}
-
-		for (let i = 0; i < this.configs.length; i++) {
-			a[i] = this.configs[i];
-		}
-
-		return a;
+	public toArray(): ATNConfig[] {
+		return this.configs;
 	}
 
 	public add(e: ATNConfig): boolean;
@@ -399,18 +388,6 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		return changed;
-	}
-
-	@Override
-	public retainAll(c: Iterable<any>): boolean {
-		this.ensureWritable();
-		throw new Error("Not supported yet.");
-	}
-
-	@Override
-	public removeAll(c: Iterable<any>): boolean {
-		this.ensureWritable();
-		throw new Error("Not supported yet.");
 	}
 
 	@Override
@@ -554,41 +531,6 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 	public get(index: number): ATNConfig {
 		return this.configs[index];
-	}
-
-	// @Override
-	// remove(o: any): boolean {
-	// 	this.ensureWritable();
-
-	// 	throw new Error("Not supported yet.");
-	// }
-
-	public remove(o: any): boolean;
-	public remove(index: number): void;
-	public remove(indexOrItem: number | any): boolean | void {
-		this.ensureWritable();
-		if (!this.mergedConfigs || !this.unmerged) {
-			throw new Error("Covered by ensureWritable but duplicated here for strict null check limitation");
-		}
-
-		if (typeof indexOrItem !== "number") {
-			throw new Error("Not supported yet");
-		}
-
-		let index = indexOrItem;
-		let config: ATNConfig = this.configs[index];
-		this.configs.splice(index, 1);
-		let key = this.getKey(config);
-		if (this.mergedConfigs.get(key) === config) {
-			this.mergedConfigs.remove(key);
-		} else {
-			for (let i = 0; i < this.unmerged.length; i++) {
-				if (this.unmerged[i] === config) {
-					this.unmerged.splice(i, 1);
-					return;
-				}
-			}
-		}
 	}
 
 	protected ensureWritable(): void {

@@ -147,14 +147,14 @@ export interface IntSet {
 	remove(el: number): void;
 
 	/**
-	 * Return a list containing the elements represented by the current set. The
-	 * list is returned in ascending numerical order.
+	 * Return an array containing the elements represented by the current set. The
+	 * array is returned in ascending numerical order.
 	 *
-	 * @return A list containing all element present in the current set, sorted
+	 * @return An array containing all element present in the current set, sorted
 	 * in ascending numerical order.
 	 */
 	//@NotNull
-	toList(): number[];
+	toArray(): number[];
 
 	/**
 	 * {@inheritDoc}

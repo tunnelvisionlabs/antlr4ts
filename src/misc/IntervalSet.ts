@@ -176,7 +176,7 @@ export class IntervalSet implements IntSet {
 			}
 		}
 		else {
-			for (let value of set.toList()) {
+			for (let value of set.toArray()) {
 				this.add(value);
 			}
 		}
@@ -625,22 +625,6 @@ export class IntervalSet implements IntSet {
 		return values;
 	}
 
-	@Override
-	public toList(): number[] {
-		let values: number[] = new Array<number>();
-		let n: number = this._intervals.length;
-		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
-			let a: number = I.a;
-			let b: number = I.b;
-			for (let v = a; v <= b; v++) {
-				values.push(v);
-			}
-		}
-
-		return values;
-	}
-
 	public toSet(): Set<number> {
 		let s: Set<number> = new Set<number>();
 		for (let I of this._intervals) {
@@ -655,7 +639,18 @@ export class IntervalSet implements IntSet {
 	}
 
 	public toArray(): number[] {
-		return this.toList();
+		let values: number[] = new Array<number>();
+		let n: number = this._intervals.length;
+		for (let i = 0; i < n; i++) {
+			let I: Interval = this._intervals[i];
+			let a: number = I.a;
+			let b: number = I.b;
+			for (let v = a; v <= b; v++) {
+				values.push(v);
+			}
+		}
+
+		return values;
 	}
 
 	@Override
