@@ -42,6 +42,7 @@
     "profile": "npm run profile-core",
     "profile-core": "node --prof target/benchmark/TestPerformance.js"
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
