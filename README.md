@@ -38,23 +38,25 @@ TypeScript 2.0.
 
 ## Getting started
 
-1. Add `antlr4ts` to **package.json** as a runtime dependency
+1. Install `antlr4ts` as a runtime dependency using your preferred package manager.
 
-    ```
-    "dependencies": {
-      // ...
-      "antlr4ts": "^0.2.0"
-    }
-    ```
+  ```bash
+  npm install antlr4ts --save
+  ```
+  
+  ```bash
+  yarn add antlr4ts
+  ```
 
-2. Add `antlr4ts-cli` to **package.json** as a development dependency
+2. Install `antlr4ts-cli` as a development dependency using your preferred package manager.
 
-    ```
-    "devDependencies": {
-      // ...
-      "antlr4ts-cli": "^0.2.0"
-    }
-    ```
+  ```bash
+  npm install antlr4ts-cli --save-dev
+  ```
+  
+  ```bash
+  yarn add -D antlr4ts-cli
+  ```
 
 3. Add a grammar to your project, e.g. **path/to/MyGrammar.g4**
 
