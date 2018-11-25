@@ -87,48 +87,48 @@ export class TestXPath {
 
 	@Test public testWeirdChar(): void {
 		let path: string = "&";
-		let expected: string = "Invalid tokens or characters at index 0 in path '&'";
+		let expected: RegExp = /^RangeError: Invalid tokens or characters at index 0 in path '&' -- $/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	@Test public testWeirdChar2(): void {
 		let path: string = "//w&e/";
-		let expected: string = "Invalid tokens or characters at index 3 in path '//w&e/'";
+		let expected: RegExp = /^RangeError: Invalid tokens or characters at index 3 in path '\/\/w&e\/' -- $/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	@Test public testBadSyntax(): void {
 		let path: string = "///";
-		let expected: string = "/ at index 2 isn't a valid rule name";
+		let expected: RegExp = /^Error: \/ at index 2 isn't a valid rule name$/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	@Test public testMissingWordAtEnd(): void {
 		let path: string = "//";
-		let expected: string = "Missing path element at end of path";
+		let expected: RegExp = /^Error: Missing path element at end of path$/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	@Test public testBadTokenName(): void {
 		let path: string = "//Ick";
-		let expected: string = "Ick at index 2 isn't a valid token name";
+		let expected: RegExp = /^Error: Ick at index 2 isn't a valid token name$/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	@Test public testBadRuleName(): void {
 		let path: string = "/prog/ick";
-		let expected: string = "ick at index 6 isn't a valid rule name";
+		let expected: RegExp = /^Error: ick at index 6 isn't a valid rule name$/;
 
 		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 	}
 
 	protected testError<TParser extends Parser>(
-		input: string, path: string, expected: string,
+		input: string, path: string, expected: RegExp,
 		startRule: (parser: TParser) => ParseTree,
 		lexerCtor: {new(stream: CharStream): Lexer},
 		parserCtor: {new(stream: TokenStream): TParser}): void {
