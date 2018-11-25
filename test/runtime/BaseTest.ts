@@ -5,6 +5,7 @@
 
 import * as assert from "assert";
 import * as stdMocks from "std-mocks";
+import { Console } from "console";
 
 import { ANTLRInputStream } from "antlr4ts/ANTLRInputStream";
 import { CharStream } from "antlr4ts/CharStream";
@@ -20,12 +21,29 @@ import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 
-function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: () => void ) {
+function trySetConsole(valueFactory: () => Console): boolean {
 	try {
+		console = valueFactory();
+		return true;
+	} catch (ex) {
+		if (!(ex instanceof TypeError)) {
+			throw ex;
+		}
+
+		// Older versions of Node.js do not support setting 'console'
+		return false;
+	}
+}
+
+function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: () => void ) {
+	let priorConsole = console;
+	try {
+		trySetConsole(() => new Console({ stdout: process.stdout, stderr: process.stderr, colorMode: false }));
 		stdMocks.use();
 		testFunction();
 	} finally {
 		stdMocks.restore();
+		trySetConsole(() => priorConsole);
 	}
 	let streams = stdMocks.flush();
 	let output = streams.stdout.join("");
