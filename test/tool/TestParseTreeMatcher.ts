@@ -264,7 +264,7 @@ export class TestParseTreeMatcher {
 	private async getPattern(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
 		let lexer: Lexer = new lexerCtor(new ANTLRInputStream(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
-		return await parser.compileParseTreePattern(pattern, ruleIndex);
+		return parser.compileParseTreePattern(pattern, ruleIndex);
 	}
 
 	private getPatternMatcher(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}): ParseTreePatternMatcher {
