@@ -228,7 +228,7 @@ export class TestParseTreeMatcher {
 	@Test public async testLRecursiveExpr(): Promise<void> {
 		let input: string = "3*4*5";
 		let pattern: string = "<expr> * <expr> * <expr>";
-		this.checkPatternMatch((parser) => parser.expr(), ParseTreeMatcherX8Parser.RULE_expr, input, pattern, ParseTreeMatcherX8Lexer, ParseTreeMatcherX8Parser);
+		await this.checkPatternMatch((parser) => parser.expr(), ParseTreeMatcherX8Parser.RULE_expr, input, pattern, ParseTreeMatcherX8Lexer, ParseTreeMatcherX8Parser);
 	}
 
 	private execParser<TParser extends Parser>(
