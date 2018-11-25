@@ -51,7 +51,7 @@ describe("EquatableTest", () => {
 	});
 
 	it("should hash identical values the same", () => {
-		assert.equal(alpha.hashCode(), alpha_again.hashCode());
+		assert.strictEqual(alpha.hashCode(), alpha_again.hashCode());
 	});
 
 	it("should hash different values differently", () => {
@@ -66,12 +66,12 @@ describe("Array2DHashSet", () => {
 
 	it("shoud count entities", () => {
 		assert( set.isEmpty );
-		assert.equal( set.size, 0 );
+		assert.strictEqual( set.size, 0 );
 		set.add(alpha);
 		assert( !set.isEmpty);
-		assert.equal(set.size, 1);
+		assert.strictEqual(set.size, 1);
 		set.add(beta);
-		assert.equal(set.size, 2);
+		assert.strictEqual(set.size, 2);
 	});
 
 	it("should check entries by value", () => {

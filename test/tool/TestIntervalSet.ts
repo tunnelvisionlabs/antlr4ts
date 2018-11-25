@@ -13,7 +13,7 @@ import { suite, test as Test } from "mocha-typescript";
 import * as assert from "assert";
 
 function assertEquals<T>(expected: T, actual: T): void {
-	assert.equal(actual, expected);
+	assert.strictEqual(actual, expected);
 }
 
 function assertFalse(value: boolean): void {
