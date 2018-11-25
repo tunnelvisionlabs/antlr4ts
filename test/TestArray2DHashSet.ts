@@ -55,7 +55,7 @@ describe("EquatableTest", () => {
 	});
 
 	it("should hash different values differently", () => {
-		assert.notEqual(alpha.hashCode(), beta.hashCode());
+		assert.notStrictEqual(alpha.hashCode(), beta.hashCode());
 	});
 });
 

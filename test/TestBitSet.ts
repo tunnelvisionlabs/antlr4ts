@@ -159,8 +159,8 @@ describe("BitSet Tests", () => {
 		});
 
 		it("hash collisions", () => {
-			assert.notEqual( evens.hashCode(), 0);
-			assert.notEqual( evens.hashCode(), primes.hashCode());
+			assert.notStrictEqual(evens.hashCode(), 0);
+			assert.notStrictEqual(evens.hashCode(), primes.hashCode());
 		});
 
 		it("copy constructor", () => {

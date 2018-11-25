@@ -22,10 +22,11 @@ export class TestGraphNodes {
 	public fullCtx(): boolean { return false; }
 
 	@Test public test_properties(): void {
-		assert.notEqual(PredictionContext.EMPTY_LOCAL, null);
-		assert.notEqual(PredictionContext.EMPTY_FULL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, undefined);
+		assert.notStrictEqual(PredictionContext.EMPTY_FULL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_FULL, undefined);
 		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
-		assert.notEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
 		assert(!PredictionContext.EMPTY_FULL.equals(PredictionContext.EMPTY_LOCAL), "by value equal");
 	}
 
