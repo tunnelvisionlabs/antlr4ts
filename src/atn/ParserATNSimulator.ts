@@ -1893,7 +1893,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 				}
 				else if (t instanceof RuleTransition) {
-					if (this.optimize_tail_calls && (t as RuleTransition).optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
+					if (this.optimize_tail_calls && t.optimizedTailCall && (!this.tail_call_preserves_sll || !PredictionContext.isEmptyLocal(config.context))) {
 						assert(c.context === config.context);
 						if (newDepth === 0) {
 							// the pop/push of a tail call would keep the depth
