@@ -100,7 +100,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	public reset(resetInput: boolean): void;
 	public reset(resetInput?: boolean): void {
 		// wack Lexer state variables
-		if (resetInput === undefined || resetInput === true) {
+		if (resetInput === undefined || resetInput) {
 			this._input.seek(0); // rewind the input
 		}
 

@@ -20,6 +20,7 @@
 
     // Enabled with specific or customized configuration
     "indent": [true, "tabs"],
+    "no-boolean-literal-compare": true,
     "promise-function-async": true,
     "no-unsafe-any": true,
     "no-unnecessary-type-assertion": true,
