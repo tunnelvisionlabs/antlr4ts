@@ -52,7 +52,7 @@ export class CommonTokenFactory implements TokenFactory {
 	public create(
 		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
-		text: string,
+		text: string | undefined,
 		channel: number,
 		start: number,
 		stop: number,
