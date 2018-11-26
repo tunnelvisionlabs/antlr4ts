@@ -760,22 +760,8 @@ StructDecl(struct,ctorAttrs,attrs,getters,dispatchMethods,interfaces,extensionMe
 export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>ParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-<if(struct.provideCopyFrom)>
-	constructor();
-<endif>
-	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>);
-<if(struct.provideCopyFrom)>
-	constructor(parent?: ParserRuleContext, invokingState?: number<ctorAttrs:{a | , <a>}>) {
-		if (parent !== undefined && invokingState !== undefined) {
-			super(parent, invokingState);
-		} else {
-			super();
-		}
-<else>
-	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>) {
+	constructor(parent: ParserRuleContext | undefined, invokingState: number<ctorAttrs:{a | , <a>}>) {
 		super(parent, invokingState);
-<endif>
-
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
 	@Override public get ruleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
@@ -794,7 +780,10 @@ AltLabelStructDecl(struct,attrs,getters,dispatchMethods) ::= <<
 export class <struct.name> extends <currentRule.currentRule.name; format="cap">Context {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
-	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) { super(); this.copyFrom(ctx); }
+	constructor(ctx: <currentRule.currentRule.name; format="cap">Context) {
+		super(ctx.parent, ctx.invokingState<currentRule.ruleCtx.ctorAttrs:{a | , ctx.<a.d.name>}>);
+		this.copyFrom(ctx);
+	}
 	<dispatchMethods; separator="\n">
 }
 >>

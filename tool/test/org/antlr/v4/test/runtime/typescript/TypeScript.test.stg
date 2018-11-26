@@ -374,7 +374,7 @@ import { ParserRuleContext as PRC } from "antlr4ts/ParserRuleContext";
 
 export class MyRuleNode extends PRC {
 	private altNum: number;
-	constructor(parent: PRC, invokingStateNumber: number) {
+	constructor(parent: PRC | undefined, invokingStateNumber: number) {
 		super(parent, invokingStateNumber);
 	}
 
