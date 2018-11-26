@@ -763,9 +763,6 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 <if(struct.provideCopyFrom)>
 	constructor();
 <endif>
-<if(ctorAttrs)>
-	constructor(parent: ParserRuleContext, invokingState: number);
-<endif>
 	constructor(parent: ParserRuleContext, invokingState: number<ctorAttrs:{a | , <a>}>);
 <if(struct.provideCopyFrom)>
 	constructor(parent?: ParserRuleContext, invokingState?: number<ctorAttrs:{a | , <a>}>) {

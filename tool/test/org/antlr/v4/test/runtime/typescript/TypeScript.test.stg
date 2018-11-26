@@ -205,7 +205,7 @@ Column() ::= "this.charPositionInLine"
 
 Text() ::= "this.text"
 
-ValEquals(a,b) ::= <%<a>==<b>%>
+ValEquals(a,b) ::= <%<a> === <b>%>
 
 TextEquals(a) ::= <%this.text === "<a>"%>
 
@@ -628,17 +628,6 @@ IgnoredTests ::= [
 	// Skipped due to limitations in the testing framework
 
 	// Skipped due to limitations in the TypeScript target
-	"CompositeParsers.DelegatorInvokesDelegateRuleWithArgs": "Arguments are not supported with labeled outer alternatives.",
-
-	"SemPredEvalParser.AtomWithClosureInTranslatedLRRule": "Arguments are not supported with labeled outer alternatives.",
-	"SemPredEvalParser.DepedentPredsInGlobalFOLLOW": "Arguments are not supported with labeled outer alternatives.",
-	"SemPredEvalParser.DependentPredNotInOuterCtxShouldBeIgnored": "Arguments are not supported with labeled outer alternatives.",
-	"SemPredEvalParser.PredicateDependentOnArg": "Arguments are not supported with labeled outer alternatives.",
-	"SemPredEvalParser.PredicateDependentOnArg2": "Arguments are not supported with labeled outer alternatives.",
-
-	"FullContextParsing.ExprAmbiguity_1": "Arguments are not supported with labeled outer alternatives.",
-	"FullContextParsing.ExprAmbiguity_2": "Arguments are not supported with labeled outer alternatives.",
-
 	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass.",
 
 	default: false
