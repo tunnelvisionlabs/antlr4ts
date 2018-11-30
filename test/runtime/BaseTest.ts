@@ -54,8 +54,8 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 		output += "\n";
 	}
 
-	assert.equal( output, expectedOutput);
-	assert.equal( errors, expectedErrors);
+	assert.strictEqual(output, expectedOutput);
+	assert.strictEqual(errors, expectedErrors);
 }
 
 export interface LexerTestOptions {
