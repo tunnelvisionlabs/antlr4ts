@@ -61,17 +61,17 @@ export class TestParseTreeMatcher {
 
 	@Test public testInvertedTags(): void {
 		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
-		assert.throws(() => m.split(">expr<"), "tag delimiters out of order in pattern: >expr<");
+		assert.throws(() => m.split(">expr<"), /^Error: tag delimiters out of order in pattern: >expr<$/);
 	}
 
 	@Test public testUnclosedTag(): void {
 		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
-		assert.throws(() => m.split("<expr hi mom"), "unterminated tag in pattern: <expr hi mom");
+		assert.throws(() => m.split("<expr hi mom"), /^Error: unterminated tag in pattern: <expr hi mom$/);
 	}
 
 	@Test public testExtraClose(): void {
 		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
-		assert.throws(() => m.split("<expr> >"), "missing start tag in pattern: <expr> >");
+		assert.throws(() => m.split("<expr> >"), /^Error: missing start tag in pattern: <expr> >$/);
 	}
 
 	@Test public testTokenizingPattern(): void {

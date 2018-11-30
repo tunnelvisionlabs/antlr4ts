@@ -30,6 +30,7 @@
     "no-unnecessary-type-assertion": true,
     "no-floating-promises": true,
     "no-return-await": true,
+    "deprecation": true,
 
     // Can't be reasonably enabled because the imports need to be per-file within this repository
     "ordered-imports": false

@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:27:11.1463816-07:00
 
 import * as assert from "assert";
-import assertEquals = assert.equal;
+import assertEquals = assert.strictEqual;
 import { test as Test, suite } from "mocha-typescript";
 
 import { PredictionContext } from "../../src/atn/PredictionContext";
@@ -22,10 +22,11 @@ export class TestGraphNodes {
 	public fullCtx(): boolean { return false; }
 
 	@Test public test_properties(): void {
-		assert.notEqual(PredictionContext.EMPTY_LOCAL, null);
-		assert.notEqual(PredictionContext.EMPTY_FULL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, undefined);
+		assert.notStrictEqual(PredictionContext.EMPTY_FULL, null);
+		assert.notStrictEqual(PredictionContext.EMPTY_FULL, undefined);
 		assert.notStrictEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
-		assert.notEqual(PredictionContext.EMPTY_LOCAL, PredictionContext.EMPTY_FULL);
 		assert(!PredictionContext.EMPTY_FULL.equals(PredictionContext.EMPTY_LOCAL), "by value equal");
 	}
 

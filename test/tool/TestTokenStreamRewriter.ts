@@ -245,7 +245,8 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "insert op <InsertBeforeOp@[@1,1:1='b',<2>,1:1]:\"0\"> within boundaries of previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@2,2:2='c',<3>,1:2]:\"x\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
@@ -365,7 +366,8 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "insert op <InsertBeforeOp@[@4,4:4='c',<3>,1:4]:\"y\"> within boundaries of previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"x\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
@@ -429,7 +431,8 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@3,3:3='c',<3>,1:3]..[@5,5:5='b',<2>,1:5]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
@@ -456,7 +459,8 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@3,3:3='c',<3>,1:3]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
@@ -584,7 +588,8 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@2,2:2='c',<3>,1:2]:\"foo\"> overlap with previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@3,3:3='c',<3>,1:3]:\"bar\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 

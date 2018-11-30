@@ -276,7 +276,7 @@ export class Trees {
 
 		let n: number =  t.childCount;
 		for (let i = 0 ; i < n ; i++){
-			let u = Trees.findNodeSuchThat(t.getChild(i), pred);
+			let u = Trees.findNodeSuchThat(t.getChild(i), pred as (tree: Tree) => boolean);
 			if (u !== undefined) {
 				return u;
 			}
