@@ -45,7 +45,7 @@ export namespace MurmurHash {
 		} else if (typeof value === "string") {
 			value = hashString(value);
 		} else if (typeof value === "object") {
-			value = (value as Equatable).hashCode();
+			value = value.hashCode();
 		}
 
 		let k: number = value;

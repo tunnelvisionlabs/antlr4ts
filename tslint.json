@@ -20,8 +20,16 @@
 
     // Enabled with specific or customized configuration
     "indent": [true, "tabs"],
+    "prefer-while": true,
+    "no-for-in-array": true,
+    "return-undefined": true,
+    "no-boolean-literal-compare": true,
+    "no-inferred-empty-object-type": true,
     "promise-function-async": true,
     "no-unsafe-any": true,
+    "no-unnecessary-type-assertion": true,
+    "no-floating-promises": true,
+    "no-return-await": true,
     "deprecation": true,
 
     // Can't be reasonably enabled because the imports need to be per-file within this repository

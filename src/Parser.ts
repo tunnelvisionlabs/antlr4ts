@@ -151,7 +151,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	public reset(resetInput: boolean): void;
 	public reset(resetInput?: boolean): void {
 		// Note: this method executes when not parsing, so _ctx can be undefined
-		if (resetInput === undefined || resetInput === true) {
+		if (resetInput === undefined || resetInput) {
 			this.inputStream.seek(0);
 		}
 

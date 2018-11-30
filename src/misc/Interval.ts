@@ -65,8 +65,7 @@ export class Interval implements Equatable {
 			return false;
 		}
 
-		let other = o as Interval;
-		return this.a === other.a && this.b === other.b;
+		return this.a === o.a && this.b === o.b;
 	}
 
 	@Override
