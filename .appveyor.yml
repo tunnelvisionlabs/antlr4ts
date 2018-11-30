@@ -13,8 +13,12 @@ environment:
 build_script:
 - npm install
 - npm run tslint
+- npm run pack-tool
+- npm run pack-runtime
 test_script:
 - npm test
+artifacts:
+- path: 'antlr4ts-*.tgz'
 cache:
 - node_modules -> **\package.json
 - C:\Users\appveyor\.m2 -> **\pom.xml
