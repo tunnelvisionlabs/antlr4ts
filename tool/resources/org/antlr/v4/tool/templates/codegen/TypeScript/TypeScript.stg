@@ -669,7 +669,7 @@ QRetValueRef(a) ::= "<ctx(a)>._<a.dict>.<a.name>"
 /** How to translate $tokenLabel */
 TokenRef(t) ::= "<ctx(t)>._<t.name>"
 LabelRef(t) ::= "<ctx(t)>._<t.name>"
-ListLabelRef(t) ::= "<ctx(t)>.<ListLabelName(t.name)>"
+ListLabelRef(t) ::= "<ctx(t)>._<ListLabelName(t.name)>"
 SetAttr(s,rhsChunks) ::= "<ctx(s)>.<s.name> = <rhsChunks>;"
 
 TokenLabelType() ::= "<file.TokenLabelType; null={Token}>"
