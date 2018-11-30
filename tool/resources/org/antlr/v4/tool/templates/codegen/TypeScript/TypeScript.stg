@@ -156,13 +156,13 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 	<vocabulary(parser.name, parser.literalNames, parser.symbolicNames)>
 	// tslint:enable:no-trailing-whitespace
 
-	@Override
+	// @Override
 	public get grammarFileName(): string { return "<parser.grammarFileName>"; }
 
-	@Override
+	// @Override
 	public get ruleNames(): string[] { return <parser.name>.ruleNames; }
 
-	@Override
+	// @Override
 	public get serializedATN(): string { return <parser.name>._serializedATN; }
 
 	<namedActions.members>
@@ -204,8 +204,8 @@ private static readonly _SYMBOLIC_NAMES: Array\<string | undefined> = [
 ];
 public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._LITERAL_NAMES, <className>._SYMBOLIC_NAMES, []);
 
-@Override
-@NotNull
+// @Override
+// @NotNull
 public get vocabulary(): Vocabulary {
 	return <className>.VOCABULARY;
 }
@@ -213,7 +213,7 @@ public get vocabulary(): Vocabulary {
 
 dumpActions(recog, argFuncs, actionFuncs, sempredFuncs) ::= <<
 <if(actionFuncs)>
-@Override
+// @Override
 public action(_localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
 	switch (ruleIndex) {
 	<recog.actionFuncs.values:{f|
@@ -225,7 +225,7 @@ case <f.ruleIndex>:
 <actionFuncs.values; separator="\n">
 <endif>
 <if(sempredFuncs)>
-@Override
+// @Override
 public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 	switch (ruleIndex) {
 	<recog.sempredFuncs.values:{f|
@@ -274,7 +274,7 @@ case <index>:
 >>
 
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
-//@RuleVersion(<namedActions.version; null="0">)
+// @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
@@ -383,7 +383,7 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", ">): <currentRule.ctxType>;
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p: number): <currentRule.ctxType>;
-//@RuleVersion(<namedActions.version; null="0">)
+// @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=", "><if(args)>, <endif>_p?: number): <currentRule.ctxType> {
 	if (_p === undefined) {
 		_p = 0;
@@ -781,7 +781,8 @@ export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><el
 
 		<struct.ctorAttrs:{a | this.<a.name> = <a.name>;}; separator="\n">
 	}
-	@Override public get ruleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
+	// @Override
+	public get ruleIndex(): number { return <parser.name>.RULE_<struct.derivedFromName>; }
 <if(struct.provideCopyFrom)><! don't need copy unless we have subclasses !>
 	public copyFrom(ctx: <struct.name>): void {
 		super.copyFrom(ctx);
@@ -803,7 +804,7 @@ export class <struct.name> extends <currentRule.currentRule.name; format="cap">C
 >>
 
 ListenerDispatchMethod(method) ::= <<
-@Override
+// @Override
 public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: <parser.grammarName>Listener): void {
 	if (listener.<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">) {
 		listener.<if(method.isEnter)>enter<else>exit<endif><struct.derivedFromName; format="cap">(this);
@@ -812,7 +813,7 @@ public <if(method.isEnter)>enter<else>exit<endif>Rule(listener: <parser.grammarN
 >>
 
 VisitorDispatchMethod(method) ::= <<
-@Override
+// @Override
 public accept\<Result>(visitor: <parser.grammarName>Visitor\<Result>): Result {
 	if (visitor.visit<struct.derivedFromName; format="cap">) {
 		return visitor.visit<struct.derivedFromName; format="cap">(this);
@@ -927,16 +928,16 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 		this._interp = new LexerATNSimulator(<lexer.name>._ATN, this);
 	}
 
-	@Override
+	// @Override
 	public get grammarFileName(): string { return "<lexer.grammarFileName>"; }
 
-	@Override
+	// @Override
 	public get ruleNames(): string[] { return <lexer.name>.ruleNames; }
 
-	@Override
+	// @Override
 	public get serializedATN(): string { return <lexer.name>._serializedATN; }
 
-	@Override
+	// @Override
 	public get modeNames(): string[] { return <lexer.name>.modeNames; }
 
 	<dumpActions(lexer, "", actionFuncs, sempredFuncs)>
