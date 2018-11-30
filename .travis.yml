@@ -12,3 +12,5 @@ script:
   - nyc report --reporter=text-lcov > coverage.lcov
   - codecov
   - npm run tslint
+  - npm run pack-tool
+  - npm run pack-runtime
