@@ -17,7 +17,7 @@ export interface Vocabulary {
 	/**
 	 * Returns the highest token type value. It can be used to iterate from
 	 * zero to that number, inclusively, thus querying all stored entries.
-	 * @return the highest token type value
+	 * @returns the highest token type value
 	 */
 	readonly maxTokenType: number;
 
@@ -54,7 +54,7 @@ export interface Vocabulary {
 	 *
 	 * @param tokenType The token type.
 	 *
-	 * @return The string literal associated with the specified token type, or
+	 * @returns The string literal associated with the specified token type, or
 	 * `null` if no string literal is associated with the type.
 	 */
 	getLiteralName(tokenType: number): string | undefined;
@@ -97,7 +97,7 @@ export interface Vocabulary {
 	 *
 	 * @param tokenType The token type.
 	 *
-	 * @return The symbolic name associated with the specified token type, or
+	 * @returns The symbolic name associated with the specified token type, or
 	 * `null` if no symbolic name is associated with the type.
 	 */
 	getSymbolicName(tokenType: number): string | undefined;
@@ -117,7 +117,7 @@ export interface Vocabulary {
 	 *
 	 * @param tokenType The token type.
 	 *
-	 * @return The display name of the token type, for use in error reporting or
+	 * @returns The display name of the token type, for use in error reporting or
 	 * other user-visible messages which reference specific token types.
 	 */
 	//@NotNull

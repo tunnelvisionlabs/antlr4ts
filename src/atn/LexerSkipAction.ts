@@ -30,7 +30,7 @@ export class LexerSkipAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#SKIP}.
+	 * @returns This method returns {@link LexerActionType#SKIP}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -39,7 +39,7 @@ export class LexerSkipAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `false`.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

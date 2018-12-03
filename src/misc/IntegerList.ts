@@ -179,7 +179,7 @@ export class IntegerList {
 	 * this method returns `false`.
 	 *
 	 * @param o the object to be compared for equality with this list
-	 * @return `true` if the specified object is equal to this list
+	 * @returns `true` if the specified object is equal to this list
 	 */
 	@Override
 	public equals(o: any): boolean {
@@ -211,7 +211,7 @@ export class IntegerList {
 	 * list hash function in the documentation for the {@link List#hashCode}
 	 * method.
 	 *
-	 * @return the hash code value for this list
+	 * @returns the hash code value for this list
 	 */
 	@Override
 	public hashCode(): number {

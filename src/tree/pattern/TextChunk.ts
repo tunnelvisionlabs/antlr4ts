@@ -38,7 +38,7 @@ export class TextChunk extends Chunk {
 	/**
 	 * Gets the raw text of this chunk.
 	 *
-	 * @return The text of the chunk.
+	 * @returns The text of the chunk.
 	 */
 	@NotNull
 	get text(): string {

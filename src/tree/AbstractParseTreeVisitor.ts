@@ -85,7 +85,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * The default implementation of {@link #visitChildren visitChildren}
 	 * initializes its aggregate result to this value.
 	 *
-	 * @return The default value returned by visitor methods.
+	 * @returns The default value returned by visitor methods.
 	 */
 	protected abstract defaultResult(): Result;
 
@@ -106,7 +106,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * @param nextResult The result of the immediately preceeding call to visit
 	 * a child node.
 	 *
-	 * @return The updated aggregate result.
+	 * @returns The updated aggregate result.
 	 */
 	protected aggregateResult(aggregate: Result, nextResult: Result): Result {
 		return nextResult;
@@ -132,7 +132,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * @param currentResult The current aggregate result of the children visited
 	 * to the current point.
 	 *
-	 * @return `true` to continue visiting children. Otherwise return
+	 * @returns `true` to continue visiting children. Otherwise return
 	 * `false` to stop visiting children and immediately return the
 	 * current aggregate result from {@link #visitChildren}.
 	 */

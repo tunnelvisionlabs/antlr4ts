@@ -61,7 +61,7 @@ export class LexerActionExecutor {
 	 * @param lexerAction The lexer action to execute after the actions
 	 * specified in `lexerActionExecutor`.
 	 *
-	 * @return A {@link LexerActionExecutor} for executing the combine actions
+	 * @returns A {@link LexerActionExecutor} for executing the combine actions
 	 * of `lexerActionExecutor` and `lexerAction`.
 	 */
 	@NotNull
@@ -101,7 +101,7 @@ export class LexerActionExecutor {
 	 * @param offset The current offset to assign to all position-dependent
 	 * lexer actions which do not already have offsets assigned.
 	 *
-	 * @return A {@link LexerActionExecutor} which stores input stream offsets
+	 * @returns A {@link LexerActionExecutor} which stores input stream offsets
 	 * for all position-dependent lexer actions.
 	 */
 	public fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
@@ -125,7 +125,7 @@ export class LexerActionExecutor {
 
 	/**
 	 * Gets the lexer actions to be executed by this executor.
-	 * @return The lexer actions to be executed by this executor.
+	 * @returns The lexer actions to be executed by this executor.
 	 */
 	@NotNull
 	get lexerActions(): LexerAction[] {

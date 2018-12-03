@@ -31,7 +31,7 @@ export class LexerTypeAction implements LexerAction {
 
 	/**
 	 * Gets the type to assign to a token created by the lexer.
-	 * @return The type to assign to a token created by the lexer.
+	 * @returns The type to assign to a token created by the lexer.
 	 */
 	get type(): number {
 		return this._type;
@@ -39,7 +39,7 @@ export class LexerTypeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#TYPE}.
+	 * @returns This method returns {@link LexerActionType#TYPE}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -48,7 +48,7 @@ export class LexerTypeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `false`.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

@@ -42,7 +42,7 @@ export class LL1Analyzer {
 	 * element at index *i* of the result will be `null`.
 	 *
 	 * @param s the ATN state
-	 * @return the expected symbols for each outgoing transition of `s`.
+	 * @returns the expected symbols for each outgoing transition of `s`.
 	 */
 	public getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
@@ -81,7 +81,7 @@ export class LL1Analyzer {
 	 * @param ctx the complete parser context, or `null` if the context
 	 * should be ignored
 	 *
-	 * @return The set of tokens that can follow `s` in the ATN in the
+	 * @returns The set of tokens that can follow `s` in the ATN in the
 	 * specified `ctx`.
 	 */
 	// @NotNull
@@ -102,7 +102,7 @@ export class LL1Analyzer {
 	 * @param ctx the complete parser context, or `null` if the context
 	 * should be ignored
 	 *
-	 * @return The set of tokens that can follow `s` in the ATN in the
+	 * @returns The set of tokens that can follow `s` in the ATN in the
 	 * specified `ctx`.
 	 */
 	// @NotNull

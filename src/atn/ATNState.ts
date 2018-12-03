@@ -91,7 +91,7 @@ export abstract class ATNState {
 	/**
 	 * Gets the state number.
 	 *
-	 * @return the state number
+	 * @returns the state number
 	 */
 	public getStateNumber(): number {
 		return this.stateNumber;
@@ -101,7 +101,7 @@ export abstract class ATNState {
 	 * For all states except {@link RuleStopState}, this returns the state
 	 * number. Returns -1 for stop states.
 	 *
-	 * @return -1 for {@link RuleStopState}, otherwise the state number
+	 * @returns -1 for {@link RuleStopState}, otherwise the state number
 	 */
 	get nonStopStateNumber(): number {
 		return this.getStateNumber();

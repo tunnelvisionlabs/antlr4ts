@@ -27,7 +27,7 @@ export class ParseInfo {
 	 * Gets an array of {@link DecisionInfo} instances containing the profiling
 	 * information gathered for each decision in the ATN.
 	 *
-	 * @return An array of {@link DecisionInfo} instances, indexed by decision
+	 * @returns An array of {@link DecisionInfo} instances, indexed by decision
 	 * number.
 	 */
 	@NotNull
@@ -40,7 +40,7 @@ export class ParseInfo {
 	 * full-context predictions during parsing. These are decisions for which
 	 * {@link DecisionInfo#LL_Fallback} is non-zero.
 	 *
-	 * @return A list of decision numbers which required one or more
+	 * @returns A list of decision numbers which required one or more
 	 * full-context predictions during parsing.
 	 */
 	@NotNull

@@ -142,7 +142,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Make sure index `i` in tokens has a token.
 	 *
-	 * @return `true` if a token is located at index `i`, otherwise
+	 * @returns `true` if a token is located at index `i`, otherwise
 	 *    `false`.
 	 * @see #get(int i)
 	 */
@@ -160,7 +160,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Add `n` elements to buffer.
 	 *
-	 * @return The actual number of elements added to the buffer.
+	 * @returns The actual number of elements added to the buffer.
 	 */
 	protected fetch(n: number): number {
 		if (this.fetchedEOF) {
@@ -278,7 +278,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * the seek target is always an on-channel token.
 	 *
 	 * @param i The target token index.
-	 * @return The adjusted target token index.
+	 * @returns The adjusted target token index.
 	 */
 	protected adjustSeekIndex(i: number): number {
 		return i;

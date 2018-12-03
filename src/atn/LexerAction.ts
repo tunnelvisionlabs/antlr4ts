@@ -21,7 +21,7 @@ export interface LexerAction extends Equatable {
 	/**
 	 * Gets the serialization type of the lexer action.
 	 *
-	 * @return The serialization type of the lexer action.
+	 * @returns The serialization type of the lexer action.
 	 */
 	//@NotNull
 	readonly actionType: LexerActionType;
@@ -36,7 +36,7 @@ export interface LexerAction extends Equatable {
 	 * Actions like this are position-independent, and may be stored more
 	 * efficiently as part of the `ATNConfig.lexerActionExecutor`.
 	 *
-	 * @return `true` if the lexer action semantics can be affected by the
+	 * @returns `true` if the lexer action semantics can be affected by the
 	 * position of the input {@link CharStream} at the time it is executed;
 	 * otherwise, `false`.
 	 */

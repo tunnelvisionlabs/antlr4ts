@@ -51,7 +51,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * action should be executed. The value is interpreted as an offset relative
 	 * to the token start index.
 	 *
-	 * @return The location in the input {@link CharStream} at which the lexer
+	 * @returns The location in the input {@link CharStream} at which the lexer
 	 * action should be executed.
 	 */
 	get offset(): number {
@@ -61,7 +61,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	/**
 	 * Gets the lexer action to execute.
 	 *
-	 * @return A {@link LexerAction} object which executes the lexer action.
+	 * @returns A {@link LexerAction} object which executes the lexer action.
 	 */
 	@NotNull
 	get action(): LexerAction {
@@ -71,7 +71,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return This method returns the result of calling {@link #getActionType}
+	 * @returns This method returns the result of calling {@link #getActionType}
 	 * on the {@link LexerAction} returned by {@link #getAction}.
 	 */
 	@Override
@@ -81,7 +81,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `true`.
+	 * @returns This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

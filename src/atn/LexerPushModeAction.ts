@@ -32,7 +32,7 @@ export class LexerPushModeAction implements LexerAction {
 	/**
 	 * Get the lexer mode this action should transition the lexer to.
 	 *
-	 * @return The lexer mode for this `pushMode` command.
+	 * @returns The lexer mode for this `pushMode` command.
 	 */
 	get mode(): number {
 		return this._mode;
@@ -40,7 +40,7 @@ export class LexerPushModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#PUSH_MODE}.
+	 * @returns This method returns {@link LexerActionType#PUSH_MODE}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -49,7 +49,7 @@ export class LexerPushModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `false`.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

@@ -92,7 +92,7 @@ export abstract class SemanticContext implements Equatable {
 	 *
 	 * @param parser The parser instance.
 	 * @param parserCallStack
-	 * @return The simplified semantic context after precedence predicates are
+	 * @returns The simplified semantic context after precedence predicates are
 	 * evaluated, which will be one of the following values.
 	 *
 	 * * {@link #NONE}: if the predicate simplifies to `true` after
@@ -289,7 +289,7 @@ export namespace SemanticContext {
 		/**
 		 * Gets the operands for the semantic context operator.
 		 *
-		 * @return a collection of {@link SemanticContext} operands for the
+		 * @returns a collection of {@link SemanticContext} operands for the
 		 * operator.
 		 *
 		 * @since 4.3

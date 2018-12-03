@@ -18,7 +18,7 @@ export namespace MurmurHash {
 	 * Initialize the hash using the specified `seed`.
 	 *
 	 * @param seed the seed (optional)
-	 * @return the intermediate hash value
+	 * @returns the intermediate hash value
 	 */
 	export function initialize(seed: number = DEFAULT_SEED): number {
 		return seed;
@@ -29,7 +29,7 @@ export namespace MurmurHash {
 	 *
 	 * @param hash the intermediate hash value
 	 * @param value the value to add to the current hash
-	 * @return the updated intermediate hash value
+	 * @returns the updated intermediate hash value
 	 */
 	export function update(hash: number, value: number | string | Equatable | null | undefined): number {
 		const c1: number = 0xCC9E2D51;
@@ -66,7 +66,7 @@ export namespace MurmurHash {
 	 *
 	 * @param hash the intermediate hash value
 	 * @param numberOfWords the number of integer values added to the hash
-	 * @return the final hash result
+	 * @returns the final hash result
 	 */
 	export function finish(hash: number, numberOfWords: number): number {
 		hash = hash ^ (numberOfWords * 4);
@@ -85,7 +85,7 @@ export namespace MurmurHash {
 	 * @param <T> the array element type
 	 * @param data the array data
 	 * @param seed the seed for the MurmurHash algorithm
-	 * @return the hash code of the data
+	 * @returns the hash code of the data
 	 */
 	export function hashCode<T extends number | string | Equatable>(data: Iterable<T>, seed: number = DEFAULT_SEED): number {
 		let hash: number = initialize(seed);

@@ -83,7 +83,7 @@ export interface TokenStream extends IntStream {
 	 *
 	 * @param interval The interval of tokens within this stream to get text
 	 * for.
-	 * @return The text of all tokens within the specified interval in this
+	 * @returns The text of all tokens within the specified interval in this
 	 * stream.
 	 *
 	 * @throws NullPointerException if `interval` is `null`
@@ -102,7 +102,7 @@ export interface TokenStream extends IntStream {
 	 * String text = stream.getText(new Interval(0, stream.size));
 	 * ```
 	 *
-	 * @return The text of all tokens in the stream.
+	 * @returns The text of all tokens in the stream.
 	 */
 	//@NotNull
 	getText(): string;
@@ -123,7 +123,7 @@ export interface TokenStream extends IntStream {
 	 *
 	 * @param ctx The context providing the source interval of tokens to get
 	 * text for.
-	 * @return The text of all tokens within the source interval of `ctx`.
+	 * @returns The text of all tokens within the source interval of `ctx`.
 	 */
 	//@NotNull
 	getText(/*@NotNull*/ ctx: RuleContext): string;
@@ -151,7 +151,7 @@ export interface TokenStream extends IntStream {
 	 *
 	 * @param start The first token in the interval to get text for.
 	 * @param stop The last token in the interval to get text for (inclusive).
-	 * @return The text of all tokens lying between the specified `start`
+	 * @returns The text of all tokens lying between the specified `start`
 	 * and `stop` tokens.
 	 *
 	 * @throws UnsupportedOperationException if this stream does not support

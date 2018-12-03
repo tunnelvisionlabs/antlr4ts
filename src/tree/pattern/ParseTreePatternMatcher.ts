@@ -258,7 +258,7 @@ export class ParseTreePatternMatcher {
 	 * Recursively walk `tree` against `patternTree`, filling
 	 * `match.`{@link ParseTreeMatch#labels labels}.
 	 *
-	 * @return the first node encountered in `tree` which does not match
+	 * @returns the first node encountered in `tree` which does not match
 	 * a corresponding node in `patternTree`, or `null` if the match
 	 * was successful. The specific node returned depends on the matching
 	 * algorithm used by the implementation, and may be overridden.

@@ -256,7 +256,7 @@ export class ATNConfig implements Equatable {
 	 * `false`.
 	 *
 	 * @param subconfig The sub configuration.
-	 * @return `true` if this configuration contains `subconfig`; otherwise, `false`.
+	 * @returns `true` if this configuration contains `subconfig`; otherwise, `false`.
 	 */
 	public contains(subconfig: ATNConfig): boolean {
 		if (this.state.stateNumber !== subconfig.state.stateNumber
@@ -356,7 +356,7 @@ export class ATNConfig implements Equatable {
 	 * Returns a graphical representation of the current `ATNConfig` in Graphviz format. The graph can be stored to a
 	 * **.dot** file and then rendered to an image using Graphviz.
 	 *
-	 * @return A Graphviz graph representing the current `ATNConfig`.
+	 * @returns A Graphviz graph representing the current `ATNConfig`.
 	 *
 	 * @see http://www.graphviz.org/
 	 */

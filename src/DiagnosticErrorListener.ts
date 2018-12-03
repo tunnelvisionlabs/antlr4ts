@@ -141,7 +141,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * @param reportedAlts The set of conflicting or ambiguous alternatives, as
 	 * reported by the parser.
 	 * @param configs The conflicting or ambiguous configuration set.
-	 * @return Returns `reportedAlts` if it is not `null`, otherwise
+	 * @returns Returns `reportedAlts` if it is not `null`, otherwise
 	 * returns the set of alternatives represented in `configs`.
 	 */
 	@NotNull

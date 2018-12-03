@@ -134,7 +134,7 @@ export interface IntStream {
 	 * }
 	 * ```
 	 *
-	 * @return An opaque marker which should be passed to
+	 * @returns An opaque marker which should be passed to
 	 * {@link #release release()} when the marked range is no longer required.
 	 */
 	mark(): number;

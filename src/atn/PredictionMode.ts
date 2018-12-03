@@ -128,7 +128,7 @@ export namespace PredictionMode {
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return `true` if any configuration in `configs` is in a
+	 * @returns `true` if any configuration in `configs` is in a
 	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
@@ -148,7 +148,7 @@ export namespace PredictionMode {
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return `true` if all configurations in `configs` are in a
+	 * @returns `true` if all configurations in `configs` are in a
 	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {

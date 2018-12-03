@@ -41,7 +41,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the vocabulary used by the recognizer.
 	 *
-	 * @return A {@link Vocabulary} instance providing information about the
+	 * @returns A {@link Vocabulary} instance providing information about the
 	 * vocabulary used by the grammar.
 	 */
 	public abstract readonly vocabulary: Vocabulary;
@@ -126,7 +126,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the {@link ATN} used by the recognizer for prediction.
 	 *
-	 * @return The {@link ATN} used by the recognizer for prediction.
+	 * @returns The {@link ATN} used by the recognizer for prediction.
 	 */
 	@NotNull
 	get atn(): ATN {
@@ -136,7 +136,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the ATN interpreter used by the recognizer for prediction.
 	 *
-	 * @return The ATN interpreter used by the recognizer for prediction.
+	 * @returns The ATN interpreter used by the recognizer for prediction.
 	 */
 	@NotNull
 	get interpreter(): ATNInterpreter {

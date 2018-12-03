@@ -19,7 +19,7 @@ export interface EqualityComparator<T> {
 	 * This method returns a hash code for the specified object.
 	 *
 	 * @param obj The object.
-	 * @return The hash code for `obj`.
+	 * @returns The hash code for `obj`.
 	 */
 	hashCode(obj: T): number;
 
@@ -28,7 +28,7 @@ export interface EqualityComparator<T> {
 	 *
 	 * @param a The first object to compare.
 	 * @param b The second object to compare.
-	 * @return `true` if `a` equals `b`, otherwise `false`.
+	 * @returns `true` if `a` equals `b`, otherwise `false`.
 	 */
 	equals(a: T, b: T): boolean;
 

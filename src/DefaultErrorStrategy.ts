@@ -495,7 +495,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * token with the correct type to produce this behavior.
 	 *
 	 * @param recognizer the parser instance
-	 * @return `true` if single-token insertion is a viable recovery
+	 * @returns `true` if single-token insertion is a viable recovery
 	 * strategy for the current mismatched input, otherwise `false`
 	 */
 	protected singleTokenInsertion(@NotNull recognizer: Parser): boolean {
@@ -530,7 +530,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * match.
 	 *
 	 * @param recognizer the parser instance
-	 * @return the successfully matched {@link Token} instance if single-token
+	 * @returns the successfully matched {@link Token} instance if single-token
 	 * deletion successfully recovers from the mismatched input, otherwise
 	 * `null`
 	 */

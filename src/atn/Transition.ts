@@ -71,7 +71,7 @@ export abstract class Transition {
 	 *
 	 * The default implementation returns `false`.
 	 *
-	 * @return `true` if traversing this transition in the ATN does not
+	 * @returns `true` if traversing this transition in the ATN does not
 	 * consume an input symbol; otherwise, `false` if traversing this
 	 * transition consumes (matches) an input symbol.
 	 */

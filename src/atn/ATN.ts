@@ -227,7 +227,7 @@ export class ATN {
 	 *
 	 * @param stateNumber the ATN state number
 	 * @param context the full parse context
-	 * @return The set of potentially valid input symbols which could follow the
+	 * @returns The set of potentially valid input symbols which could follow the
 	 * specified state in the specified context.
 	 * @ if the ATN does not contain a state with
 	 * number `stateNumber`

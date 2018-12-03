@@ -26,7 +26,7 @@ export interface IntSet {
 	 *
 	 * @param set The set to add to the current set. A `null` argument is
 	 * treated as though it were an empty set.
-	 * @return `this` (to support chained calls)
+	 * @returns `this` (to support chained calls)
 	 *
 	 * @exception IllegalStateException if the current set is read-only
 	 */
@@ -38,7 +38,7 @@ export interface IntSet {
 	 * present in both the current set and the specified set `a`.
 	 *
 	 * @param a The set to intersect with the current set.
-	 * @return A new {@link IntSet} instance containing the intersection of the
+	 * @returns A new {@link IntSet} instance containing the intersection of the
 	 * current set and `a`.
 	 */
 	and(a: IntSet): IntSet;
@@ -53,7 +53,7 @@ export interface IntSet {
 	 * * `y.subtract(x)`
 	 *
 	 * @param elements The set to compare with the current set.
-	 * @return A new {@link IntSet} instance containing the elements present in
+	 * @returns A new {@link IntSet} instance containing the elements present in
 	 * `elements` but not present in the current set.
 	 */
 	complement(elements: IntSet): IntSet;
@@ -67,7 +67,7 @@ export interface IntSet {
 	 *
 	 * @param a The set to union with the current set. A `null` argument
 	 * is treated as though it were an empty set.
-	 * @return A new {@link IntSet} instance containing the union of the current
+	 * @returns A new {@link IntSet} instance containing the union of the current
 	 * set and `a`. The value `null` may be returned in place of an
 	 * empty result set.
 	 */
@@ -85,7 +85,7 @@ export interface IntSet {
 	 *
 	 * @param a The set to compare with the current set. A `null`
 	 * argument is treated as though it were an empty set.
-	 * @return A new {@link IntSet} instance containing the elements present in
+	 * @returns A new {@link IntSet} instance containing the elements present in
 	 * `elements` but not present in the current set. The value
 	 * `null` may be returned in place of an empty result set.
 	 */
@@ -95,7 +95,7 @@ export interface IntSet {
 	/**
 	 * Return the total number of elements represented by the current set.
 	 *
-	 * @return the total number of elements represented by the current set,
+	 * @returns the total number of elements represented by the current set,
 	 * regardless of the manner in which the elements are stored.
 	 */
 	readonly size: number;
@@ -103,7 +103,7 @@ export interface IntSet {
 	/**
 	 * Returns `true` if this set contains no elements.
 	 *
-	 * @return `true` if the current set contains no elements; otherwise,
+	 * @returns `true` if the current set contains no elements; otherwise,
 	 * `false`.
 	 */
 	readonly isNil: boolean;
@@ -118,7 +118,7 @@ export interface IntSet {
 	 * Returns the single value contained in the set, if {@link #size} is 1;
 	 * otherwise, returns {@link Token#INVALID_TYPE}.
 	 *
-	 * @return the single value contained in the set, if {@link #size} is 1;
+	 * @returns the single value contained in the set, if {@link #size} is 1;
 	 * otherwise, returns {@link Token#INVALID_TYPE}.
 	 */
 	getSingleElement(): number;
@@ -127,7 +127,7 @@ export interface IntSet {
 	 * Returns `true` if the set contains the specified element.
 	 *
 	 * @param el The element to check for.
-	 * @return `true` if the set contains `el`; otherwise `false`.
+	 * @returns `true` if the set contains `el`; otherwise `false`.
 	 */
 	contains(el: number): boolean;
 
@@ -145,7 +145,7 @@ export interface IntSet {
 	 * Return an array containing the elements represented by the current set. The
 	 * array is returned in ascending numerical order.
 	 *
-	 * @return An array containing all element present in the current set, sorted
+	 * @returns An array containing all element present in the current set, sorted
 	 * in ascending numerical order.
 	 */
 	//@NotNull

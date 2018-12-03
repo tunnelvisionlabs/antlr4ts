@@ -181,7 +181,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
 	 * @param ttype the token type to match
-	 * @return the matched symbol
+	 * @returns the matched symbol
 	 * @ if the current input symbol did not match
 	 * `ttype` and the error strategy could not recover from the
 	 * mismatched symbol
@@ -219,7 +219,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
 	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
-	 * @return the matched symbol
+	 * @returns the matched symbol
 	 * @ if the current input symbol did not match
 	 * a wildcard and the error strategy could not recover from the mismatched
 	 * symbol
@@ -266,7 +266,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * Gets whether or not a complete parse tree will be constructed while
 	 * parsing. This property is `true` for a newly constructed parser.
 	 *
-	 * @return `true` if a complete parse tree will be constructed while
+	 * @returns `true` if a complete parse tree will be constructed while
 	 * parsing, otherwise `false`
 	 */
 	get buildParseTree(): boolean {
@@ -624,7 +624,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Get the precedence level for the top-most precedence rule.
 	 *
-	 * @return The precedence level for the top-most precedence rule, or -1 if
+	 * @returns The precedence level for the top-most precedence rule, or -1 if
 	 * the parser context is not nested within a precedence rule.
 	 */
 	get precedence(): number {
@@ -728,7 +728,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * ```
 	 *
 	 * @param symbol the symbol type to check
-	 * @return `true` if `symbol` can follow the current state in
+	 * @returns `true` if `symbol` can follow the current state in
 	 * the ATN, otherwise `false`.
 	 */
 	public isExpectedToken(symbol: number): boolean {

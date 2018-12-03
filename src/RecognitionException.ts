@@ -94,7 +94,7 @@ export class RecognitionException extends Error {
 	 * If the set of expected tokens is not known and could not be computed,
 	 * this method returns `null`.
 	 *
-	 * @return The set of token types that could potentially follow the current
+	 * @returns The set of token types that could potentially follow the current
 	 * state in the ATN, or `null` if the information is not available.
 	 */
 	get expectedTokens(): IntervalSet | undefined {
@@ -109,7 +109,7 @@ export class RecognitionException extends Error {
 	 *
 	 * If the context is not available, this method returns `null`.
 	 *
-	 * @return The {@link RuleContext} at the time this exception was thrown.
+	 * @returns The {@link RuleContext} at the time this exception was thrown.
 	 * If the context is not available, this method returns `null`.
 	 */
 	get context(): RuleContext | undefined {
@@ -122,7 +122,7 @@ export class RecognitionException extends Error {
 	 *
 	 * If the input stream is not available, this method returns `null`.
 	 *
-	 * @return The input stream which is the symbol source for the recognizer
+	 * @returns The input stream which is the symbol source for the recognizer
 	 * where this exception was thrown, or `null` if the stream is not
 	 * available.
 	 */
@@ -151,7 +151,7 @@ export class RecognitionException extends Error {
 	 *
 	 * If the recognizer is not available, this method returns `null`.
 	 *
-	 * @return The recognizer where this exception occurred, or `null` if
+	 * @returns The recognizer where this exception occurred, or `null` if
 	 * the recognizer is not available.
 	 */
 	get recognizer(): Recognizer<any, any> | undefined {

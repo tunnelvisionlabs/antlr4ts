@@ -55,7 +55,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * Gets the name of the rule associated with this rule tag.
 	 *
-	 * @return The name of the parser rule associated with this rule tag.
+	 * @returns The name of the parser rule associated with this rule tag.
 	 */
 	@NotNull
 	get ruleName(): string {
@@ -65,7 +65,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * Gets the label associated with the rule tag.
 	 *
-	 * @return The name of the label associated with the rule tag, or
+	 * @returns The name of the label associated with the rule tag, or
 	 * `null` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {

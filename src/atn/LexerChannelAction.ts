@@ -32,7 +32,7 @@ export class LexerChannelAction implements LexerAction {
 	/**
 	 * Gets the channel to use for the {@link Token} created by the lexer.
 	 *
-	 * @return The channel to use for the {@link Token} created by the lexer.
+	 * @returns The channel to use for the {@link Token} created by the lexer.
 	 */
 	get channel(): number {
 		return this._channel;
@@ -40,7 +40,7 @@ export class LexerChannelAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#CHANNEL}.
+	 * @returns This method returns {@link LexerActionType#CHANNEL}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -49,7 +49,7 @@ export class LexerChannelAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `false`.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

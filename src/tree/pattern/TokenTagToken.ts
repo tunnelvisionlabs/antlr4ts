@@ -41,7 +41,7 @@ export class TokenTagToken extends CommonToken {
 
 	/**
 	 * Gets the token name.
-	 * @return The token name.
+	 * @returns The token name.
 	 */
 	@NotNull
 	get tokenName(): string {
@@ -51,7 +51,7 @@ export class TokenTagToken extends CommonToken {
 	/**
 	 * Gets the label associated with the rule tag.
 	 *
-	 * @return The name of the label associated with the rule tag, or
+	 * @returns The name of the label associated with the rule tag, or
 	 * `null` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {

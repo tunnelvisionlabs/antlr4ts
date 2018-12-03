@@ -210,7 +210,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	 *
 	 * @param s The current DFA state
 	 * @param t The next input symbol
-	 * @return The existing target DFA state for the given input symbol
+	 * @returns The existing target DFA state for the given input symbol
 	 * `t`, or `null` if the target state for this edge is not
 	 * already cached
 	 */
@@ -232,7 +232,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	 * @param s The current DFA state
 	 * @param t The next input symbol
 	 *
-	 * @return The computed target DFA state for the given input symbol
+	 * @returns The computed target DFA state for the given input symbol
 	 * `t`. If `t` does not lead to a valid DFA state, this method
 	 * returns {@link #ERROR}.
 	 */
@@ -369,7 +369,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	 * search from `config`, all other (potentially reachable) states for
 	 * this rule would have a lower priority.
 	 *
-	 * @return `true` if an accept state is reached, otherwise
+	 * @returns `true` if an accept state is reached, otherwise
 	 * `false`.
 	 */
 	protected closure(@NotNull input: CharStream, @NotNull config: ATNConfig, @NotNull configs: ATNConfigSet, currentAltReachedAcceptState: boolean, speculative: boolean, treatEofAsEpsilon: boolean): boolean {
@@ -557,7 +557,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	 * @param speculative `true` if the current index in `input` is
 	 * one character before the predicate's location.
 	 *
-	 * @return `true` if the specified predicate evaluates to
+	 * @returns `true` if the specified predicate evaluates to
 	 * `true`.
 	 */
 	protected evaluatePredicate(@NotNull input: CharStream, ruleIndex: number, predIndex: number, speculative: boolean): boolean {

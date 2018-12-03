@@ -106,7 +106,7 @@ export class DFA {
 	 * supplying individual start states corresponding to specific precedence
 	 * values.
 	 *
-	 * @return `true` if this is a precedence DFA; otherwise,
+	 * @returns `true` if this is a precedence DFA; otherwise,
 	 * `false`.
 	 * @see Parser.precedence
 	 */
@@ -118,7 +118,7 @@ export class DFA {
 	 * Get the start state for a specific precedence value.
 	 *
 	 * @param precedence The current precedence.
-	 * @return The start state corresponding to the specified precedence, or
+	 * @returns The start state corresponding to the specified precedence, or
 	 * `null` if no start state exists for the specified precedence.
 	 *
 	 * @ if this is not a precedence DFA.

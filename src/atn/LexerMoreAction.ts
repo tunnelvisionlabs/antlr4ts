@@ -30,7 +30,7 @@ export class LexerMoreAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#MORE}.
+	 * @returns This method returns {@link LexerActionType#MORE}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -39,7 +39,7 @@ export class LexerMoreAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns `false`.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

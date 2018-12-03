@@ -38,7 +38,7 @@ export interface TokenSource {
 	 * Get the line number for the current position in the input stream. The
 	 * first line in the input is line 1.
 	 *
-	 * @return The line number for the current position in the input stream, or
+	 * @returns The line number for the current position in the input stream, or
 	 * 0 if the current token source does not track line numbers.
 	 */
 	readonly line: number;
@@ -47,7 +47,7 @@ export interface TokenSource {
 	 * Get the index into the current line for the current position in the input
 	 * stream. The first character on a line has position 0.
 	 *
-	 * @return The line number for the current position in the input stream, or
+	 * @returns The line number for the current position in the input stream, or
 	 * -1 if the current token source does not track character positions.
 	 */
 	readonly charPositionInLine: number;
@@ -56,7 +56,7 @@ export interface TokenSource {
 	 * Get the {@link CharStream} from which this token source is currently
 	 * providing tokens.
 	 *
-	 * @return The {@link CharStream} associated with the current position in
+	 * @returns The {@link CharStream} associated with the current position in
 	 * the input, or `null` if no input stream is available for the token
 	 * source.
 	 */

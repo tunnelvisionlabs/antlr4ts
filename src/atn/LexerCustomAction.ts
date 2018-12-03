@@ -45,7 +45,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * Gets the rule index to use for calls to {@link Recognizer#action}.
 	 *
-	 * @return The rule index for the custom action.
+	 * @returns The rule index for the custom action.
 	 */
 	get ruleIndex(): number {
 		return this._ruleIndex;
@@ -54,7 +54,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * Gets the action index to use for calls to {@link Recognizer#action}.
 	 *
-	 * @return The action index for the custom action.
+	 * @returns The action index for the custom action.
 	 */
 	get actionIndex(): number {
 		return this._actionIndex;
@@ -63,7 +63,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return This method returns {@link LexerActionType#CUSTOM}.
+	 * @returns This method returns {@link LexerActionType#CUSTOM}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -79,7 +79,7 @@ export class LexerCustomAction implements LexerAction {
 	 * user-defined embedded action which makes calls to methods like
 	 * {@link Lexer#getText}.
 	 *
-	 * @return This method returns `true`.
+	 * @returns This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

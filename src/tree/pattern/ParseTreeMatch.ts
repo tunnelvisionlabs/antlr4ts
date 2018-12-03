@@ -84,7 +84,7 @@ export class ParseTreeMatch {
 	 *
 	 * @param label The label to check.
 	 *
-	 * @return The last {@link ParseTree} to match a tag with the specified
+	 * @returns The last {@link ParseTree} to match a tag with the specified
 	 * label, or `null` if no parse tree matched a tag with the label.
 	 */
 	public get(label: string): ParseTree | undefined {
@@ -113,7 +113,7 @@ export class ParseTreeMatch {
 	 *
 	 * @param label The label.
 	 *
-	 * @return A collection of all {@link ParseTree} nodes matching tags with
+	 * @returns A collection of all {@link ParseTree} nodes matching tags with
 	 * the specified `label`. If no nodes matched the label, an empty list
 	 * is returned.
 	 */
@@ -133,7 +133,7 @@ export class ParseTreeMatch {
 	 * tokens referenced in tags in the original pattern. For additional
 	 * information, see the description of {@link #getAll(String)}.
 	 *
-	 * @return A mapping from labels to parse tree nodes. If the parse tree
+	 * @returns A mapping from labels to parse tree nodes. If the parse tree
 	 * pattern did not contain any rule or token tags, this map will be empty.
 	 */
 	@NotNull
@@ -144,7 +144,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the node at which we first detected a mismatch.
 	 *
-	 * @return the node at which we first detected a mismatch, or `null`
+	 * @returns the node at which we first detected a mismatch, or `null`
 	 * if the match was successful.
 	 */
 	get mismatchedNode(): ParseTree | undefined {
@@ -154,7 +154,7 @@ export class ParseTreeMatch {
 	/**
 	 * Gets a value indicating whether the match operation succeeded.
 	 *
-	 * @return `true` if the match operation succeeded; otherwise,
+	 * @returns `true` if the match operation succeeded; otherwise,
 	 * `false`.
 	 */
 	get succeeded(): boolean {
@@ -164,7 +164,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the tree pattern we are matching against.
 	 *
-	 * @return The tree pattern we are matching against.
+	 * @returns The tree pattern we are matching against.
 	 */
 	@NotNull
 	get pattern(): ParseTreePattern {
@@ -174,7 +174,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the parse tree we are trying to match to a pattern.
 	 *
-	 * @return The {@link ParseTree} we are trying to match to a pattern.
+	 * @returns The {@link ParseTree} we are trying to match to a pattern.
 	 */
 	@NotNull
 	get tree(): ParseTree {

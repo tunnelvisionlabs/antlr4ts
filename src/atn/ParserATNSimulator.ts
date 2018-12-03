@@ -663,7 +663,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * considering the full parser context; otherwise, `false` if the
 	 * algorithm is currently performing a local context prediction.
 	 *
-	 * @return `true` if the specified `state` is an accept state;
+	 * @returns `true` if the specified `state` is an accept state;
 	 * otherwise, `false`.
 	 */
 	protected isAcceptState(state: DFAState, useContext: boolean): boolean {
@@ -904,7 +904,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * @param previous The ATN simulation state immediately before the
 	 * {@link #ERROR} state was reached
 	 *
-	 * @return The value to return from {@link #adaptivePredict}, or
+	 * @returns The value to return from {@link #adaptivePredict}, or
 	 * {@link ATN#INVALID_ALT_NUMBER} if a suitable alternative was not
 	 * identified and {@link #adaptivePredict} should report an error instead.
 	 */
@@ -1029,7 +1029,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * @param s The current DFA state
 	 * @param t The next input symbol
-	 * @return The existing target DFA state for the given input symbol
+	 * @returns The existing target DFA state for the given input symbol
 	 * `t`, or `null` if the target state for this edge is not
 	 * already cached
 	 */
@@ -1048,7 +1048,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * @param useContext
 	 * @param contextCache
 	 *
-	 * @return The computed target DFA state for the given input symbol
+	 * @returns The computed target DFA state for the given input symbol
 	 * `t`. If `t` does not lead to a valid DFA state, this method
 	 * returns {@link #ERROR}.
 	 */
@@ -1205,7 +1205,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * @param configs the configuration set to update
 	 * @param contextCache the {@link PredictionContext} cache
 	 *
-	 * @return `configs` if all configurations in `configs` are in a
+	 * @returns `configs` if all configurations in `configs` are in a
 	 * rule stop state, otherwise return a new configuration set containing only
 	 * the configurations from `configs` which are in a rule stop state
 	 */
@@ -1437,7 +1437,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * @param configs The configuration set computed by
 	 * {@link #computeStartState} as the start state for the DFA.
-	 * @return The transformed configuration set representing the start state
+	 * @returns The transformed configuration set representing the start state
 	 * for a precedence DFA at a particular precedence level (determined by
 	 * calling {@link Parser#getPrecedence}).
 	 */

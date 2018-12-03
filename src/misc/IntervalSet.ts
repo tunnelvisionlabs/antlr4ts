@@ -440,7 +440,7 @@ export class IntervalSet implements IntSet {
 	/**
 	 * Returns the maximum value contained in the set.
 	 *
-	 * @return the maximum value contained in the set. If the set is empty, this
+	 * @returns the maximum value contained in the set. If the set is empty, this
 	 * method returns {@link Token#INVALID_TYPE}.
 	 */
 	get maxElement(): number {
@@ -455,7 +455,7 @@ export class IntervalSet implements IntSet {
 	/**
 	 * Returns the minimum value contained in the set.
 	 *
-	 * @return the minimum value contained in the set. If the set is empty, this
+	 * @returns the minimum value contained in the set. If the set is empty, this
 	 * method returns {@link Token#INVALID_TYPE}.
 	 */
 	get minElement(): number {

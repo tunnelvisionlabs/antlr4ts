@@ -56,7 +56,7 @@ export class TagChunk extends Chunk {
 	/**
 	 * Get the tag for this chunk.
 	 *
-	 * @return The tag for the chunk.
+	 * @returns The tag for the chunk.
 	 */
 	@NotNull
 	get tag(): string {
@@ -66,7 +66,7 @@ export class TagChunk extends Chunk {
 	/**
 	 * Get the label, if any, assigned to this chunk.
 	 *
-	 * @return The label assigned to this chunk, or `null` if no label is
+	 * @returns The label assigned to this chunk, or `null` if no label is
 	 * assigned to the chunk.
 	 */
 	get label(): string | undefined {

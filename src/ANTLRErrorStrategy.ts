@@ -94,7 +94,7 @@ export interface ANTLRErrorStrategy {
 	 * {@link ParserRuleContext#addChild(Token)}.
 	 *
 	 * @param recognizer the parser instance
-	 * @return `true` if the parser is currently recovering from a parse
+	 * @returns `true` if the parser is currently recovering from a parse
 	 * error, otherwise `false`
 	 */
 	inErrorRecoveryMode(/*@NotNull*/ recognizer: Parser): boolean;

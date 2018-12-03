@@ -350,7 +350,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * types.
 	 *
 	 * @param o the object to try and cast to the element type of the set
-	 * @return `o` if it could be an instance of `T`, otherwise
+	 * @returns `o` if it could be an instance of `T`, otherwise
 	 * `null`.
 	 */
 
@@ -363,7 +363,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * Return an array of `T[]` with length `capacity`.
 	 *
 	 * @param capacity the length of the array to return
-	 * @return the newly constructed array
+	 * @returns the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
 	protected createBuckets(capacity: number): Array<T[] | undefined> {

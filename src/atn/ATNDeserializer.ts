@@ -124,7 +124,7 @@ export class ATNDeserializer {
 	 * supported in the serialized ATN.
 	 * @param actualUuid The {@link UUID} of the actual serialized ATN which is
 	 * currently being deserialized.
-	 * @return `true` if the `actualUuid` value represents a
+	 * @returns `true` if the `actualUuid` value represents a
 	 * serialized ATN at or after the feature identified by `feature` was
 	 * introduced; otherwise, `false`.
 	 */
