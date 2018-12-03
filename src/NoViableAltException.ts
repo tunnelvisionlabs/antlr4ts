@@ -5,12 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.3255548-07:00
 
-/** Indicates that the parser could not decide which of two or more paths
- *  to take based upon the remaining input. It tracks the starting token
- *  of the offending input and also knows where the parser was
- *  in the various paths when the error. Reported by reportNoViableAlternative()
- */
-
 import { ATNConfigSet } from "./atn/ATNConfigSet";
 import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
@@ -21,6 +15,11 @@ import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
 import { NotNull } from "./Decorators";
 
+/** Indicates that the parser could not decide which of two or more paths
+ *  to take based upon the remaining input. It tracks the starting token
+ *  of the offending input and also knows where the parser was
+ *  in the various paths when the error. Reported by reportNoViableAlternative()
+ */
 export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
 

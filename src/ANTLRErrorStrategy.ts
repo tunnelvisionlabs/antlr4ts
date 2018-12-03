@@ -5,6 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.9102174-07:00
 
+import { Parser } from "./Parser";
+import { Token } from "./Token";
+import { RecognitionException } from "./RecognitionException";
+
 /**
  * The interface for defining strategies to deal with syntax errors encountered
  * during a parse by ANTLR-generated parsers. We distinguish between three
@@ -20,10 +24,6 @@
  *
  * TODO: what to do about lexers
  */
-import { Parser } from "./Parser";
-import { Token } from "./Token";
-import { RecognitionException } from "./RecognitionException";
-
 export interface ANTLRErrorStrategy {
 	/**
 	 * Reset the error handler state for the specified {@code recognizer}.

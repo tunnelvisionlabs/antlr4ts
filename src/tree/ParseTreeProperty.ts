@@ -5,6 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6782223-07:00
 
+import { ParseTree } from "./ParseTree";
+
 /**
  * Associate a property with a parse tree node. Useful with parse tree listeners
  * that need to associate values with particular tree nodes, kind of like
@@ -21,8 +23,6 @@
  * You would make one decl (values here) in the listener and use lots of times
  * in your event methods.
  */
-import { ParseTree } from "./ParseTree";
-
 export class ParseTreeProperty<V> {
 	private _symbol: symbol;
 

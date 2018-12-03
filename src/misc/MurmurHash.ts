@@ -10,7 +10,6 @@ import { Equatable } from "./Stubs";
  *
  * @author Sam Harwell
  */
-
 export namespace MurmurHash {
 
 	const DEFAULT_SEED: number = 0;

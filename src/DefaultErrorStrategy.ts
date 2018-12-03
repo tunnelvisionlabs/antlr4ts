@@ -5,10 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.8290527-07:00
 
-/**
- * This is the default implementation of {@link ANTLRErrorStrategy} used for
- * error reporting and recovery in ANTLR parsers.
- */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
 import { ATN } from "./atn/ATN";
 import { ATNState } from "./atn/ATNState";
@@ -30,6 +26,10 @@ import { TokenSource } from "./TokenSource";
 import { Vocabulary } from "./Vocabulary";
 import { Override, NotNull } from "./Decorators";
 
+/**
+ * This is the default implementation of {@link ANTLRErrorStrategy} used for
+ * error reporting and recovery in ANTLR parsers.
+ */
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * Indicates whether the error strategy is currently "recovering from an
