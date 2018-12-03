@@ -212,8 +212,8 @@ export class ATN {
 	 * appear at a given token position in the input phrase.  In other words, it
 	 * does not answer:
 	 *
-	 * <quote>"Given a specific partial input phrase, return the set of all
-	 * tokens that can follow the last token in the input phrase."</quote>
+	 * > Given a specific partial input phrase, return the set of all
+	 * > tokens that can follow the last token in the input phrase.
 	 *
 	 * The big difference is that with just the input, the parser could land
 	 * right in the middle of a lookahead decision. Getting all
