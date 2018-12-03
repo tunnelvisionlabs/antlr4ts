@@ -14,8 +14,8 @@ import { NotNull, Override } from "../Decorators";
 /**
  * Implements the {@code skip} lexer action by calling {@link Lexer#skip}.
  *
- * <p>The {@code skip} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * The {@code skip} command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.
  *
  * @author Sam Harwell
  * @since 4.2
@@ -49,7 +49,7 @@ export class LexerSkipAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#skip}.</p>
+	 * This action is implemented by calling {@link Lexer#skip}.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

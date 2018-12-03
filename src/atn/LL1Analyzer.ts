@@ -72,10 +72,10 @@ export class LL1Analyzer {
 	 * Compute set of tokens that can follow {@code s} in the ATN in the
 	 * specified {@code ctx}.
 	 *
-	 * <p>If {@code ctx} is {@code null} and the end of the rule containing
+	 * If {@code ctx} is {@code null} and the end of the rule containing
 	 * {@code s} is reached, {@link Token#EPSILON} is added to the result set.
 	 * If {@code ctx} is not {@code null} and the end of the outermost rule is
-	 * reached, {@link Token#EOF} is added to the result set.</p>
+	 * reached, {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state
 	 * @param ctx the complete parser context, or {@code null} if the context
@@ -91,10 +91,10 @@ export class LL1Analyzer {
 	 * Compute set of tokens that can follow {@code s} in the ATN in the
 	 * specified {@code ctx}.
 	 *
-	 * <p>If {@code ctx} is {@code null} and the end of the rule containing
+	 * If {@code ctx} is {@code null} and the end of the rule containing
 	 * {@code s} is reached, {@link Token#EPSILON} is added to the result set.
 	 * If {@code ctx} is not {@code PredictionContext#EMPTY_LOCAL} and the end of the outermost rule is
-	 * reached, {@link Token#EOF} is added to the result set.</p>
+	 * reached, {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state
 	 * @param stopState the ATN state to stop at. This can be a

@@ -49,7 +49,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get a map from token names to token types.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	@NotNull
 	public getTokenTypeMap(): ReadonlyMap<string, number> {
@@ -80,7 +80,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get a map from rule names to rule indexes.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	@NotNull
 	public getRuleIndexMap(): ReadonlyMap<string, number> {
@@ -110,8 +110,8 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 * If this recognizer was generated, it will have a serialized ATN
 	 * representation of the grammar.
 	 *
-	 * <p>For interpreters, we don't know their serialized ATN despite having
-	 * created the interpreter from it.</p>
+	 * For interpreters, we don't know their serialized ATN despite having
+	 * created the interpreter from it.
 	 */
 	@NotNull
 	get serializedATN(): string {

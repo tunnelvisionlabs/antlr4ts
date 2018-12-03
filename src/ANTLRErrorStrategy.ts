@@ -20,7 +20,7 @@
  * Implementations of this interface report syntax errors by calling
  * {@link Parser#notifyErrorListeners}.
  *
- * <p>TODO: what to do about lexers</p>
+ * TODO: what to do about lexers
  */
 import { Parser } from "./Parser";
 import { Token } from "./Token";
@@ -40,12 +40,12 @@ export interface ANTLRErrorStrategy {
 	 * returns the {@link Token} instance which should be treated as the
 	 * successful result of the match.
 	 *
-	 * <p>This method handles the consumption of any tokens - the caller should
-	 * <em>not</em> call {@link Parser#consume} after a successful recovery.</p>
+	 * This method handles the consumption of any tokens - the caller should
+	 * <em>not</em> call {@link Parser#consume} after a successful recovery.
 	 *
-	 * <p>Note that the calling code will not report an error if this method
+	 * Note that the calling code will not report an error if this method
 	 * returns successfully. The error strategy implementation is responsible
-	 * for calling {@link Parser#notifyErrorListeners} as appropriate.</p>
+	 * for calling {@link Parser#notifyErrorListeners} as appropriate.
 	 *
 	 * @param recognizer the parser instance
 	 * @ if the error strategy was not able to
@@ -72,12 +72,12 @@ export interface ANTLRErrorStrategy {
 	 * syntactic or semantic errors in the input stream before they result in a
 	 * {@link RecognitionException}.
 	 *
-	 * <p>The generated code currently contains calls to {@link #sync} after
+	 * The generated code currently contains calls to {@link #sync} after
 	 * entering the decision state of a closure block ({@code (...)*} or
-	 * {@code (...)+}).</p>
+	 * {@code (...)+}).
 	 *
-	 * <p>For an implementation based on Jim Idle's "magic sync" mechanism, see
-	 * {@link DefaultErrorStrategy#sync}.</p>
+	 * For an implementation based on Jim Idle's "magic sync" mechanism, see
+	 * {@link DefaultErrorStrategy#sync}.
 	 *
 	 * @see DefaultErrorStrategy#sync
 	 *

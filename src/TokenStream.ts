@@ -43,15 +43,15 @@ export interface TokenStream extends IntStream {
 	 * Gets the {@link Token} at the specified {@code index} in the stream. When
 	 * the preconditions of this method are met, the return value is non-null.
 	 *
-	 * <p>The preconditions for this method are the same as the preconditions of
+	 * The preconditions for this method are the same as the preconditions of
 	 * {@link IntStream#seek}. If the behavior of {@code seek(index)} is
 	 * unspecified for the current state and given {@code index}, then the
-	 * behavior of this method is also unspecified.</p>
+	 * behavior of this method is also unspecified.
 	 *
-	 * <p>The symbol referred to by {@code index} differs from {@code seek()} only
+	 * The symbol referred to by {@code index} differs from {@code seek()} only
 	 * in the case of filtering streams where {@code index} lies before the end
 	 * of the stream. Unlike {@code seek()}, this method does not adjust
-	 * {@code index} to point to a non-ignored symbol.</p>
+	 * {@code index} to point to a non-ignored symbol.
 	 *
 	 * @throws IllegalArgumentException if {code index} is less than 0
 	 * @throws UnsupportedOperationException if the stream does not support
@@ -113,8 +113,8 @@ export interface TokenStream extends IntStream {
 	 * exceptions from the call to {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <p>If {@code ctx.sourceInterval} does not return a valid interval of
-	 * tokens provided by this stream, the behavior is unspecified.</p>
+	 * If {@code ctx.sourceInterval} does not return a valid interval of
+	 * tokens provided by this stream, the behavior is unspecified.
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;
@@ -132,14 +132,14 @@ export interface TokenStream extends IntStream {
 	 * Return the text of all tokens in this stream between {@code start} and
 	 * {@code stop} (inclusive).
 	 *
-	 * <p>If the specified {@code start} or {@code stop} token was not provided by
+	 * If the specified {@code start} or {@code stop} token was not provided by
 	 * this stream, or if the {@code stop} occurred before the {@code start}
-	 * token, the behavior is unspecified.</p>
+	 * token, the behavior is unspecified.
 	 *
-	 * <p>For streams which ensure that the `Token.tokenIndex` method is
+	 * For streams which ensure that the `Token.tokenIndex` method is
 	 * accurate for all of its provided tokens, this method behaves like the
 	 * following code. Other streams may implement this method in other ways
-	 * provided the behavior is consistent with this at a high level.</p>
+	 * provided the behavior is consistent with this at a high level.
 	 *
 	 * <pre>
 	 * TokenStream stream = ...;

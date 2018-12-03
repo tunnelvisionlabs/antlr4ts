@@ -169,7 +169,7 @@ export class IntegerList {
 	 * both lists have the same size, and all corresponding pairs of elements in
 	 * the two lists are equal.  In other words, two lists are defined to be
 	 * equal if they contain the same elements in the same order.
-	 * <p>
+	 *
 	 * This implementation first checks if the specified object is this
 	 * list. If so, it returns {@code true}; if not, it checks if the
 	 * specified object is an {@link IntegerList}. If not, it returns {@code false};
@@ -207,9 +207,9 @@ export class IntegerList {
 	/**
 	 * Returns the hash code value for this list.
 	 *
-	 * <p>This implementation uses exactly the code that is used to define the
+	 * This implementation uses exactly the code that is used to define the
 	 * list hash function in the documentation for the {@link List#hashCode}
-	 * method.</p>
+	 * method.
 	 *
 	 * @return the hash code value for this list
 	 */

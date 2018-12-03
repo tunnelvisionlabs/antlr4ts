@@ -22,10 +22,9 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>
 	 * This implementation prints messages to {@link System#err} containing the
 	 * values of {@code line}, {@code charPositionInLine}, and {@code msg} using
-	 * the following format.</p>
+	 * the following format.
 	 *
 	 * <pre>
 	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>

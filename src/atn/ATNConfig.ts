@@ -149,10 +149,9 @@ export class ATNConfig implements Equatable {
 	 * dependent predicates unless we are in the rule that initially
 	 * invokes the ATN simulator.
 	 *
-	 * <p>
 	 * closure() tracks the depth of how far we dip into the outer context:
 	 * depth &gt; 0.  Note that it may not be totally accurate depth since I
-	 * don't ever decrement. TODO: make it a boolean then</p>
+	 * don't ever decrement. TODO: make it a boolean then
 	 */
 	get outerContextDepth(): number {
 		return (this.altAndOuterContextDepth >>> 24) & 0x7F;

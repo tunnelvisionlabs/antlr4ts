@@ -19,10 +19,9 @@ export class VocabularyImpl implements Vocabulary {
 	/**
 	 * Gets an empty {@link Vocabulary} instance.
 	 *
-	 * <p>
 	 * No literal or symbol names are assigned to token types, so
 	 * {@link #getDisplayName(int)} returns the numeric value for all tokens
-	 * except {@link Token#EOF}.</p>
+	 * except {@link Token#EOF}.
 	 */
 	@NotNull
 	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);

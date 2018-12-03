@@ -25,9 +25,9 @@ export namespace IntStream {
  * of buffering necessary to implement arbitrary lookahead during prediction.
  * For more information on marked ranges, see {@link #mark}.
  *
- * <p><strong>Initializing Methods:</strong> Some methods in this interface have
+ * <strong>Initializing Methods:</strong> Some methods in this interface have
  * unspecified behavior if no call to an initializing method has occurred after
- * the stream was constructed. The following is a list of initializing methods:</p>
+ * the stream was constructed. The following is a list of initializing methods:
  *
  * <ul>
  *   <li>{@link #LA}</li>
@@ -69,7 +69,7 @@ export interface IntStream {
 	 * {@code i==0}, but the specific behavior is unspecified because this
 	 * method is frequently called from performance-critical code.
 	 *
-	 * <p>This method is guaranteed to succeed if any of the following are true:</p>
+	 * This method is guaranteed to succeed if any of the following are true:
 	 *
 	 * <ul>
 	 *   <li>{@code i>0}</li>
@@ -84,12 +84,12 @@ export interface IntStream {
 	 *     that has not yet been released.</li>
 	 * </ul>
 	 *
-	 * <p>If {@code i} represents a position at or beyond the end of the stream,
-	 * this method returns {@link #EOF}.</p>
+	 * If {@code i} represents a position at or beyond the end of the stream,
+	 * this method returns {@link #EOF}.
 	 *
-	 * <p>The return value is unspecified if {@code i<0} and fewer than {@code -i}
+	 * The return value is unspecified if {@code i<0} and fewer than {@code -i}
 	 * calls to {@link #consume consume()} have occurred from the beginning of
-	 * the stream before calling this method.</p>
+	 * the stream before calling this method.
 	 *
 	 * @throws UnsupportedOperationException if the stream does not support
 	 * retrieving the value of the specified symbol
@@ -103,7 +103,7 @@ export interface IntStream {
 	 * streaming input sources by specifying the minimum buffering requirements
 	 * to support arbitrary lookahead during prediction.
 	 *
-	 * <p>The returned mark is an opaque handle (type {@code int}) which is passed
+	 * The returned mark is an opaque handle (type {@code int}) which is passed
 	 * to {@link #release release()} when the guarantees provided by the marked
 	 * range are no longer necessary. When calls to
 	 * {@code mark()}/{@code release()} are nested, the marks must be released
@@ -111,19 +111,19 @@ export interface IntStream {
 	 * used during performance-critical sections of prediction, the specific
 	 * behavior of invalid usage is unspecified (i.e. a mark is not released, or
 	 * a mark is released twice, or marks are not released in reverse order from
-	 * which they were created).</p>
+	 * which they were created).
 	 *
-	 * <p>The behavior of this method is unspecified if no call to an
+	 * The behavior of this method is unspecified if no call to an
 	 * {@link IntStream initializing method} has occurred after this stream was
-	 * constructed.</p>
+	 * constructed.
 	 *
-	 * <p>This method does not change the current position in the input stream.</p>
+	 * This method does not change the current position in the input stream.
 	 *
-	 * <p>The following example shows the use of {@link #mark mark()},
+	 * The following example shows the use of {@link #mark mark()},
 	 * {@link #release release(mark)}, `index`, and
 	 * {@link #seek seek(index)} as part of an operation to safely work within a
 	 * marked region, then restore the stream position to its original value and
-	 * release the mark.</p>
+	 * release the mark.
 	 * <pre>
 	 * IntStream stream = ...;
 	 * int index = -1;
@@ -151,7 +151,7 @@ export interface IntStream {
 	 * released twice, or if marks are not released in reverse order of the
 	 * corresponding calls to {@code mark()}, the behavior is unspecified.
 	 *
-	 * <p>For more information and an example, see {@link #mark}.</p>
+	 * For more information and an example, see {@link #mark}.
 	 *
 	 * @param marker A marker returned by a call to {@code mark()}.
 	 * @see #mark
@@ -162,9 +162,9 @@ export interface IntStream {
 	 * Return the index into the stream of the input symbol referred to by
 	 * {@code LA(1)}.
 	 *
-	 * <p>The behavior of this method is unspecified if no call to an
+	 * The behavior of this method is unspecified if no call to an
 	 * {@link IntStream initializing method} has occurred after this stream was
-	 * constructed.</p>
+	 * constructed.
 	 */
 	readonly index: number;
 

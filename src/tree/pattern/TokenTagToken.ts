@@ -61,8 +61,8 @@ export class TokenTagToken extends CommonToken {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link TokenTagToken} returns the token tag
-	 * formatted with {@code <} and {@code >} delimiters.</p>
+	 * The implementation for {@link TokenTagToken} returns the token tag
+	 * formatted with {@code <} and {@code >} delimiters.
 	 */
 	@Override
 	get text(): string {
@@ -76,8 +76,8 @@ export class TokenTagToken extends CommonToken {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link TokenTagToken} returns a string of the form
-	 * {@code tokenName:type}.</p>
+	 * The implementation for {@link TokenTagToken} returns a string of the form
+	 * {@code tokenName:type}.
 	 */
 	@Override
 	public toString(): string {

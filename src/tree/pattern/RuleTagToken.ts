@@ -75,7 +75,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>Rule tag tokens are always placed on the {@link #DEFAULT_CHANNEL}.</p>
+	 * Rule tag tokens are always placed on the {@link #DEFAULT_CHANNEL}.
 	 */
 	@Override
 	get channel(): number {
@@ -85,8 +85,8 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This method returns the rule tag formatted with {@code <} and {@code >}
-	 * delimiters.</p>
+	 * This method returns the rule tag formatted with {@code <} and {@code >}
+	 * delimiters.
 	 */
 	@Override
 	get text(): string {
@@ -100,8 +100,8 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>Rule tag tokens have types assigned according to the rule bypass
-	 * transitions created during ATN deserialization.</p>
+	 * Rule tag tokens have types assigned according to the rule bypass
+	 * transitions created during ATN deserialization.
 	 */
 	@Override
 	get type(): number {
@@ -111,7 +111,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns 0.</p>
+	 * The implementation for {@link RuleTagToken} always returns 0.
 	 */
 	@Override
 	get line(): number {
@@ -121,7 +121,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
+	 * The implementation for {@link RuleTagToken} always returns -1.
 	 */
 	@Override
 	get charPositionInLine(): number {
@@ -131,7 +131,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
+	 * The implementation for {@link RuleTagToken} always returns -1.
 	 */
 	@Override
 	get tokenIndex(): number {
@@ -141,7 +141,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
+	 * The implementation for {@link RuleTagToken} always returns -1.
 	 */
 	@Override
 	get startIndex(): number {
@@ -151,7 +151,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns -1.</p>
+	 * The implementation for {@link RuleTagToken} always returns -1.
 	 */
 	@Override
 	get stopIndex(): number {
@@ -161,7 +161,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
+	 * The implementation for {@link RuleTagToken} always returns {@code null}.
 	 */
 	@Override
 	get tokenSource(): TokenSource | undefined {
@@ -171,7 +171,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} always returns {@code null}.</p>
+	 * The implementation for {@link RuleTagToken} always returns {@code null}.
 	 */
 	@Override
 	get inputStream(): CharStream | undefined {
@@ -181,8 +181,8 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link RuleTagToken} returns a string of the form
-	 * {@code ruleName:bypassTokenType}.</p>
+	 * The implementation for {@link RuleTagToken} returns a string of the form
+	 * {@code ruleName:bypassTokenType}.
 	 */
 	@Override
 	public toString(): string {

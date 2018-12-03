@@ -44,11 +44,10 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getTokenSource} and
 	 * {@link #getInputStream}.
 	 *
-	 * <p>
 	 * These properties share a field to reduce the memory footprint of
 	 * {@link CommonToken}. Tokens created by a {@link CommonTokenFactory} from
 	 * the same source and input stream share a reference to the same
-	 * {@link Tuple2} containing these values.</p>
+	 * {@link Tuple2} containing these values.
 	 */
 	@NotNull
 	protected source: { source?: TokenSource, stream?: CharStream };
@@ -92,13 +91,12 @@ export class CommonToken implements WritableToken {
 	/**
 	 * Constructs a new {@link CommonToken} as a copy of another {@link Token}.
 	 *
-	 * <p>
 	 * If {@code oldToken} is also a {@link CommonToken} instance, the newly
 	 * constructed token will share a reference to the {@link #text} field and
 	 * the {@link Tuple2} stored in {@link #source}. Otherwise, {@link #text} will
 	 * be assigned the result of calling {@link #getText}, and {@link #source}
 	 * will be constructed from the result of {@link Token#getTokenSource} and
-	 * {@link Token#getInputStream}.</p>
+	 * {@link Token#getInputStream}.
 	 *
 	 * @param oldToken The token to copy.
 	 */

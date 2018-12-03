@@ -48,8 +48,8 @@ export class TextChunk extends Chunk {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link TextChunk} returns the result of
-	 * `text` in single quotes.</p>
+	 * The implementation for {@link TextChunk} returns the result of
+	 * `text` in single quotes.
 	 */
 	@Override
 	public toString(): string {

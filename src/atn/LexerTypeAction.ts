@@ -58,8 +58,8 @@ export class LexerTypeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by setting `Lexer.type` with the
-	 * value provided by `type`.</p>
+	 * This action is implemented by setting `Lexer.type` with the
+	 * value provided by `type`.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

@@ -64,9 +64,8 @@ export interface IntSet {
 	 * Return a new {@link IntSet} object containing all elements that are
 	 * present in the current set, the specified set {@code a}, or both.
 	 *
-	 * <p>
 	 * This method is similar to {@link #addAll(IntSet)}, but returns a new
-	 * {@link IntSet} instance instead of modifying the current set.</p>
+	 * {@link IntSet} instance instead of modifying the current set.
 	 *
 	 * @param a The set to union with the current set. A {@code null} argument
 	 * is treated as though it were an empty set.

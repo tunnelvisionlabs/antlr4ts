@@ -21,12 +21,11 @@ import { WritableToken } from "./WritableToken";
  * {@link TokenSource} on-demand, and places the tokens in a buffer to provide
  * access to any previous token by index.
  *
- * <p>
  * This token stream ignores the value of {@link Token#getChannel}. If your
  * parser requires the token stream filter tokens to only those on a particular
  * channel, such as {@link Token#DEFAULT_CHANNEL} or
  * {@link Token#HIDDEN_CHANNEL}, use a filtering token stream such a
- * {@link CommonTokenStream}.</p>
+ * {@link CommonTokenStream}.
  */
 export class BufferedTokenStream implements TokenStream {
 	/**
@@ -47,11 +46,11 @@ export class BufferedTokenStream implements TokenStream {
 	 * {@link #consume}). {@link #tokens}{@code [}{@link #p}{@code ]} should be
 	 * {@link #LT LT(1)}.
 	 *
-	 * <p>This field is set to -1 when the stream is first constructed or when
+	 * This field is set to -1 when the stream is first constructed or when
 	 * {@link #setTokenSource} is called, indicating that the first token has
 	 * not yet been fetched from the token source. For additional information,
 	 * see the documentation of {@link IntStream} for a description of
-	 * Initializing Methods.</p>
+	 * Initializing Methods.
 	 */
 	protected p: number = -1;
 
@@ -277,8 +276,8 @@ export class BufferedTokenStream implements TokenStream {
 	 * exception is thrown in this method, the current stream index should not be
 	 * changed.
 	 *
-	 * <p>For example, {@link CommonTokenStream} overrides this method to ensure that
-	 * the seek target is always an on-channel token.</p>
+	 * For example, {@link CommonTokenStream} overrides this method to ensure that
+	 * the seek target is always an on-channel token.
 	 *
 	 * @param i The target token index.
 	 * @return The adjusted target token index.
@@ -365,10 +364,9 @@ export class BufferedTokenStream implements TokenStream {
 	 * channel. Return {@code i} if {@code tokens[i]} is on channel. Return -1
 	 * if there are no tokens on channel between {@code i} and 0.
 	 *
-	 * <p>
 	 * If {@code i} specifies an index at or after the EOF token, the EOF token
 	 * index is returned. This is due to the fact that the EOF token is treated
-	 * as though it were on every channel.</p>
+	 * as though it were on every channel.
 	 */
 	protected previousTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);

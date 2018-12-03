@@ -54,8 +54,8 @@ function min<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
  *  an ATN configuration is valid.  It's either a single predicate,
  *  a conjunction {@code p1&&p2}, or a sum of products {@code p1||p2}.
  *
- *  <p>I have scoped the {@link AND}, {@link OR}, and {@link Predicate} subclasses of
- *  {@link SemanticContext} within the scope of this outer class.</p>
+ *  I have scoped the {@link AND}, {@link OR}, and {@link Predicate} subclasses of
+ *  {@link SemanticContext} within the scope of this outer class.
  */
 export abstract class SemanticContext implements Equatable {
 	private static _NONE: SemanticContext;
@@ -79,11 +79,11 @@ export abstract class SemanticContext implements Equatable {
 	 * opposed to the parser, which creates them naturally). In a practical
 	 * sense, this avoids a cast exception from RuleContext to myruleContext.
 	 *
-	 * <p>For context dependent predicates, we must pass in a local context so that
+	 * For context dependent predicates, we must pass in a local context so that
 	 * references such as $arg evaluate properly as _localctx.arg. We only
 	 * capture context dependent predicates in the context in which we begin
 	 * prediction, so we passed in the outer context here in case of context
-	 * dependent predicate evaluation.</p>
+	 * dependent predicate evaluation.
 	 */
 	public abstract eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean;
 
@@ -356,9 +356,8 @@ export namespace SemanticContext {
 		/**
 		 * {@inheritDoc}
 		 *
-		 * <p>
 		 * The evaluation of predicates by this context is short-circuiting, but
-		 * unordered.</p>
+		 * unordered.
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
@@ -468,9 +467,8 @@ export namespace SemanticContext {
 		/**
 		 * {@inheritDoc}
 		 *
-		 * <p>
 		 * The evaluation of predicates by this context is short-circuiting, but
-		 * unordered.</p>
+		 * unordered.
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {

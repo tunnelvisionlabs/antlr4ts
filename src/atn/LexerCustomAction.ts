@@ -17,9 +17,9 @@ import { NotNull, Override } from "../Decorators";
  * a custom action is added to the generated code for the lexer in an override
  * of {@link Recognizer#action} when the grammar is compiled.
  *
- * <p>This class may represent embedded actions created with the <code>{...}</code>
+ * This class may represent embedded actions created with the <code>{...}</code>
  * syntax in ANTLR 4, as well as actions created for lexer commands where the
- * command argument could not be evaluated when the grammar was compiled.</p>
+ * command argument could not be evaluated when the grammar was compiled.
  *
  * @author Sam Harwell
  * @since 4.2
@@ -75,9 +75,9 @@ export class LexerCustomAction implements LexerAction {
 	 * actions may have different semantics depending on the {@link CharStream}
 	 * index at the time the action is executed.
 	 *
-	 * <p>Custom actions are position-dependent since they may represent a
+	 * Custom actions are position-dependent since they may represent a
 	 * user-defined embedded action which makes calls to methods like
-	 * {@link Lexer#getText}.</p>
+	 * {@link Lexer#getText}.
 	 *
 	 * @return This method returns {@code true}.
 	 */
@@ -89,8 +89,8 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>Custom actions are implemented by calling {@link Lexer#action} with the
-	 * appropriate rule and action indexes.</p>
+	 * Custom actions are implemented by calling {@link Lexer#action} with the
+	 * appropriate rule and action indexes.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

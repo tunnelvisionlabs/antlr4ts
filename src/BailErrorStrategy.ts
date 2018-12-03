@@ -12,8 +12,7 @@
  * {@link ParserRuleContext#exception} field is set for all parse tree nodes
  * that were not completed prior to encountering the error.
  *
- * <p>
- * This error strategy is useful in the following scenarios.</p>
+ * This error strategy is useful in the following scenarios.
  *
  * <ul>
  * <li><strong>Two-stage parsing:</strong> This error strategy allows the first
@@ -28,8 +27,7 @@
  * when the result will be ignored either way.</li>
  * </ul>
  *
- * <p>
- * {@code myparser.errorHandler = new BailErrorStrategy();}</p>
+ * {@code myparser.errorHandler = new BailErrorStrategy();}
  *
  * @see Parser.errorHandler
  */

@@ -9,7 +9,7 @@
  * like a {@code char[]} buffer. Can also pass in a {@link String} or
  * {@code char[]} to use.
  *
- * <p>If you need encoding, pass in stream/reader with correct encoding.</p>
+ * If you need encoding, pass in stream/reader with correct encoding.
  */
 import * as assert from "assert";
 import { CharStream } from "./CharStream";

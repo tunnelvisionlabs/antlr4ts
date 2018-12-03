@@ -95,10 +95,9 @@ export namespace Token {
 	 * This is the minimum constant value which can be assigned to a
 	 * user-defined token channel.
 	 *
-	 * <p>
 	 * The non-negative numbers less than {@link #MIN_USER_CHANNEL_VALUE} are
 	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
-	 * {@link #HIDDEN_CHANNEL}.</p>
+	 * {@link #HIDDEN_CHANNEL}.
 	 *
 	 * @see `Token.channel`
 	 */

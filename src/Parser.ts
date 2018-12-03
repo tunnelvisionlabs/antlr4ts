@@ -173,12 +173,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * matches, {@link ANTLRErrorStrategy#reportMatch} and {@link #consume} are
 	 * called to complete the match process.
 	 *
-	 * <p>If the symbol type does not match,
+	 * If the symbol type does not match,
 	 * {@link ANTLRErrorStrategy#recoverInline} is called on the current error
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
 	 * {@code true} and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
-	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.</p>
+	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
 	 * @param ttype the token type to match
 	 * @return the matched symbol
@@ -212,12 +212,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * (i.e. has a value greater than 0), {@link ANTLRErrorStrategy#reportMatch}
 	 * and {@link #consume} are called to complete the match process.
 	 *
-	 * <p>If the symbol type does not match,
+	 * If the symbol type does not match,
 	 * {@link ANTLRErrorStrategy#recoverInline} is called on the current error
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
 	 * {@code true} and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
-	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.</p>
+	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
 	 * @return the matched symbol
 	 * @ if the current input symbol did not match
@@ -249,14 +249,14 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * forms a parse tree. The {@link ParserRuleContext} returned from the start
 	 * rule represents the root of the parse tree.
 	 *
-	 * <p>Note that if we are not building parse trees, rule contexts only point
+	 * Note that if we are not building parse trees, rule contexts only point
 	 * upwards. When a rule exits, it returns the context but that gets garbage
 	 * collected if nobody holds a reference. It points upwards but nobody
-	 * points at it.</p>
+	 * points at it.
 	 *
-	 * <p>When we build parse trees, we are adding all of these contexts to
+	 * When we build parse trees, we are adding all of these contexts to
 	 * {@link ParserRuleContext#children} list. Contexts are then not candidates
-	 * for garbage collection.</p>
+	 * for garbage collection.
 	 */
 	set buildParseTree(buildParseTrees: boolean) {
 		this._buildParseTrees = buildParseTrees;
@@ -281,18 +281,18 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Registers {@code listener} to receive events during the parsing process.
 	 *
-	 * <p>To support output-preserving grammar transformations (including but not
+	 * To support output-preserving grammar transformations (including but not
 	 * limited to left-recursion removal, automated left-factoring, and
 	 * optimized code generation), calls to listener methods during the parse
 	 * may differ substantially from calls made by
 	 * {@link ParseTreeWalker#DEFAULT} used after the parse is complete. In
 	 * particular, rule entry and exit events may occur in a different order
 	 * during the parse than after the parser. In addition, calls to certain
-	 * rule entry methods may be omitted.</p>
+	 * rule entry methods may be omitted.
 	 *
-	 * <p>With the following specific exceptions, calls to listener events are
+	 * With the following specific exceptions, calls to listener events are
 	 * <em>deterministic</em>, i.e. for identical input the calls to listener
-	 * methods will be the same.</p>
+	 * methods will be the same.
 	 *
 	 * <ul>
 	 * <li>Alterations to the grammar used to generate code may change the
@@ -318,8 +318,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Remove {@code listener} from the list of parse listeners.
 	 *
-	 * <p>If {@code listener} is {@code null} or has not been added as a parse
-	 * listener, this method does nothing.</p>
+	 * If {@code listener} is {@code null} or has not been added as a parse
+	 * listener, this method does nothing.
 	 *
 	 * @see #addParseListener
 	 *
@@ -506,9 +506,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Consume and return the [current symbol](`currentToken`).
 	 *
-	 * <p>E.g., given the following input with {@code A} being the current
+	 * E.g., given the following input with {@code A} being the current
 	 * lookahead symbol, this function moves the cursor to {@code B} and returns
-	 * {@code A}.</p>
+	 * {@code A}.
 	 *
 	 * <pre>
 	 *  A B

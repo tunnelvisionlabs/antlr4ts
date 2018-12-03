@@ -26,8 +26,8 @@ export interface Vocabulary {
 	 * by this method, when not {@code null}, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
-	 * <p>The following table shows examples of lexer rules and the literal
-	 * names assigned to the corresponding token types.</p>
+	 * The following table shows examples of lexer rules and the literal
+	 * names assigned to the corresponding token types.
 	 *
 	 * <table>
 	 *  <tr>
@@ -64,8 +64,8 @@ export interface Vocabulary {
 	 * by this method, when not {@code null}, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
-	 * <p>This method supports token types defined by any of the following
-	 * methods:</p>
+	 * This method supports token types defined by any of the following
+	 * methods:
 	 *
 	 * <ul>
 	 *  <li>Tokens created by lexer rules.</li>
@@ -75,8 +75,8 @@ export interface Vocabulary {
 	 *  {@link Token#EOF}.</li>
 	 * </ul>
 	 *
-	 * <p>The following table shows examples of lexer rules and the literal
-	 * names assigned to the corresponding token types.</p>
+	 * The following table shows examples of lexer rules and the literal
+	 * names assigned to the corresponding token types.
 	 *
 	 * <table>
 	 *  <tr>
@@ -107,11 +107,11 @@ export interface Vocabulary {
 	/**
 	 * Gets the display name of a token type.
 	 *
-	 * <p>ANTLR provides a default implementation of this method, but
+	 * ANTLR provides a default implementation of this method, but
 	 * applications are free to override the behavior in any manner which makes
 	 * sense for the application. The default implementation returns the first
 	 * result from the following list which produces a non-{@code null}
-	 * result.</p>
+	 * result.
 	 *
 	 * <ol>
 	 *  <li>The result of {@link #getLiteralName}</li>

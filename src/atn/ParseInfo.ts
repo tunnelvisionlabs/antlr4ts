@@ -134,9 +134,8 @@ export class ParseInfo {
 	 * Gets the total number of ATN lookahead operations for SLL and LL
 	 * prediction across all decisions made during parsing.
 	 *
-	 * <p>
 	 * This value is the sum of {@link #getTotalSLLATNLookaheadOps} and
-	 * {@link #getTotalLLATNLookaheadOps}.</p>
+	 * {@link #getTotalLLATNLookaheadOps}.
 	 */
 	public getTotalATNLookaheadOps(): number {
 		let decisions: DecisionInfo[] = this.atnSimulator.getDecisionInfo();

@@ -16,9 +16,9 @@ import { TokenSource } from "./TokenSource";
  * Provides an implementation of {@link TokenSource} as a wrapper around a list
  * of {@link Token} objects.
  *
- * <p>If the final token in the list is an {@link Token#EOF} token, it will be used
+ * If the final token in the list is an {@link Token#EOF} token, it will be used
  * as the EOF token for every call to {@link #nextToken} after the end of the
- * list is reached. Otherwise, an EOF token will be created.</p>
+ * list is reached. Otherwise, an EOF token will be created.
  */
 export class ListTokenSource implements TokenSource {
 	/**

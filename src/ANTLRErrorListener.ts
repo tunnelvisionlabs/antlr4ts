@@ -17,10 +17,10 @@ export interface ANTLRErrorListener<TSymbol> {
 	 * messages. This listener's job is simply to emit a computed message,
 	 * though it has enough information to create its own message in many cases.
 	 *
-	 * <p>The {@link RecognitionException} is non-null for all syntax errors except
+	 * The {@link RecognitionException} is non-null for all syntax errors except
 	 * when we discover mismatched token errors that we can recover from
 	 * in-line, without returning from the surrounding rule (via the single
-	 * token insertion and deletion mechanism).</p>
+	 * token insertion and deletion mechanism).
 	 *
 	 * @param recognizer
 	 *        What parser got the error. From this

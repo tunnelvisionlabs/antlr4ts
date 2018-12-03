@@ -542,14 +542,14 @@ export class LexerATNSimulator extends ATNSimulator {
 	/**
 	 * Evaluate a predicate specified in the lexer.
 	 *
-	 * <p>If {@code speculative} is {@code true}, this method was called before
+	 * If {@code speculative} is {@code true}, this method was called before
 	 * {@link #consume} for the matched character. This method should call
 	 * {@link #consume} before evaluating the predicate to ensure position
 	 * sensitive values, including {@link Lexer#getText}, {@link Lexer#getLine},
 	 * and {@link Lexer#getCharPositionInLine}, properly reflect the current
 	 * lexer state. This method should restore {@code input} and the simulator
 	 * to the original state before returning (i.e. undo the actions made by the
-	 * call to {@link #consume}.</p>
+	 * call to {@link #consume}.
 	 *
 	 * @param input The input stream.
 	 * @param ruleIndex The rule containing the predicate.
@@ -737,12 +737,12 @@ export namespace LexerATNSimulator {
 	 *  tracking the starting line and characterization of the token. These
 	 *  variables track the "state" of the simulator when it hits an accept state.
 	 *
-	 *  <p>We track these variables separately for the DFA and ATN simulation
+	 *  We track these variables separately for the DFA and ATN simulation
 	 *  because the DFA simulation often has to fail over to the ATN
 	 *  simulation. If the ATN simulation fails, we need the DFA to fall
 	 *  back to its previously accepted state, if any. If the ATN succeeds,
 	 *  then the ATN does the accept and the DFA simulator that invoked it
-	 *  can simply return the predicted token type.</p>
+	 *  can simply return the predicted token type.
 	 */
 	export class SimState {
 		public index: number = -1;
