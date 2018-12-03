@@ -10,12 +10,10 @@
  * during a parse by ANTLR-generated parsers. We distinguish between three
  * different kinds of errors:
  *
- * <ul>
- * <li>The parser could not figure out which path to take in the ATN (none of
- * the available alternatives could possibly match)</li>
- * <li>The current input does not match what we were looking for</li>
- * <li>A predicate evaluated to false</li>
- * </ul>
+ * * The parser could not figure out which path to take in the ATN (none of
+ *   the available alternatives could possibly match)
+ * * The current input does not match what we were looking for
+ * * A predicate evaluated to false
  *
  * Implementations of this interface report syntax errors by calling
  * {@link Parser#notifyErrorListeners}.

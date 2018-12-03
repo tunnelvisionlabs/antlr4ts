@@ -67,13 +67,11 @@ export interface Vocabulary {
 	 * This method supports token types defined by any of the following
 	 * methods:
 	 *
-	 * <ul>
-	 *  <li>Tokens created by lexer rules.</li>
-	 *  <li>Tokens defined in a <code>tokens{}</code> block in a lexer or parser
-	 *  grammar.</li>
-	 *  <li>The implicitly defined {@code EOF} token, which has the token type
-	 *  {@link Token#EOF}.</li>
-	 * </ul>
+	 * * Tokens created by lexer rules.
+	 * * Tokens defined in a <code>tokens{}</code> block in a lexer or parser
+	 *   grammar.
+	 * * The implicitly defined {@code EOF} token, which has the token type
+	 *   {@link Token#EOF}.
 	 *
 	 * The following table shows examples of lexer rules and the literal
 	 * names assigned to the corresponding token types.
@@ -113,11 +111,9 @@ export interface Vocabulary {
 	 * result from the following list which produces a non-{@code null}
 	 * result.
 	 *
-	 * <ol>
-	 *  <li>The result of {@link #getLiteralName}</li>
-	 *  <li>The result of {@link #getSymbolicName}</li>
-	 *  <li>The result of {@link Integer#toString}</li>
-	 * </ol>
+	 * 1. The result of {@link #getLiteralName}
+	 * 1. The result of {@link #getSymbolicName}
+	 * 1. The result of {@link Integer#toString}
 	 *
 	 * @param tokenType The token type.
 	 *

@@ -30,13 +30,11 @@ export class StarLoopEntryState extends DecisionState {
 	 * For precedence decisions, this set marks states *S* which have all
 	 * of the following characteristics:
 	 *
-	 * <ul>
-	 * <li>One or more invocation sites of the current rule returns to
-	 * *S*.</li>
-	 * <li>The closure from *S* includes the current decision without
-	 * passing through any rule invocations or stepping out of the current
-	 * rule.</li>
-	 * </ul>
+	 * * One or more invocation sites of the current rule returns to
+	 *   *S*.
+	 * * The closure from *S* includes the current decision without
+	 *   passing through any rule invocations or stepping out of the current
+	 *   rule.
 	 *
 	 * This field is not used when {@link #isPrecedenceDecision} is
 	 * {@code false}.

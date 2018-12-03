@@ -109,16 +109,14 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * and dispatches the reporting task based on the runtime type of {@code e}
 	 * according to the following table.
 	 *
-	 * <ul>
-	 * <li>{@link NoViableAltException}: Dispatches the call to
-	 * {@link #reportNoViableAlternative}</li>
-	 * <li>{@link InputMismatchException}: Dispatches the call to
-	 * {@link #reportInputMismatch}</li>
-	 * <li>{@link FailedPredicateException}: Dispatches the call to
-	 * {@link #reportFailedPredicate}</li>
-	 * <li>All other types: calls {@link Parser#notifyErrorListeners} to report
-	 * the exception</li>
-	 * </ul>
+	 * * {@link NoViableAltException}: Dispatches the call to
+	 *   {@link #reportNoViableAlternative}
+	 * * {@link InputMismatchException}: Dispatches the call to
+	 *   {@link #reportInputMismatch}
+	 * * {@link FailedPredicateException}: Dispatches the call to
+	 *   {@link #reportFailedPredicate}
+	 * * All other types: calls {@link Parser#notifyErrorListeners} to report
+	 *   the exception
 	 */
 	@Override
 	public reportError(

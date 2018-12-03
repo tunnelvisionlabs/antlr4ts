@@ -59,13 +59,11 @@ export class BufferedTokenStream implements TokenStream {
 	 * {@link #tokenSource} and added to {@link #tokens}. This field improves
 	 * performance for the following cases:
 	 *
-	 * <ul>
-	 * <li>{@link #consume}: The lookahead check in {@link #consume} to prevent
-	 * consuming the EOF symbol is optimized by checking the values of
-	 * {@link #fetchedEOF} and {@link #p} instead of calling {@link #LA}.</li>
-	 * <li>{@link #fetch}: The check to prevent adding multiple EOF symbols into
-	 * {@link #tokens} is trivial with this field.</li>
-	 * <ul>
+	 * * {@link #consume}: The lookahead check in {@link #consume} to prevent
+	 *   consuming the EOF symbol is optimized by checking the values of
+	 *   {@link #fetchedEOF} and {@link #p} instead of calling {@link #LA}.
+	 * * {@link #fetch}: The check to prevent adding multiple EOF symbols into
+	 *   {@link #tokens} is trivial with this field.
 	 */
 	protected fetchedEOF: boolean = false;
 

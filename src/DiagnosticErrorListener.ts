@@ -11,18 +11,16 @@
  * are made by calling {@link Parser#notifyErrorListeners} with the appropriate
  * message.
  *
- * <ul>
- * <li>**Ambiguities**: These are cases where more than one path through the
- * grammar can match the input.</li>
- * <li>**Weak context sensitivity**: These are cases where full-context
- * prediction resolved an SLL conflict to a unique alternative which equaled the
- * minimum alternative of the SLL conflict.</li>
- * <li>**Strong (forced) context sensitivity**: These are cases where the
- * full-context prediction resolved an SLL conflict to a unique alternative,
- * *and* the minimum alternative of the SLL conflict was found to not be
- * a truly viable alternative. Two-stage parsing cannot be used for inputs where
- * this situation occurs.</li>
- * </ul>
+ * * **Ambiguities**: These are cases where more than one path through the
+ *   grammar can match the input.
+ * * **Weak context sensitivity**: These are cases where full-context
+ *   prediction resolved an SLL conflict to a unique alternative which equaled the
+ *   minimum alternative of the SLL conflict.
+ * * **Strong (forced) context sensitivity**: These are cases where the
+ *   full-context prediction resolved an SLL conflict to a unique alternative,
+ *   *and* the minimum alternative of the SLL conflict was found to not be
+ *   a truly viable alternative. Two-stage parsing cannot be used for inputs where
+ *   this situation occurs.
  *
  * @author Sam Harwell
  */

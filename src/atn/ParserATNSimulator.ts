@@ -870,24 +870,20 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * and valid, and the syntax error will be reported later at a more
 	 * localized location.
 	 *
-	 * <ul>
-	 * <li>If no configuration in {@code configs} reached the end of the
-	 * decision rule, return {@link ATN#INVALID_ALT_NUMBER}.</li>
-	 * <li>If all configurations in {@code configs} which reached the end of the
-	 * decision rule predict the same alternative, return that alternative.</li>
-	 * <li>If the configurations in {@code configs} which reached the end of the
-	 * decision rule predict multiple alternatives (call this *S*),
-	 * choose an alternative in the following order.
-	 * <ol>
-	 * <li>Filter the configurations in {@code configs} to only those
-	 * configurations which remain viable after evaluating semantic predicates.
-	 * If the set of these filtered configurations which also reached the end of
-	 * the decision rule is not empty, return the minimum alternative
-	 * represented in this set.</li>
-	 * <li>Otherwise, choose the minimum alternative in *S*.</li>
-	 * </ol>
-	 * </li>
-	 * </ul>
+	 * * If no configuration in {@code configs} reached the end of the
+	 *   decision rule, return {@link ATN#INVALID_ALT_NUMBER}.
+	 * * If all configurations in {@code configs} which reached the end of the
+	 *   decision rule predict the same alternative, return that alternative.
+	 * * If the configurations in {@code configs} which reached the end of the
+	 *   decision rule predict multiple alternatives (call this *S*),
+	 *   choose an alternative in the following order.
+	 *
+	 *     1. Filter the configurations in {@code configs} to only those
+	 *        configurations which remain viable after evaluating semantic predicates.
+	 *        If the set of these filtered configurations which also reached the end of
+	 *        the decision rule is not empty, return the minimum alternative
+	 *        represented in this set.
+	 *     1. Otherwise, choose the minimum alternative in *S*.
 	 *
 	 * In some scenarios, the algorithm described above could predict an
 	 * alternative which will result in a {@link FailedPredicateException} in
@@ -1400,30 +1396,26 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * process applies the following changes to the start state's configuration
 	 * set.
 	 *
-	 * <ol>
-	 * <li>Evaluate the precedence predicates for each configuration using
-	 * {@link SemanticContext#evalPrecedence}.</li>
-	 * <li>When {@link ATNConfig#isPrecedenceFilterSuppressed} is {@code false},
-	 * remove all configurations which predict an alternative greater than 1,
-	 * for which another configuration that predicts alternative 1 is in the
-	 * same ATN state with the same prediction context. This transformation is
-	 * valid for the following reasons:
-	 * <ul>
-	 * <li>The closure block cannot contain any epsilon transitions which bypass
-	 * the body of the closure, so all states reachable via alternative 1 are
-	 * part of the precedence alternatives of the transformed left-recursive
-	 * rule.</li>
-	 * <li>The "primary" portion of a left recursive rule cannot contain an
-	 * epsilon transition, so the only way an alternative other than 1 can exist
-	 * in a state that is also reachable via alternative 1 is by nesting calls
-	 * to the left-recursive rule, with the outer calls not being at the
-	 * preferred precedence level. The
-	 * {@link ATNConfig#isPrecedenceFilterSuppressed} property marks ATN
-	 * configurations which do not meet this condition, and therefore are not
-	 * eligible for elimination during the filtering process.</li>
-	 * </ul>
-	 * </li>
-	 * </ol>
+	 * 1. Evaluate the precedence predicates for each configuration using
+	 *    {@link SemanticContext#evalPrecedence}.
+	 * 1. When {@link ATNConfig#isPrecedenceFilterSuppressed} is {@code false},
+	 *    remove all configurations which predict an alternative greater than 1,
+	 *    for which another configuration that predicts alternative 1 is in the
+	 *    same ATN state with the same prediction context. This transformation is
+	 *    valid for the following reasons:
+	 *
+	 *     * The closure block cannot contain any epsilon transitions which bypass
+	 *       the body of the closure, so all states reachable via alternative 1 are
+	 *       part of the precedence alternatives of the transformed left-recursive
+	 *       rule.
+	 *     * The "primary" portion of a left recursive rule cannot contain an
+	 *       epsilon transition, so the only way an alternative other than 1 can exist
+	 *       in a state that is also reachable via alternative 1 is by nesting calls
+	 *       to the left-recursive rule, with the outer calls not being at the
+	 *       preferred precedence level. The
+	 *       {@link ATNConfig#isPrecedenceFilterSuppressed} property marks ATN
+	 *       configurations which do not meet this condition, and therefore are not
+	 *       eligible for elimination during the filtering process.
 	 *
 	 * The prediction context must be considered by this filter to address
 	 * situations like the following.
@@ -1657,17 +1649,15 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * during the prediction process. In particular, we currently do not
 	 * evaluate the following but it may change in the future:
 	 *
-	 * <ul>
-	 * <li>Precedence predicates (represented by
-	 * {@link SemanticContext.PrecedencePredicate}) are not currently evaluated
-	 * through this method.</li>
-	 * <li>Operator predicates (represented by {@link SemanticContext.AND} and
-	 * {@link SemanticContext.OR}) are evaluated as a single semantic
-	 * context, rather than evaluating the operands individually.
-	 * Implementations which require evaluation results from individual
-	 * predicates should override this method to explicitly handle evaluation of
-	 * the operands within operator predicates.</li>
-	 * </ul>
+	 * * Precedence predicates (represented by
+	 *   {@link SemanticContext.PrecedencePredicate}) are not currently evaluated
+	 *   through this method.
+	 * * Operator predicates (represented by {@link SemanticContext.AND} and
+	 *   {@link SemanticContext.OR}) are evaluated as a single semantic
+	 *   context, rather than evaluating the operands individually.
+	 *   Implementations which require evaluation results from individual
+	 *   predicates should override this method to explicitly handle evaluation of
+	 *   the operands within operator predicates.
 	 *
 	 * @param pred The semantic context to evaluate
 	 * @param parserCallStack The parser context in which to evaluate the

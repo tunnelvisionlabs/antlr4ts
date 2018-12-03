@@ -49,10 +49,8 @@ export interface IntSet {
 	 * following expressions are equivalent for input non-null {@link IntSet}
 	 * instances {@code x} and {@code y}.
 	 *
-	 * <ul>
-	 * <li>{@code x.complement(y)}</li>
-	 * <li>{@code y.subtract(x)}</li>
-	 * </ul>
+	 * * {@code x.complement(y)}
+	 * * {@code y.subtract(x)}
 	 *
 	 * @param elements The set to compare with the current set.
 	 * @return A new {@link IntSet} instance containing the elements present in
@@ -82,10 +80,8 @@ export interface IntSet {
 	 * The following expressions are equivalent for input non-null
 	 * {@link IntSet} instances {@code x} and {@code y}.
 	 *
-	 * <ul>
-	 * <li>{@code y.subtract(x)}</li>
-	 * <li>{@code x.complement(y)}</li>
-	 * </ul>
+	 * * {@code y.subtract(x)}
+	 * * {@code x.complement(y)}
 	 *
 	 * @param a The set to compare with the current set. A {@code null}
 	 * argument is treated as though it were an empty set.

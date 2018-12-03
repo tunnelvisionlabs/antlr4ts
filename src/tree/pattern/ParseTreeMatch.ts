@@ -106,12 +106,10 @@ export class ParseTreeMatch {
 	 * the parser rule or token. For example, if {@code label} is {@code "foo"},
 	 * the result will contain *all* of the following.
 	 *
-	 * <ul>
-	 * <li>Parse tree nodes matching tags of the form {@code <foo:anyRuleName>} and
-	 * {@code <foo:AnyTokenName>}.</li>
-	 * <li>Parse tree nodes matching tags of the form {@code <anyLabel:foo>}.</li>
-	 * <li>Parse tree nodes matching tags of the form {@code <foo>}.</li>
-	 * </ul>
+	 * * Parse tree nodes matching tags of the form {@code <foo:anyRuleName>} and
+	 *   {@code <foo:AnyTokenName>}.
+	 * * Parse tree nodes matching tags of the form {@code <anyLabel:foo>}.
+	 * * Parse tree nodes matching tags of the form {@code <foo>}.
 	 *
 	 * @param label The label.
 	 *

@@ -29,25 +29,21 @@ export namespace IntStream {
  * unspecified behavior if no call to an initializing method has occurred after
  * the stream was constructed. The following is a list of initializing methods:
  *
- * <ul>
- *   <li>{@link #LA}</li>
- *   <li>{@link #consume}</li>
- *   <li>{@link #size}</li>
- * </ul>
+ * * {@link #LA}
+ * * {@link #consume}
+ * * {@link #size}
  */
 export interface IntStream {
 	/**
 	 * Consumes the current symbol in the stream. This method has the following
 	 * effects:
 	 *
-	 * <ul>
-	 *   <li>**Forward movement:** The value of `index`
-	 *     before calling this method is less than the value of `index`
-	 *     after calling this method.</li>
-	 *   <li>**Ordered lookahead:** The value of {@code LA(1)} before
-	 *     calling this method becomes the value of {@code LA(-1)} after calling
-	 *     this method.</li>
-	 * </ul>
+	 * * **Forward movement:** The value of `index`
+	 *   before calling this method is less than the value of `index`
+	 *   after calling this method.
+	 * * **Ordered lookahead:** The value of {@code LA(1)} before
+	 *   calling this method becomes the value of {@code LA(-1)} after calling
+	 *   this method.
 	 *
 	 * Note that calling this method does not guarantee that `index` is
 	 * incremented by exactly 1, as that would preclude the ability to implement
@@ -71,18 +67,16 @@ export interface IntStream {
 	 *
 	 * This method is guaranteed to succeed if any of the following are true:
 	 *
-	 * <ul>
-	 *   <li>{@code i>0}</li>
-	 *   <li>{@code i==-1} and `index` returns a value greater
-	 *     than the value of `index` after the stream was constructed
-	 *     and {@code LA(1)} was called in that order. Specifying the current
-	 *     `index` relative to the index after the stream was created
-	 *     allows for filtering implementations that do not return every symbol
-	 *     from the underlying source. Specifying the call to {@code LA(1)}
-	 *     allows for lazily initialized streams.</li>
-	 *   <li>{@code LA(i)} refers to a symbol consumed within a marked region
-	 *     that has not yet been released.</li>
-	 * </ul>
+	 * * {@code i>0}
+	 * * {@code i==-1} and `index` returns a value greater
+	 *   than the value of `index` after the stream was constructed
+	 *   and {@code LA(1)} was called in that order. Specifying the current
+	 *   `index` relative to the index after the stream was created
+	 *   allows for filtering implementations that do not return every symbol
+	 *   from the underlying source. Specifying the call to {@code LA(1)}
+	 *   allows for lazily initialized streams.
+	 * * {@code LA(i)} refers to a symbol consumed within a marked region
+	 *   that has not yet been released.
 	 *
 	 * If {@code i} represents a position at or beyond the end of the stream,
 	 * this method returns {@link #EOF}.
@@ -175,14 +169,12 @@ export interface IntStream {
 	 * returns without throwing an exception, then at least one of the following
 	 * will be true.
 	 *
-	 * <ul>
-	 *   <li>`index` will return the index of the first symbol
-	 *     appearing at or after the specified {@code index}. Specifically,
-	 *     implementations which filter their sources should automatically
-	 *     adjust {@code index} forward the minimum amount required for the
-	 *     operation to target a non-ignored symbol.</li>
-	 *   <li>{@code LA(1)} returns {@link #EOF}</li>
-	 * </ul>
+	 * * `index` will return the index of the first symbol
+	 *   appearing at or after the specified {@code index}. Specifically,
+	 *   implementations which filter their sources should automatically
+	 *   adjust {@code index} forward the minimum amount required for the
+	 *   operation to target a non-ignored symbol.
+	 * * {@code LA(1)} returns {@link #EOF}
 	 *
 	 * This operation is guaranteed to not throw an exception if {@code index}
 	 * lies within a marked region. For more information on marked regions, see

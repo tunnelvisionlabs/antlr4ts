@@ -64,11 +64,9 @@ export class ATNConfig implements Equatable {
 	/**
 	 * This is a bit-field currently containing the following values.
 	 *
-	 * <ul>
-	 * <li>0x00FFFFFF: Alternative</li>
-	 * <li>0x7F000000: Outer context depth</li>
-	 * <li>0x80000000: Suppress precedence filter</li>
-	 * </ul>
+	 * * 0x00FFFFFF: Alternative
+	 * * 0x7F000000: Outer context depth
+	 * * 0x80000000: Suppress precedence filter
 	 */
 	private altAndOuterContextDepth: number;
 
