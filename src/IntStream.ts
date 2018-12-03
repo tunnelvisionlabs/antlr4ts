@@ -118,7 +118,8 @@ export interface IntStream {
 	 * {@link #seek seek(index)} as part of an operation to safely work within a
 	 * marked region, then restore the stream position to its original value and
 	 * release the mark.
-	 * <pre>
+	 *
+	 * ```
 	 * IntStream stream = ...;
 	 * int index = -1;
 	 * int mark = stream.mark();
@@ -131,7 +132,7 @@ export interface IntStream {
 	 *   }
 	 *   stream.release(mark);
 	 * }
-	 * </pre>
+	 * ```
 	 *
 	 * @return An opaque marker which should be passed to
 	 * {@link #release release()} when the marked range is no longer required.

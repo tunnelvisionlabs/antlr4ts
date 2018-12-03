@@ -128,21 +128,21 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * constructor calls versus function calls. One grammar might look like
  * this:
  *
- * <pre>
+ * ```antlr
  * ctorBody
  *   : '{' superCall? stat* '}'
  *   ;
- * </pre>
+ * ```
  *
  * Or, you might see something like
  *
- * <pre>
+ * ```antlr
  * stat
  *   : superCall ';'
  *   | expression ';'
  *   | ...
  *   ;
- * </pre>
+ * ```
  *
  * In both cases I believe that no closure operations will dip into the outer
  * context. In the first case ctorBody in the worst case will stop at the '}'.
@@ -219,10 +219,10 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * syntax error. For maximum speed, Sam starts the parser set to pure SLL
  * mode with the {@link BailErrorStrategy}:
  *
- * <pre>
+ * ```
  * parser.interpreter.{@link #setPredictionMode setPredictionMode}{@code (}{@link PredictionMode#SLL}{@code )};
  * parser.{@link Parser#setErrorHandler setErrorHandler}(new {@link BailErrorStrategy}());
- * </pre>
+ * ```
  *
  * If it does not get a syntax error, then we're done. If it does get a syntax
  * error, we need to retry with the combined SLL/LL strategy.
@@ -1420,14 +1420,12 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * The prediction context must be considered by this filter to address
 	 * situations like the following.
 	 *
-	 * <code>
-	 * <pre>
+	 * ```antlr
 	 * grammar TA;
 	 * prog: statement* EOF;
 	 * statement: letterA | statement letterA 'b' ;
 	 * letterA: 'a';
-	 * </pre>
-	 * </code>
+	 * ```
 	 *
 	 * If the above grammar, the ATN state immediately before the token
 	 * reference {@code 'a'} in {@code letterA} is reachable from the left edge

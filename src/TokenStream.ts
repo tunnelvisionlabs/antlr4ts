@@ -73,13 +73,13 @@ export interface TokenStream extends IntStream {
 	 * for violating preconditions of {@link #get}, but may be optimized by the
 	 * specific implementation.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = interval.a; i &lt;= interval.b; i++) {
+	 * for (int i = interval.a; i <= interval.b; i++) {
 	 *   text += stream.get(i).text;
 	 * }
-	 * </pre>
+	 * ```
 	 *
 	 * @param interval The interval of tokens within this stream to get text
 	 * for.
@@ -97,10 +97,10 @@ export interface TokenStream extends IntStream {
 	 * {@link IntStream#size} and {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = stream.getText(new Interval(0, stream.size));
-	 * </pre>
+	 * ```
 	 *
 	 * @return The text of all tokens in the stream.
 	 */
@@ -116,10 +116,10 @@ export interface TokenStream extends IntStream {
 	 * If {@code ctx.sourceInterval} does not return a valid interval of
 	 * tokens provided by this stream, the behavior is unspecified.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = stream.getText(ctx.sourceInterval);
-	 * </pre>
+	 * ```
 	 *
 	 * @param ctx The context providing the source interval of tokens to get
 	 * text for.
@@ -141,13 +141,13 @@ export interface TokenStream extends IntStream {
 	 * following code. Other streams may implement this method in other ways
 	 * provided the behavior is consistent with this at a high level.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = start.tokenIndex; i &lt;= stop.tokenIndex; i++) {
+	 * for (int i = start.tokenIndex; i <= stop.tokenIndex; i++) {
 	 *   text += stream.get(i).text;
 	 * }
-	 * </pre>
+	 * ```
 	 *
 	 * @param start The first token in the interval to get text for.
 	 * @param stop The last token in the interval to get text for (inclusive).

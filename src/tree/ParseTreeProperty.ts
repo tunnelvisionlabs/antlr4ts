@@ -11,12 +11,12 @@
  * specifying a return value for the listener event method that visited a
  * particular node. Example:
  *
- * <pre>
- * ParseTreeProperty&lt;Integer&gt; values = new ParseTreeProperty&lt;Integer&gt;();
+ * ```
+ * ParseTreeProperty<Integer> values = new ParseTreeProperty<Integer>();
  * values.put(tree, 36);
  * int x = values.get(tree);
  * values.removeFrom(tree);
- * </pre>
+ * ```
  *
  * You would make one decl (values here) in the listener and use lots of times
  * in your event methods.

@@ -46,36 +46,36 @@ import * as Utils from "./misc/Utils";
  * are queued up, you can easily simulate transactions and roll back any changes
  * if there is an error just by removing instructions. For example,
  *
- * <pre>
+ * ```
  * CharStream input = new ANTLRFileStream("input");
  * TLexer lex = new TLexer(input);
  * CommonTokenStream tokens = new CommonTokenStream(lex);
  * T parser = new T(tokens);
  * TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
  * parser.startRule();
- * </pre>
+ * ```
  *
  * Then in the rules, you can execute (assuming rewriter is visible):
  *
- * <pre>
+ * ```
  * Token t,u;
  * ...
  * rewriter.insertAfter(t, "text to put after t");}
  * rewriter.insertAfter(u, "text after u");}
  * System.out.println(rewriter.getText());
- * </pre>
+ * ```
  *
  * You can also have multiple "instruction streams" and get multiple rewrites
  * from a single pass over the input. Just name the instruction streams and use
  * that name again when printing the buffer. This could be useful for generating
  * a C file and also its header file--all from the same buffer:
  *
- * <pre>
+ * ```
  * rewriter.insertAfter("pass1", t, "text to put after t");}
  * rewriter.insertAfter("pass2", u, "text after u");}
  * System.out.println(rewriter.getText("pass1"));
  * System.out.println(rewriter.getText("pass2"));
- * </pre>
+ * ```
  *
  * If you don't use named rewrite streams, a "default" stream is used as the
  * first example shows.

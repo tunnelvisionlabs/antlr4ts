@@ -508,10 +508,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * lookahead symbol, this function moves the cursor to {@code B} and returns
 	 * {@code A}.
 	 *
-	 * <pre>
-	 *  A B
-	 *  ^
-	 * </pre>
+	 * ```
+	 * A B
+	 * ^
+	 * ```
 	 *
 	 * If the parser is not in error recovery mode, the consumed symbol is added
 	 * to the parse tree using {@link ParserRuleContext#addChild(Token)}, and
@@ -723,9 +723,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * implemented such that the complete context-sensitive follow set does not
 	 * need to be explicitly constructed.
 	 *
-	 * <pre>
+	 * ```
 	 * return getExpectedTokens().contains(symbol);
-	 * </pre>
+	 * ```
 	 *
 	 * @param symbol the symbol type to check
 	 * @return {@code true} if {@code symbol} can follow the current state in

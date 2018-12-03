@@ -68,7 +68,7 @@ export interface Vocabulary {
 	 * methods:
 	 *
 	 * * Tokens created by lexer rules.
-	 * * Tokens defined in a <code>tokens{}</code> block in a lexer or parser
+	 * * Tokens defined in a `tokens{}` block in a lexer or parser
 	 *   grammar.
 	 * * The implicitly defined {@code EOF} token, which has the token type
 	 *   {@link Token#EOF}.

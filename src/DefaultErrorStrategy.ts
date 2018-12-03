@@ -199,10 +199,10 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * Implements Jim Idle's magic sync mechanism in closures and optional
 	 * subrules. E.g.,
 	 *
-	 * <pre>
+	 * ```antlr
 	 * a : sync ( stuff sync )* ;
 	 * sync : {consume to what can follow sync} ;
-	 * </pre>
+	 * ```
 	 *
 	 * At the start of a sub rule upon error, {@link #sync} performs single
 	 * token deletion, if possible. If it can't do that, it bails on the current
@@ -223,9 +223,9 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * A single mismatch token or missing token would force the parser to bail
 	 * out of the entire rules surrounding the loop. So, for rule
 	 *
-	 * <pre>
+	 * ```antlr
 	 * classDef : 'class' ID '{' member* '}'
-	 * </pre>
+	 * ```
 	 *
 	 * input with an extra token between members would force the parser to
 	 * consume until it found the next class definition rather than the next
@@ -444,17 +444,17 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * the parser returns from the nested call to {@code expr}, it will have
 	 * call chain:
 	 *
-	 * <pre>
-	 * stat &rarr; expr &rarr; atom
-	 * </pre>
+	 * ```
+	 * stat → expr → atom
+	 * ```
 	 *
 	 * and it will be trying to match the {@code ')'} at this point in the
 	 * derivation:
 	 *
-	 * <pre>
-	 * =&gt; ID '=' '(' INT ')' ('+' atom)* ';'
+	 * ```
+	 * => ID '=' '(' INT ')' ('+' atom)* ';'
 	 *                    ^
-	 * </pre>
+	 * ```
 	 *
 	 * The attempt to match {@code ')'} will fail when it sees {@code ';'} and
 	 * call {@link #recoverInline}. To recover, it sees that {@code LA(1)==';'}
