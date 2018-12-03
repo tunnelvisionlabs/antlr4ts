@@ -522,7 +522,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * strategy. It is called by {@link #recoverInline} to attempt to recover
 	 * from mismatched input. If this method returns null, the parser and error
 	 * handler state will not have changed. If this method returns non-null,
-	 * {@code recognizer} will <em>not</em> be in error recovery mode since the
+	 * {@code recognizer} will *not* be in error recovery mode since the
 	 * returned token was a successful match.
 	 *
 	 * If the single-token deletion is successful, this method calls

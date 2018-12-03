@@ -291,7 +291,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * rule entry methods may be omitted.
 	 *
 	 * With the following specific exceptions, calls to listener events are
-	 * <em>deterministic</em>, i.e. for identical input the calls to listener
+	 * *deterministic*, i.e. for identical input the calls to listener
 	 * methods will be the same.
 	 *
 	 * <ul>
@@ -518,7 +518,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * If the parser is not in error recovery mode, the consumed symbol is added
 	 * to the parse tree using {@link ParserRuleContext#addChild(Token)}, and
 	 * {@link ParseTreeListener#visitTerminal} is called on any parse listeners.
-	 * If the parser <em>is</em> in error recovery mode, the consumed symbol is
+	 * If the parser *is* in error recovery mode, the consumed symbol is
 	 * added to the parse tree using
 	 * {@link ParserRuleContext#addErrorNode(Token)}, and
 	 * {@link ParseTreeListener#visitErrorNode} is called on any parse

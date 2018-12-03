@@ -243,12 +243,12 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * alternatives.
  *
  * Let's say we have a set of SLL conflicting alternatives {@code {1, 2, 3}} and
- * a smaller LL set called <em>s</em>. If <em>s</em> is {@code {2, 3}}, then SLL
+ * a smaller LL set called *s*. If *s* is {@code {2, 3}}, then SLL
  * parsing will get an error because SLL will pursue alternative 1. If
- * <em>s</em> is {@code {1, 2}} or {@code {1, 3}} then both SLL and LL will
+ * *s* is {@code {1, 2}} or {@code {1, 3}} then both SLL and LL will
  * choose the same alternative because alternative one is the minimum of either
- * set. If <em>s</em> is {@code {2}} or {@code {3}} then SLL will get a syntax
- * error. If <em>s</em> is {@code {1}} then SLL will succeed.
+ * set. If *s* is {@code {2}} or {@code {3}} then SLL will get a syntax
+ * error. If *s* is {@code {1}} then SLL will succeed.
  *
  * Of course, if the input is invalid, then we will get an error for sure in
  * both SLL and LL parsing. Erroneous input will therefore require 2 passes over
@@ -876,7 +876,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * <li>If all configurations in {@code configs} which reached the end of the
 	 * decision rule predict the same alternative, return that alternative.</li>
 	 * <li>If the configurations in {@code configs} which reached the end of the
-	 * decision rule predict multiple alternatives (call this <em>S</em>),
+	 * decision rule predict multiple alternatives (call this *S*),
 	 * choose an alternative in the following order.
 	 * <ol>
 	 * <li>Filter the configurations in {@code configs} to only those
@@ -884,14 +884,14 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * If the set of these filtered configurations which also reached the end of
 	 * the decision rule is not empty, return the minimum alternative
 	 * represented in this set.</li>
-	 * <li>Otherwise, choose the minimum alternative in <em>S</em>.</li>
+	 * <li>Otherwise, choose the minimum alternative in *S*.</li>
 	 * </ol>
 	 * </li>
 	 * </ul>
 	 *
 	 * In some scenarios, the algorithm described above could predict an
 	 * alternative which will result in a {@link FailedPredicateException} in
-	 * parser. Specifically, this could occur if the <em>only</em> configuration
+	 * parser. Specifically, this could occur if the *only* configuration
 	 * capable of successfully parsing to the end of the decision rule is
 	 * blocked by a semantic predicate. By choosing this alternative within
 	 * {@link #adaptivePredict} instead of throwing a

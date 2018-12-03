@@ -79,7 +79,7 @@ import { TokenTagToken } from "./TokenTagToken";
  * {@code expr} but, from the parser passed in, we create a special version of
  * the underlying grammar representation (an {@link ATN}) that allows imaginary
  * tokens representing rules ({@code <expr>}) to match entire rules. We call
- * these <em>bypass alternatives</em>.
+ * these *bypass alternatives*.
  *
  * Delimiters are {@code <} and {@code >}, with {@code \} as the escape string
  * by default, but you can set them to whatever you want using

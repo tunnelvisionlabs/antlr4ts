@@ -27,7 +27,7 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	 * the following format.
 	 *
 	 * <pre>
-	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
+	 * line *line*:*charPositionInLine* *msg*
 	 * </pre>
 	 */
 	public syntaxError<T>(

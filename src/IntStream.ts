@@ -21,7 +21,7 @@ export namespace IntStream {
 
 /**
  * A simple stream of symbols whose values are represented as integers. This
- * interface provides <em>marked ranges</em> with support for a minimum level
+ * interface provides *marked ranges* with support for a minimum level
  * of buffering necessary to implement arbitrary lookahead during prediction.
  * For more information on marked ranges, see {@link #mark}.
  *

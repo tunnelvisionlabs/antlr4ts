@@ -31,12 +31,12 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * {@link ATNConfigSet#getRepresentedAlternatives} to obtain the represented
 	 * alternatives from the {@code configs} argument.
 	 *
-	 * When {@code exact} is {@code true}, <em>all</em> of the potentially
+	 * When {@code exact} is {@code true}, *all* of the potentially
 	 * viable alternatives are truly viable, i.e. this is reporting an exact
-	 * ambiguity. When {@code exact} is {@code false}, <em>at least two</em> of
+	 * ambiguity. When {@code exact} is {@code false}, *at least two* of
 	 * the potentially viable alternatives are viable for the current input, but
 	 * the prediction algorithm terminated as soon as it determined that at
-	 * least the <em>minimum</em> potentially viable alternative is truly
+	 * least the *minimum* potentially viable alternative is truly
 	 * viable.
 	 *
 	 * When the {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} prediction

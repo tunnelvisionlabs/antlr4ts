@@ -27,13 +27,13 @@ export class StarLoopEntryState extends DecisionState {
 	public precedenceRuleDecision: boolean = false;
 
 	/**
-	 * For precedence decisions, this set marks states <em>S</em> which have all
+	 * For precedence decisions, this set marks states *S* which have all
 	 * of the following characteristics:
 	 *
 	 * <ul>
 	 * <li>One or more invocation sites of the current rule returns to
-	 * <em>S</em>.</li>
-	 * <li>The closure from <em>S</em> includes the current decision without
+	 * *S*.</li>
+	 * <li>The closure from *S* includes the current decision without
 	 * passing through any rule invocations or stepping out of the current
 	 * rule.</li>
 	 * </ul>

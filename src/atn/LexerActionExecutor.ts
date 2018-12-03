@@ -82,7 +82,7 @@ export class LexerActionExecutor {
 	 * Normally, when the executor encounters lexer actions where
 	 * {@link LexerAction#isPositionDependent} returns {@code true}, it calls
 	 * {@link IntStream#seek} on the input {@link CharStream} to set the input
-	 * position to the <em>end</em> of the current token. This behavior provides
+	 * position to the *end* of the current token. This behavior provides
 	 * for efficient DFA representation of lexer actions which appear at the end
 	 * of a lexer rule, even when the lexer rule matches a variable number of
 	 * characters.

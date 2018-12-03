@@ -217,7 +217,7 @@ export class ATN {
 	 *
 	 * The big difference is that with just the input, the parser could land
 	 * right in the middle of a lookahead decision. Getting all
-	 * <em>possible</em> tokens given a partial input stream is a separate
+	 * *possible* tokens given a partial input stream is a separate
 	 * computation. See https://github.com/antlr/antlr4/issues/1428
 	 *
 	 * For this function, we are specifying an ATN state and call stack to

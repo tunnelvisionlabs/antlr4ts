@@ -19,7 +19,7 @@
  * minimum alternative of the SLL conflict.</li>
  * <li><b>Strong (forced) context sensitivity</b>: These are cases where the
  * full-context prediction resolved an SLL conflict to a unique alternative,
- * <em>and</em> the minimum alternative of the SLL conflict was found to not be
+ * *and* the minimum alternative of the SLL conflict was found to not be
  * a truly viable alternative. Two-stage parsing cannot be used for inputs where
  * this situation occurs.</li>
  * </ul>
