@@ -12,9 +12,9 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code popMode} lexer action by calling {@link Lexer#popMode}.
+ * Implements the `popMode` lexer action by calling {@link Lexer#popMode}.
  *
- * The {@code popMode} command does not have any parameters, so this action is
+ * The `popMode` command does not have any parameters, so this action is
  * implemented as a singleton instance exposed by {@link #INSTANCE}.
  *
  * @author Sam Harwell
@@ -22,7 +22,7 @@ import { NotNull, Override } from "../Decorators";
  */
 export class LexerPopModeAction implements LexerAction {
 	/**
-	 * Constructs the singleton instance of the lexer {@code popMode} command.
+	 * Constructs the singleton instance of the lexer `popMode` command.
 	 */
 	constructor() {
 		// intentionally empty
@@ -39,7 +39,7 @@ export class LexerPopModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @return This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

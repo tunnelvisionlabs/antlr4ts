@@ -11,7 +11,7 @@ import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
 import { XPath } from "../xpath/XPath";
 
 /**
- * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
+ * A pattern like `<ID> = <expr>;` converted to a {@link ParseTree} by
  * {@link ParseTreePatternMatcher#compile(String, int)}.
  */
 export class ParseTreePattern {
@@ -76,8 +76,8 @@ export class ParseTreePattern {
 	 * Determine whether or not a parse tree matches this tree pattern.
 	 *
 	 * @param tree The parse tree to match against this tree pattern.
-	 * @return {@code true} if {@code tree} is a match for the current tree
-	 * pattern; otherwise, {@code false}.
+	 * @return `true` if `tree` is a match for the current tree
+	 * pattern; otherwise, `false`.
 	 */
 	public matches(@NotNull tree: ParseTree): boolean {
 		return this._matcher.match(tree, this).succeeded;

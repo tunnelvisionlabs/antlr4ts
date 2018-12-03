@@ -31,14 +31,14 @@ export interface LexerAction extends Equatable {
 	 * actions may have different semantics depending on the {@link CharStream}
 	 * index at the time the action is executed.
 	 *
-	 * Many lexer commands, including {@code type}, {@code skip}, and
-	 * {@code more}, do not check the input index during their execution.
+	 * Many lexer commands, including `type`, `skip`, and
+	 * `more`, do not check the input index during their execution.
 	 * Actions like this are position-independent, and may be stored more
 	 * efficiently as part of the `ATNConfig.lexerActionExecutor`.
 	 *
-	 * @return {@code true} if the lexer action semantics can be affected by the
+	 * @return `true` if the lexer action semantics can be affected by the
 	 * position of the input {@link CharStream} at the time it is executed;
-	 * otherwise, {@code false}.
+	 * otherwise, `false`.
 	 */
 	readonly isPositionDependent: boolean;
 

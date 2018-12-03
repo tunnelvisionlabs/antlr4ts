@@ -23,7 +23,7 @@ export class TextChunk extends Chunk {
 	 * Constructs a new instance of {@link TextChunk} with the specified text.
 	 *
 	 * @param text The text of this chunk.
-	 * @exception IllegalArgumentException if {@code text} is {@code null}.
+	 * @exception IllegalArgumentException if `text` is `null`.
 	 */
 	constructor(@NotNull text: string) {
 		super();

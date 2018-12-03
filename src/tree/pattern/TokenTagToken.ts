@@ -10,7 +10,7 @@ import { NotNull, Override } from "../../Decorators";
 
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,
- * {@code <ID>}. These tokens are created for {@link TagChunk} chunks where the
+ * `<ID>`. These tokens are created for {@link TagChunk} chunks where the
  * tag corresponds to a lexer rule or token type.
  */
 export class TokenTagToken extends CommonToken {
@@ -30,7 +30,7 @@ export class TokenTagToken extends CommonToken {
 	 *
 	 * @param tokenName The token name.
 	 * @param type The token type.
-	 * @param label The label associated with the token tag, or {@code null} if
+	 * @param label The label associated with the token tag, or `null` if
 	 * the token tag is unlabeled.
 	 */
 	constructor(@NotNull tokenName: string, type: number, label?: string) {
@@ -52,7 +52,7 @@ export class TokenTagToken extends CommonToken {
 	 * Gets the label associated with the rule tag.
 	 *
 	 * @return The name of the label associated with the rule tag, or
-	 * {@code null} if this is an unlabeled rule tag.
+	 * `null` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {
 		return this._label;
@@ -62,7 +62,7 @@ export class TokenTagToken extends CommonToken {
 	 * {@inheritDoc}
 	 *
 	 * The implementation for {@link TokenTagToken} returns the token tag
-	 * formatted with {@code <} and {@code >} delimiters.
+	 * formatted with `<` and `>` delimiters.
 	 */
 	@Override
 	get text(): string {
@@ -77,7 +77,7 @@ export class TokenTagToken extends CommonToken {
 	 * {@inheritDoc}
 	 *
 	 * The implementation for {@link TokenTagToken} returns a string of the form
-	 * {@code tokenName:type}.
+	 * `tokenName:type`.
 	 */
 	@Override
 	public toString(): string {

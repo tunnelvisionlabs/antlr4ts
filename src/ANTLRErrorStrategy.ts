@@ -26,7 +26,7 @@ import { RecognitionException } from "./RecognitionException";
  */
 export interface ANTLRErrorStrategy {
 	/**
-	 * Reset the error handler state for the specified {@code recognizer}.
+	 * Reset the error handler state for the specified `recognizer`.
 	 * @param recognizer the parser instance
 	 */
 	reset(/*@NotNull*/ recognizer: Parser): void;
@@ -52,7 +52,7 @@ export interface ANTLRErrorStrategy {
 	recoverInline(/*@NotNull*/ recognizer: Parser): Token;
 
 	/**
-	 * This method is called to recover from exception {@code e}. This method is
+	 * This method is called to recover from exception `e`. This method is
 	 * called after {@link #reportError} by the default exception handler
 	 * generated for a rule method.
 	 *
@@ -71,8 +71,8 @@ export interface ANTLRErrorStrategy {
 	 * {@link RecognitionException}.
 	 *
 	 * The generated code currently contains calls to {@link #sync} after
-	 * entering the decision state of a closure block ({@code (...)*} or
-	 * {@code (...)+}).
+	 * entering the decision state of a closure block (`(...)*` or
+	 * `(...)+`).
 	 *
 	 * For an implementation based on Jim Idle's "magic sync" mechanism, see
 	 * {@link DefaultErrorStrategy#sync}.
@@ -87,15 +87,15 @@ export interface ANTLRErrorStrategy {
 	sync(/*@NotNull*/ recognizer: Parser): void;
 
 	/**
-	 * Tests whether or not {@code recognizer} is in the process of recovering
+	 * Tests whether or not `recognizer` is in the process of recovering
 	 * from an error. In error recovery mode, {@link Parser#consume} adds
 	 * symbols to the parse tree by calling
 	 * {@link ParserRuleContext#addErrorNode(Token)} instead of
 	 * {@link ParserRuleContext#addChild(Token)}.
 	 *
 	 * @param recognizer the parser instance
-	 * @return {@code true} if the parser is currently recovering from a parse
-	 * error, otherwise {@code false}
+	 * @return `true` if the parser is currently recovering from a parse
+	 * error, otherwise `false`
 	 */
 	inErrorRecoveryMode(/*@NotNull*/ recognizer: Parser): boolean;
 

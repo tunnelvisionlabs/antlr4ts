@@ -200,15 +200,15 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * configurations' {@link PredictionContext} objects using cached
  * subgraphs/nodes. No other locking occurs, even during DFA simulation. This is
  * safe as long as we can guarantee that all threads referencing
- * {@code s.edge[t]} get the same physical target {@link DFAState}, or
- * {@code null}. Once into the DFA, the DFA simulation does not reference the
+ * `s.edge[t]` get the same physical target {@link DFAState}, or
+ * `null`. Once into the DFA, the DFA simulation does not reference the
  * {@link DFA#states} map. It follows the {@link DFAState#edges} field to new
  * targets. The DFA simulator will either find {@link DFAState#edges} to be
- * {@code null}, to be non-{@code null} and {@code dfa.edges[t]} null, or
- * {@code dfa.edges[t]} to be non-null. The
+ * `null`, to be non-`null` and `dfa.edges[t]` null, or
+ * `dfa.edges[t]` to be non-null. The
  * {@link #addDFAEdge} method could be racing to set the field
- * but in either case the DFA simulator works; if {@code null}, and requests ATN
- * simulation. It could also race trying to get {@code dfa.edges[t]}, but either
+ * but in either case the DFA simulator works; if `null`, and requests ATN
+ * simulation. It could also race trying to get `dfa.edges[t]`, but either
  * way it will work because it's not doing a test and set operation.
  *
  * **Starting with SLL then failing to combined SLL/LL (Two-Stage
@@ -220,7 +220,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * mode with the {@link BailErrorStrategy}:
  *
  * ```
- * parser.interpreter.{@link #setPredictionMode setPredictionMode}{@code (}{@link PredictionMode#SLL}{@code )};
+ * parser.interpreter.{@link #setPredictionMode setPredictionMode}`(`{@link PredictionMode#SLL}`)`;
  * parser.{@link Parser#setErrorHandler setErrorHandler}(new {@link BailErrorStrategy}());
  * ```
  *
@@ -242,13 +242,13 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * alternative because they both choose the minimum of multiple conflicting
  * alternatives.
  *
- * Let's say we have a set of SLL conflicting alternatives {@code {1, 2, 3}} and
- * a smaller LL set called *s*. If *s* is {@code {2, 3}}, then SLL
+ * Let's say we have a set of SLL conflicting alternatives `{1, 2, 3}` and
+ * a smaller LL set called *s*. If *s* is `{2, 3}`, then SLL
  * parsing will get an error because SLL will pursue alternative 1. If
- * *s* is {@code {1, 2}} or {@code {1, 3}} then both SLL and LL will
+ * *s* is `{1, 2}` or `{1, 3}` then both SLL and LL will
  * choose the same alternative because alternative one is the minimum of either
- * set. If *s* is {@code {2}} or {@code {3}} then SLL will get a syntax
- * error. If *s* is {@code {1}} then SLL will succeed.
+ * set. If *s* is `{2}` or `{3}` then SLL will get a syntax
+ * error. If *s* is `{1}` then SLL will succeed.
  *
  * Of course, if the input is invalid, then we will get an error for sure in
  * both SLL and LL parsing. Erroneous input will therefore require 2 passes over
@@ -266,7 +266,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	/**
 	 * Determines whether the DFA is used for full-context predictions. When
-	 * {@code true}, the DFA stores transition information for both full-context
+	 * `true`, the DFA stores transition information for both full-context
 	 * and SLL parsing; otherwise, the DFA only stores SLL transition
 	 * information.
 	 *
@@ -275,7 +275,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * comes at the expense of memory used for storing the cached DFA states,
 	 * configuration sets, and prediction contexts.
 	 *
-	 * The default value is {@code false}.
+	 * The default value is `false`.
 	 */
 	public enable_global_context_dfa: boolean = false;
 	public optimize_unique_closure: boolean = true;
@@ -287,12 +287,12 @@ export class ParserATNSimulator extends ATNSimulator {
 	protected _parser: Parser;
 
 	/**
-	 * When {@code true}, ambiguous alternatives are reported when they are
-	 * encountered within {@link #execATN}. When {@code false}, these messages
-	 * are suppressed. The default is {@code false}.
+	 * When `true`, ambiguous alternatives are reported when they are
+	 * encountered within {@link #execATN}. When `false`, these messages
+	 * are suppressed. The default is `false`.
 	 *
 	 * When messages about ambiguous alternatives are not required, setting this
-	 * to {@code false} enables additional internal optimizations which may lose
+	 * to `false` enables additional internal optimizations which may lose
 	 * this information.
 	 */
 	public reportAmbiguities: boolean = false;
@@ -647,24 +647,24 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	/**
 	 * Determines if a particular DFA state should be treated as an accept state
-	 * for the current prediction mode. In addition to the {@code useContext}
+	 * for the current prediction mode. In addition to the `useContext`
 	 * parameter, the {@link #getPredictionMode()} method provides the
 	 * prediction mode controlling the prediction algorithm as a whole.
 	 *
 	 * The default implementation simply returns the value of
 	 * `DFAState.isAcceptState` except for conflict states when
-	 * {@code useContext} is {@code true} and {@link #getPredictionMode()} is
+	 * `useContext` is `true` and {@link #getPredictionMode()} is
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}. In that case, only
 	 * conflict states where {@link ATNConfigSet#isExactConflict} is
-	 * {@code true} are considered accept states.
+	 * `true` are considered accept states.
 	 *
 	 * @param state The DFA state to check.
-	 * @param useContext {@code true} if the prediction algorithm is currently
-	 * considering the full parser context; otherwise, {@code false} if the
+	 * @param useContext `true` if the prediction algorithm is currently
+	 * considering the full parser context; otherwise, `false` if the
 	 * algorithm is currently performing a local context prediction.
 	 *
-	 * @return {@code true} if the specified {@code state} is an accept state;
-	 * otherwise, {@code false}.
+	 * @return `true` if the specified `state` is an accept state;
+	 * otherwise, `false`.
 	 */
 	protected isAcceptState(state: DFAState, useContext: boolean): boolean {
 		if (!state.isAcceptState) {
@@ -870,15 +870,15 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * and valid, and the syntax error will be reported later at a more
 	 * localized location.
 	 *
-	 * * If no configuration in {@code configs} reached the end of the
+	 * * If no configuration in `configs` reached the end of the
 	 *   decision rule, return {@link ATN#INVALID_ALT_NUMBER}.
-	 * * If all configurations in {@code configs} which reached the end of the
+	 * * If all configurations in `configs` which reached the end of the
 	 *   decision rule predict the same alternative, return that alternative.
-	 * * If the configurations in {@code configs} which reached the end of the
+	 * * If the configurations in `configs` which reached the end of the
 	 *   decision rule predict multiple alternatives (call this *S*),
 	 *   choose an alternative in the following order.
 	 *
-	 *     1. Filter the configurations in {@code configs} to only those
+	 *     1. Filter the configurations in `configs` to only those
 	 *        configurations which remain viable after evaluating semantic predicates.
 	 *        If the set of these filtered configurations which also reached the end of
 	 *        the decision rule is not empty, return the minimum alternative
@@ -899,7 +899,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * @param input The input {@link TokenStream}
 	 * @param startIndex The start index for the current prediction, which is
-	 * the input index where any semantic context in {@code configs} should be
+	 * the input index where any semantic context in `configs` should be
 	 * evaluated
 	 * @param previous The ATN simulation state immediately before the
 	 * {@link #ERROR} state was reached
@@ -1025,12 +1025,12 @@ export class ParserATNSimulator extends ATNSimulator {
 	/**
 	 * Get an existing target state for an edge in the DFA. If the target state
 	 * for the edge has not yet been computed or is otherwise not available,
-	 * this method returns {@code null}.
+	 * this method returns `null`.
 	 *
 	 * @param s The current DFA state
 	 * @param t The next input symbol
 	 * @return The existing target DFA state for the given input symbol
-	 * {@code t}, or {@code null} if the target state for this edge is not
+	 * `t`, or `null` if the target state for this edge is not
 	 * already cached
 	 */
 	protected getExistingTargetState(@NotNull s: DFAState, t: number): DFAState | undefined {
@@ -1049,7 +1049,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * @param contextCache
 	 *
 	 * @return The computed target DFA state for the given input symbol
-	 * {@code t}. If {@code t} does not lead to a valid DFA state, this method
+	 * `t`. If `t` does not lead to a valid DFA state, this method
 	 * returns {@link #ERROR}.
 	 */
 	@NotNull
@@ -1198,16 +1198,16 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	/**
 	 * Return a configuration set containing only the configurations from
-	 * {@code configs} which are in a {@link RuleStopState}. If all
-	 * configurations in {@code configs} are already in a rule stop state, this
-	 * method simply returns {@code configs}.
+	 * `configs` which are in a {@link RuleStopState}. If all
+	 * configurations in `configs` are already in a rule stop state, this
+	 * method simply returns `configs`.
 	 *
 	 * @param configs the configuration set to update
 	 * @param contextCache the {@link PredictionContext} cache
 	 *
-	 * @return {@code configs} if all configurations in {@code configs} are in a
+	 * @return `configs` if all configurations in `configs` are in a
 	 * rule stop state, otherwise return a new configuration set containing only
-	 * the configurations from {@code configs} which are in a rule stop state
+	 * the configurations from `configs` which are in a rule stop state
 	 */
 	@NotNull
 	protected removeAllConfigsNotInRuleStopState(@NotNull configs: ATNConfigSet, contextCache: PredictionContextCache): ATNConfigSet {
@@ -1398,7 +1398,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 *
 	 * 1. Evaluate the precedence predicates for each configuration using
 	 *    {@link SemanticContext#evalPrecedence}.
-	 * 1. When {@link ATNConfig#isPrecedenceFilterSuppressed} is {@code false},
+	 * 1. When {@link ATNConfig#isPrecedenceFilterSuppressed} is `false`,
 	 *    remove all configurations which predict an alternative greater than 1,
 	 *    for which another configuration that predicts alternative 1 is in the
 	 *    same ATN state with the same prediction context. This transformation is
@@ -1428,11 +1428,11 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * ```
 	 *
 	 * If the above grammar, the ATN state immediately before the token
-	 * reference {@code 'a'} in {@code letterA} is reachable from the left edge
+	 * reference `'a'` in `letterA` is reachable from the left edge
 	 * of both the primary and closure blocks of the left-recursive rule
-	 * {@code statement}. The prediction context associated with each of these
+	 * `statement`. The prediction context associated with each of these
 	 * configurations distinguishes between them, and prevents the alternative
-	 * which stepped out to {@code prog} (and then back in to {@code statement}
+	 * which stepped out to `prog` (and then back in to `statement`
 	 * from being eliminated by the filter.
 	 *
 	 * @param configs The configuration set computed by
@@ -1603,7 +1603,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	/** Look through a list of predicate/alt pairs, returning alts for the
-	 *  pairs that win. A {@code null} predicate indicates an alt containing an
+	 *  pairs that win. A `null` predicate indicates an alt containing an
 	 *  unpredicated config which behaves as "always true."
 	 */
 	protected evalSemanticContext(
@@ -1660,7 +1660,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	 * @param pred The semantic context to evaluate
 	 * @param parserCallStack The parser context in which to evaluate the
 	 * semantic context
-	 * @param alt The alternative which is guarded by {@code pred}
+	 * @param alt The alternative which is guarded by `pred`
 	 *
 	 * @since 4.3
 	 */

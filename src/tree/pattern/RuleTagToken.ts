@@ -12,7 +12,7 @@ import { TokenSource } from "../../TokenSource";
 
 /**
  * A {@link Token} object representing an entire subtree matched by a parser
- * rule; e.g., {@code <expr>}. These tokens are created for {@link TagChunk}
+ * rule; e.g., `<expr>`. These tokens are created for {@link TagChunk}
  * chunks where the tag corresponds to a parser rule.
  */
 export class RuleTagToken implements Token {
@@ -36,10 +36,10 @@ export class RuleTagToken implements Token {
 	 *
 	 * @param ruleName The name of the parser rule this rule tag matches.
 	 * @param bypassTokenType The bypass token type assigned to the parser rule.
-	 * @param label The label associated with the rule tag, or {@code null} if
+	 * @param label The label associated with the rule tag, or `null` if
 	 * the rule tag is unlabeled.
 	 *
-	 * @exception IllegalArgumentException if {@code ruleName} is {@code null}
+	 * @exception IllegalArgumentException if `ruleName` is `null`
 	 * or empty.
 	 */
 	constructor(@NotNull ruleName: string, bypassTokenType: number, label?: string) {
@@ -66,7 +66,7 @@ export class RuleTagToken implements Token {
 	 * Gets the label associated with the rule tag.
 	 *
 	 * @return The name of the label associated with the rule tag, or
-	 * {@code null} if this is an unlabeled rule tag.
+	 * `null` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {
 		return this._label;
@@ -85,7 +85,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * This method returns the rule tag formatted with {@code <} and {@code >}
+	 * This method returns the rule tag formatted with `<` and `>`
 	 * delimiters.
 	 */
 	@Override
@@ -161,7 +161,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * The implementation for {@link RuleTagToken} always returns {@code null}.
+	 * The implementation for {@link RuleTagToken} always returns `null`.
 	 */
 	@Override
 	get tokenSource(): TokenSource | undefined {
@@ -171,7 +171,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * The implementation for {@link RuleTagToken} always returns {@code null}.
+	 * The implementation for {@link RuleTagToken} always returns `null`.
 	 */
 	@Override
 	get inputStream(): CharStream | undefined {
@@ -182,7 +182,7 @@ export class RuleTagToken implements Token {
 	 * {@inheritDoc}
 	 *
 	 * The implementation for {@link RuleTagToken} returns a string of the form
-	 * {@code ruleName:bypassTokenType}.
+	 * `ruleName:bypassTokenType`.
 	 */
 	@Override
 	public toString(): string {

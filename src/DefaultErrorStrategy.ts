@@ -106,7 +106,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * The default implementation returns immediately if the handler is already
 	 * in error recovery mode. Otherwise, it calls {@link #beginErrorCondition}
-	 * and dispatches the reporting task based on the runtime type of {@code e}
+	 * and dispatches the reporting task based on the runtime type of `e`
 	 * according to the following table.
 	 *
 	 * * {@link NoViableAltException}: Dispatches the call to
@@ -209,7 +209,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * rule and uses the default error recovery, which consumes until the
 	 * resynchronization set of the current rule.
 	 *
-	 * If the sub rule is optional ({@code (...)?}, {@code (...)*}, or block
+	 * If the sub rule is optional (`(...)?`, `(...)*`, or block
 	 * with an empty alternative), then the expected set includes what follows
 	 * the subrule.
 	 *
@@ -349,9 +349,9 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * This method is called to report a syntax error which requires the removal
 	 * of a token from the input stream. At the time this method is called, the
-	 * erroneous symbol is current {@code LT(1)} symbol and has not yet been
+	 * erroneous symbol is current `LT(1)` symbol and has not yet been
 	 * removed from the input stream. When this method returns,
-	 * {@code recognizer} is in error recovery mode.
+	 * `recognizer` is in error recovery mode.
 	 *
 	 * This method is called when {@link #singleTokenDeletion} identifies
 	 * single-token deletion as a viable recovery strategy for a mismatched
@@ -383,7 +383,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * This method is called to report a syntax error which requires the
 	 * insertion of a missing token into the input stream. At the time this
 	 * method is called, the missing token has not yet been inserted. When this
-	 * method returns, {@code recognizer} is in error recovery mode.
+	 * method returns, `recognizer` is in error recovery mode.
 	 *
 	 * This method is called when {@link #singleTokenInsertion} identifies
 	 * single-token insertion as a viable recovery strategy for a mismatched
@@ -421,17 +421,17 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * **EXTRA TOKEN** (single token deletion)
 	 *
-	 * {@code LA(1)} is not what we are looking for. If {@code LA(2)} has the
-	 * right token, however, then assume {@code LA(1)} is some extra spurious
+	 * `LA(1)` is not what we are looking for. If `LA(2)` has the
+	 * right token, however, then assume `LA(1)` is some extra spurious
 	 * token and delete it. Then consume and return the next token (which was
-	 * the {@code LA(2)} token) as the successful result of the match operation.
+	 * the `LA(2)` token) as the successful result of the match operation.
 	 *
 	 * This recovery strategy is implemented by {@link #singleTokenDeletion}.
 	 *
 	 * **MISSING TOKEN** (single token insertion)
 	 *
-	 * If current token (at {@code LA(1)}) is consistent with what could come
-	 * after the expected {@code LA(1)} token, then assume the token is missing
+	 * If current token (at `LA(1)`) is consistent with what could come
+	 * after the expected `LA(1)` token, then assume the token is missing
 	 * and use the parser's {@link TokenFactory} to create it on the fly. The
 	 * "insertion" is performed by returning the created token as the successful
 	 * result of the match operation.
@@ -440,15 +440,15 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * **EXAMPLE**
 	 *
-	 * For example, Input {@code i=(3;} is clearly missing the {@code ')'}. When
-	 * the parser returns from the nested call to {@code expr}, it will have
+	 * For example, Input `i=(3;` is clearly missing the `')'`. When
+	 * the parser returns from the nested call to `expr`, it will have
 	 * call chain:
 	 *
 	 * ```
 	 * stat → expr → atom
 	 * ```
 	 *
-	 * and it will be trying to match the {@code ')'} at this point in the
+	 * and it will be trying to match the `')'` at this point in the
 	 * derivation:
 	 *
 	 * ```
@@ -456,10 +456,10 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *                    ^
 	 * ```
 	 *
-	 * The attempt to match {@code ')'} will fail when it sees {@code ';'} and
-	 * call {@link #recoverInline}. To recover, it sees that {@code LA(1)==';'}
-	 * is in the set of tokens that can follow the {@code ')'} token reference
-	 * in rule {@code atom}. It can assume that you forgot the {@code ')'}.
+	 * The attempt to match `')'` will fail when it sees `';'` and
+	 * call {@link #recoverInline}. To recover, it sees that `LA(1)==';'`
+	 * is in the set of tokens that can follow the `')'` token reference
+	 * in rule `atom`. It can assume that you forgot the `')'`.
 	 */
 	@Override
 	public recoverInline(recognizer: Parser): Token {
@@ -485,18 +485,18 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * This method implements the single-token insertion inline error recovery
 	 * strategy. It is called by {@link #recoverInline} if the single-token
 	 * deletion strategy fails to recover from the mismatched input. If this
-	 * method returns {@code true}, {@code recognizer} will be in error recovery
+	 * method returns `true`, `recognizer` will be in error recovery
 	 * mode.
 	 *
 	 * This method determines whether or not single-token insertion is viable by
-	 * checking if the {@code LA(1)} input symbol could be successfully matched
-	 * if it were instead the {@code LA(2)} symbol. If this method returns
-	 * {@code true}, the caller is responsible for creating and inserting a
+	 * checking if the `LA(1)` input symbol could be successfully matched
+	 * if it were instead the `LA(2)` symbol. If this method returns
+	 * `true`, the caller is responsible for creating and inserting a
 	 * token with the correct type to produce this behavior.
 	 *
 	 * @param recognizer the parser instance
-	 * @return {@code true} if single-token insertion is a viable recovery
-	 * strategy for the current mismatched input, otherwise {@code false}
+	 * @return `true` if single-token insertion is a viable recovery
+	 * strategy for the current mismatched input, otherwise `false`
 	 */
 	protected singleTokenInsertion(@NotNull recognizer: Parser): boolean {
 		let currentSymbolType: number = recognizer.inputStream.LA(1);
@@ -520,7 +520,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * strategy. It is called by {@link #recoverInline} to attempt to recover
 	 * from mismatched input. If this method returns null, the parser and error
 	 * handler state will not have changed. If this method returns non-null,
-	 * {@code recognizer} will *not* be in error recovery mode since the
+	 * `recognizer` will *not* be in error recovery mode since the
 	 * returned token was a successful match.
 	 *
 	 * If the single-token deletion is successful, this method calls
@@ -532,7 +532,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @return the successfully matched {@link Token} instance if single-token
 	 * deletion successfully recovers from the mismatched input, otherwise
-	 * {@code null}
+	 * `null`
 	 */
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number = recognizer.inputStream.LA(2);

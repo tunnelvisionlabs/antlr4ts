@@ -27,8 +27,8 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  *   {@link BasicState} states or the inclusion of a block representing a nested
  *   construct in one of the forms below.
  *
- * * Nodes showing multiple outgoing alternatives with a {@code ...} support
- *   any number of alternatives (one or more). Nodes without the {@code ...} only
+ * * Nodes showing multiple outgoing alternatives with a `...` support
+ *   any number of alternatives (one or more). Nodes without the `...` only
  *   support the exact number of alternatives shown in the diagram.
  *
  * <h2>Basic Blocks</h2>
@@ -43,29 +43,29 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  *
  * <h2>Greedy Loops</h2>
  *
- * <h3>Greedy Closure: {@code (...)*}</h3>
+ * <h3>Greedy Closure: `(...)*`</h3>
  *
  * <embed src="images/ClosureGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Greedy Positive Closure: {@code (...)+}</h3>
+ * <h3>Greedy Positive Closure: `(...)+`</h3>
  *
  * <embed src="images/PositiveClosureGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Greedy Optional: {@code (...)?}</h3>
+ * <h3>Greedy Optional: `(...)?`</h3>
  *
  * <embed src="images/OptionalGreedy.svg" type="image/svg+xml"/>
  *
  * <h2>Non-Greedy Loops</h2>
  *
- * <h3>Non-Greedy Closure: {@code (...)*?}</h3>
+ * <h3>Non-Greedy Closure: `(...)*?`</h3>
  *
  * <embed src="images/ClosureNonGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Non-Greedy Positive Closure: {@code (...)+?}</h3>
+ * <h3>Non-Greedy Positive Closure: `(...)+?`</h3>
  *
  * <embed src="images/PositiveClosureNonGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Non-Greedy Optional: {@code (...)??}</h3>
+ * <h3>Non-Greedy Optional: `(...)??`</h3>
  *
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */

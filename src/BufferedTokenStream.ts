@@ -37,13 +37,13 @@ export class BufferedTokenStream implements TokenStream {
 	/**
 	 * A collection of all tokens fetched from the token source. The list is
 	 * considered a complete view of the input once {@link #fetchedEOF} is set
-	 * to {@code true}.
+	 * to `true`.
 	 */
 	protected tokens: Token[] = [];
 
 	/**
 	 * The index into {@link #tokens} of the current token (next token to
-	 * {@link #consume}). {@link #tokens}{@code [}{@link #p}{@code ]} should be
+	 * {@link #consume}). {@link #tokens}`[`{@link #p}`]` should be
 	 * {@link #LT LT(1)}.
 	 *
 	 * This field is set to -1 when the stream is first constructed or when
@@ -140,10 +140,10 @@ export class BufferedTokenStream implements TokenStream {
 		}
 	}
 
-	/** Make sure index {@code i} in tokens has a token.
+	/** Make sure index `i` in tokens has a token.
 	 *
-	 * @return {@code true} if a token is located at index {@code i}, otherwise
-	 *    {@code false}.
+	 * @return `true` if a token is located at index `i`, otherwise
+	 *    `false`.
 	 * @see #get(int i)
 	 */
 	protected sync(i: number): boolean {
@@ -158,7 +158,7 @@ export class BufferedTokenStream implements TokenStream {
 		return true;
 	}
 
-	/** Add {@code n} elements to buffer.
+	/** Add `n` elements to buffer.
 	 *
 	 * @return The actual number of elements added to the buffer.
 	 */
@@ -270,7 +270,7 @@ export class BufferedTokenStream implements TokenStream {
 	/**
 	 * Allowed derived classes to modify the behavior of operations which change
 	 * the current stream position by adjusting the target token index of a seek
-	 * operation. The default implementation simply returns {@code i}. If an
+	 * operation. The default implementation simply returns `i`. If an
 	 * exception is thrown in this method, the current stream index should not be
 	 * changed.
 	 *
@@ -295,8 +295,8 @@ export class BufferedTokenStream implements TokenStream {
 		this.p = this.adjustSeekIndex(0);
 	}
 
-	/** Given a start and stop index, return a {@code List} of all tokens in
-	 *  the token type {@code BitSet}.  Return {@code null} if no tokens were found.  This
+	/** Given a start and stop index, return a `List` of all tokens in
+	 *  the token type `BitSet`.  Return `null` if no tokens were found.  This
 	 *  method looks at both on and off channel tokens.
 	 */
 	public getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {
@@ -333,8 +333,8 @@ export class BufferedTokenStream implements TokenStream {
 
 	/**
 	 * Given a starting index, return the index of the next token on channel.
-	 * Return {@code i} if {@code tokens[i]} is on channel. Return the index of
-	 * the EOF token if there are no tokens on channel between {@code i} and
+	 * Return `i` if `tokens[i]` is on channel. Return the index of
+	 * the EOF token if there are no tokens on channel between `i` and
 	 * EOF.
 	 */
 	protected nextTokenOnChannel(i: number, channel: number): number {
@@ -359,10 +359,10 @@ export class BufferedTokenStream implements TokenStream {
 
 	/**
 	 * Given a starting index, return the index of the previous token on
-	 * channel. Return {@code i} if {@code tokens[i]} is on channel. Return -1
-	 * if there are no tokens on channel between {@code i} and 0.
+	 * channel. Return `i` if `tokens[i]` is on channel. Return -1
+	 * if there are no tokens on channel between `i` and 0.
 	 *
-	 * If {@code i} specifies an index at or after the EOF token, the EOF token
+	 * If `i` specifies an index at or after the EOF token, the EOF token
 	 * index is returned. This is due to the fact that the EOF token is treated
 	 * as though it were on every channel.
 	 */
@@ -387,7 +387,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Collect all tokens on specified channel to the right of
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL} or
-	 *  EOF. If {@code channel} is {@code -1}, find any non default channel token.
+	 *  EOF. If `channel` is `-1`, find any non default channel token.
 	 */
 	public getHiddenTokensToRight(tokenIndex: number, channel: number = -1): Token[] {
 		this.lazyInit();
@@ -410,7 +410,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Collect all tokens on specified channel to the left of
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL}.
-	 *  If {@code channel} is {@code -1}, find any non default channel token.
+	 *  If `channel` is `-1`, find any non default channel token.
 	 */
 	public getHiddenTokensToLeft(tokenIndex: number, channel: number = -1): Token[] {
 		this.lazyInit();

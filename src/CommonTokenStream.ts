@@ -22,10 +22,10 @@ import { TokenSource } from "./TokenSource";
  *
  * By default, tokens are placed on the default channel
  * ({@link Token#DEFAULT_CHANNEL}), but may be reassigned by using the
- * {@code ->channel(HIDDEN)} lexer command, or by using an embedded action to
+ * `->channel(HIDDEN)` lexer command, or by using an embedded action to
  * call {@link Lexer#setChannel}.
  *
- * Note: lexer rules which use the {@code ->skip} lexer command or call
+ * Note: lexer rules which use the `->skip` lexer command or call
  * {@link Lexer#skip} do not produce tokens at all, so input text matched by
  * such a rule will not be available as part of the token stream, regardless of
  * channel.
@@ -42,7 +42,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 	/**
 	 * Constructs a new {@link CommonTokenStream} using the specified token
 	 * source and filtering tokens to the specified channel. Only tokens whose
-	 * {@link Token#getChannel} matches {@code channel} or have the
+	 * {@link Token#getChannel} matches `channel` or have the
 	 * `Token.type` equal to {@link Token#EOF} will be returned by the
 	 * token stream lookahead methods.
 	 *

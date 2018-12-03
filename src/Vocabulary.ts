@@ -23,7 +23,7 @@ export interface Vocabulary {
 
 	/**
 	 * Gets the string literal associated with a token type. The string returned
-	 * by this method, when not {@code null}, can be used unaltered in a parser
+	 * by this method, when not `null`, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
 	 * The following table shows examples of lexer rules and the literal
@@ -36,32 +36,32 @@ export interface Vocabulary {
 	 *   <th>Java String Literal</th>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code THIS : 'this';}</td>
-	 *   <td>{@code 'this'}</td>
-	 *   <td>{@code "'this'"}</td>
+	 *   <td>`THIS : 'this';`</td>
+	 *   <td>`'this'`</td>
+	 *   <td>`"'this'"`</td>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code SQUOTE : '\'';}</td>
-	 *   <td>{@code '\''}</td>
-	 *   <td>{@code "'\\''"}</td>
+	 *   <td>`SQUOTE : '\'';`</td>
+	 *   <td>`'\''`</td>
+	 *   <td>`"'\\''"`</td>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code ID : [A-Z]+;}</td>
+	 *   <td>`ID : [A-Z]+;`</td>
 	 *   <td>n/a</td>
-	 *   <td>{@code null}</td>
+	 *   <td>`null`</td>
 	 *  </tr>
 	 * </table>
 	 *
 	 * @param tokenType The token type.
 	 *
 	 * @return The string literal associated with the specified token type, or
-	 * {@code null} if no string literal is associated with the type.
+	 * `null` if no string literal is associated with the type.
 	 */
 	getLiteralName(tokenType: number): string | undefined;
 
 	/**
 	 * Gets the symbolic name associated with a token type. The string returned
-	 * by this method, when not {@code null}, can be used unaltered in a parser
+	 * by this method, when not `null`, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
 	 * This method supports token types defined by any of the following
@@ -70,7 +70,7 @@ export interface Vocabulary {
 	 * * Tokens created by lexer rules.
 	 * * Tokens defined in a `tokens{}` block in a lexer or parser
 	 *   grammar.
-	 * * The implicitly defined {@code EOF} token, which has the token type
+	 * * The implicitly defined `EOF` token, which has the token type
 	 *   {@link Token#EOF}.
 	 *
 	 * The following table shows examples of lexer rules and the literal
@@ -82,23 +82,23 @@ export interface Vocabulary {
 	 *   <th>Symbolic Name</th>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code THIS : 'this';}</td>
-	 *   <td>{@code THIS}</td>
+	 *   <td>`THIS : 'this';`</td>
+	 *   <td>`THIS`</td>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code SQUOTE : '\'';}</td>
-	 *   <td>{@code SQUOTE}</td>
+	 *   <td>`SQUOTE : '\'';`</td>
+	 *   <td>`SQUOTE`</td>
 	 *  </tr>
 	 *  <tr>
-	 *   <td>{@code ID : [A-Z]+;}</td>
-	 *   <td>{@code ID}</td>
+	 *   <td>`ID : [A-Z]+;`</td>
+	 *   <td>`ID`</td>
 	 *  </tr>
 	 * </table>
 	 *
 	 * @param tokenType The token type.
 	 *
 	 * @return The symbolic name associated with the specified token type, or
-	 * {@code null} if no symbolic name is associated with the type.
+	 * `null` if no symbolic name is associated with the type.
 	 */
 	getSymbolicName(tokenType: number): string | undefined;
 
@@ -108,7 +108,7 @@ export interface Vocabulary {
 	 * ANTLR provides a default implementation of this method, but
 	 * applications are free to override the behavior in any manner which makes
 	 * sense for the application. The default implementation returns the first
-	 * result from the following list which produces a non-{@code null}
+	 * result from the following list which produces a non-`null`
 	 * result.
 	 *
 	 * 1. The result of {@link #getLiteralName}

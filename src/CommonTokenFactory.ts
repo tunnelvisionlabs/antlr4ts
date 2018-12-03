@@ -28,7 +28,7 @@ export class CommonTokenFactory implements TokenFactory {
 	 * allows {@link Token#getText} to be called at any time regardless of the
 	 * input stream implementation.
 	 *
-	 * The default value is {@code false} to avoid the performance and memory
+	 * The default value is `false` to avoid the performance and memory
 	 * overhead of copying text for every token unless explicitly requested.
 	 */
 	protected copyText: boolean;
@@ -37,7 +37,7 @@ export class CommonTokenFactory implements TokenFactory {
 	 * Constructs a {@link CommonTokenFactory} with the specified value for
 	 * {@link #copyText}.
 	 *
-	 * When {@code copyText} is {@code false}, the {@link #DEFAULT} instance
+	 * When `copyText` is `false`, the {@link #DEFAULT} instance
 	 * should be used instead of constructing a new instance.
 	 *
 	 * @param copyText The value for {@link #copyText}.

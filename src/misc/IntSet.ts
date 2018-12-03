@@ -22,11 +22,11 @@ export interface IntSet {
 
 	/**
 	 * Modify the current {@link IntSet} object to contain all elements that are
-	 * present in itself, the specified {@code set}, or both.
+	 * present in itself, the specified `set`, or both.
 	 *
-	 * @param set The set to add to the current set. A {@code null} argument is
+	 * @param set The set to add to the current set. A `null` argument is
 	 * treated as though it were an empty set.
-	 * @return {@code this} (to support chained calls)
+	 * @return `this` (to support chained calls)
 	 *
 	 * @exception IllegalStateException if the current set is read-only
 	 */
@@ -35,40 +35,40 @@ export interface IntSet {
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
-	 * present in both the current set and the specified set {@code a}.
+	 * present in both the current set and the specified set `a`.
 	 *
 	 * @param a The set to intersect with the current set.
 	 * @return A new {@link IntSet} instance containing the intersection of the
-	 * current set and {@code a}.
+	 * current set and `a`.
 	 */
 	and(a: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
-	 * present in {@code elements} but not present in the current set. The
+	 * present in `elements` but not present in the current set. The
 	 * following expressions are equivalent for input non-null {@link IntSet}
-	 * instances {@code x} and {@code y}.
+	 * instances `x` and `y`.
 	 *
-	 * * {@code x.complement(y)}
-	 * * {@code y.subtract(x)}
+	 * * `x.complement(y)`
+	 * * `y.subtract(x)`
 	 *
 	 * @param elements The set to compare with the current set.
 	 * @return A new {@link IntSet} instance containing the elements present in
-	 * {@code elements} but not present in the current set.
+	 * `elements` but not present in the current set.
 	 */
 	complement(elements: IntSet): IntSet;
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
-	 * present in the current set, the specified set {@code a}, or both.
+	 * present in the current set, the specified set `a`, or both.
 	 *
 	 * This method is similar to {@link #addAll(IntSet)}, but returns a new
 	 * {@link IntSet} instance instead of modifying the current set.
 	 *
-	 * @param a The set to union with the current set. A {@code null} argument
+	 * @param a The set to union with the current set. A `null` argument
 	 * is treated as though it were an empty set.
 	 * @return A new {@link IntSet} instance containing the union of the current
-	 * set and {@code a}. The value {@code null} may be returned in place of an
+	 * set and `a`. The value `null` may be returned in place of an
 	 * empty result set.
 	 */
 	//@Nullable
@@ -76,18 +76,18 @@ export interface IntSet {
 
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
-	 * present in the current set but not present in the input set {@code a}.
+	 * present in the current set but not present in the input set `a`.
 	 * The following expressions are equivalent for input non-null
-	 * {@link IntSet} instances {@code x} and {@code y}.
+	 * {@link IntSet} instances `x` and `y`.
 	 *
-	 * * {@code y.subtract(x)}
-	 * * {@code x.complement(y)}
+	 * * `y.subtract(x)`
+	 * * `x.complement(y)`
 	 *
-	 * @param a The set to compare with the current set. A {@code null}
+	 * @param a The set to compare with the current set. A `null`
 	 * argument is treated as though it were an empty set.
 	 * @return A new {@link IntSet} instance containing the elements present in
-	 * {@code elements} but not present in the current set. The value
-	 * {@code null} may be returned in place of an empty result set.
+	 * `elements` but not present in the current set. The value
+	 * `null` may be returned in place of an empty result set.
 	 */
 	//@Nullable
 	subtract(/*@Nullable*/ a: IntSet): IntSet;
@@ -101,10 +101,10 @@ export interface IntSet {
 	readonly size: number;
 
 	/**
-	 * Returns {@code true} if this set contains no elements.
+	 * Returns `true` if this set contains no elements.
 	 *
-	 * @return {@code true} if the current set contains no elements; otherwise,
-	 * {@code false}.
+	 * @return `true` if the current set contains no elements; otherwise,
+	 * `false`.
 	 */
 	readonly isNil: boolean;
 
@@ -124,10 +124,10 @@ export interface IntSet {
 	getSingleElement(): number;
 
 	/**
-	 * Returns {@code true} if the set contains the specified element.
+	 * Returns `true` if the set contains the specified element.
 	 *
 	 * @param el The element to check for.
-	 * @return {@code true} if the set contains {@code el}; otherwise {@code false}.
+	 * @return `true` if the set contains `el`; otherwise `false`.
 	 */
 	contains(el: number): boolean;
 

@@ -57,7 +57,7 @@ export interface TokenSource {
 	 * providing tokens.
 	 *
 	 * @return The {@link CharStream} associated with the current position in
-	 * the input, or {@code null} if no input stream is available for the token
+	 * the input, or `null` if no input stream is available for the token
 	 * source.
 	 */
 	readonly inputStream: CharStream | undefined;

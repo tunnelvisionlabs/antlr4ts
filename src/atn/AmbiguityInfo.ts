@@ -22,7 +22,7 @@ import { TokenStream } from "../TokenStream";
  * determine that the SLL conflict is truly an ambiguity. For example, if none
  * of the ATN configurations in the conflicting SLL configuration set have
  * traversed a global follow transition (i.e.
- * {@link ATNConfig#getReachesIntoOuterContext} is {@code false} for all
+ * {@link ATNConfig#getReachesIntoOuterContext} is `false` for all
  * configurations), then the result of SLL prediction for that input is known to
  * be equivalent to the result of LL prediction for that input.
  *

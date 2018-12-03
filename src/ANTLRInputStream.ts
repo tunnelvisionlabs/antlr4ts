@@ -16,8 +16,8 @@ const INITIAL_BUFFER_SIZE: number = 1024;
 
 /**
  * Vacuum all input from a {@link Reader}/{@link InputStream} and then treat it
- * like a {@code char[]} buffer. Can also pass in a {@link String} or
- * {@code char[]} to use.
+ * like a `char[]` buffer. Can also pass in a {@link String} or
+ * `char[]` to use.
  *
  * If you need encoding, pass in stream/reader with correct encoding.
  */

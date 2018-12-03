@@ -122,14 +122,14 @@ export namespace PredictionMode {
 	}
 
 	/**
-	 * Checks if any configuration in {@code configs} is in a
+	 * Checks if any configuration in `configs` is in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if any configuration in {@code configs} is in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @return `true` if any configuration in `configs` is in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
 		for (let c of configs) {
@@ -142,14 +142,14 @@ export namespace PredictionMode {
 	}
 
 	/**
-	 * Checks if all configurations in {@code configs} are in a
+	 * Checks if all configurations in `configs` are in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if all configurations in {@code configs} are in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @return `true` if all configurations in `configs` are in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
 		for (let config of configs) {

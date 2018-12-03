@@ -12,7 +12,7 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code type} lexer action by setting `Lexer.type`
+ * Implements the `type` lexer action by setting `Lexer.type`
  * with the assigned type.
  *
  * @author Sam Harwell
@@ -22,7 +22,7 @@ export class LexerTypeAction implements LexerAction {
 	private readonly _type: number;
 
 	/**
-	 * Constructs a new {@code type} action with the specified token type value.
+	 * Constructs a new `type` action with the specified token type value.
 	 * @param type The type to assign to the token using `Lexer.type`.
 	 */
 	constructor(type: number) {
@@ -48,7 +48,7 @@ export class LexerTypeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @return This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

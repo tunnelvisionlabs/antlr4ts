@@ -34,12 +34,14 @@ import { Token } from "./Token";
  *   the {@link BailErrorStrategy} avoids wasting work on recovering from errors
  *   when the result will be ignored either way.
  *
- * {@code myparser.errorHandler = new BailErrorStrategy();}
+ * ```
+ * myparser.errorHandler = new BailErrorStrategy();
+ * ```
  *
  * @see Parser.errorHandler
  */
 export class BailErrorStrategy extends DefaultErrorStrategy {
-	/** Instead of recovering from exception {@code e}, re-throw it wrapped
+	/** Instead of recovering from exception `e`, re-throw it wrapped
 	 *  in a {@link ParseCancellationException} so it is not caught by the
 	 *  rule function catches.  Use {@link Exception#getCause()} to get the
 	 *  original {@link RecognitionException}.

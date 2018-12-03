@@ -91,7 +91,7 @@ export class CommonToken implements WritableToken {
 	/**
 	 * Constructs a new {@link CommonToken} as a copy of another {@link Token}.
 	 *
-	 * If {@code oldToken} is also a {@link CommonToken} instance, the newly
+	 * If `oldToken` is also a {@link CommonToken} instance, the newly
 	 * constructed token will share a reference to the {@link #text} field and
 	 * the {@link Tuple2} stored in {@link #source}. Otherwise, {@link #text} will
 	 * be assigned the result of calling {@link #getText}, and {@link #source}
@@ -158,10 +158,10 @@ export class CommonToken implements WritableToken {
 
 	/**
 	 * Explicitly set the text for this token. If {code text} is not
-	 * {@code null}, then {@link #getText} will return this value rather than
+	 * `null`, then {@link #getText} will return this value rather than
 	 * extracting the text from the input.
 	 *
-	 * @param text The explicit text of the token, or {@code null} if the text
+	 * @param text The explicit text of the token, or `null` if the text
 	 * should be obtained from the input along with the start and stop indexes
 	 * of the token.
 	 */

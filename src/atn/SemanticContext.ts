@@ -52,7 +52,7 @@ function min<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 
 /** A tree structure used to record the semantic context in which
  *  an ATN configuration is valid.  It's either a single predicate,
- *  a conjunction {@code p1&&p2}, or a sum of products {@code p1||p2}.
+ *  a conjunction `p1&&p2`, or a sum of products `p1||p2`.
  *
  *  I have scoped the {@link AND}, {@link OR}, and {@link Predicate} subclasses of
  *  {@link SemanticContext} within the scope of this outer class.
@@ -62,7 +62,7 @@ export abstract class SemanticContext implements Equatable {
 
 	/**
 	 * The default {@link SemanticContext}, which is semantically equivalent to
-	 * a predicate of the form {@code {true}?}.
+	 * a predicate of the form `{true}?`.
 	 */
 	static get NONE(): SemanticContext {
 		if (SemanticContext._NONE === undefined) {
@@ -95,13 +95,13 @@ export abstract class SemanticContext implements Equatable {
 	 * @return The simplified semantic context after precedence predicates are
 	 * evaluated, which will be one of the following values.
 	 *
-	 * * {@link #NONE}: if the predicate simplifies to {@code true} after
+	 * * {@link #NONE}: if the predicate simplifies to `true` after
 	 *   precedence predicates are evaluated.
-	 * * {@code null}: if the predicate simplifies to {@code false} after
+	 * * `null`: if the predicate simplifies to `false` after
 	 *   precedence predicates are evaluated.
-	 * * {@code this}: if the semantic context is not changed as a result of
+	 * * `this`: if the semantic context is not changed as a result of
 	 *   precedence predicate evaluation.
-	 * * A non-{@code null} {@link SemanticContext}: the new simplified
+	 * * A non-`null` {@link SemanticContext}: the new simplified
 	 *   semantic context after precedence predicates are evaluated.
 	 */
 	public evalPrecedence(parser: Recognizer<any, any>, parserCallStack: RuleContext): SemanticContext | undefined {

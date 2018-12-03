@@ -27,7 +27,7 @@ export class ListTokenSource implements TokenSource {
 	protected tokens: Token[];
 
 	/**
-	 * The name of the input source. If this value is {@code null}, a call to
+	 * The name of the input source. If this value is `null`, a call to
 	 * {@link #getSourceName} should return the source name used to create the
 	 * the next token in {@link #tokens} (or the previous token if the end of
 	 * the input has been reached).
@@ -59,11 +59,11 @@ export class ListTokenSource implements TokenSource {
 	 * @param tokens The collection of {@link Token} objects to provide as a
 	 * {@link TokenSource}.
 	 * @param sourceName The name of the {@link TokenSource}. If this value is
-	 * {@code null}, {@link #getSourceName} will attempt to infer the name from
+	 * `null`, {@link #getSourceName} will attempt to infer the name from
 	 * the next {@link Token} (or the previous token if the end of the input has
 	 * been reached).
 	 *
-	 * @exception NullPointerException if {@code tokens} is {@code null}
+	 * @exception NullPointerException if `tokens` is `null`
 	 */
 	constructor(@NotNull tokens: Token[], sourceName?: string) {
 		if (tokens == null) {

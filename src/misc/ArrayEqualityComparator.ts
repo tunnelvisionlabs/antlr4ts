@@ -23,7 +23,7 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * {@inheritDoc}
 	 *
 	 * This implementation returns
-	 * {@code obj.}{@link Object#hashCode hashCode()}.
+	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
 	@Override
 	public hashCode(obj: Equatable[]): number {
@@ -38,10 +38,10 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * {@inheritDoc}
 	 *
 	 * This implementation relies on object equality. If both objects are
-	 * {@code null}, this method returns {@code true}. Otherwise if only
-	 * {@code a} is {@code null}, this method returns {@code false}. Otherwise,
+	 * `null`, this method returns `true`. Otherwise if only
+	 * `a` is `null`, this method returns `false`. Otherwise,
 	 * this method returns the result of
-	 * {@code a.}{@link Object#equals equals}{@code (b)}.
+	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
 	@Override
 	public equals(a: Equatable[], b: Equatable[]): boolean {

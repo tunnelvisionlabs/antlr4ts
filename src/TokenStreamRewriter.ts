@@ -38,8 +38,8 @@ import * as Utils from "./misc/Utils";
  *
  * Since the operations are done lazily at {@link #getText}-time, operations do
  * not screw up the token index values. That is, an insert operation at token
- * index {@code i} does not change the index values for tokens
- * {@code i}+1..n-1.
+ * index `i` does not change the index values for tokens
+ * `i`+1..n-1.
  *
  * Because operations never actually alter the buffer, you may always get the
  * original token stream back without undoing anything. Since the instructions

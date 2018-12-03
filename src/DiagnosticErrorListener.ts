@@ -43,8 +43,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * Initializes a new instance of {@link DiagnosticErrorListener}, specifying
 	 * whether all ambiguities or only exact ambiguities are reported.
 	 *
-	 * @param exactOnly {@code true} to report only exact ambiguities, otherwise
-	 * {@code false} to report all ambiguities.  Defaults to true.
+	 * @param exactOnly `true` to report only exact ambiguities, otherwise
+	 * `false` to report all ambiguities.  Defaults to true.
 	 */
 	constructor(protected exactOnly: boolean = true) {
 		this.exactOnly = exactOnly;
@@ -141,8 +141,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * @param reportedAlts The set of conflicting or ambiguous alternatives, as
 	 * reported by the parser.
 	 * @param configs The conflicting or ambiguous configuration set.
-	 * @return Returns {@code reportedAlts} if it is not {@code null}, otherwise
-	 * returns the set of alternatives represented in {@code configs}.
+	 * @return Returns `reportedAlts` if it is not `null`, otherwise
+	 * returns the set of alternatives represented in `configs`.
 	 */
 	@NotNull
 	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {

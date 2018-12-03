@@ -33,7 +33,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * with a {@link LexerAction}.
 	 *
 	 * Note: This class is only required for lexer actions for which
-	 * {@link LexerAction#isPositionDependent} returns {@code true}.
+	 * {@link LexerAction#isPositionDependent} returns `true`.
 	 *
 	 * @param offset The offset into the input {@link CharStream}, relative to
 	 * the token start index, at which the specified lexer action should be
@@ -81,7 +81,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code true}.
+	 * @return This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -92,7 +92,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * {@inheritDoc}
 	 *
 	 * This method calls {@link #execute} on the result of {@link #getAction}
-	 * using the provided {@code lexer}.
+	 * using the provided `lexer`.
 	 */
 	@Override
 	public execute(lexer: Lexer): void {

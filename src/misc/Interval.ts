@@ -125,9 +125,9 @@ export class Interval implements Equatable {
 		return Interval.of(Math.max(this.a, other.a), Math.min(this.b, other.b));
 	}
 
-	/** Return the interval with elements from {@code this} not in {@code other};
-	 *  {@code other} must not be totally enclosed (properly contained)
-	 *  within {@code this}, which would result in two disjoint intervals
+	/** Return the interval with elements from `this` not in `other`;
+	 *  `other` must not be totally enclosed (properly contained)
+	 *  within `this`, which would result in two disjoint intervals
 	 *  instead of the single one returned by this method.
 	 */
 	public differenceNotProperlyContained(other: Interval): Interval | undefined {

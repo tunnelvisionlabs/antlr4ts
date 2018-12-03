@@ -12,8 +12,8 @@ import { TerminalNode } from "./TerminalNode";
 
 /**
  * This interface defines the basic notion of a parse tree visitor. Generated
- * visitors implement this interface and the {@code XVisitor} interface for
- * grammar {@code X}.
+ * visitors implement this interface and the `XVisitor` interface for
+ * grammar `X`.
  *
  * @author Sam Harwell
  * @param <Result> The return type of the visit operation. Use {@link Void} for

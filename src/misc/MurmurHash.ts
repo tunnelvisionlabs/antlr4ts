@@ -15,7 +15,7 @@ export namespace MurmurHash {
 	const DEFAULT_SEED: number = 0;
 
 	/**
-	 * Initialize the hash using the specified {@code seed}.
+	 * Initialize the hash using the specified `seed`.
 	 *
 	 * @param seed the seed (optional)
 	 * @return the intermediate hash value
@@ -25,7 +25,7 @@ export namespace MurmurHash {
 	}
 
 	/**
-	 * Update the intermediate hash value for the next input {@code value}.
+	 * Update the intermediate hash value for the next input `value`.
 	 *
 	 * @param hash the intermediate hash value
 	 * @param value the value to add to the current hash
@@ -61,7 +61,7 @@ export namespace MurmurHash {
 
 
 	/**
-	 * Apply the final computation steps to the intermediate value {@code hash}
+	 * Apply the final computation steps to the intermediate value `hash`
 	 * to form the final result of the MurmurHash 3 hash function.
 	 *
 	 * @param hash the intermediate hash value

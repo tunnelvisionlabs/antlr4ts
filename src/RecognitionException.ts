@@ -92,10 +92,10 @@ export class RecognitionException extends Error {
 	 * previously matched symbol at the time this exception was thrown.
 	 *
 	 * If the set of expected tokens is not known and could not be computed,
-	 * this method returns {@code null}.
+	 * this method returns `null`.
 	 *
 	 * @return The set of token types that could potentially follow the current
-	 * state in the ATN, or {@code null} if the information is not available.
+	 * state in the ATN, or `null` if the information is not available.
 	 */
 	get expectedTokens(): IntervalSet | undefined {
 		if (this._recognizer) {
@@ -107,10 +107,10 @@ export class RecognitionException extends Error {
 	/**
 	 * Gets the {@link RuleContext} at the time this exception was thrown.
 	 *
-	 * If the context is not available, this method returns {@code null}.
+	 * If the context is not available, this method returns `null`.
 	 *
 	 * @return The {@link RuleContext} at the time this exception was thrown.
-	 * If the context is not available, this method returns {@code null}.
+	 * If the context is not available, this method returns `null`.
 	 */
 	get context(): RuleContext | undefined {
 		return this.ctx;
@@ -120,10 +120,10 @@ export class RecognitionException extends Error {
 	 * Gets the input stream which is the symbol source for the recognizer where
 	 * this exception was thrown.
 	 *
-	 * If the input stream is not available, this method returns {@code null}.
+	 * If the input stream is not available, this method returns `null`.
 	 *
 	 * @return The input stream which is the symbol source for the recognizer
-	 * where this exception was thrown, or {@code null} if the stream is not
+	 * where this exception was thrown, or `null` if the stream is not
 	 * available.
 	 */
 
@@ -149,9 +149,9 @@ export class RecognitionException extends Error {
 	/**
 	 * Gets the {@link Recognizer} where this exception occurred.
 	 *
-	 * If the recognizer is not available, this method returns {@code null}.
+	 * If the recognizer is not available, this method returns `null`.
 	 *
-	 * @return The recognizer where this exception occurred, or {@code null} if
+	 * @return The recognizer where this exception occurred, or `null` if
 	 * the recognizer is not available.
 	 */
 	get recognizer(): Recognizer<any, any> | undefined {

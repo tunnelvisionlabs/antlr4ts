@@ -47,7 +47,7 @@ export class DFAState {
 	@NotNull
 	public configs: ATNConfigSet;
 
-	/** {@code edges.get(symbol)} points to target of symbol.
+	/** `edges.get(symbol)` points to target of symbol.
 	 */
 	@NotNull
 	private readonly edges: Map<number, DFAState>;

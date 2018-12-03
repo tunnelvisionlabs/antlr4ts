@@ -30,7 +30,7 @@ export class AcceptStateInfo {
 	/**
 	 * Gets the prediction made by this accept state. Note that this value
 	 * assumes the predicates, if any, in the {@link DFAState} evaluate to
-	 * {@code true}. If predicate evaluation is enabled, the final prediction of
+	 * `true`. If predicate evaluation is enabled, the final prediction of
 	 * the accept state will be determined by the result of predicate
 	 * evaluation.
 	 */

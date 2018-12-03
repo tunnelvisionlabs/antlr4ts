@@ -29,7 +29,7 @@ export interface ANTLRErrorListener<TSymbol> {
 	 * @param offendingSymbol
 	 *        The offending token in the input token
 	 * 		  stream, unless recognizer is a lexer (then it's null). If
-	 * 		  no viable alternative error, {@code e} has token at which we
+	 * 		  no viable alternative error, `e` has token at which we
 	 * 		  started production for the decision.
 	 * @param line
 	 * 		  The line number in the input where the error occurred.

@@ -37,7 +37,7 @@ export class StarLoopEntryState extends DecisionState {
 	 *   rule.
 	 *
 	 * This field is not used when {@link #isPrecedenceDecision} is
-	 * {@code false}.
+	 * `false`.
 	 */
 	public precedenceLoopbackStates: BitSet = new BitSet();
 

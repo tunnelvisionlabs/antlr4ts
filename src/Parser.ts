@@ -115,9 +115,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	private _buildParseTrees: boolean = true;
 
 	/**
-	 * When {@link #setTrace}{@code (true)} is called, a reference to the
+	 * When {@link #setTrace}`(true)` is called, a reference to the
 	 * {@link TraceListener} is stored here so it can be easily removed in a
-	 * later call to {@link #setTrace}{@code (false)}. The listener itself is
+	 * later call to {@link #setTrace}`(false)`. The listener itself is
 	 * implemented as a parser listener so this field is not directly used by
 	 * other parser methods.
 	 */
@@ -169,21 +169,21 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	/**
-	 * Match current input symbol against {@code ttype}. If the symbol type
+	 * Match current input symbol against `ttype`. If the symbol type
 	 * matches, {@link ANTLRErrorStrategy#reportMatch} and {@link #consume} are
 	 * called to complete the match process.
 	 *
 	 * If the symbol type does not match,
 	 * {@link ANTLRErrorStrategy#recoverInline} is called on the current error
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
-	 * {@code true} and the token index of the symbol returned by
+	 * `true` and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
 	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
 	 * @param ttype the token type to match
 	 * @return the matched symbol
 	 * @ if the current input symbol did not match
-	 * {@code ttype} and the error strategy could not recover from the
+	 * `ttype` and the error strategy could not recover from the
 	 * mismatched symbol
 	 */
 	@NotNull
@@ -215,7 +215,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * If the symbol type does not match,
 	 * {@link ANTLRErrorStrategy#recoverInline} is called on the current error
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
-	 * {@code true} and the token index of the symbol returned by
+	 * `true` and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
 	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
 	 *
@@ -264,10 +264,10 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	/**
 	 * Gets whether or not a complete parse tree will be constructed while
-	 * parsing. This property is {@code true} for a newly constructed parser.
+	 * parsing. This property is `true` for a newly constructed parser.
 	 *
-	 * @return {@code true} if a complete parse tree will be constructed while
-	 * parsing, otherwise {@code false}
+	 * @return `true` if a complete parse tree will be constructed while
+	 * parsing, otherwise `false`
 	 */
 	get buildParseTree(): boolean {
 		return this._buildParseTrees;
@@ -279,7 +279,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	/**
-	 * Registers {@code listener} to receive events during the parsing process.
+	 * Registers `listener` to receive events during the parsing process.
 	 *
 	 * To support output-preserving grammar transformations (including but not
 	 * limited to left-recursion removal, automated left-factoring, and
@@ -303,7 +303,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @param listener the listener to add
 	 *
-	 * @ if {@code} listener is {@code null}
+	 * @ if `listener` is `null`
 	 */
 	public addParseListener(@NotNull listener: ParseTreeListener): void {
 		if (listener == null) {
@@ -314,9 +314,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	/**
-	 * Remove {@code listener} from the list of parse listeners.
+	 * Remove `listener` from the list of parse listeners.
 	 *
-	 * If {@code listener} is {@code null} or has not been added as a parse
+	 * If `listener` is `null` or has not been added as a parse
 	 * listener, this method does nothing.
 	 *
 	 * @see #addParseListener
@@ -504,9 +504,9 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Consume and return the [current symbol](`currentToken`).
 	 *
-	 * E.g., given the following input with {@code A} being the current
-	 * lookahead symbol, this function moves the cursor to {@code B} and returns
-	 * {@code A}.
+	 * E.g., given the following input with `A` being the current
+	 * lookahead symbol, this function moves the cursor to `B` and returns
+	 * `A`.
 	 *
 	 * ```
 	 * A B
@@ -718,7 +718,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	/**
-	 * Checks whether or not {@code symbol} can follow the current state in the
+	 * Checks whether or not `symbol` can follow the current state in the
 	 * ATN. The behavior of this method is equivalent to the following, but is
 	 * implemented such that the complete context-sensitive follow set does not
 	 * need to be explicitly constructed.
@@ -728,8 +728,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * ```
 	 *
 	 * @param symbol the symbol type to check
-	 * @return {@code true} if {@code symbol} can follow the current state in
-	 * the ATN, otherwise {@code false}.
+	 * @return `true` if `symbol` can follow the current state in
+	 * the ATN, otherwise `false`.
 	 */
 	public isExpectedToken(symbol: number): boolean {
 //   		return interpreter.atn.nextTokens(_ctx);
@@ -786,7 +786,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		return atn.nextTokens(s);
 	}
 
-	/** Get a rule's index (i.e., {@code RULE_ruleName} field) or -1 if not found. */
+	/** Get a rule's index (i.e., `RULE_ruleName` field) or -1 if not found. */
 	public getRuleIndex(ruleName: string): number {
 		let ruleIndex = this.getRuleIndexMap().get(ruleName);
 		if (ruleIndex != null) {

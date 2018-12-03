@@ -25,15 +25,15 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * will call either {@link #reportContextSensitivity} or
 	 * {@link #reportAmbiguity}.
 	 *
-	 * When {@code ambigAlts} is not null, it contains the set of potentially
+	 * When `ambigAlts` is not null, it contains the set of potentially
 	 * viable alternatives identified by the prediction algorithm. When
-	 * {@code ambigAlts} is null, use
+	 * `ambigAlts` is null, use
 	 * {@link ATNConfigSet#getRepresentedAlternatives} to obtain the represented
-	 * alternatives from the {@code configs} argument.
+	 * alternatives from the `configs` argument.
 	 *
-	 * When {@code exact} is {@code true}, *all* of the potentially
+	 * When `exact` is `true`, *all* of the potentially
 	 * viable alternatives are truly viable, i.e. this is reporting an exact
-	 * ambiguity. When {@code exact} is {@code false}, *at least two* of
+	 * ambiguity. When `exact` is `false`, *at least two* of
 	 * the potentially viable alternatives are viable for the current input, but
 	 * the prediction algorithm terminated as soon as it determined that at
 	 * least the *minimum* potentially viable alternative is truly
@@ -41,18 +41,18 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 *
 	 * When the {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} prediction
 	 * mode is used, the parser is required to identify exact ambiguities so
-	 * {@code exact} will always be {@code true}.
+	 * `exact` will always be `true`.
 	 *
 	 * @param recognizer the parser instance
 	 * @param dfa the DFA for the current decision
 	 * @param startIndex the input index where the decision started
 	 * @param stopIndex the input input where the ambiguity was identified
-	 * @param exact {@code true} if the ambiguity is exactly known, otherwise
-	 * {@code false}. This is always {@code true} when
+	 * @param exact `true` if the ambiguity is exactly known, otherwise
+	 * `false`. This is always `true` when
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} is used.
-	 * @param ambigAlts the potentially ambiguous alternatives, or {@code null}
+	 * @param ambigAlts the potentially ambiguous alternatives, or `null`
 	 * to indicate that the potentially ambiguous alternatives are the complete
-	 * set of represented alternatives in {@code configs}
+	 * set of represented alternatives in `configs`
 	 * @param configs the ATN configuration set where the ambiguity was
 	 * identified
 	 */
@@ -72,18 +72,18 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * This method is called when an SLL conflict occurs and the parser is about
 	 * to use the full context information to make an LL decision.
 	 *
-	 * If one or more configurations in {@code configs} contains a semantic
+	 * If one or more configurations in `configs` contains a semantic
 	 * predicate, the predicates are evaluated before this method is called. The
 	 * subset of alternatives which are still viable after predicates are
-	 * evaluated is reported in {@code conflictingAlts}.
+	 * evaluated is reported in `conflictingAlts`.
 	 *
 	 * @param recognizer the parser instance
 	 * @param dfa the DFA for the current decision
 	 * @param startIndex the input index where the decision started
 	 * @param stopIndex the input index where the SLL conflict occurred
 	 * @param conflictingAlts The specific conflicting alternatives. If this is
-	 * {@code null}, the conflicting alternatives are all alternatives
-	 * represented in {@code configs}.
+	 * `null`, the conflicting alternatives are all alternatives
+	 * represented in `configs`.
 	 * @param conflictState the simulator state when the SLL conflict was
 	 * detected
 	 */
@@ -114,10 +114,10 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * indicate a problem, and it may appear even in completely unambiguous
 	 * grammars.
 	 *
-	 * {@code configs} may have more than one represented alternative if the
+	 * `configs` may have more than one represented alternative if the
 	 * full-context prediction algorithm does not evaluate predicates before
 	 * beginning the full-context prediction. In all cases, the final prediction
-	 * is passed as the {@code prediction} argument.
+	 * is passed as the `prediction` argument.
 	 *
 	 * Note that the definition of "context sensitivity" in this method
 	 * differs from the concept in {@link DecisionInfo#contextSensitivities}.

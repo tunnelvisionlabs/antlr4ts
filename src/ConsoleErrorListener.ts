@@ -23,7 +23,7 @@ export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	 * {@inheritDoc}
 	 *
 	 * This implementation prints messages to {@link System#err} containing the
-	 * values of {@code line}, {@code charPositionInLine}, and {@code msg} using
+	 * values of `line`, `charPositionInLine`, and `msg` using
 	 * the following format.
 	 *
 	 * <pre>

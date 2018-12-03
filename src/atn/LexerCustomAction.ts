@@ -79,7 +79,7 @@ export class LexerCustomAction implements LexerAction {
 	 * user-defined embedded action which makes calls to methods like
 	 * {@link Lexer#getText}.
 	 *
-	 * @return This method returns {@code true}.
+	 * @return This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {

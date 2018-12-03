@@ -223,7 +223,7 @@ export class IntervalSet implements IntSet {
 
 	/**
 	 * Compute the set difference between two interval sets. The specific
-	 * operation is {@code left - right}.
+	 * operation is `left - right`.
 	 */
 	@NotNull
 	public static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {

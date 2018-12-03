@@ -12,7 +12,7 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code mode} lexer action by calling {@link Lexer#mode} with
+ * Implements the `mode` lexer action by calling {@link Lexer#mode} with
  * the assigned mode.
  *
  * @author Sam Harwell
@@ -22,7 +22,7 @@ export class LexerModeAction implements LexerAction {
 	private readonly _mode: number;
 
 	/**
-	 * Constructs a new {@code mode} action with the specified mode value.
+	 * Constructs a new `mode` action with the specified mode value.
 	 * @param mode The mode value to pass to {@link Lexer#mode}.
 	 */
 	constructor(mode: number) {
@@ -32,7 +32,7 @@ export class LexerModeAction implements LexerAction {
 	/**
 	 * Get the lexer mode this action should transition the lexer to.
 	 *
-	 * @return The lexer mode for this {@code mode} command.
+	 * @return The lexer mode for this `mode` command.
 	 */
 	get mode(): number {
 		return this._mode;
@@ -49,7 +49,7 @@ export class LexerModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @return This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
