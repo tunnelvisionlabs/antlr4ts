@@ -30,7 +30,7 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 *
 	 * @param decision The decision number
 	 * @param state The final simulator state containing the necessary
-	 * information to determine the result of a prediction, or `null` if
+	 * information to determine the result of a prediction, or `undefined` if
 	 * the final state is not available
 	 * @param input The input token stream
 	 * @param startIndex The start index for the current prediction

@@ -201,13 +201,13 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * subgraphs/nodes. No other locking occurs, even during DFA simulation. This is
  * safe as long as we can guarantee that all threads referencing
  * `s.edge[t]` get the same physical target {@link DFAState}, or
- * `null`. Once into the DFA, the DFA simulation does not reference the
+ * `undefined`. Once into the DFA, the DFA simulation does not reference the
  * {@link DFA#states} map. It follows the {@link DFAState#edges} field to new
  * targets. The DFA simulator will either find {@link DFAState#edges} to be
- * `null`, to be non-`null` and `dfa.edges[t]` null, or
- * `dfa.edges[t]` to be non-null. The
+ * `undefined`, to be non-`undefined` and `dfa.edges[t]` undefined, or
+ * `dfa.edges[t]` to be non-undefined. The
  * {@link #addDFAEdge} method could be racing to set the field
- * but in either case the DFA simulator works; if `null`, and requests ATN
+ * but in either case the DFA simulator works; if `undefined`, and requests ATN
  * simulation. It could also race trying to get `dfa.edges[t]`, but either
  * way it will work because it's not doing a test and set operation.
  *
@@ -1025,12 +1025,12 @@ export class ParserATNSimulator extends ATNSimulator {
 	/**
 	 * Get an existing target state for an edge in the DFA. If the target state
 	 * for the edge has not yet been computed or is otherwise not available,
-	 * this method returns `null`.
+	 * this method returns `undefined`.
 	 *
 	 * @param s The current DFA state
 	 * @param t The next input symbol
 	 * @returns The existing target DFA state for the given input symbol
-	 * `t`, or `null` if the target state for this edge is not
+	 * `t`, or `undefined` if the target state for this edge is not
 	 * already cached
 	 */
 	protected getExistingTargetState(@NotNull s: DFAState, t: number): DFAState | undefined {
@@ -1145,7 +1145,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				reach = this.removeAllConfigsNotInRuleStopState(reach, contextCache);
 			}
 
-			/* If skippedStopStates is not null, then it contains at least one
+			/* If skippedStopStates is not undefined, then it contains at least one
 			 * configuration. For full-context reach operations, these
 			 * configurations reached the end of the start rule, in which case we
 			 * only add them back to reach if no configuration during the current
@@ -1583,8 +1583,8 @@ export class ParserATNSimulator extends ATNSimulator {
 			// find first unpredicated but ambig alternative, if any.
 			// Only ambiguous alternatives will have SemanticContext.NONE.
 			// Any unambig alts or ambig naked alts after first ambig naked are ignored
-			// (null, i) means alt i is the default prediction
-			// if no (null, i), then no default prediction.
+			// (undefined, i) means alt i is the default prediction
+			// if no (undefined, i), then no default prediction.
 			if (ambigAlts != null && ambigAlts.get(i) && pred === SemanticContext.NONE) {
 				pairs.push(new DFAState.PredPrediction(pred, i));
 			}
@@ -1603,7 +1603,7 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	/** Look through a list of predicate/alt pairs, returning alts for the
-	 *  pairs that win. A `null` predicate indicates an alt containing an
+	 *  pairs that win. An `undefined` predicate indicates an alt containing an
 	 *  unpredicated config which behaves as "always true."
 	 */
 	protected evalSemanticContext(

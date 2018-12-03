@@ -19,7 +19,7 @@ export interface CharStream extends IntStream {
 	 * @param interval an interval within the stream
 	 * @returns the text of the specified interval
 	 *
-	 * @throws NullPointerException if `interval` is `null`
+	 * @throws NullPointerException if `interval` is `undefined`
 	 * @throws IllegalArgumentException if `interval.a < 0`, or if
 	 * `interval.b < interval.a - 1`, or if `interval.b` lies at or
 	 * past the end of the stream

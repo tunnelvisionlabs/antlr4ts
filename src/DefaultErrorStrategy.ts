@@ -518,8 +518,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * This method implements the single-token deletion inline error recovery
 	 * strategy. It is called by {@link #recoverInline} to attempt to recover
-	 * from mismatched input. If this method returns null, the parser and error
-	 * handler state will not have changed. If this method returns non-null,
+	 * from mismatched input. If this method returns `undefined`, the parser and error
+	 * handler state will not have changed. If this method returns non-`undefined`,
 	 * `recognizer` will *not* be in error recovery mode since the
 	 * returned token was a successful match.
 	 *
@@ -532,7 +532,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * @param recognizer the parser instance
 	 * @returns the successfully matched {@link Token} instance if single-token
 	 * deletion successfully recovers from the mismatched input, otherwise
-	 * `null`
+	 * `undefined`
 	 */
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number = recognizer.inputStream.LA(2);

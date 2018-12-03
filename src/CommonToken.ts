@@ -158,10 +158,10 @@ export class CommonToken implements WritableToken {
 
 	/**
 	 * Explicitly set the text for this token. If {code text} is not
-	 * `null`, then {@link #getText} will return this value rather than
+	 * `undefined`, then {@link #getText} will return this value rather than
 	 * extracting the text from the input.
 	 *
-	 * @param text The explicit text of the token, or `null` if the text
+	 * @param text The explicit text of the token, or `undefined` if the text
 	 * should be obtained from the input along with the start and stop indexes
 	 * of the token.
 	 */

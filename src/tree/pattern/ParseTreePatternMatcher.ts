@@ -127,8 +127,8 @@ export class ParseTreePatternMatcher {
 	 * @param stop The stop delimiter.
 	 * @param escapeLeft The escape sequence to use for escaping a start or stop delimiter.
 	 *
-	 * @exception IllegalArgumentException if `start` is `null` or empty.
-	 * @exception IllegalArgumentException if `stop` is `null` or empty.
+	 * @throws {@link Error} if `start` is not defined or empty.
+	 * @throws {@link Error} if `stop` is not defined or empty.
 	 */
 	public setDelimiters(start: string, stop: string, escapeLeft: string): void {
 		if (!start) {
@@ -259,7 +259,7 @@ export class ParseTreePatternMatcher {
 	 * `match.`{@link ParseTreeMatch#labels labels}.
 	 *
 	 * @returns the first node encountered in `tree` which does not match
-	 * a corresponding node in `patternTree`, or `null` if the match
+	 * a corresponding node in `patternTree`, or `undefined` if the match
 	 * was successful. The specific node returned depends on the matching
 	 * algorithm used by the implementation, and may be overridden.
 	 */

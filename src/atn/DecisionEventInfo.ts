@@ -34,7 +34,7 @@ export class DecisionEventInfo {
 
 	/**
 	 * The simulator state containing additional information relevant to the
-	 * prediction state when the current event occurred, or `null` if no
+	 * prediction state when the current event occurred, or `undefined` if no
 	 * additional information is relevant or available.
 	 */
 	public state: SimulatorState | undefined;

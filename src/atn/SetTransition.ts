@@ -17,7 +17,7 @@ export class SetTransition extends Transition {
 	@NotNull
 	public set: IntervalSet;
 
-	// TODO (sam): should we really allow null here?
+	// TODO (sam): should we really allow undefined here?
 	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
 		super(target);
 		if (set == null) {

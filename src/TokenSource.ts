@@ -57,14 +57,14 @@ export interface TokenSource {
 	 * providing tokens.
 	 *
 	 * @returns The {@link CharStream} associated with the current position in
-	 * the input, or `null` if no input stream is available for the token
+	 * the input, or `undefined` if no input stream is available for the token
 	 * source.
 	 */
 	readonly inputStream: CharStream | undefined;
 
 	/**
 	 * Gets the name of the underlying input source. This method returns a
-	 * non-null, non-empty string. If such a name is not known, this method
+	 * non-undefined, non-empty string. If such a name is not known, this method
 	 * returns {@link IntStream#UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull

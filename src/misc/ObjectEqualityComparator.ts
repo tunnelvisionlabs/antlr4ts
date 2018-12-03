@@ -36,8 +36,8 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable | 
 	 * {@inheritDoc}
 	 *
 	 * This implementation relies on object equality. If both objects are
-	 * `null`, this method returns `true`. Otherwise if only
-	 * `a` is `null`, this method returns `false`. Otherwise,
+	 * `undefined` or `null`, this method returns `true`. Otherwise if only
+	 * `a` is `undefined` or `null`, this method returns `false`. Otherwise,
 	 * this method returns the result of
 	 * `a.`{@link Object#equals equals}`(b)`.
 	 */

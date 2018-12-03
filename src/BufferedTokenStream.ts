@@ -296,7 +296,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Given a start and stop index, return a `List` of all tokens in
-	 *  the token type `BitSet`.  Return `null` if no tokens were found.  This
+	 *  the token type `BitSet`.  Return an empty array if no tokens were found.  This
 	 *  method looks at both on and off channel tokens.
 	 */
 	public getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {

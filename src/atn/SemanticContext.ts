@@ -74,7 +74,7 @@ export abstract class SemanticContext implements Equatable {
 
 	/**
 	 * For context independent predicates, we evaluate them without a local
-	 * context (i.e., null context). That way, we can evaluate them without
+	 * context (i.e., unedfined context). That way, we can evaluate them without
 	 * having to create proper rule-specific context during prediction (as
 	 * opposed to the parser, which creates them naturally). In a practical
 	 * sense, this avoids a cast exception from RuleContext to myruleContext.
@@ -97,11 +97,11 @@ export abstract class SemanticContext implements Equatable {
 	 *
 	 * * {@link #NONE}: if the predicate simplifies to `true` after
 	 *   precedence predicates are evaluated.
-	 * * `null`: if the predicate simplifies to `false` after
+	 * * `undefined`: if the predicate simplifies to `false` after
 	 *   precedence predicates are evaluated.
 	 * * `this`: if the semantic context is not changed as a result of
 	 *   precedence predicate evaluation.
-	 * * A non-`null` {@link SemanticContext}: the new simplified
+	 * * A non-`undefined` {@link SemanticContext}: the new simplified
 	 *   semantic context after precedence predicates are evaluated.
 	 */
 	public evalPrecedence(parser: Recognizer<any, any>, parserCallStack: RuleContext): SemanticContext | undefined {

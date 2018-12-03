@@ -175,7 +175,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	/**
-	 * @exception NullPointerException if `listener` is `null`.
+	 * @exception NullPointerException if `listener` is `undefined`.
 	 */
 	public addErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
 		if (!listener) {

@@ -18,7 +18,7 @@ import { NotNull, Override } from "../../Decorators";
  * * `id:ID`: A labeled placeholder for a token of type `ID`.
  *
  * This class does not perform any validation on the tag or label names aside
- * from ensuring that the tag is a non-null, non-empty string.
+ * from ensuring that the tag is a defined, non-empty string.
  */
 export class TagChunk extends Chunk {
 	/**
@@ -34,12 +34,12 @@ export class TagChunk extends Chunk {
 	 * Construct a new instance of {@link TagChunk} using the specified label
 	 * and tag.
 	 *
-	 * @param label The label for the tag. If this is `null`, the
+	 * @param label The label for the tag. If this is `undefined`, the
 	 * {@link TagChunk} represents an unlabeled tag.
 	 * @param tag The tag, which should be the name of a parser rule or token
 	 * type.
 	 *
-	 * @exception IllegalArgumentException if `tag` is `null` or
+	 * @exception IllegalArgumentException if `tag` is not defined or
 	 * empty.
 	 */
 	constructor(tag: string, label?: string) {
@@ -66,7 +66,7 @@ export class TagChunk extends Chunk {
 	/**
 	 * Get the label, if any, assigned to this chunk.
 	 *
-	 * @returns The label assigned to this chunk, or `null` if no label is
+	 * @returns The label assigned to this chunk, or `undefined` if no label is
 	 * assigned to the chunk.
 	 */
 	get label(): string | undefined {

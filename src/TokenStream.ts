@@ -18,7 +18,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `LT(k).type === LA(k)`.
+	 * is non-undefined and the value of `LT(k).type === LA(k)`.
 	 *
 	 * A `RangeError` is thrown if `k<0` and fewer than `-k` calls to `consume()` have occurred from the beginning of
 	 * the stream before calling this method.
@@ -30,7 +30,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `tryLT(k).type === LA(k)`.
+	 * is non-undefined and the value of `tryLT(k).type === LA(k)`.
 	 *
 	 * The return value is `undefined` if `k<0` and fewer than `-k` calls to `consume()` have occurred from the
 	 * beginning of the stream before calling this method.
@@ -41,7 +41,7 @@ export interface TokenStream extends IntStream {
 
 	/**
 	 * Gets the {@link Token} at the specified `index` in the stream. When
-	 * the preconditions of this method are met, the return value is non-null.
+	 * the preconditions of this method are met, the return value is non-undefined.
 	 *
 	 * The preconditions for this method are the same as the preconditions of
 	 * {@link IntStream#seek}. If the behavior of `seek(index)` is
@@ -86,7 +86,7 @@ export interface TokenStream extends IntStream {
 	 * @returns The text of all tokens within the specified interval in this
 	 * stream.
 	 *
-	 * @throws NullPointerException if `interval` is `null`
+	 * @throws NullPointerException if `interval` is `undefined`
 	 */
 	//@NotNull
 	getText(/*@NotNull*/ interval: Interval): string;

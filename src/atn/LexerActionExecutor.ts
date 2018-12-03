@@ -56,7 +56,7 @@ export class LexerActionExecutor {
 	 *
 	 * @param lexerActionExecutor The executor for actions already traversed by
 	 * the lexer while matching a token within a particular
-	 * {@link ATNConfig}. If this is `null`, the method behaves as though
+	 * {@link ATNConfig}. If this is `undefined`, the method behaves as though
 	 * it were an empty executor.
 	 * @param lexerAction The lexer action to execute after the actions
 	 * specified in `lexerActionExecutor`.

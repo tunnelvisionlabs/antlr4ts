@@ -25,9 +25,9 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * will call either {@link #reportContextSensitivity} or
 	 * {@link #reportAmbiguity}.
 	 *
-	 * When `ambigAlts` is not null, it contains the set of potentially
+	 * When `ambigAlts` is not `undefined`, it contains the set of potentially
 	 * viable alternatives identified by the prediction algorithm. When
-	 * `ambigAlts` is null, use
+	 * `ambigAlts` is `undefined`, use
 	 * {@link ATNConfigSet#getRepresentedAlternatives} to obtain the represented
 	 * alternatives from the `configs` argument.
 	 *
@@ -50,7 +50,7 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param exact `true` if the ambiguity is exactly known, otherwise
 	 * `false`. This is always `true` when
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} is used.
-	 * @param ambigAlts the potentially ambiguous alternatives, or `null`
+	 * @param ambigAlts the potentially ambiguous alternatives, or `undefined`
 	 * to indicate that the potentially ambiguous alternatives are the complete
 	 * set of represented alternatives in `configs`
 	 * @param configs the ATN configuration set where the ambiguity was
@@ -82,7 +82,7 @@ export interface ParserErrorListener extends ANTLRErrorListener<Token> {
 	 * @param startIndex the input index where the decision started
 	 * @param stopIndex the input index where the SLL conflict occurred
 	 * @param conflictingAlts The specific conflicting alternatives. If this is
-	 * `null`, the conflicting alternatives are all alternatives
+	 * `undefined`, the conflicting alternatives are all alternatives
 	 * represented in `configs`.
 	 * @param conflictState the simulator state when the SLL conflict was
 	 * detected

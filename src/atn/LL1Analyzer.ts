@@ -39,7 +39,7 @@ export class LL1Analyzer {
 	 * of an {@link ATNState}. The returned array has one element for each
 	 * outgoing transition in `s`. If the closure from transition
 	 * *i* leads to a semantic predicate before matching a symbol, the
-	 * element at index *i* of the result will be `null`.
+	 * element at index *i* of the result will be `undefined`.
 	 *
 	 * @param s the ATN state
 	 * @returns the expected symbols for each outgoing transition of `s`.
@@ -72,13 +72,13 @@ export class LL1Analyzer {
 	 * Compute set of tokens that can follow `s` in the ATN in the
 	 * specified `ctx`.
 	 *
-	 * If `ctx` is `null` and the end of the rule containing
+	 * If `ctx` is `undefined` and the end of the rule containing
 	 * `s` is reached, {@link Token#EPSILON} is added to the result set.
-	 * If `ctx` is not `null` and the end of the outermost rule is
+	 * If `ctx` is not `undefined` and the end of the outermost rule is
 	 * reached, {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state
-	 * @param ctx the complete parser context, or `null` if the context
+	 * @param ctx the complete parser context, or `undefined` if the context
 	 * should be ignored
 	 *
 	 * @returns The set of tokens that can follow `s` in the ATN in the
@@ -91,7 +91,7 @@ export class LL1Analyzer {
 	 * Compute set of tokens that can follow `s` in the ATN in the
 	 * specified `ctx`.
 	 *
-	 * If `ctx` is `null` and the end of the rule containing
+	 * If `ctx` is `undefined` and the end of the rule containing
 	 * `s` is reached, {@link Token#EPSILON} is added to the result set.
 	 * If `ctx` is not `PredictionContext#EMPTY_LOCAL` and the end of the outermost rule is
 	 * reached, {@link Token#EOF} is added to the result set.
@@ -99,7 +99,7 @@ export class LL1Analyzer {
 	 * @param s the ATN state
 	 * @param stopState the ATN state to stop at. This can be a
 	 * {@link BlockEndState} to detect epsilon paths through a closure.
-	 * @param ctx the complete parser context, or `null` if the context
+	 * @param ctx the complete parser context, or `undefined` if the context
 	 * should be ignored
 	 *
 	 * @returns The set of tokens that can follow `s` in the ATN in the

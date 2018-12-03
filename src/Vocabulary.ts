@@ -23,7 +23,7 @@ export interface Vocabulary {
 
 	/**
 	 * Gets the string literal associated with a token type. The string returned
-	 * by this method, when not `null`, can be used unaltered in a parser
+	 * by this method, when not `undefined`, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
 	 * The following table shows examples of lexer rules and the literal
@@ -48,20 +48,20 @@ export interface Vocabulary {
 	 *  <tr>
 	 *   <td>`ID : [A-Z]+;`</td>
 	 *   <td>n/a</td>
-	 *   <td>`null`</td>
+	 *   <td>`undefined`</td>
 	 *  </tr>
 	 * </table>
 	 *
 	 * @param tokenType The token type.
 	 *
 	 * @returns The string literal associated with the specified token type, or
-	 * `null` if no string literal is associated with the type.
+	 * `undefined` if no string literal is associated with the type.
 	 */
 	getLiteralName(tokenType: number): string | undefined;
 
 	/**
 	 * Gets the symbolic name associated with a token type. The string returned
-	 * by this method, when not `null`, can be used unaltered in a parser
+	 * by this method, when not `undefined`, can be used unaltered in a parser
 	 * grammar to represent this token type.
 	 *
 	 * This method supports token types defined by any of the following
@@ -98,7 +98,7 @@ export interface Vocabulary {
 	 * @param tokenType The token type.
 	 *
 	 * @returns The symbolic name associated with the specified token type, or
-	 * `null` if no symbolic name is associated with the type.
+	 * `undefined` if no symbolic name is associated with the type.
 	 */
 	getSymbolicName(tokenType: number): string | undefined;
 
@@ -108,7 +108,7 @@ export interface Vocabulary {
 	 * ANTLR provides a default implementation of this method, but
 	 * applications are free to override the behavior in any manner which makes
 	 * sense for the application. The default implementation returns the first
-	 * result from the following list which produces a non-`null`
+	 * result from the following list which produces a non-`undefined`
 	 * result.
 	 *
 	 * 1. The result of {@link #getLiteralName}

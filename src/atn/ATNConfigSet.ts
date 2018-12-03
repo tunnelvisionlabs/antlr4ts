@@ -67,7 +67,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * added to this map stays, and the remaining configs are placed in {@link #unmerged}.
 	 *
 	 * This map is only used for optimizing the process of adding configs to the set,
-	 * and is `null` for read-only sets stored in the DFA.
+	 * and is `undefined` for read-only sets stored in the DFA.
 	 */
 	private mergedConfigs?: Array2DHashMap<KeyType, ATNConfig>;
 
@@ -78,7 +78,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * different semantic contexts.
 	 *
 	 * This list is only used for optimizing the process of adding configs to the set,
-	 * and is `null` for read-only sets stored in the DFA.
+	 * and is `undefined` for read-only sets stored in the DFA.
 	 */
 	private unmerged?: ATNConfig[];
 

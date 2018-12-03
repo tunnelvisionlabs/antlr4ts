@@ -102,7 +102,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * The {@link ParserRuleContext} object for the currently executing rule.
 	 *
-	 * This is always non-null during the parsing process.
+	 * This is always non-undefined during the parsing process.
 	 */
 	protected _ctx: ParserRuleContext;
 
@@ -303,7 +303,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * @param listener the listener to add
 	 *
-	 * @ if `listener` is `null`
+	 * @throws {@link TypeError} if `listener` is `undefined`
 	 */
 	public addParseListener(@NotNull listener: ParseTreeListener): void {
 		if (listener == null) {
@@ -316,7 +316,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	/**
 	 * Remove `listener` from the list of parse listeners.
 	 *
-	 * If `listener` is `null` or has not been added as a parse
+	 * If `listener` is `undefined` or has not been added as a parse
 	 * listener, this method does nothing.
 	 *
 	 * @see #addParseListener

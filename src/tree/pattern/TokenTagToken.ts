@@ -30,7 +30,7 @@ export class TokenTagToken extends CommonToken {
 	 *
 	 * @param tokenName The token name.
 	 * @param type The token type.
-	 * @param label The label associated with the token tag, or `null` if
+	 * @param label The label associated with the token tag, or `undefined` if
 	 * the token tag is unlabeled.
 	 */
 	constructor(@NotNull tokenName: string, type: number, label?: string) {
@@ -52,7 +52,7 @@ export class TokenTagToken extends CommonToken {
 	 * Gets the label associated with the rule tag.
 	 *
 	 * @returns The name of the label associated with the rule tag, or
-	 * `null` if this is an unlabeled rule tag.
+	 * `undefined` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {
 		return this._label;

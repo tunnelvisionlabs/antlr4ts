@@ -24,7 +24,7 @@ export interface IntSet {
 	 * Modify the current {@link IntSet} object to contain all elements that are
 	 * present in itself, the specified `set`, or both.
 	 *
-	 * @param set The set to add to the current set. A `null` argument is
+	 * @param set The set to add to the current set. An `undefined` argument is
 	 * treated as though it were an empty set.
 	 * @returns `this` (to support chained calls)
 	 *
@@ -46,7 +46,7 @@ export interface IntSet {
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
 	 * present in `elements` but not present in the current set. The
-	 * following expressions are equivalent for input non-null {@link IntSet}
+	 * following expressions are equivalent for input non-`undefined` {@link IntSet}
 	 * instances `x` and `y`.
 	 *
 	 * * `x.complement(y)`
@@ -65,10 +65,10 @@ export interface IntSet {
 	 * This method is similar to {@link #addAll(IntSet)}, but returns a new
 	 * {@link IntSet} instance instead of modifying the current set.
 	 *
-	 * @param a The set to union with the current set. A `null` argument
+	 * @param a The set to union with the current set. An `undefined` argument
 	 * is treated as though it were an empty set.
 	 * @returns A new {@link IntSet} instance containing the union of the current
-	 * set and `a`. The value `null` may be returned in place of an
+	 * set and `a`. The value `undefined` may be returned in place of an
 	 * empty result set.
 	 */
 	//@Nullable
@@ -77,17 +77,17 @@ export interface IntSet {
 	/**
 	 * Return a new {@link IntSet} object containing all elements that are
 	 * present in the current set but not present in the input set `a`.
-	 * The following expressions are equivalent for input non-null
+	 * The following expressions are equivalent for input non-`undefined`
 	 * {@link IntSet} instances `x` and `y`.
 	 *
 	 * * `y.subtract(x)`
 	 * * `x.complement(y)`
 	 *
-	 * @param a The set to compare with the current set. A `null`
+	 * @param a The set to compare with the current set. A `undefined`
 	 * argument is treated as though it were an empty set.
 	 * @returns A new {@link IntSet} instance containing the elements present in
 	 * `elements` but not present in the current set. The value
-	 * `null` may be returned in place of an empty result set.
+	 * `undefined` may be returned in place of an empty result set.
 	 */
 	//@Nullable
 	subtract(/*@Nullable*/ a: IntSet): IntSet;

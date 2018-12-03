@@ -119,7 +119,7 @@ export class DFA {
 	 *
 	 * @param precedence The current precedence.
 	 * @returns The start state corresponding to the specified precedence, or
-	 * `null` if no start state exists for the specified precedence.
+	 * `undefined` if no start state exists for the specified precedence.
 	 *
 	 * @ if this is not a precedence DFA.
 	 * @see `isPrecedenceDfa`

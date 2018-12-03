@@ -44,9 +44,9 @@ export class ParseTreeMatch {
 	 * @param mismatchedNode The first node which failed to match the tree
 	 * pattern during the matching process.
 	 *
-	 * @exception IllegalArgumentException if `tree` is `null`
-	 * @exception IllegalArgumentException if `pattern` is `null`
-	 * @exception IllegalArgumentException if `labels` is `null`
+	 * @throws {@link Error} if `tree` is not defined
+	 * @throws {@link Error} if `pattern` is not defined
+	 * @throws {@link Error} if `labels` is not defined
 	 */
 	constructor(
 		@NotNull tree: ParseTree,
@@ -77,7 +77,7 @@ export class ParseTreeMatch {
 	 * For example, for pattern `<id:ID>`, `get("id")` returns the
 	 * node matched for that `ID`. If more than one node
 	 * matched the specified label, only the last is returned. If there is
-	 * no node associated with the label, this returns `null`.
+	 * no node associated with the label, this returns `undefined`.
 	 *
 	 * Pattern tags like `<ID>` and `<expr>` without labels are
 	 * considered to be labeled with `ID` and `expr`, respectively.
@@ -85,7 +85,7 @@ export class ParseTreeMatch {
 	 * @param label The label to check.
 	 *
 	 * @returns The last {@link ParseTree} to match a tag with the specified
-	 * label, or `null` if no parse tree matched a tag with the label.
+	 * label, or `undefined` if no parse tree matched a tag with the label.
 	 */
 	public get(label: string): ParseTree | undefined {
 		let parseTrees = this._labels.get(label);
@@ -144,7 +144,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the node at which we first detected a mismatch.
 	 *
-	 * @returns the node at which we first detected a mismatch, or `null`
+	 * @returns the node at which we first detected a mismatch, or `undefined`
 	 * if the match was successful.
 	 */
 	get mismatchedNode(): ParseTree | undefined {

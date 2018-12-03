@@ -202,7 +202,7 @@ export interface IntStream {
 
 	/**
 	 * Gets the name of the underlying symbol source. This method returns a
-	 * non-null, non-empty string. If such a name is not known, this method
+	 * non-undefined, non-empty string. If such a name is not known, this method
 	 * returns {@link #UNKNOWN_SOURCE_NAME}.
 	 */
 	//@NotNull

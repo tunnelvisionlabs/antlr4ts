@@ -15,6 +15,6 @@
  */
 export function notNull(parameterName: string, value: any): void {
 	if (value == null) {
-		throw new TypeError(parameterName + " cannot be null.");
+		throw new TypeError(parameterName + " cannot be null or undefined.");
 	}
 }

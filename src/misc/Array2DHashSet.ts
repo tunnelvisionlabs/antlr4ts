@@ -342,8 +342,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 
 	/**
 	 * Return `o` as an instance of the element type `T`. If
-	 * `o` is non-null but known to not be an instance of `T`, this
-	 * method returns `null`. The base implementation does not perform any
+	 * `o` is non-undefined but known to not be an instance of `T`, this
+	 * method returns `undefined`. The base implementation does not perform any
 	 * type checks; override this method to provide strong type checks for the
 	 * {@link #contains} and {@link #remove} methods to ensure the arguments to
 	 * the {@link EqualityComparator} for the set always have the expected
@@ -351,9 +351,8 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 *
 	 * @param o the object to try and cast to the element type of the set
 	 * @returns `o` if it could be an instance of `T`, otherwise
-	 * `null`.
+	 * `undefined`.
 	 */
-
 	@SuppressWarnings("unchecked")
 	protected asElementType(o: any): T {
 		return o as T;

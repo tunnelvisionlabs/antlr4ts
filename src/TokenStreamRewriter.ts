@@ -363,7 +363,7 @@ export class TokenStreamRewriter {
 	 *  R.i-j.u R.x-y.v	| x-y in i-j			ERROR
 	 *  R.i-j.u R.x-y.v	| boundaries overlap	ERROR
 	 *
-	 *  Delete special case of replace (text==null):
+	 *  Delete special case of replace (text==undefined):
 	 *  D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
 	 *
 	 *  I.i.u R.x-y.v | i in (x+1)-y			delete I (since insert before
@@ -390,7 +390,7 @@ export class TokenStreamRewriter {
 	 * 	 insert with replace and delete this replace.
 	 * 		3. throw exception if index in same range as previous replace
 	 *
-	 *  Don't actually delete; make op null in list. Easier to walk list.
+	 *  Don't actually delete; make op undefined in list. Easier to walk list.
 	 *  Later we can throw as we add to index &rarr; op map.
 	 *
 	 *  Note that I.2 R.2-2 will wipe out I.2 even though, technically, the

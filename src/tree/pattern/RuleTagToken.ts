@@ -36,10 +36,10 @@ export class RuleTagToken implements Token {
 	 *
 	 * @param ruleName The name of the parser rule this rule tag matches.
 	 * @param bypassTokenType The bypass token type assigned to the parser rule.
-	 * @param label The label associated with the rule tag, or `null` if
+	 * @param label The label associated with the rule tag, or `undefined` if
 	 * the rule tag is unlabeled.
 	 *
-	 * @exception IllegalArgumentException if `ruleName` is `null`
+	 * @exception IllegalArgumentException if `ruleName` is not defined
 	 * or empty.
 	 */
 	constructor(@NotNull ruleName: string, bypassTokenType: number, label?: string) {
@@ -66,7 +66,7 @@ export class RuleTagToken implements Token {
 	 * Gets the label associated with the rule tag.
 	 *
 	 * @returns The name of the label associated with the rule tag, or
-	 * `null` if this is an unlabeled rule tag.
+	 * `undefined` if this is an unlabeled rule tag.
 	 */
 	get label(): string | undefined {
 		return this._label;
@@ -161,7 +161,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * The implementation for {@link RuleTagToken} always returns `null`.
+	 * The implementation for {@link RuleTagToken} always returns `undefined`.
 	 */
 	@Override
 	get tokenSource(): TokenSource | undefined {
@@ -171,7 +171,7 @@ export class RuleTagToken implements Token {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * The implementation for {@link RuleTagToken} always returns `null`.
+	 * The implementation for {@link RuleTagToken} always returns `undefined`.
 	 */
 	@Override
 	get inputStream(): CharStream | undefined {

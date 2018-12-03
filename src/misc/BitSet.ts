@@ -695,9 +695,9 @@ export class BitSet implements Iterable<number>{
 	}
 
 	/**
-	 * Compares this object against the specified object. The result is `true` if and only if the argument is not `null`
-	 * and is a `Bitset` object that has exactly the same set of bits set to `true` as this bit set. That is, for every
-	 * nonnegative index `k`,
+	 * Compares this object against the specified object. The result is `true` if and only if the argument is not
+	 * `undefined` and is a `Bitset` object that has exactly the same set of bits set to `true` as this bit set. That
+	 * is, for every nonnegative index `k`,
 	 *
 	 *     ((BitSet)obj).get(k) == this.get(k)
 	 *
