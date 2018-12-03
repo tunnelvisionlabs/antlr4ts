@@ -699,7 +699,9 @@ export class BitSet implements Iterable<number>{
 	 * `undefined` and is a `Bitset` object that has exactly the same set of bits set to `true` as this bit set. That
 	 * is, for every nonnegative index `k`,
 	 *
-	 *     ((BitSet)obj).get(k) == this.get(k)
+	 * ```
+	 * ((BitSet)obj).get(k) == this.get(k)
+	 * ```
 	 *
 	 * must be true. The current sizes of the two bit sets are not compared.
 	 */
