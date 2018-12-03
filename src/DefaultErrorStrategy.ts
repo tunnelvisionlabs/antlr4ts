@@ -219,7 +219,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * sub rule or what follows loop. Yes, that is pretty aggressive. We opt to
 	 * stay in the loop as long as possible.
 	 *
-	 * <strong>ORIGINS</strong>
+	 * **ORIGINS**
 	 *
 	 * Previous versions of ANTLR did a poor job of their recovery within loops.
 	 * A single mismatch token or missing token would force the parser to bail
@@ -421,7 +421,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * recovery attempt fails, this method
 	 * {@link InputMismatchException}.
 	 *
-	 * <strong>EXTRA TOKEN</strong> (single token deletion)
+	 * **EXTRA TOKEN** (single token deletion)
 	 *
 	 * {@code LA(1)} is not what we are looking for. If {@code LA(2)} has the
 	 * right token, however, then assume {@code LA(1)} is some extra spurious
@@ -430,7 +430,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * This recovery strategy is implemented by {@link #singleTokenDeletion}.
 	 *
-	 * <strong>MISSING TOKEN</strong> (single token insertion)
+	 * **MISSING TOKEN** (single token insertion)
 	 *
 	 * If current token (at {@code LA(1)}) is consistent with what could come
 	 * after the expected {@code LA(1)} token, then assume the token is missing
@@ -440,7 +440,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 *
 	 * This recovery strategy is implemented by {@link #singleTokenInsertion}.
 	 *
-	 * <strong>EXAMPLE</strong>
+	 * **EXAMPLE**
 	 *
 	 * For example, Input {@code i=(3;} is clearly missing the {@code ')'}. When
 	 * the parser returns from the nested call to {@code expr}, it will have

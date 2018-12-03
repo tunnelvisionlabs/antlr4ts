@@ -90,7 +90,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * This is slow because we can't save the results and have to "interpret" the
  * ATN each time we get that input.
  *
- * <strong>CACHING FULL CONTEXT PREDICTIONS</strong>
+ * **CACHING FULL CONTEXT PREDICTIONS**
  *
  * We could cache results from full context to predicted alternative easily and
  * that saves a lot of time but doesn't work in presence of predicates. The set
@@ -118,7 +118,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * likely LL(1) + pred eval. Easier to do the whole SLL unless error and retry
  * with full LL thing Sam does.
  *
- * <strong>AVOIDING FULL CONTEXT PREDICTION</strong>
+ * **AVOIDING FULL CONTEXT PREDICTION**
  *
  * We avoid doing full context retry when the outer context is empty, we did not
  * dip into the outer context by falling off the end of the decision state rule,
@@ -149,7 +149,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * In the 2nd case it should stop at the ';'. Both cases should stay within the
  * entry rule and not dip into the outer context.
  *
- * <strong>PREDICATES</strong>
+ * **PREDICATES**
  *
  * Predicates are always evaluated if present in either SLL or LL both. SLL and
  * LL simulation deals with predicates differently. SLL collects predicates as
@@ -176,7 +176,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * closure. It hits a landmine when parsing with the Java grammar, for example,
  * without this on-the-fly evaluation.
  *
- * <strong>SHARING DFA</strong>
+ * **SHARING DFA**
  *
  * All instances of the same parser share the same decision DFAs through a
  * static field. Each instance gets its own ATN simulator but they share the
@@ -185,7 +185,7 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * {@link PredictionContext} objects are shared among the DFA states. This makes
  * a big size difference.
  *
- * <strong>THREAD SAFETY</strong>
+ * **THREAD SAFETY**
  *
  * The {@link ParserATNSimulator} locks on the {@link ATN#decisionToDFA} field when
  * it adds a new DFA object to that array. {@link #addDFAEdge}
@@ -211,8 +211,8 @@ const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
  * simulation. It could also race trying to get {@code dfa.edges[t]}, but either
  * way it will work because it's not doing a test and set operation.
  *
- * <strong>Starting with SLL then failing to combined SLL/LL (Two-Stage
- * Parsing)</strong>
+ * **Starting with SLL then failing to combined SLL/LL (Two-Stage
+ * Parsing)**
  *
  * Sam pointed out that if SLL does not give a syntax error, then there is no
  * point in doing full LL, which is slower. We only have to try LL if we get a

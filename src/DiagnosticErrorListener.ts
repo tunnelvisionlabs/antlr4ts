@@ -12,12 +12,12 @@
  * message.
  *
  * <ul>
- * <li><b>Ambiguities</b>: These are cases where more than one path through the
+ * <li>**Ambiguities**: These are cases where more than one path through the
  * grammar can match the input.</li>
- * <li><b>Weak context sensitivity</b>: These are cases where full-context
+ * <li>**Weak context sensitivity**: These are cases where full-context
  * prediction resolved an SLL conflict to a unique alternative which equaled the
  * minimum alternative of the SLL conflict.</li>
- * <li><b>Strong (forced) context sensitivity</b>: These are cases where the
+ * <li>**Strong (forced) context sensitivity**: These are cases where the
  * full-context prediction resolved an SLL conflict to a unique alternative,
  * *and* the minimum alternative of the SLL conflict was found to not be
  * a truly viable alternative. Two-stage parsing cannot be used for inputs where

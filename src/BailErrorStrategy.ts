@@ -15,13 +15,13 @@
  * This error strategy is useful in the following scenarios.
  *
  * <ul>
- * <li><strong>Two-stage parsing:</strong> This error strategy allows the first
+ * <li>**Two-stage parsing:** This error strategy allows the first
  * stage of two-stage parsing to immediately terminate if an error is
  * encountered, and immediately fall back to the second stage. In addition to
  * avoiding wasted work by attempting to recover from errors here, the empty
  * implementation of {@link BailErrorStrategy#sync} improves the performance of
  * the first stage.</li>
- * <li><strong>Silent validation:</strong> When syntax errors are not being
+ * <li>**Silent validation:** When syntax errors are not being
  * reported or logged, and the parse result is simply ignored if errors occur,
  * the {@link BailErrorStrategy} avoids wasting work on recovering from errors
  * when the result will be ignored either way.</li>

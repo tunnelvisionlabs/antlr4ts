@@ -25,7 +25,7 @@ export namespace IntStream {
  * of buffering necessary to implement arbitrary lookahead during prediction.
  * For more information on marked ranges, see {@link #mark}.
  *
- * <strong>Initializing Methods:</strong> Some methods in this interface have
+ * **Initializing Methods:** Some methods in this interface have
  * unspecified behavior if no call to an initializing method has occurred after
  * the stream was constructed. The following is a list of initializing methods:
  *
@@ -41,10 +41,10 @@ export interface IntStream {
 	 * effects:
 	 *
 	 * <ul>
-	 *   <li><strong>Forward movement:</strong> The value of `index`
+	 *   <li>**Forward movement:** The value of `index`
 	 *     before calling this method is less than the value of `index`
 	 *     after calling this method.</li>
-	 *   <li><strong>Ordered lookahead:</strong> The value of {@code LA(1)} before
+	 *   <li>**Ordered lookahead:** The value of {@code LA(1)} before
 	 *     calling this method becomes the value of {@code LA(-1)} after calling
 	 *     this method.</li>
 	 * </ul>
