@@ -22,10 +22,9 @@ import { Vocabulary } from "../Vocabulary";
  * of a sequential range of numbers that are all part of the set. For example,
  * the set { 1, 2, 3, 4, 7, 8 } may be represented as { [1, 4], [7, 8] }.
  *
- * <p>
  * This class is able to represent sets containing any combination of values in
  * the range {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}
- * (inclusive).</p>
+ * (inclusive).
  */
 export class IntervalSet implements IntSet {
 	private static _COMPLETE_CHAR_SET: IntervalSet;
@@ -224,7 +223,7 @@ export class IntervalSet implements IntSet {
 
 	/**
 	 * Compute the set difference between two interval sets. The specific
-	 * operation is {@code left - right}.
+	 * operation is `left - right`.
 	 */
 	@NotNull
 	public static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {
@@ -441,7 +440,7 @@ export class IntervalSet implements IntSet {
 	/**
 	 * Returns the maximum value contained in the set.
 	 *
-	 * @return the maximum value contained in the set. If the set is empty, this
+	 * @returns the maximum value contained in the set. If the set is empty, this
 	 * method returns {@link Token#INVALID_TYPE}.
 	 */
 	get maxElement(): number {
@@ -456,7 +455,7 @@ export class IntervalSet implements IntSet {
 	/**
 	 * Returns the minimum value contained in the set.
 	 *
-	 * @return the minimum value contained in the set. If the set is empty, this
+	 * @returns the minimum value contained in the set. If the set is empty, this
 	 * method returns {@link Token#INVALID_TYPE}.
 	 */
 	get minElement(): number {

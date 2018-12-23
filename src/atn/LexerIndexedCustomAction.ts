@@ -15,11 +15,11 @@ import { NotNull, Override } from "../Decorators";
  * This implementation of {@link LexerAction} is used for tracking input offsets
  * for position-dependent actions within a {@link LexerActionExecutor}.
  *
- * <p>This action is not serialized as part of the ATN, and is only required for
+ * This action is not serialized as part of the ATN, and is only required for
  * position-dependent lexer actions which appear at a location other than the
  * end of a rule. For more information about DFA optimizations employed for
  * lexer actions, see {@link LexerActionExecutor#append} and
- * {@link LexerActionExecutor#fixOffsetBeforeMatch}.</p>
+ * {@link LexerActionExecutor#fixOffsetBeforeMatch}.
  *
  * @author Sam Harwell
  * @since 4.2
@@ -32,8 +32,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * Constructs a new indexed custom action by associating a character offset
 	 * with a {@link LexerAction}.
 	 *
-	 * <p>Note: This class is only required for lexer actions for which
-	 * {@link LexerAction#isPositionDependent} returns {@code true}.</p>
+	 * Note: This class is only required for lexer actions for which
+	 * {@link LexerAction#isPositionDependent} returns `true`.
 	 *
 	 * @param offset The offset into the input {@link CharStream}, relative to
 	 * the token start index, at which the specified lexer action should be
@@ -51,7 +51,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * action should be executed. The value is interpreted as an offset relative
 	 * to the token start index.
 	 *
-	 * @return The location in the input {@link CharStream} at which the lexer
+	 * @returns The location in the input {@link CharStream} at which the lexer
 	 * action should be executed.
 	 */
 	get offset(): number {
@@ -61,7 +61,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	/**
 	 * Gets the lexer action to execute.
 	 *
-	 * @return A {@link LexerAction} object which executes the lexer action.
+	 * @returns A {@link LexerAction} object which executes the lexer action.
 	 */
 	@NotNull
 	get action(): LexerAction {
@@ -71,7 +71,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return This method returns the result of calling {@link #getActionType}
+	 * @returns This method returns the result of calling {@link #getActionType}
 	 * on the {@link LexerAction} returned by {@link #getAction}.
 	 */
 	@Override
@@ -81,7 +81,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code true}.
+	 * @returns This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -91,8 +91,8 @@ export class LexerIndexedCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This method calls {@link #execute} on the result of {@link #getAction}
-	 * using the provided {@code lexer}.</p>
+	 * This method calls {@link #execute} on the result of {@link #getAction}
+	 * using the provided `lexer`.
 	 */
 	@Override
 	public execute(lexer: Lexer): void {

@@ -19,10 +19,9 @@ export class VocabularyImpl implements Vocabulary {
 	/**
 	 * Gets an empty {@link Vocabulary} instance.
 	 *
-	 * <p>
 	 * No literal or symbol names are assigned to token types, so
 	 * {@link #getDisplayName(int)} returns the numeric value for all tokens
-	 * except {@link Token#EOF}.</p>
+	 * except {@link Token#EOF}.
 	 */
 	@NotNull
 	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
@@ -45,7 +44,7 @@ export class VocabularyImpl implements Vocabulary {
 	 * @param symbolicNames The symbolic names assigned to tokens, or
 	 * an empty array if no symbolic names are assigned.
 	 * @param displayNames The display names assigned to tokens, or an empty array
-	 * to use the values in {@code literalNames} and {@code symbolicNames} as
+	 * to use the values in `literalNames` and `symbolicNames` as
 	 * the source of display names, as described in
 	 * {@link #getDisplayName(int)}.
 	 *

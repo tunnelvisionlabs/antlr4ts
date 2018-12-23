@@ -35,7 +35,7 @@ export interface Tree {
 	readonly childCount: number;
 
 	/** Print out a whole tree, not just a node, in LISP format
-	 *  {@code (root child1 .. childN)}. Print just a node if this is a leaf.
+	 *  `(root child1 .. childN)`. Print just a node if this is a leaf.
 	 */
 	toStringTree(): string;
 }

@@ -58,7 +58,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	/**
-	 * Add {@code o} to set if not there; return existing value if already
+	 * Add `o` to set if not there; return existing value if already
 	 * there. This method performs the same operation as {@link #add} aside from
 	 * the return value.
 	 */
@@ -341,29 +341,28 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	/**
-	 * Return {@code o} as an instance of the element type {@code T}. If
-	 * {@code o} is non-null but known to not be an instance of {@code T}, this
-	 * method returns {@code null}. The base implementation does not perform any
+	 * Return `o` as an instance of the element type `T`. If
+	 * `o` is non-undefined but known to not be an instance of `T`, this
+	 * method returns `undefined`. The base implementation does not perform any
 	 * type checks; override this method to provide strong type checks for the
 	 * {@link #contains} and {@link #remove} methods to ensure the arguments to
 	 * the {@link EqualityComparator} for the set always have the expected
 	 * types.
 	 *
 	 * @param o the object to try and cast to the element type of the set
-	 * @return {@code o} if it could be an instance of {@code T}, otherwise
-	 * {@code null}.
+	 * @returns `o` if it could be an instance of `T`, otherwise
+	 * `undefined`.
 	 */
-
 	@SuppressWarnings("unchecked")
 	protected asElementType(o: any): T {
 		return o as T;
 	}
 
 	/**
-	 * Return an array of {@code T[]} with length {@code capacity}.
+	 * Return an array of `T[]` with length `capacity`.
 	 *
 	 * @param capacity the length of the array to return
-	 * @return the newly constructed array
+	 * @returns the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
 	protected createBuckets(capacity: number): Array<T[] | undefined> {

@@ -11,7 +11,7 @@ import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
 import { XPath } from "../xpath/XPath";
 
 /**
- * A pattern like {@code <ID> = <expr>;} converted to a {@link ParseTree} by
+ * A pattern like `<ID> = <expr>;` converted to a {@link ParseTree} by
  * {@link ParseTreePatternMatcher#compile(String, int)}.
  */
 export class ParseTreePattern {
@@ -63,7 +63,7 @@ export class ParseTreePattern {
 	 * Match a specific parse tree against this tree pattern.
 	 *
 	 * @param tree The parse tree to match against this tree pattern.
-	 * @return A {@link ParseTreeMatch} object describing the result of the
+	 * @returns A {@link ParseTreeMatch} object describing the result of the
 	 * match operation. The `ParseTreeMatch.succeeded` method can be
 	 * used to determine whether or not the match was successful.
 	 */
@@ -76,8 +76,8 @@ export class ParseTreePattern {
 	 * Determine whether or not a parse tree matches this tree pattern.
 	 *
 	 * @param tree The parse tree to match against this tree pattern.
-	 * @return {@code true} if {@code tree} is a match for the current tree
-	 * pattern; otherwise, {@code false}.
+	 * @returns `true` if `tree` is a match for the current tree
+	 * pattern; otherwise, `false`.
 	 */
 	public matches(@NotNull tree: ParseTree): boolean {
 		return this._matcher.match(tree, this).succeeded;
@@ -90,7 +90,7 @@ export class ParseTreePattern {
 	 * @param tree The {@link ParseTree} to match against this pattern.
 	 * @param xpath An expression matching the nodes
 	 *
-	 * @return A collection of {@link ParseTreeMatch} objects describing the
+	 * @returns A collection of {@link ParseTreeMatch} objects describing the
 	 * successful matches. Unsuccessful matches are omitted from the result,
 	 * regardless of the reason for the failure.
 	 */
@@ -110,7 +110,7 @@ export class ParseTreePattern {
 	/**
 	 * Get the {@link ParseTreePatternMatcher} which created this tree pattern.
 	 *
-	 * @return The {@link ParseTreePatternMatcher} which created this tree
+	 * @returns The {@link ParseTreePatternMatcher} which created this tree
 	 * pattern.
 	 */
 	@NotNull
@@ -121,7 +121,7 @@ export class ParseTreePattern {
 	/**
 	 * Get the tree pattern in concrete syntax form.
 	 *
-	 * @return The tree pattern in concrete syntax form.
+	 * @returns The tree pattern in concrete syntax form.
 	 */
 	@NotNull
 	get pattern(): string {
@@ -132,7 +132,7 @@ export class ParseTreePattern {
 	 * Get the parser rule which serves as the outermost rule for the tree
 	 * pattern.
 	 *
-	 * @return The parser rule which serves as the outermost rule for the tree
+	 * @returns The parser rule which serves as the outermost rule for the tree
 	 * pattern.
 	 */
 	get patternRuleIndex(): number {
@@ -144,7 +144,7 @@ export class ParseTreePattern {
 	 * the pattern are present in the parse tree as terminal nodes with a symbol
 	 * of type {@link RuleTagToken} or {@link TokenTagToken}.
 	 *
-	 * @return The tree pattern as a {@link ParseTree}.
+	 * @returns The tree pattern as a {@link ParseTree}.
 	 */
 	@NotNull
 	get patternTree(): ParseTree {

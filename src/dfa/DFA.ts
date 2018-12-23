@@ -52,8 +52,8 @@ export class DFA {
 	private nextStateNumber: number = 0;
 
 	/**
-	 * {@code true} if this DFA is for a precedence decision; otherwise,
-	 * {@code false}. This is the backing field for {@link #isPrecedenceDfa}.
+	 * `true` if this DFA is for a precedence decision; otherwise,
+	 * `false`. This is the backing field for {@link #isPrecedenceDfa}.
 	 */
 	private precedenceDfa: boolean;
 
@@ -106,8 +106,8 @@ export class DFA {
 	 * supplying individual start states corresponding to specific precedence
 	 * values.
 	 *
-	 * @return {@code true} if this is a precedence DFA; otherwise,
-	 * {@code false}.
+	 * @returns `true` if this is a precedence DFA; otherwise,
+	 * `false`.
 	 * @see Parser.precedence
 	 */
 	get isPrecedenceDfa(): boolean {
@@ -118,8 +118,8 @@ export class DFA {
 	 * Get the start state for a specific precedence value.
 	 *
 	 * @param precedence The current precedence.
-	 * @return The start state corresponding to the specified precedence, or
-	 * {@code null} if no start state exists for the specified precedence.
+	 * @returns The start state corresponding to the specified precedence, or
+	 * `undefined` if no start state exists for the specified precedence.
 	 *
 	 * @ if this is not a precedence DFA.
 	 * @see `isPrecedenceDfa`

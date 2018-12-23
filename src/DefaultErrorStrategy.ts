@@ -5,10 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.8290527-07:00
 
-/**
- * This is the default implementation of {@link ANTLRErrorStrategy} used for
- * error reporting and recovery in ANTLR parsers.
- */
 import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
 import { ATN } from "./atn/ATN";
 import { ATNState } from "./atn/ATNState";
@@ -30,6 +26,10 @@ import { TokenSource } from "./TokenSource";
 import { Vocabulary } from "./Vocabulary";
 import { Override, NotNull } from "./Decorators";
 
+/**
+ * This is the default implementation of {@link ANTLRErrorStrategy} used for
+ * error reporting and recovery in ANTLR parsers.
+ */
 export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * Indicates whether the error strategy is currently "recovering from an
@@ -53,8 +53,8 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation simply calls {@link #endErrorCondition} to
-	 * ensure that the handler is not in error recovery mode.</p>
+	 * The default implementation simply calls {@link #endErrorCondition} to
+	 * ensure that the handler is not in error recovery mode.
 	 */
 	@Override
 	public reset(recognizer: Parser): void {
@@ -94,7 +94,7 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation simply calls {@link #endErrorCondition}.</p>
+	 * The default implementation simply calls {@link #endErrorCondition}.
 	 */
 	@Override
 	public reportMatch(recognizer: Parser): void {
@@ -104,21 +104,19 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation returns immediately if the handler is already
+	 * The default implementation returns immediately if the handler is already
 	 * in error recovery mode. Otherwise, it calls {@link #beginErrorCondition}
-	 * and dispatches the reporting task based on the runtime type of {@code e}
-	 * according to the following table.</p>
+	 * and dispatches the reporting task based on the runtime type of `e`
+	 * according to the following table.
 	 *
-	 * <ul>
-	 * <li>{@link NoViableAltException}: Dispatches the call to
-	 * {@link #reportNoViableAlternative}</li>
-	 * <li>{@link InputMismatchException}: Dispatches the call to
-	 * {@link #reportInputMismatch}</li>
-	 * <li>{@link FailedPredicateException}: Dispatches the call to
-	 * {@link #reportFailedPredicate}</li>
-	 * <li>All other types: calls {@link Parser#notifyErrorListeners} to report
-	 * the exception</li>
-	 * </ul>
+	 * * {@link NoViableAltException}: Dispatches the call to
+	 *   {@link #reportNoViableAlternative}
+	 * * {@link InputMismatchException}: Dispatches the call to
+	 *   {@link #reportInputMismatch}
+	 * * {@link FailedPredicateException}: Dispatches the call to
+	 *   {@link #reportFailedPredicate}
+	 * * All other types: calls {@link Parser#notifyErrorListeners} to report
+	 *   the exception
 	 */
 	@Override
 	public reportError(
@@ -160,9 +158,9 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation resynchronizes the parser by consuming tokens
+	 * The default implementation resynchronizes the parser by consuming tokens
 	 * until we find one in the resynchronization set--loosely the set of tokens
-	 * that can follow the current rule.</p>
+	 * that can follow the current rule.
 	 */
 	@Override
 	public recover(recognizer: Parser, e: RecognitionException): void {
@@ -198,45 +196,45 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * at this point in the ATN. You can call this anytime but ANTLR only
 	 * generates code to check before subrules/loops and each iteration.
 	 *
-	 * <p>Implements Jim Idle's magic sync mechanism in closures and optional
-	 * subrules. E.g.,</p>
+	 * Implements Jim Idle's magic sync mechanism in closures and optional
+	 * subrules. E.g.,
 	 *
-	 * <pre>
+	 * ```antlr
 	 * a : sync ( stuff sync )* ;
 	 * sync : {consume to what can follow sync} ;
-	 * </pre>
+	 * ```
 	 *
 	 * At the start of a sub rule upon error, {@link #sync} performs single
 	 * token deletion, if possible. If it can't do that, it bails on the current
 	 * rule and uses the default error recovery, which consumes until the
 	 * resynchronization set of the current rule.
 	 *
-	 * <p>If the sub rule is optional ({@code (...)?}, {@code (...)*}, or block
+	 * If the sub rule is optional (`(...)?`, `(...)*`, or block
 	 * with an empty alternative), then the expected set includes what follows
-	 * the subrule.</p>
+	 * the subrule.
 	 *
-	 * <p>During loop iteration, it consumes until it sees a token that can start a
+	 * During loop iteration, it consumes until it sees a token that can start a
 	 * sub rule or what follows loop. Yes, that is pretty aggressive. We opt to
-	 * stay in the loop as long as possible.</p>
+	 * stay in the loop as long as possible.
 	 *
-	 * <p><strong>ORIGINS</strong></p>
+	 * **ORIGINS**
 	 *
-	 * <p>Previous versions of ANTLR did a poor job of their recovery within loops.
+	 * Previous versions of ANTLR did a poor job of their recovery within loops.
 	 * A single mismatch token or missing token would force the parser to bail
-	 * out of the entire rules surrounding the loop. So, for rule</p>
+	 * out of the entire rules surrounding the loop. So, for rule
 	 *
-	 * <pre>
+	 * ```antlr
 	 * classDef : 'class' ID '{' member* '}'
-	 * </pre>
+	 * ```
 	 *
 	 * input with an extra token between members would force the parser to
 	 * consume until it found the next class definition rather than the next
 	 * member definition of the current class.
 	 *
-	 * <p>This functionality cost a little bit of effort because the parser has to
+	 * This functionality cost a little bit of effort because the parser has to
 	 * compare token set at the start of the loop and at each iteration. If for
 	 * some reason speed is suffering for you, you can turn off this
-	 * functionality by simply overriding this method as a blank { }.</p>
+	 * functionality by simply overriding this method as a blank { }.
 	 */
 	@Override
 	public sync(recognizer: Parser): void {
@@ -351,18 +349,18 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * This method is called to report a syntax error which requires the removal
 	 * of a token from the input stream. At the time this method is called, the
-	 * erroneous symbol is current {@code LT(1)} symbol and has not yet been
+	 * erroneous symbol is current `LT(1)` symbol and has not yet been
 	 * removed from the input stream. When this method returns,
-	 * {@code recognizer} is in error recovery mode.
+	 * `recognizer` is in error recovery mode.
 	 *
-	 * <p>This method is called when {@link #singleTokenDeletion} identifies
+	 * This method is called when {@link #singleTokenDeletion} identifies
 	 * single-token deletion as a viable recovery strategy for a mismatched
-	 * input error.</p>
+	 * input error.
 	 *
-	 * <p>The default implementation simply returns if the handler is already in
+	 * The default implementation simply returns if the handler is already in
 	 * error recovery mode. Otherwise, it calls {@link #beginErrorCondition} to
 	 * enter error recovery mode, followed by calling
-	 * {@link Parser#notifyErrorListeners}.</p>
+	 * {@link Parser#notifyErrorListeners}.
 	 *
 	 * @param recognizer the parser instance
 	 */
@@ -385,16 +383,16 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * This method is called to report a syntax error which requires the
 	 * insertion of a missing token into the input stream. At the time this
 	 * method is called, the missing token has not yet been inserted. When this
-	 * method returns, {@code recognizer} is in error recovery mode.
+	 * method returns, `recognizer` is in error recovery mode.
 	 *
-	 * <p>This method is called when {@link #singleTokenInsertion} identifies
+	 * This method is called when {@link #singleTokenInsertion} identifies
 	 * single-token insertion as a viable recovery strategy for a mismatched
-	 * input error.</p>
+	 * input error.
 	 *
-	 * <p>The default implementation simply returns if the handler is already in
+	 * The default implementation simply returns if the handler is already in
 	 * error recovery mode. Otherwise, it calls {@link #beginErrorCondition} to
 	 * enter error recovery mode, followed by calling
-	 * {@link Parser#notifyErrorListeners}.</p>
+	 * {@link Parser#notifyErrorListeners}.
 	 *
 	 * @param recognizer the parser instance
 	 */
@@ -416,52 +414,52 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The default implementation attempts to recover from the mismatched input
+	 * The default implementation attempts to recover from the mismatched input
 	 * by using single token insertion and deletion as described below. If the
 	 * recovery attempt fails, this method
-	 * {@link InputMismatchException}.</p>
+	 * {@link InputMismatchException}.
 	 *
-	 * <p><strong>EXTRA TOKEN</strong> (single token deletion)</p>
+	 * **EXTRA TOKEN** (single token deletion)
 	 *
-	 * <p>{@code LA(1)} is not what we are looking for. If {@code LA(2)} has the
-	 * right token, however, then assume {@code LA(1)} is some extra spurious
+	 * `LA(1)` is not what we are looking for. If `LA(2)` has the
+	 * right token, however, then assume `LA(1)` is some extra spurious
 	 * token and delete it. Then consume and return the next token (which was
-	 * the {@code LA(2)} token) as the successful result of the match operation.</p>
+	 * the `LA(2)` token) as the successful result of the match operation.
 	 *
-	 * <p>This recovery strategy is implemented by {@link #singleTokenDeletion}.</p>
+	 * This recovery strategy is implemented by {@link #singleTokenDeletion}.
 	 *
-	 * <p><strong>MISSING TOKEN</strong> (single token insertion)</p>
+	 * **MISSING TOKEN** (single token insertion)
 	 *
-	 * <p>If current token (at {@code LA(1)}) is consistent with what could come
-	 * after the expected {@code LA(1)} token, then assume the token is missing
+	 * If current token (at `LA(1)`) is consistent with what could come
+	 * after the expected `LA(1)` token, then assume the token is missing
 	 * and use the parser's {@link TokenFactory} to create it on the fly. The
 	 * "insertion" is performed by returning the created token as the successful
-	 * result of the match operation.</p>
+	 * result of the match operation.
 	 *
-	 * <p>This recovery strategy is implemented by {@link #singleTokenInsertion}.</p>
+	 * This recovery strategy is implemented by {@link #singleTokenInsertion}.
 	 *
-	 * <p><strong>EXAMPLE</strong></p>
+	 * **EXAMPLE**
 	 *
-	 * <p>For example, Input {@code i=(3;} is clearly missing the {@code ')'}. When
-	 * the parser returns from the nested call to {@code expr}, it will have
-	 * call chain:</p>
+	 * For example, Input `i=(3;` is clearly missing the `')'`. When
+	 * the parser returns from the nested call to `expr`, it will have
+	 * call chain:
 	 *
-	 * <pre>
-	 * stat &rarr; expr &rarr; atom
-	 * </pre>
+	 * ```
+	 * stat → expr → atom
+	 * ```
 	 *
-	 * and it will be trying to match the {@code ')'} at this point in the
+	 * and it will be trying to match the `')'` at this point in the
 	 * derivation:
 	 *
-	 * <pre>
-	 * =&gt; ID '=' '(' INT ')' ('+' atom)* ';'
+	 * ```
+	 * => ID '=' '(' INT ')' ('+' atom)* ';'
 	 *                    ^
-	 * </pre>
+	 * ```
 	 *
-	 * The attempt to match {@code ')'} will fail when it sees {@code ';'} and
-	 * call {@link #recoverInline}. To recover, it sees that {@code LA(1)==';'}
-	 * is in the set of tokens that can follow the {@code ')'} token reference
-	 * in rule {@code atom}. It can assume that you forgot the {@code ')'}.
+	 * The attempt to match `')'` will fail when it sees `';'` and
+	 * call {@link #recoverInline}. To recover, it sees that `LA(1)==';'`
+	 * is in the set of tokens that can follow the `')'` token reference
+	 * in rule `atom`. It can assume that you forgot the `')'`.
 	 */
 	@Override
 	public recoverInline(recognizer: Parser): Token {
@@ -487,18 +485,18 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	 * This method implements the single-token insertion inline error recovery
 	 * strategy. It is called by {@link #recoverInline} if the single-token
 	 * deletion strategy fails to recover from the mismatched input. If this
-	 * method returns {@code true}, {@code recognizer} will be in error recovery
+	 * method returns `true`, `recognizer` will be in error recovery
 	 * mode.
 	 *
-	 * <p>This method determines whether or not single-token insertion is viable by
-	 * checking if the {@code LA(1)} input symbol could be successfully matched
-	 * if it were instead the {@code LA(2)} symbol. If this method returns
-	 * {@code true}, the caller is responsible for creating and inserting a
-	 * token with the correct type to produce this behavior.</p>
+	 * This method determines whether or not single-token insertion is viable by
+	 * checking if the `LA(1)` input symbol could be successfully matched
+	 * if it were instead the `LA(2)` symbol. If this method returns
+	 * `true`, the caller is responsible for creating and inserting a
+	 * token with the correct type to produce this behavior.
 	 *
 	 * @param recognizer the parser instance
-	 * @return {@code true} if single-token insertion is a viable recovery
-	 * strategy for the current mismatched input, otherwise {@code false}
+	 * @returns `true` if single-token insertion is a viable recovery
+	 * strategy for the current mismatched input, otherwise `false`
 	 */
 	protected singleTokenInsertion(@NotNull recognizer: Parser): boolean {
 		let currentSymbolType: number = recognizer.inputStream.LA(1);
@@ -520,21 +518,21 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	/**
 	 * This method implements the single-token deletion inline error recovery
 	 * strategy. It is called by {@link #recoverInline} to attempt to recover
-	 * from mismatched input. If this method returns null, the parser and error
-	 * handler state will not have changed. If this method returns non-null,
-	 * {@code recognizer} will <em>not</em> be in error recovery mode since the
+	 * from mismatched input. If this method returns `undefined`, the parser and error
+	 * handler state will not have changed. If this method returns non-`undefined`,
+	 * `recognizer` will *not* be in error recovery mode since the
 	 * returned token was a successful match.
 	 *
-	 * <p>If the single-token deletion is successful, this method calls
+	 * If the single-token deletion is successful, this method calls
 	 * {@link #reportUnwantedToken} to report the error, followed by
 	 * {@link Parser#consume} to actually "delete" the extraneous token. Then,
 	 * before returning {@link #reportMatch} is called to signal a successful
-	 * match.</p>
+	 * match.
 	 *
 	 * @param recognizer the parser instance
-	 * @return the successfully matched {@link Token} instance if single-token
+	 * @returns the successfully matched {@link Token} instance if single-token
 	 * deletion successfully recovers from the mismatched input, otherwise
-	 * {@code null}
+	 * `undefined`
 	 */
 	protected singleTokenDeletion(@NotNull recognizer: Parser): Token | undefined {
 		let nextTokenType: number = recognizer.inputStream.LA(2);

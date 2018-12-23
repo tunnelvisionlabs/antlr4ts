@@ -12,17 +12,17 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code more} lexer action by calling {@link Lexer#more}.
+ * Implements the `more` lexer action by calling {@link Lexer#more}.
  *
- * <p>The {@code more} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * The `more` command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.
  *
  * @author Sam Harwell
  * @since 4.2
  */
 export class LexerMoreAction implements LexerAction {
 	/**
-	 * Constructs the singleton instance of the lexer {@code more} command.
+	 * Constructs the singleton instance of the lexer `more` command.
 	 */
 	constructor() {
 		// intentionally empty
@@ -30,7 +30,7 @@ export class LexerMoreAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#MORE}.
+	 * @returns This method returns {@link LexerActionType#MORE}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -39,7 +39,7 @@ export class LexerMoreAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -49,7 +49,7 @@ export class LexerMoreAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#more}.</p>
+	 * This action is implemented by calling {@link Lexer#more}.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

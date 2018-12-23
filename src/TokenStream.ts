@@ -18,7 +18,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `LT(k).type === LA(k)`.
+	 * is non-undefined and the value of `LT(k).type === LA(k)`.
 	 *
 	 * A `RangeError` is thrown if `k<0` and fewer than `-k` calls to `consume()` have occurred from the beginning of
 	 * the stream before calling this method.
@@ -30,7 +30,7 @@ export interface TokenStream extends IntStream {
 	/**
 	 * Get the `Token` instance associated with the value returned by `LA(k)`. This method has the same pre- and
 	 * post-conditions as `IntStream.LA`. In addition, when the preconditions of this method are met, the return value
-	 * is non-null and the value of `tryLT(k).type === LA(k)`.
+	 * is non-undefined and the value of `tryLT(k).type === LA(k)`.
 	 *
 	 * The return value is `undefined` if `k<0` and fewer than `-k` calls to `consume()` have occurred from the
 	 * beginning of the stream before calling this method.
@@ -40,18 +40,18 @@ export interface TokenStream extends IntStream {
 	tryLT(k: number): Token | undefined;
 
 	/**
-	 * Gets the {@link Token} at the specified {@code index} in the stream. When
-	 * the preconditions of this method are met, the return value is non-null.
+	 * Gets the {@link Token} at the specified `index` in the stream. When
+	 * the preconditions of this method are met, the return value is non-undefined.
 	 *
-	 * <p>The preconditions for this method are the same as the preconditions of
-	 * {@link IntStream#seek}. If the behavior of {@code seek(index)} is
-	 * unspecified for the current state and given {@code index}, then the
-	 * behavior of this method is also unspecified.</p>
+	 * The preconditions for this method are the same as the preconditions of
+	 * {@link IntStream#seek}. If the behavior of `seek(index)` is
+	 * unspecified for the current state and given `index`, then the
+	 * behavior of this method is also unspecified.
 	 *
-	 * <p>The symbol referred to by {@code index} differs from {@code seek()} only
-	 * in the case of filtering streams where {@code index} lies before the end
-	 * of the stream. Unlike {@code seek()}, this method does not adjust
-	 * {@code index} to point to a non-ignored symbol.</p>
+	 * The symbol referred to by `index` differs from `seek()` only
+	 * in the case of filtering streams where `index` lies before the end
+	 * of the stream. Unlike `seek()`, this method does not adjust
+	 * `index` to point to a non-ignored symbol.
 	 *
 	 * @throws IllegalArgumentException if {code index} is less than 0
 	 * @throws UnsupportedOperationException if the stream does not support
@@ -68,25 +68,25 @@ export interface TokenStream extends IntStream {
 	readonly tokenSource: TokenSource;
 
 	/**
-	 * Return the text of all tokens within the specified {@code interval}. This
+	 * Return the text of all tokens within the specified `interval`. This
 	 * method behaves like the following code (including potential exceptions
 	 * for violating preconditions of {@link #get}, but may be optimized by the
 	 * specific implementation.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = interval.a; i &lt;= interval.b; i++) {
+	 * for (int i = interval.a; i <= interval.b; i++) {
 	 *   text += stream.get(i).text;
 	 * }
-	 * </pre>
+	 * ```
 	 *
 	 * @param interval The interval of tokens within this stream to get text
 	 * for.
-	 * @return The text of all tokens within the specified interval in this
+	 * @returns The text of all tokens within the specified interval in this
 	 * stream.
 	 *
-	 * @throws NullPointerException if {@code interval} is {@code null}
+	 * @throws NullPointerException if `interval` is `undefined`
 	 */
 	//@NotNull
 	getText(/*@NotNull*/ interval: Interval): string;
@@ -97,12 +97,12 @@ export interface TokenStream extends IntStream {
 	 * {@link IntStream#size} and {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = stream.getText(new Interval(0, stream.size));
-	 * </pre>
+	 * ```
 	 *
-	 * @return The text of all tokens in the stream.
+	 * @returns The text of all tokens in the stream.
 	 */
 	//@NotNull
 	getText(): string;
@@ -113,46 +113,46 @@ export interface TokenStream extends IntStream {
 	 * exceptions from the call to {@link #getText(Interval)}, but may be
 	 * optimized by the specific implementation.
 	 *
-	 * <p>If {@code ctx.sourceInterval} does not return a valid interval of
-	 * tokens provided by this stream, the behavior is unspecified.</p>
+	 * If `ctx.sourceInterval` does not return a valid interval of
+	 * tokens provided by this stream, the behavior is unspecified.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = stream.getText(ctx.sourceInterval);
-	 * </pre>
+	 * ```
 	 *
 	 * @param ctx The context providing the source interval of tokens to get
 	 * text for.
-	 * @return The text of all tokens within the source interval of {@code ctx}.
+	 * @returns The text of all tokens within the source interval of `ctx`.
 	 */
 	//@NotNull
 	getText(/*@NotNull*/ ctx: RuleContext): string;
 
 	/**
-	 * Return the text of all tokens in this stream between {@code start} and
-	 * {@code stop} (inclusive).
+	 * Return the text of all tokens in this stream between `start` and
+	 * `stop` (inclusive).
 	 *
-	 * <p>If the specified {@code start} or {@code stop} token was not provided by
-	 * this stream, or if the {@code stop} occurred before the {@code start}
-	 * token, the behavior is unspecified.</p>
+	 * If the specified `start` or `stop` token was not provided by
+	 * this stream, or if the `stop` occurred before the `start`}
+	 * token, the behavior is unspecified.
 	 *
-	 * <p>For streams which ensure that the `Token.tokenIndex` method is
+	 * For streams which ensure that the `Token.tokenIndex` method is
 	 * accurate for all of its provided tokens, this method behaves like the
 	 * following code. Other streams may implement this method in other ways
-	 * provided the behavior is consistent with this at a high level.</p>
+	 * provided the behavior is consistent with this at a high level.
 	 *
-	 * <pre>
+	 * ```
 	 * TokenStream stream = ...;
 	 * String text = "";
-	 * for (int i = start.tokenIndex; i &lt;= stop.tokenIndex; i++) {
+	 * for (int i = start.tokenIndex; i <= stop.tokenIndex; i++) {
 	 *   text += stream.get(i).text;
 	 * }
-	 * </pre>
+	 * ```
 	 *
 	 * @param start The first token in the interval to get text for.
 	 * @param stop The last token in the interval to get text for (inclusive).
-	 * @return The text of all tokens lying between the specified {@code start}
-	 * and {@code stop} tokens.
+	 * @returns The text of all tokens lying between the specified `start`
+	 * and `stop` tokens.
 	 *
 	 * @throws UnsupportedOperationException if this stream does not support
 	 * this method for the specified tokens

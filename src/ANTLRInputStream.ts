@@ -4,13 +4,6 @@
  */
 // ConvertTo-TS run at 2016-10-04T11:26:49.0828748-07:00
 
-/**
- * Vacuum all input from a {@link Reader}/{@link InputStream} and then treat it
- * like a {@code char[]} buffer. Can also pass in a {@link String} or
- * {@code char[]} to use.
- *
- * <p>If you need encoding, pass in stream/reader with correct encoding.</p>
- */
 import * as assert from "assert";
 import { CharStream } from "./CharStream";
 import { Arrays } from "./misc/Arrays";
@@ -21,6 +14,13 @@ import { Interval } from "./misc/Interval";
 const READ_BUFFER_SIZE: number = 1024;
 const INITIAL_BUFFER_SIZE: number = 1024;
 
+/**
+ * Vacuum all input from a {@link Reader}/{@link InputStream} and then treat it
+ * like a `char[]` buffer. Can also pass in a {@link String} or
+ * `char[]` to use.
+ *
+ * If you need encoding, pass in stream/reader with correct encoding.
+ */
 export class ANTLRInputStream implements CharStream {
 	/** The data being scanned */
 	protected data: string;

@@ -14,7 +14,7 @@ import { SyntaxTree } from "./SyntaxTree";
  *  This node represents both internal nodes, rule invocations,
  *  and leaf nodes, token matches.
  *
- *  <p>The payload is either a {@link Token} or a {@link RuleContext} object.</p>
+ *  The payload is either a {@link Token} or a {@link RuleContext} object.
  */
 export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods

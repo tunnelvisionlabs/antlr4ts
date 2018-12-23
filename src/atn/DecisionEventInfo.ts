@@ -34,7 +34,7 @@ export class DecisionEventInfo {
 
 	/**
 	 * The simulator state containing additional information relevant to the
-	 * prediction state when the current event occurred, or {@code null} if no
+	 * prediction state when the current event occurred, or `undefined` if no
 	 * additional information is relevant or available.
 	 */
 	public state: SimulatorState | undefined;
@@ -57,8 +57,8 @@ export class DecisionEventInfo {
 	public stopIndex: number;
 
 	/**
-	 * {@code true} if the current event occurred during LL prediction;
-	 * otherwise, {@code false} if the input occurred during SLL prediction.
+	 * `true` if the current event occurred during LL prediction;
+	 * otherwise, `false` if the input occurred during SLL prediction.
 	 */
 	public fullCtx: boolean;
 

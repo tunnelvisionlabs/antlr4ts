@@ -12,7 +12,7 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code channel} lexer action by calling
+ * Implements the `channel` lexer action by calling
  * {@link Lexer#setChannel} with the assigned channel.
  *
  * @author Sam Harwell
@@ -22,7 +22,7 @@ export class LexerChannelAction implements LexerAction {
 	private readonly _channel: number;
 
 	/**
-	 * Constructs a new {@code channel} action with the specified channel value.
+	 * Constructs a new `channel` action with the specified channel value.
 	 * @param channel The channel value to pass to {@link Lexer#setChannel}.
 	 */
 	constructor(channel: number) {
@@ -32,7 +32,7 @@ export class LexerChannelAction implements LexerAction {
 	/**
 	 * Gets the channel to use for the {@link Token} created by the lexer.
 	 *
-	 * @return The channel to use for the {@link Token} created by the lexer.
+	 * @returns The channel to use for the {@link Token} created by the lexer.
 	 */
 	get channel(): number {
 		return this._channel;
@@ -40,7 +40,7 @@ export class LexerChannelAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#CHANNEL}.
+	 * @returns This method returns {@link LexerActionType#CHANNEL}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -49,7 +49,7 @@ export class LexerChannelAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -59,8 +59,8 @@ export class LexerChannelAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#setChannel} with the
-	 * value provided by {@link #getChannel}.</p>
+	 * This action is implemented by calling {@link Lexer#setChannel} with the
+	 * value provided by {@link #getChannel}.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

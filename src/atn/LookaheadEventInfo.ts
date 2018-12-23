@@ -30,13 +30,13 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 	 *
 	 * @param decision The decision number
 	 * @param state The final simulator state containing the necessary
-	 * information to determine the result of a prediction, or {@code null} if
+	 * information to determine the result of a prediction, or `undefined` if
 	 * the final state is not available
 	 * @param input The input token stream
 	 * @param startIndex The start index for the current prediction
 	 * @param stopIndex The index at which the prediction was finally made
-	 * @param fullCtx {@code true} if the current lookahead is part of an LL
-	 * prediction; otherwise, {@code false} if the current lookahead is part of
+	 * @param fullCtx `true` if the current lookahead is part of an LL
+	 * prediction; otherwise, `false` if the current lookahead is part of
 	 * an SLL prediction
 	 */
 	constructor(

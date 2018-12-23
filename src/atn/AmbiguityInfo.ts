@@ -17,23 +17,21 @@ import { TokenStream } from "../TokenStream";
  * conflict, followed by LL prediction also reaching a conflict state
  * (indicating a true ambiguity in the grammar).
  *
- * <p>
  * This event may be reported during SLL prediction in cases where the
  * conflicting SLL configuration set provides sufficient information to
  * determine that the SLL conflict is truly an ambiguity. For example, if none
  * of the ATN configurations in the conflicting SLL configuration set have
  * traversed a global follow transition (i.e.
- * {@link ATNConfig#getReachesIntoOuterContext} is {@code false} for all
+ * {@link ATNConfig#getReachesIntoOuterContext} is `false` for all
  * configurations), then the result of SLL prediction for that input is known to
- * be equivalent to the result of LL prediction for that input.</p>
+ * be equivalent to the result of LL prediction for that input.
  *
- * <p>
  * In some cases, the minimum represented alternative in the conflicting LL
  * configuration set is not equal to the minimum represented alternative in the
  * conflicting SLL configuration set. Grammars and inputs which result in this
  * scenario are unable to use {@link PredictionMode#SLL}, which in turn means
  * they cannot use the two-stage parsing strategy to improve parsing performance
- * for that input.</p>
+ * for that input.
  *
  * @see ParserATNSimulator#reportAmbiguity
  * @see ParserErrorListener#reportAmbiguity

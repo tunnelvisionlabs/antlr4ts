@@ -12,17 +12,17 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code skip} lexer action by calling {@link Lexer#skip}.
+ * Implements the `skip` lexer action by calling {@link Lexer#skip}.
  *
- * <p>The {@code skip} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * The `skip` command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.
  *
  * @author Sam Harwell
  * @since 4.2
  */
 export class LexerSkipAction implements LexerAction {
 	/**
-	 * Constructs the singleton instance of the lexer {@code skip} command.
+	 * Constructs the singleton instance of the lexer `skip` command.
 	 */
 	constructor() {
 		// intentionally empty
@@ -30,7 +30,7 @@ export class LexerSkipAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#SKIP}.
+	 * @returns This method returns {@link LexerActionType#SKIP}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -39,7 +39,7 @@ export class LexerSkipAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -49,7 +49,7 @@ export class LexerSkipAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#skip}.</p>
+	 * This action is implemented by calling {@link Lexer#skip}.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

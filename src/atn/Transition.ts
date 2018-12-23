@@ -13,14 +13,14 @@ import { TransitionType } from "./TransitionType";
 /** An ATN transition between any two ATN states.  Subclasses define
  *  atom, set, epsilon, action, predicate, rule transitions.
  *
- *  <p>This is a one way link.  It emanates from a state (usually via a list of
- *  transitions) and has a target state.</p>
+ *  This is a one way link.  It emanates from a state (usually via a list of
+ *  transitions) and has a target state.
  *
- *  <p>Since we never have to change the ATN transitions once we construct it,
+ *  Since we never have to change the ATN transitions once we construct it,
  *  we can fix these transitions as specific classes. The DFA transitions
  *  on the other hand need to update the labels as it adds transitions to
  *  the states. We'll use the term Edge for the DFA to distinguish them from
- *  ATN transitions.</p>
+ *  ATN transitions.
  */
 export abstract class Transition {
 	public static readonly serializationNames: string[] = [
@@ -69,10 +69,10 @@ export abstract class Transition {
 	/**
 	 * Determines if the transition is an "epsilon" transition.
 	 *
-	 * <p>The default implementation returns {@code false}.</p>
+	 * The default implementation returns `false`.
 	 *
-	 * @return {@code true} if traversing this transition in the ATN does not
-	 * consume an input symbol; otherwise, {@code false} if traversing this
+	 * @returns `true` if traversing this transition in the ATN does not
+	 * consume an input symbol; otherwise, `false` if traversing this
 	 * transition consumes (matches) an input symbol.
 	 */
 	get isEpsilon(): boolean {

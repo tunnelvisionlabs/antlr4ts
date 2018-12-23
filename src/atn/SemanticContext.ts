@@ -52,17 +52,17 @@ function min<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 
 /** A tree structure used to record the semantic context in which
  *  an ATN configuration is valid.  It's either a single predicate,
- *  a conjunction {@code p1&&p2}, or a sum of products {@code p1||p2}.
+ *  a conjunction `p1&&p2`, or a sum of products `p1||p2`.
  *
- *  <p>I have scoped the {@link AND}, {@link OR}, and {@link Predicate} subclasses of
- *  {@link SemanticContext} within the scope of this outer class.</p>
+ *  I have scoped the {@link AND}, {@link OR}, and {@link Predicate} subclasses of
+ *  {@link SemanticContext} within the scope of this outer class.
  */
 export abstract class SemanticContext implements Equatable {
 	private static _NONE: SemanticContext;
 
 	/**
 	 * The default {@link SemanticContext}, which is semantically equivalent to
-	 * a predicate of the form {@code {true}?}.
+	 * a predicate of the form `{true}?`.
 	 */
 	static get NONE(): SemanticContext {
 		if (SemanticContext._NONE === undefined) {
@@ -74,16 +74,16 @@ export abstract class SemanticContext implements Equatable {
 
 	/**
 	 * For context independent predicates, we evaluate them without a local
-	 * context (i.e., null context). That way, we can evaluate them without
+	 * context (i.e., unedfined context). That way, we can evaluate them without
 	 * having to create proper rule-specific context during prediction (as
 	 * opposed to the parser, which creates them naturally). In a practical
 	 * sense, this avoids a cast exception from RuleContext to myruleContext.
 	 *
-	 * <p>For context dependent predicates, we must pass in a local context so that
+	 * For context dependent predicates, we must pass in a local context so that
 	 * references such as $arg evaluate properly as _localctx.arg. We only
 	 * capture context dependent predicates in the context in which we begin
 	 * prediction, so we passed in the outer context here in case of context
-	 * dependent predicate evaluation.</p>
+	 * dependent predicate evaluation.
 	 */
 	public abstract eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean;
 
@@ -92,18 +92,17 @@ export abstract class SemanticContext implements Equatable {
 	 *
 	 * @param parser The parser instance.
 	 * @param parserCallStack
-	 * @return The simplified semantic context after precedence predicates are
+	 * @returns The simplified semantic context after precedence predicates are
 	 * evaluated, which will be one of the following values.
-	 * <ul>
-	 * <li>{@link #NONE}: if the predicate simplifies to {@code true} after
-	 * precedence predicates are evaluated.</li>
-	 * <li>{@code null}: if the predicate simplifies to {@code false} after
-	 * precedence predicates are evaluated.</li>
-	 * <li>{@code this}: if the semantic context is not changed as a result of
-	 * precedence predicate evaluation.</li>
-	 * <li>A non-{@code null} {@link SemanticContext}: the new simplified
-	 * semantic context after precedence predicates are evaluated.</li>
-	 * </ul>
+	 *
+	 * * {@link #NONE}: if the predicate simplifies to `true` after
+	 *   precedence predicates are evaluated.
+	 * * `undefined`: if the predicate simplifies to `false` after
+	 *   precedence predicates are evaluated.
+	 * * `this`: if the semantic context is not changed as a result of
+	 *   precedence predicate evaluation.
+	 * * A non-`undefined` {@link SemanticContext}: the new simplified
+	 *   semantic context after precedence predicates are evaluated.
 	 */
 	public evalPrecedence(parser: Recognizer<any, any>, parserCallStack: RuleContext): SemanticContext | undefined {
 		return this;
@@ -290,7 +289,7 @@ export namespace SemanticContext {
 		/**
 		 * Gets the operands for the semantic context operator.
 		 *
-		 * @return a collection of {@link SemanticContext} operands for the
+		 * @returns a collection of {@link SemanticContext} operands for the
 		 * operator.
 		 *
 		 * @since 4.3
@@ -356,9 +355,8 @@ export namespace SemanticContext {
 		/**
 		 * {@inheritDoc}
 		 *
-		 * <p>
 		 * The evaluation of predicates by this context is short-circuiting, but
-		 * unordered.</p>
+		 * unordered.
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
@@ -468,9 +466,8 @@ export namespace SemanticContext {
 		/**
 		 * {@inheritDoc}
 		 *
-		 * <p>
 		 * The evaluation of predicates by this context is short-circuiting, but
-		 * unordered.</p>
+		 * unordered.
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {

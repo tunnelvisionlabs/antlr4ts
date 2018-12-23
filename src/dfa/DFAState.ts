@@ -33,13 +33,13 @@ import * as assert from "assert";
  *  I have to add a stack to simulate the proper lookahead sequences for
  *  the underlying LL grammar from which the ATN was derived.
  *
- *  <p>I use a set of ATNConfig objects not simple states.  An ATNConfig
+ *  I use a set of ATNConfig objects not simple states.  An ATNConfig
  *  is both a state (ala normal conversion) and a RuleContext describing
- *  the chain of rules (if any) followed to arrive at that state.</p>
+ *  the chain of rules (if any) followed to arrive at that state.
  *
- *  <p>A DFA state may have multiple references to a particular state,
+ *  A DFA state may have multiple references to a particular state,
  *  but with different ATN contexts (with same or different alts)
- *  meaning that state was reached via a different set of rule invocations.</p>
+ *  meaning that state was reached via a different set of rule invocations.
  */
 export class DFAState {
 	public stateNumber: number = -1;
@@ -47,7 +47,7 @@ export class DFAState {
 	@NotNull
 	public configs: ATNConfigSet;
 
-	/** {@code edges.get(symbol)} points to target of symbol.
+	/** `edges.get(symbol)` points to target of symbol.
 	 */
 	@NotNull
 	private readonly edges: Map<number, DFAState>;
@@ -195,14 +195,14 @@ export class DFAState {
 	 * Two {@link DFAState} instances are equal if their ATN configuration sets
 	 * are the same. This method is used to see if a state already exists.
 	 *
-	 * <p>Because the number of alternatives and number of ATN configurations are
+	 * Because the number of alternatives and number of ATN configurations are
 	 * finite, there is a finite number of DFA states that can be processed.
-	 * This is necessary to show that the algorithm terminates.</p>
+	 * This is necessary to show that the algorithm terminates.
 	 *
-	 * <p>Cannot test the DFA state numbers here because in
+	 * Cannot test the DFA state numbers here because in
 	 * {@link ParserATNSimulator#addDFAState} we need to know if any other state
 	 * exists that has this exact set of ATN configurations. The
-	 * {@link #stateNumber} is irrelevant.</p>
+	 * {@link #stateNumber} is irrelevant.
 	 */
 	@Override
 	public equals(o: any): boolean {

@@ -54,7 +54,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  create a single token.  nextToken will return this object after
 	 *  matching lexer rule(s).  If you subclass to allow multiple token
 	 *  emissions, then set this to the last token to be matched or
-	 *  something nonnull so that the auto token emit mechanism will not
+	 *  something non-undefined so that the auto token emit mechanism will not
 	 *  emit another token.
 	 */
 	public _token: Token | undefined;
@@ -188,7 +188,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	/** Instruct the lexer to skip creating a token for current lexer rule
 	 *  and look for another token.  nextToken() knows to keep looking when
 	 *  a lexer rule finishes with token set to SKIP_TOKEN.  Recall that
-	 *  if token==null at end of any token rule, it creates one for you
+	 *  if token==undefined at end of any token rule, it creates one for you
 	 *  and emits it.
 	 */
 	public skip(): void {

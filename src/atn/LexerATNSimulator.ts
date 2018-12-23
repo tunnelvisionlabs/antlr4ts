@@ -206,12 +206,12 @@ export class LexerATNSimulator extends ATNSimulator {
 	/**
 	 * Get an existing target state for an edge in the DFA. If the target state
 	 * for the edge has not yet been computed or is otherwise not available,
-	 * this method returns {@code null}.
+	 * this method returns `undefined`.
 	 *
 	 * @param s The current DFA state
 	 * @param t The next input symbol
-	 * @return The existing target DFA state for the given input symbol
-	 * {@code t}, or {@code null} if the target state for this edge is not
+	 * @returns The existing target DFA state for the given input symbol
+	 * `t`, or `undefined` if the target state for this edge is not
 	 * already cached
 	 */
 	protected getExistingTargetState(@NotNull s: DFAState, t: number): DFAState | undefined {
@@ -232,8 +232,8 @@ export class LexerATNSimulator extends ATNSimulator {
 	 * @param s The current DFA state
 	 * @param t The next input symbol
 	 *
-	 * @return The computed target DFA state for the given input symbol
-	 * {@code t}. If {@code t} does not lead to a valid DFA state, this method
+	 * @returns The computed target DFA state for the given input symbol
+	 * `t`. If `t` does not lead to a valid DFA state, this method
 	 * returns {@link #ERROR}.
 	 */
 	@NotNull
@@ -279,7 +279,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	/** Given a starting configuration set, figure out all ATN configurations
-	 *  we can reach upon input {@code t}. Parameter {@code reach} is a return
+	 *  we can reach upon input `t`. Parameter `reach` is a return
 	 *  parameter.
 	 */
 	protected getReachableConfigSet(@NotNull input: CharStream, @NotNull closure: ATNConfigSet, @NotNull reach: ATNConfigSet, t: number): void {
@@ -366,11 +366,11 @@ export class LexerATNSimulator extends ATNSimulator {
 	 * Since the alternatives within any lexer decision are ordered by
 	 * preference, this method stops pursuing the closure as soon as an accept
 	 * state is reached. After the first accept state is reached by depth-first
-	 * search from {@code config}, all other (potentially reachable) states for
+	 * search from `config`, all other (potentially reachable) states for
 	 * this rule would have a lower priority.
 	 *
-	 * @return {@code true} if an accept state is reached, otherwise
-	 * {@code false}.
+	 * @returns `true` if an accept state is reached, otherwise
+	 * `false`.
 	 */
 	protected closure(@NotNull input: CharStream, @NotNull config: ATNConfig, @NotNull configs: ATNConfigSet, currentAltReachedAcceptState: boolean, speculative: boolean, treatEofAsEpsilon: boolean): boolean {
 		if (LexerATNSimulator.debug) {
@@ -542,23 +542,23 @@ export class LexerATNSimulator extends ATNSimulator {
 	/**
 	 * Evaluate a predicate specified in the lexer.
 	 *
-	 * <p>If {@code speculative} is {@code true}, this method was called before
+	 * If `speculative` is `true`, this method was called before
 	 * {@link #consume} for the matched character. This method should call
 	 * {@link #consume} before evaluating the predicate to ensure position
 	 * sensitive values, including {@link Lexer#getText}, {@link Lexer#getLine},
 	 * and {@link Lexer#getCharPositionInLine}, properly reflect the current
-	 * lexer state. This method should restore {@code input} and the simulator
+	 * lexer state. This method should restore `input` and the simulator
 	 * to the original state before returning (i.e. undo the actions made by the
-	 * call to {@link #consume}.</p>
+	 * call to {@link #consume}.
 	 *
 	 * @param input The input stream.
 	 * @param ruleIndex The rule containing the predicate.
 	 * @param predIndex The index of the predicate within the rule.
-	 * @param speculative {@code true} if the current index in {@code input} is
+	 * @param speculative `true` if the current index in `input` is
 	 * one character before the predicate's location.
 	 *
-	 * @return {@code true} if the specified predicate evaluates to
-	 * {@code true}.
+	 * @returns `true` if the specified predicate evaluates to
+	 * `true`.
 	 */
 	protected evaluatePredicate(@NotNull input: CharStream, ruleIndex: number, predIndex: number, speculative: boolean): boolean {
 		// assume true if no recognizer was provided
@@ -737,12 +737,12 @@ export namespace LexerATNSimulator {
 	 *  tracking the starting line and characterization of the token. These
 	 *  variables track the "state" of the simulator when it hits an accept state.
 	 *
-	 *  <p>We track these variables separately for the DFA and ATN simulation
+	 *  We track these variables separately for the DFA and ATN simulation
 	 *  because the DFA simulation often has to fail over to the ATN
 	 *  simulation. If the ATN simulation fails, we need the DFA to fall
 	 *  back to its previously accepted state, if any. If the ATN succeeds,
 	 *  then the ATN does the accept and the DFA simulator that invoked it
-	 *  can simply return the predicted token type.</p>
+	 *  can simply return the predicted token type.
 	 */
 	export class SimState {
 		public index: number = -1;

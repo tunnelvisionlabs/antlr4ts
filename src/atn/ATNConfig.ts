@@ -64,11 +64,9 @@ export class ATNConfig implements Equatable {
 	/**
 	 * This is a bit-field currently containing the following values.
 	 *
-	 * <ul>
-	 * <li>0x00FFFFFF: Alternative</li>
-	 * <li>0x7F000000: Outer context depth</li>
-	 * <li>0x80000000: Suppress precedence filter</li>
-	 * </ul>
+	 * * 0x00FFFFFF: Alternative
+	 * * 0x7F000000: Outer context depth
+	 * * 0x80000000: Suppress precedence filter
 	 */
 	private altAndOuterContextDepth: number;
 
@@ -149,10 +147,9 @@ export class ATNConfig implements Equatable {
 	 * dependent predicates unless we are in the rule that initially
 	 * invokes the ATN simulator.
 	 *
-	 * <p>
 	 * closure() tracks the depth of how far we dip into the outer context:
 	 * depth &gt; 0.  Note that it may not be totally accurate depth since I
-	 * don't ever decrement. TODO: make it a boolean then</p>
+	 * don't ever decrement. TODO: make it a boolean then
 	 */
 	get outerContextDepth(): number {
 		return (this.altAndOuterContextDepth >>> 24) & 0x7F;
@@ -259,7 +256,7 @@ export class ATNConfig implements Equatable {
 	 * `false`.
 	 *
 	 * @param subconfig The sub configuration.
-	 * @return `true` if this configuration contains `subconfig`; otherwise, `false`.
+	 * @returns `true` if this configuration contains `subconfig`; otherwise, `false`.
 	 */
 	public contains(subconfig: ATNConfig): boolean {
 		if (this.state.stateNumber !== subconfig.state.stateNumber
@@ -359,7 +356,7 @@ export class ATNConfig implements Equatable {
 	 * Returns a graphical representation of the current `ATNConfig` in Graphviz format. The graph can be stored to a
 	 * **.dot** file and then rendered to an image using Graphviz.
 	 *
-	 * @return A Graphviz graph representing the current `ATNConfig`.
+	 * @returns A Graphviz graph representing the current `ATNConfig`.
 	 *
 	 * @see http://www.graphviz.org/
 	 */

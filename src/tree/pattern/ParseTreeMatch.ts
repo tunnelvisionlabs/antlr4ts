@@ -44,9 +44,9 @@ export class ParseTreeMatch {
 	 * @param mismatchedNode The first node which failed to match the tree
 	 * pattern during the matching process.
 	 *
-	 * @exception IllegalArgumentException if {@code tree} is {@code null}
-	 * @exception IllegalArgumentException if {@code pattern} is {@code null}
-	 * @exception IllegalArgumentException if {@code labels} is {@code null}
+	 * @throws {@link Error} if `tree` is not defined
+	 * @throws {@link Error} if `pattern` is not defined
+	 * @throws {@link Error} if `labels` is not defined
 	 */
 	constructor(
 		@NotNull tree: ParseTree,
@@ -72,20 +72,20 @@ export class ParseTreeMatch {
 	}
 
 	/**
-	 * Get the last node associated with a specific {@code label}.
+	 * Get the last node associated with a specific `label`.
 	 *
-	 * <p>For example, for pattern {@code <id:ID>}, {@code get("id")} returns the
-	 * node matched for that {@code ID}. If more than one node
+	 * For example, for pattern `<id:ID>`, `get("id")` returns the
+	 * node matched for that `ID`. If more than one node
 	 * matched the specified label, only the last is returned. If there is
-	 * no node associated with the label, this returns {@code null}.</p>
+	 * no node associated with the label, this returns `undefined`.
 	 *
-	 * <p>Pattern tags like {@code <ID>} and {@code <expr>} without labels are
-	 * considered to be labeled with {@code ID} and {@code expr}, respectively.</p>
+	 * Pattern tags like `<ID>` and `<expr>` without labels are
+	 * considered to be labeled with `ID` and `expr`, respectively.
 	 *
 	 * @param label The label to check.
 	 *
-	 * @return The last {@link ParseTree} to match a tag with the specified
-	 * label, or {@code null} if no parse tree matched a tag with the label.
+	 * @returns The last {@link ParseTree} to match a tag with the specified
+	 * label, or `undefined` if no parse tree matched a tag with the label.
 	 */
 	public get(label: string): ParseTree | undefined {
 		let parseTrees = this._labels.get(label);
@@ -99,24 +99,22 @@ export class ParseTreeMatch {
 	/**
 	 * Return all nodes matching a rule or token tag with the specified label.
 	 *
-	 * <p>If the {@code label} is the name of a parser rule or token in the
+	 * If the `label` is the name of a parser rule or token in the
 	 * grammar, the resulting list will contain both the parse trees matching
 	 * rule or tags explicitly labeled with the label and the complete set of
 	 * parse trees matching the labeled and unlabeled tags in the pattern for
-	 * the parser rule or token. For example, if {@code label} is {@code "foo"},
-	 * the result will contain <em>all</em> of the following.</p>
+	 * the parser rule or token. For example, if `label` is `"foo"`,
+	 * the result will contain *all* of the following.
 	 *
-	 * <ul>
-	 * <li>Parse tree nodes matching tags of the form {@code <foo:anyRuleName>} and
-	 * {@code <foo:AnyTokenName>}.</li>
-	 * <li>Parse tree nodes matching tags of the form {@code <anyLabel:foo>}.</li>
-	 * <li>Parse tree nodes matching tags of the form {@code <foo>}.</li>
-	 * </ul>
+	 * * Parse tree nodes matching tags of the form `<foo:anyRuleName>` and
+	 *   `<foo:AnyTokenName>`.
+	 * * Parse tree nodes matching tags of the form `<anyLabel:foo>`.
+	 * * Parse tree nodes matching tags of the form `<foo>`.
 	 *
 	 * @param label The label.
 	 *
-	 * @return A collection of all {@link ParseTree} nodes matching tags with
-	 * the specified {@code label}. If no nodes matched the label, an empty list
+	 * @returns A collection of all {@link ParseTree} nodes matching tags with
+	 * the specified `label`. If no nodes matched the label, an empty list
 	 * is returned.
 	 */
 	@NotNull
@@ -131,11 +129,11 @@ export class ParseTreeMatch {
 	/**
 	 * Return a mapping from label &rarr; [list of nodes].
 	 *
-	 * <p>The map includes special entries corresponding to the names of rules and
+	 * The map includes special entries corresponding to the names of rules and
 	 * tokens referenced in tags in the original pattern. For additional
-	 * information, see the description of {@link #getAll(String)}.</p>
+	 * information, see the description of {@link #getAll(String)}.
 	 *
-	 * @return A mapping from labels to parse tree nodes. If the parse tree
+	 * @returns A mapping from labels to parse tree nodes. If the parse tree
 	 * pattern did not contain any rule or token tags, this map will be empty.
 	 */
 	@NotNull
@@ -146,7 +144,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the node at which we first detected a mismatch.
 	 *
-	 * @return the node at which we first detected a mismatch, or {@code null}
+	 * @returns the node at which we first detected a mismatch, or `undefined`
 	 * if the match was successful.
 	 */
 	get mismatchedNode(): ParseTree | undefined {
@@ -156,8 +154,8 @@ export class ParseTreeMatch {
 	/**
 	 * Gets a value indicating whether the match operation succeeded.
 	 *
-	 * @return {@code true} if the match operation succeeded; otherwise,
-	 * {@code false}.
+	 * @returns `true` if the match operation succeeded; otherwise,
+	 * `false`.
 	 */
 	get succeeded(): boolean {
 		return !this._mismatchedNode;
@@ -166,7 +164,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the tree pattern we are matching against.
 	 *
-	 * @return The tree pattern we are matching against.
+	 * @returns The tree pattern we are matching against.
 	 */
 	@NotNull
 	get pattern(): ParseTreePattern {
@@ -176,7 +174,7 @@ export class ParseTreeMatch {
 	/**
 	 * Get the parse tree we are trying to match to a pattern.
 	 *
-	 * @return The {@link ParseTree} we are trying to match to a pattern.
+	 * @returns The {@link ParseTree} we are trying to match to a pattern.
 	 */
 	@NotNull
 	get tree(): ParseTree {

@@ -9,7 +9,7 @@ import { BlockEndState } from "./BlockEndState";
 import { DecisionState } from "./DecisionState";
 import { Override } from "../Decorators";
 
-/**  The start of a regular {@code (...)} block. */
+/**  The start of a regular `(...)` block. */
 export abstract class BlockStartState extends DecisionState {
 	public endState: BlockEndState;
 }

@@ -50,7 +50,7 @@ export class PredicateEvalInfo extends DecisionEventInfo {
 	 * @param semctx The semantic context which was evaluated
 	 * @param evalResult The results of evaluating the semantic context
 	 * @param predictedAlt The alternative number for the decision which is
-	 * guarded by the semantic context {@code semctx}. See {@link #predictedAlt}
+	 * guarded by the semantic context `semctx`. See {@link #predictedAlt}
 	 * for more information.
 	 *
 	 * @see ParserATNSimulator#evalSemanticContext(SemanticContext, ParserRuleContext, int)

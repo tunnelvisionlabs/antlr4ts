@@ -62,12 +62,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	/**
 	 * This maps (state, alt) -> merged {@link ATNConfig}. The key does not account for
 	 * the {@link ATNConfig#getSemanticContext} of the value, which is only a problem if a single
-	 * {@code ATNConfigSet} contains two configs with the same state and alternative
+	 * `ATNConfigSet` contains two configs with the same state and alternative
 	 * but different semantic contexts. When this case arises, the first config
 	 * added to this map stays, and the remaining configs are placed in {@link #unmerged}.
-	 * <p>
+	 *
 	 * This map is only used for optimizing the process of adding configs to the set,
-	 * and is {@code null} for read-only sets stored in the DFA.
+	 * and is `undefined` for read-only sets stored in the DFA.
 	 */
 	private mergedConfigs?: Array2DHashMap<KeyType, ATNConfig>;
 
@@ -76,9 +76,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * of the configs in {@link #mergedConfigs} but have a colliding key. This
 	 * occurs when two configs in the set have the same state and alternative but
 	 * different semantic contexts.
-	 * <p>
+	 *
 	 * This list is only used for optimizing the process of adding configs to the set,
-	 * and is {@code null} for read-only sets stored in the DFA.
+	 * and is `undefined` for read-only sets stored in the DFA.
 	 */
 	private unmerged?: ATNConfig[];
 
@@ -94,12 +94,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	private _hasSemanticContext: boolean = false;
 	private _dipsIntoOuterContext: boolean = false;
 	/**
-	 * When {@code true}, this config set represents configurations where the entire
+	 * When `true`, this config set represents configurations where the entire
 	 * outer context has been consumed by the ATN interpreter. This prevents the
 	 * {@link ParserATNSimulator#closure} from pursuing the global FOLLOW when a
 	 * rule stop state is reached with an empty prediction context.
-	 * <p>
-	 * Note: {@code outermostConfigSet} and {@link #dipsIntoOuterContext} should never
+	 *
+	 * Note: `outermostConfigSet` and {@link #dipsIntoOuterContext} should never
 	 * be true at the same time.
 	 */
 	private outermostConfigSet: boolean = false;

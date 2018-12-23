@@ -17,23 +17,19 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  * The following images show the relation of states and
  * {@link ATNState#transitions} for various grammar constructs.
  *
- * <ul>
+ * * Solid edges marked with an &#0949; indicate a required
+ *   {@link EpsilonTransition}.
  *
- * <li>Solid edges marked with an &#0949; indicate a required
- * {@link EpsilonTransition}.</li>
+ * * Dashed edges indicate locations where any transition derived from
+ *   {@link Transition} might appear.
  *
- * <li>Dashed edges indicate locations where any transition derived from
- * {@link Transition} might appear.</li>
+ * * Dashed nodes are place holders for either a sequence of linked
+ *   {@link BasicState} states or the inclusion of a block representing a nested
+ *   construct in one of the forms below.
  *
- * <li>Dashed nodes are place holders for either a sequence of linked
- * {@link BasicState} states or the inclusion of a block representing a nested
- * construct in one of the forms below.</li>
- *
- * <li>Nodes showing multiple outgoing alternatives with a {@code ...} support
- * any number of alternatives (one or more). Nodes without the {@code ...} only
- * support the exact number of alternatives shown in the diagram.</li>
- *
- * </ul>
+ * * Nodes showing multiple outgoing alternatives with a `...` support
+ *   any number of alternatives (one or more). Nodes without the `...` only
+ *   support the exact number of alternatives shown in the diagram.
  *
  * <h2>Basic Blocks</h2>
  *
@@ -47,29 +43,29 @@ const INITIAL_NUM_TRANSITIONS: number = 4;
  *
  * <h2>Greedy Loops</h2>
  *
- * <h3>Greedy Closure: {@code (...)*}</h3>
+ * <h3>Greedy Closure: `(...)*`</h3>
  *
  * <embed src="images/ClosureGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Greedy Positive Closure: {@code (...)+}</h3>
+ * <h3>Greedy Positive Closure: `(...)+`</h3>
  *
  * <embed src="images/PositiveClosureGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Greedy Optional: {@code (...)?}</h3>
+ * <h3>Greedy Optional: `(...)?`</h3>
  *
  * <embed src="images/OptionalGreedy.svg" type="image/svg+xml"/>
  *
  * <h2>Non-Greedy Loops</h2>
  *
- * <h3>Non-Greedy Closure: {@code (...)*?}</h3>
+ * <h3>Non-Greedy Closure: `(...)*?`</h3>
  *
  * <embed src="images/ClosureNonGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Non-Greedy Positive Closure: {@code (...)+?}</h3>
+ * <h3>Non-Greedy Positive Closure: `(...)+?`</h3>
  *
  * <embed src="images/PositiveClosureNonGreedy.svg" type="image/svg+xml"/>
  *
- * <h3>Non-Greedy Optional: {@code (...)??}</h3>
+ * <h3>Non-Greedy Optional: `(...)??`</h3>
  *
  * <embed src="images/OptionalNonGreedy.svg" type="image/svg+xml"/>
  */
@@ -95,7 +91,7 @@ export abstract class ATNState {
 	/**
 	 * Gets the state number.
 	 *
-	 * @return the state number
+	 * @returns the state number
 	 */
 	public getStateNumber(): number {
 		return this.stateNumber;
@@ -105,7 +101,7 @@ export abstract class ATNState {
 	 * For all states except {@link RuleStopState}, this returns the state
 	 * number. Returns -1 for stop states.
 	 *
-	 * @return -1 for {@link RuleStopState}, otherwise the state number
+	 * @returns -1 for {@link RuleStopState}, otherwise the state number
 	 */
 	get nonStopStateNumber(): number {
 		return this.getStateNumber();

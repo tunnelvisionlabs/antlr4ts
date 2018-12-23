@@ -13,15 +13,15 @@ export interface CharStream extends IntStream {
 	/**
 	 * This method returns the text for a range of characters within this input
 	 * stream. This method is guaranteed to not throw an exception if the
-	 * specified {@code interval} lies entirely within a marked range. For more
+	 * specified `interval` lies entirely within a marked range. For more
 	 * information about marked ranges, see {@link IntStream#mark}.
 	 *
 	 * @param interval an interval within the stream
-	 * @return the text of the specified interval
+	 * @returns the text of the specified interval
 	 *
-	 * @throws NullPointerException if {@code interval} is {@code null}
-	 * @throws IllegalArgumentException if {@code interval.a < 0}, or if
-	 * {@code interval.b < interval.a - 1}, or if {@code interval.b} lies at or
+	 * @throws NullPointerException if `interval` is `undefined`
+	 * @throws IllegalArgumentException if `interval.a < 0`, or if
+	 * `interval.b < interval.a - 1`, or if `interval.b` lies at or
 	 * past the end of the stream
 	 * @throws UnsupportedOperationException if the stream does not support
 	 * getting the text of the specified interval

@@ -21,8 +21,8 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation returns
-	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
+	 * This implementation returns
+	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
 	@Override
 	public hashCode(obj: any): number {
@@ -38,11 +38,11 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation relies on object equality. If both objects are
-	 * {@code null}, this method returns {@code true}. Otherwise if only
-	 * {@code a} is {@code null}, this method returns {@code false}. Otherwise,
+	 * This implementation relies on object equality. If both objects are
+	 * `undefined` or `null`, this method returns `true`. Otherwise if only
+	 * `a` is `undefined` or `null`, this method returns `false`. Otherwise,
 	 * this method returns the result of
-	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
+	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
 	@Override
 	public equals(a: any, b: any): boolean {

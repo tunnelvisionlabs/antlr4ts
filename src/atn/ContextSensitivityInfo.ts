@@ -15,13 +15,12 @@ import { TokenStream } from "../TokenStream";
  * Context sensitivities are decisions where a particular input resulted in an
  * SLL conflict, but LL prediction produced a single unique alternative.
  *
- * <p>
  * In some cases, the unique alternative identified by LL prediction is not
  * equal to the minimum represented alternative in the conflicting SLL
  * configuration set. Grammars and inputs which result in this scenario are
  * unable to use {@link PredictionMode#SLL}, which in turn means they cannot use
  * the two-stage parsing strategy to improve parsing performance for that
- * input.</p>
+ * input.
  *
  * @see ParserATNSimulator#reportContextSensitivity
  * @see ParserErrorListener#reportContextSensitivity

@@ -17,9 +17,9 @@ import { NotNull, Override } from "../Decorators";
  * a custom action is added to the generated code for the lexer in an override
  * of {@link Recognizer#action} when the grammar is compiled.
  *
- * <p>This class may represent embedded actions created with the <code>{...}</code>
+ * This class may represent embedded actions created with the `{...}`
  * syntax in ANTLR 4, as well as actions created for lexer commands where the
- * command argument could not be evaluated when the grammar was compiled.</p>
+ * command argument could not be evaluated when the grammar was compiled.
  *
  * @author Sam Harwell
  * @since 4.2
@@ -45,7 +45,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * Gets the rule index to use for calls to {@link Recognizer#action}.
 	 *
-	 * @return The rule index for the custom action.
+	 * @returns The rule index for the custom action.
 	 */
 	get ruleIndex(): number {
 		return this._ruleIndex;
@@ -54,7 +54,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * Gets the action index to use for calls to {@link Recognizer#action}.
 	 *
-	 * @return The action index for the custom action.
+	 * @returns The action index for the custom action.
 	 */
 	get actionIndex(): number {
 		return this._actionIndex;
@@ -63,7 +63,7 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return This method returns {@link LexerActionType#CUSTOM}.
+	 * @returns This method returns {@link LexerActionType#CUSTOM}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -75,11 +75,11 @@ export class LexerCustomAction implements LexerAction {
 	 * actions may have different semantics depending on the {@link CharStream}
 	 * index at the time the action is executed.
 	 *
-	 * <p>Custom actions are position-dependent since they may represent a
+	 * Custom actions are position-dependent since they may represent a
 	 * user-defined embedded action which makes calls to methods like
-	 * {@link Lexer#getText}.</p>
+	 * {@link Lexer#getText}.
 	 *
-	 * @return This method returns {@code true}.
+	 * @returns This method returns `true`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -89,8 +89,8 @@ export class LexerCustomAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>Custom actions are implemented by calling {@link Lexer#action} with the
-	 * appropriate rule and action indexes.</p>
+	 * Custom actions are implemented by calling {@link Lexer#action} with the
+	 * appropriate rule and action indexes.
 	 */
 	@Override
 	public execute(@NotNull lexer: Lexer): void {

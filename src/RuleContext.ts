@@ -5,15 +5,26 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
+import { ATN } from "./atn/ATN";
+import { Parser } from "./Parser";
+import { Recognizer } from "./Recognizer";
+import { RuleNode } from "./tree/RuleNode";
+import { ParseTree } from "./tree/ParseTree";
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators";
+import { Trees } from "./tree/Trees";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+import { ParserRuleContext } from "./ParserRuleContext";
+
 /** A rule context is a record of a single rule invocation.
  *
  *  We form a stack of these context objects using the parent
- *  pointer. A parent pointer of null indicates that the current
+ *  pointer. A parent pointer of `undefined` indicates that the current
  *  context is the bottom of the stack. The ParserRuleContext subclass
  *  as a children list so that we can turn this data structure into a
  *  tree.
  *
- *  The root node always has a null pointer and invokingState of -1.
+ *  The root node always has a `undefined` pointer and invokingState of -1.
  *
  *  Upon entry to parsing, the first invoked rule function creates a
  *  context object (a subclass specialized for that rule such as
@@ -55,18 +66,6 @@
  *
  *  @see ParserRuleContext
  */
-
-import { ATN } from "./atn/ATN";
-import { Parser } from "./Parser";
-import { Recognizer } from "./Recognizer";
-import { RuleNode } from "./tree/RuleNode";
-import { ParseTree } from "./tree/ParseTree";
-import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators";
-import { Trees } from "./tree/Trees";
-import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
-import { ParserRuleContext } from "./ParserRuleContext";
-
 export class RuleContext extends RuleNode {
 	public _parent: RuleContext | undefined;
 	public invokingState: number;
@@ -118,7 +117,7 @@ export class RuleContext extends RuleNode {
 
 	/** Return the combined text of all child nodes. This method only considers
 	 *  tokens which have been added to the parse tree.
-	 *  <p>
+	 *
 	 *  Since tokens on hidden channels (e.g. whitespace or comments) are not
 	 *  added to the parse trees, they will not appear in the output of this
 	 *  method.
@@ -199,7 +198,7 @@ export class RuleContext extends RuleNode {
 	public toString(recog: Recognizer<any, any> | undefined): string;
 	public toString(ruleNames: string[] | undefined): string;
 
-	// // recog null unless ParserRuleContext, in which case we use subclass toString(...)
+	// // recog undefined unless ParserRuleContext, in which case we use subclass toString(...)
 	public toString(recog: Recognizer<any, any> | undefined, stop: RuleContext | undefined): string;
 
 	public toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;

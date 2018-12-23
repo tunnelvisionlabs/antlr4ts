@@ -40,10 +40,9 @@ export class ConflictInfo {
 	 * could reduce the set of viable alternatives. In LL prediction, an exact
 	 * conflict indicates a true ambiguity in the input.
 	 *
-	 * <p>
 	 * For the {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} prediction mode,
 	 * accept states are conflicting but not exact are treated as non-accept
-	 * states.</p>
+	 * states.
 	 */
 	get isExact(): boolean {
 		return this.exact;

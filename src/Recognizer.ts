@@ -41,7 +41,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the vocabulary used by the recognizer.
 	 *
-	 * @return A {@link Vocabulary} instance providing information about the
+	 * @returns A {@link Vocabulary} instance providing information about the
 	 * vocabulary used by the grammar.
 	 */
 	public abstract readonly vocabulary: Vocabulary;
@@ -49,7 +49,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get a map from token names to token types.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	@NotNull
 	public getTokenTypeMap(): ReadonlyMap<string, number> {
@@ -80,7 +80,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get a map from rule names to rule indexes.
 	 *
-	 * <p>Used for XPath and tree pattern compilation.</p>
+	 * Used for XPath and tree pattern compilation.
 	 */
 	@NotNull
 	public getRuleIndexMap(): ReadonlyMap<string, number> {
@@ -110,8 +110,8 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 * If this recognizer was generated, it will have a serialized ATN
 	 * representation of the grammar.
 	 *
-	 * <p>For interpreters, we don't know their serialized ATN despite having
-	 * created the interpreter from it.</p>
+	 * For interpreters, we don't know their serialized ATN despite having
+	 * created the interpreter from it.
 	 */
 	@NotNull
 	get serializedATN(): string {
@@ -126,7 +126,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the {@link ATN} used by the recognizer for prediction.
 	 *
-	 * @return The {@link ATN} used by the recognizer for prediction.
+	 * @returns The {@link ATN} used by the recognizer for prediction.
 	 */
 	@NotNull
 	get atn(): ATN {
@@ -136,7 +136,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/**
 	 * Get the ATN interpreter used by the recognizer for prediction.
 	 *
-	 * @return The ATN interpreter used by the recognizer for prediction.
+	 * @returns The ATN interpreter used by the recognizer for prediction.
 	 */
 	@NotNull
 	get interpreter(): ATNInterpreter {
@@ -175,7 +175,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	/**
-	 * @exception NullPointerException if {@code listener} is {@code null}.
+	 * @exception NullPointerException if `listener` is `undefined`.
 	 */
 	public addErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
 		if (!listener) {

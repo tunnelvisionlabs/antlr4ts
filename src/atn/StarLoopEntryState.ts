@@ -18,28 +18,26 @@ export class StarLoopEntryState extends DecisionState {
 	 * Indicates whether this state can benefit from a precedence DFA during SLL
 	 * decision making.
 	 *
-	 * <p>This is a computed property that is calculated during ATN deserialization
+	 * This is a computed property that is calculated during ATN deserialization
 	 * and stored for use in {@link ParserATNSimulator} and
-	 * {@link ParserInterpreter}.</p>
+	 * {@link ParserInterpreter}.
 	 *
 	 * @see `DFA.isPrecedenceDfa`
 	 */
 	public precedenceRuleDecision: boolean = false;
 
 	/**
-	 * For precedence decisions, this set marks states <em>S</em> which have all
+	 * For precedence decisions, this set marks states *S* which have all
 	 * of the following characteristics:
 	 *
-	 * <ul>
-	 * <li>One or more invocation sites of the current rule returns to
-	 * <em>S</em>.</li>
-	 * <li>The closure from <em>S</em> includes the current decision without
-	 * passing through any rule invocations or stepping out of the current
-	 * rule.</li>
-	 * </ul>
+	 * * One or more invocation sites of the current rule returns to
+	 *   *S*.
+	 * * The closure from *S* includes the current decision without
+	 *   passing through any rule invocations or stepping out of the current
+	 *   rule.
 	 *
-	 * <p>This field is not used when {@link #isPrecedenceDecision} is
-	 * {@code false}.</p>
+	 * This field is not used when {@link #isPrecedenceDecision} is
+	 * `false`.
 	 */
 	public precedenceLoopbackStates: BitSet = new BitSet();
 

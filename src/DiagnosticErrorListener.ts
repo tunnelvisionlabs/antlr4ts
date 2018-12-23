@@ -5,28 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.2133685-07:00
 
-/**
- * This implementation of {@link ANTLRErrorListener} can be used to identify
- * certain potential correctness and performance problems in grammars. "Reports"
- * are made by calling {@link Parser#notifyErrorListeners} with the appropriate
- * message.
- *
- * <ul>
- * <li><b>Ambiguities</b>: These are cases where more than one path through the
- * grammar can match the input.</li>
- * <li><b>Weak context sensitivity</b>: These are cases where full-context
- * prediction resolved an SLL conflict to a unique alternative which equaled the
- * minimum alternative of the SLL conflict.</li>
- * <li><b>Strong (forced) context sensitivity</b>: These are cases where the
- * full-context prediction resolved an SLL conflict to a unique alternative,
- * <em>and</em> the minimum alternative of the SLL conflict was found to not be
- * a truly viable alternative. Two-stage parsing cannot be used for inputs where
- * this situation occurs.</li>
- * </ul>
- *
- * @author Sam Harwell
- */
-
 import { ATNConfig } from "./atn/ATNConfig";
 import { ATNConfigSet } from "./atn/ATNConfigSet";
 import { BitSet } from "./misc/BitSet";
@@ -40,14 +18,33 @@ import { Token } from "./Token";
 import { Override, NotNull } from "./Decorators";
 import { Interval } from "./misc/Interval";
 
+/**
+ * This implementation of {@link ANTLRErrorListener} can be used to identify
+ * certain potential correctness and performance problems in grammars. "Reports"
+ * are made by calling {@link Parser#notifyErrorListeners} with the appropriate
+ * message.
+ *
+ * * **Ambiguities**: These are cases where more than one path through the
+ *   grammar can match the input.
+ * * **Weak context sensitivity**: These are cases where full-context
+ *   prediction resolved an SLL conflict to a unique alternative which equaled the
+ *   minimum alternative of the SLL conflict.
+ * * **Strong (forced) context sensitivity**: These are cases where the
+ *   full-context prediction resolved an SLL conflict to a unique alternative,
+ *   *and* the minimum alternative of the SLL conflict was found to not be
+ *   a truly viable alternative. Two-stage parsing cannot be used for inputs where
+ *   this situation occurs.
+ *
+ * @author Sam Harwell
+ */
 export class DiagnosticErrorListener implements ParserErrorListener {
 
 	/**
 	 * Initializes a new instance of {@link DiagnosticErrorListener}, specifying
 	 * whether all ambiguities or only exact ambiguities are reported.
 	 *
-	 * @param exactOnly {@code true} to report only exact ambiguities, otherwise
-	 * {@code false} to report all ambiguities.  Defaults to true.
+	 * @param exactOnly `true` to report only exact ambiguities, otherwise
+	 * `false` to report all ambiguities.  Defaults to true.
 	 */
 	constructor(protected exactOnly: boolean = true) {
 		this.exactOnly = exactOnly;
@@ -144,8 +141,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * @param reportedAlts The set of conflicting or ambiguous alternatives, as
 	 * reported by the parser.
 	 * @param configs The conflicting or ambiguous configuration set.
-	 * @return Returns {@code reportedAlts} if it is not {@code null}, otherwise
-	 * returns the set of alternatives represented in {@code configs}.
+	 * @returns Returns `reportedAlts` if it is not `undefined`, otherwise
+	 * returns the set of alternatives represented in `configs`.
 	 */
 	@NotNull
 	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {

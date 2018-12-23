@@ -12,8 +12,8 @@ import { TerminalNode } from "./TerminalNode";
 
 /**
  * This interface defines the basic notion of a parse tree visitor. Generated
- * visitors implement this interface and the {@code XVisitor} interface for
- * grammar {@code X}.
+ * visitors implement this interface and the `XVisitor` interface for
+ * grammar `X`.
  *
  * @author Sam Harwell
  * @param <Result> The return type of the visit operation. Use {@link Void} for
@@ -25,7 +25,7 @@ export interface ParseTreeVisitor<Result> {
 	 * Visit a parse tree, and return a user-defined result of the operation.
 	 *
 	 * @param tree The {@link ParseTree} to visit.
-	 * @return The result of visiting the parse tree.
+	 * @returns The result of visiting the parse tree.
 	 */
 	visit(/*@NotNull*/ tree: ParseTree): Result;
 
@@ -34,7 +34,7 @@ export interface ParseTreeVisitor<Result> {
 	 * of the operation.
 	 *
 	 * @param node The {@link RuleNode} whose children should be visited.
-	 * @return The result of visiting the children of the node.
+	 * @returns The result of visiting the children of the node.
 	 */
 	visitChildren(/*@NotNull*/ node: RuleNode): Result;
 
@@ -42,7 +42,7 @@ export interface ParseTreeVisitor<Result> {
 	 * Visit a terminal node, and return a user-defined result of the operation.
 	 *
 	 * @param node The {@link TerminalNode} to visit.
-	 * @return The result of visiting the node.
+	 * @returns The result of visiting the node.
 	 */
 	visitTerminal(/*@NotNull*/ node: TerminalNode): Result;
 
@@ -50,7 +50,7 @@ export interface ParseTreeVisitor<Result> {
 	 * Visit an error node, and return a user-defined result of the operation.
 	 *
 	 * @param node The {@link ErrorNode} to visit.
-	 * @return The result of visiting the node.
+	 * @returns The result of visiting the node.
 	 */
 	visitErrorNode(/*@NotNull*/ node: ErrorNode): Result;
 

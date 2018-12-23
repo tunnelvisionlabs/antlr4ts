@@ -15,13 +15,12 @@ import { PredicateEvalInfo } from "./PredicateEvalInfo";
 /**
  * This class contains profiling gathered for a particular decision.
  *
- * <p>
  * Parsing performance in ANTLR 4 is heavily influenced by both static factors
  * (e.g. the form of the rules in the grammar) and dynamic factors (e.g. the
  * choice of input and the state of the DFA cache at the time profiling
  * operations are started). For best results, gather and use aggregate
  * statistics from a large sample of inputs representing the inputs expected in
- * production before using the results to make changes in the grammar.</p>
+ * production before using the results to make changes in the grammar.
  *
  * @since 4.3
  */
@@ -41,7 +40,6 @@ export class DecisionInfo {
 	 * The total time spent in {@link ParserATNSimulator#adaptivePredict} for
 	 * this decision, in nanoseconds.
 	 *
-	 * <p>
 	 * The value of this field contains the sum of differential results obtained
 	 * by {@link System#nanoTime()}, and is not adjusted to compensate for JIT
 	 * and/or garbage collection overhead. For best accuracy, use a modern JVM
@@ -49,7 +47,7 @@ export class DecisionInfo {
 	 * {@link System#nanoTime()}, and perform profiling in a separate process
 	 * which is warmed up by parsing the input prior to profiling. If desired,
 	 * call {@link ATNSimulator#clearDFA} to reset the DFA cache to its initial
-	 * state before starting the profiling measurement pass.</p>
+	 * state before starting the profiling measurement pass.
 	 */
 	public timeInPrediction: number = 0;
 
@@ -152,11 +150,10 @@ export class DecisionInfo {
 	 * DFA does not contain an edge that is required for prediction, resulting
 	 * in on-the-fly computation of that edge.
 	 *
-	 * <p>
 	 * If DFA caching of SLL transitions is employed by the implementation, ATN
 	 * computation may cache the computed edge for efficient lookup during
 	 * future parsing of this decision. Otherwise, the SLL parsing algorithm
-	 * will use ATN transitions exclusively.</p>
+	 * will use ATN transitions exclusively.
 	 *
 	 * @see #SLL_ATNTransitions
 	 * @see ParserATNSimulator#computeTargetState
@@ -168,8 +165,8 @@ export class DecisionInfo {
 	 * The total number of DFA transitions required during SLL prediction for
 	 * this decision.
 	 *
-	 * <p>If the ATN simulator implementation does not use DFA caching for SLL
-	 * transitions, this value will be 0.</p>
+	 * If the ATN simulator implementation does not use DFA caching for SLL
+	 * transitions, this value will be 0.
 	 *
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState
@@ -180,12 +177,12 @@ export class DecisionInfo {
 	 * Gets the total number of times SLL prediction completed in a conflict
 	 * state, resulting in fallback to LL prediction.
 	 *
-	 * <p>Note that this value is not related to whether or not
+	 * Note that this value is not related to whether or not
 	 * {@link PredictionMode#SLL} may be used successfully with a particular
 	 * grammar. If the ambiguity resolution algorithm applied to the SLL
 	 * conflicts for this decision produce the same result as LL prediction for
 	 * this decision, {@link PredictionMode#SLL} would produce the same overall
-	 * parsing result as {@link PredictionMode#LL}.</p>
+	 * parsing result as {@link PredictionMode#LL}.
 	 */
 	public LL_Fallback: number = 0;
 
@@ -195,11 +192,10 @@ export class DecisionInfo {
 	 * DFA does not contain an edge that is required for prediction, resulting
 	 * in on-the-fly computation of that edge.
 	 *
-	 * <p>
 	 * If DFA caching of LL transitions is employed by the implementation, ATN
 	 * computation may cache the computed edge for efficient lookup during
 	 * future parsing of this decision. Otherwise, the LL parsing algorithm will
-	 * use ATN transitions exclusively.</p>
+	 * use ATN transitions exclusively.
 	 *
 	 * @see #LL_DFATransitions
 	 * @see ParserATNSimulator#computeTargetState
@@ -211,8 +207,8 @@ export class DecisionInfo {
 	 * The total number of DFA transitions required during LL prediction for
 	 * this decision.
 	 *
-	 * <p>If the ATN simulator implementation does not use DFA caching for LL
-	 * transitions, this value will be 0.</p>
+	 * If the ATN simulator implementation does not use DFA caching for LL
+	 * transitions, this value will be 0.
 	 *
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState

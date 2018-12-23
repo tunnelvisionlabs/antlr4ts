@@ -23,7 +23,7 @@ export class TextChunk extends Chunk {
 	 * Constructs a new instance of {@link TextChunk} with the specified text.
 	 *
 	 * @param text The text of this chunk.
-	 * @exception IllegalArgumentException if {@code text} is {@code null}.
+	 * @exception IllegalArgumentException if `text` is not defined.
 	 */
 	constructor(@NotNull text: string) {
 		super();
@@ -38,7 +38,7 @@ export class TextChunk extends Chunk {
 	/**
 	 * Gets the raw text of this chunk.
 	 *
-	 * @return The text of the chunk.
+	 * @returns The text of the chunk.
 	 */
 	@NotNull
 	get text(): string {
@@ -48,8 +48,8 @@ export class TextChunk extends Chunk {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>The implementation for {@link TextChunk} returns the result of
-	 * `text` in single quotes.</p>
+	 * The implementation for {@link TextChunk} returns the result of
+	 * `text` in single quotes.
 	 */
 	@Override
 	public toString(): string {

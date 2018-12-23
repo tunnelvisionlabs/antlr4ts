@@ -32,18 +32,16 @@ export enum PredictionMode {
 	 * may result in syntax errors for grammar and input combinations which are
 	 * not SLL.
 	 *
-	 * <p>
 	 * When using this prediction mode, the parser will either return a correct
 	 * parse tree (i.e. the same parse tree that would be returned with the
 	 * {@link #LL} prediction mode), or it will report a syntax error. If a
 	 * syntax error is encountered when using the {@link #SLL} prediction mode,
 	 * it may be due to either an actual syntax error in the input or indicate
 	 * that the particular combination of grammar and input requires the more
-	 * powerful {@link #LL} prediction abilities to complete successfully.</p>
+	 * powerful {@link #LL} prediction abilities to complete successfully.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
 	SLL,
 	/**
@@ -53,16 +51,14 @@ export enum PredictionMode {
 	 * parse results for all combinations of grammars with syntactically correct
 	 * inputs.
 	 *
-	 * <p>
 	 * When using this prediction mode, the parser will make correct decisions
 	 * for all syntactically-correct grammar and input combinations. However, in
 	 * cases where the grammar is truly ambiguous this prediction mode might not
-	 * report a precise answer for <em>exactly which</em> alternatives are
-	 * ambiguous.</p>
+	 * report a precise answer for *exactly which* alternatives are
+	 * ambiguous.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
 	LL,
 	/**
@@ -72,15 +68,13 @@ export enum PredictionMode {
 	 * complete and exact set of ambiguous alternatives for every ambiguous
 	 * decision encountered while parsing.
 	 *
-	 * <p>
 	 * This prediction mode may be used for diagnosing ambiguities during
 	 * grammar development. Due to the performance overhead of calculating sets
 	 * of ambiguous alternatives, this prediction mode should be avoided when
-	 * the exact results are not necessary.</p>
+	 * the exact results are not necessary.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
 	LL_EXACT_AMBIG_DETECTION,
 }
@@ -128,14 +122,14 @@ export namespace PredictionMode {
 	}
 
 	/**
-	 * Checks if any configuration in {@code configs} is in a
+	 * Checks if any configuration in `configs` is in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if any configuration in {@code configs} is in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @returns `true` if any configuration in `configs` is in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
 		for (let c of configs) {
@@ -148,14 +142,14 @@ export namespace PredictionMode {
 	}
 
 	/**
-	 * Checks if all configurations in {@code configs} are in a
+	 * Checks if all configurations in `configs` are in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if all configurations in {@code configs} are in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @returns `true` if all configurations in `configs` are in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
 		for (let config of configs) {
