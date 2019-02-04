@@ -65,8 +65,18 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		}
 	}
 
+	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;
+	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined, useContext: boolean): number;
 	@Override
-	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number {
+	public adaptivePredict(
+		@NotNull input: TokenStream,
+		decision: number,
+		outerContext: ParserRuleContext | undefined,
+		useContext?: boolean): number {
+		if (useContext !== undefined) {
+			return super.adaptivePredict(input, decision, outerContext, useContext);
+		}
+
 		try {
 			this._input = input;
 			this._startIndex = input.index;
