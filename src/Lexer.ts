@@ -350,6 +350,8 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this._channel;
 	}
 
+	public abstract readonly channelNames: string[];
+
 	public abstract readonly modeNames: string[];
 
 	/** Return a list of all Token objects in input char stream.

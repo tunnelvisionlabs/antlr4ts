@@ -32,7 +32,7 @@ export class TestTokenStreamRewriter {
 	private createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
 		let stream = new ANTLRInputStream(input);
 		let lexer = new lexerCtor(stream);
-		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.modeNames, lexer.ruleNames, lexer.atn, stream);
+		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.ruleNames, lexer.channelNames, lexer.modeNames, lexer.atn, stream);
 	}
 
 	@Test public testInsertBeforeIndex0(): void {
