@@ -275,6 +275,11 @@ export class IntegerList {
 		this._data = tmp;
 	}
 
+	/** Convert the list to a UTF-16 encoded char array. If all values are less
+	 *  than the 0xFFFF 16-bit code point limit then this is just a char array
+	 *  of 16-bit char as usual. For values in the supplementary range, encode
+	 * them as two UTF-16 code units.
+	 */
 	public toCharArray(): Uint16Array {
 		// Optimize for the common case (all data values are < 0xFFFF) to avoid an extra scan
 		let resultArray: Uint16Array = new Uint16Array(this._size);
