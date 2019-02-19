@@ -63,6 +63,15 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // 	while ( data.contains(value) ) data.remove(value);
 // }
 
+// export function writeFile(@NotNull file: File, @NotNull content: Uint8Array): void {
+// 	let fos: FileOutputStream = new FileOutputStream(file);
+// 	try {
+// 		fos.write(content);
+// 	} finally {
+// 		fos.close();
+// 	}
+// }
+
 // export function writeFile(@NotNull fileName: string, @NotNull content: string): void {
 // 	writeFile(fileName, content, null);
 // }

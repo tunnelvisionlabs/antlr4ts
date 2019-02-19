@@ -10,6 +10,7 @@ export * from "./ANTLRInputStream";
 export * from "./BailErrorStrategy";
 export * from "./BufferedTokenStream";
 export * from "./CharStream";
+export * from "./CharStreams";
 export * from "./CodePointCharStream";
 export * from "./CodingErrorAction";
 export * from "./CommonToken";

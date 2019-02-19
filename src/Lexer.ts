@@ -40,7 +40,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	public static readonly MIN_CHAR_VALUE: number = 0x0000;
-	public static readonly MAX_CHAR_VALUE: number = 0xFFFF;
+	public static readonly MAX_CHAR_VALUE: number = 0x10FFFF;
 
 	public _input: CharStream;
 
