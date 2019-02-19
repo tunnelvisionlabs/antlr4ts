@@ -275,4 +275,41 @@ export class IntegerList {
 		this._data = tmp;
 	}
 
+	public toCharArray(): Uint16Array {
+		// Optimize for the common case (all data values are < 0xFFFF) to avoid an extra scan
+		let resultArray: Uint16Array = new Uint16Array(this._size);
+		let resultIdx = 0;
+		let calculatedPreciseResultSize = false;
+		for (let i = 0; i < this._size; i++) {
+			let codePoint = this._data[i];
+			if (codePoint >= 0 && codePoint < 0x10000) {
+				resultArray[resultIdx] = codePoint;
+				resultIdx++;
+				continue;
+			}
+
+			// Calculate the precise result size if we encounter a code point > 0xFFFF
+			if (!calculatedPreciseResultSize) {
+				let newResultArray = new Uint16Array(this.charArraySize());
+				newResultArray.set(resultArray, 0);
+				resultArray = newResultArray;
+				calculatedPreciseResultSize = true;
+			}
+
+			// This will throw RangeError if the code point is not a valid Unicode code point
+			let pair = String.fromCodePoint(codePoint);
+			resultArray[resultIdx] = pair.charCodeAt(0);
+			resultArray[resultIdx + 1] = pair.charCodeAt(1);
+			resultIdx += 2;
+		}
+		return resultArray;
+	}
+
+	private charArraySize(): number {
+		let result = 0;
+		for (let i = 0; i < this._size; i++) {
+			result += this._data[i] >= 0x10000 ? 2 : 1;
+		}
+		return result;
+	}
 }
