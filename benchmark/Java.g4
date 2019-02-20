@@ -1142,7 +1142,7 @@ SignedInteger
 
 fragment
 Sign
-	:	[+-]
+	:	[+\-]
 	;
 
 fragment

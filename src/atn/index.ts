@@ -21,6 +21,7 @@ export * from "./BasicBlockStartState";
 export * from "./BasicState";
 export * from "./BlockEndState";
 export * from "./BlockStartState";
+export * from "./CodePointTransitions";
 export * from "./ConflictInfo";
 export * from "./ContextSensitivityInfo";
 export * from "./DecisionEventInfo";

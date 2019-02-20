@@ -3,11 +3,12 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+import * as assert from "assert";
 import { CharStream } from "./CharStream";
+import { CodePointBuffer } from "./CodePointBuffer";
 import { IntStream } from "./IntStream";
 import { Interval } from "./misc/Interval";
 import { Override } from "./Decorators";
-import * as assert from "assert";
 
 /**
  * Alternative to {@link ANTLRInputStream} which treats the input
@@ -17,57 +18,77 @@ import * as assert from "assert";
  * Use this if you need to parse input which potentially contains
  * Unicode values > U+FFFF.
  */
-export class CodePointCharStream implements CharStream {
-	private readonly _codePointBuffer: Int32Array;
-	private readonly _initialPosition: number;
+export abstract class CodePointCharStream implements CharStream {
 	private readonly _size: number;
 	private readonly _name: string;
 
 	private _position: number;
 
+	// Use the factory method {@link #fromBuffer(CodePointBuffer)} to
+	// construct instances of this type.
+	protected constructor(position: number, remaining: number, name: string) {
+		// TODO
+		assert(position === 0);
+		this._size = remaining;
+		this._name = name;
+		this._position = 0;
+	}
+
+	abstract get internalStorage(): Uint8Array | Uint16Array | Int32Array;
+
 	/**
 	 * Constructs a {@link CodePointCharStream} which provides access
 	 * to the Unicode code points stored in {@code codePointBuffer}.
-	 *
-	 * {@code codePointBuffer}'s {@link IntBuffer#position position}
-	 * reflects the first code point of the stream, and its
-	 * {@link IntBuffer#limit limit} is just after the last code point
-	 * of the stream.
 	 */
-	// public constructor(codePointBuffer: Int32Array) {
-	// 	this(codePointBuffer, UNKNOWN_SOURCE_NAME);
-	// }
+	public static fromBuffer(codePointBuffer: CodePointBuffer): CodePointCharStream;
 
 	/**
 	 * Constructs a named {@link CodePointCharStream} which provides access
 	 * to the Unicode code points stored in {@code codePointBuffer}.
-	 *
-	 * {@code codePointBuffer}'s {@link IntBuffer#position position}
-	 * reflects the first code point of the stream, and its
-	 * {@link IntBuffer#limit limit} is just after the last code point
-	 * of the stream.
 	 */
-	public constructor(codePointBuffer: Int32Array, initialPosition: number);
-	public constructor(codePointBuffer: Int32Array, initialPosition: number, name: string);
-	public constructor(codePointBuffer: Int32Array, initialPosition: number, name?: string) {
+	public static fromBuffer(codePointBuffer: CodePointBuffer, name: string): CodePointCharStream;
+	public static fromBuffer(codePointBuffer: CodePointBuffer, name?: string): CodePointCharStream {
 		if (name === undefined || name.length === 0) {
 			name = IntStream.UNKNOWN_SOURCE_NAME;
 		}
 
-		this._codePointBuffer = codePointBuffer;
-		this._initialPosition = initialPosition;
-		this._size = codePointBuffer.length - initialPosition;
-		this._name = name;
-		this._position = initialPosition;
-	}
+		// Java lacks generics on primitive types.
+		//
+		// To avoid lots of calls to virtual methods in the
+		// very hot codepath of LA() below, we construct one
+		// of three concrete subclasses.
+		//
+		// The concrete subclasses directly access the code
+		// points stored in the underlying array (byte[],
+		// char[], or int[]), so we can avoid lots of virtual
+		// method calls to ByteBuffer.get(offset).
+		switch (codePointBuffer.type) {
+			case CodePointBuffer.Type.BYTE:
+				return new CodePoint8BitCharStream(
+					codePointBuffer.position,
+					codePointBuffer.remaining,
+					name,
+					codePointBuffer.byteArray());
+			case CodePointBuffer.Type.CHAR:
+				return new CodePoint16BitCharStream(
+					codePointBuffer.position,
+					codePointBuffer.remaining,
+					name,
+					codePointBuffer.charArray());
+			case CodePointBuffer.Type.INT:
+				return new CodePoint32BitCharStream(
+					codePointBuffer.position,
+					codePointBuffer.remaining,
+					name,
+					codePointBuffer.intArray());
+		}
 
-	private relativeBufferPosition(i: number): number {
-		return this._initialPosition + this._position + i;
+		throw new RangeError("Not reached");
 	}
 
 	@Override
 	public consume(): void {
-		if (this._position >= this._codePointBuffer.length) {
+		if (this._size - this._position === 0) {
 			assert(this.LA(1) === IntStream.EOF);
 			throw new RangeError("cannot consume EOF");
 		}
@@ -76,25 +97,8 @@ export class CodePointCharStream implements CharStream {
 	}
 
 	@Override
-	public LA(i: number): number {
-		if (i === 0) {
-			// Undefined
-			return 0;
-		} else if (i < 0) {
-			if (this._position + i < this._initialPosition) {
-				return IntStream.EOF;
-			}
-			return this._codePointBuffer[this.relativeBufferPosition(i)];
-		} else if (i > this._codePointBuffer.length - this._position) {
-			return IntStream.EOF;
-		} else {
-			return this._codePointBuffer[this.relativeBufferPosition(i - 1)];
-		}
-	}
-
-	@Override
 	public get index(): number {
-		return this._position - this._initialPosition;
+		return this._position;
 	}
 
 	@Override
@@ -115,30 +119,7 @@ export class CodePointCharStream implements CharStream {
 
 	@Override
 	public seek(index: number): void {
-		if (index < this._initialPosition) {
-			throw new RangeError();
-		}
-
-		if (index > this._codePointBuffer.length) {
-			throw new RangeError();
-		}
-
-		this._position = this._initialPosition + index;
-	}
-
-	/** Return the UTF-16 encoded string for the given interval */
-	@Override
-	public getText(interval: Interval): string {
-		const startIdx: number = this._initialPosition + Math.min(interval.a, this.size - 1);
-		const stopIdx: number = this._initialPosition + Math.min(interval.b, this.size - 1);
-		// interval.length() will be too small if we contain any code points > U+FFFF,
-		// but it's just a hint for initial capacity; StringBuilder will grow anyway.
-		let sb: string = "";
-		for (let codePointIdx: number = startIdx; codePointIdx <= stopIdx; codePointIdx++) {
-			sb += String.fromCodePoint(this._codePointBuffer[codePointIdx]);
-		}
-
-		return sb;
+		this._position = index;
 	}
 
 	@Override
@@ -149,5 +130,168 @@ export class CodePointCharStream implements CharStream {
 	@Override
 	public toString(): string {
 		return this.getText(Interval.of(0, this.size - 1));
+	}
+
+	// @Override
+	public abstract LA(i: number): number;
+
+	/** Return the UTF-16 encoded string for the given interval */
+	// @Override
+	public abstract getText(interval: Interval): string;
+}
+
+// 8-bit storage for code points <= U+00FF.
+export class CodePoint8BitCharStream extends CodePointCharStream {
+	private readonly byteArray: Uint8Array;
+
+	public constructor(position: number, remaining: number, name: string, byteArray: Uint8Array) {
+		super(position, remaining, name);
+		this.byteArray = byteArray;
+	}
+
+	/** Return the UTF-16 encoded string for the given interval */
+	@Override
+	public getText(interval: Interval): string {
+		const startIdx: number = Math.min(interval.a, this.size - 1);
+		const len: number = Math.min(interval.b - interval.a + 1, this.size);
+
+		return String.fromCharCode(...Array.from(this.byteArray.subarray(startIdx, startIdx + len)));
+	}
+
+	@Override
+	public LA(i: number): number {
+		let offset: number;
+		switch (Math.sign(i)) {
+			case -1:
+				offset = this.index + i;
+				if (offset < 0) {
+					return IntStream.EOF;
+				}
+
+				return this.byteArray[offset];
+
+			case 0:
+				// Undefined
+				return 0;
+
+			case 1:
+				offset = this.index + i - 1;
+				if (offset >= this.size) {
+					return IntStream.EOF;
+				}
+
+				return this.byteArray[offset];
+		}
+
+		throw new RangeError("Not reached");
+	}
+
+	@Override
+	public get internalStorage(): Uint8Array {
+		return this.byteArray;
+	}
+}
+
+// 16-bit internal storage for code points between U+0100 and U+FFFF.
+class CodePoint16BitCharStream extends CodePointCharStream {
+	private readonly charArray: Uint16Array;
+
+	public constructor(position: number, remaining: number, name: string, charArray: Uint16Array) {
+		super(position, remaining, name);
+		this.charArray = charArray;
+	}
+
+	/** Return the UTF-16 encoded string for the given interval */
+	@Override
+	public getText(interval: Interval): string {
+		const startIdx: number = Math.min(interval.a, this.size - 1);
+		const len: number = Math.min(interval.b - interval.a + 1, this.size);
+
+		return String.fromCharCode(...Array.from(this.charArray.subarray(startIdx, startIdx + len)));
+	}
+
+	@Override
+	public LA(i: number): number {
+		let offset: number;
+		switch (Math.sign(i)) {
+			case -1:
+				offset = this.index + i;
+				if (offset < 0) {
+					return IntStream.EOF;
+				}
+
+				return this.charArray[offset];
+
+			case 0:
+				// Undefined
+				return 0;
+
+			case 1:
+				offset = this.index + i - 1;
+				if (offset >= this.size) {
+					return IntStream.EOF;
+				}
+
+				return this.charArray[offset];
+		}
+
+		throw new RangeError("Not reached");
+	}
+
+	@Override
+	public get internalStorage(): Uint16Array {
+		return this.charArray;
+	}
+}
+
+// 32-bit internal storage for code points between U+10000 and U+10FFFF.
+class CodePoint32BitCharStream extends CodePointCharStream {
+	private readonly intArray: Int32Array;
+
+	public constructor(position: number, remaining: number, name: string, intArray: Int32Array) {
+		super(position, remaining, name);
+		this.intArray = intArray;
+	}
+
+	/** Return the UTF-16 encoded string for the given interval */
+	@Override
+	public getText(interval: Interval): string {
+		const startIdx: number = Math.min(interval.a, this.size - 1);
+		const len: number = Math.min(interval.b - interval.a + 1, this.size);
+
+		return String.fromCodePoint(...Array.from(this.intArray.subarray(startIdx, startIdx + len)));
+	}
+
+	@Override
+	public LA(i: number): number {
+		let offset: number;
+		switch (Math.sign(i)) {
+			case -1:
+				offset = this.index + i;
+				if (offset < 0) {
+					return IntStream.EOF;
+				}
+
+				return this.intArray[offset];
+
+			case 0:
+				// Undefined
+				return 0;
+
+			case 1:
+				offset = this.index + i - 1;
+				if (offset >= this.size) {
+					return IntStream.EOF;
+				}
+
+				return this.intArray[offset];
+		}
+
+		throw new RangeError("Not reached");
+	}
+
+	@Override
+	public get internalStorage(): Int32Array {
+		return this.intArray;
 	}
 }

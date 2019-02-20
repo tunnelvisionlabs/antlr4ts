@@ -112,6 +112,12 @@ export class RuleContext extends RuleNode {
 	@Override
 	get parent(): RuleContext | undefined { return this._parent; }
 
+	/** @since 4.7. {@see ParseTree#setParent} comment */
+	@Override
+	public setParent(parent: RuleContext): void {
+		this._parent = parent;
+	}
+
 	@Override
 	get payload(): RuleContext { return this; }
 

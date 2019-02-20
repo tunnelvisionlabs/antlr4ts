@@ -104,6 +104,94 @@ export class TestATNLexerInterpreter extends BaseTest {
 		checkLexerMatches(lg, "c", expecting);
 	}
 
+	@Test testLexerSetUnicodeBMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ('\u611B'|'\u611C')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, "\u611B", expecting);
+	}
+
+	@Test testLexerNotSetUnicodeBMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('\u611B'|'\u611C')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, "\u611D", expecting);
+	}
+
+		@Test testLexerNotSetUnicodeBMPMatchesSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('\u611B'|'\u611C')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1F4A9).toString(), expecting);
+	}
+
+	@Test testLexerSetUnicodeSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ('\\u{1F4A9}'|'\\u{1F4AA}')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1F4A9).toString(), expecting);
+	}
+
+	@Test testLexerNotBMPSetMatchesUnicodeSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1F4A9).toString(), expecting);
+	}
+
+	@Test testLexerNotBMPSetMatchesBMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, "\u611B", expecting);
+	}
+
+	@Test testLexerNotBMPSetMatchesSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('a'|'b')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1F4A9).toString(), expecting);
+	}
+
+	@Test testLexerNotSMPSetMatchesBMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('\\u{1F4A9}'|'\\u{1F4AA}')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, "\u611B", expecting);
+	}
+
+	@Test testLexerNotSMPSetMatchesSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ~('\\u{1F4A9}'|'\\u{1F4AA}')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1D7C0).toString(), expecting);
+	}
+
+	@Test testLexerRangeUnicodeSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ('\\u{1F4A9}'..'\\u{1F4B0}')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x1F4AF).toString(), expecting);
+	}
+
+	@Test testLexerRangeUnicodeBMPToSMP(): void {
+		let lg: LexerGrammar =  new LexerGrammar(
+			"lexer grammar L;\n"+
+			"ID : ('\\u611B'..'\\u{1F4B0}')\n ;");
+		let expecting: string = "ID, EOF";
+		checkLexerMatches(lg, new StringBuilder().appendCodePoint(0x12001).toString(), expecting);
+	}
+
 	@Test testLexerKeywordIDAmbiguity(): void {
 		let lg: LexerGrammar =  new LexerGrammar(
 			"lexer grammar L;\n"+

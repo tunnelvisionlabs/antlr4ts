@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:38.8508887-07:00
 
-import { ANTLRInputStream } from "../../src/ANTLRInputStream";
 import { CharStream } from "../../src/CharStream";
+import { CharStreams } from "../../src/CharStreams";
 import { CommonTokenStream } from "../../src/CommonTokenStream";
 import { Lexer } from "../../src/Lexer";
 import { Parser } from "../../src/Parser";
@@ -21,7 +21,6 @@ import { TestXPathParser } from "./gen/xpath/TestXPathParser";
 
 import * as assert from "assert";
 import { suite, test as Test, skip as Ignore } from "mocha-typescript";
-
 
 const SAMPLE_PROGRAM: string =
 	"def f(x,y) { x = 3+4; y; ; }\n" +
@@ -133,7 +132,7 @@ export class TestXPath {
 		lexerCtor: {new(stream: CharStream): Lexer},
 		parserCtor: {new(stream: TokenStream): TParser}): void {
 
-		let lexer = new lexerCtor(new ANTLRInputStream(input));
+		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
 		let tree: ParseTree = startRule(parser);
 
@@ -146,7 +145,7 @@ export class TestXPath {
 		lexerCtor: {new(stream: CharStream): Lexer},
 		parserCtor: {new(stream: TokenStream): TParser}): string[] {
 
-		let lexer = new lexerCtor(new ANTLRInputStream(input));
+		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
 		let tree: ParseTree = startRule(parser);
 

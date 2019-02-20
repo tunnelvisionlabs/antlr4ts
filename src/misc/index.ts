@@ -9,6 +9,7 @@ export * from "./Args";
 export * from "./Array2DHashSet";
 export * from "./Arrays";
 export * from "./BitSet";
+export * from "./Character";
 export * from "./DefaultEqualityComparator";
 // export * from "./DoubleKeyMap";
 export * from "./EqualityComparator";

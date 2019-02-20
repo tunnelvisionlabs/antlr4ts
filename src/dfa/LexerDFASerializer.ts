@@ -18,6 +18,6 @@ export class LexerDFASerializer extends DFASerializer {
 	@Override
 	@NotNull
 	protected getEdgeLabel(i: number): string {
-		return "'" + String.fromCharCode(i) + "'";
+		return "'" + String.fromCodePoint(i) + "'";
 	}
 }

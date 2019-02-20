@@ -57,6 +57,20 @@ import { TransitionType } from "./TransitionType";
 import { UUID } from "../misc/UUID";
 import { WildcardTransition } from "./WildcardTransition";
 
+interface UnicodeDeserializer {
+	// Wrapper for readInt() or readInt32()
+	readUnicode(data: Uint16Array, p: number): number;
+
+	// Work around Java not allowing mutation of captured variables
+	// by returning amount by which to increment p after each read
+	readonly size: number;
+}
+
+const enum UnicodeDeserializingMode {
+	UNICODE_BMP,
+	UNICODE_SMP,
+}
+
 /**
  *
  * @author Sam Harwell
@@ -88,7 +102,7 @@ export class ATNDeserializer {
 	 * IntervalSets, where the second set's values are encoded as
 	 * 32-bit integers to support the full Unicode SMP range up to U+10FFFF.
 	 */
-	private static readonly ADDED_UNICODE_SMP: UUID = UUID.fromString("59627784-3BE5-417A-B9EB-8131A7286089");
+	private static readonly ADDED_UNICODE_SMP: UUID = UUID.fromString("C23FEA89-0605-4f51-AFB8-058BCAB8C91B");
 	/**
 	 * This list contains all of the currently supported UUIDs, ordered by when
 	 * the feature first appeared in this branch.
@@ -128,13 +142,31 @@ export class ATNDeserializer {
 	 * serialized ATN at or after the feature identified by `feature` was
 	 * introduced; otherwise, `false`.
 	 */
-	protected isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
+	protected static isFeatureSupported(feature: UUID, actualUuid: UUID): boolean {
 		let featureIndex: number = ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(feature));
 		if (featureIndex < 0) {
 			return false;
 		}
 
 		return ATNDeserializer.SUPPORTED_UUIDS.findIndex((e) => e.equals(actualUuid)) >= featureIndex;
+	}
+
+	private static getUnicodeDeserializer(mode: UnicodeDeserializingMode): UnicodeDeserializer {
+		if (mode === UnicodeDeserializingMode.UNICODE_BMP) {
+			return {
+				readUnicode: (data: Uint16Array, p: number): number => {
+					return ATNDeserializer.toInt(data[p]);
+				},
+				size: 1,
+			};
+		} else {
+			return {
+				readUnicode: (data: Uint16Array, p: number): number => {
+					return ATNDeserializer.toInt32(data, p);
+				},
+				size: 2,
+			};
+		}
 	}
 
 	public deserialize(@NotNull data: Uint16Array): ATN {
@@ -167,7 +199,7 @@ export class ATNDeserializer {
 			throw new Error(reason);
 		}
 
-		let supportsLexerActions: boolean = this.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid);
+		let supportsLexerActions: boolean = ATNDeserializer.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid);
 
 		let grammarType: ATNType = ATNDeserializer.toInt(data[p++]);
 		let maxTokenType: number = ATNDeserializer.toInt(data[p++]);
@@ -253,7 +285,7 @@ export class ATNDeserializer {
 
 				atn.ruleToTokenType[i] = tokenType;
 
-				if (!this.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid)) {
+				if (!ATNDeserializer.isFeatureSupported(ATNDeserializer.ADDED_LEXER_ACTIONS, uuid)) {
 					// this piece of unused metadata was serialized prior to the
 					// addition of LexerAction
 					let actionIndexIgnored: number = ATNDeserializer.toInt(data[p++]);
@@ -292,12 +324,14 @@ export class ATNDeserializer {
 		// SETS
 		//
 		let sets: IntervalSet[] = [];
-		p = this.readSets(data, p, sets, false);
+
+		// First, read all sets with 16-bit Unicode code points <= U+FFFF.
+		p = this.deserializeSets(data, p, sets, ATNDeserializer.getUnicodeDeserializer(UnicodeDeserializingMode.UNICODE_BMP));
 
 		// Next, if the ATN was serialized with the Unicode SMP feature,
 		// deserialize sets with 32-bit arguments <= U+10FFFF.
-		if (this.isFeatureSupported(ATNDeserializer.ADDED_UNICODE_SMP, uuid)) {
-			p = this.readSets(data, p, sets, true);
+		if (ATNDeserializer.isFeatureSupported(ATNDeserializer.ADDED_UNICODE_SMP, uuid)) {
+			p = this.deserializeSets(data, p, sets, ATNDeserializer.getUnicodeDeserializer(UnicodeDeserializingMode.UNICODE_SMP));
 		}
 
 		//
@@ -582,7 +616,7 @@ export class ATNDeserializer {
 		return atn;
 	}
 
-	private readSets(data: Uint16Array, p: number, sets: IntervalSet[], read32: boolean): number {
+	private deserializeSets(data: Uint16Array, p: number, sets: IntervalSet[], unicodeDeserializer: UnicodeDeserializer): number {
 		let nsets: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < nsets; i++) {
 			let nintervals: number = ATNDeserializer.toInt(data[p]);
@@ -595,16 +629,12 @@ export class ATNDeserializer {
 				set.add(-1);
 			}
 
-			if (read32) {
-				for (let j = 0; j < nintervals; j++) {
-					set.add(ATNDeserializer.toInt32(data, p), ATNDeserializer.toInt32(data, p + 2));
-					p += 4;
-				}
-			} else {
-				for (let j = 0; j < nintervals; j++) {
-					set.add(ATNDeserializer.toInt(data[p]), ATNDeserializer.toInt(data[p + 1]));
-					p += 2;
-				}
+			for (let j: number = 0; j < nintervals; j++) {
+				let a: number = unicodeDeserializer.readUnicode(data, p);
+				p += unicodeDeserializer.size;
+				let b: number = unicodeDeserializer.readUnicode(data, p);
+				p += unicodeDeserializer.size;
+				set.add(a, b);
 			}
 		}
 

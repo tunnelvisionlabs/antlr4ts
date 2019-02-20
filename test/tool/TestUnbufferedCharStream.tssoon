@@ -293,6 +293,30 @@ export class TestUnbufferedCharStream extends BaseTest {
 		assertEquals(expecting, tokens.getTokens().toString());
     }
 
+	@Test testUnicodeSMP(): void {
+		TestingUnbufferedCharStream input = createStream("🌎");
+		assertEquals(0x1F30E, input.LA(1));
+		assertEquals("🌎", input.getBuffer());
+		input.consume();
+		assertEquals(IntStream.EOF, input.LA(1));
+		assertEquals("\uFFFF", input.getBuffer());
+	}
+
+	@Test(expected = RuntimeException.class)
+	testDanglingHighSurrogateAtEOFThrows(): void {
+		createStream("\uD83C");
+	}
+
+	@Test(expected = RuntimeException.class)
+	testDanglingHighSurrogateThrows(): void {
+		createStream("\uD83C\u0123");
+	}
+
+	@Test(expected = RuntimeException.class)
+	testDanglingLowSurrogateThrows(): void {
+		createStream("\uDF0E");
+	}
+
 	protected static createStream(text: string): TestingUnbufferedCharStream {
 		return new TestingUnbufferedCharStream(new StringReader(text));
 	}
@@ -316,7 +340,13 @@ export class TestUnbufferedCharStream extends BaseTest {
 		 */
 		getRemainingBuffer(): string {
 			if ( n==0 ) return "";
-			return new String(data,p,n-p);
+			int len = n;
+			if (data[len-1] === IntStream.EOF) {
+				// Don't pass -1 to new String().
+				return new String(data,p,len-p-1) + "\uFFFF";
+			} else {
+				return new String(data,p,len-p);
+			}
 		}
 
 		/** For testing.  What's in moving window buffer into data stream.
@@ -324,7 +354,14 @@ export class TestUnbufferedCharStream extends BaseTest {
 		 */
 		getBuffer(): string {
 			if ( n==0 ) return "";
-			return new String(data,0,n);
+			int len = n;
+			// Don't pass -1 to new String().
+			if (data[len-1] === IntStream.EOF) {
+				// Don't pass -1 to new String().
+				return new String(data,0,len-1) + "\uFFFF";
+			} else {
+				return new String(data,0,len);
+			}
 		}
 
 	}

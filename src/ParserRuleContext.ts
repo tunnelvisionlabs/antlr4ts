@@ -93,7 +93,8 @@ export class ParserRuleContext extends RuleContext {
 
 	/**
 	 * COPY a ctx (I'm deliberately not using copy constructor) to avoid
-	 * confusion with creating node with parent. Does not copy children.
+	 * confusion with creating node with parent. Does not copy children
+	 * (except error leaves).
 	 *
 	 * This is used in the generated parser code to flip a generic XContext
 	 * node for rule X to a YContext for alt label Y. In that sense, it is not
@@ -116,8 +117,7 @@ export class ParserRuleContext extends RuleContext {
 			// reset parent pointer for any error nodes
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
-					this.children.push(child);
-					child._parent = this;
+					this.addChild(child);
 				}
 			}
 		}
@@ -132,29 +132,92 @@ export class ParserRuleContext extends RuleContext {
 		// intentionally empty
 	}
 
-	public addChild(t: TerminalNode): void;
-	public addChild(ruleInvocation: RuleContext): void;
-	public addChild(matchedToken: Token): TerminalNode;
-	public addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
-		let result: TerminalNode | void;
-		if (t instanceof TerminalNode) {
-			// Does not set parent link
-		} else if (t instanceof RuleContext) {
-			// Does not set parent link
-		} else {
-			t = new TerminalNode(t);
-			t._parent = this;
-			result = t;
-		}
-
+	/** Add a parse tree node to this as a child.  Works for
+	 *  internal and leaf nodes. Does not set parent link;
+	 *  other add methods must do that. Other addChild methods
+	 *  call this.
+	 *
+	 *  We cannot set the parent pointer of the incoming node
+	 *  because the existing interfaces do not have a setParent()
+	 *  method and I don't want to break backward compatibility for this.
+	 *
+	 *  @since 4.7
+	 */
+	public addAnyChild<T extends ParseTree>(t: T): T {
 		if (!this.children) {
 			this.children = [t];
 		} else {
 			this.children.push(t);
 		}
 
-		return result;
+		return t;
 	}
+
+	/** Add a token leaf node child and force its parent to be this node. */
+	public addChild(t: TerminalNode): void;
+	public addChild(ruleInvocation: RuleContext): void;
+	/**
+	 * Add a child to this node based upon matchedToken. It
+	 * creates a TerminalNodeImpl rather than using
+	 * {@link Parser#createTerminalNode(ParserRuleContext, Token)}. I'm leaving this
+	 * in for compatibility but the parser doesn't use this anymore.
+	 *
+	 * @deprecated Use another overload instead.
+	 */
+	public addChild(matchedToken: Token): TerminalNode;
+	public addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
+		let result: TerminalNode | void;
+		if (t instanceof TerminalNode) {
+			t.setParent(this);
+			this.addAnyChild(t);
+			return;
+		} else if (t instanceof RuleContext) {
+			// Does not set parent link
+			this.addAnyChild(t);
+			return;
+		} else {
+			// Deprecated code path
+			t = new TerminalNode(t);
+			this.addAnyChild(t);
+			t.setParent(this);
+			return t;
+		}
+	}
+
+	/** Add an error node child and force its parent to be this node.
+	 *
+	 * @since 4.7
+	 */
+	public addErrorNode(errorNode: ErrorNode): ErrorNode;
+
+	/**
+	 * Add a child to this node based upon badToken. It
+	 * creates a ErrorNode rather than using
+	 * {@link Parser#createErrorNode(ParserRuleContext, Token)}. I'm leaving this
+	 * in for compatibility but the parser doesn't use this anymore.
+	 *
+	 * @deprecated Use another overload instead.
+	 */
+	public addErrorNode(badToken: Token): ErrorNode;
+	public addErrorNode(node: ErrorNode | Token): ErrorNode {
+		if (node instanceof ErrorNode) {
+			const errorNode: ErrorNode = node;
+			errorNode.setParent(this);
+			return this.addAnyChild(errorNode);
+		} else {
+			// deprecated path
+			const badToken: Token = node;
+			let t = new ErrorNode(badToken);
+			this.addAnyChild(t);
+			t.setParent(this);
+			return t;
+		}
+	}
+
+//	public void trace(int s) {
+//		if ( states==null ) states = new ArrayList<Integer>();
+//		states.add(s);
+//	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
 	 *  we entered a rule. If we have # label, we will need to remove
@@ -164,18 +227,6 @@ export class ParserRuleContext extends RuleContext {
 		if (this.children) {
 			this.children.pop();
 		}
-	}
-
-//	public void trace(int s) {
-//		if ( states==null ) states = new ArrayList<Integer>();
-//		states.add(s);
-//	}
-
-	public addErrorNode(badToken: Token): ErrorNode {
-		let t = new ErrorNode(badToken);
-		this.addChild(t);
-		t._parent = this;
-		return t;
 	}
 
 	@Override

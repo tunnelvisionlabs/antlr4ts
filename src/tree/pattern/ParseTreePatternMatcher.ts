@@ -5,8 +5,8 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
+import { CharStreams } from "../../CharStreams";
 import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
 import { Lexer } from "../../Lexer";
@@ -404,8 +404,7 @@ export class ParseTreePatternMatcher {
 			}
 			else {
 				let textChunk = chunk as TextChunk;
-				let input = new ANTLRInputStream(textChunk.text);
-				this._lexer.inputStream = input;
+				this._lexer.inputStream = CharStreams.fromString(textChunk.text);
 				let t: Token = this._lexer.nextToken();
 				while (t.type !== Token.EOF) {
 					tokens.push(t);

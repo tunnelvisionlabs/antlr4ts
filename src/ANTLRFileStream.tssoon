@@ -7,6 +7,8 @@
 /**
  * This is an {@link ANTLRInputStream} that is loaded from a file all at once
  * when you construct the object.
+ *
+ * @deprecated as of 4.7 Please use {@link CharStreams} interface.
  */
 export class ANTLRFileStream extends ANTLRInputStream {
 	protected fileName: string; 

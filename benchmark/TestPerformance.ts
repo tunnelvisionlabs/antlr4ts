@@ -25,6 +25,9 @@ import { ATNDeserializer } from "../src/atn/ATNDeserializer";
 import { BailErrorStrategy } from "../src/BailErrorStrategy";
 import { BitSet } from "../src/misc/BitSet";
 import { CharStream } from "../src/CharStream";
+import { CharStreams } from "../src/CharStreams";
+import { CodePointBuffer } from "../src/CodePointBuffer";
+import { CodePointCharStream } from "../src/CodePointCharStream";
 import { CommonTokenStream } from "../src/CommonTokenStream";
 import { DefaultErrorStrategy } from "../src/DefaultErrorStrategy";
 import { DFA } from "../src/dfa/DFA";
@@ -1233,7 +1236,7 @@ export class TestPerformance {
 		//     parserCtor: Constructor<? extends Parser> =  parserClass.getConstructor(TokenStream.class);
 
 			// construct initial instances of the lexer and parser to deserialize their ATNs
-			let lexerInstance =  new lexerCtor(new ANTLRInputStream(""));
+			let lexerInstance =  new lexerCtor(CharStreams.fromString(""));
 			let parserInstance = new parserCtor(new CommonTokenStream(lexerInstance));
 
 			if (!TestPerformance.REUSE_LEXER_DFA) {
@@ -1970,7 +1973,7 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 
 export class InputDescriptor {
 	private source: string;
-	private inputStream?: CloneableANTLRFileStream;
+	private inputStream?: CodePointBuffer;
 
 	constructor(@NotNull source: string) {
 		this.source = source;
@@ -1981,27 +1984,23 @@ export class InputDescriptor {
 
 	@NotNull
 	public getInputStream(): CharStream {
-		if (this.inputStream == null) {
-			let input = fs.readFileSync(this.source, TestPerformance.ENCODING);
-			let stream = new CloneableANTLRFileStream(input);
-			stream.name = this.source;
-			this.inputStream = stream;
+		if (this.inputStream === undefined) {
+			this.inputStream = this.bufferFromFileName(this.source, TestPerformance.ENCODING);
 		}
 
-		return new JavaUnicodeInputStream(this.inputStream.createCopy());
-	}
-}
-
-class CloneableANTLRFileStream extends ANTLRInputStream {
-
-	constructor(input: string) {
-		super(input);
+		return new JavaUnicodeInputStream(CodePointCharStream.fromBuffer(this.inputStream, this.source));
 	}
 
-	public createCopy(): ANTLRInputStream {
-		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
-		stream.name = this.sourceName;
-		return stream;
+	private bufferFromFileName(source: string, encoding: string): CodePointBuffer {
+		let input = fs.readFileSync(this.source, encoding);
+		let array = new Uint16Array(input.length);
+		for (let i = 0; i < input.length; i++) {
+			array[i] = input.charCodeAt(i);
+		}
+
+		let builder = CodePointBuffer.builder(input.length);
+		builder.append(array);
+		return builder.build();
 	}
 }
 

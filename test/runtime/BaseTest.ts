@@ -83,7 +83,7 @@ class TreeShapeListener implements ParseTreeListener {
 }
 
 export function lexerTest(options: LexerTestOptions) {
-	const inputStream: CharStream = CharStreams.createWithString(options.input);
+	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
 	expectConsole( options.expectedOutput, options.expectedErrors, () => {
@@ -96,7 +96,7 @@ export function lexerTest(options: LexerTestOptions) {
 }
 
 export function parserTest<TParser extends Parser>(options: ParserTestOptions<TParser>) {
-	const inputStream: CharStream = CharStreams.createWithString(options.input);
+	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
 	const parser = new options.parser(tokens);

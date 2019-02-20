@@ -5,35 +5,32 @@
 
 import * as assert from "assert";
 import { test, suite } from "mocha-typescript";
+import { CharStream } from "../../src/CharStream";
 import { CharStreams } from "../../src/CharStreams";
-import { CodePointCharStream } from "../../src/CodePointCharStream";
-import { Interval } from "../../src/misc/Interval";
-import { IntStream } from "../../src/IntStream";
-import { CodingErrorAction } from "../../src/CodingErrorAction";
 
 @suite
 export class TestCharStreams {
 	@test
-	public createWithBMPStringHasExpectedSize(): void {
-		let s: CodePointCharStream = CharStreams.createWithString("hello");
+	public fromBMPStringHasExpectedSize(): void {
+		let s: CharStream = CharStreams.fromString("hello");
 		assert.strictEqual(5, s.size);
 		assert.strictEqual(0, s.index);
 		assert.strictEqual("hello", s.toString());
 	}
 
 	@test
-	public createWithSMPStringHasExpectedSize(): void {
-		let s: CodePointCharStream = CharStreams.createWithString("hello \uD83C\uDF0E");
+	public fromSMPStringHasExpectedSize(): void {
+		let s: CharStream = CharStreams.fromString("hello 🌎");
 		assert.strictEqual(7, s.size);
 		assert.strictEqual(0, s.index);
-		assert.strictEqual("hello \uD83C\uDF0E", s.toString());
+		assert.strictEqual("hello 🌎", s.toString());
 	}
 
 	// @test
-	// public createWithBMPUTF8PathHasExpectedSize(): void {
+	// public fromBMPUTF8PathHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
 	// 	Utils.writeFile(p, "hello".getBytes(Charset.forName("UTF-8")));
-	// 	let s: CodePointCharStream = CharStreams.createWithUTF8(p);
+	// 	let s: CharStream = CharStreams.fromFile(p);
 	// 	assert.strictEqual(5, s.size);
 	// 	assert.strictEqual(0, s.index);
 	// 	assert.strictEqual("hello", s.toString());
@@ -41,23 +38,23 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithSMPUTF8PathHasExpectedSize(): void {
+	// public fromSMPUTF8PathHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
-	// 	Utils.writeFile(p, "hello \uD83C\uDF0E".getBytes(Charset.forName("UTF-8")));
-	// 	let s: CodePointCharStream = CharStreams.createWithUTF8(p);
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
+	// 	let s: CharStream = CharStreams.fromFile(p);
 	// 	assert.strictEqual(7, s.size);
 	// 	assert.strictEqual(0, s.index);
-	// 	assert.strictEqual("hello \uD83C\uDF0E", s.toString());
+	// 	assert.strictEqual("hello 🌎", s.toString());
 	// 	assert.strictEqual(p.toString(), s.sourceName);
 	// }
 
 	// @test
-	// public createWithBMPUTF8InputStreamHasExpectedSize(): void {
+	// public fromBMPUTF8InputStreamHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
 	// 	Utils.writeFile(p, "hello".getBytes(Charset.forName("UTF-8")));
 	// 	let is: InputStream = new FileInputStream(p);
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Stream(is);
+	// 		let s: CharStream = CharStreams.fromStream(is);
 	// 		assert.strictEqual(5, s.size);
 	// 		assert.strictEqual(0, s.index);
 	// 		assert.strictEqual("hello", s.toString());
@@ -68,15 +65,15 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithSMPUTF8InputStreamHasExpectedSize(): void {
+	// public fromSMPUTF8InputStreamHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
-	// 	Utils.writeFile(p, "hello \uD83C\uDF0E".getBytes(Charset.forName("UTF-8")));
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
 	// 	let is: InputStream = new FileInputStream(p);
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Stream(is);
+	// 		let s: CharStream = CharStreams.fromStream(is);
 	// 		assert.strictEqual(7, s.size);
 	// 		assert.strictEqual(0, s.index);
-	// 		assert.strictEqual("hello \uD83C\uDF0E", s.toString());
+	// 		assert.strictEqual("hello 🌎", s.toString());
 	// 	}
 	// 	finally {
 	// 		is.close();
@@ -84,12 +81,12 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithBMPUTF8ChannelHasExpectedSize(): void {
+	// public fromBMPUTF8ChannelHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
 	// 	Utils.writeFile(p, "hello".getBytes(Charset.forName("UTF-8")));
 	// 	let c: ReadableByteChannel = Channels.newChannel(new FileInputStream(p));
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Channel(c, 4096, CodingErrorAction.REPLACE, "foo");
+	// 		let s: CharStream = CharStreams.fromChannel(c, 4096, CodingErrorAction.REPLACE, "foo");
 	// 		assert.strictEqual(5, s.size);
 	// 		assert.strictEqual(0, s.index);
 	// 		assert.strictEqual("hello", s.toString());
@@ -101,15 +98,15 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithSMPUTF8ChannelHasExpectedSize(): void {
+	// public fromSMPUTF8ChannelHasExpectedSize(): void {
 	// 	let p: File = folder.newFile();
-	// 	Utils.writeFile(p, "hello \uD83C\uDF0E".getBytes(Charset.forName("UTF-8")));
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
 	// 	let c: ReadableByteChannel = Channels.newChannel(new FileInputStream(p));
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Channel(c, 4096, CodingErrorAction.REPLACE, "foo");
+	// 		let s: CharStream = CharStreams.fromChannel(c, 4096, CodingErrorAction.REPLACE, "foo");
 	// 		assert.strictEqual(7, s.size);
 	// 		assert.strictEqual(0, s.index);
-	// 		assert.strictEqual("hello \uD83C\uDF0E", s.toString());
+	// 		assert.strictEqual("hello 🌎", s.toString());
 	// 		assert.strictEqual("foo", s.sourceName);
 	// 	}
 	// 	finally {
@@ -118,16 +115,16 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithInvalidUTF8BytesChannelReplacesWithSubstCharInReplaceMode(): void {
+	// public fromInvalidUTF8BytesChannelReplacesWithSubstCharInReplaceMode(): void {
 	// 	let p: File = folder.newFile();
 	// 	let toWrite: Uint8Array = new Uint8Array([0xCA, 0xFE, 0xFE, 0xED]);
 	// 	Utils.writeFile(p, toWrite);
 	// 	let c: ReadableByteChannel = Channels.newChannel(new FileInputStream(p));
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Channel(c, 4096, CodingErrorAction.REPLACE, "foo");
-	// 		assert.strictEqual(3, s.size);
+	// 		let s: CharStream = CharStreams.fromChannel(c, 4096, CodingErrorAction.REPLACE, "foo");
+	// 		assert.strictEqual(4, s.size);
 	// 		assert.strictEqual(0, s.index);
-	// 		assert.strictEqual("\uFFFD\uFFFD\uFFFD", s.toString());
+	// 		assert.strictEqual("\uFFFD\uFFFD\uFFFD\uFFFD", s.toString());
 	// 	}
 	// 	finally {
 	// 		c.close();
@@ -135,13 +132,13 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithInvalidUTF8BytesThrowsInReportMode(): void {
+	// public fromInvalidUTF8BytesThrowsInReportMode(): void {
 	// 	let p: File = folder.newFile();
 	// 	let toWrite: Uint8Array = new Uint8Array([0xCA, 0xFE]);
 	// 	Utils.writeFile(p, toWrite);
 	// 	let c: ReadableByteChannel = Channels.newChannel(new FileInputStream(p));
 	// 	try {
-	// 		assert.throws(() => CharStreams.createWithUTF8Channel(c, 4096, CodingErrorAction.REPORT, "foo"), RangeError);
+	// 		assert.throws(() => CharStreams.fromChannel(c, 4096, CodingErrorAction.REPORT, "foo"), RangeError);
 	// 	}
 	// 	finally {
 	// 		c.close();
@@ -149,12 +146,12 @@ export class TestCharStreams {
 	// }
 
 	// @test
-	// public createWithSMPUTF8SequenceStraddlingBufferBoundary(): void {
+	// public fromSMPUTF8SequenceStraddlingBufferBoundary(): void {
 	// 	let p: File = folder.newFile();
-	// 	Utils.writeFile(p, "hello \uD83C\uDF0E".getBytes(Charset.forName("UTF-8")));
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
 	// 	let c: ReadableByteChannel = Channels.newChannel(new FileInputStream(p));
 	// 	try {
-	// 		let s: CodePointCharStream = CharStreams.createWithUTF8Channel(
+	// 		let s: CharStream = CharStreams.fromChannel(
 	// 				c,
 	// 				// Note this buffer size ensures the SMP code point
 	// 				// straddles the boundary of two buffers
@@ -163,45 +160,70 @@ export class TestCharStreams {
 	// 				"foo");
 	// 		assert.strictEqual(7, s.size);
 	// 		assert.strictEqual(0, s.index);
-	// 		assert.strictEqual("hello \uD83C\uDF0E", s.toString());
+	// 		assert.strictEqual("hello 🌎", s.toString());
 	// 	}
 	// 	finally {
 	// 		c.close();
 	// 	}
 	// }
 
-	@test
-	public createWithBMPUTF8ArrayHasExpectedSize(): void {
-		let c: Uint8Array = new Uint8Array([0x68, 0x65, 0x6C, 0x6C, 0x6F]);
-		let s: CodePointCharStream = CharStreams.createWithUTF8Array(c, CodingErrorAction.REPLACE, "foo");
-		assert.strictEqual(5, s.size);
-		assert.strictEqual(0, s.index);
-		assert.strictEqual("hello", s.toString());
-		assert.strictEqual("foo", s.sourceName);
-	}
+	// @test
+	// public fromFileName(): void {
+	// 	let p: File = folder.newFile();
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
+	// 	let s: CharStream = CharStreams.fromFileName(p.toString());
+	// 	assert.strictEqual(7, s.size);
+	// 	assert.strictEqual(0, s.index);
+	// 	assert.strictEqual("hello 🌎", s.toString());
+	// 	assert.strictEqual(p.toString(), s.sourceName);
+	// }
 
-	@test
-	public createWithSMPUTF8ArrayHasExpectedSize(): void {
-		let c: Uint8Array = new Uint8Array([0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0xF0, 0x9F, 0x8C, 0x8E]);
-		let s: CodePointCharStream = CharStreams.createWithUTF8Array(c, CodingErrorAction.REPLACE, "foo");
-		assert.strictEqual(7, s.size);
-		assert.strictEqual(0, s.index);
-		assert.strictEqual("hello 🌎", s.toString());
-		assert.strictEqual("foo", s.sourceName);
-	}
+	// @test
+	// public fromFileNameWithLatin1(): void {
+	// 	let p: File = folder.newFile();
+	// 	Utils.writeFile(p, "hello \u00CA\u00FE".getBytes(Charset.forName("ISO-8859-1")));
+	// 	let s: CharStream = CharStreams.fromFileName(p.toString(), Charset.forName("ISO-8859-1"));
+	// 	assert.strictEqual(8, s.size);
+	// 	assert.strictEqual(0, s.index);
+	// 	assert.strictEqual("hello \u00CA\u00FE", s.toString());
+	// 	assert.strictEqual(p.toString(), s.sourceName);
+	// }
 
-	@test
-	public createWithInvalidUTF8BytesArrayReplacesWithSubstCharInReplaceMode(): void {
-		let c: Uint8Array = new Uint8Array([0xCA, 0xFE, 0xFE, 0xED]);
-		let s: CodePointCharStream = CharStreams.createWithUTF8Array(c, CodingErrorAction.REPLACE, "foo");
-		assert.strictEqual(3, s.size);
-		assert.strictEqual(0, s.index);
-		assert.strictEqual("\uFFFD\uFFFD\uFFFD", s.toString());
-	}
+	// @test
+	// public fromReader(): void {
+	// 	let p: File = folder.newFile();
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-8")));
+	// 	let r: Reader = new InputStreamReader(new FileInputStream(p), Charset.forName("UTF-8"));
+	// 	try {
+	// 		let s: CharStream = CharStreams.fromReader(r);
+	// 		assert.strictEqual(7, s.size);
+	// 		assert.strictEqual(0, s.index);
+	// 		assert.strictEqual("hello 🌎", s.toString());
+	// 	}
+	// 	finally {
+	// 		r.close();
+	// 	}
+	// }
 
-	@test
-	public createWithInvalidUTF8BytesArrayThrowsInReportMode(): void {
-		let c: Uint8Array = new Uint8Array([0xCA, 0xFE]);
-		assert.throws(() => CharStreams.createWithUTF8Array(c, CodingErrorAction.REPORT, "foo"), RangeError);
-	}
+	// @test
+	// public fromSMPUTF16LEPathSMPHasExpectedSize(): void {
+	// 	let p: File = folder.newFile();
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-16LE")));
+	// 	let s: CharStream = CharStreams.fromFile(p, Charset.forName("UTF-16LE"));
+	// 	assert.strictEqual(7, s.size);
+	// 	assert.strictEqual(0, s.index);
+	// 	assert.strictEqual("hello 🌎", s.toString());
+	// 	assert.strictEqual(p.toString(), s.sourceName);
+	// }
+
+	// @test
+	// public fromSMPUTF32LEPathSMPHasExpectedSize(): void {
+	// 	let p: File = folder.newFile();
+	// 	Utils.writeFile(p, "hello 🌎".getBytes(Charset.forName("UTF-32LE")));
+	// 	let s: CharStream = CharStreams.fromFile(p, Charset.forName("UTF-32LE"));
+	// 	assert.strictEqual(7, s.size);
+	// 	assert.strictEqual(0, s.index);
+	// 	assert.strictEqual("hello 🌎", s.toString());
+	// 	assert.strictEqual(p.toString(), s.sourceName);
+	// }
 }

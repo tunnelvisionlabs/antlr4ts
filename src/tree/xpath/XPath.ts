@@ -5,14 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
 
-import { ANTLRInputStream } from "../../ANTLRInputStream";
+import { CharStreams } from "../../CharStreams";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from "../../Lexer";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
 import { Parser } from "../../Parser";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
-import { RecognitionException } from "../../RecognitionException";
 import { Token } from "../../Token";
 import { XPathElement } from "./XPathElement";
 import { XPathLexer } from "./XPathLexer";
@@ -79,8 +77,7 @@ export class XPath {
 	// TODO: check for invalid token/rule names, bad syntax
 
 	public split(path: string): XPathElement[] {
-		let input = new ANTLRInputStream(path);
-		let lexer = new XPathLexer(input);
+		let lexer = new XPathLexer(CharStreams.fromString(path));
 		lexer.recover = (e: LexerNoViableAltException) => { throw e; };
 
 		lexer.removeErrorListeners();

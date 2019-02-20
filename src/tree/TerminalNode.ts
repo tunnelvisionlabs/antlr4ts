@@ -10,6 +10,7 @@ import { Override } from "../Decorators";
 import { Parser } from "../Parser";
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { RuleContext } from "../RuleContext";
 import { RuleNode } from "./RuleNode";
 import { Token } from "../Token";
 
@@ -33,6 +34,11 @@ export class TerminalNode implements ParseTree {
 	@Override
 	get parent(): RuleNode | undefined {
 		return this._parent;
+	}
+
+	@Override
+	public setParent(parent: RuleContext): void {
+		this._parent = parent;
 	}
 
 	@Override
