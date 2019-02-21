@@ -204,8 +204,8 @@ class CodePoint16BitCharStream extends CodePointCharStream {
 	/** Return the UTF-16 encoded string for the given interval */
 	@Override
 	public getText(interval: Interval): string {
-		const startIdx: number = Math.min(interval.a, this.size - 1);
-		const len: number = Math.min(interval.b - interval.a + 1, this.size);
+		const startIdx: number = Math.min(interval.a, this.size);
+		const len: number = Math.min(interval.b - interval.a + 1, this.size - startIdx);
 
 		return String.fromCharCode(...Array.from(this.charArray.subarray(startIdx, startIdx + len)));
 	}
@@ -256,8 +256,8 @@ class CodePoint32BitCharStream extends CodePointCharStream {
 	/** Return the UTF-16 encoded string for the given interval */
 	@Override
 	public getText(interval: Interval): string {
-		const startIdx: number = Math.min(interval.a, this.size - 1);
-		const len: number = Math.min(interval.b - interval.a + 1, this.size);
+		const startIdx: number = Math.min(interval.a, this.size);
+		const len: number = Math.min(interval.b - interval.a + 1, this.size - startIdx);
 
 		return String.fromCodePoint(...Array.from(this.intArray.subarray(startIdx, startIdx + len)));
 	}
