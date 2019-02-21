@@ -6,6 +6,8 @@ package org.antlr.v4.codegen.target;
 
 import org.antlr.v4.codegen.CodeGenerator;
 import org.antlr.v4.codegen.Target;
+import org.antlr.v4.codegen.UnicodeEscapes;
+import org.antlr.v4.misc.CharSupport;
 import org.antlr.v4.tool.ErrorType;
 import org.antlr.v4.tool.ast.GrammarAST;
 import org.stringtemplate.v4.NumberRenderer;
@@ -57,18 +59,21 @@ public class TypeScriptTarget extends Target {
 
 		if ( addQuotes ) sb.append('"');
 
-		for (int i = 1; i < is.length() -1; i++) {
-			if  (is.charAt(i) == '\\') {
+		for (int i = 1; i < is.length() - 1; ) {
+			int codePoint = is.codePointAt(i);
+			int toAdvance = Character.charCount(codePoint);
+			if  (codePoint == '\\') {
 				// Anything escaped is what it is! We assume that
 				// people know how to escape characters correctly. However
 				// we catch anything that does not need an escape in Java (which
 				// is what the default implementation is dealing with and remove
 				// the escape. The C target does this for instance.
 				//
-				switch (is.charAt(i+1)) {
+				int escapedCodePoint = is.codePointAt(i + toAdvance);
+				toAdvance++;
+				switch (escapedCodePoint) {
 					// Pass through any escapes that Java also needs
 					//
-					case    '"':
 					case    'n':
 					case    'r':
 					case    't':
@@ -77,32 +82,54 @@ public class TypeScriptTarget extends Target {
 					case    '\\':
 						// Pass the escape through
 						sb.append('\\');
+						sb.appendCodePoint(escapedCodePoint);
 						break;
 
-					case    'u':    // Assume unnnn
-						// Pass the escape through as double \\
-						// so that Java leaves as \u0000 string not char
-						sb.append('\\');
-						sb.append('\\');
+					case    'u':    // Either unnnn or u{nnnnnn}
+						if (is.charAt(i + toAdvance) == '{') {
+							while (is.charAt(i + toAdvance) != '}') {
+								toAdvance++;
+							}
+
+							toAdvance++;
+						} else {
+							toAdvance += 4;
+						}
+
+						if (i + toAdvance <= is.length()) {
+							// we might have an invalid \\uAB or something
+							String fullEscape = is.substring(i, i + toAdvance);
+							appendUnicodeEscapedCodePoint(
+								CharSupport.getCharValueFromCharInGrammarLiteral(fullEscape),
+								sb);
+						}
+
 						break;
 
 					default:
-						// Remove the escape by virtue of not adding it here
-						// Thus \' becomes ' and so on
+						if (shouldUseUnicodeEscapeForCodePointInDoubleQuotedString(escapedCodePoint)) {
+							appendUnicodeEscapedCodePoint(escapedCodePoint, sb);
+						} else {
+							sb.appendCodePoint(escapedCodePoint);
+						}
+
 						break;
 				}
 
 				// Go past the \ character
 				i++;
 			} else {
-				// Characters that don't need \ in ANTLR 'strings' but do in Java
-				if (is.charAt(i) == '"') {
-					// We need to escape " in Java
-					sb.append('\\');
+				if (codePoint == 0x22) {
+					// ANTLR doesn't escape " in literal strings, but every other language needs to do so.
+					sb.append("\\\"");
+				} else if (shouldUseUnicodeEscapeForCodePointInDoubleQuotedString(codePoint)) {
+					appendUnicodeEscapedCodePoint(codePoint, sb);
+				} else {
+					sb.appendCodePoint(codePoint);
 				}
 			}
-			// Add in the next character, which may have been escaped
-			sb.append(is.charAt(i));
+
+			i += toAdvance;
 		}
 
 		if ( addQuotes ) sb.append('"');
@@ -169,6 +196,11 @@ public class TypeScriptTarget extends Target {
 		});
 
 		return result;
+	}
+
+	@Override
+	protected void appendUnicodeEscapedCodePoint(int codePoint, StringBuilder sb) {
+		UnicodeEscapes.appendJavaStyleEscapedCodePoint(codePoint, sb);
 	}
 
 }

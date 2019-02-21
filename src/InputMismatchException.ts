@@ -8,6 +8,7 @@
 import { RecognitionException } from "./RecognitionException";
 import { NotNull } from "./Decorators";
 import { Parser } from "./Parser";
+import { ParserRuleContext } from "./ParserRuleContext";
 
 /** This signifies any kind of mismatched input exceptions such as
  *  when the current input does not match the expected token.
@@ -15,8 +16,19 @@ import { Parser } from "./Parser";
 export class InputMismatchException extends RecognitionException {
 	//private static serialVersionUID: number =  1532568338707443067L;
 
-	constructor(@NotNull recognizer: Parser) {
-		super(recognizer, recognizer.inputStream, recognizer.context);
-		super.setOffendingToken(recognizer, recognizer.currentToken);
+	constructor(/*@NotNull*/ recognizer: Parser);
+	constructor(/*@NotNull*/ recognizer: Parser, state: number, context: ParserRuleContext);
+	constructor(@NotNull recognizer: Parser, state?: number, context?: ParserRuleContext) {
+		if (context === undefined) {
+			context = recognizer.context;
+		}
+
+		super(recognizer, recognizer.inputStream, context);
+
+		if (state !== undefined) {
+			this.setOffendingState(state);
+		}
+
+		this.setOffendingToken(recognizer, recognizer.currentToken);
 	}
 }
