@@ -18,7 +18,8 @@ import { Override } from "./Decorators";
  * Use this if you need to parse input which potentially contains
  * Unicode values > U+FFFF.
  */
-export abstract class CodePointCharStream implements CharStream {
+export class CodePointCharStream implements CharStream {
+	private readonly _array: Uint8Array | Uint16Array | Int32Array;
 	private readonly _size: number;
 	private readonly _name: string;
 
@@ -26,15 +27,18 @@ export abstract class CodePointCharStream implements CharStream {
 
 	// Use the factory method {@link #fromBuffer(CodePointBuffer)} to
 	// construct instances of this type.
-	protected constructor(position: number, remaining: number, name: string) {
+	protected constructor(array: Uint8Array | Uint16Array | Int32Array, position: number, remaining: number, name: string) {
 		// TODO
 		assert(position === 0);
+		this._array = array;
 		this._size = remaining;
 		this._name = name;
 		this._position = 0;
 	}
 
-	abstract get internalStorage(): Uint8Array | Uint16Array | Int32Array;
+	public get internalStorage(): Uint8Array | Uint16Array | Int32Array {
+		return this._array;
+	}
 
 	/**
 	 * Constructs a {@link CodePointCharStream} which provides access
@@ -62,28 +66,11 @@ export abstract class CodePointCharStream implements CharStream {
 		// points stored in the underlying array (byte[],
 		// char[], or int[]), so we can avoid lots of virtual
 		// method calls to ByteBuffer.get(offset).
-		switch (codePointBuffer.type) {
-			case CodePointBuffer.Type.BYTE:
-				return new CodePoint8BitCharStream(
-					codePointBuffer.position,
-					codePointBuffer.remaining,
-					name,
-					codePointBuffer.byteArray());
-			case CodePointBuffer.Type.CHAR:
-				return new CodePoint16BitCharStream(
-					codePointBuffer.position,
-					codePointBuffer.remaining,
-					name,
-					codePointBuffer.charArray());
-			case CodePointBuffer.Type.INT:
-				return new CodePoint32BitCharStream(
-					codePointBuffer.position,
-					codePointBuffer.remaining,
-					name,
-					codePointBuffer.intArray());
-		}
-
-		throw new RangeError("Not reached");
+		return new CodePointCharStream(
+			codePointBuffer.array(),
+			codePointBuffer.position,
+			codePointBuffer.remaining,
+			name);
 	}
 
 	@Override
@@ -132,32 +119,6 @@ export abstract class CodePointCharStream implements CharStream {
 		return this.getText(Interval.of(0, this.size - 1));
 	}
 
-	// @Override
-	public abstract LA(i: number): number;
-
-	/** Return the UTF-16 encoded string for the given interval */
-	// @Override
-	public abstract getText(interval: Interval): string;
-}
-
-// 8-bit storage for code points <= U+00FF.
-export class CodePoint8BitCharStream extends CodePointCharStream {
-	private readonly byteArray: Uint8Array;
-
-	public constructor(position: number, remaining: number, name: string, byteArray: Uint8Array) {
-		super(position, remaining, name);
-		this.byteArray = byteArray;
-	}
-
-	/** Return the UTF-16 encoded string for the given interval */
-	@Override
-	public getText(interval: Interval): string {
-		const startIdx: number = Math.min(interval.a, this.size);
-		const len: number = Math.min(interval.b - interval.a + 1, this.size - startIdx);
-
-		return String.fromCharCode(...Array.from(this.byteArray.subarray(startIdx, startIdx + len)));
-	}
-
 	@Override
 	public LA(i: number): number {
 		let offset: number;
@@ -168,7 +129,7 @@ export class CodePoint8BitCharStream extends CodePointCharStream {
 					return IntStream.EOF;
 				}
 
-				return this.byteArray[offset];
+				return this._array[offset];
 
 			case 0:
 				// Undefined
@@ -180,25 +141,10 @@ export class CodePoint8BitCharStream extends CodePointCharStream {
 					return IntStream.EOF;
 				}
 
-				return this.byteArray[offset];
+				return this._array[offset];
 		}
 
 		throw new RangeError("Not reached");
-	}
-
-	@Override
-	public get internalStorage(): Uint8Array {
-		return this.byteArray;
-	}
-}
-
-// 16-bit internal storage for code points between U+0100 and U+FFFF.
-class CodePoint16BitCharStream extends CodePointCharStream {
-	private readonly charArray: Uint16Array;
-
-	public constructor(position: number, remaining: number, name: string, charArray: Uint16Array) {
-		super(position, remaining, name);
-		this.charArray = charArray;
 	}
 
 	/** Return the UTF-16 encoded string for the given interval */
@@ -207,91 +153,10 @@ class CodePoint16BitCharStream extends CodePointCharStream {
 		const startIdx: number = Math.min(interval.a, this.size);
 		const len: number = Math.min(interval.b - interval.a + 1, this.size - startIdx);
 
-		return String.fromCharCode(...Array.from(this.charArray.subarray(startIdx, startIdx + len)));
-	}
-
-	@Override
-	public LA(i: number): number {
-		let offset: number;
-		switch (Math.sign(i)) {
-			case -1:
-				offset = this.index + i;
-				if (offset < 0) {
-					return IntStream.EOF;
-				}
-
-				return this.charArray[offset];
-
-			case 0:
-				// Undefined
-				return 0;
-
-			case 1:
-				offset = this.index + i - 1;
-				if (offset >= this.size) {
-					return IntStream.EOF;
-				}
-
-				return this.charArray[offset];
+		if (this._array instanceof Int32Array) {
+			return String.fromCodePoint(...Array.from(this._array.subarray(startIdx, startIdx + len)));
+		} else {
+			return String.fromCharCode(...Array.from(this._array.subarray(startIdx, startIdx + len)));
 		}
-
-		throw new RangeError("Not reached");
-	}
-
-	@Override
-	public get internalStorage(): Uint16Array {
-		return this.charArray;
-	}
-}
-
-// 32-bit internal storage for code points between U+10000 and U+10FFFF.
-class CodePoint32BitCharStream extends CodePointCharStream {
-	private readonly intArray: Int32Array;
-
-	public constructor(position: number, remaining: number, name: string, intArray: Int32Array) {
-		super(position, remaining, name);
-		this.intArray = intArray;
-	}
-
-	/** Return the UTF-16 encoded string for the given interval */
-	@Override
-	public getText(interval: Interval): string {
-		const startIdx: number = Math.min(interval.a, this.size);
-		const len: number = Math.min(interval.b - interval.a + 1, this.size - startIdx);
-
-		return String.fromCodePoint(...Array.from(this.intArray.subarray(startIdx, startIdx + len)));
-	}
-
-	@Override
-	public LA(i: number): number {
-		let offset: number;
-		switch (Math.sign(i)) {
-			case -1:
-				offset = this.index + i;
-				if (offset < 0) {
-					return IntStream.EOF;
-				}
-
-				return this.intArray[offset];
-
-			case 0:
-				// Undefined
-				return 0;
-
-			case 1:
-				offset = this.index + i - 1;
-				if (offset >= this.size) {
-					return IntStream.EOF;
-				}
-
-				return this.intArray[offset];
-		}
-
-		throw new RangeError("Not reached");
-	}
-
-	@Override
-	public get internalStorage(): Int32Array {
-		return this.intArray;
 	}
 }
