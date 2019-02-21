@@ -14,7 +14,7 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tunnelvisionlabs</groupId>
     <artifactId>antlr4-typescript</artifactId>
-    <version>4.7-SNAPSHOT</version>
+    <version>4.7.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>ANTLR 4 Target TypeScript</name>
@@ -85,13 +85,13 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
         <dependency>
             <groupId>com.tunnelvisionlabs</groupId>
             <artifactId>antlr4</artifactId>
-            <version>4.7</version>
+            <version>4.7.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.tunnelvisionlabs</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.7</version>
+            <version>4.7.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -223,7 +223,7 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
             <plugin>
                 <groupId>com.tunnelvisionlabs</groupId>
                 <artifactId>antlr4-testgen-maven-plugin</artifactId>
-                <version>4.7</version>
+                <version>4.7.1</version>
                 <executions>
                     <execution>
                         <goals>

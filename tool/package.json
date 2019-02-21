@@ -5,7 +5,7 @@
   "description": "ANTLR 4 command line tool for TypeScript",
   "files": [
     "LICENSE",
-    "target/antlr4-typescript-4.7-SNAPSHOT-complete.jar",
+    "target/antlr4-typescript-4.7.1-SNAPSHOT-complete.jar",
     "antlr4ts",
     "index.js"
   ],

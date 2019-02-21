@@ -318,7 +318,6 @@ export class ParserInterpreter extends Parser {
 	 *  for subclasses to track interesting things.
 	 */
 	protected visitDecisionState(p: DecisionState): number {
-		let edge: number = 1;
 		let predictedAlt: number;
 		this.errorHandler.sync(this);
 		let decision: number = p.decision;

@@ -17,6 +17,7 @@ export class TestCodePointCharStream {
 		let s: CodePointCharStream = CharStreams.fromString("");
 		assert.strictEqual(0, s.size);
 		assert.strictEqual(0, s.index);
+		assert.strictEqual("", s.toString());
 	}
 
 	@test
