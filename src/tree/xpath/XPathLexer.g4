@@ -5,10 +5,6 @@
 
 lexer grammar XPathLexer;
 
-@header {
-import * as Character from "../../misc/Character";
-}
-
 tokens { TOKEN_REF, RULE_REF }
 
 /*
@@ -45,14 +41,12 @@ if (text.charAt(0) === text.charAt(0).toUpperCase()) {
 			;
 
 fragment
-NameChar    :   [A-Za-z0-9_]
-            |   ~[\u0000-\u007F] {Character.isUnicodeIdentifierPart(this._input.LA(-1))}?
+NameChar    :   [\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nl}\p{Pc}\p{Nd}\p{Mc}\p{Mn}\p{Cf}\u0000-\u0008\u000E-\u001B\u007F-\u009F]
             ;
 
 fragment
 NameStartChar
-            :   [A-Za-z]
-            |   ~[\u0000-\u007F] {Character.isUnicodeIdentifierStart(this._input.LA(-1))}?
+            :   [\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nl}]
             ;
 
 STRING : '\'' .*? '\'' ;
