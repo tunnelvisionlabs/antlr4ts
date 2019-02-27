@@ -308,10 +308,6 @@ export class BufferedTokenStream implements TokenStream {
 			throw new RangeError("start " + start + " or stop " + stop + " not in 0.." + (this.tokens.length - 1));
 		}
 
-		if (start === 0 && stop === this.tokens.length - 1) {
-			return this.tokens;
-		}
-
 		if (start > stop) {
 			return [];
 		}
