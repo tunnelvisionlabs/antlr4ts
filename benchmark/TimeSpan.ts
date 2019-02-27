@@ -12,13 +12,25 @@ export class TimeSpan {
 		this.nanos = nanos;
 	}
 
+	public static fromMilliseconds(millis: number): TimeSpan {
+		let seconds = Math.trunc(millis / TimeSpan.MILLIS_PER_SECOND);
+		let nanos = (millis - (seconds * TimeSpan.MILLIS_PER_SECOND)) * TimeSpan.NANOS_PER_MILLISECOND;
+		return new TimeSpan(seconds, nanos);
+	}
+
 	public get totalMilliseconds(): number {
 		return (this.seconds * TimeSpan.MILLIS_PER_SECOND) + (this.nanos / TimeSpan.NANOS_PER_MILLISECOND);
+	}
+
+	public get totalMicroseconds(): number {
+		return (this.seconds * TimeSpan.MICROS_PER_SECOND) + (this.nanos / TimeSpan.NANOS_PER_MICROSECOND);
 	}
 }
 
 export namespace TimeSpan {
 	export const MILLIS_PER_SECOND: number = 1000;
+	export const MICROS_PER_SECOND: number = 1000000;
 	export const NANOS_PER_SECOND: number = 1000000000;
+	export const NANOS_PER_MICROSECOND: number = 1000;
 	export const NANOS_PER_MILLISECOND: number = 1000000;
 }

@@ -1,4 +1,4 @@
-grammar graphemes;
+grammar Graphemes;
 
 Extend: [\p{Grapheme_Cluster_Break=Extend}];
 ZWJ: '\u200D';
@@ -33,7 +33,7 @@ fragment EmojiZWJElement:
   | EmojiNRK;
 EmojiZWJSequence:
     EmojiZWJElement (ZWJ EmojiZWJElement)+;
-emoji_sequence:
+emojiSequence:
   (   EmojiZWJSequence
     | EmojiCoreSequence )
   ( Extend | ZWJ | SpacingMark )*;
@@ -48,8 +48,8 @@ HangulSyllable:
   | [\p{Grapheme_Cluster_Break=L}]+
   | [\p{Grapheme_Cluster_Break=T}]+;
 
-grapheme_cluster:
+graphemeCluster:
     CRLF
-  | Prepend* ( emoji_sequence | HangulSyllable | NonControl ) ( Extend | ZWJ | SpacingMark )*;
+  | Prepend* ( emojiSequence | HangulSyllable | NonControl ) ( Extend | ZWJ | SpacingMark )*;
 
-graphemes: grapheme_cluster* EOF;
+graphemes: graphemeCluster* EOF;
