@@ -5,13 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.5869363-07:00
 
-// import org.junit.Assert;
-// import org.junit.Test;
-
-// import static org.hamcrest.CoreMatchers.instanceOf;
-// import static org.junit.Assert.assertThat;
-// import static org.junit.Assert.assertTrue;
-
 import * as sourceMapSupport from "source-map-support";
 sourceMapSupport.install();
 
@@ -56,7 +49,9 @@ import { PredictionMode } from "../src/atn/PredictionMode";
 import { RecognitionException } from "../src/RecognitionException";
 import { Recognizer } from "../src/Recognizer";
 import { SimulatorState } from "../src/atn/SimulatorState";
+import { Stopwatch } from "./Stopwatch";
 import { TerminalNode } from "../src/tree/TerminalNode";
+import { TimeSpan } from "./TimeSpan";
 import { Token } from "../src/Token";
 import { TokenSource } from "../src/TokenSource";
 import { TokenStream } from "../src/TokenStream";
@@ -118,67 +113,6 @@ function forceGC(): boolean {
 
 	global.gc();
 	return true;
-}
-
-export class TimeSpan {
-	public readonly seconds: number;
-	public readonly nanos: number;
-
-	constructor(seconds: number, nanos: number) {
-		this.seconds = seconds;
-		this.nanos = nanos;
-	}
-
-	public get totalMilliseconds(): number {
-		return (this.seconds * Stopwatch.MILLIS_PER_SECOND) + (this.nanos / Stopwatch.NANOS_PER_MILLISECOND);
-	}
-}
-
-export class Stopwatch {
-	public static readonly MILLIS_PER_SECOND = 1000;
-	public static readonly NANOS_PER_SECOND: number = 1000000000;
-	public static readonly NANOS_PER_MILLISECOND: number = 1000000;
-
-	private _elapsed: number[] = [0, 0];
-	private _start?: number[];
-
-	public static startNew(): Stopwatch {
-		let result = new Stopwatch();
-		result.start();
-		return result;
-	}
-
-	public start(): void {
-		if (this._start !== undefined) {
-			throw new Error("The stopwatch is already started.");
-		}
-
-		this._start = process.hrtime();
-	}
-
-	public elapsed(): TimeSpan {
-		let result = { seconds: this._elapsed[0], nanos: this._elapsed[1] };
-		if (this._start !== undefined) {
-			let stop = process.hrtime();
-			result.seconds += stop[0] - this._start[0];
-			if (stop[0] === this._start[0]) {
-				result.nanos += stop[1] - this._start[1];
-			} else {
-				result.nanos += Stopwatch.NANOS_PER_SECOND - this._start[1] + stop[1];
-			}
-		}
-
-		while (result.nanos > Stopwatch.NANOS_PER_SECOND) {
-			result.seconds++;
-			result.nanos -= Stopwatch.NANOS_PER_SECOND;
-		}
-
-		return new TimeSpan(result.seconds, result.nanos);
-	}
-
-	public elapsedMillis(): number {
-		return this.elapsed().totalMilliseconds;
-	}
 }
 
 export class MurmurHashChecksum {
