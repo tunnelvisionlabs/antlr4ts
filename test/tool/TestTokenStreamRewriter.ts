@@ -11,8 +11,8 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertNotNull;
 
-import { ANTLRInputStream } from "../../src/ANTLRInputStream";
 import { CharStream } from "../../src/CharStream";
+import { CharStreams } from "../../src/CharStreams";
 import { CommonTokenStream } from "../../src/CommonTokenStream";
 import { Interval } from "../../src/misc/Interval";
 import { Lexer } from "../../src/Lexer";
@@ -30,9 +30,9 @@ import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 export class TestTokenStreamRewriter {
 
 	private createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
-		let stream = new ANTLRInputStream(input);
+		let stream = CharStreams.fromString(input);
 		let lexer = new lexerCtor(stream);
-		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.modeNames, lexer.ruleNames, lexer.atn, stream);
+		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.ruleNames, lexer.channelNames, lexer.modeNames, lexer.atn, stream);
 	}
 
 	@Test public testInsertBeforeIndex0(): void {

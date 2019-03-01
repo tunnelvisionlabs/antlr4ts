@@ -115,15 +115,6 @@ export interface IntSet {
 	equals(obj: any): boolean;
 
 	/**
-	 * Returns the single value contained in the set, if {@link #size} is 1;
-	 * otherwise, returns {@link Token#INVALID_TYPE}.
-	 *
-	 * @returns the single value contained in the set, if {@link #size} is 1;
-	 * otherwise, returns {@link Token#INVALID_TYPE}.
-	 */
-	getSingleElement(): number;
-
-	/**
 	 * Returns `true` if the set contains the specified element.
 	 *
 	 * @param el The element to check for.

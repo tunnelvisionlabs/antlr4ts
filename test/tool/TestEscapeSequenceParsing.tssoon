@@ -1,0 +1,128 @@
+/*!
+ * Copyright 2016 The ANTLR Project. All rights reserved.
+ * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
+ */
+
+@suite
+export class TestEscapeSequenceParsing {
+	@test
+	public testParseEmpty(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("", 0).type);
+	}
+
+	@test
+	public testParseJustBackslash(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\", 0).type);
+	}
+
+	@test
+	public testParseInvalidEscape(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\z", 0).type);
+	}
+
+	@test
+	public testParseNewline(): void {
+		assert.strictEqual(
+				new Result(Result.Type.CODE_POINT, '\n', IntervalSet.EMPTY_SET, 0, 2),
+				EscapeSequenceParsing.parseEscape("\\n", 0));
+	}
+
+	@test
+	public testParseTab(): void {
+		assert.strictEqual(
+				new Result(Result.Type.CODE_POINT, '\t', IntervalSet.EMPTY_SET, 0, 2),
+				EscapeSequenceParsing.parseEscape("\\t", 0));
+	}
+
+	@test
+	public testParseUnicodeTooShort(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\uABC", 0).type);
+	}
+
+	@test
+	public testParseUnicodeBMP(): void {
+		assert.strictEqual(
+				new Result(Result.Type.CODE_POINT, 0xABCD, IntervalSet.EMPTY_SET, 0, 6),
+				EscapeSequenceParsing.parseEscape("\\uABCD", 0));
+	}
+
+	@test
+	public testParseUnicodeSMPTooShort(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\u{}", 0).type);
+	}
+
+	@test
+	public testParseUnicodeSMPMissingCloseBrace(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\u{12345", 0).type);
+	}
+
+	@test
+	public testParseUnicodeTooBig(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\u{110000}", 0).type);
+	}
+
+	@test
+	public testParseUnicodeSMP(): void {
+		assert.strictEqual(
+				new Result(Result.Type.CODE_POINT, 0x10ABCD, IntervalSet.EMPTY_SET, 0, 10),
+				EscapeSequenceParsing.parseEscape("\\u{10ABCD}", 0));
+	}
+
+	@test
+	public testParseUnicodePropertyTooShort(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\p{}", 0).type);
+	}
+
+	@test
+	public testParseUnicodePropertyMissingCloseBrace(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\p{1234", 0).type);
+	}
+
+	@test
+	public testParseUnicodeProperty(): void {
+		assert.strictEqual(
+				new Result(Result.Type.PROPERTY, -1, IntervalSet.of(66560, 66639), 0, 11),
+				EscapeSequenceParsing.parseEscape("\\p{Deseret}", 0));
+	}
+
+	@test
+	public testParseUnicodePropertyInvertedTooShort(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\P{}", 0).type);
+	}
+
+	@test
+	public testParseUnicodePropertyInvertedMissingCloseBrace(): void {
+		assert.strictEqual(
+				EscapeSequenceParsing.Result.Type.INVALID,
+				EscapeSequenceParsing.parseEscape("\\P{Deseret", 0).type);
+	}
+
+	@test
+	public testParseUnicodePropertyInverted(): void {
+		let expected: IntervalSet = IntervalSet.of(0, 66559);
+		expected.add(66640, Character.MAX_CODE_POINT);
+		assert.strictEqual(
+				new Result(Result.Type.PROPERTY, -1, expected, 0, 11),
+				EscapeSequenceParsing.parseEscape("\\P{Deseret}", 0));
+	}
+}

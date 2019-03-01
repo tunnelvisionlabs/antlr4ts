@@ -318,7 +318,6 @@ export class ParserInterpreter extends Parser {
 	 *  for subclasses to track interesting things.
 	 */
 	protected visitDecisionState(p: DecisionState): number {
-		let edge: number = 1;
 		let predictedAlt: number;
 		this.errorHandler.sync(this);
 		let decision: number = p.decision;
@@ -431,14 +430,19 @@ export class ParserInterpreter extends Parser {
 					throw new Error("Expected the exception to provide expected tokens");
 				}
 
-				let expectedTokenType: number = expectedTokens.minElement; // get any element
+				let expectedTokenType: number = Token.INVALID_TYPE;
+				if (!expectedTokens.isNil) {
+					// get any element
+					expectedTokenType = expectedTokens.minElement;
+				}
+
 				let errToken: Token =
 					this.tokenFactory.create(sourcePair,
 						expectedTokenType, tok.text,
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
 						tok.line, tok.charPositionInLine);
-				this._ctx.addErrorNode(errToken);
+				this._ctx.addErrorNode(this.createErrorNode(this._ctx, errToken));
 			}
 			else { // NoViableAlt
 				let source = tok.tokenSource;
@@ -448,7 +452,7 @@ export class ParserInterpreter extends Parser {
 						Token.DEFAULT_CHANNEL,
 						-1, -1, // invalid start/stop
 						tok.line, tok.charPositionInLine);
-				this._ctx.addErrorNode(errToken);
+				this._ctx.addErrorNode(this.createErrorNode(this._ctx, errToken));
 			}
 		}
 	}

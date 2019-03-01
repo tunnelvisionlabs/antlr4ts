@@ -3,8 +3,8 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { ANTLRInputStream } from "../src/ANTLRInputStream";
 import { BufferedTokenStream } from "../src/BufferedTokenStream";
+import { CharStreams } from "../src/CharStreams";
 import { Token } from "../src/Token";
 import { XPathLexer } from "../src/tree/xpath/XPathLexer";
 
@@ -23,14 +23,14 @@ export class TestTokenStream {
 	 */
 	@test
 	public testBufferedTokenStreamReuseAfterFill(): void {
-		let firstInput = new ANTLRInputStream("A");
+		let firstInput = CharStreams.fromString("A");
 		let tokenStream = new BufferedTokenStream(new XPathLexer(firstInput));
 		tokenStream.fill();
 		assert.strictEqual(tokenStream.size, 2);
 		assert.strictEqual(tokenStream.get(0).type, XPathLexer.TOKEN_REF);
 		assert.strictEqual(tokenStream.get(1).type, Token.EOF);
 
-		let secondInput = new ANTLRInputStream("A/");
+		let secondInput = CharStreams.fromString("A/");
 		tokenStream.tokenSource = new XPathLexer(secondInput);
 		tokenStream.fill();
 		assert.strictEqual(tokenStream.size, 3);

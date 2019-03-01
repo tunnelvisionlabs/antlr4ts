@@ -40,6 +40,6 @@ export class RangeTransition extends Transition {
 	@Override
 	@NotNull
 	public toString(): string {
-		return "'" + String.fromCharCode(this.from) + "'..'" + String.fromCharCode(this.to) + "'";
+		return "'" + String.fromCodePoint(this.from) + "'..'" + String.fromCodePoint(this.to) + "'";
 	}
 }

@@ -7,6 +7,7 @@
 
 import { Parser } from "../Parser";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { RuleContext } from "../RuleContext";
 import { SyntaxTree } from "./SyntaxTree";
 
 /** An interface to access the tree of {@link RuleContext} objects created
@@ -20,6 +21,13 @@ export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods
 	//@Override
 	readonly parent: ParseTree | undefined;
+
+	/**
+	 * Set the parent for this node.
+	 *
+	 * @since 4.7
+	 */
+	setParent(parent: RuleContext): void;
 
 	//@Override
 	getChild(i: number): ParseTree;

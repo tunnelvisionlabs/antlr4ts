@@ -51,6 +51,21 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	protected lastErrorStates?: IntervalSet;
 
 	/**
+	 * This field is used to propagate information about the lookahead following
+	 * the previous match. Since prediction prefers completing the current rule
+	 * to error recovery efforts, error reporting may occur later than the
+	 * original point where it was discoverable. The original context is used to
+	 * compute the true expected sets as though the reporting occurred as early
+	 * as possible.
+	 */
+	protected nextTokensContext?: ParserRuleContext;
+
+	/**
+	 * @see #nextTokensContext
+	 */
+	protected nextTokensState: number = ATNState.INVALID_STATE_NUMBER;
+
+	/**
 	 * {@inheritDoc}
 	 *
 	 * The default implementation simply calls {@link #endErrorCondition} to
@@ -250,7 +265,21 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 
 		// try cheaper subset first; might get lucky. seems to shave a wee bit off
 		let nextTokens: IntervalSet = recognizer.atn.nextTokens(s);
-		if (nextTokens.contains(Token.EPSILON) || nextTokens.contains(la)) {
+		if (nextTokens.contains(la)) {
+			// We are sure the token matches
+			this.nextTokensContext = undefined;
+			this.nextTokensState = ATNState.INVALID_STATE_NUMBER;
+			return;
+		}
+
+		if (nextTokens.contains(Token.EPSILON)) {
+			if (this.nextTokensContext === undefined) {
+				// It's possible the next token won't match; information tracked
+				// by sync is restricted for performance.
+				this.nextTokensContext = recognizer.context;
+				this.nextTokensState = recognizer.state;
+			}
+
 			return;
 		}
 
@@ -478,7 +507,11 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 		}
 
 		// even that didn't work; must throw the exception
-		throw new InputMismatchException(recognizer);
+		if (this.nextTokensContext === undefined) {
+			throw new InputMismatchException(recognizer);
+		} else {
+			throw new InputMismatchException(recognizer, this.nextTokensState, this.nextTokensContext);
+		}
 	}
 
 	/**
@@ -577,7 +610,12 @@ export class DefaultErrorStrategy implements ANTLRErrorStrategy {
 	protected getMissingSymbol(@NotNull recognizer: Parser): Token {
 		let currentSymbol: Token = recognizer.currentToken;
 		let expecting: IntervalSet = this.getExpectedTokens(recognizer);
-		let expectedTokenType: number = expecting.minElement; // get any element
+		let expectedTokenType: number = Token.INVALID_TYPE;
+		if (!expecting.isNil) {
+			// get any element
+			expectedTokenType = expecting.minElement;
+		}
+
 		let tokenText: string;
 		if (expectedTokenType === Token.EOF) {
 			tokenText = "<missing EOF>";

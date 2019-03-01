@@ -9,6 +9,12 @@
  *  for efficiency and also buffers while a mark exists (set by the
  *  lookahead prediction in parser). "Unbuffered" here refers to fact
  *  that it doesn't buffer all data, not that's it's on demand loading of char.
+ *
+ *  Before 4.7, this class used the default environment encoding to convert
+ *  bytes to UTF-16, and held the UTF-16 bytes in the buffer as chars.
+ *
+ *  As of 4.7, the class uses UTF-8 by default, and the buffer holds Unicode
+ *  code points in the buffer as ints.
  */
 export class UnbufferedCharStream implements CharStream {
 	/**
@@ -16,7 +22,7 @@ export class UnbufferedCharStream implements CharStream {
 	 * we keep adding to buffer. Otherwise, {@link #consume consume()} resets so
 	 * we start filling at index 0 again.
 	 */
-   	protected data: char[]; 
+   	protected data: int[]; 
 
 	/**
 	 * The number of characters currently in {@link #data data}.
@@ -73,7 +79,7 @@ export class UnbufferedCharStream implements CharStream {
 	/** Useful for subclasses that pull char from other than this.input. */
 	 constructor1(bufferSize: number)  {
 		n = 0;
-		data = new char[bufferSize];
+		data = new int[bufferSize];
 	}
 
 	 constructor2(input: InputStream)  {
@@ -85,8 +91,12 @@ export class UnbufferedCharStream implements CharStream {
 	}
 
 	 constructor4(input: InputStream, bufferSize: number)  {
+		this(input, bufferSize, Charset.forName("UTF-8"));
+	}
+
+	 constructor(input: InputStream, bufferSize: number, charset: Charset) {
 		this(bufferSize);
-		this.input = new InputStreamReader(input);
+		this.input = new InputStreamReader(input, charset);
 		fill(1); // prime
 	}
 
@@ -136,13 +146,42 @@ export class UnbufferedCharStream implements CharStream {
 	 */
 	protected fill(n: number): number {
 		for (let i=0; i<n; i++) {
-			if (this.n > 0 && data[this.n - 1] == (char)IntStream.EOF) {
+			if (this.n > 0 && data[this.n - 1] === IntStream.EOF) {
 				return i;
 			}
 
 			try {
 				let c: number =  nextChar();
-				add(c);
+				if (c > Character.MAX_VALUE || c === IntStream.EOF) {
+					add(c);
+				}
+				else {
+					let ch: number = c;
+					if (Character.isLowSurrogate(ch)) {
+						throw new RuntimeException("Invalid UTF-16 (low surrogate with no preceding high surrogate)");
+					}
+					else if (Character.isHighSurrogate(ch)) {
+						let lowSurrogate: number = nextChar();
+						if (lowSurrogate > Character.MAX_VALUE) {
+							throw new RuntimeException("Invalid UTF-16 (high surrogate followed by code point > U+FFFF");
+						}
+						else if (lowSurrogate == IntStream.EOF) {
+							throw new RuntimeException("Invalid UTF-16 (dangling high surrogate at end of file)");
+						}
+						else {
+							let lowSurrogateChar: number = lowSurrogate;
+							if (Character.isLowSurrogate(lowSurrogateChar)) {
+								add(Character.toCodePoint(ch, lowSurrogateChar));
+							}
+							else {
+								throw new RuntimeException("Invalid UTF-16 (dangling high surrogate");
+							}
+						}
+					}
+					else {
+						add(c);
+					}
+				}
 			}
 			catch (IOException ioe) {
 				throw new RuntimeException(ioe);
@@ -164,7 +203,7 @@ export class UnbufferedCharStream implements CharStream {
 		if ( n>=data.length ) {
 			data = Arrays.copyOf(data, data.length * 2);
         }
-        data[n++] = (char)c;
+        data[n++] = c;
     }
 
     @Override
@@ -174,9 +213,7 @@ export class UnbufferedCharStream implements CharStream {
         let index: number =  p + i - 1;
         if ( index < 0 ) throw new IndexOutOfBoundsException();
 		if ( index >= n ) return IntStream.EOF;
-        let c: char =  data[index];
-        if ( c==(char)IntStream.EOF ) return IntStream.EOF;
-        return c;
+        return data[index];
     }
 
 	/**

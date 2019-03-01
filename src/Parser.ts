@@ -178,7 +178,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
 	 * `true` and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
-	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
+	 * the parse tree by calling {@link #createErrorNode(ParserRuleContext, Token)} then
+	 * {@link ParserRuleContext#addErrorNode(ErrorNode)}.
 	 *
 	 * @param ttype the token type to match
 	 * @returns the matched symbol
@@ -201,7 +202,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			if (this._buildParseTrees && t.tokenIndex === -1) {
 				// we must have conjured up a new token during single token insertion
 				// if it's not the current symbol
-				this._ctx.addErrorNode(t);
+				this._ctx.addErrorNode(this.createErrorNode(this._ctx, t));
 			}
 		}
 		return t;
@@ -217,7 +218,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * strategy to attempt recovery. If {@link #getBuildParseTree} is
 	 * `true` and the token index of the symbol returned by
 	 * {@link ANTLRErrorStrategy#recoverInline} is -1, the symbol is added to
-	 * the parse tree by calling {@link ParserRuleContext#addErrorNode}.
+	 * the parse tree by calling {@link Parser#createErrorNode(ParserRuleContext, Token)} then
+	 * {@link ParserRuleContext#addErrorNode(ErrorNode)}.
 	 *
 	 * @returns the matched symbol
 	 * @ if the current input symbol did not match
@@ -236,7 +238,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			if (this._buildParseTrees && t.tokenIndex === -1) {
 				// we must have conjured up a new token during single token insertion
 				// if it's not the current symbol
-				this._ctx.addErrorNode(t);
+				this._ctx.addErrorNode(this.createErrorNode(this._ctx, t));
 			}
 		}
 
@@ -514,11 +516,11 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * ```
 	 *
 	 * If the parser is not in error recovery mode, the consumed symbol is added
-	 * to the parse tree using {@link ParserRuleContext#addChild(Token)}, and
+	 * to the parse tree using {@link ParserRuleContext#addChild(TerminalNode)}, and
 	 * {@link ParseTreeListener#visitTerminal} is called on any parse listeners.
 	 * If the parser *is* in error recovery mode, the consumed symbol is
-	 * added to the parse tree using
-	 * {@link ParserRuleContext#addErrorNode(Token)}, and
+	 * added to the parse tree using {@link #createErrorNode(ParserRuleContext, Token)} then
+	 * {@link ParserRuleContext#addErrorNode(ErrorNode)} and
 	 * {@link ParseTreeListener#visitErrorNode} is called on any parse
 	 * listeners.
 	 */
@@ -530,7 +532,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		let hasListener: boolean = this._parseListeners.length !== 0;
 		if (this._buildParseTrees || hasListener) {
 			if (this._errHandler.inErrorRecoveryMode(this)) {
-				let node: ErrorNode = this._ctx.addErrorNode(o);
+				let node: ErrorNode = this._ctx.addErrorNode(this.createErrorNode(this._ctx, o));
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
 						if (listener.visitErrorNode) {
@@ -540,7 +542,8 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 				}
 			}
 			else {
-				let node: TerminalNode = this._ctx.addChild(o);
+				let node: TerminalNode = this.createTerminalNode(this._ctx, o);
+				this._ctx.addChild(node);
 				if (hasListener) {
 					for (let listener of this._parseListeners) {
 						if (listener.visitTerminal) {
@@ -551,6 +554,26 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 			}
 		}
 		return o;
+	}
+
+	/**
+	 * How to create a token leaf node associated with a parent.
+	 * Typically, the terminal node to create is not a function of the parent.
+	 *
+	 * @since 4.7
+	 */
+	public createTerminalNode(parent: ParserRuleContext, t: Token): TerminalNode {
+		return new TerminalNode(t);
+	}
+
+	/**
+	 * How to create an error node, given a token, associated with a parent.
+	 * Typically, the error node to create is not a function of the parent.
+	 *
+	 * @since 4.7
+	 */
+	public createErrorNode(parent: ParserRuleContext, t: Token): ErrorNode {
+		return new ErrorNode(t);
 	}
 
 	protected addContextToParseTree(): void {

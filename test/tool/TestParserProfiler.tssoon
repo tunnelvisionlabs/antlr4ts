@@ -231,7 +231,7 @@ export class TestParserProfiler extends BaseTest {
 		for (let s of input) {
 			lexEngine.reset();
 			parser.reset();
-			lexEngine.inputStream = new ANTLRInputStream(s);
+			lexEngine.inputStream = CharStreams.fromString(s);
 			let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 			parser.inputStream = tokens;
 			let r: Rule =  g.rules.get(startRule);

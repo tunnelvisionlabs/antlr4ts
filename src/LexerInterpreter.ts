@@ -19,11 +19,12 @@ export class LexerInterpreter extends Lexer {
 	protected _atn: ATN;
 
 	protected _ruleNames: string[];
+	protected _channelNames: string[];
 	protected _modeNames: string[];
 	@NotNull
 	private _vocabulary: Vocabulary;
 
-	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, modeNames: string[], ruleNames: string[], atn: ATN, input: CharStream) {
+	constructor(grammarFileName: string, @NotNull vocabulary: Vocabulary, ruleNames: string[], channelNames: string[], modeNames: string[], atn: ATN, input: CharStream) {
 		super(input);
 
 		if (atn.grammarType !== ATNType.LEXER) {
@@ -34,6 +35,7 @@ export class LexerInterpreter extends Lexer {
 		this._atn = atn;
 
 		this._ruleNames = ruleNames.slice(0);
+		this._channelNames = channelNames.slice(0);
 		this._modeNames = modeNames.slice(0);
 		this._vocabulary = vocabulary;
 		this._interp = new LexerATNSimulator(atn, this);
@@ -52,6 +54,11 @@ export class LexerInterpreter extends Lexer {
 	@Override
 	get ruleNames(): string[] {
 		return this._ruleNames;
+	}
+
+	@Override
+	get channelNames(): string[] {
+		return this._channelNames;
 	}
 
 	@Override

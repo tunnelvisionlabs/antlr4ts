@@ -5,13 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.5869363-07:00
 
-// import org.junit.Assert;
-// import org.junit.Test;
-
-// import static org.hamcrest.CoreMatchers.instanceOf;
-// import static org.junit.Assert.assertThat;
-// import static org.junit.Assert.assertTrue;
-
 import * as sourceMapSupport from "source-map-support";
 sourceMapSupport.install();
 
@@ -25,6 +18,9 @@ import { ATNDeserializer } from "../src/atn/ATNDeserializer";
 import { BailErrorStrategy } from "../src/BailErrorStrategy";
 import { BitSet } from "../src/misc/BitSet";
 import { CharStream } from "../src/CharStream";
+import { CharStreams } from "../src/CharStreams";
+import { CodePointBuffer } from "../src/CodePointBuffer";
+import { CodePointCharStream } from "../src/CodePointCharStream";
 import { CommonTokenStream } from "../src/CommonTokenStream";
 import { DefaultErrorStrategy } from "../src/DefaultErrorStrategy";
 import { DFA } from "../src/dfa/DFA";
@@ -53,7 +49,9 @@ import { PredictionMode } from "../src/atn/PredictionMode";
 import { RecognitionException } from "../src/RecognitionException";
 import { Recognizer } from "../src/Recognizer";
 import { SimulatorState } from "../src/atn/SimulatorState";
+import { Stopwatch } from "./Stopwatch";
 import { TerminalNode } from "../src/tree/TerminalNode";
+import { TimeSpan } from "./TimeSpan";
 import { Token } from "../src/Token";
 import { TokenSource } from "../src/TokenSource";
 import { TokenStream } from "../src/TokenStream";
@@ -115,67 +113,6 @@ function forceGC(): boolean {
 
 	global.gc();
 	return true;
-}
-
-export class TimeSpan {
-	public readonly seconds: number;
-	public readonly nanos: number;
-
-	constructor(seconds: number, nanos: number) {
-		this.seconds = seconds;
-		this.nanos = nanos;
-	}
-
-	public get totalMilliseconds(): number {
-		return (this.seconds * Stopwatch.MILLIS_PER_SECOND) + (this.nanos / Stopwatch.NANOS_PER_MILLISECOND);
-	}
-}
-
-export class Stopwatch {
-	public static readonly MILLIS_PER_SECOND = 1000;
-	public static readonly NANOS_PER_SECOND: number = 1000000000;
-	public static readonly NANOS_PER_MILLISECOND: number = 1000000;
-
-	private _elapsed: number[] = [0, 0];
-	private _start?: number[];
-
-	public static startNew(): Stopwatch {
-		let result = new Stopwatch();
-		result.start();
-		return result;
-	}
-
-	public start(): void {
-		if (this._start !== undefined) {
-			throw new Error("The stopwatch is already started.");
-		}
-
-		this._start = process.hrtime();
-	}
-
-	public elapsed(): TimeSpan {
-		let result = { seconds: this._elapsed[0], nanos: this._elapsed[1] };
-		if (this._start !== undefined) {
-			let stop = process.hrtime();
-			result.seconds += stop[0] - this._start[0];
-			if (stop[0] === this._start[0]) {
-				result.nanos += stop[1] - this._start[1];
-			} else {
-				result.nanos += Stopwatch.NANOS_PER_SECOND - this._start[1] + stop[1];
-			}
-		}
-
-		while (result.nanos > Stopwatch.NANOS_PER_SECOND) {
-			result.seconds++;
-			result.nanos -= Stopwatch.NANOS_PER_SECOND;
-		}
-
-		return new TimeSpan(result.seconds, result.nanos);
-	}
-
-	public elapsedMillis(): number {
-		return this.elapsed().totalMilliseconds;
-	}
 }
 
 export class MurmurHashChecksum {
@@ -1233,7 +1170,7 @@ export class TestPerformance {
 		//     parserCtor: Constructor<? extends Parser> =  parserClass.getConstructor(TokenStream.class);
 
 			// construct initial instances of the lexer and parser to deserialize their ATNs
-			let lexerInstance =  new lexerCtor(new ANTLRInputStream(""));
+			let lexerInstance =  new lexerCtor(CharStreams.fromString(""));
 			let parserInstance = new parserCtor(new CommonTokenStream(lexerInstance));
 
 			if (!TestPerformance.REUSE_LEXER_DFA) {
@@ -1970,7 +1907,7 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 
 export class InputDescriptor {
 	private source: string;
-	private inputStream?: CloneableANTLRFileStream;
+	private inputStream?: CodePointBuffer;
 
 	constructor(@NotNull source: string) {
 		this.source = source;
@@ -1981,27 +1918,23 @@ export class InputDescriptor {
 
 	@NotNull
 	public getInputStream(): CharStream {
-		if (this.inputStream == null) {
-			let input = fs.readFileSync(this.source, TestPerformance.ENCODING);
-			let stream = new CloneableANTLRFileStream(input);
-			stream.name = this.source;
-			this.inputStream = stream;
+		if (this.inputStream === undefined) {
+			this.inputStream = this.bufferFromFileName(this.source, TestPerformance.ENCODING);
 		}
 
-		return new JavaUnicodeInputStream(this.inputStream.createCopy());
-	}
-}
-
-class CloneableANTLRFileStream extends ANTLRInputStream {
-
-	constructor(input: string) {
-		super(input);
+		return new JavaUnicodeInputStream(CodePointCharStream.fromBuffer(this.inputStream, this.source));
 	}
 
-	public createCopy(): ANTLRInputStream {
-		let stream: ANTLRInputStream =  new ANTLRInputStream(this.data);
-		stream.name = this.sourceName;
-		return stream;
+	private bufferFromFileName(source: string, encoding: string): CodePointBuffer {
+		let input = fs.readFileSync(this.source, encoding);
+		let array = new Uint16Array(input.length);
+		for (let i = 0; i < input.length; i++) {
+			array[i] = input.charCodeAt(i);
+		}
+
+		let builder = CodePointBuffer.builder(input.length);
+		builder.append(array);
+		return builder.build();
 	}
 }
 

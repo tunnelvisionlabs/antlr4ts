@@ -1,0 +1,140 @@
+/*!
+ * Copyright 2016 The ANTLR Project. All rights reserved.
+ * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
+ */
+
+import * as assert from "assert";
+import { suite, test } from "mocha-typescript";
+import { CharStream } from "../../src/CharStream";
+import { CharStreams } from "../../src/CharStreams";
+import { CommonTokenStream } from "../../src/CommonTokenStream";
+import { ParseTree } from "../../src/tree/ParseTree";
+import { Trees } from "../../src/tree/Trees";
+
+@suite
+export class TestUnicodeGrammar {
+	@test
+	public unicodeBMPLiteralInGrammar(): void {
+		let grammarText: string =
+			"grammar Unicode;\n" +
+			"r : 'hello' WORLD;\n" +
+			"WORLD : ('world' | '\\u4E16\\u754C' | '\\u1000\\u1019\\u1039\\u1018\\u102C' );\n" +
+			"WS : [ \\t\\r\\n]+ -> skip;\n";
+		let inputText: string = "hello 世界";
+		assert.strictEqual(
+			`(r:1 ${inputText})`,
+			this.parseTreeForGrammarWithInput(grammarText, "r", inputText));
+	}
+
+	// TODO: This test cannot pass unless we change either the grammar
+	// parser to decode surrogate pair literals to code points (which
+	// would break existing clients) or to treat them as an
+	// alternative:
+	//
+	// '\\uD83C\\uDF0D' -> ('\\u{1F30E}' | '\\uD83C\\uDF0D')
+	//
+	// but I worry that might cause parse ambiguity if we're not careful.
+	// @test
+	public unicodeSurrogatePairLiteralInGrammar(): void {
+		let grammarText: string =
+			"grammar Unicode;\n" +
+			"r : 'hello' WORLD;\n" +
+			"WORLD : ('\\uD83C\\uDF0D' | '\\uD83C\\uDF0E' | '\\uD83C\\uDF0F' );\n" +
+			"WS : [ \\t\\r\\n]+ -> skip;\n";
+		let inputText: string = "hello 🌎";
+		assert.strictEqual(
+			`(r:1 ${inputText})`,
+			this.parseTreeForGrammarWithInput(grammarText, "r", inputText));
+	}
+
+	@test
+	public unicodeSMPLiteralInGrammar(): void {
+		let grammarText: string =
+			"grammar Unicode;\n" +
+			"r : 'hello' WORLD;\n" +
+			"WORLD : ('\\u{1F30D}' | '\\u{1F30E}' | '\\u{1F30F}' );\n" +
+			"WS : [ \\t\\r\\n]+ -> skip;\n";
+		let inputText: string = "hello 🌎";
+		assert.strictEqual(
+			`(r:1 ${inputText})`,
+			this.parseTreeForGrammarWithInput(grammarText, "r", inputText));
+	}
+
+	@test
+	public unicodeSMPRangeInGrammar(): void {
+		let grammarText: string =
+			"grammar Unicode;\n" +
+			"r : 'hello' WORLD;\n" +
+			"WORLD : ('\\u{1F30D}'..'\\u{1F30F}' );\n" +
+			"WS : [ \\t\\r\\n]+ -> skip;\n";
+		let inputText: string = "hello 🌎";
+		assert.strictEqual(
+			`(r:1 ${inputText})`,
+			this.parseTreeForGrammarWithInput(grammarText, "r", inputText));
+	}
+
+	@test
+	public matchingDanglingSurrogateInInput(): void {
+		let grammarText: string =
+			"grammar Unicode;\n" +
+			"r : 'hello' WORLD;\n" +
+			"WORLD : ('\\uD83C' | '\\uD83D' | '\\uD83E' );\n" +
+			"WS : [ \\t\\r\\n]+ -> skip;\n";
+		let inputText: string = "hello \uD83C";
+		assert.strictEqual(
+			`(r:1 ${inputText})`,
+			this.parseTreeForGrammarWithInput(grammarText, "r", inputText));
+	}
+
+	@test
+	public binaryGrammar(): void {
+		let grammarText: string =
+			"grammar Binary;\n" +
+			"r : HEADER PACKET+ FOOTER;\n" +
+			"HEADER : '\\u0002\\u0000\\u0001\\u0007';\n" +
+			"PACKET : '\\u00D0' ('\\u00D1' | '\\u00D2' | '\\u00D3') +;\n" +
+			"FOOTER : '\\u00FF';\n";
+		let toParse: Uint8Array = new Uint8Array([
+			0x02, 0x00, 0x01, 0x07,
+			0xD0, 0xD2, 0xD2, 0xD3, 0xD3, 0xD3,
+			0xD0, 0xD3, 0xD3, 0xD1,
+			0xFF]);
+		let charStream: CharStream;
+		let is: ByteArrayInputStream = new ByteArrayInputStream(toParse);
+		try {
+			// Note we use ISO_8859_1 to treat all byte values as Unicode "characters" from
+			// U+0000 to U+00FF.
+			let isr: InputStreamReader = new InputStreamReader(is, Charset.forName("ISO-8859-1"));
+			try {
+				charStream = CharStreams.fromReader(isr);
+			}
+			finally {
+				isr.close();
+			}
+		}
+		finally {
+			is.close();
+		}
+		let grammar: Grammar = new Grammar(grammarText);
+		let lexEngine: LexerInterpreter = grammar.createLexerInterpreter(charStream);
+		let tokens: CommonTokenStream = new CommonTokenStream(lexEngine);
+		let parser: GrammarParserInterpreter = grammar.createGrammarParserInterpreter(tokens);
+		let parseTree: ParseTree = parser.parse(grammar.rules.get("r").index);
+		let nodeTextProvider: InterpreterTreeTextProvider = new InterpreterTreeTextProvider(grammar.getRuleNames());
+		let result: string = Trees.toStringTree(parseTree, nodeTextProvider);
+
+		assert.strictEqual(
+			"(r:1 \u0002\u0000\u0001\u0007 \u00D0\u00D2\u00D2\u00D3\u00D3\u00D3 \u00D0\u00D3\u00D3\u00D1 \u00FF)",
+			result);
+	}
+
+	private static parseTreeForGrammarWithInput(grammarText: string, rootRule: string, inputText: string): string {
+		let grammar: Grammar = new Grammar(grammarText);
+		let lexEngine: LexerInterpreter = grammar.createLexerInterpreter(CharStreams.fromString(inputText));
+		let tokens: CommonTokenStream = new CommonTokenStream(lexEngine);
+		let parser: GrammarParserInterpreter = grammar.createGrammarParserInterpreter(tokens);
+		let parseTree: ParseTree = parser.parse(grammar.rules.get(rootRule).index);
+		let nodeTextProvider: InterpreterTreeTextProvider = new InterpreterTreeTextProvider(grammar.getRuleNames());
+		return Trees.toStringTree(parseTree, nodeTextProvider);
+	}
+}

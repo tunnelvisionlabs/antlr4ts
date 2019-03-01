@@ -206,7 +206,7 @@ export class TestAmbigParseTrees {
 	{
 		let nodeTextProvider: InterpreterTreeTextProvider =  new InterpreterTreeTextProvider(g.ruleNames);
 
-		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(CharStreams.fromString(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
 		parser.setProfile(true);
@@ -246,7 +246,7 @@ export class TestAmbigParseTrees {
 								 input: string,
 								 expectedParseTree: string): void
 	{
-		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(CharStreams.fromString(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		let parser: ParserInterpreter =  g.createGrammarParserInterpreter(tokens);
 		let ruleStartState: RuleStartState =  g.atn.ruleToStartState[g.getRule(startRule).index];

@@ -27,7 +27,7 @@ export class TestBufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: CharStream =  new ANTLRInputStream("x = 3 * 0 + 2 * 0;");
+        let input: CharStream =  CharStreams.fromString("x = 3 * 0 + 2 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
@@ -48,7 +48,7 @@ export class TestBufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: CharStream =  new ANTLRInputStream("x = 3 * 0 + 2 * 0;");
+        let input: CharStream =  CharStreams.fromString("x = 3 * 0 + 2 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
@@ -69,7 +69,7 @@ export class TestBufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: CharStream =  new ANTLRInputStream("x = 3 * 0 + 2 * 0;");
+        let input: CharStream =  CharStreams.fromString("x = 3 * 0 + 2 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
@@ -99,7 +99,7 @@ export class TestBufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: CharStream =  new ANTLRInputStream("x = 3 * 0 + 2 * 0;");
+        let input: CharStream =  CharStreams.fromString("x = 3 * 0 + 2 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 
@@ -126,7 +126,7 @@ export class TestBufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 3 * 0 + 2 * 0;
-        let input: CharStream =  new ANTLRInputStream("x = 3 * 0 + 2 * 0;");
+        let input: CharStream =  CharStreams.fromString("x = 3 * 0 + 2 * 0;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  createTokenStream(lexEngine);
 

@@ -115,7 +115,7 @@ export class TestLookaheadTrees {
 		let nodeTextProvider: InterpreterTreeTextProvider = 
 					InterpreterTreeTextProvider(g.ruleNames): new;
 
-		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(CharStreams.fromString(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		let parser: GrammarParserInterpreter =  g.createGrammarParserInterpreter(tokens);
 		parser.setProfile(true);

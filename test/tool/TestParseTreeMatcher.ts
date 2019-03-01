@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.0984506-07:00
 
-import { ANTLRInputStream } from "../../src/ANTLRInputStream";
 import { CharStream } from "../../src/CharStream";
+import { CharStreams } from "../../src/CharStreams";
 import { CommonTokenStream } from "../../src/CommonTokenStream";
 import { InputMismatchException } from "../../src/InputMismatchException";
 import { Lexer } from "../../src/Lexer";
@@ -237,7 +237,7 @@ export class TestParseTreeMatcher {
 		lexerCtor: {new(stream: CharStream): Lexer},
 		parserCtor: {new(stream: TokenStream): TParser}): ParseTree {
 
-		let lexer = new lexerCtor(new ANTLRInputStream(input));
+		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
 		return startRule(parser);
 	}
@@ -262,13 +262,13 @@ export class TestParseTreeMatcher {
 	}
 
 	private async getPattern(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
-		let lexer: Lexer = new lexerCtor(new ANTLRInputStream(""));
+		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return parser.compileParseTreePattern(pattern, ruleIndex);
 	}
 
 	private getPatternMatcher(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}): ParseTreePatternMatcher {
-		let lexer: Lexer = new lexerCtor(new ANTLRInputStream(""));
+		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return new ParseTreePatternMatcher(lexer, parser);
 	}

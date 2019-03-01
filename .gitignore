@@ -37,6 +37,7 @@ jspm_packages/
 .node_repl_history
 
 # Build products
+/src/tree/xpath/XPathLexer.interp
 /src/tree/xpath/XPathLexer.tokens
 /src/tree/xpath/XPathLexer.ts
 gen/

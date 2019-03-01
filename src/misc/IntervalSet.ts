@@ -390,32 +390,25 @@ export class IntervalSet implements IntSet {
 	@Override
 	public contains(el: number): boolean {
 		let n: number = this._intervals.length;
-		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
+		let l: number = 0;
+		let r: number = n - 1;
+		// Binary search for the element in the (sorted, disjoint) array of intervals.
+		while (l <= r) {
+			let m: number = (l + r) >> 1;
+			let I: Interval = this._intervals[m];
 			let a: number = I.a;
 			let b: number = I.b;
-			if (el < a) {
-				// list is sorted and el is before this interval; not here
-				break;
-			}
-			if (el >= a && el <= b) {
-				// found in this interval
+			if (b < el) {
+				l = m + 1;
+			} else if (a > el) {
+				r = m - 1;
+			} else {
+				// el >= a && el <= b
 				return true;
 			}
 		}
+
 		return false;
-		/*
-				for (ListIterator iter = intervals.listIterator(); iter.hasNext();) {
-					let I: Interval =  (Interval) iter.next();
-					if ( el<I.a ) {
-						break; // list is sorted and el is before this interval; not here
-					}
-					if ( el>=I.a && el<=I.b ) {
-						return true; // found in this interval
-					}
-				}
-				return false;
-				*/
 	}
 
 	/** {@inheritDoc} */
@@ -424,28 +417,15 @@ export class IntervalSet implements IntSet {
 		return this._intervals == null || this._intervals.length === 0;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public getSingleElement(): number {
-		if (this._intervals != null && this._intervals.length === 1) {
-			let I: Interval = this._intervals[0];
-			if (I.a === I.b) {
-				return I.a;
-			}
-		}
-
-		return Token.INVALID_TYPE;
-	}
-
 	/**
-	 * Returns the maximum value contained in the set.
+	 * Returns the maximum value contained in the set if not isNil.
 	 *
-	 * @returns the maximum value contained in the set. If the set is empty, this
-	 * method returns {@link Token#INVALID_TYPE}.
+	 * @return the maximum value contained in the set.
+	 * @throws RangeError if set is empty
 	 */
 	get maxElement(): number {
 		if (this.isNil) {
-			return Token.INVALID_TYPE;
+			throw new RangeError("set is empty");
 		}
 
 		let last: Interval = this._intervals[this._intervals.length - 1];
@@ -453,14 +433,14 @@ export class IntervalSet implements IntSet {
 	}
 
 	/**
-	 * Returns the minimum value contained in the set.
+	 * Returns the minimum value contained in the set if not isNil.
 	 *
-	 * @returns the minimum value contained in the set. If the set is empty, this
-	 * method returns {@link Token#INVALID_TYPE}.
+	 * @return the minimum value contained in the set.
+	 * @throws RangeError if set is empty
 	 */
 	get minElement(): number {
 		if (this.isNil) {
-			return Token.INVALID_TYPE;
+			throw new RangeError("set is empty");
 		}
 
 		return this._intervals[0].a;
@@ -521,13 +501,13 @@ export class IntervalSet implements IntSet {
 				if (a === Token.EOF) {
 					buf += "<EOF>";
 				} else if (elemAreChar) {
-					buf += "'" + String.fromCharCode(a) + "'";
+					buf += "'" + String.fromCodePoint(a) + "'";
 				} else {
 					buf += a;
 				}
 			} else {
 				if (elemAreChar) {
-					buf += "'" + String.fromCharCode(a) + "'..'" + String.fromCharCode(b) + "'";
+					buf += "'" + String.fromCodePoint(a) + "'..'" + String.fromCodePoint(b) + "'";
 				} else {
 					buf += a + ".." + b;
 				}

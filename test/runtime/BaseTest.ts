@@ -7,11 +7,10 @@ import * as assert from "assert";
 import * as stdMocks from "std-mocks";
 import { Console } from "console";
 
-import { ANTLRInputStream } from "antlr4ts/ANTLRInputStream";
 import { CharStream } from "antlr4ts/CharStream";
+import { CharStreams } from "antlr4ts/CharStreams";
 import { CommonTokenStream } from "antlr4ts/CommonTokenStream";
 import { DiagnosticErrorListener } from "antlr4ts/DiagnosticErrorListener";
-import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { Lexer } from "antlr4ts/Lexer";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
@@ -19,7 +18,6 @@ import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 
 function trySetConsole(valueFactory: () => Console): boolean {
 	try {
@@ -85,7 +83,7 @@ class TreeShapeListener implements ParseTreeListener {
 }
 
 export function lexerTest(options: LexerTestOptions) {
-	const inputStream: CharStream = new ANTLRInputStream(options.input);
+	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
 	expectConsole( options.expectedOutput, options.expectedErrors, () => {
@@ -98,7 +96,7 @@ export function lexerTest(options: LexerTestOptions) {
 }
 
 export function parserTest<TParser extends Parser>(options: ParserTestOptions<TParser>) {
-	const inputStream: CharStream = new ANTLRInputStream(options.input);
+	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
 	const parser = new options.parser(tokens);

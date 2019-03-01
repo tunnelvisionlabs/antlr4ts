@@ -826,7 +826,7 @@ recRuleSetReturnAction(src,name)	  ::= "$<name>=$<src>.<name>;"
 recRuleSetStopToken()                 ::= "this._ctx._stop = this._input.tryLT(-1);"
 
 recRuleAltStartAction(ruleName, ctxName, label, isListLabel) ::= <<
-_localctx = new <ctxName>Context(_parentctx, _parentState);
+_localctx = new <ctxName>(_parentctx, _parentState);
 <if(label)>
 <if(isListLabel)>
 _localctx._<label>.push(_prevctx);
@@ -837,8 +837,8 @@ _localctx._<label> = _prevctx;
 this.pushNewRecursionContext(_localctx, _startState, <parser.name>.RULE_<ruleName>);
 >>
 
-recRuleLabeledAltStartAction(ruleName, currentAltLabel, label, isListLabel) ::= <<
-_localctx = new <currentAltLabel; format="cap">Context(new <ruleName; format="cap">Context(_parentctx, _parentState));
+recRuleLabeledAltStartAction(ruleName, ctxName, currentAltLabel, label, isListLabel) ::= <<
+_localctx = new <currentAltLabel; format="cap">Context(new <ctxName>(_parentctx, _parentState));
 <if(label)>
 <if(isListLabel)>
 (_localctx as <currentAltLabel; format="cap">Context)._<label>.push(_prevctx);
@@ -890,11 +890,15 @@ import * as Utils from "<basePath()>/misc/Utils";
 
 Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass, isLexer=true) ::= <<
 export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends <superClass; null="Lexer"> {
-	<lexer.tokens:{k | public static readonly <k> = <lexer.tokens.(k)>;}; separator="\n", wrap, anchor>
-	<if(lexer.channels)>
-	<lexer.channels:{k | public static readonly <k> = <lexer.channels.(k)>;}; separator="\n", wrap, anchor>
-	<endif>
-	<rest(lexer.modes):{m| public static readonly <m> = <i>;}; separator="\n">
+	<lexer.tokens:{k | public static readonly <k> = <lexer.tokens.(k)>;}; separator="\n">
+	<lexer.channels:{c | public static readonly <c> = <lexer.channels.(c)>;}; separator="\n">
+	<rest(lexer.modes):{m | public static readonly <m> = <i>;}; separator="\n">
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly channelNames: string[] = [
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",<if(lexer.channels)> <lexer.channels:{c| "<c>",}; separator=" ", wrap, anchor><endif>
+	];
+
 	// tslint:disable:no-trailing-whitespace
 	public static readonly modeNames: string[] = [
 		<lexer.modes:{m| "<m>",}; separator=" ", wrap, anchor>
@@ -922,6 +926,9 @@ export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends 
 
 	// @Override
 	public get serializedATN(): string { return <lexer.name>._serializedATN; }
+
+	// @Override
+	public get channelNames(): string[] { return <lexer.name>.channelNames; }
 
 	// @Override
 	public get modeNames(): string[] { return <lexer.name>.modeNames; }
