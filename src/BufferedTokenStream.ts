@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:49.6074365-07:00
 
-import assert = require("assert");
+import * as assert from "assert";
 import { CommonToken } from "./CommonToken";
 import { Interval } from "./misc/Interval";
 import { Lexer } from "./Lexer";
@@ -295,6 +295,14 @@ export class BufferedTokenStream implements TokenStream {
 		this.p = this.adjustSeekIndex(0);
 	}
 
+	public getTokens(): Token[];
+
+	public getTokens(start: number, stop: number): Token[];
+
+	public getTokens(start: number, stop: number, types: Set<number>): Token[];
+
+	public getTokens(start: number, stop: number, ttype: number): Token[];
+
 	/** Given a start and stop index, return a `List` of all tokens in
 	 *  the token type `BitSet`.  Return an empty array if no tokens were found.  This
 	 *  method looks at both on and off channel tokens.
@@ -302,21 +310,22 @@ export class BufferedTokenStream implements TokenStream {
 	public getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {
 		this.lazyInit();
 
-		start = start || 0;
-		stop = stop || this.tokens.length - 1;
-		if (start < 0 || stop >= this.tokens.length || stop < 0 || start >= this.tokens.length) {
-			throw new RangeError("start " + start + " or stop " + stop + " not in 0.." + (this.tokens.length - 1));
+		if (start === undefined) {
+			assert(stop === undefined && types === undefined);
+			return this.tokens;
+		} else if (stop === undefined) {
+			stop = this.tokens.length - 1;
 		}
 
-		if (start === 0 && stop === this.tokens.length - 1) {
-			return this.tokens;
+		if (start < 0 || stop >= this.tokens.length || stop < 0 || start >= this.tokens.length) {
+			throw new RangeError("start " + start + " or stop " + stop + " not in 0.." + (this.tokens.length - 1));
 		}
 
 		if (start > stop) {
 			return [];
 		}
 
-		if (types == null) {
+		if (types === undefined) {
 			return this.tokens.slice(start, stop + 1);
 		} else if (typeof types === "number") {
 			types = new Set<number>().add(types);
