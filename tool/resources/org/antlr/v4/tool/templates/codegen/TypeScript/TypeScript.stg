@@ -21,6 +21,7 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 <namedActions.header>
 
 import { ATN } from "<basePath()>/atn/ATN";
+import { INVALID_ALT_NUMBER } from "<basePath()>/atn/Constant";
 import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
 import { FailedPredicateException } from "<basePath()>/FailedPredicateException";
 import { NotNull } from "<basePath()>/Decorators";
@@ -529,7 +530,7 @@ StarBlock(choice, alts, sync, iteration) ::= <<
 this.state = <choice.stateNumber>;
 this._errHandler.sync(this);
 _alt = this.interpreter.adaptivePredict(this._input, <choice.decision>, this._ctx);
-while (_alt !== <choice.exitAlt> && _alt !== ATN.INVALID_ALT_NUMBER) {
+while (_alt !== <choice.exitAlt> && _alt !== INVALID_ALT_NUMBER) {
 	if (_alt === 1<if(!choice.ast.greedy)> + 1<endif>) {
 		<iteration>
 		<alts><! should only be one !>
@@ -556,7 +557,7 @@ case <i><if(!choice.ast.greedy)> + 1<endif>:
 	this.state = <choice.loopBackStateNumber>;<! loopback/exit decision !>
 	this._errHandler.sync(this);
 	_alt = this.interpreter.adaptivePredict(this._input, <choice.decision>, this._ctx);
-} while (_alt !== <choice.exitAlt> && _alt !== ATN.INVALID_ALT_NUMBER);
+} while (_alt !== <choice.exitAlt> && _alt !== INVALID_ALT_NUMBER);
 >>
 
 Sync(s) ::= "this.sync(<s.expecting.name>);"
@@ -869,6 +870,7 @@ LexerFile(file, lexer, namedActions) ::= <<
 <namedActions.header>
 
 import { ATN } from "<basePath()>/atn/ATN";
+import { INVALID_ALT_NUMBER } from "<basePath()>/atn/Constant";
 import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
 import { CharStream } from "<basePath()>/CharStream";
 import { Lexer } from "<basePath()>/Lexer";
