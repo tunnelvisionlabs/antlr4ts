@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 import { Arrays } from "../misc/Arrays";
-import { ATN } from "../atn/ATN";
+import { INVALID_ALT_NUMBER } from "../atn/Constant";
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
@@ -90,7 +90,7 @@ export class Trees {
 			let ruleIndex: number = ruleContext.ruleIndex;
 			let ruleName: string = ruleNames[ruleIndex];
 			let altNumber: number = ruleContext.altNumber;
-			if (altNumber !== ATN.INVALID_ALT_NUMBER) {
+			if (altNumber !== INVALID_ALT_NUMBER) {
 				return ruleName + ":" + altNumber;
 			}
 			return ruleName;

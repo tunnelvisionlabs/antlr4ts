@@ -264,7 +264,3 @@ export class ATN {
 		return expected;
 	}
 }
-
-export namespace ATN {
-	export const INVALID_ALT_NUMBER: number = 0;
-}

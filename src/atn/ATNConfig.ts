@@ -14,7 +14,7 @@ import { MurmurHash } from "../misc/MurmurHash";
 import { NotNull, Override } from "../Decorators";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
 import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
+import { PredictionContextCache } from "./PredictionContext";
 import { Recognizer } from "../Recognizer";
 import { SemanticContext } from "./SemanticContext";
 

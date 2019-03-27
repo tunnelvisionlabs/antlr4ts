@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.4741196-07:00
 
-import { ATN } from "./atn/ATN";
+import { INVALID_ALT_NUMBER } from "./atn/Constant";
 import { Override } from "./Decorators";
 import { ParserRuleContext } from "./ParserRuleContext";
 
@@ -31,7 +31,7 @@ export class RuleContextWithAltNum extends ParserRuleContext {
 			super();
 		}
 
-		this._altNumber = ATN.INVALID_ALT_NUMBER;
+		this._altNumber = INVALID_ALT_NUMBER;
 	}
 
 	@Override
