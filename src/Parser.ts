@@ -24,6 +24,7 @@ import { IntStream } from "./IntStream";
 import { Lexer } from "./Lexer";
 import { Override, NotNull, Nullable } from "./Decorators";
 import { ParseInfo } from "./atn/ParseInfo";
+import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
 import { ParserATNSimulator } from "./atn/ParserATNSimulator";
 import { ParserErrorListener } from "./ParserErrorListener";
 import { ParserRuleContext } from "./ParserRuleContext";
@@ -39,7 +40,6 @@ import { Token } from "./Token";
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
 import { TokenStream } from "./TokenStream";
-import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
 import { ParseTreePatternMatcher } from "./tree/pattern/ParseTreePatternMatcher";
 
 class TraceListener implements ParseTreeListener {

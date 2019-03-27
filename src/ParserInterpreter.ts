@@ -5,6 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:53.1043451-07:00
 
+import { Parser } from "./Parser";
+import { ParserATNSimulator } from "./atn/ParserATNSimulator";
 import { ActionTransition } from "./atn/ActionTransition";
 import { ATN } from "./atn/ATN";
 import { ATNState } from "./atn/ATNState";
@@ -18,8 +20,6 @@ import { InterpreterRuleContext } from "./InterpreterRuleContext";
 import { LoopEndState } from "./atn/LoopEndState";
 import { NotNull } from "./Decorators";
 import { Override } from "./Decorators";
-import { Parser } from "./Parser";
-import { ParserATNSimulator } from "./atn/ParserATNSimulator";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { PrecedencePredicateTransition } from "./atn/PrecedencePredicateTransition";
 import { PredicateTransition } from "./atn/PredicateTransition";

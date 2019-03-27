@@ -5,6 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:31.1989835-07:00
 
+import { Parser } from "../Parser";
 import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
 import { ActionTransition } from "./ActionTransition";
 import { Array2DHashSet } from "../misc/Array2DHashSet";
@@ -30,7 +31,6 @@ import { NotNull, Nullable, Override } from "../Decorators";
 import { NotSetTransition } from "./NotSetTransition";
 import { NoViableAltException } from "../NoViableAltException";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { Parser } from "../Parser";
 import { ParserRuleContext } from "../ParserRuleContext";
 import { PrecedencePredicateTransition } from "./PrecedencePredicateTransition";
 import { PredicateTransition } from "./PredicateTransition";

@@ -5,6 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.4188352-07:00
 
+import { Parser } from "../Parser";
+import { ParserATNSimulator } from "./ParserATNSimulator";
 import { AmbiguityInfo } from "./AmbiguityInfo";
 import { INVALID_ALT_NUMBER } from "./Constant";
 import { ATNConfigSet } from "./ATNConfigSet";
@@ -17,8 +19,6 @@ import { DFAState } from "../dfa/DFAState";
 import { ErrorInfo } from "./ErrorInfo";
 import { NotNull, Override } from "../Decorators";
 import { LookaheadEventInfo } from "./LookaheadEventInfo";
-import { Parser } from "../Parser";
-import { ParserATNSimulator } from "./ParserATNSimulator";
 import { ParserRuleContext } from "../ParserRuleContext";
 import { PredicateEvalInfo } from "./PredicateEvalInfo";
 import { PredictionContextCache } from "./PredictionContext";

@@ -45,7 +45,7 @@ import { ParserRuleContext } from "../src/ParserRuleContext";
 import { ParseTree } from "../src/tree/ParseTree";
 import { ParseTreeListener } from "../src/tree/ParseTreeListener";
 import { ParseTreeWalker } from "../src/tree/ParseTreeWalker";
-import { PredictionContextCache } from "../src/atn/PredictionContextCache";
+import { PredictionContextCache } from "../src/atn/PredictionContext";
 import { PredictionMode } from "../src/atn/PredictionMode";
 import { RecognitionException } from "../src/RecognitionException";
 import { Recognizer } from "../src/Recognizer";

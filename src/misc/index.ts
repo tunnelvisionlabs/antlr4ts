@@ -16,7 +16,7 @@ export * from "./EqualityComparator";
 // export * from "./FlexibleHashMap";
 export * from "./IntegerList";
 export * from "./IntegerStack";
-export * from "./InterpreterDataReader";
+// export * from "./InterpreterDataReader";
 export * from "./Interval";
 export * from "./IntervalSet";
 export * from "./IntSet";
