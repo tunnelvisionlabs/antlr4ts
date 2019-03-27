@@ -6,7 +6,7 @@
 import { IntegerList } from "../../src/misc/IntegerList";
 
 import { suite, test } from "mocha-typescript";
-import * as assert from "assert";
+import assert from "assert";
 
 @suite
 export class TestIntegerList {

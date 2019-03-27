@@ -68,7 +68,7 @@ import { JavaParser as JavaParserAtn } from "./gen/std-atn/JavaParser";
 import { JavaLRParser as JavaLRParser } from "./gen/lr/JavaLRParser";
 import { JavaLRParser as JavaLRParserAtn } from "./gen/lr-atn/JavaLRParser";
 
-import * as assert from "assert";
+import assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
 

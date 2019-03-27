@@ -11,7 +11,7 @@ import { Interval } from "../src/misc/Interval";
 import { NotNull } from "../src/Decorators";
 import { Override } from "../src/Decorators";
 
-import * as assert from "assert";
+import assert from "assert";
 
 const BACKSLASH = "\\".charCodeAt(0);
 const LOWER_U = "u".charCodeAt(0);

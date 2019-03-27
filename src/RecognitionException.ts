@@ -29,7 +29,7 @@ export class RecognitionException extends Error {
 
 	private ctx?: RuleContext;
 
-	private input?: IntStream;
+	protected input?: IntStream;
 
 	/**
 	 * The current {@link Token} when an error occurred. Since not all streams

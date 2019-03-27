@@ -42,7 +42,7 @@ export class LexerNoViableAltException extends RecognitionException {
 
 	@Override
 	get inputStream(): CharStream {
-		return super.inputStream as CharStream;
+		return this.input as CharStream;
 	}
 
 	@Override

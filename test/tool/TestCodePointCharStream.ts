@@ -3,7 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import * as assert from "assert";
+import assert from "assert";
 import { test, suite } from "mocha-typescript";
 import { CharStreams } from "../../src/CharStreams";
 import { CodePointCharStream } from "../../src/CodePointCharStream";

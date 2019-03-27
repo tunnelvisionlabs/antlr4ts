@@ -36,7 +36,7 @@ import { ParseTreeMatcherX7Parser } from "./gen/matcher/ParseTreeMatcherX7Parser
 import { ParseTreeMatcherX8Lexer } from "./gen/matcher/ParseTreeMatcherX8Lexer";
 import { ParseTreeMatcherX8Parser } from "./gen/matcher/ParseTreeMatcherX8Parser";
 
-import * as assert from "assert";
+import assert from "assert";
 import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
 @suite

@@ -66,7 +66,7 @@ export class ParserRuleContext extends RuleContext {
 	 *
 	 *  This does not trace states visited during prediction.
 	 */
-//	public Array<number> states;
+	//	public Array<number> states;
 
 	public _start: Token;
 	public _stop: Token | undefined;
@@ -214,10 +214,10 @@ export class ParserRuleContext extends RuleContext {
 		}
 	}
 
-//	public void trace(int s) {
-//		if ( states==null ) states = new ArrayList<Integer>();
-//		states.add(s);
-//	}
+	//	public void trace(int s) {
+	//		if ( states==null ) states = new ArrayList<Integer>();
+	//		states.add(s);
+	//	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
 	 *  we entered a rule. If we have # label, we will need to remove
@@ -232,7 +232,7 @@ export class ParserRuleContext extends RuleContext {
 	@Override
 	/** Override to make type more specific */
 	get parent(): ParserRuleContext | undefined {
-		let parent = super.parent;
+		let parent = this._parent;
 		if (parent === undefined || parent instanceof ParserRuleContext) {
 			return parent;
 		}
@@ -241,9 +241,9 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	public getChild(i: number): ParseTree;
-	public getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
+	public getChild<T extends ParseTree>(i: number, ctxType: { new(...args: any[]): T; }): T;
 	// Note: in TypeScript, order or arguments reversed
-	public getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
+	public getChild<T extends ParseTree>(i: number, ctxType?: { new(...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			throw new RangeError("index parameter must be between >= 0 and <= number of children.");
 		}
@@ -260,7 +260,7 @@ export class ParserRuleContext extends RuleContext {
 		return result;
 	}
 
-	public tryGetChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+	public tryGetChild<T extends ParseTree>(i: number, ctxType: { new(...args: any[]): T; }): T | undefined {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			return undefined;
 		}
@@ -332,15 +332,15 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	// NOTE: argument order change from Java version
-	public getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
+	public getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new(...args: any[]): T; }): T {
 		return this.getChild(i, ctxType);
 	}
 
-	public tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+	public tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new(...args: any[]): T; }): T | undefined {
 		return this.tryGetChild(i, ctxType);
 	}
 
-	public getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
+	public getRuleContexts<T extends ParserRuleContext>(ctxType: { new(...args: any[]): T; }): T[] {
 		let contexts: T[] = [];
 		if (!this.children) {
 			return contexts;

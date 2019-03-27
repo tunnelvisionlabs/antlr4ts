@@ -22,7 +22,7 @@ import { PredictionContext } from "./PredictionContext";
 import { PredictionContextCache } from "./PredictionContextCache";
 import { SemanticContext } from "./SemanticContext";
 
-import * as assert from "assert";
+import assert from "assert";
 import * as Utils from "../misc/Utils";
 
 interface KeyType { state: number; alt: number; }

@@ -7,7 +7,7 @@ import { Token } from "../../src/Token";
 import { Vocabulary } from "../../src/Vocabulary";
 import { VocabularyImpl } from "../../src/VocabularyImpl";
 
-import * as assert from "assert";
+import assert from "assert";
 import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
 /**

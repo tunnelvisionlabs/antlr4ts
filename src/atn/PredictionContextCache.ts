@@ -10,7 +10,7 @@ import { Override } from "../Decorators";
 import { JavaMap } from "../misc/Stubs";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
 import { PredictionContext } from "./PredictionContext";
-import * as assert from "assert";
+import assert from "assert";
 
 /** Used to cache {@link PredictionContext} objects. Its used for the shared
  *  context cash associated with contexts in DFA states. This cache

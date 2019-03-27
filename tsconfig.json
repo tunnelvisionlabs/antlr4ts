@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "target",
     "sourceMap": true,
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "es2015",
+    "target": "es5",
     "lib": [
       "es6"
     ],
@@ -11,8 +11,11 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "preserveConstEnums": true,
+    "downlevelIteration": true,
+    "moduleResolution": "node",
     "typeRoots": [
       "./node_modules/@types"
     ],
