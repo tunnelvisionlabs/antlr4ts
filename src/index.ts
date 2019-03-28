@@ -50,5 +50,8 @@ export * from "./Vocabulary";
 export * from "./VocabularyImpl";
 export * from "./WritableToken";
 export * from "./BailErrorStrategy";
+
 export * from "./atn";
+export * from "./dfa";
 export * from "./misc";
+export * from "./tree";
