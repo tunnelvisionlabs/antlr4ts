@@ -23,6 +23,9 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 import { ATN } from "<basePath()>/atn/ATN";
 import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
 import { FailedPredicateException } from "<basePath()>/FailedPredicateException";
+<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+import { IncrementalTokenStream } from "<basePath()>/IncrementalTokenStream";
+<endif>
 import { NotNull } from "<basePath()>/Decorators";
 import { NoViableAltException } from "<basePath()>/NoViableAltException";
 import { Override } from "<basePath()>/Decorators";
@@ -144,6 +147,7 @@ Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
 
 Parser_(parser, funcs, atn, sempredFuncs, ctor, superClass) ::= <<
 export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extends <superClass; null="Parser"> {
+
 	<if(parser.tokens)>
 	<parser.tokens:{k | public static readonly <k> = <parser.tokens.(k)>;}; separator="\n", wrap, anchor>
 	<endif>
@@ -239,10 +243,17 @@ case <f.ruleIndex>:
 >>
 
 parser_ctor(p) ::= <<
+<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+constructor(input: IncrementalTokenStream, deletedTokenIndexes: number[],
+		    addedTokenIndexes: number[], oldTree?: ParseTree) {
+		super(input, deletedTokenIndexes, addedTokenIndexes, oldTree);
+}
+<else>
 constructor(input: TokenStream) {
 	super(input);
 	this._interp = new ParserATNSimulator(<p.name>._ATN, this);
 }
+<endif>
 >>
 
 /* This generates a private method since the actionIndex is generated, making an
@@ -277,6 +288,10 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 // @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
+	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+	// Check whether we need to execute this rule.	
+	if (this.guardRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) {
+	<endif>
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -305,6 +320,9 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 		<finallyAction>
 		this.exitRule();
 	}
+	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+	}
+	<endif>
 	return _localctx;
 }
 >>
