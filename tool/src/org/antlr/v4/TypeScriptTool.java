@@ -78,8 +78,6 @@ public class TypeScriptTool extends Tool {
 	public Writer getOutputFileWriter(Grammar g, String fileName) throws IOException {
 		if (Boolean.parseBoolean(g.getOptionString("incremental"))) {
 			grammarOptions.put("incremental", "true");
-			g.ast.cmdLineOptions.put("contextSuperClass", "IncrementalParserRuleContext");
-			g.ast.cmdLineOptions.put("superClass", "IncrementalParser");
 		}
 		if (outputDirectory != null) {
 			// output directory is a function of where the grammar file lives

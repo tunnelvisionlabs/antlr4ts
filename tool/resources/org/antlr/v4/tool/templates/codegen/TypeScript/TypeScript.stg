@@ -24,6 +24,9 @@ import { ATN } from "<basePath()>/atn/ATN";
 import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
 import { FailedPredicateException } from "<basePath()>/FailedPredicateException";
 <if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+import { IncrementalParser } from "<basePath()>/IncrementalParser";
+import { IncrementalParserData } from "<basePath()>/IncrementalParserData";
+import { IncrementalParserRuleContext } from "<basePath()>/IncrementalParserRuleContext";
 import { IncrementalTokenStream } from "<basePath()>/IncrementalTokenStream";
 <endif>
 import { NotNull } from "<basePath()>/Decorators";
@@ -146,8 +149,11 @@ Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
 >>
 
 Parser_(parser, funcs, atn, sempredFuncs, ctor, superClass) ::= <<
+<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extends <superClass; null="IncrementalParser"> {
+<else>
 export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extends <superClass; null="Parser"> {
-
+<endif>
 	<if(parser.tokens)>
 	<parser.tokens:{k | public static readonly <k> = <parser.tokens.(k)>;}; separator="\n", wrap, anchor>
 	<endif>
@@ -244,9 +250,9 @@ case <f.ruleIndex>:
 
 parser_ctor(p) ::= <<
 <if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
-constructor(input: IncrementalTokenStream, deletedTokenIndexes: number[],
-		    addedTokenIndexes: number[], oldTree?: ParseTree) {
-		super(input, deletedTokenIndexes, addedTokenIndexes, oldTree);
+constructor(input: IncrementalTokenStream, parseData?: IncrementalParserData) {
+		super(input, parseData);
+		this._interp = new ParserATNSimulator(<p.name>._ATN, this);
 }
 <else>
 constructor(input: TokenStream) {
@@ -287,11 +293,16 @@ case <index>:
 RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,finallyAction,postamble,exceptions) ::= <<
 // @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
-	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
 	// Check whether we need to execute this rule.	
-	if (this.guardRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) {
+	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
+	// If we found an existing context that is valid, return it.
+	if (guardResult) {
+		this._input.seek(guardResult.stop!.tokenIndex + 1);
+		return guardResult;
+	}
 	<endif>
+	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, this.state<currentRule.args:{a | , <a.name>}>);
 	this.enterRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -320,9 +331,6 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 		<finallyAction>
 		this.exitRule();
 	}
-	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
-	}
-	<endif>
 	return _localctx;
 }
 >>
@@ -412,6 +420,15 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
 	let _prevctx: <currentRule.ctxType> = _localctx;
 	let _startState: number = <currentRule.startState>;
+	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+	// Check whether we need to execute this rule.	
+	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
+	// If we found an existing context that is valid, return it.
+	if (guardResult) {
+		this._input.seek(guardResult.stop!.tokenIndex + 1);
+		return guardResult;
+	}
+	<endif>
 	this.enterRecursionRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>, _p);
 	<namedActions.init>
 	<locals; separator="\n">
@@ -775,7 +792,11 @@ CaptureNextTokenType(d) ::= "<d.varName> = this._input.LA(1);"
 
 StructDecl(struct,ctorAttrs,attrs,getters,dispatchMethods,interfaces,extensionMembers)
 	::= <<
+<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
+export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>IncrementalParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
+<else>
 export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>ParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
+<endif>
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
 	constructor(parent: ParserRuleContext | undefined, invokingState: number<ctorAttrs:{a | , <a>}>) {
