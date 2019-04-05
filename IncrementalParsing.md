@@ -50,6 +50,9 @@ Tree fixup is actually the most expensive part of the parser data right now, and
 - The way the incremental grammar option is parsed/used in the stg file should obviously be moved to antlr4 core.
 - There is code that could be cleaned up if we included an IntervalMap datastructure (or at least a NonOverlappingIntervalList. IntervalSet does not do what we need). To ensure i did not add dependencies, i didn't do this, but it will likely be worth it in the future.
 - We currently eagerly fixup the old parse tree in IncrementalParserData, etc. We may want to be lazier and just do it in the parser when the context gets reused instead.
+- We use the parselistener interface as an easy way to ensure we get to see entry/exit events at the right time. This turned out to be easier than handling
+recursion/left factoring through overriding the relevant parser interface pieces.
+
 
 #### References
 

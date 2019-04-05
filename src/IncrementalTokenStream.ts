@@ -10,6 +10,13 @@ import { Interval } from "./misc/Interval";
 
 export class IncrementalTokenStream extends CommonTokenStream {
 	/**
+	 * ANTLR looks at the same tokens alot, and this avoids recalculating the
+	 * interval when the position and lookahead number doesn't move.
+	 */
+	private lastP: number = -1;
+	private lastK: number = -1;
+
+	/**
 	 * This tracks the min/max token index looked at since the value was reset.
 	 * This is used to track how far ahead the grammar looked, since it may be
 	 * outside the rule context's start/stop tokens.
@@ -47,13 +54,19 @@ export class IncrementalTokenStream extends CommonTokenStream {
 	}
 	public LT(k: number): Token {
 		let result = super.LT(k);
-		// Adjust the top of the minimum maximum stack.
-		if (this.minMaxStack.length !== 0) {
+		// Adjust the top of the minimum maximum stack if the position/lookahead amount changed.
+		if (
+			this.minMaxStack.length !== 0 &&
+			(this.lastP !== this.p || this.lastK !== k)
+		) {
 			let lastIdx = this.minMaxStack.length - 1;
 			let stackItem = this.minMaxStack[lastIdx];
 			this.minMaxStack[lastIdx] = stackItem.union(
 				Interval.of(result.tokenIndex, result.tokenIndex),
 			);
+
+			this.lastP = this.p;
+			this.lastK = k;
 		}
 		return result;
 	}
