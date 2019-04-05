@@ -8,8 +8,11 @@ import { IncrementalTokenStream } from "./IncrementalTokenStream";
 import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { IncrementalParserData } from "./IncrementalParserData";
+import { ParseTreeListener } from "./tree/ParseTreeListener";
 
-export abstract class IncrementalParser extends Parser {
+// In order to make this easier in code generation, we use the parse listener interface to do most of our work.
+export abstract class IncrementalParser extends Parser
+	implements ParseTreeListener {
 	public static _PARSER_EPOCH: number = 0;
 	public static get PARSER_EPOCH() {
 		return this._PARSER_EPOCH;
@@ -25,6 +28,8 @@ export abstract class IncrementalParser extends Parser {
 		super(input);
 		this.parseData = parseData;
 		this.incrementParserEpoch();
+		// Register ourselves as our own parse listener. Life is weird.
+		this.addParseListener(this);
 	}
 
 	// Push the current token data onto the min max stack for the stream.
@@ -34,14 +39,19 @@ export abstract class IncrementalParser extends Parser {
 		incStream.pushMinMax(token.tokenIndex, token.tokenIndex);
 	}
 
-	// Pop the min max stack the stream is using.
-	private popCurrentMinMax() {
+	// Pop the min max stack the stream is using and return the interval.
+	private popCurrentMinMax(ctx: IncrementalParserRuleContext) {
 		let incStream = this.inputStream as IncrementalTokenStream;
-		let incCtx = this._ctx as IncrementalParserRuleContext;
 		let interval = incStream.popMinMax();
-		return { incCtx, interval };
+		return interval;
 	}
 
+	/**
+	 * Guard a rule's previous context from being reused.
+	 *
+	 * This routine will check whether a given parser rule needs to be rerun, or if we already have context that can be
+	 * reused for this parse.
+	 */
 	public guardRule(
 		parentCtx: IncrementalParserRuleContext,
 		state: number,
@@ -74,78 +84,36 @@ export abstract class IncrementalParser extends Parser {
 		return existingCtx;
 	}
 
-	public enterRule(
-		localctx: ParserRuleContext,
-		state: number,
-		ruleIndex: number,
-	): void {
+	/**
+	 * Pop the min max stack the stream is using and union the interval
+	 * into the passed in context.  Return the interval for the context
+	 *
+	 * @param ctx Context to union interval into.
+	 */
+	private popAndHandleMinMax(ctx: IncrementalParserRuleContext) {
+		let interval = this.popCurrentMinMax(ctx);
+		ctx.minMaxTokenIndex = ctx.minMaxTokenIndex.union(interval);
+		// Returning interval is wrong because there may have been child
+		// intervals already merged into this ctx.
+		return ctx.minMaxTokenIndex;
+	}
+
+	public enterEveryRule(ctx: ParserRuleContext) {
 		// During rule entry, we push a new min/max token state.
 		this.pushCurrentTokenToMinMax();
-		super.enterRule(localctx, state, ruleIndex);
-		(localctx as IncrementalParserRuleContext).epoch =
+		(ctx as IncrementalParserRuleContext).epoch =
 			IncrementalParser.PARSER_EPOCH;
 	}
-	public exitRule(): void {
-		// Here _ctx is the local context.
-		let { incCtx, interval } = this.popCurrentMinMax();
-
-		// Set the created context min/max numbers.
-		incCtx.minMaxTokenIndex = incCtx.minMaxTokenIndex.union(interval);
-		// After the call to super.exitRule, _ctx now points to the parent.
-		super.exitRule();
-		// Adjust the parent context min/max numbers if needed.
-		// the end result after rule processing is that they are the min/max of their children.
-		if (this._ctx) {
-			let parentIncCtx = this._ctx as IncrementalParserRuleContext;
+	public exitEveryRule(ctx: ParserRuleContext) {
+		// First merge with our interval
+		let incCtx = ctx as IncrementalParserRuleContext;
+		let interval = this.popAndHandleMinMax(incCtx);
+		// Now merge with our parent interval.
+		if (incCtx._parent) {
+			let parentIncCtx = incCtx._parent as IncrementalParserRuleContext;
 			parentIncCtx.minMaxTokenIndex = parentIncCtx.minMaxTokenIndex.union(
-				incCtx.minMaxTokenIndex,
+				interval,
 			);
 		}
 	}
-
-	/*  Need to finish and verify this
-	public enterRecursionRule(
-		localctx: ParserRuleContext,
-		state: number,
-		ruleIndex: number,
-		precedence: number,
-	): void {
-		// During rule entry, we push a new min/max token state.
-		this.pushCurrentTokenToMinMax();
-		(localctx as IncrementalParserRuleContext).epoch =
-			IncrementalParser.PARSER_EPOCH;
-		super.enterRecursionRule(localctx, state, ruleIndex, precedence);
-	}
-	public pushNewRecursionContext(
-		localctx: ParserRuleContext,
-		state: number,
-		ruleIndex: number,
-	): void {
-		// During rule entry, we push a new min/max token state.
-		this.pushCurrentTokenToMinMax();
-		(localctx as IncrementalParserRuleContext).epoch =
-			IncrementalParser.PARSER_EPOCH;
-		super.pushNewRecursionContext(localctx, state, ruleIndex);
-	}
-	public unrollRecursionContexts(_parentctx: ParserRuleContext): void {
-		// Walk all the recursive contexts and do what we would do for a normal exit.
-		let currCtx = this._ctx as IncrementalParserRuleContext;
-		while (currCtx !== _parentctx) {
-			let { incCtx, interval } = this.popCurrentMinMax();
-
-			// Set the created context min/max numbers.
-			incCtx.minMaxTokenIndex = incCtx.minMaxTokenIndex.union(interval);
-			currCtx = currCtx._parent as IncrementalParserRuleContext;
-			let parentIncCtx = currCtx;
-			parentIncCtx.minMaxTokenIndex = parentIncCtx.minMaxTokenIndex.union(
-				incCtx.minMaxTokenIndex,
-			);
-		}
-		let parentIncCtx = currCtx._parent as IncrementalParserRuleContext;
-		parentIncCtx.minMaxTokenIndex = parentIncCtx.minMaxTokenIndex.union(
-			currCtx.minMaxTokenIndex,
-		);
-		super.unrollRecursionContexts(_parentctx);
-	}
-	*/
 }
