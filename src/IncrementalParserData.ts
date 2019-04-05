@@ -36,7 +36,7 @@ function findChangedTokenInRange(
 			low = mid + 1;
 		}
 	}
-	return undefined;
+	return -1;
 }
 
 // Given a token index in the old token stream, and an array of token changes, see what the
@@ -233,22 +233,33 @@ export class IncrementalParserData {
 		let start = ctx.minTokenIndex;
 		let end = ctx.maxTokenIndex;
 		let result = findChangedTokenInRange(this.changedTokens, start, end);
-		if (result !== undefined) {
+		if (result !== -1) {
 			return true;
 		}
 
 		return false;
 	}
 	/**
-	 * Try to see if we have existing context for this rule and token position
-	 * that may be reused.
+	 * Try to see if we have existing context for this state, rule and token position that may be reused.
+	 *
+	 * @param state Parser state number - currently ignored.
 	 * @param ruleIndex Rule number
 	 * @param tokenIndex Token index in the *new* token stream
 	 */
-	public tryGetContext(ruleIndex: number, tokenIndex: number) {
-		return this.ruleStartMap.get(`${ruleIndex},${tokenIndex}`);
+	public tryGetContext(state: number, ruleIndex: number, tokenIndex: number) {
+		return this.ruleStartMap.get(this.getKey(state, ruleIndex, tokenIndex));
 	}
 
+	private getKeyFromContext(ctx: IncrementalParserRuleContext) {
+		return this.getKey(
+			ctx.invokingState,
+			ctx.ruleIndex,
+			ctx.start.tokenIndex,
+		);
+	}
+	private getKey(state: number, rule: number, tokenindex: number) {
+		return `${state},${rule},${tokenindex}`;
+	}
 	/**
 	 * 	Index a given parse tree and adjust the min/max ranges
 	 *  @param tree Parser context to adjust
@@ -358,19 +369,16 @@ export class IncrementalParserData {
 				// reuse. Also don't touch contexts without an epoch. They must
 				// represent something the incremental parser never saw,
 				// since it sets epochs on all contexts it touches.
-				if (
+				let usableContext =
 					incCtx.epoch &&
-					!this.incrementalData.ruleAffectedByTokenChanges(incCtx)
-				) {
+					!this.incrementalData.ruleAffectedByTokenChanges(incCtx);
+				if (usableContext) {
 					if (this.tokenOffsets && this.tokenOffsets.length !== 0) {
 						this.adjustMinMax(incCtx);
 						this.adjustStartStop(incCtx);
 					}
-
-					this.ruleStartMap.set(
-						`${incCtx.ruleIndex},${incCtx.start.tokenIndex}`,
-						incCtx,
-					);
+					let key = this.incrementalData.getKeyFromContext(incCtx);
+					this.ruleStartMap.set(key, incCtx);
 				}
 			}
 		};

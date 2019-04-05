@@ -82,6 +82,7 @@ export abstract class IncrementalParser extends Parser
 		}
 		// See if we have seen this state before at this starting point.
 		let existingCtx = this.parseData.tryGetContext(
+			this.state,
 			ruleIndex,
 			this._input.LT(1).tokenIndex,
 		);
@@ -116,14 +117,41 @@ export abstract class IncrementalParser extends Parser
 		// intervals already merged into this ctx.
 		return ctx.minMaxTokenIndex;
 	}
+	/*
+	  This is part of the regular Parser API.
+	  The super method must be called.
+    */
 
-	/* These two functions are parse of the ParseTreeListener API */
+	/**
+	 * The new recursion context is an unfortunate edge case for us.
+	 * It reparents the relationship between the contexts,
+	 * so we need to merge intervals here.
+	 */
+	public pushNewRecursionContext(
+		localctx: ParserRuleContext,
+		state: number,
+		ruleIndex: number,
+	): void {
+		// This context becomes the child
+		let previous = this._ctx as IncrementalParserRuleContext;
+		// The incoming context becomes the parent
+		let incLocalCtx = localctx as IncrementalParserRuleContext;
+		incLocalCtx.minMaxTokenIndex = incLocalCtx.minMaxTokenIndex.union(
+			previous.minMaxTokenIndex,
+		);
+		super.pushNewRecursionContext(localctx, state, ruleIndex);
+	}
+
+	/*
+	   These two functions are parse of the ParseTreeListener API.
+	   We do not need to call super methods
+	*/
 
 	public enterEveryRule(ctx: ParserRuleContext) {
 		// During rule entry, we push a new min/max token state.
 		this.pushCurrentTokenToMinMax();
-		(ctx as IncrementalParserRuleContext).epoch =
-			IncrementalParser.PARSER_EPOCH;
+		let incCtx = ctx as IncrementalParserRuleContext;
+		incCtx.epoch = IncrementalParser.PARSER_EPOCH;
 	}
 	public exitEveryRule(ctx: ParserRuleContext) {
 		// On exit, we need to merge the min max into the current context,
