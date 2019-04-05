@@ -102,18 +102,28 @@ class SyncableTokenStream extends IncrementalTokenStream {
  * This class computes and stores data needed by the incremental parser.
  * It is fairly unoptimized ATM to make things obvious and hopefully less broken.
  *
- *
  * Please note: This class expects to own the parse tree passed in,
  * and will modify it.
  * Please clone them if you need them to remain unmodified for some reason.
  */
 export class IncrementalParserData {
 	private tokenStream: IncrementalTokenStream;
+	/* This mapping gives you a range and token index offset to be applied for
+	   that range.  It is used to figure out what token in the new stream to
+	   look at for a given token in the old stream. */
 	private tokenOffsets: TokenOffsetRange[];
+
+	/* This is the set of tokens that changed in any way. We do not use IntervalSet ATM,
+	   we would need a function that operates like the binary search. Since IntervalSet
+	   is a port, i didn't want to modify it.  */
 	private changedTokens: number[] = [];
+
+	/* This is the set of token changes that were specified by the user.  */
 	private tokenChanges: TokenChange[] | undefined;
-	// We can't use a nice interface type here as the key because of how map equality
-	// works in ES right now. Hopefully ES7 will fix this.
+
+	/* This maps from rule number, starting token index, to context we've seen before.
+	   We can't use a nice interface type here as the key because of how map equality
+	   works in ES right now. Hopefully ES7 will fix this. */
 	private ruleStartMap = new Map<string, IncrementalParserRuleContext>();
 
 	constructor();
@@ -135,6 +145,16 @@ export class IncrementalParserData {
 		}
 	}
 
+	/**
+	 * Take the set of token changes the user specified and convert it into two things:
+	 * 1. A list of changed tokens
+	 * 2. A set of ranges that say how tokenIndexes that appear in the old stream
+	 * will have changed in the new stream. IE if a token was removed, the tokens after
+	 * would appear at originalIndex - 1 in the new stream.
+	 *
+	 * @param maxOldTokenIndex The maximum token index we may see in the old stream.
+	 * This is used as the upper bound of the last range.
+	 */
 	private computeTokenOffsetRanges(maxOldTokenIndex: number) {
 		if (!this.tokenChanges || this.tokenChanges.length === 0) {
 			return new Map<number, Token>();
@@ -165,7 +185,7 @@ export class IncrementalParserData {
 				indexOffset += 1;
 				indexToPush = tokenChange.newToken!.tokenIndex;
 			}
-			// End the previous range at the index right before us
+			// End the previous range at the token index right before us
 			if (tokenOffsets.length !== 0) {
 				let lastIdx = tokenOffsets.length - 1;
 				let lastItem = tokenOffsets[lastIdx];
@@ -174,13 +194,15 @@ export class IncrementalParserData {
 					indexToPush - 1,
 				);
 			}
-			// Push the range this change starts at, and what the effect is.
+			// Push the range this change starts at, and what the effect is on
+			// the index.
 			tokenOffsets.push({
 				indexOffset,
 				interval: Interval.of(indexToPush, indexToPush),
 			});
 		}
-		// End the final range at length of the old token stream. That is the last possible thing we need to offset.
+		// End the final range at length of the old token stream. That is the
+		// last possible thing we need to offset.
 		if (tokenOffsets.length !== 0) {
 			let lastIdx = tokenOffsets.length - 1;
 			let lastItem = tokenOffsets[lastIdx];
@@ -206,6 +228,8 @@ export class IncrementalParserData {
 		if (this.tokenChanges.length === 0) {
 			return false;
 		}
+
+		// See if any changed token exists in our upper, lower bounds.
 		let start = ctx.minTokenIndex;
 		let end = ctx.maxTokenIndex;
 		let result = findChangedTokenInRange(this.changedTokens, start, end);
@@ -216,7 +240,7 @@ export class IncrementalParserData {
 		return false;
 	}
 	/**
-	 * Try to see if we have existing context for this rule and token positiont
+	 * Try to see if we have existing context for this rule and token position
 	 * that may be reused.
 	 * @param ruleIndex Rule number
 	 * @param tokenIndex Token index in the *new* token stream
@@ -224,7 +248,11 @@ export class IncrementalParserData {
 	public tryGetContext(ruleIndex: number, tokenIndex: number) {
 		return this.ruleStartMap.get(`${ruleIndex},${tokenIndex}`);
 	}
-	// Index a given parse tree and adjust the min/max ranges
+
+	/**
+	 * 	Index a given parse tree and adjust the min/max ranges
+	 *  @param tree Parser context to adjust
+	 */
 	private indexAndAdjustParseTree(tree: IncrementalParserRuleContext) {
 		// This is a quick way of indexing the parse tree by start. We actually
 		// could walk the old parse tree as the parse proceeds. This is left as
@@ -233,6 +261,7 @@ export class IncrementalParserData {
 		let listener = new IncrementalParserData.ParseTreeProcessor(this);
 		ParseTreeWalker.DEFAULT.walk(listener, tree);
 	}
+
 	// We use a class expression so we can access private members of IncrementalData
 	private static ParseTreeProcessor =
 		/**
@@ -251,6 +280,13 @@ export class IncrementalParserData {
 				this.tokenOffsets = incrementalData.tokenOffsets;
 				this.ruleStartMap = incrementalData.ruleStartMap;
 			}
+
+			/**
+			 * Given a token index the old stream, figure out the token it would
+			 * be in the new stream and return it.  If we don't need token
+			 * adjustment, return nothing.
+			 * @param oldTokenIndex Token index in old stream.
+			 */
 			private getAdjustedToken(oldTokenIndex: number): Token | undefined {
 				let newTokenIndex = findAdjustedTokenIndex(
 					this.tokenOffsets,
@@ -263,6 +299,14 @@ export class IncrementalParserData {
 				}
 				return undefined;
 			}
+
+			/**
+			 * Adjust the minimum/maximum token index that appears in a rule context.
+			 * Like other functions, this simply converts the token indexes from how they
+			 * appear in the old stream to how they would appear in the new stream.
+			 *
+			 * @param ctx Parser context to adjust.
+			 */
 			private adjustMinMax(ctx: IncrementalParserRuleContext) {
 				let changed = false;
 				let newMin = ctx.minTokenIndex;
@@ -284,8 +328,9 @@ export class IncrementalParserData {
 					ctx.minMaxTokenIndex = Interval.of(newMin, newMax);
 				}
 			}
+
 			/**
-			 * Adjust the start stop token indexes of a rule to take into account
+			 * Adjust the start/stop token indexes of a rule to take into account
 			 * position changes in the token stream.
 			 *
 			 * @param ctx The rule context to adjust the start/stop tokens of.
@@ -304,11 +349,15 @@ export class IncrementalParserData {
 				}
 			}
 
+			/**
+			 * Main entry point for this walker.
+			 */
 			public enterEveryRule(ctx: ParserRuleContext) {
 				let incCtx = ctx as IncrementalParserRuleContext;
 				// Don't bother adjusting rule contexts that we can't possibly
-				// reuse. Also don't touch contexts without an epoch. They are
-				// places we haven't finished making incremental in the parser.
+				// reuse. Also don't touch contexts without an epoch. They must
+				// represent something the incremental parser never saw,
+				// since it sets epochs on all contexts it touches.
 				if (
 					incCtx.epoch &&
 					!this.incrementalData.ruleAffectedByTokenChanges(incCtx)

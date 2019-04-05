@@ -8,8 +8,9 @@ import { Interval } from "./misc/Interval";
 
 export class IncrementalParserRuleContext extends ParserRuleContext {
 	// This is an epoch number that can be used to tell which pieces were
-	// modified during a given incremental parse, which can be useful during
-	// debugging and testing.
+	// modified during a given incremental parse. The incremental parser
+	// adds the current epoch number to all rule contexts it creates.
+	// The epoch number is incremented every time a new parser instance is created.
 	public epoch: number;
 
 	// The interval that stores the min/max token we touched during lookahead/lookbehind

@@ -52,6 +52,10 @@ export class IncrementalTokenStream extends CommonTokenStream {
 	public minMaxSize() {
 		return this.minMaxStack.length;
 	}
+
+	/**
+	 * This is an override of the base LT function that tracks the minimum/maximum token index looked at.
+	 */
 	public LT(k: number): Token {
 		let result = super.LT(k);
 		// Adjust the top of the minimum maximum stack if the position/lookahead amount changed.

@@ -10,9 +10,27 @@ import { ParserRuleContext } from "./ParserRuleContext";
 import { IncrementalParserData } from "./IncrementalParserData";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
 
-// In order to make this easier in code generation, we use the parse listener interface to do most of our work.
+/**
+ * Incremental parser implementation
+ *
+ * There are only two differences between this parser and the underlying regular
+ * Parser - guard rules and min/max tracking
+ *
+ * The guard rule API is used in incremental mode to know when a rule context
+ * can be reused.  It looks for token changes in the bounds of the rule.
+ *
+ * The min/max tracking is used to track how far ahead/behind the parser looked
+ * to correctly detect whether a change can a parser rule in the future (IE when
+ * handed to the guard rule of the next parse)
+ *
+ * @notes See IncrementalParsing.md for more details on the theory behind this.
+ * In order to make this easier in code generation, we use the parse listener
+ * interface to do most of our work.
+ *
+ */
 export abstract class IncrementalParser extends Parser
 	implements ParseTreeListener {
+	// Current parser epoch. Incremented every time a new incremental parser is created.
 	public static _PARSER_EPOCH: number = 0;
 	public static get PARSER_EPOCH() {
 		return this._PARSER_EPOCH;
@@ -20,6 +38,7 @@ export abstract class IncrementalParser extends Parser
 	protected incrementParserEpoch() {
 		++IncrementalParser._PARSER_EPOCH;
 	}
+
 	private parseData: IncrementalParserData | undefined;
 	constructor(
 		input: IncrementalTokenStream,
@@ -98,6 +117,8 @@ export abstract class IncrementalParser extends Parser
 		return ctx.minMaxTokenIndex;
 	}
 
+	/* These two functions are parse of the ParseTreeListener API */
+
 	public enterEveryRule(ctx: ParserRuleContext) {
 		// During rule entry, we push a new min/max token state.
 		this.pushCurrentTokenToMinMax();
@@ -105,9 +126,13 @@ export abstract class IncrementalParser extends Parser
 			IncrementalParser.PARSER_EPOCH;
 	}
 	public exitEveryRule(ctx: ParserRuleContext) {
-		// First merge with our interval
+		// On exit, we need to merge the min max into the current context,
+		// and then merge the current context interval into our parent.
+
+		// First merge with the interval on the top of the stack.
 		let incCtx = ctx as IncrementalParserRuleContext;
 		let interval = this.popAndHandleMinMax(incCtx);
+
 		// Now merge with our parent interval.
 		if (incCtx._parent) {
 			let parentIncCtx = incCtx._parent as IncrementalParserRuleContext;
