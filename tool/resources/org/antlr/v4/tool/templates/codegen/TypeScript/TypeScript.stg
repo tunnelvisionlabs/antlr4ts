@@ -295,7 +295,7 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
 	// Check whether we need to execute this rule.	
-	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
+	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, this.state, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
 	// If we found an existing context that is valid, return it.
 	if (guardResult) {
 		this._input.seek(guardResult.stop!.tokenIndex + 1);
@@ -417,18 +417,19 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 
 	let _parentctx: ParserRuleContext = this._ctx;
 	let _parentState: number = this.state;
-	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
-	let _prevctx: <currentRule.ctxType> = _localctx;
-	let _startState: number = <currentRule.startState>;
 	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
 	// Check whether we need to execute this rule.	
-	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
+	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, _parentState, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
 	// If we found an existing context that is valid, return it.
 	if (guardResult) {
 		this._input.seek(guardResult.stop!.tokenIndex + 1);
 		return guardResult;
 	}
 	<endif>
+	let _localctx: <currentRule.ctxType> = new <currentRule.ctxType>(this._ctx, _parentState<currentRule.args:{a | , <a.name>}>);
+	let _prevctx: <currentRule.ctxType> = _localctx;
+	let _startState: number = <currentRule.startState>;
+
 	this.enterRecursionRule(_localctx, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>, _p);
 	<namedActions.init>
 	<locals; separator="\n">

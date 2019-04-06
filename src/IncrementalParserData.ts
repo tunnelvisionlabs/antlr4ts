@@ -89,14 +89,6 @@ export interface TokenChange {
 	newToken?: CommonToken;
 }
 
-// Unfortunately we have to make this public in order to be able to use it
-// from IncrementalParserData properly.
-// We do this in a type safe way however.
-class SyncableTokenStream extends IncrementalTokenStream {
-	public sync(i: number): boolean {
-		return super.sync(i);
-	}
-}
 /**
  *
  * This class computes and stores data needed by the incremental parser.
@@ -270,9 +262,9 @@ export class IncrementalParserData {
 		depth: number,
 		state: number,
 		rule: number,
-		tokenindex: number,
+		tokenIndex: number,
 	) {
-		return `${depth},${rule},${tokenindex}`;
+		return `${depth},${rule},${tokenIndex}`;
 	}
 	/**
 	 * 	Index a given parse tree and adjust the min/max ranges
@@ -283,6 +275,7 @@ export class IncrementalParserData {
 		// could walk the old parse tree as the parse proceeds. This is left as
 		// a future optimization.  We also could just allow passing in
 		// constructed maps if this turns out to be slow.
+		this.tokenStream.fill();
 		let listener = new IncrementalParserData.ParseTreeProcessor(this);
 		ParseTreeWalker.DEFAULT.walk(listener, tree);
 	}
@@ -296,12 +289,12 @@ export class IncrementalParserData {
 		 */
 		class ParseTreeProcessor implements ParseTreeListener {
 			private incrementalData: IncrementalParserData;
-			private tokenStream: SyncableTokenStream;
+			private tokenStream: IncrementalTokenStream;
 			private tokenOffsets: TokenOffsetRange[];
 			private ruleStartMap: Map<string, IncrementalParserRuleContext>;
 			constructor(incrementalData: IncrementalParserData) {
 				this.incrementalData = incrementalData;
-				this.tokenStream = incrementalData.tokenStream as SyncableTokenStream;
+				this.tokenStream = incrementalData.tokenStream;
 				this.tokenOffsets = incrementalData.tokenOffsets;
 				this.ruleStartMap = incrementalData.ruleStartMap;
 			}
@@ -319,7 +312,7 @@ export class IncrementalParserData {
 				);
 				if (newTokenIndex !== undefined) {
 					let syncableStream = this.tokenStream;
-					syncableStream.sync(newTokenIndex);
+					// We filled the stream before the walk
 					return syncableStream.get(newTokenIndex);
 				}
 				return undefined;

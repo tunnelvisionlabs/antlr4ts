@@ -31,13 +31,14 @@ import { ParseTreeListener } from "./tree/ParseTreeListener";
 export abstract class IncrementalParser extends Parser
 	implements ParseTreeListener {
 	// Current parser epoch. Incremented every time a new incremental parser is created.
-	public static _PARSER_EPOCH: number = 0;
-	public static get PARSER_EPOCH() {
-		return this._PARSER_EPOCH;
+	private static _GLOBAL_PARSER_EPOCH: number = 0;
+	public static get GLOBAL_PARSER_EPOCH() {
+		return this._GLOBAL_PARSER_EPOCH;
 	}
 	protected incrementParserEpoch() {
-		++IncrementalParser._PARSER_EPOCH;
+		return ++IncrementalParser._GLOBAL_PARSER_EPOCH;
 	}
+	public parserEpoch = -1;
 
 	private parseData: IncrementalParserData | undefined;
 	constructor(
@@ -46,7 +47,7 @@ export abstract class IncrementalParser extends Parser
 	) {
 		super(input);
 		this.parseData = parseData;
-		this.incrementParserEpoch();
+		this.parserEpoch = this.incrementParserEpoch();
 		// Register ourselves as our own parse listener. Life is weird.
 		this.addParseListener(this);
 	}
@@ -61,8 +62,7 @@ export abstract class IncrementalParser extends Parser
 	// Pop the min max stack the stream is using and return the interval.
 	private popCurrentMinMax(ctx: IncrementalParserRuleContext) {
 		let incStream = this.inputStream as IncrementalTokenStream;
-		let interval = incStream.popMinMax();
-		return interval;
+		return incStream.popMinMax();
 	}
 
 	/**
@@ -83,7 +83,7 @@ export abstract class IncrementalParser extends Parser
 		// See if we have seen this state before at this starting point.
 		let existingCtx = this.parseData.tryGetContext(
 			parentCtx ? parentCtx.depth() + 1 : 1,
-			this.state,
+			state,
 			ruleIndex,
 			this._input.LT(1).tokenIndex,
 		);
@@ -152,7 +152,7 @@ export abstract class IncrementalParser extends Parser
 		// During rule entry, we push a new min/max token state.
 		this.pushCurrentTokenToMinMax();
 		let incCtx = ctx as IncrementalParserRuleContext;
-		incCtx.epoch = IncrementalParser.PARSER_EPOCH;
+		incCtx.epoch = this.parserEpoch;
 	}
 	public exitEveryRule(ctx: ParserRuleContext) {
 		// On exit, we need to merge the min max into the current context,

@@ -32,112 +32,115 @@ import {
 } from "./gen/incremental/TestIncrementalJavaParser";
 
 const SAMPLE_TEXT_1 = "foo 5555 foo 5555 foo";
-const EXPECTED_TEXT_1 = "foo5555foo5555foo";
+const EXPECTED_TREE_1 =
+	"(program (identifier foo) (digits 5555) (identifier foo) (digits 5555) (identifier foo))";
 // In all of our expectations, the reused pieces come first and the modified pieces are after them.
 const CHILD_EXPECTATIONS_1: ContextExpectation[] = [
 	{
 		class: IdentifierContext,
 		startTokenIndex: 0,
 		stopTokenIndex: 0,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 2,
 		stopTokenIndex: 2,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 4,
 		stopTokenIndex: 4,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 6,
 		stopTokenIndex: 6,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 8,
 		stopTokenIndex: 8,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 ];
 const SAMPLE_DELETED_TEXT_2 = "foo 5555 5555 foo";
-const EXPECTED_TEXT_2 = "foo55555555foo";
+const EXPECTED_TREE_2 =
+	"(program (identifier foo) (digits 5555) (digits 5555) (identifier foo))";
 
 const CHILD_EXPECTATIONS_2: ContextExpectation[] = [
 	{
 		class: IdentifierContext,
 		startTokenIndex: 0,
 		stopTokenIndex: 0,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 2,
 		stopTokenIndex: 2,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 4,
 		stopTokenIndex: 4,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 6,
 		stopTokenIndex: 6,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 ];
 const SAMPLE_ADDED_TEXT_3 = "foo 5555 foo 5555 foo foo";
-const EXPECTED_TEXT_3 = "foo5555foo5555foofoo";
+const EXPECTED_TREE_3 =
+	"(program (identifier foo) (digits 5555) (identifier foo) (digits 5555) (identifier foo) (identifier foo))";
 
 const CHILD_EXPECTATIONS_3: ContextExpectation[] = [
 	{
 		class: IdentifierContext,
 		startTokenIndex: 0,
 		stopTokenIndex: 0,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 2,
 		stopTokenIndex: 2,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 4,
 		stopTokenIndex: 4,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: DigitsContext,
 		startTokenIndex: 6,
 		stopTokenIndex: 6,
-		text: "5555",
+		tree: "(digits 5555)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 8,
 		stopTokenIndex: 8,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 	{
 		class: IdentifierContext,
 		startTokenIndex: 10,
 		stopTokenIndex: 10,
-		text: "foo",
+		tree: "(identifier foo)",
 	},
 ];
 interface ContextExpectation {
-	text: string;
+	tree: string;
 	startTokenIndex: number;
 	stopTokenIndex: number;
 	class: any; // Instanceof requires this be an any
@@ -146,44 +149,45 @@ interface ContextExpectation {
 
 interface XPathExpectation {
 	xpathRule: string;
-	text: string;
+	tree: string;
 	class: any;
 	epoch?: number;
 }
 const JAVA_PROGRAM_1 =
 	'\npublic class HelloWorld {\n\n    public static void main(String[] args) {\n        // Prints "Hello, World" to the terminal window.\n        System.out.println("Hello, World");\n    }\n\n}\n';
-const JAVA_EXPECTED_TEXT_1 =
-	'publicclassHelloWorld{publicstaticvoidmain(String[]args){System.out.println("Hello, World");}}<EOF>';
+const JAVA_EXPECTED_TREE_1 =
+	'(compilationUnit (typeDeclaration (classOrInterfaceDeclaration (classOrInterfaceModifiers (classOrInterfaceModifier public)) (classDeclaration (normalClassDeclaration class HelloWorld (classBody { (classBodyDeclaration (modifiers (modifier public) (modifier static)) (memberDecl void main (methodDeclaratorRest (formalParameters ( (formalParameterDecls variableModifiers (type (classOrInterfaceType String) [ ]) (formalParameterDeclsRest (variableDeclaratorId args))) )) (methodBody (block { (blockStatement (statement (statementExpression (expression (expression (expression (expression (primary System)) . out) . println) ( (expressionList (expression (primary (literal "Hello, World")))) ))) ;)) }))))) }))))) <EOF>)';
 const JAVA_PROGRAM_2 =
 	'\npublic class HelloWorld {\n\n    public static void main(String[] args) {\n        // Prints "Hello, World" to the terminal window.\n        System.out.println("Hello");\n    }\n\n}\n';
-const JAVA_EXPECTED_TEXT_2 =
-	'publicclassHelloWorld{publicstaticvoidmain(String[]args){System.out.println("Hello");}}<EOF>';
+const JAVA_EXPECTED_TREE_2 =
+	'(compilationUnit (typeDeclaration (classOrInterfaceDeclaration (classOrInterfaceModifiers (classOrInterfaceModifier public)) (classDeclaration (normalClassDeclaration class HelloWorld (classBody { (classBodyDeclaration (modifiers (modifier public) (modifier static)) (memberDecl void main (methodDeclaratorRest (formalParameters ( (formalParameterDecls variableModifiers (type (classOrInterfaceType String) [ ]) (formalParameterDeclsRest (variableDeclaratorId args))) )) (methodBody (block { (blockStatement (statement (statementExpression (expression (expression (expression (expression (primary System)) . out) . println) ( (expressionList (expression (primary (literal "Hello")))) ))) ;)) }))))) }))))) <EOF>)';
 const JAVA_PROGRAM_2_EXPECTATIONS: XPathExpectation[] = [
 	{
 		class: ClassOrInterfaceModifiersContext,
-		text: "public",
+		tree: "(classOrInterfaceModifiers (classOrInterfaceModifier public))",
 		xpathRule: "//classOrInterfaceModifiers",
 	},
 	{
 		class: FormalParametersContext,
-		text: "(String[]args)",
+		tree:
+			"(formalParameters ( (formalParameterDecls variableModifiers (type (classOrInterfaceType String) [ ]) (formalParameterDeclsRest (variableDeclaratorId args))) ))",
 		xpathRule: "//formalParameters",
 	},
 	{
 		class: ModifiersContext,
-		text: "publicstatic",
+		tree: "(modifiers (modifier public) (modifier static))",
 		xpathRule: "//modifiers",
 	},
 	/* This requires reusing individual recursion contexts */
 	/*
 	{
 		class: ExpressionContext,
-		text: "System.out.println",
+		tree: "System.out.println",
 		xpathRule: "//statementExpression/expression/expression",
 	},*/
 	{
 		class: LiteralContext,
-		text: '"Hello"',
+		tree: '(literal "Hello")',
 		xpathRule: "//expression/primary/literal",
 	},
 ];
@@ -210,9 +214,9 @@ export class TestIncremental {
 
 				let incCtx = XPathMatch as IncrementalParserRuleContext;
 				assert.strictEqual(
-					incCtx.text,
-					expectation.text,
-					"Text of context is wrong",
+					incCtx.toStringTree(parser),
+					expectation.tree,
+					"Tree of context is wrong",
 				);
 				if (expectation.epoch) {
 					assert.strictEqual(
@@ -226,6 +230,7 @@ export class TestIncremental {
 	}
 	// Verify a set of context expectations against an array of contexts
 	private verifyContextExpectations(
+		parser: IncrementalParser,
 		data: IncrementalParserRuleContext[],
 		expectations: ContextExpectation[],
 	) {
@@ -246,7 +251,11 @@ export class TestIncremental {
 				expectations[i].stopTokenIndex,
 				`Stop token of context ${i} is wrong`,
 			);
-			assert.strictEqual(data[i].text, expectations[i].text);
+			assert.strictEqual(
+				data[i].toStringTree(parser),
+				expectations[i].tree,
+				`Tree of context ${i} is wrong`,
+			);
 			if (expectations[i].epoch) {
 				assert.strictEqual(
 					data[i].epoch,
@@ -258,17 +267,16 @@ export class TestIncremental {
 	}
 	// Test that the incremental parser works in non-incremental mode.
 	@Test public testBasicIncrementalParse(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(SAMPLE_TEXT_1);
 		let lexer = new TestIncremental1Lexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncremental1Parser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.program();
 
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, EXPECTED_TEXT_1);
+		assert.strictEqual(firstTree.toStringTree(parser), EXPECTED_TREE_1);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -276,6 +284,7 @@ export class TestIncremental {
 		assert.strictEqual(firstTree.childCount, 5);
 		assert.ok(firstTree instanceof IncrementalParserRuleContext);
 		this.verifyContextExpectations(
+			parser,
 			firstTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_1,
 		);
@@ -283,22 +292,21 @@ export class TestIncremental {
 
 	// Test that reparsing with no changes reuses the parse tree
 	@Test public testBasicIncrementalReparse(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(SAMPLE_TEXT_1);
 		let lexer = new TestIncremental1Lexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncremental1Parser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.program();
 
 		// Add the correct epoch to all expectations
 		for (let expectation of CHILD_EXPECTATIONS_1) {
-			expectation.epoch = startingEpoch + 1;
+			expectation.epoch = startingEpoch;
 		}
 
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, EXPECTED_TEXT_1);
+		assert.strictEqual(firstTree.toStringTree(parser), EXPECTED_TREE_1);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -306,13 +314,14 @@ export class TestIncremental {
 		assert.strictEqual(firstTree.childCount, 5);
 		assert.ok(firstTree instanceof IncrementalParserRuleContext);
 		this.verifyContextExpectations(
+			parser,
 			firstTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_1,
 		);
 
 		// Add the correct epoch to all expectations
 		for (let expectation of CHILD_EXPECTATIONS_1) {
-			expectation.epoch = startingEpoch + 1;
+			expectation.epoch = startingEpoch;
 		}
 		// Reparse with no changes
 		inputStream = CharStreams.fromString(SAMPLE_TEXT_1);
@@ -320,10 +329,9 @@ export class TestIncremental {
 		tokenStream = new IncrementalTokenStream(lexer);
 		let parserData = new IncrementalParserData(tokenStream, [], firstTree);
 		parser = new TestIncremental1Parser(tokenStream, parserData);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 2);
 		let secondTree = parser.program();
 		// Make sure the parse tree text is right
-		assert.strictEqual(secondTree.text, EXPECTED_TEXT_1);
+		assert.strictEqual(secondTree.toStringTree(parser), EXPECTED_TREE_1);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(secondTree.start.tokenIndex, 0);
@@ -333,8 +341,9 @@ export class TestIncremental {
 
 		// All data should have come from the original parser
 		// Verify that and that the current epoch was incremented
-		assert.strictEqual(secondTree.epoch, startingEpoch + 1);
+		assert.strictEqual(secondTree.epoch, startingEpoch);
 		this.verifyContextExpectations(
+			parser,
 			secondTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_1,
 		);
@@ -342,20 +351,19 @@ export class TestIncremental {
 
 	// Test that reparsing with a delete reuses data not deleted.
 	@Test public testBasicIncrementalDeleteWithWhitespace(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(SAMPLE_TEXT_1);
 		let lexer = new TestIncremental1Lexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncremental1Parser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.program();
 		// Add the correct epoch to all expectations
 		for (let expectation of CHILD_EXPECTATIONS_1) {
-			expectation.epoch = startingEpoch + 1;
+			expectation.epoch = startingEpoch;
 		}
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, EXPECTED_TEXT_1);
+		assert.strictEqual(firstTree.toStringTree(parser), EXPECTED_TREE_1);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -363,12 +371,13 @@ export class TestIncremental {
 		assert.strictEqual(firstTree.childCount, 5);
 		assert.ok(firstTree instanceof IncrementalParserRuleContext);
 		this.verifyContextExpectations(
+			parser,
 			firstTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_1,
 		);
 		// Add the correct epoch to all expectations
 		for (let expectation of CHILD_EXPECTATIONS_2) {
-			expectation.epoch = startingEpoch + 1;
+			expectation.epoch = startingEpoch;
 		}
 		// Reparse with a delete
 		let oldTokens = tokenStream.getTokens();
@@ -385,11 +394,10 @@ export class TestIncremental {
 			firstTree,
 		);
 		parser = new TestIncremental1Parser(tokenStream, parserData);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 2);
-
+		let secondEpoch = parser.parserEpoch;
 		let secondTree = parser.program();
 		// Make sure the parse tree text is right
-		assert.strictEqual(secondTree.text, EXPECTED_TEXT_2);
+		assert.strictEqual(secondTree.toStringTree(parser), EXPECTED_TREE_2);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(secondTree.start.tokenIndex, 0);
@@ -399,28 +407,28 @@ export class TestIncremental {
 
 		// All data should have come from the original parser
 		// Verify that and that the current epoch was incremented
-		assert.strictEqual(secondTree.epoch, startingEpoch + 2);
+		assert.strictEqual(secondTree.epoch, secondEpoch);
 		this.verifyContextExpectations(
+			parser,
 			secondTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_2,
 		);
 	}
 	// Test that reparsing with an add reuses the non-added parts.
 	@Test public testBasicIncrementalAddWithWhitespace(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(SAMPLE_TEXT_1);
 		let lexer = new TestIncremental1Lexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncremental1Parser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.program();
 		// Add the correct epoch to all expectations
 		for (let expectation of CHILD_EXPECTATIONS_1) {
-			expectation.epoch = startingEpoch + 1;
+			expectation.epoch = startingEpoch;
 		}
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, EXPECTED_TEXT_1);
+		assert.strictEqual(firstTree.toStringTree(parser), EXPECTED_TREE_1);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -428,15 +436,10 @@ export class TestIncremental {
 		assert.strictEqual(firstTree.childCount, 5);
 		assert.ok(firstTree instanceof IncrementalParserRuleContext);
 		this.verifyContextExpectations(
+			parser,
 			firstTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_1,
 		);
-		// Add the correct epoch to all expectations
-		for (let expectation of CHILD_EXPECTATIONS_3) {
-			expectation.epoch = startingEpoch + 1;
-		}
-		CHILD_EXPECTATIONS_3[CHILD_EXPECTATIONS_3.length - 1].epoch =
-			startingEpoch + 2;
 
 		// Reparse with a delete
 		let oldTokens = tokenStream.getTokens();
@@ -461,11 +464,18 @@ export class TestIncremental {
 			firstTree,
 		);
 		parser = new TestIncremental1Parser(tokenStream, parserData);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 2);
+		let secondEpoch = parser.parserEpoch;
+		// Add the correct epoch to all expectations
+		for (let expectation of CHILD_EXPECTATIONS_3) {
+			expectation.epoch = startingEpoch;
+		}
+		CHILD_EXPECTATIONS_3[
+			CHILD_EXPECTATIONS_3.length - 1
+		].epoch = secondEpoch;
 
 		let secondTree = parser.program();
 		// Make sure the parse tree text is right
-		assert.strictEqual(secondTree.text, EXPECTED_TEXT_3);
+		assert.strictEqual(secondTree.toStringTree(parser), EXPECTED_TREE_3);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(secondTree.start.tokenIndex, 0);
@@ -475,8 +485,9 @@ export class TestIncremental {
 
 		// All data should have come from the original parser
 		// Verify that and that the current epoch was incremented
-		assert.strictEqual(secondTree.epoch, startingEpoch + 2);
+		assert.strictEqual(secondTree.epoch, secondEpoch);
 		this.verifyContextExpectations(
+			parser,
 			secondTree.children as IncrementalParserRuleContext[],
 			CHILD_EXPECTATIONS_3,
 		);
@@ -484,17 +495,19 @@ export class TestIncremental {
 
 	// Test that the incremental parser works in non-incremental mode.
 	@Test public testJavaIncrementalParse(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(JAVA_PROGRAM_1);
 		let lexer = new TestIncrementalJavaLexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncrementalJavaParser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.compilationUnit();
 
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, JAVA_EXPECTED_TEXT_1);
+		assert.strictEqual(
+			firstTree.toStringTree(parser),
+			JAVA_EXPECTED_TREE_1,
+		);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -504,17 +517,19 @@ export class TestIncremental {
 
 	// Test that reparsing with no changes reuses the parse tree
 	@Test public testJavaIncrementalReparse(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(JAVA_PROGRAM_1);
 		let lexer = new TestIncrementalJavaLexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncrementalJavaParser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.compilationUnit();
 
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, JAVA_EXPECTED_TEXT_1);
+		assert.strictEqual(
+			firstTree.toStringTree(parser),
+			JAVA_EXPECTED_TREE_1,
+		);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -526,10 +541,12 @@ export class TestIncremental {
 		tokenStream = new IncrementalTokenStream(lexer);
 		let parserData = new IncrementalParserData(tokenStream, [], firstTree);
 		parser = new TestIncrementalJavaParser(tokenStream, parserData);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 2);
 		let secondTree = parser.compilationUnit();
 		// Make sure the parse tree text is right
-		assert.strictEqual(secondTree.text, JAVA_EXPECTED_TEXT_1);
+		assert.strictEqual(
+			secondTree.toStringTree(parser),
+			JAVA_EXPECTED_TREE_1,
+		);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -538,23 +555,25 @@ export class TestIncremental {
 
 		// All data should have come from the original parser
 		// Verify that and that the current epoch was incremented
-		assert.strictEqual(secondTree.epoch, startingEpoch + 1);
+		assert.strictEqual(secondTree.epoch, startingEpoch);
 		// Verify the first and second trees are exactly the same.
 		assert.deepStrictEqual(firstTree, secondTree);
 	}
 	// Test that reparsing with a changed token reuses everything but one piece of the parse tree
 	@Test public testJavaReparseWithChange(): void {
-		let startingEpoch = IncrementalParser.PARSER_EPOCH;
 		// Create a parser and verify the result is sane
 		let inputStream = CharStreams.fromString(JAVA_PROGRAM_1);
 		let lexer = new TestIncrementalJavaLexer(inputStream);
 		let tokenStream = new IncrementalTokenStream(lexer);
 		let parser = new TestIncrementalJavaParser(tokenStream);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 1);
+		let startingEpoch = parser.parserEpoch;
 		let firstTree = parser.compilationUnit();
 
 		// Make sure the parse tree text is right
-		assert.strictEqual(firstTree.text, JAVA_EXPECTED_TEXT_1);
+		assert.strictEqual(
+			firstTree.toStringTree(parser),
+			JAVA_EXPECTED_TREE_1,
+		);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(firstTree.start.tokenIndex, 0);
@@ -577,23 +596,26 @@ export class TestIncremental {
 			firstTree,
 		);
 		parser = new TestIncrementalJavaParser(tokenStream, parserData);
-		assert.strictEqual(IncrementalParser.PARSER_EPOCH, startingEpoch + 2);
+		let secondEpoch = parser.parserEpoch;
 		let secondTree = parser.compilationUnit();
 		// Make sure the parse tree text is right
-		assert.strictEqual(secondTree.text, JAVA_EXPECTED_TEXT_2);
+		assert.strictEqual(
+			secondTree.toStringTree(parser),
+			JAVA_EXPECTED_TREE_2,
+		);
 
 		// Make sure the parse tree looks correct
 		assert.strictEqual(secondTree.start.tokenIndex, 0);
 		assert.strictEqual(secondTree.stop!.tokenIndex, 26);
 		assert.ok(secondTree instanceof IncrementalParserRuleContext);
-		assert.strictEqual(secondTree.epoch, startingEpoch + 2);
+		assert.strictEqual(secondTree.epoch, secondEpoch);
 		// Set the epochs
 		for (let i = 0; i < JAVA_PROGRAM_2_EXPECTATIONS.length - 1; ++i) {
-			JAVA_PROGRAM_2_EXPECTATIONS[i].epoch = startingEpoch + 1;
+			JAVA_PROGRAM_2_EXPECTATIONS[i].epoch = startingEpoch;
 		}
 		JAVA_PROGRAM_2_EXPECTATIONS[
 			JAVA_PROGRAM_2_EXPECTATIONS.length - 1
-		].epoch = startingEpoch + 2;
+		].epoch = secondEpoch;
 		this.verifyXPathExpectations(
 			parser,
 			secondTree,
