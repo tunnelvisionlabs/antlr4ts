@@ -242,23 +242,37 @@ export class IncrementalParserData {
 	/**
 	 * Try to see if we have existing context for this state, rule and token position that may be reused.
 	 *
+	 * @param depth Current rule depth
 	 * @param state Parser state number - currently ignored.
 	 * @param ruleIndex Rule number
 	 * @param tokenIndex Token index in the *new* token stream
 	 */
-	public tryGetContext(state: number, ruleIndex: number, tokenIndex: number) {
-		return this.ruleStartMap.get(this.getKey(state, ruleIndex, tokenIndex));
+	public tryGetContext(
+		depth: number,
+		state: number,
+		ruleIndex: number,
+		tokenIndex: number,
+	) {
+		return this.ruleStartMap.get(
+			this.getKey(depth, state, ruleIndex, tokenIndex),
+		);
 	}
 
 	private getKeyFromContext(ctx: IncrementalParserRuleContext) {
 		return this.getKey(
+			ctx.depth(),
 			ctx.invokingState,
 			ctx.ruleIndex,
 			ctx.start.tokenIndex,
 		);
 	}
-	private getKey(state: number, rule: number, tokenindex: number) {
-		return `${state},${rule},${tokenindex}`;
+	private getKey(
+		depth: number,
+		state: number,
+		rule: number,
+		tokenindex: number,
+	) {
+		return `${depth},${rule},${tokenindex}`;
 	}
 	/**
 	 * 	Index a given parse tree and adjust the min/max ranges

@@ -57,10 +57,8 @@ Tree fixup is actually the most expensive part of the parser data right now, and
 - We use the parselistener interface as an easy way to ensure we get to see entry/
   exit events at the right time. This turned out to be easier than handling
   recursion/left factoring through overriding the relevant parser interface pieces.
-- It is not possible to distinguish between recursive contexts because they only
-  store the invoking state, not the state of the parser. That means it is not apparently
-  possible to get the kind of unique key we need. As a result, we will not reuse recursive
-  contexts (but will reuse pieces from below them).
+- Top level recursion contexts are now reused, but we won't reuse individaul recursion contexts yet.
+
 
 #### References
 

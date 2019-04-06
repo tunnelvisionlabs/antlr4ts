@@ -424,8 +424,7 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	// Check whether we need to execute this rule.	
 	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, <currentRule.startState>, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
 	// If we found an existing context that is valid, return it.
-	// NOTE: Recursive context reuse is currently disabled
-	if (0 && guardResult) {
+	if (guardResult) {
 		this._input.seek(guardResult.stop!.tokenIndex + 1);
 		return guardResult;
 	}

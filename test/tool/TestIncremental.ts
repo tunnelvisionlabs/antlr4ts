@@ -174,8 +174,9 @@ const JAVA_PROGRAM_2_EXPECTATIONS: XPathExpectation[] = [
 		text: "publicstatic",
 		xpathRule: "//modifiers",
 	},
-	// This requires making recursive contexts work
-	/*{
+	/* This requires reusing individual recursion contexts */
+	/*
+	{
 		class: ExpressionContext,
 		text: "System.out.println",
 		xpathRule: "//statementExpression/expression/expression",
@@ -590,8 +591,9 @@ export class TestIncremental {
 		for (let i = 0; i < JAVA_PROGRAM_2_EXPECTATIONS.length - 1; ++i) {
 			JAVA_PROGRAM_2_EXPECTATIONS[i].epoch = startingEpoch + 1;
 		}
-		JAVA_PROGRAM_2_EXPECTATIONS[JAVA_PROGRAM_2_EXPECTATIONS.length - 1].epoch =
-			startingEpoch + 2;
+		JAVA_PROGRAM_2_EXPECTATIONS[
+			JAVA_PROGRAM_2_EXPECTATIONS.length - 1
+		].epoch = startingEpoch + 2;
 		this.verifyXPathExpectations(
 			parser,
 			secondTree,

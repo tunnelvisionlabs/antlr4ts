@@ -82,6 +82,7 @@ export abstract class IncrementalParser extends Parser
 		}
 		// See if we have seen this state before at this starting point.
 		let existingCtx = this.parseData.tryGetContext(
+			parentCtx ? parentCtx.depth() + 1 : 1,
 			this.state,
 			ruleIndex,
 			this._input.LT(1).tokenIndex,

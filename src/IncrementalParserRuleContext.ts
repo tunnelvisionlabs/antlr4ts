@@ -5,8 +5,13 @@
 
 import { ParserRuleContext } from "./ParserRuleContext";
 import { Interval } from "./misc/Interval";
+import { RuleContext } from "./RuleContext";
 
 export class IncrementalParserRuleContext extends ParserRuleContext {
+	/* Avoid having to recompute depth on every single depth call */
+	private cachedDepth: number | undefined = undefined;
+	private cachedParent: RuleContext | undefined = undefined;
+
 	// This is an epoch number that can be used to tell which pieces were
 	// modified during a given incremental parse. The incremental parser
 	// adds the current epoch number to all rule contexts it creates.
@@ -39,5 +44,29 @@ export class IncrementalParserRuleContext extends ParserRuleContext {
 	}
 	set minMaxTokenIndex(index: Interval) {
 		this._minMaxTokenIndex = index;
+	}
+
+	/**
+	 * Compute the depth of this context in the parse tree.
+	 *
+	 * @notes The incremental parser uses a caching implemntation.
+	 *
+	 */
+	public depth(): number {
+		if (
+			this.cachedParent !== undefined &&
+			this.cachedParent === this._parent
+		) {
+			return this.cachedDepth as number;
+		}
+		let n = 1;
+		if (this._parent) {
+			let parentDepth = this._parent.depth();
+			this.cachedParent = this._parent;
+			this.cachedDepth = n = parentDepth + 1;
+		} else {
+			this.cachedDepth = n = 1;
+		}
+		return n;
 	}
 }
