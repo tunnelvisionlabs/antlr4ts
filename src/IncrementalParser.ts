@@ -20,7 +20,7 @@ import { ParseTreeListener } from "./tree/ParseTreeListener";
  * can be reused.  It looks for token changes in the bounds of the rule.
  *
  * The min/max tracking is used to track how far ahead/behind the parser looked
- * to correctly detect whether a change can a parser rule in the future (IE when
+ * to correctly detect whether a token change can affect a parser rule in the future (IE when
  * handed to the guard rule of the next parse)
  *
  * @notes See IncrementalParsing.md for more details on the theory behind this.

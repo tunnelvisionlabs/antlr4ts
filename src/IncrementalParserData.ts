@@ -376,12 +376,16 @@ export class IncrementalParserData {
 				// reuse. Also don't touch contexts without an epoch. They must
 				// represent something the incremental parser never saw,
 				// since it sets epochs on all contexts it touches.
-				let usableContext =
-					incCtx.epoch &&
-					!this.incrementalData.ruleAffectedByTokenChanges(incCtx);
-				if (usableContext) {
-					if (this.tokenOffsets && this.tokenOffsets.length !== 0) {
-						this.adjustMinMax(incCtx);
+				if (incCtx.epoch === -1) {
+					return;
+				}
+				let mayNeedAdjustment =
+					this.tokenOffsets && this.tokenOffsets.length !== 0;
+				if (mayNeedAdjustment) {
+					this.adjustMinMax(incCtx);
+				}
+				if (!this.incrementalData.ruleAffectedByTokenChanges(incCtx)) {
+					if (mayNeedAdjustment) {
 						this.adjustStartStop(incCtx);
 					}
 					let key = this.incrementalData.getKeyFromContext(incCtx);
