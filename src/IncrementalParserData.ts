@@ -85,8 +85,8 @@ export enum TokenChangeType {
 }
 export interface TokenChange {
 	changeType: TokenChangeType;
-	oldToken?: CommonToken;
 	newToken?: CommonToken;
+	oldToken?: CommonToken;
 }
 
 /**

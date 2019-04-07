@@ -589,8 +589,8 @@ export class TestIncremental {
 			[
 				{
 					changeType: TokenChangeType.CHANGED,
-					oldToken: oldTokens[21],
 					newToken: tokenStream.get(21) as CommonToken,
+					oldToken: oldTokens[21],
 				},
 			],
 			firstTree,

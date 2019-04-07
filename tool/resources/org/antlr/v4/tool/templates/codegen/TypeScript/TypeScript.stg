@@ -294,7 +294,7 @@ RuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,namedActions,fina
 // @RuleVersion(<namedActions.version; null="0">)
 <if(currentRule.modifiers)><currentRule.modifiers:{f | <f> }><else>public <endif><currentRule.name>(<args; separator=",">): <currentRule.ctxType> {
 	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
-	// Check whether we need to execute this rule.	
+	// Check whether we need to execute this rule.
 	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, this.state, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
 	// If we found an existing context that is valid, return it.
 	if (guardResult) {
@@ -418,7 +418,7 @@ LeftRecursiveRuleFunction(currentRule,args,code,locals,ruleCtx,altLabelCtxs,
 	let _parentctx: ParserRuleContext = this._ctx;
 	let _parentState: number = this.state;
 	<if(file.factory.grammar.ast.cmdLineOptions.("incremental"))>
-	// Check whether we need to execute this rule.	
+	// Check whether we need to execute this rule.
 	let guardResult = this.guardRule(this._ctx as IncrementalParserRuleContext, _parentState, <parser.name>.RULE_<currentRule.name>) as <currentRule.ctxType>;
 	// If we found an existing context that is valid, return it.
 	if (guardResult) {
