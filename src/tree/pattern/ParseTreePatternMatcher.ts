@@ -5,16 +5,16 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ANTLRInputStream } from "../../ANTLRInputStream";
 import { BailErrorStrategy } from "../../BailErrorStrategy";
+import { CharStreams } from "../../CharStreams";
 import { Chunk } from "./Chunk";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from '../../Lexer';
+import { Lexer } from "../../Lexer";
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
 import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { Parser } from '../../Parser';
+import { Parser } from "../../Parser";
 import { ParserInterpreter } from "../../ParserInterpreter";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
@@ -32,59 +32,61 @@ import { TokenTagToken } from "./TokenTagToken";
 /**
  * A tree pattern matching mechanism for ANTLR {@link ParseTree}s.
  *
- * <p>Patterns are strings of source input text with special tags representing
- * token or rule references such as:</p>
+ * Patterns are strings of source input text with special tags representing
+ * token or rule references such as:
  *
- * <p>{@code <ID> = <expr>;}</p>
+ * ```
+ * <ID> = <expr>;
+ * ```
  *
- * <p>Given a pattern start rule such as {@code statement}, this object constructs
- * a {@link ParseTree} with placeholders for the {@code ID} and {@code expr}
+ * Given a pattern start rule such as `statement`, this object constructs
+ * a {@link ParseTree} with placeholders for the `ID` and `expr`
  * subtree. Then the {@link #match} routines can compare an actual
- * {@link ParseTree} from a parse with this pattern. Tag {@code <ID>} matches
- * any {@code ID} token and tag {@code <expr>} references the result of the
- * {@code expr} rule (generally an instance of {@code ExprContext}.</p>
+ * {@link ParseTree} from a parse with this pattern. Tag `<ID>` matches
+ * any `ID` token and tag `<expr>` references the result of the
+ * `expr` rule (generally an instance of `ExprContext`.
  *
- * <p>Pattern {@code x = 0;} is a similar pattern that matches the same pattern
- * except that it requires the identifier to be {@code x} and the expression to
- * be {@code 0}.</p>
+ * Pattern `x = 0;` is a similar pattern that matches the same pattern
+ * except that it requires the identifier to be `x` and the expression to
+ * be `0`.
  *
- * <p>The {@link #matches} routines return {@code true} or {@code false} based
+ * The {@link #matches} routines return `true` or `false` based
  * upon a match for the tree rooted at the parameter sent in. The
  * {@link #match} routines return a {@link ParseTreeMatch} object that
  * contains the parse tree, the parse tree pattern, and a map from tag name to
  * matched nodes (more below). A subtree that fails to match, returns with
  * {@link ParseTreeMatch#mismatchedNode} set to the first tree node that did not
- * match.</p>
+ * match.
  *
- * <p>For efficiency, you can compile a tree pattern in string form to a
- * {@link ParseTreePattern} object.</p>
+ * For efficiency, you can compile a tree pattern in string form to a
+ * {@link ParseTreePattern} object.
  *
- * <p>See {@code TestParseTreeMatcher} for lots of examples.
+ * See `TestParseTreeMatcher` for lots of examples.
  * {@link ParseTreePattern} has two static helper methods:
  * {@link ParseTreePattern#findAll} and {@link ParseTreePattern#match} that
  * are easy to use but not super efficient because they create new
  * {@link ParseTreePatternMatcher} objects each time and have to compile the
- * pattern in string form before using it.</p>
+ * pattern in string form before using it.
  *
- * <p>The lexer and parser that you pass into the {@link ParseTreePatternMatcher}
+ * The lexer and parser that you pass into the {@link ParseTreePatternMatcher}
  * constructor are used to parse the pattern in string form. The lexer converts
- * the {@code <ID> = <expr>;} into a sequence of four tokens (assuming lexer
+ * the `<ID> = <expr>;` into a sequence of four tokens (assuming lexer
  * throws out whitespace or puts it on a hidden channel). Be aware that the
  * input stream is reset for the lexer (but not the parser; a
  * {@link ParserInterpreter} is created to parse the input.). Any user-defined
  * fields you have put into the lexer might get changed when this mechanism asks
- * it to scan the pattern string.</p>
+ * it to scan the pattern string.
  *
- * <p>Normally a parser does not accept token {@code <expr>} as a valid
- * {@code expr} but, from the parser passed in, we create a special version of
+ * Normally a parser does not accept token `<expr>` as a valid
+ * `expr` but, from the parser passed in, we create a special version of
  * the underlying grammar representation (an {@link ATN}) that allows imaginary
- * tokens representing rules ({@code <expr>}) to match entire rules. We call
- * these <em>bypass alternatives</em>.</p>
+ * tokens representing rules (`<expr>`) to match entire rules. We call
+ * these *bypass alternatives*.
  *
- * <p>Delimiters are {@code <} and {@code >}, with {@code \} as the escape string
+ * Delimiters are `<`} and `>`}, with `\` as the escape string
  * by default, but you can set them to whatever you want using
  * {@link #setDelimiters}. You must escape both start and stop strings
- * {@code \<} and {@code \>}.</p>
+ * `\<` and `\>`.
  */
 export class ParseTreePatternMatcher {
 	/**
@@ -125,10 +127,10 @@ export class ParseTreePatternMatcher {
 	 * @param stop The stop delimiter.
 	 * @param escapeLeft The escape sequence to use for escaping a start or stop delimiter.
 	 *
-	 * @exception IllegalArgumentException if {@code start} is {@code null} or empty.
-	 * @exception IllegalArgumentException if {@code stop} is {@code null} or empty.
+	 * @throws {@link Error} if `start` is not defined or empty.
+	 * @throws {@link Error} if `stop` is not defined or empty.
 	 */
-	setDelimiters(start: string, stop: string, escapeLeft: string): void {
+	public setDelimiters(start: string, stop: string, escapeLeft: string): void {
 		if (!start) {
 			throw new Error("start cannot be null or empty");
 		}
@@ -140,18 +142,18 @@ export class ParseTreePatternMatcher {
 		this.start = start;
 		this.stop = stop;
 		this.escape = escapeLeft;
-		this.escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), "g");
+		this.escapeRE = new RegExp(escapeLeft.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
 	}
 
-	/** Does {@code pattern} matched as rule {@code patternRuleIndex} match {@code tree}? */
-	matches(tree: ParseTree, pattern: string, patternRuleIndex: number): boolean;
+	/** Does `pattern` matched as rule `patternRuleIndex` match `tree`? */
+	public matches(tree: ParseTree, pattern: string, patternRuleIndex: number): boolean;
 
-	/** Does {@code pattern} matched as rule patternRuleIndex match tree? Pass in a
+	/** Does `pattern` matched as rule patternRuleIndex match tree? Pass in a
 	 *  compiled pattern instead of a string representation of a tree pattern.
 	 */
-	matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
+	public matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
 
-	matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
+	public matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
 		if (typeof pattern === "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.matches(tree, p);
@@ -163,24 +165,24 @@ export class ParseTreePatternMatcher {
 	}
 
 	/**
-	 * Compare {@code pattern} matched as rule {@code patternRuleIndex} against
-	 * {@code tree} and return a {@link ParseTreeMatch} object that contains the
+	 * Compare `pattern` matched as rule `patternRuleIndex` against
+	 * `tree` and return a {@link ParseTreeMatch} object that contains the
 	 * matched elements, or the node at which the match failed.
 	 */
-	match(tree: ParseTree, pattern: string, patternRuleIndex: number): ParseTreeMatch;
+	public match(tree: ParseTree, pattern: string, patternRuleIndex: number): ParseTreeMatch;
 
 	/**
-	 * Compare {@code pattern} matched against {@code tree} and return a
+	 * Compare `pattern` matched against `tree` and return a
 	 * {@link ParseTreeMatch} object that contains the matched elements, or the
 	 * node at which the match failed. Pass in a compiled pattern instead of a
 	 * string representation of a tree pattern.
 	 */
-	match(tree: ParseTree, pattern: ParseTreePattern): ParseTreeMatch;
+	public match(tree: ParseTree, pattern: ParseTreePattern): ParseTreeMatch;
 
 	// Implementation of match
 	@NotNull
-	match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
-		if (typeof pattern == "string") {
+	public match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
+		if (typeof pattern === "string") {
 			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
 		} else {
@@ -194,7 +196,7 @@ export class ParseTreePatternMatcher {
 	 * For repeated use of a tree pattern, compile it to a
 	 * {@link ParseTreePattern} using this method.
 	 */
-	compile(pattern: string, patternRuleIndex: number): ParseTreePattern {
+	public compile(pattern: string, patternRuleIndex: number): ParseTreePattern {
 		let tokenList = this.tokenize(pattern);
 		let tokenSrc = new ListTokenSource(tokenList);
 		let tokens = new CommonTokenStream(tokenSrc);
@@ -217,8 +219,10 @@ export class ParseTreePatternMatcher {
 				throw e.getCause();
 			} else if (e instanceof RecognitionException) {
 				throw e;
-			} else {
+			} else if (e instanceof Error) {
 				throw new ParseTreePatternMatcher.CannotInvokeStartRule(e);
+			} else {
+				throw e;
 			}
 		}
 
@@ -251,11 +255,11 @@ export class ParseTreePatternMatcher {
 	// ---- SUPPORT CODE ----
 
 	/**
-	 * Recursively walk {@code tree} against {@code patternTree}, filling
-	 * {@code match.}{@link ParseTreeMatch#labels labels}.
+	 * Recursively walk `tree` against `patternTree`, filling
+	 * `match.`{@link ParseTreeMatch#labels labels}.
 	 *
-	 * @return the first node encountered in {@code tree} which does not match
-	 * a corresponding node in {@code patternTree}, or {@code null} if the match
+	 * @returns the first node encountered in `tree` which does not match
+	 * a corresponding node in `patternTree`, or `undefined` if the match
 	 * was successful. The specific node returned depends on the matching
 	 * algorithm used by the implementation, and may be overridden.
 	 */
@@ -273,7 +277,7 @@ export class ParseTreePatternMatcher {
 
 		// x and <ID>, x and y, or x and x; or could be mismatched types
 		if (tree instanceof TerminalNode && patternTree instanceof TerminalNode) {
-			let mismatchedNode: ParseTree | undefined = undefined;
+			let mismatchedNode: ParseTree | undefined;
 			// both are tokens and they have same type
 			if (tree.symbol.type === patternTree.symbol.type) {
 				if (patternTree.symbol instanceof TokenTagToken) { // x and <ID>
@@ -306,7 +310,7 @@ export class ParseTreePatternMatcher {
 
 		if (tree instanceof ParserRuleContext
 			&& patternTree instanceof ParserRuleContext) {
-			let mismatchedNode: ParseTree | undefined = undefined;
+			let mismatchedNode: ParseTree | undefined;
 			// (expr ...) and <expr>
 			let ruleTagToken = this.getRuleTagToken(patternTree);
 			if (ruleTagToken) {
@@ -352,7 +356,7 @@ export class ParseTreePatternMatcher {
 		return tree;
 	}
 
-	/** Is {@code t} {@code (expr <expr>)} subtree? */
+	/** Is `t` `(expr <expr>)` subtree? */
 	protected getRuleTagToken(t: ParseTree): RuleTagToken | undefined {
 		if (t instanceof RuleNode) {
 			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
@@ -366,7 +370,7 @@ export class ParseTreePatternMatcher {
 		return undefined;
 	}
 
-	tokenize(pattern: string): Token[] {
+	public tokenize(pattern: string): Token[] {
 		// split pattern into chunks: sea (raw input) and islands (<ID>, <expr>)
 		let chunks = this.split(pattern);
 
@@ -400,8 +404,7 @@ export class ParseTreePatternMatcher {
 			}
 			else {
 				let textChunk = chunk as TextChunk;
-				let input = new ANTLRInputStream(textChunk.text);
-				this._lexer.inputStream = input;
+				this._lexer.inputStream = CharStreams.fromString(textChunk.text);
 				let t: Token = this._lexer.nextToken();
 				while (t.type !== Token.EOF) {
 					tokens.push(t);
@@ -414,8 +417,8 @@ export class ParseTreePatternMatcher {
 		return tokens;
 	}
 
-	/** Split {@code <ID> = <e:expr> ;} into 4 chunks for tokenizing by {@link #tokenize}. */
-	split(pattern: string): Chunk[] {
+	/** Split `<ID> = <e:expr> ;` into 4 chunks for tokenizing by {@link #tokenize}. */
+	public split(pattern: string): Chunk[] {
 		let p: number = 0;
 		let n: number = pattern.length;
 		let chunks: Chunk[] = [];
@@ -475,8 +478,8 @@ export class ParseTreePatternMatcher {
 			// copy inside of <tag>
 			let tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
 			let ruleOrToken: string = tag;
-			let label: string | undefined = undefined;
-			let colon: number = tag.indexOf(':');
+			let label: string | undefined;
+			let colon: number = tag.indexOf(":");
 			if (colon >= 0) {
 				label = tag.substring(0, colon);
 				ruleOrToken = tag.substring(colon + 1, tag.length);

@@ -5,52 +5,52 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.4445360-07:00
 
-import { AbstractPredicateTransition } from './AbstractPredicateTransition';
-import { Array2DHashSet } from '../misc/Array2DHashSet';
-import { ATN } from './ATN';
-import { ATNConfig } from './ATNConfig';
-import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { IntervalSet } from '../misc/IntervalSet';
-import { NotNull } from '../Decorators';
-import { NotSetTransition } from './NotSetTransition';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { PredictionContext } from './PredictionContext';
-import { RuleStopState } from './RuleStopState';
-import { RuleTransition } from './RuleTransition';
-import { SetTransition } from './SetTransition';
-import { Token } from '../Token';
-import { Transition } from './Transition';
-import { WildcardTransition } from './WildcardTransition';
+import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { ATN } from "./ATN";
+import { ATNConfig } from "./ATNConfig";
+import { ATNState } from "./ATNState";
+import { BitSet } from "../misc/BitSet";
+import { IntervalSet } from "../misc/IntervalSet";
+import { NotNull } from "../Decorators";
+import { NotSetTransition } from "./NotSetTransition";
+import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
+import { PredictionContext } from "./PredictionContext";
+import { RuleStopState } from "./RuleStopState";
+import { RuleTransition } from "./RuleTransition";
+import { SetTransition } from "./SetTransition";
+import { Token } from "../Token";
+import { Transition } from "./Transition";
+import { WildcardTransition } from "./WildcardTransition";
 
 export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit
-	 *  a predicate during analysis if {@code seeThruPreds==false}.
+	 *  a predicate during analysis if `seeThruPreds==false`.
 	 */
-	static readonly HIT_PRED: number = Token.INVALID_TYPE;
+	public static readonly HIT_PRED: number = Token.INVALID_TYPE;
 
 	@NotNull
-	atn: ATN;
+	public atn: ATN;
 
 	constructor(@NotNull atn: ATN) { this.atn = atn; }
 
 	/**
 	 * Calculates the SLL(1) expected lookahead set for each outgoing transition
 	 * of an {@link ATNState}. The returned array has one element for each
-	 * outgoing transition in {@code s}. If the closure from transition
-	 * <em>i</em> leads to a semantic predicate before matching a symbol, the
-	 * element at index <em>i</em> of the result will be {@code null}.
+	 * outgoing transition in `s`. If the closure from transition
+	 * *i* leads to a semantic predicate before matching a symbol, the
+	 * element at index *i* of the result will be `undefined`.
 	 *
 	 * @param s the ATN state
-	 * @return the expected symbols for each outgoing transition of {@code s}.
+	 * @returns the expected symbols for each outgoing transition of `s`.
 	 */
-	getDecisionLookahead(s: ATNState | undefined): (IntervalSet | undefined)[] | undefined {
+	public getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
 		if (s == null) {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
+		let look: Array<IntervalSet | undefined> = new Array<IntervalSet>(s.numberOfTransitions);
 		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
@@ -69,47 +69,47 @@ export class LL1Analyzer {
 	}
 
 	/**
-	 * Compute set of tokens that can follow {@code s} in the ATN in the
-	 * specified {@code ctx}.
+	 * Compute set of tokens that can follow `s` in the ATN in the
+	 * specified `ctx`.
 	 *
-	 * <p>If {@code ctx} is {@code null} and the end of the rule containing
-	 * {@code s} is reached, {@link Token#EPSILON} is added to the result set.
-	 * If {@code ctx} is not {@code null} and the end of the outermost rule is
-	 * reached, {@link Token#EOF} is added to the result set.</p>
+	 * If `ctx` is `undefined` and the end of the rule containing
+	 * `s` is reached, {@link Token#EPSILON} is added to the result set.
+	 * If `ctx` is not `undefined` and the end of the outermost rule is
+	 * reached, {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state
-	 * @param ctx the complete parser context, or {@code null} if the context
+	 * @param ctx the complete parser context, or `undefined` if the context
 	 * should be ignored
 	 *
-	 * @return The set of tokens that can follow {@code s} in the ATN in the
-	 * specified {@code ctx}.
+	 * @returns The set of tokens that can follow `s` in the ATN in the
+	 * specified `ctx`.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext): IntervalSet;
 
 	/**
-	 * Compute set of tokens that can follow {@code s} in the ATN in the
-	 * specified {@code ctx}.
+	 * Compute set of tokens that can follow `s` in the ATN in the
+	 * specified `ctx`.
 	 *
-	 * <p>If {@code ctx} is {@code null} and the end of the rule containing
-	 * {@code s} is reached, {@link Token#EPSILON} is added to the result set.
-	 * If {@code ctx} is not {@code PredictionContext#EMPTY_LOCAL} and the end of the outermost rule is
-	 * reached, {@link Token#EOF} is added to the result set.</p>
+	 * If `ctx` is `undefined` and the end of the rule containing
+	 * `s` is reached, {@link Token#EPSILON} is added to the result set.
+	 * If `ctx` is not `PredictionContext#EMPTY_LOCAL` and the end of the outermost rule is
+	 * reached, {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state
 	 * @param stopState the ATN state to stop at. This can be a
 	 * {@link BlockEndState} to detect epsilon paths through a closure.
-	 * @param ctx the complete parser context, or {@code null} if the context
+	 * @param ctx the complete parser context, or `undefined` if the context
 	 * should be ignored
 	 *
-	 * @return The set of tokens that can follow {@code s} in the ATN in the
-	 * specified {@code ctx}.
+	 * @returns The set of tokens that can follow `s` in the ATN in the
+	 * specified `ctx`.
 	 */
 	// @NotNull
-	LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
+	public LOOK(/*@NotNull*/ s: ATNState, /*@NotNull*/ ctx: PredictionContext, stopState: ATNState | null): IntervalSet;
 
 	@NotNull
-	LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
+	public LOOK(@NotNull s: ATNState, @NotNull ctx: PredictionContext, stopState?: ATNState | null): IntervalSet {
 		if (stopState === undefined) {
 			if (s.atn == null) {
 				throw new Error("Illegal state");
@@ -130,14 +130,14 @@ export class LL1Analyzer {
 	}
 
 	/**
-	 * Compute set of tokens that can follow {@code s} in the ATN in the
-	 * specified {@code ctx}.
+	 * Compute set of tokens that can follow `s` in the ATN in the
+	 * specified `ctx`.
 	 * <p/>
-	 * If {@code ctx} is {@link PredictionContext#EMPTY_LOCAL} and
-	 * {@code stopState} or the end of the rule containing {@code s} is reached,
-	 * {@link Token#EPSILON} is added to the result set. If {@code ctx} is not
-	 * {@link PredictionContext#EMPTY_LOCAL} and {@code addEOF} is {@code true}
-	 * and {@code stopState} or the end of the outermost rule is reached,
+	 * If `ctx` is {@link PredictionContext#EMPTY_LOCAL} and
+	 * `stopState` or the end of the rule containing `s` is reached,
+	 * {@link Token#EPSILON} is added to the result set. If `ctx` is not
+	 * {@link PredictionContext#EMPTY_LOCAL} and `addEOF` is `true`
+	 * and `stopState` or the end of the outermost rule is reached,
 	 * {@link Token#EOF} is added to the result set.
 	 *
 	 * @param s the ATN state.
@@ -148,19 +148,20 @@ export class LL1Analyzer {
 	 * @param look The result lookahead set.
 	 * @param lookBusy A set used for preventing epsilon closures in the ATN
 	 * from causing a stack overflow. Outside code should pass
-	 * {@code new HashSet<ATNConfig>} for this argument.
+	 * `new HashSet<ATNConfig>` for this argument.
 	 * @param calledRuleStack A set used for preventing left recursion in the
 	 * ATN from causing a stack overflow. Outside code should pass
-	 * {@code new BitSet()} for this argument.
-	 * @param seeThruPreds {@code true} to true semantic predicates as
-	 * implicitly {@code true} and "see through them", otherwise {@code false}
+	 * `new BitSet()` for this argument.
+	 * @param seeThruPreds `true` to true semantic predicates as
+	 * implicitly `true` and "see through them", otherwise `false`
 	 * to treat semantic predicates as opaque and add {@link #HIT_PRED} to the
 	 * result if one is encountered.
 	 * @param addEOF Add {@link Token#EOF} to the result if the end of the
-	 * outermost context is reached. This parameter has no effect if {@code ctx}
+	 * outermost context is reached. This parameter has no effect if `ctx`
 	 * is {@link PredictionContext#EMPTY_LOCAL}.
 	 */
-	protected _LOOK(@NotNull s: ATNState,
+	protected _LOOK(
+		@NotNull s: ATNState,
 		stopState: ATNState | undefined,
 		@NotNull ctx: PredictionContext,
 		@NotNull look: IntervalSet,
@@ -170,7 +171,9 @@ export class LL1Analyzer {
 		addEOF: boolean): void {
 //		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
 		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
-		if (!lookBusy.add(c)) return;
+		if (!lookBusy.add(c)) {
+			return;
+		}
 
 		if (s === stopState) {
 			if (PredictionContext.isEmptyLocal(ctx)) {
@@ -248,7 +251,6 @@ export class LL1Analyzer {
 			}
 			else {
 //				System.out.println("adding "+ t);
-				t = <Transition>t;
 				let set: IntervalSet | undefined = t.label;
 				if (set != null) {
 					if (t instanceof NotSetTransition) {

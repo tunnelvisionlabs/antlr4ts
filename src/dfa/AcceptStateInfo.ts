@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.1172076-07:00
 
-import { LexerActionExecutor } from '../atn/LexerActionExecutor';
+import { LexerActionExecutor } from "../atn/LexerActionExecutor";
 
 /**
  * Stores information about a {@link DFAState} which is an accept state under
@@ -30,7 +30,7 @@ export class AcceptStateInfo {
 	/**
 	 * Gets the prediction made by this accept state. Note that this value
 	 * assumes the predicates, if any, in the {@link DFAState} evaluate to
-	 * {@code true}. If predicate evaluation is enabled, the final prediction of
+	 * `true`. If predicate evaluation is enabled, the final prediction of
 	 * the accept state will be determined by the result of predicate
 	 * evaluation.
 	 */

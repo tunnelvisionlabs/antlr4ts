@@ -5,14 +5,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.1614404-07:00
 
-import { ATNSimulator } from './atn/ATNSimulator';
-import { CharStream } from './CharStream';
-import { Interval } from './misc/Interval';
-import { NotNull, Override } from './Decorators';
-import { Recognizer } from './Recognizer';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
-import { WritableToken } from './WritableToken';
+import { ATNSimulator } from "./atn/ATNSimulator";
+import { CharStream } from "./CharStream";
+import { Interval } from "./misc/Interval";
+import { NotNull, Override } from "./Decorators";
+import { Recognizer } from "./Recognizer";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
+import { WritableToken } from "./WritableToken";
 
 export class CommonToken implements WritableToken {
 	/**
@@ -44,11 +44,10 @@ export class CommonToken implements WritableToken {
 	 * This is the backing field for {@link #getTokenSource} and
 	 * {@link #getInputStream}.
 	 *
-	 * <p>
 	 * These properties share a field to reduce the memory footprint of
 	 * {@link CommonToken}. Tokens created by a {@link CommonTokenFactory} from
 	 * the same source and input stream share a reference to the same
-	 * {@link Tuple2} containing these values.</p>
+	 * {@link Tuple2} containing these values.
 	 */
 	@NotNull
 	protected source: { source?: TokenSource, stream?: CharStream };
@@ -92,17 +91,16 @@ export class CommonToken implements WritableToken {
 	/**
 	 * Constructs a new {@link CommonToken} as a copy of another {@link Token}.
 	 *
-	 * <p>
-	 * If {@code oldToken} is also a {@link CommonToken} instance, the newly
+	 * If `oldToken` is also a {@link CommonToken} instance, the newly
 	 * constructed token will share a reference to the {@link #text} field and
 	 * the {@link Tuple2} stored in {@link #source}. Otherwise, {@link #text} will
 	 * be assigned the result of calling {@link #getText}, and {@link #source}
 	 * will be constructed from the result of {@link Token#getTokenSource} and
-	 * {@link Token#getInputStream}.</p>
+	 * {@link Token#getInputStream}.
 	 *
 	 * @param oldToken The token to copy.
 	 */
-	static fromToken(@NotNull oldToken: Token): CommonToken {
+	public static fromToken(@NotNull oldToken: Token): CommonToken {
 		let result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.tokenIndex;
@@ -122,6 +120,16 @@ export class CommonToken implements WritableToken {
 	@Override
 	get type(): number {
 		return this._type;
+	}
+
+	// @Override
+	set type(type: number) {
+		this._type = type;
+	}
+
+	@Override
+	get line(): number {
+		return this._line;
 	}
 
 	// @Override
@@ -150,21 +158,16 @@ export class CommonToken implements WritableToken {
 
 	/**
 	 * Explicitly set the text for this token. If {code text} is not
-	 * {@code null}, then {@link #getText} will return this value rather than
+	 * `undefined`, then {@link #getText} will return this value rather than
 	 * extracting the text from the input.
 	 *
-	 * @param text The explicit text of the token, or {@code null} if the text
+	 * @param text The explicit text of the token, or `undefined` if the text
 	 * should be obtained from the input along with the start and stop indexes
 	 * of the token.
 	 */
 	// @Override
 	set text(text: string | undefined) {
 		this._text = text;
-	}
-
-	@Override
-	get line(): number {
-		return this._line;
 	}
 
 	@Override
@@ -185,11 +188,6 @@ export class CommonToken implements WritableToken {
 	// @Override
 	set channel(channel: number) {
 		this._channel = channel;
-	}
-
-	// @Override
-	set type(type: number) {
-		this._type = type;
 	}
 
 	@Override
@@ -230,11 +228,11 @@ export class CommonToken implements WritableToken {
 		return this.source.stream;
 	}
 
-	toString(): string;
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<Symbol, ATNInterpreter> | undefined): string;
+	public toString(): string;
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<TSymbol, ATNInterpreter> | undefined): string;
 
 	@Override
-	toString<Symbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<Symbol, ATNInterpreter>): string {
+	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<TSymbol, ATNInterpreter>): string {
 		let channelStr: string = "";
 		if (this._channel > 0) {
 			channelStr = ",channel=" + this._channel;

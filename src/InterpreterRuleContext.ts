@@ -5,20 +5,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.5898546-07:00
 
-import { Override } from './Decorators';
-import { ParserRuleContext } from './ParserRuleContext';
+import { Override } from "./Decorators";
+import { ParserRuleContext } from "./ParserRuleContext";
 
 /**
  * This class extends {@link ParserRuleContext} by allowing the value of
  * {@link #getRuleIndex} to be explicitly set for the context.
  *
- * <p>
  * {@link ParserRuleContext} does not include field storage for the rule index
  * since the context classes created by the code generator override the
  * {@link #getRuleIndex} method to return the correct value for that context.
  * Since the parser interpreter does not use the context classes generated for a
  * parser, this class (with slightly more memory overhead per node) is used to
- * provide equivalent functionality.</p>
+ * provide equivalent functionality.
  */
 export class InterpreterRuleContext extends ParserRuleContext {
 	/**

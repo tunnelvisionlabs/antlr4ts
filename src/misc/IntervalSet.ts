@@ -5,15 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
-import { ArrayEqualityComparator } from './ArrayEqualityComparator';
-import { IntegerList } from './IntegerList';
-import { Interval } from './Interval';
-import { IntSet } from './IntSet';
-import { Lexer } from '../Lexer';
-import { MurmurHash } from './MurmurHash';
-import { Override, NotNull } from '../Decorators';
-import { Token } from '../Token';
-import { Vocabulary } from '../Vocabulary';
+import { ArrayEqualityComparator } from "./ArrayEqualityComparator";
+import { IntegerList } from "./IntegerList";
+import { Interval } from "./Interval";
+import { IntSet } from "./IntSet";
+import { Lexer } from "../Lexer";
+import { MurmurHash } from "./MurmurHash";
+import { Override, NotNull } from "../Decorators";
+import { Token } from "../Token";
+import { Vocabulary } from "../Vocabulary";
 
 /**
  * This class implements the {@link IntSet} backed by a sorted array of
@@ -22,10 +22,9 @@ import { Vocabulary } from '../Vocabulary';
  * of a sequential range of numbers that are all part of the set. For example,
  * the set { 1, 2, 3, 4, 7, 8 } may be represented as { [1, 4], [7, 8] }.
  *
- * <p>
  * This class is able to represent sets containing any combination of values in
  * the range {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}
- * (inclusive).</p>
+ * (inclusive).
  */
 export class IntervalSet implements IntSet {
 	private static _COMPLETE_CHAR_SET: IntervalSet;
@@ -66,13 +65,13 @@ export class IntervalSet implements IntSet {
 	 * a.
 	 */
 	@NotNull
-	static of(a: number, b: number = a): IntervalSet {
+	public static of(a: number, b: number = a): IntervalSet {
 		let s: IntervalSet = new IntervalSet();
 		s.add(a, b);
 		return s;
 	}
 
-	clear(): void {
+	public clear(): void {
 		if (this.readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
@@ -87,7 +86,7 @@ export class IntervalSet implements IntSet {
 	 *  If this is {1..5, 10..20}, adding 6..7 yields
 	 *  {1..5, 6..7, 10..20}.  Adding 4..8 yields {1..8, 10..20}.
 	 */
-	add(a: number, b: number = a): void {
+	public add(a: number, b: number = a): void {
 		this.addRange(Interval.of(a, b));
 	}
 
@@ -151,7 +150,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	/** combine all sets in the array returned the or'd value */
-	static or(sets: IntervalSet[]): IntervalSet {
+	public static or(sets: IntervalSet[]): IntervalSet {
 		let r: IntervalSet = new IntervalSet();
 		for (let s of sets) {
 			r.addAll(s);
@@ -161,7 +160,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@Override
-	addAll(set: IntSet): IntervalSet {
+	public addAll(set: IntSet): IntervalSet {
 		if (set == null) {
 			return this;
 		}
@@ -176,7 +175,7 @@ export class IntervalSet implements IntSet {
 			}
 		}
 		else {
-			for (let value of set.toList()) {
+			for (let value of set.toArray()) {
 				this.add(value);
 			}
 		}
@@ -184,13 +183,13 @@ export class IntervalSet implements IntSet {
 		return this;
 	}
 
-	complementRange(minElement: number, maxElement: number): IntervalSet {
+	public complementRange(minElement: number, maxElement: number): IntervalSet {
 		return this.complement(IntervalSet.of(minElement, maxElement));
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	complement(vocabulary: IntSet): IntervalSet {
+	public complement(vocabulary: IntSet): IntervalSet {
 		if (vocabulary.isNil) {
 			// nothing in common with null set
 			return IntervalSet.EMPTY_SET;
@@ -208,7 +207,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@Override
-	subtract(a: IntSet): IntervalSet {
+	public subtract(a: IntSet): IntervalSet {
 		if (a == null || a.isNil) {
 			return new IntervalSet(this._intervals);
 		}
@@ -224,10 +223,10 @@ export class IntervalSet implements IntSet {
 
 	/**
 	 * Compute the set difference between two interval sets. The specific
-	 * operation is {@code left - right}.
+	 * operation is `left - right`.
 	 */
 	@NotNull
-	static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {
+	public static subtract(left: IntervalSet, right: IntervalSet): IntervalSet {
 		if (left.isNil) {
 			return new IntervalSet();
 		}
@@ -304,7 +303,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@Override
-	or(a: IntSet): IntervalSet {
+	public or(a: IntSet): IntervalSet {
 		let o: IntervalSet = new IntervalSet();
 		o.addAll(this);
 		o.addAll(a);
@@ -313,7 +312,7 @@ export class IntervalSet implements IntSet {
 
 	/** {@inheritDoc} */
 	@Override
-	and(other: IntSet): IntervalSet {
+	public and(other: IntSet): IntervalSet {
 		if (other.isNil) { //|| !(other instanceof IntervalSet) ) {
 			// nothing in common with null set
 			return new IntervalSet();
@@ -389,34 +388,27 @@ export class IntervalSet implements IntSet {
 
 	/** {@inheritDoc} */
 	@Override
-	contains(el: number): boolean {
+	public contains(el: number): boolean {
 		let n: number = this._intervals.length;
-		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
+		let l: number = 0;
+		let r: number = n - 1;
+		// Binary search for the element in the (sorted, disjoint) array of intervals.
+		while (l <= r) {
+			let m: number = (l + r) >> 1;
+			let I: Interval = this._intervals[m];
 			let a: number = I.a;
 			let b: number = I.b;
-			if (el < a) {
-				// list is sorted and el is before this interval; not here
-				break;
-			}
-			if (el >= a && el <= b) {
-				// found in this interval
+			if (b < el) {
+				l = m + 1;
+			} else if (a > el) {
+				r = m - 1;
+			} else {
+				// el >= a && el <= b
 				return true;
 			}
 		}
+
 		return false;
-		/*
-				for (ListIterator iter = intervals.listIterator(); iter.hasNext();) {
-					let I: Interval =  (Interval) iter.next();
-					if ( el<I.a ) {
-						break; // list is sorted and el is before this interval; not here
-					}
-					if ( el>=I.a && el<=I.b ) {
-						return true; // found in this interval
-					}
-				}
-				return false;
-				*/
 	}
 
 	/** {@inheritDoc} */
@@ -425,28 +417,15 @@ export class IntervalSet implements IntSet {
 		return this._intervals == null || this._intervals.length === 0;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	getSingleElement(): number {
-		if (this._intervals != null && this._intervals.length === 1) {
-			let I: Interval = this._intervals[0];
-			if (I.a === I.b) {
-				return I.a;
-			}
-		}
-
-		return Token.INVALID_TYPE;
-	}
-
 	/**
-	 * Returns the maximum value contained in the set.
+	 * Returns the maximum value contained in the set if not isNil.
 	 *
-	 * @return the maximum value contained in the set. If the set is empty, this
-	 * method returns {@link Token#INVALID_TYPE}.
+	 * @return the maximum value contained in the set.
+	 * @throws RangeError if set is empty
 	 */
 	get maxElement(): number {
 		if (this.isNil) {
-			return Token.INVALID_TYPE;
+			throw new RangeError("set is empty");
 		}
 
 		let last: Interval = this._intervals[this._intervals.length - 1];
@@ -454,14 +433,14 @@ export class IntervalSet implements IntSet {
 	}
 
 	/**
-	 * Returns the minimum value contained in the set.
+	 * Returns the minimum value contained in the set if not isNil.
 	 *
-	 * @return the minimum value contained in the set. If the set is empty, this
-	 * method returns {@link Token#INVALID_TYPE}.
+	 * @return the minimum value contained in the set.
+	 * @throws RangeError if set is empty
 	 */
 	get minElement(): number {
 		if (this.isNil) {
-			return Token.INVALID_TYPE;
+			throw new RangeError("set is empty");
 		}
 
 		return this._intervals[0].a;
@@ -473,7 +452,7 @@ export class IntervalSet implements IntSet {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (let I of this._intervals) {
 			hash = MurmurHash.update(hash, I.a);
@@ -485,12 +464,12 @@ export class IntervalSet implements IntSet {
 	}
 
 	/** Are two IntervalSets equal?  Because all intervals are sorted
-     *  and disjoint, equals is a simple linear walk over both lists
-     *  to make sure they are the same.  Interval.equals() is used
-     *  by the List.equals() method to check the ranges.
-     */
+	 *  and disjoint, equals is a simple linear walk over both lists
+	 *  to make sure they are the same.  Interval.equals() is used
+	 *  by the List.equals() method to check the ranges.
+	 */
 	@Override
-	equals(o: any): boolean {
+	public equals(o: any): boolean {
 		if (o == null || !(o instanceof IntervalSet)) {
 			return false;
 		}
@@ -498,7 +477,7 @@ export class IntervalSet implements IntSet {
 		return ArrayEqualityComparator.INSTANCE.equals(this._intervals, o._intervals);
 	}
 
-	toString(elemAreChar: boolean = false): string {
+	public toString(elemAreChar: boolean = false): string {
 		let buf: string = "";
 		if (this._intervals == null || this._intervals.length === 0) {
 			return "{}";
@@ -519,16 +498,16 @@ export class IntervalSet implements IntSet {
 			let a: number = I.a;
 			let b: number = I.b;
 			if (a === b) {
-				if (a == Token.EOF) {
+				if (a === Token.EOF) {
 					buf += "<EOF>";
 				} else if (elemAreChar) {
-					buf += "'" + String.fromCharCode(a) + "'";
+					buf += "'" + String.fromCodePoint(a) + "'";
 				} else {
 					buf += a;
 				}
 			} else {
 				if (elemAreChar) {
-					buf += "'" + String.fromCharCode(a) + "'..'" + String.fromCharCode(b) + "'";
+					buf += "'" + String.fromCodePoint(a) + "'..'" + String.fromCodePoint(b) + "'";
 				} else {
 					buf += a + ".." + b;
 				}
@@ -542,7 +521,7 @@ export class IntervalSet implements IntSet {
 		return buf;
 	}
 
-	toStringVocabulary( @NotNull vocabulary: Vocabulary): string {
+	public toStringVocabulary( @NotNull vocabulary: Vocabulary): string {
 		if (this._intervals == null || this._intervals.length === 0) {
 			return "{}";
 		}
@@ -597,7 +576,7 @@ export class IntervalSet implements IntSet {
 	get size(): number {
 		let n: number = 0;
 		let numIntervals: number = this._intervals.length;
-		if (numIntervals == 1) {
+		if (numIntervals === 1) {
 			let firstInterval: Interval = this._intervals[0];
 			return firstInterval.b - firstInterval.a + 1;
 		}
@@ -610,7 +589,7 @@ export class IntervalSet implements IntSet {
 		return n;
 	}
 
-	toIntegerList(): IntegerList {
+	public toIntegerList(): IntegerList {
 		let values: IntegerList = new IntegerList(this.size);
 		let n: number = this._intervals.length;
 		for (let i = 0; i < n; i++) {
@@ -625,8 +604,20 @@ export class IntervalSet implements IntSet {
 		return values;
 	}
 
-	@Override
-	toList(): number[] {
+	public toSet(): Set<number> {
+		let s: Set<number> = new Set<number>();
+		for (let I of this._intervals) {
+			let a: number = I.a;
+			let b: number = I.b;
+			for (let v = a; v <= b; v++) {
+				s.add(v);
+			}
+		}
+
+		return s;
+	}
+
+	public toArray(): number[] {
 		let values: number[] = new Array<number>();
 		let n: number = this._intervals.length;
 		for (let i = 0; i < n; i++) {
@@ -641,25 +632,8 @@ export class IntervalSet implements IntSet {
 		return values;
 	}
 
-	toSet(): Set<number> {
-		let s: Set<number> = new Set<number>();
-		for (let I of this._intervals) {
-			let a: number = I.a;
-			let b: number = I.b;
-			for (let v = a; v <= b; v++) {
-				s.add(v);
-			}
-		}
-
-		return s;
-	}
-
-	toArray(): number[] {
-		return this.toList();
-	}
-
 	@Override
-	remove(el: number): void {
+	public remove(el: number): void {
 		if (this.readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}
@@ -700,7 +674,7 @@ export class IntervalSet implements IntSet {
 		return this.readonly;
 	}
 
-	setReadonly(readonly: boolean): void {
+	public setReadonly(readonly: boolean): void {
 		if (this.readonly && !readonly) {
 			throw new Error("can't alter readonly IntervalSet");
 		}

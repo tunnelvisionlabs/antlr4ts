@@ -5,30 +5,28 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.9102174-07:00
 
+import { Parser } from "./Parser";
+import { Token } from "./Token";
+import { RecognitionException } from "./RecognitionException";
+
 /**
  * The interface for defining strategies to deal with syntax errors encountered
  * during a parse by ANTLR-generated parsers. We distinguish between three
  * different kinds of errors:
  *
- * <ul>
- * <li>The parser could not figure out which path to take in the ATN (none of
- * the available alternatives could possibly match)</li>
- * <li>The current input does not match what we were looking for</li>
- * <li>A predicate evaluated to false</li>
- * </ul>
+ * * The parser could not figure out which path to take in the ATN (none of
+ *   the available alternatives could possibly match)
+ * * The current input does not match what we were looking for
+ * * A predicate evaluated to false
  *
  * Implementations of this interface report syntax errors by calling
  * {@link Parser#notifyErrorListeners}.
  *
- * <p>TODO: what to do about lexers</p>
+ * TODO: what to do about lexers
  */
-import { Parser } from "./Parser";
-import { Token } from "./Token";
-import { RecognitionException } from "./RecognitionException";
-
 export interface ANTLRErrorStrategy {
 	/**
-	 * Reset the error handler state for the specified {@code recognizer}.
+	 * Reset the error handler state for the specified `recognizer`.
 	 * @param recognizer the parser instance
 	 */
 	reset(/*@NotNull*/ recognizer: Parser): void;
@@ -40,12 +38,12 @@ export interface ANTLRErrorStrategy {
 	 * returns the {@link Token} instance which should be treated as the
 	 * successful result of the match.
 	 *
-	 * <p>This method handles the consumption of any tokens - the caller should
-	 * <em>not</em> call {@link Parser#consume} after a successful recovery.</p>
+	 * This method handles the consumption of any tokens - the caller should
+	 * *not* call {@link Parser#consume} after a successful recovery.
 	 *
-	 * <p>Note that the calling code will not report an error if this method
+	 * Note that the calling code will not report an error if this method
 	 * returns successfully. The error strategy implementation is responsible
-	 * for calling {@link Parser#notifyErrorListeners} as appropriate.</p>
+	 * for calling {@link Parser#notifyErrorListeners} as appropriate.
 	 *
 	 * @param recognizer the parser instance
 	 * @ if the error strategy was not able to
@@ -54,7 +52,7 @@ export interface ANTLRErrorStrategy {
 	recoverInline(/*@NotNull*/ recognizer: Parser): Token;
 
 	/**
-	 * This method is called to recover from exception {@code e}. This method is
+	 * This method is called to recover from exception `e`. This method is
 	 * called after {@link #reportError} by the default exception handler
 	 * generated for a rule method.
 	 *
@@ -72,12 +70,12 @@ export interface ANTLRErrorStrategy {
 	 * syntactic or semantic errors in the input stream before they result in a
 	 * {@link RecognitionException}.
 	 *
-	 * <p>The generated code currently contains calls to {@link #sync} after
-	 * entering the decision state of a closure block ({@code (...)*} or
-	 * {@code (...)+}).</p>
+	 * The generated code currently contains calls to {@link #sync} after
+	 * entering the decision state of a closure block (`(...)*` or
+	 * `(...)+`).
 	 *
-	 * <p>For an implementation based on Jim Idle's "magic sync" mechanism, see
-	 * {@link DefaultErrorStrategy#sync}.</p>
+	 * For an implementation based on Jim Idle's "magic sync" mechanism, see
+	 * {@link DefaultErrorStrategy#sync}.
 	 *
 	 * @see DefaultErrorStrategy#sync
 	 *
@@ -89,15 +87,16 @@ export interface ANTLRErrorStrategy {
 	sync(/*@NotNull*/ recognizer: Parser): void;
 
 	/**
-	 * Tests whether or not {@code recognizer} is in the process of recovering
+	 * Tests whether or not `recognizer` is in the process of recovering
 	 * from an error. In error recovery mode, {@link Parser#consume} adds
 	 * symbols to the parse tree by calling
-	 * {@link ParserRuleContext#addErrorNode(Token)} instead of
-	 * {@link ParserRuleContext#addChild(Token)}.
+	 * {@link Parser#createErrorNode(ParserRuleContext, Token)} then
+	 * {@link ParserRuleContext#addErrorNode(ErrorNode)} instead of
+	 * {@link Parser#createTerminalNode(ParserRuleContext, Token)}.
 	 *
 	 * @param recognizer the parser instance
-	 * @return {@code true} if the parser is currently recovering from a parse
-	 * error, otherwise {@code false}
+	 * @returns `true` if the parser is currently recovering from a parse
+	 * error, otherwise `false`
 	 */
 	inErrorRecoveryMode(/*@NotNull*/ recognizer: Parser): boolean;
 

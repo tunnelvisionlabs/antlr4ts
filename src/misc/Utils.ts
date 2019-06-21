@@ -10,9 +10,11 @@
 // substantial rethink
 
 import { NotNull } from "../Decorators";
+import { Equatable } from "./Stubs";
+import { IntegerList } from "./IntegerList";
 
 export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
-	return escapeSpaces ? s.replace(/ /, '\u00B7') : s
+	return escapeSpaces ? s.replace(/ /, "\u00B7") : s
 		.replace(/\t/, "\\t")
 		.replace(/\n/, "\\n")
 		.replace(/\r/, "\\r");
@@ -35,12 +37,12 @@ export function join(collection: Iterable<any>, separator: string): string {
 	return buf;
 }
 
-export function equals(x: any, y: any): boolean {
+export function equals(x: Equatable | undefined, y: Equatable | undefined): boolean {
 	if (x === y) {
 		return true;
 	}
 
-	if (x == null || y == null) {
+	if (x === undefined || y === undefined) {
 		return false;
 	}
 
@@ -59,6 +61,15 @@ export function equals(x: any, y: any): boolean {
 // export function removeAllElements<T>(data: Collection<T>, value: T): void {
 // 	if ( data==null ) return;
 // 	while ( data.contains(value) ) data.remove(value);
+// }
+
+// export function writeFile(@NotNull file: File, @NotNull content: Uint8Array): void {
+// 	let fos: FileOutputStream = new FileOutputStream(file);
+// 	try {
+// 		fos.write(content);
+// 	} finally {
+// 		fos.close();
+// 	}
 // }
 
 // export function writeFile(@NotNull fileName: string, @NotNull content: string): void {
@@ -159,23 +170,20 @@ export function toMap(keys: string[]): Map<string, number> {
 	return m;
 }
 
-export function toCharArray(str: string): Uint16Array {
-	let result = new Uint16Array(str.length);
-	for (let i = 0; i < str.length; i++) {
-		result[i] = str.charCodeAt(i);
+export function toCharArray(str: string): Uint16Array;
+export function toCharArray(data: IntegerList): Uint16Array;
+export function toCharArray(str: string | IntegerList): Uint16Array {
+	if (typeof str === "string") {
+		let result = new Uint16Array(str.length);
+		for (let i = 0; i < str.length; i++) {
+			result[i] = str.charCodeAt(i);
+		}
+
+		return result;
+	} else {
+		return str.toCharArray();
 	}
-
-	return result;
 }
-
-// export function toCharArray(data: IntegerList): char[] {
-// 	if ( data==null ) return null;
-// 	let cdata: char[] =  new char[data.size];
-// 	for (let i=0; i<data.size; i++) {
-// 		cdata[i] = (char)data.get(i);
-// 	}
-// 	return cdata;
-// }
 
 // /**
 // 	* @since 4.5

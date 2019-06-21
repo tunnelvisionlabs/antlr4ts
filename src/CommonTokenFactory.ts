@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3010112-07:00
 
-import { CharStream } from './CharStream';
-import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Override } from './Decorators';
-import { TokenFactory } from './TokenFactory';
-import { TokenSource } from './TokenSource';
+import { CharStream } from "./CharStream";
+import { CommonToken } from "./CommonToken";
+import { Interval } from "./misc/Interval";
+import { Override } from "./Decorators";
+import { TokenFactory } from "./TokenFactory";
+import { TokenSource } from "./TokenSource";
 
 /**
  * This default implementation of {@link TokenFactory} creates
@@ -28,9 +28,8 @@ export class CommonTokenFactory implements TokenFactory {
 	 * allows {@link Token#getText} to be called at any time regardless of the
 	 * input stream implementation.
 	 *
-	 * <p>
-	 * The default value is {@code false} to avoid the performance and memory
-	 * overhead of copying text for every token unless explicitly requested.</p>
+	 * The default value is `false` to avoid the performance and memory
+	 * overhead of copying text for every token unless explicitly requested.
 	 */
 	protected copyText: boolean;
 
@@ -38,9 +37,8 @@ export class CommonTokenFactory implements TokenFactory {
 	 * Constructs a {@link CommonTokenFactory} with the specified value for
 	 * {@link #copyText}.
 	 *
-	 * <p>
-	 * When {@code copyText} is {@code false}, the {@link #DEFAULT} instance
-	 * should be used instead of constructing a new instance.</p>
+	 * When `copyText` is `false`, the {@link #DEFAULT} instance
+	 * should be used instead of constructing a new instance.
 	 *
 	 * @param copyText The value for {@link #copyText}.
 	 */
@@ -49,10 +47,10 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	create(
+	public create(
 		source: { source?: TokenSource, stream?: CharStream },
 		type: number,
-		text: string,
+		text: string | undefined,
 		channel: number,
 		start: number,
 		stop: number,
@@ -70,7 +68,7 @@ export class CommonTokenFactory implements TokenFactory {
 	}
 
 	@Override
-	createSimple(type: number, text: string): CommonToken {
+	public createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}
 }
@@ -79,9 +77,8 @@ export namespace CommonTokenFactory {
 	/**
 	 * The default {@link CommonTokenFactory} instance.
 	 *
-	 * <p>
 	 * This token factory does not explicitly copy token text when constructing
-	 * tokens.</p>
+	 * tokens.
 	 */
 	export const DEFAULT: TokenFactory = new CommonTokenFactory();
 }

@@ -5,22 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.3255548-07:00
 
-/** Indicates that the parser could not decide which of two or more paths
- *  to take based upon the remaining input. It tracks the starting token
- *  of the offending input and also knows where the parser was
- *  in the various paths when the error. Reported by reportNoViableAlternative()
- */
-
-import { ATNConfigSet } from './atn/ATNConfigSet';
-import { Parser } from './Parser';
-import { ParserRuleContext } from './ParserRuleContext';
+import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { Parser } from "./Parser";
+import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
 import { IntStream } from "./IntStream";
 import { NotNull } from "./Decorators";
 
+/** Indicates that the parser could not decide which of two or more paths
+ *  to take based upon the remaining input. It tracks the starting token
+ *  of the offending input and also knows where the parser was
+ *  in the various paths when the error. Reported by reportNoViableAlternative()
+ */
 export class NoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  5096000008992867052L;
 
@@ -37,12 +36,17 @@ export class NoViableAltException extends RecognitionException {
 
 	constructor(/*@NotNull*/ recognizer: Parser);
 	constructor(
-		/*@NotNull*/ recognizer: Recognizer<Token, any>,
-		/*@NotNull*/ input: TokenStream,
-		/*@NotNull*/ startToken: Token,
-		/*@NotNull*/ offendingToken: Token,
+		/*@NotNull*/
+		recognizer: Recognizer<Token, any>,
+		/*@NotNull*/
+		input: TokenStream,
+		/*@NotNull*/
+		startToken: Token,
+		/*@NotNull*/
+		offendingToken: Token,
 		deadEndConfigs: ATNConfigSet | undefined,
-		/*@NotNull*/ ctx: ParserRuleContext);
+		/*@NotNull*/
+		ctx: ParserRuleContext);
 
 	constructor(
 		recognizer: Recognizer<Token, any>,

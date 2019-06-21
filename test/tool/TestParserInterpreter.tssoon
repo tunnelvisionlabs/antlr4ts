@@ -318,7 +318,7 @@ export class TestParserInterpreter extends BaseTest {
 					startRule: string, input: string,
 					expectedParseTree: string): ParseTree
 	{
-		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(new ANTLRInputStream(input));
+		let lexEngine: LexerInterpreter =  lg.createLexerInterpreter(CharStreams.fromString(input));
 		let tokens: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		let parser: ParserInterpreter =  g.createParserInterpreter(tokens);
 		let t: ParseTree =  parser.parse(g.rules.get(startRule).index);

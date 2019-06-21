@@ -6,18 +6,19 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
 import { Arrays } from "../misc/Arrays";
-import { ATN } from '../atn/ATN';
+import { ATN } from "../atn/ATN";
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
 import { NotNull } from "../Decorators";
-import { Parser } from '../Parser';
+import { Parser } from "../Parser";
 import { ParserRuleContext } from "../ParserRuleContext";
 import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
 import { RuleNode } from "./RuleNode";
 import { TerminalNode } from "./TerminalNode";
 import { Token } from "../Token";
+import { Tree } from "./Tree";
 import * as Utils from "../misc/Utils";
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
@@ -26,36 +27,50 @@ export class Trees {
 	 *  node payloads to get the text for the nodes.  Detect
 	 *  parse trees and extract data appropriately.
 	 */
+	public static toStringTree(/*@NotNull*/ t: Tree): string;
 
-    /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
-     *  node payloads to get the text for the nodes.  Detect
-     *  parse trees and extract data appropriately.
-     */
+	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
+	 *  node payloads to get the text for the nodes.  Detect
+	 *  parse trees and extract data appropriately.
+	 */
+	public static toStringTree(/*@NotNull*/ t: Tree, recog: Parser | undefined): string;
 
-    /** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
-     *  node payloads to get the text for the nodes.
-     */
-	static toStringTree(@NotNull t: ParseTree, arg2?: Parser | string[]): string {
-		let ruleNames: string[];
-		if (arg2 instanceof Parser) { ruleNames = arg2.ruleNames; }
-		else { ruleNames = arg2 as string[]; }
+	/** Print out a whole tree in LISP form. {@link #getNodeText} is used on the
+	 *  node payloads to get the text for the nodes.
+	 */
+	public static toStringTree(/*@NotNull*/ t: Tree, /*@Nullable*/ ruleNames: string[] | undefined): string;
+
+	public static toStringTree(/*@NotNull*/ t: Tree, arg2?: Parser | string[]): string;
+	public static toStringTree(@NotNull t: Tree, arg2?: Parser | string[]): string {
+		let ruleNames: string[] | undefined;
+		if (arg2 instanceof Parser) {
+			ruleNames = arg2.ruleNames;
+		} else {
+			ruleNames = arg2;
+		}
 
 		let s: string = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
-		if (t.childCount == 0) return s;
+		if (t.childCount === 0) {
+			return s;
+		}
 		let buf = "";
 		buf += ("(");
 		s = Utils.escapeWhitespace(this.getNodeText(t, ruleNames), false);
 		buf += (s);
-		buf += (' ');
+		buf += (" ");
 		for (let i = 0; i < t.childCount; i++) {
-			if (i > 0) buf += (' ');
+			if (i > 0) {
+				buf += (" ");
+			}
 			buf += (this.toStringTree(t.getChild(i), ruleNames));
 		}
 		buf += (")");
 		return buf;
 	}
 
-	static getNodeText(t: ParseTree, arg2: Parser | string[]): string {
+	public static getNodeText(/*@NotNull*/ t: Tree, recog: Parser | undefined): string;
+	public static getNodeText(/*@NotNull*/ t: Tree, ruleNames: string[] | undefined): string;
+	public static getNodeText(t: Tree, arg2: Parser | string[] | undefined): string {
 		let ruleNames: string[] | undefined;
 		if (arg2 instanceof Parser) {
 			ruleNames = arg2.ruleNames;
@@ -64,10 +79,10 @@ export class Trees {
 		} else {
 			// no recog or rule names
 			let payload = t.payload;
-			if (typeof payload.text === 'string') {
+			if (typeof payload.text === "string") {
 				return payload.text;
 			}
-			return t.payload.toString();;
+			return t.payload.toString();
 		}
 
 		if (t instanceof RuleNode) {
@@ -90,11 +105,11 @@ export class Trees {
 		throw new TypeError("Unexpected node type");
 	}
 
-
-
 	/** Return ordered list of all children of this node */
-	static getChildren(t: ParseTree): ParseTree[] {
-		let kids = [] as ParseTree[];
+	public static getChildren(t: ParseTree): ParseTree[];
+	public static getChildren(t: Tree): Tree[];
+	public static getChildren(t: Tree): Tree[] {
+		let kids: Tree[] = [];
 		for (let i = 0; i < t.childCount; i++) {
 			kids.push(t.getChild(i));
 		}
@@ -106,9 +121,11 @@ export class Trees {
 	 *
 	 *  @since 4.5.1
 	 */
+	public static getAncestors(t: ParseTree): ParseTree[];
+	public static getAncestors(t: Tree): Tree[];
 	@NotNull
-	static getAncestors(@NotNull t: ParseTree): ParseTree[] {
-		let ancestors = [] as ParseTree[];
+	public static getAncestors(@NotNull t: Tree): Tree[] {
+		let ancestors: Tree[] = [];
 		let p = t.parent;
 		while (p) {
 			ancestors.unshift(p); // insert at start
@@ -117,42 +134,50 @@ export class Trees {
 		return ancestors;
 	}
 
-    /** Return true if t is u's parent or a node on path to root from u.
-     *  Use == not equals().
-     *
-     *  @since 4.5.1
-     */
-	static isAncestorOf(t: ParseTree, u: ParseTree): boolean {
-		if (!t || !u || !t.parent) return false;
+	/** Return true if t is u's parent or a node on path to root from u.
+	 *  Use === not equals().
+	 *
+	 *  @since 4.5.1
+	 */
+	public static isAncestorOf(t: Tree, u: Tree): boolean {
+		if (!t || !u || !t.parent) {
+			return false;
+		}
 		let p = u.parent;
 		while (p) {
-			if (t === p) return true;
+			if (t === p) {
+				return true;
+			}
 			p = p.parent;
 		}
 		return false;
 	}
 
-	static findAllTokenNodes(t: ParseTree, ttype: number): Array<ParseTree> {
+	public static findAllTokenNodes(t: ParseTree, ttype: number): ParseTree[] {
 		return Trees.findAllNodes(t, ttype, true);
 	}
 
-	static findAllRuleNodes(t: ParseTree, ruleIndex: number): Array<ParseTree> {
+	public static findAllRuleNodes(t: ParseTree, ruleIndex: number): ParseTree[] {
 		return Trees.findAllNodes(t, ruleIndex, false);
 	}
 
-	static findAllNodes(t: ParseTree, index: number, findTokens: boolean): Array<ParseTree> {
-		let nodes = [] as ParseTree[];
+	public static findAllNodes(t: ParseTree, index: number, findTokens: boolean): ParseTree[] {
+		let nodes: ParseTree[] = [];
 		Trees._findAllNodes(t, index, findTokens, nodes);
 		return nodes;
 	}
 
-	static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: Array<ParseTree>) {
+	public static _findAllNodes(t: ParseTree, index: number, findTokens: boolean, nodes: ParseTree[]): void {
 		// check this node (the root) first
 		if (findTokens && t instanceof TerminalNode) {
-			if (t.symbol.type === index) nodes.push(t);
+			if (t.symbol.type === index) {
+				nodes.push(t);
+			}
 		}
 		else if (!findTokens && t instanceof ParserRuleContext) {
-			if (t.ruleIndex === index) nodes.push(t);
+			if (t.ruleIndex === index) {
+				nodes.push(t);
+			}
 		}
 		// check children
 		for (let i = 0; i < t.childCount; i++) {
@@ -164,7 +189,7 @@ export class Trees {
 	 *
 	 * @since 4.5.1
 	 */
-	static getDescendants(t: ParseTree): ParseTree[] {
+	public static getDescendants(t: ParseTree): ParseTree[] {
 		let nodes: ParseTree[] = [];
 
 		function recurse(e: ParseTree): void {
@@ -180,19 +205,22 @@ export class Trees {
 	}
 
 	/** Find smallest subtree of t enclosing range startTokenIndex..stopTokenIndex
-	*  inclusively using postorder traversal.  Recursive depth-first-search.
-	*
-	*  @since 4.5
-	*/
-	static getRootOfSubtreeEnclosingRegion(@NotNull t: ParseTree,
+	 *  inclusively using postorder traversal.  Recursive depth-first-search.
+	 *
+	 *  @since 4.5
+	 */
+	public static getRootOfSubtreeEnclosingRegion(
+		@NotNull t: ParseTree,
 		startTokenIndex: number, // inclusive
-		stopTokenIndex: number // inclusive
+		stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {
 		let n: number = t.childCount;
 		for (let i = 0; i < n; i++) {
 			let child: ParseTree = t.getChild(i);
 			let r = Trees.getRootOfSubtreeEnclosingRegion(child, startTokenIndex, stopTokenIndex);
-			if (r) return r;
+			if (r) {
+				return r;
+			}
 		}
 		if (t instanceof ParserRuleContext) {
 			let stopToken = t.stop;
@@ -206,18 +234,21 @@ export class Trees {
 	}
 
 	/** Replace any subtree siblings of root that are completely to left
-	*  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
-	*  node. The source interval for t is not altered to suit smaller range!
-	*
-	*  WARNING: destructive to t.
-	*
-	*  @since 4.5.1
-	*/
-	static stripChildrenOutOfRange(t: ParserRuleContext,
+	 *  or right of lookahead range with a CommonToken(Token.INVALID_TYPE,"...")
+	 *  node. The source interval for t is not altered to suit smaller range!
+	 *
+	 *  WARNING: destructive to t.
+	 *
+	 *  @since 4.5.1
+	 */
+	public static stripChildrenOutOfRange(
+		t: ParserRuleContext,
 		root: ParserRuleContext,
 		startIndex: number,
 		stopIndex: number): void {
-		if (!t) return;
+		if (!t) {
+			return;
+		}
 		let count = t.childCount;
 		for (let i = 0; i < count; i++) {
 			let child = t.getChild(i);
@@ -231,21 +262,26 @@ export class Trees {
 		}
 	}
 
-	///** Return first node satisfying the pred
-	// *
-	//	 *  @since 4.5.1
-	// */
-	//static findNodeSuchThat(t: ParseTree, pred: Predicate<ParseTree>): ParseTree {
-	//	if ( pred.eval(t) ) return t;
+	/** Return first node satisfying the pred
+	 *
+	 *  @since 4.5.1
+	 */
+	public static findNodeSuchThat(t: ParseTree, pred: (tree: ParseTree) => boolean): ParseTree | undefined;
+	public static findNodeSuchThat(t: Tree, pred: (tree: Tree) => boolean): Tree | undefined;
+	public static findNodeSuchThat(t: Tree, pred: (tree: ParseTree) => boolean): Tree | undefined {
+		// No type check needed as long as users only use one of the available overloads
+		if (pred(t as ParseTree)) {
+			return t;
+		}
 
-	//	let n: number =  t.childCount;
-	//	for (let i = 0 ; i < n ; i++){
-	//		let u: ParseTree =  findNodeSuchThat(t.getChild(i), pred);
-	//		if ( u!=null ) return u;
-	//	}
-	//	return null;
-	//}
+		let n: number =  t.childCount;
+		for (let i = 0 ; i < n ; i++){
+			let u = Trees.findNodeSuchThat(t.getChild(i), pred as (tree: Tree) => boolean);
+			if (u !== undefined) {
+				return u;
+			}
+		}
 
-	// constructor()  {
-	//}
+		return undefined;
+	}
 }

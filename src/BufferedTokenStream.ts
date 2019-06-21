@@ -5,28 +5,27 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:49.6074365-07:00
 
-import assert = require('assert');
-import { CommonToken } from './CommonToken';
-import { Interval } from './misc/Interval';
-import { Lexer } from './Lexer';
-import { NotNull, Override } from './Decorators';
-import { RuleContext } from './RuleContext';
-import { Token } from './Token';
-import { TokenSource } from './TokenSource';
-import { TokenStream } from './TokenStream';
-import { WritableToken } from './WritableToken';
+import * as assert from "assert";
+import { CommonToken } from "./CommonToken";
+import { Interval } from "./misc/Interval";
+import { Lexer } from "./Lexer";
+import { NotNull, Override } from "./Decorators";
+import { RuleContext } from "./RuleContext";
+import { Token } from "./Token";
+import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
+import { WritableToken } from "./WritableToken";
 
 /**
  * This implementation of {@link TokenStream} loads tokens from a
  * {@link TokenSource} on-demand, and places the tokens in a buffer to provide
  * access to any previous token by index.
  *
- * <p>
  * This token stream ignores the value of {@link Token#getChannel}. If your
  * parser requires the token stream filter tokens to only those on a particular
  * channel, such as {@link Token#DEFAULT_CHANNEL} or
  * {@link Token#HIDDEN_CHANNEL}, use a filtering token stream such a
- * {@link CommonTokenStream}.</p>
+ * {@link CommonTokenStream}.
  */
 export class BufferedTokenStream implements TokenStream {
 	/**
@@ -38,20 +37,20 @@ export class BufferedTokenStream implements TokenStream {
 	/**
 	 * A collection of all tokens fetched from the token source. The list is
 	 * considered a complete view of the input once {@link #fetchedEOF} is set
-	 * to {@code true}.
+	 * to `true`.
 	 */
 	protected tokens: Token[] = [];
 
 	/**
 	 * The index into {@link #tokens} of the current token (next token to
-	 * {@link #consume}). {@link #tokens}{@code [}{@link #p}{@code ]} should be
+	 * {@link #consume}). {@link #tokens}`[`{@link #p}`]` should be
 	 * {@link #LT LT(1)}.
 	 *
-	 * <p>This field is set to -1 when the stream is first constructed or when
+	 * This field is set to -1 when the stream is first constructed or when
 	 * {@link #setTokenSource} is called, indicating that the first token has
 	 * not yet been fetched from the token source. For additional information,
 	 * see the documentation of {@link IntStream} for a description of
-	 * Initializing Methods.</p>
+	 * Initializing Methods.
 	 */
 	protected p: number = -1;
 
@@ -60,13 +59,11 @@ export class BufferedTokenStream implements TokenStream {
 	 * {@link #tokenSource} and added to {@link #tokens}. This field improves
 	 * performance for the following cases:
 	 *
-	 * <ul>
-	 * <li>{@link #consume}: The lookahead check in {@link #consume} to prevent
-	 * consuming the EOF symbol is optimized by checking the values of
-	 * {@link #fetchedEOF} and {@link #p} instead of calling {@link #LA}.</li>
-	 * <li>{@link #fetch}: The check to prevent adding multiple EOF symbols into
-	 * {@link #tokens} is trivial with this field.</li>
-	 * <ul>
+	 * * {@link #consume}: The lookahead check in {@link #consume} to prevent
+	 *   consuming the EOF symbol is optimized by checking the values of
+	 *   {@link #fetchedEOF} and {@link #p} instead of calling {@link #LA}.
+	 * * {@link #fetch}: The check to prevent adding multiple EOF symbols into
+	 *   {@link #tokens} is trivial with this field.
 	 */
 	protected fetchedEOF: boolean = false;
 
@@ -83,23 +80,31 @@ export class BufferedTokenStream implements TokenStream {
 		return this._tokenSource;
 	}
 
+	/** Reset this token stream by setting its token source. */
+	set tokenSource(tokenSource: TokenSource) {
+		this._tokenSource = tokenSource;
+		this.tokens.length = 0;
+		this.p = -1;
+		this.fetchedEOF = false;
+	}
+
 	@Override
 	get index(): number {
 		return this.p;
 	}
 
 	@Override
-	mark(): number {
+	public mark(): number {
 		return 0;
 	}
 
 	@Override
-	release(marker: number): void {
+	public release(marker: number): void {
 		// no resources to release
 	}
 
 	@Override
-	seek(index: number): void {
+	public seek(index: number): void {
 		this.lazyInit();
 		this.p = this.adjustSeekIndex(index);
 	}
@@ -110,7 +115,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	consume(): void {
+	public consume(): void {
 		let skipEofCheck: boolean;
 		if (this.p >= 0) {
 			if (this.fetchedEOF) {
@@ -135,10 +140,10 @@ export class BufferedTokenStream implements TokenStream {
 		}
 	}
 
-    /** Make sure index {@code i} in tokens has a token.
+	/** Make sure index `i` in tokens has a token.
 	 *
-	 * @return {@code true} if a token is located at index {@code i}, otherwise
-	 *    {@code false}.
+	 * @returns `true` if a token is located at index `i`, otherwise
+	 *    `false`.
 	 * @see #get(int i)
 	 */
 	protected sync(i: number): boolean {
@@ -153,9 +158,9 @@ export class BufferedTokenStream implements TokenStream {
 		return true;
 	}
 
-    /** Add {@code n} elements to buffer.
+	/** Add `n` elements to buffer.
 	 *
-	 * @return The actual number of elements added to the buffer.
+	 * @returns The actual number of elements added to the buffer.
 	 */
 	protected fetch(n: number): number {
 		if (this.fetchedEOF) {
@@ -179,7 +184,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	get(i: number): Token {
+	public get(i: number): Token {
 		if (i < 0 || i >= this.tokens.length) {
 			throw new RangeError("token index " + i + " out of range 0.." + (this.tokens.length - 1));
 		}
@@ -188,7 +193,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Get all tokens from start..stop inclusively. */
-	getRange(start: number, stop: number): Token[] {
+	public getRange(start: number, stop: number): Token[] {
 		if (start < 0 || stop < 0) {
 			return [];
 		}
@@ -212,7 +217,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	@Override
-	LA(i: number): number {
+	public LA(i: number): number {
 		let token = this.LT(i);
 		if (!token) {
 			return Token.INVALID_TYPE;
@@ -231,7 +236,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	LT(k: number): Token {
+	public LT(k: number): Token {
 		let result = this.tryLT(k);
 		if (result === undefined) {
 			throw new RangeError("requested lookback index out of range");
@@ -240,10 +245,10 @@ export class BufferedTokenStream implements TokenStream {
 		return result;
 	}
 
-	tryLT(k: number): Token | undefined {
+	public tryLT(k: number): Token | undefined {
 		this.lazyInit();
 		if (k === 0) {
-			throw new RangeError("0 is not a valid lookahead index")
+			throw new RangeError("0 is not a valid lookahead index");
 		}
 
 		if (k < 0) {
@@ -265,15 +270,15 @@ export class BufferedTokenStream implements TokenStream {
 	/**
 	 * Allowed derived classes to modify the behavior of operations which change
 	 * the current stream position by adjusting the target token index of a seek
-	 * operation. The default implementation simply returns {@code i}. If an
+	 * operation. The default implementation simply returns `i`. If an
 	 * exception is thrown in this method, the current stream index should not be
 	 * changed.
 	 *
-	 * <p>For example, {@link CommonTokenStream} overrides this method to ensure that
-	 * the seek target is always an on-channel token.</p>
+	 * For example, {@link CommonTokenStream} overrides this method to ensure that
+	 * the seek target is always an on-channel token.
 	 *
 	 * @param i The target token index.
-	 * @return The adjusted target token index.
+	 * @returns The adjusted target token index.
 	 */
 	protected adjustSeekIndex(i: number): number {
 		return i;
@@ -290,38 +295,39 @@ export class BufferedTokenStream implements TokenStream {
 		this.p = this.adjustSeekIndex(0);
 	}
 
-	/** Reset this token stream by setting its token source. */
-	set tokenSource(tokenSource: TokenSource) {
-		this._tokenSource = tokenSource;
-		this.tokens.length = 0;
-		this.p = -1;
-		this.fetchedEOF = false;
-	}
+	public getTokens(): Token[];
 
-    /** Given a start and stop index, return a {@code List} of all tokens in
-     *  the token type {@code BitSet}.  Return {@code null} if no tokens were found.  This
-     *  method looks at both on and off channel tokens.
-     */
-	getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {
+	public getTokens(start: number, stop: number): Token[];
+
+	public getTokens(start: number, stop: number, types: Set<number>): Token[];
+
+	public getTokens(start: number, stop: number, ttype: number): Token[];
+
+	/** Given a start and stop index, return a `List` of all tokens in
+	 *  the token type `BitSet`.  Return an empty array if no tokens were found.  This
+	 *  method looks at both on and off channel tokens.
+	 */
+	public getTokens(start?: number, stop?: number, types?: Set<number> | number): Token[] {
 		this.lazyInit();
 
-		start = start || 0;
-		stop = stop || this.tokens.length - 1;
-		if (start < 0 || stop >= this.tokens.length || stop < 0 || start >= this.tokens.length) {
-			throw new RangeError("start " + start + " or stop " + stop + " not in 0.." + (this.tokens.length - 1));
+		if (start === undefined) {
+			assert(stop === undefined && types === undefined);
+			return this.tokens;
+		} else if (stop === undefined) {
+			stop = this.tokens.length - 1;
 		}
 
-		if (start === 0 && stop === this.tokens.length - 1) {
-			return this.tokens;
+		if (start < 0 || stop >= this.tokens.length || stop < 0 || start >= this.tokens.length) {
+			throw new RangeError("start " + start + " or stop " + stop + " not in 0.." + (this.tokens.length - 1));
 		}
 
 		if (start > stop) {
 			return [];
 		}
 
-		if (types == null) {
+		if (types === undefined) {
 			return this.tokens.slice(start, stop + 1);
-		} else if (typeof types === 'number') {
+		} else if (typeof types === "number") {
 			types = new Set<number>().add(types);
 		}
 
@@ -329,15 +335,15 @@ export class BufferedTokenStream implements TokenStream {
 
 		// list = tokens[start:stop]:{T t, t.type in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
-		filteredTokens = filteredTokens.filter((value) => { return typesSet.has(value.type); });
+		filteredTokens = filteredTokens.filter((value) => typesSet.has(value.type));
 
 		return filteredTokens;
 	}
 
 	/**
 	 * Given a starting index, return the index of the next token on channel.
-	 * Return {@code i} if {@code tokens[i]} is on channel. Return the index of
-	 * the EOF token if there are no tokens on channel between {@code i} and
+	 * Return `i` if `tokens[i]` is on channel. Return the index of
+	 * the EOF token if there are no tokens on channel between `i` and
 	 * EOF.
 	 */
 	protected nextTokenOnChannel(i: number, channel: number): number {
@@ -362,13 +368,12 @@ export class BufferedTokenStream implements TokenStream {
 
 	/**
 	 * Given a starting index, return the index of the previous token on
-	 * channel. Return {@code i} if {@code tokens[i]} is on channel. Return -1
-	 * if there are no tokens on channel between {@code i} and 0.
+	 * channel. Return `i` if `tokens[i]` is on channel. Return -1
+	 * if there are no tokens on channel between `i` and 0.
 	 *
-	 * <p>
-	 * If {@code i} specifies an index at or after the EOF token, the EOF token
+	 * If `i` specifies an index at or after the EOF token, the EOF token
 	 * index is returned. This is due to the fact that the EOF token is treated
-	 * as though it were on every channel.</p>
+	 * as though it were on every channel.
 	 */
 	protected previousTokenOnChannel(i: number, channel: number): number {
 		this.sync(i);
@@ -391,9 +396,9 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Collect all tokens on specified channel to the right of
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL} or
-	 *  EOF. If {@code channel} is {@code -1}, find any non default channel token.
+	 *  EOF. If `channel` is `-1`, find any non default channel token.
 	 */
-	getHiddenTokensToRight(tokenIndex: number, channel: number = -1): Token[] {
+	public getHiddenTokensToRight(tokenIndex: number, channel: number = -1): Token[] {
 		this.lazyInit();
 		if (tokenIndex < 0 || tokenIndex >= this.tokens.length) {
 			throw new RangeError(tokenIndex + " not in 0.." + (this.tokens.length - 1));
@@ -414,9 +419,9 @@ export class BufferedTokenStream implements TokenStream {
 
 	/** Collect all tokens on specified channel to the left of
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL}.
-	 *  If {@code channel} is {@code -1}, find any non default channel token.
+	 *  If `channel` is `-1`, find any non default channel token.
 	 */
-	getHiddenTokensToLeft(tokenIndex: number, channel: number = -1): Token[] {
+	public getHiddenTokensToLeft(tokenIndex: number, channel: number = -1): Token[] {
 		this.lazyInit();
 		if (tokenIndex < 0 || tokenIndex >= this.tokens.length) {
 			throw new RangeError(tokenIndex + " not in 0.." + (this.tokens.length - 1));
@@ -463,12 +468,12 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Get the text of all tokens in this buffer. */
-	getText(): string;
-	getText(interval: Interval): string;
-	getText(context: RuleContext): string;
+	public getText(): string;
+	public getText(interval: Interval): string;
+	public getText(context: RuleContext): string;
 	@NotNull
 	@Override
-	getText(interval?: Interval | RuleContext): string {
+	public getText(interval?: Interval | RuleContext): string {
 		if (interval === undefined) {
 			interval = Interval.of(0, this.size - 1);
 		} else if (!(interval instanceof Interval)) {
@@ -502,7 +507,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	getTextFromRange(start: any, stop: any): string {
+	public getTextFromRange(start: any, stop: any): string {
 		if (this.isToken(start) && this.isToken(stop)) {
 			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));
 		}
@@ -511,7 +516,7 @@ export class BufferedTokenStream implements TokenStream {
 	}
 
 	/** Get all tokens from lexer until EOF. */
-	fill(): void {
+	public fill(): void {
 		this.lazyInit();
 		const blockSize: number = 1000;
 		while (true) {

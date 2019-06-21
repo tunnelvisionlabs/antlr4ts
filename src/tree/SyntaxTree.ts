@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9953174-07:00
 
-import { Tree } from './Tree';
-import { Interval } from '../misc/Interval';
+import { Tree } from "./Tree";
+import { Interval } from "../misc/Interval";
 
 /** A tree that knows about an interval in a token stream
  *  is some kind of syntax tree. Subinterfaces distinguish
@@ -19,15 +19,15 @@ export interface SyntaxTree extends Tree {
 	 * subtree. If this node is a leaf, then the interval represents a single
 	 * token and has interval i..i for token index i.
 	 *
-	 * <p>An interval of i..i-1 indicates an empty interval at position
+	 * An interval of i..i-1 indicates an empty interval at position
 	 * i in the input stream, where 0 &lt;= i &lt;= the size of the input
 	 * token stream.  Currently, the code base can only have i=0..n-1 but
-	 * in concept one could have an empty interval after EOF. </p>
+	 * in concept one could have an empty interval after EOF.
 	 *
-	 * <p>If source interval is unknown, this returns {@link Interval#INVALID}.</p>
+	 * If source interval is unknown, this returns {@link Interval#INVALID}.
 	 *
-	 * <p>As a weird special case, the source interval for rules matched after
-	 * EOF is unspecified.</p>
+	 * As a weird special case, the source interval for rules matched after
+	 * EOF is unspecified.
 	 */
 	//@NotNull
 	readonly sourceInterval: Interval;

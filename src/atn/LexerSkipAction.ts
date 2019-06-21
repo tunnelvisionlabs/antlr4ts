@@ -5,31 +5,32 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.2324460-07:00
 
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code skip} lexer action by calling {@link Lexer#skip}.
+ * Implements the `skip` lexer action by calling {@link Lexer#skip}.
  *
- * <p>The {@code skip} command does not have any parameters, so this action is
- * implemented as a singleton instance exposed by {@link #INSTANCE}.</p>
+ * The `skip` command does not have any parameters, so this action is
+ * implemented as a singleton instance exposed by {@link #INSTANCE}.
  *
  * @author Sam Harwell
  * @since 4.2
  */
 export class LexerSkipAction implements LexerAction {
 	/**
-	 * Constructs the singleton instance of the lexer {@code skip} command.
+	 * Constructs the singleton instance of the lexer `skip` command.
 	 */
 	constructor() {
+		// intentionally empty
 	}
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#SKIP}.
+	 * @returns This method returns {@link LexerActionType#SKIP}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -38,7 +39,7 @@ export class LexerSkipAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -48,27 +49,27 @@ export class LexerSkipAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#skip}.</p>
+	 * This action is implemented by calling {@link Lexer#skip}.
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.skip();
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		return MurmurHash.finish(hash, 1);
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		return obj === this;
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return "skip";
 	}
 }

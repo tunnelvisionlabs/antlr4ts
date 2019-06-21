@@ -43,9 +43,6 @@ in individual files can be removed and the antlr4 submodule commit will track th
 * [x] ListTokenSource.java
 * [x] NoViableAltException.java
 * [x] Parser.java
-  * [ ] `Parser.compileParseTreePattern`
-  * [ ] `Parser.getParseInfo`
-  * [ ] `Parser.setProfile`
 * [x] ParserErrorListener.java
 * [x] ParserInterpreter.java
 * [x] ParserRuleContext.java

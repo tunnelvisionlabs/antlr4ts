@@ -231,22 +231,24 @@ public abstract class BaseTest {
 									 boolean debug)
 	{
 		ST outputFileST = new ST(
-				"import 'mocha';\n" +
-				"import * as base from '../../../BaseTest';\n" +
-				"import { <lexerName> } from './<lexerName>';\n" +
-				"import { <parserName> } from './<parserName>';\n" +
+				"import \"mocha\";\n" +
+				"import * as base from \"../../../BaseTest\";\n" +
+				"import { <lexerName> } from \"./<lexerName>\";\n" +
+				"import { <parserName> } from \"./<parserName>\";\n" +
 				"\n" +
-				"it(`<className>.<testName>`, ()=> {\n" +
+				"it(`<className>.<testName>`, () => {\n" +
 				"	base.parserTest( {\n" +
-				"		testName: `<testName>`,\n" +
-				"		lexer: <lexerName>, \n" +
-				"		parser: <parserName>, \n" +
-				"		parserStartRule: parser => parser.<parserStartRuleName>(),\n" +
 				"		debug: <debug>,\n" +
-				"		input: `<input>`,\n" +
-				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
-				"		showDFA: <showDFA>\n" +
+				"		// tslint:disable:no-trailing-whitespace\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		input: `<input>`,\n" +
+				"		// tslint:enable:no-trailing-whitespace\n" +
+				"		lexer: <lexerName>,\n" +
+				"		parser: <parserName>,\n" +
+				"		parserStartRule: (parser) => parser.<parserStartRuleName>(),\n" +
+				"		showDFA: <showDFA>,\n" +
+				"		testName: `<testName>`,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");
@@ -266,18 +268,20 @@ public abstract class BaseTest {
 
 	private void writeLexerTestFile(String lexerName, boolean showDFA) {
 		ST outputFileST = new ST(
-				"import 'mocha';\n" +
-				"import * as base from '../../../BaseTest';\n" +
-				"import { <lexerName> } from './<lexerName>';\n" +
+				"import \"mocha\";\n" +
+				"import * as base from \"../../../BaseTest\";\n" +
+				"import { <lexerName> } from \"./<lexerName>\";\n" +
 				"\n" +
-				"it(`<className>.<testName>`, ()=> {\n" +
+				"it(`<className>.<testName>`, () => {\n" +
 				"	base.lexerTest( {\n" +
-				"		testName: `<testName>`,\n" +
-				"		lexer: <lexerName>, \n" +
-				"		input: `<input>`,\n" +
-				"		expectedOutput: `<expectedOutput>`,\n" +
 				"		expectedErrors: `<expectedErrors>`,\n" +
-				"		showDFA: <showDFA>\n" +
+				"		// tslint:disable:no-trailing-whitespace\n" +
+				"		expectedOutput: `<expectedOutput>`,\n" +
+				"		input: `<input>`,\n" +
+				"		// tslint:enable:no-trailing-whitespace\n" +
+				"		lexer: <lexerName>,\n" +
+				"		showDFA: <showDFA>,\n" +
+				"		testName: `<testName>`,\n" +
 				"		});\n" +
 				"	});\n" +
 				"\n");

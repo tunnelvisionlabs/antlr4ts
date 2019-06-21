@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.6647101-07:00
 
-import { IntegerList } from './IntegerList';
+import { IntegerList } from "./IntegerList";
 
 /**
  *
@@ -17,15 +17,15 @@ export class IntegerStack extends IntegerList {
 		super(arg);
 	}
 
-	push(value: number): void {
+	public push(value: number): void {
 		this.add(value);
 	}
 
-	pop(): number {
+	public pop(): number {
 		return this.removeAt(this.size - 1);
 	}
 
-	peek(): number {
+	public peek(): number {
 		return this.get(this.size - 1);
 	}
 

@@ -5,15 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6109431-07:00
 
-import { ErrorNode } from './ErrorNode';
-import { ParserRuleContext } from '../ParserRuleContext';
-import { TerminalNode } from './TerminalNode';
+import { ErrorNode } from "./ErrorNode";
+import { ParserRuleContext } from "../ParserRuleContext";
+import { TerminalNode } from "./TerminalNode";
 
 /** This interface describes the minimal core of methods triggered
  *  by {@link ParseTreeWalker}. E.g.,
  *
- *  	ParseTreeWalker walker = new ParseTreeWalker();
- *		walker.walk(myParseTreeListener, myParseTree); <-- triggers events in your listener
+ * ```
+ * ParseTreeWalker walker = new ParseTreeWalker();
+ * walker.walk(myParseTreeListener, myParseTree); <-- triggers events in your listener
+ * ```
  *
  *  If you want to trigger events in multiple listeners during a single
  *  tree walk, you can use the ParseTreeDispatcher object available at

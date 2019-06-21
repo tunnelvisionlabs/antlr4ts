@@ -9,7 +9,7 @@ export namespace Arrays {
 	 * be sorted prior to making this call. If it is not sorted, the results are unspecified. If the array contains
 	 * multiple elements with the specified value, there is no guarantee which one will be found.
 	 *
-	 * @return index of the search key, if it is contained in the array; otherwise, (-(insertion point) - 1). The
+	 * @returns index of the search key, if it is contained in the array; otherwise, (-(insertion point) - 1). The
 	 * insertion point is defined as the point at which the key would be inserted into the array: the index of the first
 	 * element greater than the key, or array.length if all elements in the array are less than the specified key. Note
 	 * that this guarantees that the return value will be >= 0 if and only if the key is found.
@@ -40,18 +40,17 @@ export namespace Arrays {
 		return -(low + 1);
 	}
 
-	export function toString<T>(array: ArrayLike<T>) {
+	export function toString<T>(array: Iterable<T>) {
 		let result = "[";
 
 		let first = true;
-		for (let i = 0; i < array.length; i++) {
+		for (let element of array) {
 			if (first) {
 				first = false;
 			} else {
 				result += ", ";
 			}
 
-			let element = array[i];
 			if (element === null) {
 				result += "null";
 			} else if (element === undefined) {

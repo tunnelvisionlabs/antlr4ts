@@ -46,7 +46,7 @@ export class ParserRuleContext extends RuleContext {
 	 *  operation because we don't the need to track the details about
 	 *  how we parse this rule.
 	 */
-	children?: ParseTree[];
+	public children?: ParseTree[];
 
 	/** For debugging/tracing purposes, we want to track all of the nodes in
 	 *  the ATN traversed by the parser for a particular rule.
@@ -63,8 +63,8 @@ export class ParserRuleContext extends RuleContext {
 	 *
 	 *  The parser state property updates field s and adds it to this list
 	 *  if we are debugging/tracing.
-     *
-     *  This does not trace states visited during prediction.
+	 *
+	 *  This does not trace states visited during prediction.
 	 */
 //	public Array<number> states;
 
@@ -73,9 +73,9 @@ export class ParserRuleContext extends RuleContext {
 
 	/**
 	 * The exception that forced this rule to return. If the rule successfully
-	 * completed, this is {@code null}.
+	 * completed, this is `undefined`.
 	 */
-	exception?: RecognitionException;
+	public exception?: RecognitionException;
 
 	constructor();
 	constructor(parent: ParserRuleContext | undefined, invokingStateNumber: number);
@@ -87,13 +87,14 @@ export class ParserRuleContext extends RuleContext {
 		}
 	}
 
-	static emptyContext(): ParserRuleContext {
+	public static emptyContext(): ParserRuleContext {
 		return ParserRuleContext.EMPTY;
 	}
 
 	/**
 	 * COPY a ctx (I'm deliberately not using copy constructor) to avoid
-	 * confusion with creating node with parent. Does not copy children.
+	 * confusion with creating node with parent. Does not copy children
+	 * (except error leaves).
 	 *
 	 * This is used in the generated parser code to flip a generic XContext
 	 * node for rule X to a YContext for alt label Y. In that sense, it is not
@@ -103,7 +104,7 @@ export class ParserRuleContext extends RuleContext {
 	 * to the generic XContext so this function must copy those nodes to the
 	 * YContext as well else they are lost!
 	 */
-	copyFrom(ctx: ParserRuleContext): void {
+	public copyFrom(ctx: ParserRuleContext): void {
 		this._parent = ctx._parent;
 		this.invokingState = ctx.invokingState;
 
@@ -116,8 +117,7 @@ export class ParserRuleContext extends RuleContext {
 			// reset parent pointer for any error nodes
 			for (let child of ctx.children) {
 				if (child instanceof ErrorNode) {
-					this.children.push(child);
-					child._parent = this;
+					this.addChild(child);
 				}
 			}
 		}
@@ -125,40 +125,92 @@ export class ParserRuleContext extends RuleContext {
 
 	// Double dispatch methods for listeners
 
-	enterRule(listener: ParseTreeListener): void { }
-	exitRule(listener: ParseTreeListener): void { }
+	public enterRule(listener: ParseTreeListener): void {
+		// intentionally empty
+	}
+	public exitRule(listener: ParseTreeListener): void {
+		// intentionally empty
+	}
 
-	addChild(t: TerminalNode): void;
-	addChild(ruleInvocation: RuleContext): void;
-	addChild(matchedToken: Token): TerminalNode;
-	addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
-		let result: TerminalNode | void;
-		if (t instanceof TerminalNode) {
-			// Does not set parent link
-		} else if (t instanceof RuleContext) {
-			// Does not set parent link
-		} else {
-			t = new TerminalNode(t);
-			t._parent = this;
-			result = t;
-		}
-
+	/** Add a parse tree node to this as a child.  Works for
+	 *  internal and leaf nodes. Does not set parent link;
+	 *  other add methods must do that. Other addChild methods
+	 *  call this.
+	 *
+	 *  We cannot set the parent pointer of the incoming node
+	 *  because the existing interfaces do not have a setParent()
+	 *  method and I don't want to break backward compatibility for this.
+	 *
+	 *  @since 4.7
+	 */
+	public addAnyChild<T extends ParseTree>(t: T): T {
 		if (!this.children) {
 			this.children = [t];
 		} else {
 			this.children.push(t);
 		}
 
-		return result;
+		return t;
 	}
 
-	/** Used by enterOuterAlt to toss out a RuleContext previously added as
-	 *  we entered a rule. If we have # label, we will need to remove
-	 *  generic ruleContext object.
- 	 */
-	removeLastChild(): void {
-		if (this.children) {
-			this.children.pop();
+	/** Add a token leaf node child and force its parent to be this node. */
+	public addChild(t: TerminalNode): void;
+	public addChild(ruleInvocation: RuleContext): void;
+	/**
+	 * Add a child to this node based upon matchedToken. It
+	 * creates a TerminalNodeImpl rather than using
+	 * {@link Parser#createTerminalNode(ParserRuleContext, Token)}. I'm leaving this
+	 * in for compatibility but the parser doesn't use this anymore.
+	 *
+	 * @deprecated Use another overload instead.
+	 */
+	public addChild(matchedToken: Token): TerminalNode;
+	public addChild(t: TerminalNode | RuleContext | Token): TerminalNode | void {
+		let result: TerminalNode | void;
+		if (t instanceof TerminalNode) {
+			t.setParent(this);
+			this.addAnyChild(t);
+			return;
+		} else if (t instanceof RuleContext) {
+			// Does not set parent link
+			this.addAnyChild(t);
+			return;
+		} else {
+			// Deprecated code path
+			t = new TerminalNode(t);
+			this.addAnyChild(t);
+			t.setParent(this);
+			return t;
+		}
+	}
+
+	/** Add an error node child and force its parent to be this node.
+	 *
+	 * @since 4.7
+	 */
+	public addErrorNode(errorNode: ErrorNode): ErrorNode;
+
+	/**
+	 * Add a child to this node based upon badToken. It
+	 * creates a ErrorNode rather than using
+	 * {@link Parser#createErrorNode(ParserRuleContext, Token)}. I'm leaving this
+	 * in for compatibility but the parser doesn't use this anymore.
+	 *
+	 * @deprecated Use another overload instead.
+	 */
+	public addErrorNode(badToken: Token): ErrorNode;
+	public addErrorNode(node: ErrorNode | Token): ErrorNode {
+		if (node instanceof ErrorNode) {
+			const errorNode: ErrorNode = node;
+			errorNode.setParent(this);
+			return this.addAnyChild(errorNode);
+		} else {
+			// deprecated path
+			const badToken: Token = node;
+			let t = new ErrorNode(badToken);
+			this.addAnyChild(t);
+			t.setParent(this);
+			return t;
 		}
 	}
 
@@ -167,11 +219,14 @@ export class ParserRuleContext extends RuleContext {
 //		states.add(s);
 //	}
 
-	addErrorNode(badToken: Token): ErrorNode {
-		let t = new ErrorNode(badToken);
-		this.addChild(t);
-		t._parent = this;
-		return t;
+	/** Used by enterOuterAlt to toss out a RuleContext previously added as
+	 *  we entered a rule. If we have # label, we will need to remove
+	 *  generic ruleContext object.
+	 */
+	public removeLastChild(): void {
+		if (this.children) {
+			this.children.pop();
+		}
 	}
 
 	@Override
@@ -185,12 +240,12 @@ export class ParserRuleContext extends RuleContext {
 		throw new TypeError("Invalid parent type for ParserRuleContext");
 	}
 
-	getChild(i: number): ParseTree;
-	getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
+	public getChild(i: number): ParseTree;
+	public getChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T;
 	// Note: in TypeScript, order or arguments reversed
-	getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
+	public getChild<T extends ParseTree>(i: number, ctxType?: { new (...args: any[]): T; }): ParseTree {
 		if (!this.children || i < 0 || i >= this.children.length) {
-			throw new RangeError("index parameter must be between >= 0 and <= number of children.")
+			throw new RangeError("index parameter must be between >= 0 and <= number of children.");
 		}
 
 		if (ctxType == null) {
@@ -205,7 +260,7 @@ export class ParserRuleContext extends RuleContext {
 		return result;
 	}
 
-	tryGetChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+	public tryGetChild<T extends ParseTree>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			return undefined;
 		}
@@ -223,7 +278,7 @@ export class ParserRuleContext extends RuleContext {
 		return undefined;
 	}
 
-	getToken(ttype: number, i: number): TerminalNode {
+	public getToken(ttype: number, i: number): TerminalNode {
 		let result = this.tryGetToken(ttype, i);
 		if (result === undefined) {
 			throw new Error("The specified token does not exist");
@@ -232,7 +287,7 @@ export class ParserRuleContext extends RuleContext {
 		return result;
 	}
 
-	tryGetToken(ttype: number, i: number): TerminalNode | undefined {
+	public tryGetToken(ttype: number, i: number): TerminalNode | undefined {
 		if (!this.children || i < 0 || i >= this.children.length) {
 			return undefined;
 		}
@@ -253,7 +308,7 @@ export class ParserRuleContext extends RuleContext {
 		return undefined;
 	}
 
-	getTokens(ttype: number): TerminalNode[] {
+	public getTokens(ttype: number): TerminalNode[] {
 		let tokens: TerminalNode[] = [];
 
 		if (!this.children) {
@@ -277,15 +332,15 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	// NOTE: argument order change from Java version
-	getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
+	public getRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T {
 		return this.getChild(i, ctxType);
 	}
 
-	tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
+	public tryGetRuleContext<T extends ParserRuleContext>(i: number, ctxType: { new (...args: any[]): T; }): T | undefined {
 		return this.tryGetChild(i, ctxType);
 	}
 
-	getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
+	public getRuleContexts<T extends ParserRuleContext>(ctxType: { new (...args: any[]): T; }): T[] {
 		let contexts: T[] = [];
 		if (!this.children) {
 			return contexts;
@@ -330,12 +385,12 @@ export class ParserRuleContext extends RuleContext {
 	get stop(): Token | undefined { return this._stop; }
 
 	/** Used for rule context info debugging during parse-time, not so much for ATN debugging */
-	toInfoString(recognizer: Parser): string {
-		let rules: Array<string> =
+	public toInfoString(recognizer: Parser): string {
+		let rules: string[] =
 			recognizer.getRuleInvocationStack(this).reverse();
 		return "ParserRuleContext" + rules + "{" +
 			"start=" + this._start +
 			", stop=" + this._stop +
-			'}';
+			"}";
 	}
 }

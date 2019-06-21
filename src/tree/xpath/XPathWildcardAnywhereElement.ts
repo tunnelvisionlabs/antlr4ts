@@ -17,8 +17,11 @@ export class XPathWildcardAnywhereElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): ParseTree[] {
-		if (this.invert) return []; // !* is weird but valid (empty)
+	public evaluate(t: ParseTree): ParseTree[] {
+		if (this.invert) {
+			// !* is weird but valid (empty)
+			return [];
+		}
 		return Trees.getDescendants(t);
 	}
 }

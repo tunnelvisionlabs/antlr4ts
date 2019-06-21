@@ -16,6 +16,19 @@ Building this repository from source requires several tools:
 * Maven 3.3.1+ (3.3.9+ recommended)
 * Java Development Kit 1.6+ (1.8+ recommended)
 
+Users working in Visual Studio Code should update their workspace settings to specify the paths for the Java Development
+Kit and Apache Maven:
+
+```json
+{
+  "java.home": "C:\\Program Files\\Java\\jdk1.8.0_192",
+  "terminal.integrated.env.windows": {
+    "JAVA_HOME": "C:\\Program Files\\Java\\jdk1.8.0_192",
+    "PATH": "${env:PATH};C:\\apps\\apache-maven-3.6.0\\bin"
+  }
+}
+```
+
 ### Building the code
 
 The code is built through a sequence of several steps which is automated through the following `npm` command.

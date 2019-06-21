@@ -5,14 +5,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.8653427-07:00
 
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerActionType } from './LexerActionType';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerActionType } from "./LexerActionType";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
- * Implements the {@code mode} lexer action by calling {@link Lexer#mode} with
+ * Implements the `mode` lexer action by calling {@link Lexer#mode} with
  * the assigned mode.
  *
  * @author Sam Harwell
@@ -22,7 +22,7 @@ export class LexerModeAction implements LexerAction {
 	private readonly _mode: number;
 
 	/**
-	 * Constructs a new {@code mode} action with the specified mode value.
+	 * Constructs a new `mode` action with the specified mode value.
 	 * @param mode The mode value to pass to {@link Lexer#mode}.
 	 */
 	constructor(mode: number) {
@@ -32,7 +32,7 @@ export class LexerModeAction implements LexerAction {
 	/**
 	 * Get the lexer mode this action should transition the lexer to.
 	 *
-	 * @return The lexer mode for this {@code mode} command.
+	 * @returns The lexer mode for this `mode` command.
 	 */
 	get mode(): number {
 		return this._mode;
@@ -40,7 +40,7 @@ export class LexerModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@link LexerActionType#MODE}.
+	 * @returns This method returns {@link LexerActionType#MODE}.
 	 */
 	@Override
 	get actionType(): LexerActionType {
@@ -49,7 +49,7 @@ export class LexerModeAction implements LexerAction {
 
 	/**
 	 * {@inheritDoc}
-	 * @return This method returns {@code false}.
+	 * @returns This method returns `false`.
 	 */
 	@Override
 	get isPositionDependent(): boolean {
@@ -59,16 +59,16 @@ export class LexerModeAction implements LexerAction {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This action is implemented by calling {@link Lexer#mode} with the
-	 * value provided by {@link #getMode}.</p>
+	 * This action is implemented by calling {@link Lexer#mode} with the
+	 * value provided by {@link #getMode}.
 	 */
 	@Override
-	execute(@NotNull lexer: Lexer): void {
+	public execute(@NotNull lexer: Lexer): void {
 		lexer.mode(this._mode);
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		hash = MurmurHash.update(hash, this._mode);
@@ -76,7 +76,7 @@ export class LexerModeAction implements LexerAction {
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerModeAction)) {
@@ -87,7 +87,7 @@ export class LexerModeAction implements LexerAction {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return `mode(${this._mode})`;
 	}
 }

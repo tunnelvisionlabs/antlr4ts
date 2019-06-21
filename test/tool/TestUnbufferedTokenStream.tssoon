@@ -22,9 +22,7 @@ export class TestUnbufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 302;
-        let input: CharStream =  new ANTLRInputStream(
-			StringReader("x = 302;"): new
-		);
+        let input: CharStream = CharStreams.fromString("x = 302;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
         let tokens: TokenStream =  new UnbufferedTokenStream(lexEngine);
 
@@ -48,9 +46,7 @@ export class TestUnbufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 302;
-        let input: CharStream =  new ANTLRInputStream(
-			StringReader("x = 302;"): new
-		);
+        let input: CharStream = CharStreams.fromString("x = 302;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
 		let tokens: TestingUnbufferedTokenStream =  new TestingUnbufferedTokenStream(lexEngine);
 
@@ -85,9 +81,7 @@ export class TestUnbufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 302;
-        let input: CharStream =  new ANTLRInputStream(
-			StringReader("x = 302;"): new
-		);
+        let input: CharStream = CharStreams.fromString("x = 302;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
 		let tokens: TestingUnbufferedTokenStream =  new TestingUnbufferedTokenStream(lexEngine);
 
@@ -120,9 +114,7 @@ export class TestUnbufferedTokenStream extends BaseTest {
             "WS : ' '+;\n");
         // Tokens: 012345678901234567
         // Input:  x = 302;
-        let input: CharStream =  new ANTLRInputStream(
-			StringReader("x = 302 + 1;"): new
-		);
+        let input: CharStream = CharStreams.fromString("x = 302 + 1;");
         let lexEngine: LexerInterpreter =  g.createLexerInterpreter(input);
 		let tokens: TestingUnbufferedTokenStream =  new TestingUnbufferedTokenStream(lexEngine);
 

@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.7862802-07:00
 
-import { CharStream } from './CharStream';
-import { IntStream } from './IntStream';
-import { TokenSource } from './TokenSource';
-import { TokenStream } from './TokenStream';
+import { CharStream } from "./CharStream";
+import { IntStream } from "./IntStream";
+import { TokenSource } from "./TokenSource";
+import { TokenStream } from "./TokenStream";
 
 /** A token has properties: text, type, line, character position in the line
  *  (so we can ignore tabs), token channel, index, and source from which
@@ -95,10 +95,9 @@ export namespace Token {
 	 * This is the minimum constant value which can be assigned to a
 	 * user-defined token channel.
 	 *
-	 * <p>
 	 * The non-negative numbers less than {@link #MIN_USER_CHANNEL_VALUE} are
 	 * assigned to the predefined channels {@link #DEFAULT_CHANNEL} and
-	 * {@link #HIDDEN_CHANNEL}.</p>
+	 * {@link #HIDDEN_CHANNEL}.
 	 *
 	 * @see `Token.channel`
 	 */

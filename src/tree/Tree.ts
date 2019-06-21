@@ -21,7 +21,7 @@ export interface Tree {
 	 * invocation. For abstract syntax trees (ASTs), this is a {@link Token}
 	 * object.
 	 */
-	readonly payload: any;
+	readonly payload: { text?: string };
 
 	/**
 	 * If there are children, get the `i`th value indexed from 0. Throws a `RangeError` if `i` is less than zero, or
@@ -35,7 +35,7 @@ export interface Tree {
 	readonly childCount: number;
 
 	/** Print out a whole tree, not just a node, in LISP format
-	 *  {@code (root child1 .. childN)}. Print just a node if this is a leaf.
+	 *  `(root child1 .. childN)`. Print just a node if this is a leaf.
 	 */
 	toStringTree(): string;
 }

@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.0697674-07:00
 import { CharStream } from "./CharStream";
-import { IntervalSet } from "./misc/IntervalSet"
-import { IntStream } from './IntStream';
+import { IntervalSet } from "./misc/IntervalSet";
+import { IntStream } from "./IntStream";
 import { Lexer } from "./Lexer";
-import { Parser } from './Parser';
+import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
-import { Recognizer } from './Recognizer';
+import { Recognizer } from "./Recognizer";
 import { RuleContext } from "./RuleContext";
 import { Token } from "./Token";
 
@@ -40,14 +40,17 @@ export class RecognitionException extends Error {
 
 	private _offendingState: number = -1;
 
-	constructor(lexer: Lexer | undefined,
+	constructor(
+		lexer: Lexer | undefined,
 		input: CharStream);
 
-	constructor(recognizer: Recognizer<Token, any> | undefined,
+	constructor(
+		recognizer: Recognizer<Token, any> | undefined,
 		input: IntStream | undefined,
 		ctx: ParserRuleContext | undefined);
 
-	constructor(recognizer: Recognizer<Token, any> | undefined,
+	constructor(
+		recognizer: Recognizer<Token, any> | undefined,
 		input: IntStream | undefined,
 		ctx: ParserRuleContext | undefined,
 		message: string);
@@ -62,7 +65,9 @@ export class RecognitionException extends Error {
 		this._recognizer = recognizer;
 		this.input = input;
 		this.ctx = ctx;
-		if (recognizer) this._offendingState = recognizer.state;
+		if (recognizer) {
+			this._offendingState = recognizer.state;
+		}
 	}
 
 	/**
@@ -72,7 +77,7 @@ export class RecognitionException extends Error {
 	 * {@link DecisionState} number. For others, it is the state whose outgoing
 	 * edge we couldn't match.
 	 *
-	 * <p>If the state number is not known, this method returns -1.</p>
+	 * If the state number is not known, this method returns -1.
 	 */
 	get offendingState(): number {
 		return this._offendingState;
@@ -86,11 +91,11 @@ export class RecognitionException extends Error {
 	 * Gets the set of input symbols which could potentially follow the
 	 * previously matched symbol at the time this exception was thrown.
 	 *
-	 * <p>If the set of expected tokens is not known and could not be computed,
-	 * this method returns {@code null}.</p>
+	 * If the set of expected tokens is not known and could not be computed,
+	 * this method returns `undefined`.
 	 *
-	 * @return The set of token types that could potentially follow the current
-	 * state in the ATN, or {@code null} if the information is not available.
+	 * @returns The set of token types that could potentially follow the current
+	 * state in the ATN, or `undefined` if the information is not available.
 	 */
 	get expectedTokens(): IntervalSet | undefined {
 		if (this._recognizer) {
@@ -102,10 +107,10 @@ export class RecognitionException extends Error {
 	/**
 	 * Gets the {@link RuleContext} at the time this exception was thrown.
 	 *
-	 * <p>If the context is not available, this method returns {@code null}.</p>
+	 * If the context is not available, this method returns `undefined`.
 	 *
-	 * @return The {@link RuleContext} at the time this exception was thrown.
-	 * If the context is not available, this method returns {@code null}.
+	 * @returns The {@link RuleContext} at the time this exception was thrown.
+	 * If the context is not available, this method returns `undefined`.
 	 */
 	get context(): RuleContext | undefined {
 		return this.ctx;
@@ -115,10 +120,10 @@ export class RecognitionException extends Error {
 	 * Gets the input stream which is the symbol source for the recognizer where
 	 * this exception was thrown.
 	 *
-	 * <p>If the input stream is not available, this method returns {@code null}.</p>
+	 * If the input stream is not available, this method returns `undefined`.
 	 *
-	 * @return The input stream which is the symbol source for the recognizer
-	 * where this exception was thrown, or {@code null} if the stream is not
+	 * @returns The input stream which is the symbol source for the recognizer
+	 * where this exception was thrown, or `undefined` if the stream is not
 	 * available.
 	 */
 
@@ -126,14 +131,16 @@ export class RecognitionException extends Error {
 		return this.input;
 	}
 
-	getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
-		if (recognizer && recognizer !== this._recognizer) return undefined;
+	public getOffendingToken(recognizer?: Recognizer<Token, any>): Token | undefined {
+		if (recognizer && recognizer !== this._recognizer) {
+			return undefined;
+		}
 		return this.offendingToken;
 	}
 
-	protected setOffendingToken<Symbol extends Token>(
-		recognizer: Recognizer<Symbol, any>,
-		offendingToken?: Symbol): void {
+	protected setOffendingToken<TSymbol extends Token>(
+		recognizer: Recognizer<TSymbol, any>,
+		offendingToken?: TSymbol): void {
 		if (recognizer === this._recognizer) {
 			this.offendingToken = offendingToken;
 		}
@@ -142,9 +149,9 @@ export class RecognitionException extends Error {
 	/**
 	 * Gets the {@link Recognizer} where this exception occurred.
 	 *
-	 * <p>If the recognizer is not available, this method returns {@code null}.</p>
+	 * If the recognizer is not available, this method returns `undefined`.
 	 *
-	 * @return The recognizer where this exception occurred, or {@code null} if
+	 * @returns The recognizer where this exception occurred, or `undefined` if
 	 * the recognizer is not available.
 	 */
 	get recognizer(): Recognizer<any, any> | undefined {

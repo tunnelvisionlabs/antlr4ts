@@ -6,12 +6,12 @@
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
 import * as assert from "assert";
-import { DefaultEqualityComparator } from './DefaultEqualityComparator';
-import { EqualityComparator } from './EqualityComparator';
-import { NotNull, Nullable, Override, SuppressWarnings } from '../Decorators';
-import { Collection, asIterable, JavaIterable, JavaIterator, JavaCollection, JavaSet } from './Stubs';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
-import { MurmurHash } from './MurmurHash';
+import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
+import { EqualityComparator } from "./EqualityComparator";
+import { NotNull, Nullable, Override, SuppressWarnings } from "../Decorators";
+import { JavaCollection, JavaSet } from "./Stubs";
+import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
+import { MurmurHash } from "./MurmurHash";
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 
@@ -26,7 +26,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>;
 
-	protected buckets: (T[] | undefined)[];
+	protected buckets: Array<T[] | undefined>;
 
 	/** How many elements in set */
 	protected n: number = 0;
@@ -58,12 +58,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	/**
-	 * Add {@code o} to set if not there; return existing value if already
+	 * Add `o` to set if not there; return existing value if already
 	 * there. This method performs the same operation as {@link #add} aside from
 	 * the return value.
 	 */
-	getOrAdd(o: T): T {
-		if (this.n > this.threshold) this.expand();
+	public getOrAdd(o: T): T {
+		if (this.n > this.threshold) {
+			this.expand();
+		}
 		return this.getOrAddImpl(o);
 	}
 
@@ -80,8 +82,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		}
 
 		// LOOK FOR IT IN BUCKET
-		for (let i = 0; i < bucket.length; i++) {
-			let existing = bucket[i];
+		for (let existing of bucket) {
 			if (this.comparator.equals(existing, o)) {
 				return existing; // found existing, quit
 			}
@@ -93,8 +94,10 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return o;
 	}
 
-	get(o: T): T | undefined {
-		if (o == null) return o;
+	public get(o: T): T | undefined {
+		if (o == null) {
+			return o;
+		}
 		let b: number = this.getBucket(o);
 		let bucket = this.buckets[b];
 		if (!bucket) {
@@ -118,12 +121,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) {
+				continue;
+			}
 			for (let o of bucket) {
-				if (o == null) break;
+				if (o == null) {
+					break;
+				}
 				hash = MurmurHash.update(hash, this.comparator.hashCode(o));
 			}
 		}
@@ -133,10 +140,16 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	equals(o: any): boolean {
-		if (o === this) return true;
-		if (!(o instanceof Array2DHashSet)) return false;
-		if (o.size !== this.size) return false;
+	public equals(o: any): boolean {
+		if (o === this) {
+			return true;
+		}
+		if (!(o instanceof Array2DHashSet)) {
+			return false;
+		}
+		if (o.size !== this.size) {
+			return false;
+		}
 		let same: boolean = this.containsAll(o);
 		return same;
 	}
@@ -144,7 +157,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected expand(): void {
 		let old = this.buckets;
 		let newCapacity: number = this.buckets.length * 2;
-		let newTable: (T[] | undefined)[] = this.createBuckets(newCapacity);
+		let newTable: Array<T[] | undefined> = this.createBuckets(newCapacity);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 //		System.out.println("new size="+newCapacity+", thres="+threshold);
@@ -171,7 +184,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	add(t: T): boolean {
+	public add(t: T): boolean {
 		let existing: T = this.getOrAdd(t);
 		return existing === t;
 	}
@@ -187,11 +200,11 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	contains(o: any): boolean {
+	public contains(o: any): boolean {
 		return this.containsFast(this.asElementType(o));
 	}
 
-	containsFast(@Nullable obj: T): boolean {
+	public containsFast(@Nullable obj: T): boolean {
 		if (obj == null) {
 			return false;
 		}
@@ -200,17 +213,13 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	iterator(): JavaIterator<T> {
-		return new SetIterator<T>(this.toArray(), this);
+	public *[Symbol.iterator](): IterableIterator<T> {
+		yield* this.toArray();
 	}
 
 	@Override
-	toArray(a?: any[]): T[] {
-
-		// Check if the array argument was provided
-		if (!a || a.length < this.size) {
-			a = new Array<T>(this.size);
-		}
+	public toArray(): T[] {
+		const a = new Array<T>(this.size);
 
 		// Copy elements from the nested arrays into the destination array
 		let i: number = 0; // Position within destination array
@@ -230,155 +239,101 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	@Override
-	remove(o: any): boolean {
-		return this.removeFast(this.asElementType(o));
-	}
-
-	removeFast(@Nullable obj: T): boolean {
-		if (obj == null) {
-			return false;
-		}
-
-		let b: number = this.getBucket(obj);
-		let bucket = this.buckets[b];
-		if (!bucket) {
-			// no bucket
-			return false;
-		}
-
-		for (let i = 0; i < bucket.length; i++) {
-			let e = bucket[i];
-			if (this.comparator.equals(e, obj)) {          // found it
-				// shift all elements to the right down one
-				bucket.copyWithin(i, i + 1);
-				bucket.length--;
-				this.n--;
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	containsAll(collection: JavaCollection<T>): boolean {
+	public containsAll(collection: JavaCollection<T>): boolean {
 		if (collection instanceof Array2DHashSet) {
 			let s = collection as any as Array2DHashSet<T>;
 			for (let bucket of s.buckets) {
-				if (bucket == null) continue;
+				if (bucket == null) {
+					continue;
+				}
 				for (let o of bucket) {
-					if (o == null) break;
-					if (!this.containsFast(this.asElementType(o))) return false;
+					if (o == null) {
+						break;
+					}
+					if (!this.containsFast(this.asElementType(o))) {
+						return false;
+					}
 				}
 			}
 		}
 		else {
-			for (let o of asIterable(collection)) {
-				if (!this.containsFast(this.asElementType(o))) return false;
+			for (let o of collection) {
+				if (!this.containsFast(this.asElementType(o))) {
+					return false;
+				}
 			}
 		}
 		return true;
 	}
 
 	@Override
-	addAll(c: Collection<T>): boolean {
+	public addAll(c: Iterable<T>): boolean {
 		let changed: boolean = false;
 
-		for (let o of asIterable(c)) {
+		for (let o of c) {
 			let existing: T = this.getOrAdd(o);
-			if (existing !== o) changed = true;
-		}
-		return changed;
-	}
-
-	@Override
-	retainAll(c: JavaCollection<T>): boolean {
-		let newsize: number = 0;
-		for (let bucket of this.buckets) {
-			if (bucket == null) {
-				continue;
+			if (existing !== o) {
+				changed = true;
 			}
-
-			let i: number;
-			let j: number;
-			for (i = 0, j = 0; i < bucket.length; i++) {
-				if (bucket[i] == null) {
-					break;
-				}
-
-				if (!c.contains(bucket[i])) {
-					// removed
-					continue;
-				}
-
-				// keep
-				if (i !== j) {
-					bucket[j] = bucket[i];
-				}
-
-				j++;
-				newsize++;
-			}
-
-			newsize += j;
-			bucket.length = j;
 		}
-
-		let changed: boolean = newsize != this.n;
-		this.n = newsize;
 		return changed;
 	}
 
 	@Override
-	removeAll(c: Collection<T>): boolean {
-		let changed = false;
-		for (let o of asIterable(c)) {
-			if (this.removeFast(this.asElementType(o))) changed = true;
-		}
-
-		return changed;
-	}
-
-	@Override
-	clear(): void {
+	public clear(): void {
 		this.buckets = this.createBuckets(INITAL_CAPACITY);
 		this.n = 0;
 		this.threshold = Math.floor(INITAL_CAPACITY * LOAD_FACTOR);
 	}
 
 	@Override
-	toString(): string {
-		if (this.size === 0) return "{}";
+	public toString(): string {
+		if (this.size === 0) {
+			return "{}";
+		}
 
-		let buf = '{';
+		let buf = "{";
 		let first: boolean = true;
 		for (let bucket of this.buckets) {
-			if (bucket == null) continue;
+			if (bucket == null) {
+				continue;
+			}
 			for (let o of bucket) {
-				if (o == null) break;
-				if (first) first = false;
-				else buf += ", ";
+				if (o == null) {
+					break;
+				}
+				if (first) {
+					first = false;
+				} else {
+					buf += ", ";
+				}
 				buf += o.toString();
 			}
 		}
-		buf += '}';
+		buf += "}";
 		return buf;
 	}
 
-	toTableString(): string {
+	public toTableString(): string {
 		let buf = "";
 		for (let bucket of this.buckets) {
 			if (bucket == null) {
 				buf += "null\n";
 				continue;
 			}
-			buf += '[';
+			buf += "[";
 			let first: boolean = true;
 			for (let o of bucket) {
-				if (first) first = false;
-				else buf += " ";
-				if (o == null) buf += "_";
-				else buf += o.toString();
+				if (first) {
+					first = false;
+				} else {
+					buf += " ";
+				}
+				if (o == null) {
+					buf += "_";
+				} else {
+					buf += o.toString();
+				}
 			}
 			buf += "]\n";
 		}
@@ -386,59 +341,31 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	}
 
 	/**
-	 * Return {@code o} as an instance of the element type {@code T}. If
-	 * {@code o} is non-null but known to not be an instance of {@code T}, this
-	 * method returns {@code null}. The base implementation does not perform any
+	 * Return `o` as an instance of the element type `T`. If
+	 * `o` is non-undefined but known to not be an instance of `T`, this
+	 * method returns `undefined`. The base implementation does not perform any
 	 * type checks; override this method to provide strong type checks for the
 	 * {@link #contains} and {@link #remove} methods to ensure the arguments to
 	 * the {@link EqualityComparator} for the set always have the expected
 	 * types.
 	 *
 	 * @param o the object to try and cast to the element type of the set
-	 * @return {@code o} if it could be an instance of {@code T}, otherwise
-	 * {@code null}.
+	 * @returns `o` if it could be an instance of `T`, otherwise
+	 * `undefined`.
 	 */
-
 	@SuppressWarnings("unchecked")
 	protected asElementType(o: any): T {
 		return o as T;
 	}
 
 	/**
-	 * Return an array of {@code T[]} with length {@code capacity}.
+	 * Return an array of `T[]` with length `capacity`.
 	 *
 	 * @param capacity the length of the array to return
-	 * @return the newly constructed array
+	 * @returns the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
-	protected createBuckets(capacity: number): (T[] | undefined)[] {
+	protected createBuckets(capacity: number): Array<T[] | undefined> {
 		return new Array<T[]>(capacity);
-	}
-}
-
-class SetIterator<T> implements JavaIterator<T>  {
-	nextIndex: number = 0;
-	removed: boolean = true;
-
-	constructor(private data: T[], private set: Array2DHashSet<T>) { }
-
-	public hasNext(): boolean {
-		return this.nextIndex < this.data.length;
-	}
-
-	next(): T {
-		if (this.nextIndex >= this.data.length) throw new RangeError("Attempted to iterate past end.")
-		this.removed = false;
-		return this.data[this.nextIndex++];
-	}
-
-	// Note: this is an untested extension to the JavaScript iterator interface
-	remove(): void {
-		if (this.removed) {
-			throw new Error("This entry has already been removed");
-		}
-
-		this.set.remove(this.data[this.nextIndex - 1]);
-		this.removed = true;
 	}
 }

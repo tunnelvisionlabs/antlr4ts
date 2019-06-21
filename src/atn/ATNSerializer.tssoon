@@ -5,6 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:26.8146750-07:00
 
+interface CodePointSerializer {
+	serializeCodePoint(data: IntegerList, cp: number): void;
+}
+
 export class ATNSerializer {
 	atn: ATN; 
 	private ruleNames: List<string>; 
@@ -35,9 +39,11 @@ export class ATNSerializer {
 	 *  	(args are token type,actionIndex in lexer else 0,0)
 	 *      num modes,
 	 *      mode-0-start-state, mode-1-start-state, ... (parser has 0 modes)
-	 *      num sets
-	 *      set-0-interval-count intervals, set-1-interval-count intervals, ...
-	 *  	num total edges,
+	 *      num unicode-bmp-sets
+	 *      bmp-set-0-interval-count intervals, bmp-set-1-interval-count intervals, ...
+	 *      num unicode-smp-sets
+	 *      smp-set-0-interval-count intervals, smp-set-1-interval-count intervals, ...
+	 *	num total edges,
 	 *      src, trg, edge-type, edge arg1, optional edge arg2 (present always), ...
 	 *      num decisions,
 	 *      decision-0-start-state, decision-1-start-state, ...
@@ -54,8 +60,10 @@ export class ATNSerializer {
 		data.add(atn.maxTokenType);
 		let nedges: number =  0;
 
-		let setIndices: Map<IntervalSet, number> =  new HashMap<IntervalSet, Integer>();
-		let sets: List<IntervalSet> =  new ArrayList<IntervalSet>();
+		// Note that we use a LinkedHashMap as a set to
+		// maintain insertion order while deduplicating
+		// entries with the same key.
+		let sets: Map<IntervalSet, Boolean> = new LinkedHashMap<IntervalSet, Boolean>();
 
 		// dump states, count edges and collect sets while doing so
 		let nonGreedyStates: IntegerList =  new IntegerList();
@@ -110,10 +118,7 @@ export class ATNSerializer {
 				let edgeType: number =  Transition.serializationTypes.get(t.getClass());
 				if ( edgeType == Transition.SET || edgeType == Transition.NOT_SET ) {
 					let st: SetTransition =  (SetTransition)t;
-					if (!setIndices.containsKey(st.set)) {
-						sets.add(st.set);
-						setIndices.put(st.set, sets.size - 1);
-					}
+					sets.put(st.set, true);
 				}
 			}
 		}
@@ -161,33 +166,39 @@ export class ATNSerializer {
 			}
 		}
 
-		let nsets: number =  sets.size;
-		data.add(nsets);
-		for (let set of sets) {
-			let containsEof: boolean =  set.contains(Token.EOF);
-			if (containsEof && set.intervals.get(0).b == Token.EOF) {
-				data.add(set.intervals.size - 1);
+		let bmpSets: List<IntervalSet> = new ArrayList<IntervalSet>();
+		let smpSets: List<IntervalSet> = new ArrayList<IntervalSet>();
+		for (IntervalSet set : sets.keySet()) {
+			if (set.getMaxElement() <= Character.MAX_VALUE) {
+				bmpSets.add(set);
 			}
 			else {
-				data.add(set.intervals.size);
+				smpSets.add(set);
 			}
-
-			data.add(containsEof ? 1 : 0);
-			for (let I of set.intervals) {
-				if (I.a == Token.EOF) {
-					if (I.b == Token.EOF) {
-						continue;
-					}
-					else {
-						data.add(0);
-					}
+		}
+		serializeSets(
+			data,
+			bmpSets,
+			{
+				serializeCodePoint: (data: IntegerList, cp: number): void => {
+					data.add(cp);
 				}
-				else {
-					data.add(I.a);
+			});
+		serializeSets(
+			data,
+			smpSets,
+			{
+				serializeCodePoint: (data: IntegerList, cp: number): void => {
+					serializeInt(data, cp);
 				}
-
-				data.add(I.b);
-			}
+			});
+		let setIndices: Map<IntervalSet, Integer> = new HashMap<IntervalSet, Integer>();
+		let setIndex: number = 0;
+		for (IntervalSet bmpSet : bmpSets) {
+			setIndices.put(bmpSet, setIndex++);
+		}
+		for (IntervalSet smpSet : smpSets) {
+			setIndices.put(smpSet, setIndex++);
 		}
 
 		data.add(nedges);
@@ -363,6 +374,42 @@ export class ATNSerializer {
 		return data;
 	}
 
+	private static serializeSets(
+			data: IntegerList,
+			sets: Collection<IntervalSet>,
+			codePointSerializer: CodePointSerializer): void
+	{
+		let nSets: number = sets.size;
+		data.add(nSets);
+
+		for (IntervalSet set : sets) {
+			let containsEof: boolean = set.contains(Token.EOF);
+			if (containsEof && set.intervals[0].b === Token.EOF) {
+				data.add(set.intervals.size - 1);
+			}
+			else {
+				data.add(set.intervals.size);
+			}
+
+			data.add(containsEof ? 1 : 0);
+			for (Interval I : set.intervals) {
+				if (I.a === Token.EOF) {
+					if (I.b === Token.EOF) {
+						continue;
+					}
+					else {
+						codePointSerializer.serializeCodePoint(data, 0);
+					}
+				}
+				else {
+					codePointSerializer.serializeCodePoint(data, I.a);
+				}
+
+				codePointSerializer.serializeCodePoint(data, I.b);
+			}
+		}
+	}
+
 	decode(data: char[]): string {
 		data = data.clone();
 		// don't adjust the first value since that's the version number
@@ -451,25 +498,10 @@ export class ATNSerializer {
 			let s: number =  ATNDeserializer.toInt(data[p++]);
 			buf.append("mode ").append(i).append(":").append(s).append('\n');
 		}
-		let nsets: number =  ATNDeserializer.toInt(data[p++]);
-		for (let i=0; i<nsets; i++) {
-			let nintervals: number =  ATNDeserializer.toInt(data[p++]);
-			buf.append(i).append(":");
-			let containsEof: boolean =  data[p++] != 0;
-			if (containsEof) {
-				buf.append(getTokenName(Token.EOF));
-			}
-
-			for (let j=0; j<nintervals; j++) {
-				if ( containsEof || j>0 ) {
-					buf.append(", ");
-				}
-
-				buf.append(getTokenName(ATNDeserializer.toInt(data[p]))).append("..").append(getTokenName(ATNDeserializer.toInt(data[p + 1])));
-				p += 2;
-			}
-			buf.append("\n");
-		}
+		let numBMPSets: number = ATNDeserializer.toInt(data[p++]);
+		p = appendSets(buf, data, p, numBMPSets, 0, ATNDeserializer.getUnicodeDeserializer(ATNDeserializer.UnicodeDeserializingMode.UNICODE_BMP));
+		let numSMPSets: number = ATNDeserializer.toInt(data[p++]);
+		p = appendSets(buf, data, p, numSMPSets, numBMPSets, ATNDeserializer.getUnicodeDeserializer(ATNDeserializer.UnicodeDeserializingMode.UNICODE_SMP));
 		let nedges: number =  ATNDeserializer.toInt(data[p++]);
 		for (let i=0; i<nedges; i++) {
 			let src: number =  ATNDeserializer.toInt(data[p]);
@@ -503,6 +535,33 @@ export class ATNSerializer {
 			}
 		}
 		return buf.toString();
+	}
+
+	private appendSets(buf: StringBuilder, data: char[], p: number, nsets: number, setIndexOffset: number, unicodeDeserializer: ATNDeserializer.UnicodeDeserializer): number {
+		for (let i: number = 0; i < nsets; i++) {
+			let nintervals: number = ATNDeserializer.toInt(data[p++]);
+			buf.append(i + setIndexOffset).append(":");
+			let containsEof: boolean = data[p++] !== 0;
+			if (containsEof) {
+				buf.append(getTokenName(Token.EOF));
+			}
+
+			for (let j: number = 0; j < nintervals; j++) {
+				if (containsEof || j > 0) {
+					buf.append(", ");
+				}
+
+				let a: number = unicodeDeserializer.readUnicode(data, p);
+				p += unicodeDeserializer.size;
+				let b: number = unicodeDeserializer.readUnicode(data, p);
+				p += unicodeDeserializer.size;
+				buf.append(getTokenName(a)).append("..").append(getTokenName(b));
+			}
+
+			buf.append("\n");
+		}
+
+		return p;
 	}
 
 	getTokenName(t: number): string {

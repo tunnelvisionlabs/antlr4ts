@@ -5,33 +5,32 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.5479602-07:00
 
+import { ANTLRErrorListener } from "./ANTLRErrorListener";
+import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from "./Recognizer";
+
 /**
  *
  * @author Sam Harwell
  */
-import { ANTLRErrorListener } from "./ANTLRErrorListener";
-import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
-
 export class ConsoleErrorListener implements ANTLRErrorListener<any> {
 	/**
 	 * Provides a default instance of {@link ConsoleErrorListener}.
 	 */
-	static readonly INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
+	public static readonly INSTANCE: ConsoleErrorListener = new ConsoleErrorListener();
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>
 	 * This implementation prints messages to {@link System#err} containing the
-	 * values of {@code line}, {@code charPositionInLine}, and {@code msg} using
-	 * the following format.</p>
+	 * values of `line`, `charPositionInLine`, and `msg` using
+	 * the following format.
 	 *
 	 * <pre>
-	 * line <em>line</em>:<em>charPositionInLine</em> <em>msg</em>
+	 * line *line*:*charPositionInLine* *msg*
 	 * </pre>
 	 */
-	syntaxError<T>(
+	public syntaxError<T>(
 		recognizer: Recognizer<T, any>,
 		offendingSymbol: T,
 		line: number,

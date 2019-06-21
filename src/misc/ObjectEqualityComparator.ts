@@ -4,9 +4,9 @@
  */
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
-import { EqualityComparator } from './EqualityComparator';
-import { Override } from '../Decorators';
-import { Equatable } from './Stubs';
+import { EqualityComparator } from "./EqualityComparator";
+import { Override } from "../Decorators";
+import { Equatable } from "./Stubs";
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -15,16 +15,16 @@ import { Equatable } from './Stubs';
  * @author Sam Harwell
  */
 export class ObjectEqualityComparator implements EqualityComparator<Equatable | null | undefined> {
-	static readonly INSTANCE: ObjectEqualityComparator = new ObjectEqualityComparator();
+	public static readonly INSTANCE: ObjectEqualityComparator = new ObjectEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation returns
-	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
+	 * This implementation returns
+	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
 	@Override
-	hashCode(obj: Equatable | null | undefined): number {
+	public hashCode(obj: Equatable | null | undefined): number {
 		if (obj == null) {
 			return 0;
 		}
@@ -35,14 +35,14 @@ export class ObjectEqualityComparator implements EqualityComparator<Equatable | 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation relies on object equality. If both objects are
-	 * {@code null}, this method returns {@code true}. Otherwise if only
-	 * {@code a} is {@code null}, this method returns {@code false}. Otherwise,
+	 * This implementation relies on object equality. If both objects are
+	 * `undefined` or `null`, this method returns `true`. Otherwise if only
+	 * `a` is `undefined` or `null`, this method returns `false`. Otherwise,
 	 * this method returns the result of
-	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
+	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
 	@Override
-	equals(a: Equatable | null | undefined, b: Equatable | null | undefined): boolean {
+	public equals(a: Equatable | null | undefined, b: Equatable | null | undefined): boolean {
 		if (a == null) {
 			return b == null;
 		}

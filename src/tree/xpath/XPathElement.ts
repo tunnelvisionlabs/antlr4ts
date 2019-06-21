@@ -11,7 +11,7 @@ export abstract class XPathElement {
 	protected nodeName: string;
 	public invert: boolean;
 
-	/** Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
+	/** Construct element like `/ID` or `ID` or `/*` etc...
 	 *  op is null if just node
 	 */
 	constructor(nodeName: string) {
@@ -20,13 +20,13 @@ export abstract class XPathElement {
 	}
 
 	/**
-	 * Given tree rooted at {@code t} return all nodes matched by this path
+	 * Given tree rooted at `t` return all nodes matched by this path
 	 * element.
 	 */
-	abstract evaluate(t: ParseTree): ParseTree[];
+	public abstract evaluate(t: ParseTree): ParseTree[];
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let inv: string = this.invert ? "!" : "";
 		let className: string = Object.constructor.name;
 		return className + "[" + inv + this.nodeName + "]";

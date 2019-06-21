@@ -4,14 +4,13 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.4373888-07:00
-import { ANTLRInputStream } from "../../ANTLRInputStream";
+
+import { CharStreams } from "../../CharStreams";
 import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from "../../Lexer";
 import { LexerNoViableAltException } from "../../LexerNoViableAltException";
 import { Parser } from "../../Parser";
 import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
-import { RecognitionException } from "../../RecognitionException";
 import { Token } from "../../Token";
 import { XPathElement } from "./XPathElement";
 import { XPathLexer } from "./XPathLexer";
@@ -27,48 +26,42 @@ import { XPathWildcardElement } from "./XPathWildcardElement";
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
  * parse trees.
  *
- * <p>
- * Split path into words and separators {@code /} and {@code //} via ANTLR
+ * Split path into words and separators `/` and `//` via ANTLR
  * itself then walk path elements from left to right. At each separator-word
- * pair, find set of nodes. Next stage uses those as work list.</p>
+ * pair, find set of nodes. Next stage uses those as work list.
  *
- * <p>
  * The basic interface is
- * {@link XPath#findAll ParseTree.findAll}{@code (tree, pathString, parser)}.
- * But that is just shorthand for:</p>
+ * {@link XPath#findAll ParseTree.findAll}`(tree, pathString, parser)`.
+ * But that is just shorthand for:
  *
- * <pre>
- * {@link XPath} p = new {@link XPath#XPath XPath}(parser, pathString);
- * return p.{@link #evaluate evaluate}(tree);
- * </pre>
+ * ```
+ * let p = new XPath(parser, pathString);
+ * return p.evaluate(tree);
+ * ```
  *
- * <p>
- * See {@code org.antlr.v4.test.TestXPath} for descriptions. In short, this
- * allows operators:</p>
+ * See `TestXPath` for descriptions. In short, this
+ * allows operators:
  *
- * <dl>
- * <dt>/</dt> <dd>root</dd>
- * <dt>//</dt> <dd>anywhere</dd>
- * <dt>!</dt> <dd>invert; this must appear directly after root or anywhere
- * operator</dd>
- * </dl>
+ * | | |
+ * | --- | --- |
+ * | `/` | root |
+ * | `//` | anywhere |
+ * | `!` | invert; this much appear directly after root or anywhere operator |
  *
- * <p>
- * and path elements:</p>
+ * and path elements:
  *
- * <dl>
- * <dt>ID</dt> <dd>token name</dd>
- * <dt>'string'</dt> <dd>any string literal token from the grammar</dd>
- * <dt>expr</dt> <dd>rule name</dd>
- * <dt>*</dt> <dd>wildcard matching any node</dd>
- * </dl>
+ * | | |
+ * | --- | --- |
+ * | `ID` | token name |
+ * | `'string'` | any string literal token from the grammar |
+ * | `expr` | rule name |
+ * | `*` | wildcard matching any node |
  *
- * <p>
- * Whitespace is not allowed.</p>
+ * Whitespace is not allowed.
  */
 export class XPath {
-	static readonly WILDCARD: string = "*"; // word not operator/separator
-	static readonly NOT: string = "!"; 	   // word for invert operator
+	public static readonly WILDCARD: string = "*"; // word not operator/separator
+	public static readonly NOT: string = "!"; 	   // word for invert operator
 
 	protected path: string;
 	protected elements: XPathElement[];
@@ -78,14 +71,13 @@ export class XPath {
 		this.parser = parser;
 		this.path = path;
 		this.elements = this.split(path);
-//		System.out.println(Arrays.toString(elements));
+		// console.log(this.elements.toString());
 	}
 
 	// TODO: check for invalid token/rule names, bad syntax
 
-	split(path: string): XPathElement[] {
-		let input = new ANTLRInputStream(path);
-		let lexer = new XPathLexer(input);
+	public split(path: string): XPathElement[] {
+		let lexer = new XPathLexer(CharStreams.fromString(path));
 		lexer.recover = (e: LexerNoViableAltException) => { throw e; };
 
 		lexer.removeErrorListeners();
@@ -104,7 +96,7 @@ export class XPath {
 		}
 
 		let tokens: Token[] = tokenStream.getTokens();
-//		System.out.println("path="+path+"=>"+tokens);
+		// console.log("path=" + path + "=>" + tokens);
 		let elements: XPathElement[] = [];
 		let n: number = tokens.length;
 		let i: number = 0;
@@ -147,12 +139,12 @@ export class XPath {
 	}
 
 	/**
-	 * Convert word like {@code *} or {@code ID} or {@code expr} to a path
-	 * element. {@code anywhere} is {@code true} if {@code //} precedes the
+	 * Convert word like `*` or `ID` or `expr` to a path
+	 * element. `anywhere` is `true` if `//` precedes the
 	 * word.
 	 */
 	protected getXPathElement(wordToken: Token, anywhere: boolean): XPathElement {
-		if (wordToken.type == Token.EOF) {
+		if (wordToken.type === Token.EOF) {
 			throw new Error("Missing path element at end of path");
 		}
 
@@ -179,7 +171,7 @@ export class XPath {
 					new XPathTokenAnywhereElement(word, ttype) :
 					new XPathTokenElement(word, ttype);
 			default:
-				if (ruleIndex == -1) {
+				if (ruleIndex === -1) {
 					throw new Error(word + " at index " +
 						wordToken.startIndex +
 						" isn't a valid rule name");
@@ -190,32 +182,31 @@ export class XPath {
 		}
 	}
 
-	static findAll(tree: ParseTree, xpath: string, parser: Parser): ParseTree[] {
+	public static findAll(tree: ParseTree, xpath: string, parser: Parser): Set<ParseTree> {
 		let p: XPath = new XPath(parser, xpath);
 		return p.evaluate(tree);
 	}
 
 	/**
-	 * Return a list of all nodes starting at {@code t} as root that satisfy the
-	 * path. The root {@code /} is relative to the node passed to
-	 * {@link #evaluate}.
+	 * Return a list of all nodes starting at `t` as root that satisfy the
+	 * path. The root `/` is relative to the node passed to {@link evaluate}.
 	 */
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): Set<ParseTree> {
 		let dummyRoot = new ParserRuleContext();
 		dummyRoot.addChild(t as ParserRuleContext);
 
-		let work = [dummyRoot] as ParseTree[];
+		let work = new Set<ParseTree>([dummyRoot]);
 
 		let i: number = 0;
 		while (i < this.elements.length) {
-			let next = [] as ParseTree[]; // WAS LinkedHashSet<ParseTree>
+			let next = new Set<ParseTree>();
 			for (let node of work) {
 				if (node.childCount > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.
 					let matching = this.elements[i].evaluate(node);
-					next = next.concat(matching);
+					matching.forEach(next.add, next);
 				}
 			}
 			i++;

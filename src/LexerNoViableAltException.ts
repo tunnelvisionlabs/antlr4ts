@@ -22,7 +22,8 @@ export class LexerNoViableAltException extends RecognitionException {
 	/** Which configurations did we try at input.index that couldn't match input.LA(1)? */
 	private _deadEndConfigs?: ATNConfigSet;
 
-	constructor(lexer: Lexer | undefined,
+	constructor(
+		lexer: Lexer | undefined,
 		@NotNull input: CharStream,
 		startIndex: number,
 		deadEndConfigs: ATNConfigSet | undefined) {
@@ -45,7 +46,7 @@ export class LexerNoViableAltException extends RecognitionException {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		let symbol = "";
 		if (this._startIndex >= 0 && this._startIndex < this.inputStream.size) {
 			symbol = this.inputStream.getText(Interval.of(this._startIndex, this._startIndex));

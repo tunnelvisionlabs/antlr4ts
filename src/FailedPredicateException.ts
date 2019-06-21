@@ -5,21 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.4099946-07:00
 
+import { AbstractPredicateTransition } from "./atn/AbstractPredicateTransition";
+import { ATN } from "./atn/ATN";
+import { ATNState } from "./atn/ATNState";
+import { Parser } from "./Parser";
+import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from "./Recognizer";
+import { NotNull } from "./Decorators";
+import { PredicateTransition } from "./atn/PredicateTransition";
+
 /** A semantic predicate failed during validation.  Validation of predicates
  *  occurs when normally parsing the alternative just like matching a token.
  *  Disambiguating predicate evaluation occurs when we test a predicate during
  *  prediction.
  */
-
-import { AbstractPredicateTransition } from './atn/AbstractPredicateTransition';
-import { ATN } from './atn/ATN';
-import { ATNState } from './atn/ATNState';
-import { Parser } from './Parser';
-import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from './Recognizer';
-import { NotNull } from "./Decorators";
-import { PredicateTransition } from './atn/PredicateTransition';
-
 export class FailedPredicateException extends RecognitionException {
 	//private static serialVersionUID: number =  5379330841495778709L;
 

@@ -3,6 +3,14 @@ language: node_js
 node_js:
   - "6"
 jdk: openjdk6
+before_install:
+  - npm install -g npm@6
+  - npm install -g codecov
 script:
   # npm install is run automatically by Travis before 'script'
-  - npm test
+  - nyc --reporter=none mocha --timeout=10000
+  - nyc report --reporter=text-lcov > coverage.lcov
+  - codecov
+  - npm run tslint
+  - npm run pack-tool
+  - npm run pack-runtime

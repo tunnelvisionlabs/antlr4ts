@@ -5,20 +5,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
-import { Array2DHashMap } from '../misc/Array2DHashMap';
-import { asIterable } from '../misc/Stubs';
-import { ATN } from './ATN';
-import { ATNConfig } from './ATNConfig';
-import { ATNConfigSet } from './ATNConfigSet';
-import { ATNState } from './ATNState';
-import { BitSet } from '../misc/BitSet';
-import { Collection } from '../misc/Stubs';
-import { EqualityComparator } from '../misc/EqualityComparator';
-import { MurmurHash } from '../misc/MurmurHash';
-import { ObjectEqualityComparator } from '../misc/ObjectEqualityComparator';
-import { Override } from '../Decorators';
-import { RuleStopState } from './RuleStopState';
-import { SemanticContext } from './SemanticContext';
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { ATN } from "./ATN";
+import { ATNConfig } from "./ATNConfig";
+import { ATNConfigSet } from "./ATNConfigSet";
+import { ATNState } from "./ATNState";
+import { BitSet } from "../misc/BitSet";
+import { EqualityComparator } from "../misc/EqualityComparator";
+import { MurmurHash } from "../misc/MurmurHash";
+import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
+import { Override } from "../Decorators";
+import { RuleStopState } from "./RuleStopState";
+import { SemanticContext } from "./SemanticContext";
 
 /**
  * This enumeration defines the prediction modes available in ANTLR 4 along with
@@ -34,18 +32,16 @@ export enum PredictionMode {
 	 * may result in syntax errors for grammar and input combinations which are
 	 * not SLL.
 	 *
-	 * <p>
 	 * When using this prediction mode, the parser will either return a correct
 	 * parse tree (i.e. the same parse tree that would be returned with the
 	 * {@link #LL} prediction mode), or it will report a syntax error. If a
 	 * syntax error is encountered when using the {@link #SLL} prediction mode,
 	 * it may be due to either an actual syntax error in the input or indicate
 	 * that the particular combination of grammar and input requires the more
-	 * powerful {@link #LL} prediction abilities to complete successfully.</p>
+	 * powerful {@link #LL} prediction abilities to complete successfully.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
 	SLL,
 	/**
@@ -55,16 +51,14 @@ export enum PredictionMode {
 	 * parse results for all combinations of grammars with syntactically correct
 	 * inputs.
 	 *
-	 * <p>
 	 * When using this prediction mode, the parser will make correct decisions
 	 * for all syntactically-correct grammar and input combinations. However, in
 	 * cases where the grammar is truly ambiguous this prediction mode might not
-	 * report a precise answer for <em>exactly which</em> alternatives are
-	 * ambiguous.</p>
+	 * report a precise answer for *exactly which* alternatives are
+	 * ambiguous.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
 	LL,
 	/**
@@ -74,17 +68,15 @@ export enum PredictionMode {
 	 * complete and exact set of ambiguous alternatives for every ambiguous
 	 * decision encountered while parsing.
 	 *
-	 * <p>
 	 * This prediction mode may be used for diagnosing ambiguities during
 	 * grammar development. Due to the performance overhead of calculating sets
 	 * of ambiguous alternatives, this prediction mode should be avoided when
-	 * the exact results are not necessary.</p>
+	 * the exact results are not necessary.
 	 *
-	 * <p>
 	 * This prediction mode does not provide any guarantees for prediction
-	 * behavior for syntactically-incorrect inputs.</p>
+	 * behavior for syntactically-incorrect inputs.
 	 */
-	LL_EXACT_AMBIG_DETECTION
+	LL_EXACT_AMBIG_DETECTION,
 }
 
 export namespace PredictionMode {
@@ -97,9 +89,10 @@ export namespace PredictionMode {
 	}
 
 	class AltAndContextConfigEqualityComparator implements EqualityComparator<ATNConfig> {
-		static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
+		public static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
 		private AltAndContextConfigEqualityComparator() {
+			// intentionally empty
 		}
 
 		/**
@@ -107,7 +100,7 @@ export namespace PredictionMode {
 		 * and {@link ATNConfig#context}.
 		 */
 		@Override
-		hashCode(o: ATNConfig): number {
+		public hashCode(o: ATNConfig): number {
 			let hashCode: number = MurmurHash.initialize(7);
 			hashCode = MurmurHash.update(hashCode, o.state.stateNumber);
 			hashCode = MurmurHash.update(hashCode, o.context);
@@ -116,26 +109,30 @@ export namespace PredictionMode {
 		}
 
 		@Override
-		equals(a: ATNConfig, b: ATNConfig): boolean {
-			if (a === b) return true;
-			if (a == null || b == null) return false;
-			return a.state.stateNumber == b.state.stateNumber
+		public equals(a: ATNConfig, b: ATNConfig): boolean {
+			if (a === b) {
+				return true;
+			}
+			if (a == null || b == null) {
+				return false;
+			}
+			return a.state.stateNumber === b.state.stateNumber
 				&& a.context.equals(b.context);
 		}
 	}
 
 	/**
-	 * Checks if any configuration in {@code configs} is in a
+	 * Checks if any configuration in `configs` is in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if any configuration in {@code configs} is in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @returns `true` if any configuration in `configs` is in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
-		for (let c of asIterable(configs)) {
+		for (let c of configs) {
 			if (c.state instanceof RuleStopState) {
 				return true;
 			}
@@ -145,17 +142,17 @@ export namespace PredictionMode {
 	}
 
 	/**
-	 * Checks if all configurations in {@code configs} are in a
+	 * Checks if all configurations in `configs` are in a
 	 * {@link RuleStopState}. Configurations meeting this condition have reached
 	 * the end of the decision rule (local context) or end of start rule (full
 	 * context).
 	 *
 	 * @param configs the configuration set to test
-	 * @return {@code true} if all configurations in {@code configs} are in a
-	 * {@link RuleStopState}, otherwise {@code false}
+	 * @returns `true` if all configurations in `configs` are in a
+	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
-		for (let config of asIterable(configs)) {
+		for (let config of configs) {
 			if (!(config.state instanceof RuleStopState)) {
 				return false;
 			}

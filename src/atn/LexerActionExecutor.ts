@@ -5,21 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.8810453-07:00
 
-import { ArrayEqualityComparator } from '../misc/ArrayEqualityComparator';
-import { CharStream } from '../CharStream';
-import { Lexer } from '../Lexer';
-import { LexerAction } from './LexerAction';
-import { LexerIndexedCustomAction } from './LexerIndexedCustomAction';
-import { MurmurHash } from '../misc/MurmurHash';
-import { NotNull, Override } from '../Decorators';
+import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
+import { CharStream } from "../CharStream";
+import { Lexer } from "../Lexer";
+import { LexerAction } from "./LexerAction";
+import { LexerIndexedCustomAction } from "./LexerIndexedCustomAction";
+import { MurmurHash } from "../misc/MurmurHash";
+import { NotNull, Override } from "../Decorators";
 
 /**
  * Represents an executor for a sequence of lexer actions which traversed during
  * the matching operation of a lexer rule (token).
  *
- * <p>The executor tracks position information for position-dependent lexer actions
+ * The executor tracks position information for position-dependent lexer actions
  * efficiently, ensuring that actions appearing only at the end of the rule do
- * not cause bloating of the {@link DFA} created for the lexer.</p>
+ * not cause bloating of the {@link DFA} created for the lexer.
  *
  * @author Sam Harwell
  * @since 4.2
@@ -51,21 +51,21 @@ export class LexerActionExecutor {
 
 	/**
 	 * Creates a {@link LexerActionExecutor} which executes the actions for
-	 * the input {@code lexerActionExecutor} followed by a specified
-	 * {@code lexerAction}.
+	 * the input `lexerActionExecutor` followed by a specified
+	 * `lexerAction`.
 	 *
 	 * @param lexerActionExecutor The executor for actions already traversed by
 	 * the lexer while matching a token within a particular
-	 * {@link ATNConfig}. If this is {@code null}, the method behaves as though
+	 * {@link ATNConfig}. If this is `undefined`, the method behaves as though
 	 * it were an empty executor.
 	 * @param lexerAction The lexer action to execute after the actions
-	 * specified in {@code lexerActionExecutor}.
+	 * specified in `lexerActionExecutor`.
 	 *
-	 * @return A {@link LexerActionExecutor} for executing the combine actions
-	 * of {@code lexerActionExecutor} and {@code lexerAction}.
+	 * @returns A {@link LexerActionExecutor} for executing the combine actions
+	 * of `lexerActionExecutor` and `lexerAction`.
 	 */
 	@NotNull
-	static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
+	public static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
 		if (!lexerActionExecutor) {
 			return new LexerActionExecutor([lexerAction]);
 		}
@@ -79,32 +79,32 @@ export class LexerActionExecutor {
 	 * Creates a {@link LexerActionExecutor} which encodes the current offset
 	 * for position-dependent lexer actions.
 	 *
-	 * <p>Normally, when the executor encounters lexer actions where
-	 * {@link LexerAction#isPositionDependent} returns {@code true}, it calls
+	 * Normally, when the executor encounters lexer actions where
+	 * {@link LexerAction#isPositionDependent} returns `true`, it calls
 	 * {@link IntStream#seek} on the input {@link CharStream} to set the input
-	 * position to the <em>end</em> of the current token. This behavior provides
+	 * position to the *end* of the current token. This behavior provides
 	 * for efficient DFA representation of lexer actions which appear at the end
 	 * of a lexer rule, even when the lexer rule matches a variable number of
-	 * characters.</p>
+	 * characters.
 	 *
-	 * <p>Prior to traversing a match transition in the ATN, the current offset
+	 * Prior to traversing a match transition in the ATN, the current offset
 	 * from the token start index is assigned to all position-dependent lexer
 	 * actions which have not already been assigned a fixed offset. By storing
 	 * the offsets relative to the token start index, the DFA representation of
 	 * lexer actions which appear in the middle of tokens remains efficient due
 	 * to sharing among tokens of the same length, regardless of their absolute
-	 * position in the input stream.</p>
+	 * position in the input stream.
 	 *
-	 * <p>If the current executor already has offsets assigned to all
-	 * position-dependent lexer actions, the method returns {@code this}.</p>
+	 * If the current executor already has offsets assigned to all
+	 * position-dependent lexer actions, the method returns `this`.
 	 *
 	 * @param offset The current offset to assign to all position-dependent
 	 * lexer actions which do not already have offsets assigned.
 	 *
-	 * @return A {@link LexerActionExecutor} which stores input stream offsets
+	 * @returns A {@link LexerActionExecutor} which stores input stream offsets
 	 * for all position-dependent lexer actions.
 	 */
-	fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
+	public fixOffsetBeforeMatch(offset: number): LexerActionExecutor {
 		let updatedLexerActions: LexerAction[] | undefined;
 		for (let i = 0; i < this._lexerActions.length; i++) {
 			if (this._lexerActions[i].isPositionDependent && !(this._lexerActions[i] instanceof LexerIndexedCustomAction)) {
@@ -125,7 +125,7 @@ export class LexerActionExecutor {
 
 	/**
 	 * Gets the lexer actions to be executed by this executor.
-	 * @return The lexer actions to be executed by this executor.
+	 * @returns The lexer actions to be executed by this executor.
 	 */
 	@NotNull
 	get lexerActions(): LexerAction[] {
@@ -136,22 +136,22 @@ export class LexerActionExecutor {
 	 * Execute the actions encapsulated by this executor within the context of a
 	 * particular {@link Lexer}.
 	 *
-	 * <p>This method calls {@link IntStream#seek} to set the position of the
-	 * {@code input} {@link CharStream} prior to calling
+	 * This method calls {@link IntStream#seek} to set the position of the
+	 * `input` {@link CharStream} prior to calling
 	 * {@link LexerAction#execute} on a position-dependent action. Before the
 	 * method returns, the input position will be restored to the same position
-	 * it was in when the method was invoked.</p>
+	 * it was in when the method was invoked.
 	 *
 	 * @param lexer The lexer instance.
 	 * @param input The input stream which is the source for the current token.
 	 * When this method is called, the current {@link IntStream#index} for
-	 * {@code input} should be the start of the following token, i.e. 1
+	 * `input` should be the start of the following token, i.e. 1
 	 * character past the end of the current token.
 	 * @param startIndex The token start index. This value may be passed to
-	 * {@link IntStream#seek} to set the {@code input} position to the beginning
+	 * {@link IntStream#seek} to set the `input` position to the beginning
 	 * of the token.
 	 */
-	execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
+	public execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
 		let requiresSeek: boolean = false;
 		let stopIndex: number = input.index;
 		try {
@@ -176,12 +176,12 @@ export class LexerActionExecutor {
 	}
 
 	@Override
-	hashCode(): number {
+	public hashCode(): number {
 		return this.cachedHashCode;
 	}
 
 	@Override
-	equals(obj: any): boolean {
+	public equals(obj: any): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerActionExecutor)) {

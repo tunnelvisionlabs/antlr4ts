@@ -38,23 +38,25 @@ TypeScript 2.0.
 
 ## Getting started
 
-1. Add `antlr4ts` to **package.json** as a runtime dependency
+1. Install `antlr4ts` as a runtime dependency using your preferred package manager.
 
-    ```
-    "dependencies": {
-      // ...
-      "antlr4ts": "^0.2.0"
-    }
-    ```
+  ```bash
+  npm install antlr4ts --save
+  ```
+  
+  ```bash
+  yarn add antlr4ts
+  ```
 
-2. Add `antlr4ts-cli` to **package.json** as a development dependency
+2. Install `antlr4ts-cli` as a development dependency using your preferred package manager.
 
-    ```
-    "devDependencies": {
-      // ...
-      "antlr4ts-cli": "^0.2.0"
-    }
-    ```
+  ```bash
+  npm install antlr4ts-cli --save-dev
+  ```
+  
+  ```bash
+  yarn add -D antlr4ts-cli
+  ```
 
 3. Add a grammar to your project, e.g. **path/to/MyGrammar.g4**
 
@@ -69,7 +71,7 @@ TypeScript 2.0.
 
 5. Use your grammar in TypeScript
 
-    ```
+    ```typescript
     import { ANTLRInputStream, CommonTokenStream } from 'antlr4ts';
 
     // Create the lexer and parser
@@ -79,5 +81,63 @@ TypeScript 2.0.
     let parser = new MyGrammarParser(tokenStream);
 
     // Parse the input, where `compilationUnit` is whatever entry point you defined
-    let result = parser.compilationUnit();
+    let tree = parser.compilationUnit();
+    ```
+
+    The two main ways to inspect the tree are by using a listener or a visitor, you can read about the differences between the two [here](https://github.com/antlr/antlr4/blob/master/doc/listeners.md).
+
+    ###### Listener Approach
+
+    ```typescript
+    // ...
+    import { MyGrammarParserListener } from './MyGrammarParserListener'
+    import { FunctionDeclarationContext } from './MyGrammarParser'
+    import { ParseTreeWalker } from 'antlr4ts/tree/ParseTreeWalker'
+
+
+    class EnterFunctionListener implements MyGrammarParserListener {
+      // Assuming a parser rule with name: `functionDeclaration`
+      enterFunctionDeclaration(context: FunctionDeclarationContext) {
+        console.log(`Function start line number ${context._start.line}`)
+        // ...
+      }
+
+      // other enterX functions...
+    }
+
+    // Create the listener
+    const listener: MyGrammarParserListener = new EnterFunctionListener();
+    // Use the entry point for listeners
+    ParseTreeWalker.DEFAULT.walk(listener, tree)
+    ```
+
+    ###### Visitor Approach
+
+    Note you must pass the `-visitor` flag to antlr4ts to get the generated visitor file.
+
+    ```typescript
+    // ...
+    import { MyGrammarParserVisitor } from './MyGrammarParserVisitor'
+    import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
+
+    // Extend the AbstractParseTreeVisitor to get default visitor behaviour
+    class CountFunctionsVisitor extends AbstractParseTreeVisitor<number> implements MyGrammarParserVisitor<number> {
+
+      defaultResult() {
+        return 0
+      }
+
+      aggregateResult(aggregate: number, nextResult: number) {
+        return aggregate + nextResult
+      }
+
+      visitFunctionDeclaration(context: FunctionDeclarationContext): number {
+        return 1 + super.visitChildren(context)
+      }
+    }
+
+    // Create the visitor
+    const countFunctionsVisitor = new CountFunctionsVisitor()
+    // Use the visitor entry point
+    countFunctionsVisitor.visit(tree)
     ```

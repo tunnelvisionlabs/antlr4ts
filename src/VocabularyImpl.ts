@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:59.5829654-07:00
 
-import { NotNull, Override } from './Decorators';
-import { Token } from './Token';
-import { Vocabulary } from './Vocabulary';
+import { NotNull, Override } from "./Decorators";
+import { Token } from "./Token";
+import { Vocabulary } from "./Vocabulary";
 
 /**
  * This class provides a default implementation of the {@link Vocabulary}
@@ -19,20 +19,19 @@ export class VocabularyImpl implements Vocabulary {
 	/**
 	 * Gets an empty {@link Vocabulary} instance.
 	 *
-	 * <p>
 	 * No literal or symbol names are assigned to token types, so
 	 * {@link #getDisplayName(int)} returns the numeric value for all tokens
-	 * except {@link Token#EOF}.</p>
+	 * except {@link Token#EOF}.
 	 */
 	@NotNull
-	static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
+	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
-	private readonly literalNames: (string | undefined)[];
+	private readonly literalNames: Array<string | undefined>;
 	@NotNull
-	private readonly symbolicNames: (string | undefined)[];
+	private readonly symbolicNames: Array<string | undefined>;
 	@NotNull
-	private readonly displayNames: (string | undefined)[];
+	private readonly displayNames: Array<string | undefined>;
 
 	private _maxTokenType: number;
 
@@ -45,7 +44,7 @@ export class VocabularyImpl implements Vocabulary {
 	 * @param symbolicNames The symbolic names assigned to tokens, or
 	 * an empty array if no symbolic names are assigned.
 	 * @param displayNames The display names assigned to tokens, or an empty array
-	 * to use the values in {@code literalNames} and {@code symbolicNames} as
+	 * to use the values in `literalNames` and `symbolicNames` as
 	 * the source of display names, as described in
 	 * {@link #getDisplayName(int)}.
 	 *
@@ -53,7 +52,7 @@ export class VocabularyImpl implements Vocabulary {
 	 * @see #getSymbolicName(int)
 	 * @see #getDisplayName(int)
 	 */
-	constructor(literalNames: (string | undefined)[], symbolicNames: (string | undefined)[], displayNames: (string | undefined)[]) {
+	constructor(literalNames: Array<string | undefined>, symbolicNames: Array<string | undefined>, displayNames: Array<string | undefined>) {
 		this.literalNames = literalNames;
 		this.symbolicNames = symbolicNames;
 		this.displayNames = displayNames;
@@ -69,7 +68,7 @@ export class VocabularyImpl implements Vocabulary {
 	}
 
 	@Override
-	getLiteralName(tokenType: number): string | undefined {
+	public getLiteralName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.literalNames.length) {
 			return this.literalNames[tokenType];
 		}
@@ -78,7 +77,7 @@ export class VocabularyImpl implements Vocabulary {
 	}
 
 	@Override
-	getSymbolicName(tokenType: number): string | undefined {
+	public getSymbolicName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.symbolicNames.length) {
 			return this.symbolicNames[tokenType];
 		}
@@ -92,7 +91,7 @@ export class VocabularyImpl implements Vocabulary {
 
 	@Override
 	@NotNull
-	getDisplayName(tokenType: number): string {
+	public getDisplayName(tokenType: number): string {
 		if (tokenType >= 0 && tokenType < this.displayNames.length) {
 			let displayName = this.displayNames[tokenType];
 			if (displayName) {

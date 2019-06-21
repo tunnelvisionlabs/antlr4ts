@@ -3,11 +3,11 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { EqualityComparator } from './EqualityComparator';
-import { Override } from '../Decorators';
-import { Equatable } from './Stubs';
-import { MurmurHash } from './MurmurHash';
-import { ObjectEqualityComparator } from './ObjectEqualityComparator';
+import { EqualityComparator } from "./EqualityComparator";
+import { Override } from "../Decorators";
+import { Equatable } from "./Stubs";
+import { MurmurHash } from "./MurmurHash";
+import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
 
 /**
  * This default implementation of {@link EqualityComparator} uses object equality
@@ -16,42 +16,42 @@ import { ObjectEqualityComparator } from './ObjectEqualityComparator';
  * @author Sam Harwell
  */
 export class DefaultEqualityComparator implements EqualityComparator<any> {
-	static readonly INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
+	public static readonly INSTANCE: DefaultEqualityComparator = new DefaultEqualityComparator();
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation returns
-	 * {@code obj.}{@link Object#hashCode hashCode()}.</p>
+	 * This implementation returns
+	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
 	@Override
-	hashCode(obj: any): number {
+	public hashCode(obj: any): number {
 		if (obj == null) {
 			return 0;
-		} else if (typeof obj === 'string' || typeof obj === 'number') {
+		} else if (typeof obj === "string" || typeof obj === "number") {
 			return MurmurHash.hashCode([obj]);
 		} else {
-			return ObjectEqualityComparator.INSTANCE.hashCode(<Equatable>obj);
+			return ObjectEqualityComparator.INSTANCE.hashCode(obj as Equatable);
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
-	 * <p>This implementation relies on object equality. If both objects are
-	 * {@code null}, this method returns {@code true}. Otherwise if only
-	 * {@code a} is {@code null}, this method returns {@code false}. Otherwise,
+	 * This implementation relies on object equality. If both objects are
+	 * `undefined` or `null`, this method returns `true`. Otherwise if only
+	 * `a` is `undefined` or `null`, this method returns `false`. Otherwise,
 	 * this method returns the result of
-	 * {@code a.}{@link Object#equals equals}{@code (b)}.</p>
+	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
 	@Override
-	equals(a: any, b: any): boolean {
+	public equals(a: any, b: any): boolean {
 		if (a == null) {
 			return b == null;
-		} else if (typeof a === 'string' || typeof a === 'number') {
+		} else if (typeof a === "string" || typeof a === "number") {
 			return a === b;
 		} else {
-			return ObjectEqualityComparator.INSTANCE.equals(<Equatable>a, <Equatable>b);
+			return ObjectEqualityComparator.INSTANCE.equals(a as Equatable, b as Equatable);
 		}
 	}
 }

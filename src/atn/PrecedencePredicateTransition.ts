@@ -5,18 +5,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.0994191-07:00
 
-import { AbstractPredicateTransition } from './AbstractPredicateTransition';
-import { ATNState } from './ATNState';
-import { NotNull, Override } from '../Decorators';
-import { SemanticContext } from './SemanticContext';
-import { TransitionType } from './TransitionType';
+import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
+import { ATNState } from "./ATNState";
+import { NotNull, Override } from "../Decorators";
+import { SemanticContext } from "./SemanticContext";
+import { TransitionType } from "./TransitionType";
 
 /**
  *
  * @author Sam Harwell
  */
 export class PrecedencePredicateTransition extends AbstractPredicateTransition {
-	precedence: number;
+	public precedence: number;
 
 	constructor( @NotNull target: ATNState, precedence: number) {
 		super(target);
@@ -34,7 +34,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
+	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
 
@@ -43,7 +43,7 @@ export class PrecedencePredicateTransition extends AbstractPredicateTransition {
 	}
 
 	@Override
-	toString(): string {
+	public toString(): string {
 		return this.precedence + " >= _p";
 	}
 }

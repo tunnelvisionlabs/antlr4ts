@@ -11,7 +11,7 @@ import { Trees } from "../Trees";
 import { XPathElement } from "./XPathElement";
 
 /**
- * Either {@code ID} at start of path or {@code ...//ID} in middle of path.
+ * Either `ID` at start of path or `...//ID` in middle of path.
  */
 export class XPathRuleAnywhereElement extends XPathElement {
 	protected ruleIndex: number;
@@ -21,7 +21,7 @@ export class XPathRuleAnywhereElement extends XPathElement {
 	}
 
 	@Override
-	evaluate(t: ParseTree): ParseTree[] {
+	public evaluate(t: ParseTree): ParseTree[] {
 		return Trees.findAllRuleNodes(t, this.ruleIndex);
 	}
 }

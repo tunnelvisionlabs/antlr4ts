@@ -11,31 +11,31 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertNotNull;
 
-import { ANTLRInputStream } from '../../src/ANTLRInputStream';
-import { CharStream } from '../../src/CharStream';
-import { CommonTokenStream } from '../../src/CommonTokenStream';
-import { Interval } from '../../src/misc/Interval';
-import { Lexer } from '../../src/Lexer';
-import { LexerInterpreter } from '../../src/LexerInterpreter';
-import { TokenStreamRewriter } from '../../src/TokenStreamRewriter';
+import { CharStream } from "../../src/CharStream";
+import { CharStreams } from "../../src/CharStreams";
+import { CommonTokenStream } from "../../src/CommonTokenStream";
+import { Interval } from "../../src/misc/Interval";
+import { Lexer } from "../../src/Lexer";
+import { LexerInterpreter } from "../../src/LexerInterpreter";
+import { TokenStreamRewriter } from "../../src/TokenStreamRewriter";
 
-import { RewriterLexer1 } from './gen/rewriter/RewriterLexer1';
-import { RewriterLexer2 } from './gen/rewriter/RewriterLexer2';
-import { RewriterLexer3 } from './gen/rewriter/RewriterLexer3';
+import { RewriterLexer1 } from "./gen/rewriter/RewriterLexer1";
+import { RewriterLexer2 } from "./gen/rewriter/RewriterLexer2";
+import { RewriterLexer3 } from "./gen/rewriter/RewriterLexer3";
 
-import * as assert from 'assert';
-import { suite, test as Test, skip as Ignore } from 'mocha-typescript';
+import * as assert from "assert";
+import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 
 @suite
 export class TestTokenStreamRewriter {
 
 	private createLexerInterpreter(input: string, lexerCtor: {new(stream: CharStream): Lexer}): LexerInterpreter {
-		let stream = new ANTLRInputStream(input);
+		let stream = CharStreams.fromString(input);
 		let lexer = new lexerCtor(stream);
-		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.modeNames, lexer.ruleNames, lexer.atn, stream);
+		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.ruleNames, lexer.channelNames, lexer.modeNames, lexer.atn, stream);
 	}
 
-	@Test testInsertBeforeIndex0(): void {
+	@Test public testInsertBeforeIndex0(): void {
 		let lexEngine: LexerInterpreter =  this.createLexerInterpreter("abc", RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
 		stream.fill();
@@ -46,7 +46,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testInsertAfterLastIndex(): void {
+	@Test public testInsertAfterLastIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -58,7 +58,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test test2InsertBeforeAfterMiddleIndex(): void {
+	@Test public test2InsertBeforeAfterMiddleIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -71,7 +71,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceIndex0(): void {
+	@Test public testReplaceIndex0(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -83,7 +83,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceLastIndex(): void {
+	@Test public testReplaceLastIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -95,7 +95,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceMiddleIndex(): void {
+	@Test public testReplaceMiddleIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -107,7 +107,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testToStringStartStop(): void {
+	@Test public testToStringStartStop(): void {
 		// Tokens: 0123456789
 		// Input:  x = 3 * 0;
 		let input: string =  "x = 3 * 0;";
@@ -136,7 +136,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testToStringStartStop2(): void {
+	@Test public testToStringStartStop2(): void {
 		// Tokens: 012345678901234567
 		// Input:  x = 3 * 0 + 2 * 0;
 		let input: string =  "x = 3 * 0 + 2 * 0;";
@@ -184,7 +184,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test test2ReplaceMiddleIndex(): void {
+	@Test public test2ReplaceMiddleIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -197,7 +197,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test test2ReplaceMiddleIndex1InsertBefore(): void {
+	@Test public test2ReplaceMiddleIndex1InsertBefore(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -211,7 +211,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceThenDeleteMiddleIndex(): void {
+	@Test public testReplaceThenDeleteMiddleIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -224,7 +224,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testInsertInPriorReplace(): void {
+	@Test public testInsertInPriorReplace(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -245,11 +245,12 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "insert op <InsertBeforeOp@[@1,1:1='b',<2>,1:1]:\"0\"> within boundaries of previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@2,2:2='c',<3>,1:2]:\"x\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
-	@Test testInsertThenReplaceSameIndex(): void {
+	@Test public testInsertThenReplaceSameIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -264,7 +265,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test test2InsertMiddleIndex(): void {
+	@Test public test2InsertMiddleIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -277,7 +278,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test test2InsertThenReplaceIndex0(): void {
+	@Test public test2InsertThenReplaceIndex0(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -291,7 +292,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceThenInsertBeforeLastIndex(): void {
+	@Test public testReplaceThenInsertBeforeLastIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -304,7 +305,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testInsertThenReplaceLastIndex(): void {
+	@Test public testInsertThenReplaceLastIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -317,7 +318,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceThenInsertAfterLastIndex(): void {
+	@Test public testReplaceThenInsertAfterLastIndex(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -330,7 +331,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceRangeThenInsertAtLeftEdge(): void {
+	@Test public testReplaceRangeThenInsertAtLeftEdge(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -343,7 +344,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceRangeThenInsertAtRightEdge(): void {
+	@Test public testReplaceRangeThenInsertAtRightEdge(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -365,11 +366,12 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "insert op <InsertBeforeOp@[@4,4:4='c',<3>,1:4]:\"y\"> within boundaries of previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"x\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
-	@Test testReplaceRangeThenInsertAfterRightEdge(): void {
+	@Test public testReplaceRangeThenInsertAfterRightEdge(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -382,7 +384,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceAll(): void {
+	@Test public testReplaceAll(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -394,7 +396,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceSubsetThenFetch(): void {
+	@Test public testReplaceSubsetThenFetch(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -406,7 +408,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testReplaceThenReplaceSuperset(): void {
+	@Test public testReplaceThenReplaceSuperset(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -429,11 +431,12 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@3,3:3='c',<3>,1:3]..[@5,5:5='b',<2>,1:5]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
-	@Test testReplaceThenReplaceLowerIndexedSuperset(): void {
+	@Test public testReplaceThenReplaceLowerIndexedSuperset(): void {
 		let input: string =  "abcccba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -456,11 +459,12 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@3,3:3='c',<3>,1:3]:\"foo\"> overlap with previous <ReplaceOp@[@2,2:2='c',<3>,1:2]..[@4,4:4='c',<3>,1:4]:\"xyz\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
-	@Test testReplaceSingleMiddleThenOverlappingSuperset(): void {
+	@Test public testReplaceSingleMiddleThenOverlappingSuperset(): void {
 		let input: string =  "abcba";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -473,7 +477,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testCombineInserts(): void {
+	@Test public testCombineInserts(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -486,7 +490,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testCombine3Inserts(): void {
+	@Test public testCombine3Inserts(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -500,7 +504,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testCombineInsertOnLeftWithReplace(): void {
+	@Test public testCombineInsertOnLeftWithReplace(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -515,7 +519,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testCombineInsertOnLeftWithDelete(): void {
+	@Test public testCombineInsertOnLeftWithDelete(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -532,7 +536,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testDisjointInserts(): void {
+	@Test public testDisjointInserts(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -546,7 +550,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testOverlappingReplace(): void {
+	@Test public testOverlappingReplace(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -561,7 +565,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testOverlappingReplace2(): void {
+	@Test public testOverlappingReplace2(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -584,11 +588,12 @@ export class TestTokenStreamRewriter {
 		}
 
 		let expecting: string =  "replace op boundaries of <ReplaceOp@[@1,1:1='b',<2>,1:1]..[@2,2:2='c',<3>,1:2]:\"foo\"> overlap with previous <ReplaceOp@[@0,0:0='a',<1>,1:0]..[@3,3:3='c',<3>,1:3]:\"bar\">";
-		assert.notEqual(exc, null);
+		assert.notStrictEqual(exc, null);
+		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
 	}
 
-	@Test testOverlappingReplace3(): void {
+	@Test public testOverlappingReplace3(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -603,7 +608,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testOverlappingReplace4(): void {
+	@Test public testOverlappingReplace4(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -618,7 +623,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testDropIdenticalReplace(): void {
+	@Test public testDropIdenticalReplace(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -633,7 +638,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testDropPrevCoveredInsert(): void {
+	@Test public testDropPrevCoveredInsert(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -648,7 +653,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testLeaveAloneDisjointInsert(): void {
+	@Test public testLeaveAloneDisjointInsert(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -661,7 +666,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testLeaveAloneDisjointInsert2(): void {
+	@Test public testLeaveAloneDisjointInsert2(): void {
 		let input: string =  "abcc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -674,7 +679,7 @@ export class TestTokenStreamRewriter {
 		assert.strictEqual(result, expecting);
 	}
 
-	@Test testInsertBeforeTokenThenDeleteThatToken(): void {
+	@Test public testInsertBeforeTokenThenDeleteThatToken(): void {
 		let input: string =  "abc";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -689,7 +694,7 @@ export class TestTokenStreamRewriter {
 
 	// Test for https://github.com/antlr/antlr4/issues/550
 	@Test
-	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder(): void {
+	public testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder(): void {
 		let input: string =  "aa";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
@@ -705,7 +710,7 @@ export class TestTokenStreamRewriter {
 	}
 
 	@Test
-	testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2(): void {
+	public testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2(): void {
 		let input: string = "aa";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
@@ -724,7 +729,7 @@ export class TestTokenStreamRewriter {
 
 	// Test for https://github.com/antlr/antlr4/issues/550
 	@Test
-	testPreservesOrderOfContiguousInserts(): void {
+	public testPreservesOrderOfContiguousInserts(): void {
 		let input: string = "ab";
 		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
 		let stream: CommonTokenStream = new CommonTokenStream(lexEngine);
@@ -739,6 +744,21 @@ export class TestTokenStreamRewriter {
 		tokens.insertBefore(1, "!");
 		let result: string = tokens.getText();
 		let expecting: string = "<div><b><p>a</p></b></div>!b";
+		assert.strictEqual(result, expecting);
+	}
+
+	@Test public testInsertLiterals(): void {
+		let lexEngine: LexerInterpreter =  this.createLexerInterpreter("abc", RewriterLexer1);
+		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		stream.fill();
+		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
+		tokens.insertBefore(0, false);
+		tokens.insertBefore(0, 0);
+		tokens.insertBefore(0, {});
+		tokens.insertBefore(0, []);
+		tokens.insertBefore(0, "");
+		let result: string =  tokens.getText();
+		let expecting: string =  "[object Object]0falseabc";
 		assert.strictEqual(result, expecting);
 	}
 }
