@@ -107,7 +107,7 @@ export class CommonToken implements WritableToken {
 		result._charPositionInLine = oldToken.charPositionInLine;
 
 		if (oldToken instanceof CommonToken) {
-			result._text = oldToken.text;
+			result._text = oldToken._text;
 			result.source = oldToken.source;
 		} else {
 			result._text = oldToken.text;
