@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable:callable-types
 // ConvertTo-TS run at 2016-10-04T11:27:15.0984506-07:00
 
 import { CharStream } from "../../src/CharStream";

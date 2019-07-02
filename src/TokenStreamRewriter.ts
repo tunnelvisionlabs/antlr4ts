@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+// tslint:disable:callable-types
 // ConvertTo-TS run at 2016-10-04T11:26:58.1768850-07:00
 
 import { Interval } from "./misc/Interval";
