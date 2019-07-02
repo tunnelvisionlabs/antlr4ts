@@ -34,7 +34,6 @@
     "cover": "nyc --reporter=none mocha --timeout=10000",
     "postcover": "nyc report --reporter=html",
     "dev-test-watch": "mocha-typescript-watch",
-    "typedoc": "typedoc --ignoreCompilerErrors --out doc src --name antlr4ts",
     "prepack": "npm run pack-tool && npm run pack-runtime",
     "pack-tool": "npm pack ./tool",
     "copy-runtime-extras": "cpx README.md target/src && cpx LICENSE target/src",
@@ -81,7 +80,6 @@
     "source-map-support": "^0.5.6",
     "std-mocks": "^1.0.1",
     "tslint": "^5.11.0",
-    "typedoc": "^0.11.1",
     "typescript": "^2.8.3"
   },
   "dependencies": {}
