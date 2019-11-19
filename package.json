@@ -68,12 +68,12 @@
   },
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
   "devDependencies": {
+    "@deboxsoft/cpx": "^1.5.0",
     "@types/mocha": "^5.2.0",
     "@types/node": "^10.12.10",
     "@types/source-map-support": "^0.4.0",
     "@types/std-mocks": "^1.0.0",
     "codecov": "^3.1.0",
-    "cpx": "^1.5.0",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.14",
     "nyc": "^14.1.1",
