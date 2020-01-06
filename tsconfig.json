@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "target",
     "sourceMap": true,
+    "inlineSources": true,
     "module": "commonjs",
     "target": "es2015",
     "lib": [
