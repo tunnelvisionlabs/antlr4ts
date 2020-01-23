@@ -8,7 +8,7 @@
     "prepare": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
     "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
     "unlinkruntime": "cd target/src && npm unlink",
-    "buildtool": "cd tool && npm unlink && clsnpm link",
+    "buildtool": "cd tool && npm link -force",
     "unlinktool": "cd tool && npm unlink",
     "clean": "npm run unlink && git clean -idx",
     "antlr4ts": "npm run antlr4ts-runtime-xpath && npm run antlr4ts-test-runtime && npm run antlr4ts-test-labels && npm run antlr4ts-test-pattern && npm run antlr4ts-test-rewriter && npm run antlr4ts-test-xpath && npm run antlr4ts-benchmark",
