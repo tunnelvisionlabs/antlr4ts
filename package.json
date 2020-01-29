@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "prepare": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run tsc && npm link target/src && npm run buildrts",
+    "prepare": "npm run buildtool && npm link antlr4ts-cli && npm run antlr4ts && npm run build && npm link target/src && npm run buildrts",
     "unlink": "npm unlink antlr4ts && npm unlink target/src && npm unlink antlr4ts-cli && npm run unlinkruntime && npm run unlinktool",
     "unlinkruntime": "cd target/src && npm unlink",
     "buildtool": "cd tool && npm link",
@@ -50,7 +50,8 @@
     "profile-core": "node --prof target/benchmark/TestPerformance.js",
     "preprofile-lexer": "npm run antlr4ts-benchmark-graphemes && tsc",
     "profile-lexer": "npm run profile-lexer-core",
-    "profile-lexer-core": "node --prof target/benchmark/TimeLexerSpeed.js"
+    "profile-lexer-core": "node --prof target/benchmark/TimeLexerSpeed.js",
+    "build": "gulp"
   },
   "sideEffects": false,
   "repository": {
@@ -68,12 +69,21 @@
   },
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
     "@deboxsoft/cpx": "^1.5.0",
     "@types/mocha": "^5.2.0",
     "@types/node": "^10.12.10",
     "@types/source-map-support": "^0.4.0",
     "@types/std-mocks": "^1.0.0",
     "codecov": "^3.1.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-if": "^3.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.14",
     "nyc": "^14.1.1",

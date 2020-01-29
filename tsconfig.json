@@ -7,6 +7,8 @@
     "lib": [
       "es6"
     ],
+    "inlineSourceMap": true,
+    "inlineSources": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
