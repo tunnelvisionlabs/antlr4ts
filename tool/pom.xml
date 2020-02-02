@@ -185,8 +185,8 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
                     <execution>
                         <id>default-compile</id>
                         <configuration>
-                            <source>1.6</source>
-                            <target>1.6</target>
+                            <source>1.8</source>
+                            <target>1.8</target>
                             <compilerArgs>
                                 <arg>-Xlint</arg>
                                 <arg>-Xlint:-serial</arg>
@@ -196,8 +196,8 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
                     <execution>
                         <id>default-testCompile</id>
                         <configuration>
-                            <source>1.6</source>
-                            <target>1.6</target>
+                            <source>1.8</source>
+                            <target>1.8</target>
                             <compilerArgs>
                                 <arg>-Xlint</arg>
                                 <arg>-Xlint:-serial</arg>
