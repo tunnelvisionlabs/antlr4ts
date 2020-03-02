@@ -73,7 +73,7 @@
     "@types/node": "^10.12.10",
     "@types/source-map-support": "^0.4.0",
     "@types/std-mocks": "^1.0.0",
-    "codecov": "^3.1.0",
+    "codecov": "^3.6.5",
     "mocha": "^5.2.0",
     "mocha-typescript": "^1.1.14",
     "nyc": "^14.1.1",
