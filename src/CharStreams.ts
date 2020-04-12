@@ -238,7 +238,7 @@ export namespace CharStreams {
 	 */
 	export function fromString(
 		s: string,
-		sourceName?: string
+		sourceName?: string,
 	): CodePointCharStream {
 		if (sourceName === undefined || sourceName.length === 0) {
 			sourceName = IntStream.UNKNOWN_SOURCE_NAME;
@@ -247,7 +247,7 @@ export namespace CharStreams {
 		// Initial guess assumes no code points > U+FFFF: one code
 		// point for each code unit in the string
 		let codePointBufferBuilder: CodePointBuffer.Builder = CodePointBuffer.builder(
-			s.length
+			s.length,
 		);
 
 		// TODO: CharBuffer.wrap(String) rightfully returns a read-only buffer
@@ -260,7 +260,7 @@ export namespace CharStreams {
 		codePointBufferBuilder.append(cb);
 		return CodePointCharStream.fromBuffer(
 			codePointBufferBuilder.build(),
-			sourceName
+			sourceName,
 		);
 	}
 
