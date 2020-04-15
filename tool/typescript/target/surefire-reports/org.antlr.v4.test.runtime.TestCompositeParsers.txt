@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.antlr.v4.test.runtime.TestCompositeParsers
+-------------------------------------------------------------------------------
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.299 sec - in org.antlr.v4.test.runtime.TestCompositeParsers
