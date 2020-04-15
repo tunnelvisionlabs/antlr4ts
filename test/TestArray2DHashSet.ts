@@ -3,15 +3,14 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import {Equatable} from "../src/misc/Stubs";
-import {Array2DHashSet} from "../src/misc/Array2DHashSet";
-import {MurmurHash} from "../src/misc/MurmurHash";
+import { Array2DHashSet } from "antlr4ts";
+import { MurmurHash } from "antlr4ts";
 import { suite, test } from "mocha-typescript";
 import * as assert from "assert";
 
-class EquatableTest implements Equatable {
+class EquatableTest {
 
-	constructor( public a: string, public b: string ){}
+	constructor(public a: string, public b: string) { }
 
 	public equals(o: any) {
 		if (this === o) {
@@ -36,18 +35,18 @@ const beta = new EquatableTest("beta", "1");
 describe("EquatableTest", () => {
 
 	it("should respect identity", () => {
-		assert( alpha.equals(alpha));
-		assert( alpha_again.equals(alpha_again));
-		assert( beta.equals(beta));
+		assert(alpha.equals(alpha));
+		assert(alpha_again.equals(alpha_again));
+		assert(beta.equals(beta));
 	});
 
 	it("should compare equality by value", () => {
-		assert( alpha.equals(alpha_again));
-		assert( alpha_again.equals(alpha));
+		assert(alpha.equals(alpha_again));
+		assert(alpha_again.equals(alpha));
 	});
 
 	it("should detect difference by value", () => {
-		assert( !alpha.equals(beta));
+		assert(!alpha.equals(beta));
 	});
 
 	it("should hash identical values the same", () => {
@@ -65,10 +64,10 @@ describe("Array2DHashSet", () => {
 	beforeEach(() => { set = new Array2DHashSet<EquatableTest>(); });
 
 	it("shoud count entities", () => {
-		assert( set.isEmpty );
-		assert.strictEqual( set.size, 0 );
+		assert(set.isEmpty);
+		assert.strictEqual(set.size, 0);
 		set.add(alpha);
-		assert( !set.isEmpty);
+		assert(!set.isEmpty);
 		assert.strictEqual(set.size, 1);
 		set.add(beta);
 		assert.strictEqual(set.size, 2);

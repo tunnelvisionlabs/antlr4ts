@@ -15,3 +15,5 @@ export * from "./SyntaxTree";
 export * from "./TerminalNode";
 export * from "./Tree";
 export * from "./Trees";
+export * from "./xpath";
+export * from "./pattern";

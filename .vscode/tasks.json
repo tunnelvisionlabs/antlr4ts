@@ -1,27 +1,18 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
-  "version": "2.0.0",
-  "command": "npm",
-  "tasks": [
-    {
-      "type": "npm",
-      "script": "install",
-      "problemMatcher": [],
-      "label": "npm: install",
-      "detail": "install dependencies from package",
-      "group": "build"
-    },
-    {
-      "type": "npm",
-      "script": "tsc-watch",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": [],
-      "label": "npm: tsc-watch",
-      "detail": "tsc -w -p ."
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "typescript",
+			"tsconfig": "benchmark/tsconfig.json",
+			"option": "watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"label": "tsc: watch - benchmark/tsconfig.json"
+		}
+	]
 }

@@ -60,3 +60,5 @@ bin/
 
 # NPM pack output
 *.tgz
+
+**/dist
