@@ -166,9 +166,6 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
             <testResource>
                 <directory>test</directory>
             </testResource>
-            <testResource>
-                <directory>../runtime</directory>
-            </testResource>
         </testResources>
 
         <plugins>
