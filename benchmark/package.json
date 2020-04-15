@@ -1,0 +1,38 @@
+{
+  "name": "antlr4ts-benchmark",
+  "version": "0.5.0-dev",
+  "description": "ANTLR 4 performance benchmark for JavaScript written in Typescript",
+  "scripts": {
+    "prepare": "npm run antlr && npm run tsc",
+    "antlr": "npm run antlr-benchmark-graphemes && npm run antlr-benchmark-std && npm run antlr-benchmark-std-atn && npm run antlr-benchmark-lr && npm run antlr-benchmark-lr-atn",
+    "antlr-benchmark-graphemes": "antlr4ts -visitor Graphemes.g4 -o gen",
+    "antlr-benchmark-std": "antlr4ts -visitor Java.g4 -o gen/std",
+    "antlr-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn Java.g4 -o gen/std-atn",
+    "antlr-benchmark-lr": "antlr4ts -visitor JavaLR.g4 -o gen/lr",
+    "antlr-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn JavaLR.g4 -o gen/lr-atn",
+    "tsc": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
+  },
+  "keywords": [
+    "ANTLR4",
+    "typescript"
+  ],
+  "author": "Terence Parr, Sam Harwell, and Burt Harris",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/tunnelvisionlabs/antlr4ts/issues"
+  },
+  "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
+  "devDependencies": {
+    "@types/source-map-support": "^0.5.1",
+    "antlr4ts-cli": "0.5.0-dev",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "antlr4ts": "0.5.0-dev",
+    "source-map-support": "^0.5.16"
+  }
+}

@@ -7,17 +7,17 @@ import * as assert from "assert";
 import * as stdMocks from "std-mocks";
 import { Console } from "console";
 
-import { CharStream } from "antlr4ts/CharStream";
-import { CharStreams } from "antlr4ts/CharStreams";
-import { CommonTokenStream } from "antlr4ts/CommonTokenStream";
-import { DiagnosticErrorListener } from "antlr4ts/DiagnosticErrorListener";
-import { Lexer } from "antlr4ts/Lexer";
-import { Parser } from "antlr4ts/Parser";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { ParseTree } from "antlr4ts/tree/ParseTree";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeWalker } from "antlr4ts/tree/ParseTreeWalker";
-import { RuleNode } from "antlr4ts/tree/RuleNode";
+import { CharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
+import { DiagnosticErrorListener } from "antlr4ts";
+import { Lexer } from "antlr4ts";
+import { Parser } from "antlr4ts";
+import { ParserRuleContext } from "antlr4ts";
+import { ParseTree } from "antlr4ts";
+import { ParseTreeListener } from "antlr4ts";
+import { ParseTreeWalker } from "antlr4ts";
+import { RuleNode } from "antlr4ts";
 
 function trySetConsole(valueFactory: () => Console): boolean {
 	try {
@@ -33,7 +33,7 @@ function trySetConsole(valueFactory: () => Console): boolean {
 	}
 }
 
-function expectConsole( expectedOutput: string, expectedErrors: string, testFunction: () => void ) {
+function expectConsole(expectedOutput: string, expectedErrors: string, testFunction: () => void) {
 	let priorConsole = console;
 	try {
 		trySetConsole(() => new Console({ stdout: process.stdout, stderr: process.stderr, colorMode: false }));
@@ -58,7 +58,7 @@ function expectConsole( expectedOutput: string, expectedErrors: string, testFunc
 
 export interface LexerTestOptions {
 	testName: string;
-	lexer: new(s: CharStream) => Lexer;
+	lexer: new (s: CharStream) => Lexer;
 	input: string;
 	expectedOutput: string;
 	expectedErrors: string;
@@ -66,7 +66,7 @@ export interface LexerTestOptions {
 }
 
 export interface ParserTestOptions<TParser extends Parser> extends LexerTestOptions {
-	parser: new(s: CommonTokenStream) => TParser;
+	parser: new (s: CommonTokenStream) => TParser;
 	parserStartRule: (parser: TParser) => ParseTree;
 	debug: boolean;
 }
@@ -86,7 +86,7 @@ export function lexerTest(options: LexerTestOptions) {
 	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
-	expectConsole( options.expectedOutput, options.expectedErrors, () => {
+	expectConsole(options.expectedOutput, options.expectedErrors, () => {
 		tokens.fill();
 		tokens.getTokens().forEach((t) => console.log(t.toString()));
 		if (options.showDFA) {
@@ -106,7 +106,7 @@ export function parserTest<TParser extends Parser>(options: ParserTestOptions<TP
 	}
 
 	parser.buildParseTree = true;
-	expectConsole( options.expectedOutput, options.expectedErrors, () => {
+	expectConsole(options.expectedOutput, options.expectedErrors, () => {
 		const tree = options.parserStartRule(parser);
 		ParseTreeWalker.DEFAULT.walk(new TreeShapeListener(), tree);
 	});

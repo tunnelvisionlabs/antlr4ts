@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "tool",
+    "runtime/typescript",
+    "benchmark",
+    "test"
+  ],
+  "version": "0.5.0-dev"
+}

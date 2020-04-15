@@ -3,6 +3,10 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+export * from "./atn";
+export * from "./dfa";
+export * from "./misc";
+export * from "./tree";
 export * from "./ANTLRErrorListener";
 export * from "./ANTLRErrorStrategy";
 // export * from "./ANTLRFileStream";
@@ -17,6 +21,7 @@ export * from "./CommonToken";
 export * from "./CommonTokenFactory";
 export * from "./CommonTokenStream";
 export * from "./ConsoleErrorListener";
+export * from "./Decorators";
 export * from "./DefaultErrorStrategy";
 export * from "./Dependents";
 export * from "./DiagnosticErrorListener";

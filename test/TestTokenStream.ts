@@ -3,10 +3,10 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { BufferedTokenStream } from "../src/BufferedTokenStream";
-import { CharStreams } from "../src/CharStreams";
-import { Token } from "../src/Token";
-import { XPathLexer } from "../src/tree/xpath/XPathLexer";
+import { BufferedTokenStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
+import { Token } from "antlr4ts";
+import { XPathLexer } from "antlr4ts";
 
 import { suite, test } from "mocha-typescript";
 

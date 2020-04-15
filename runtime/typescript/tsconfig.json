@@ -1,17 +1,16 @@
 {
   "include": [
-    "src/**/*.ts"
+    "../../src/**/*.ts"
   ],
   "exclude": [
+    "dist",
     "node_modules",
-    "test",
-    "benchmark",
     "target",
     "tool",
     "test/runtime"
   ],
   "compilerOptions": {
-    "outDir": "target",
+    "outDir": "dist",
     "sourceMap": true,
     "inlineSources": true,
     "module": "commonjs",
@@ -25,12 +24,8 @@
     "experimentalDecorators": true,
     "declaration": true,
     "preserveConstEnums": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
     "types": [
-      "node",
-      "mocha"
+      "node"
     ]
   }
 }

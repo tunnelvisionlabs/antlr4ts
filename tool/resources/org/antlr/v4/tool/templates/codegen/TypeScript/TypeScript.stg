@@ -20,27 +20,27 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn/ATN";
-import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
-import { FailedPredicateException } from "<basePath()>/FailedPredicateException";
-import { NotNull } from "<basePath()>/Decorators";
-import { NoViableAltException } from "<basePath()>/NoViableAltException";
-import { Override } from "<basePath()>/Decorators";
-import { Parser } from "<basePath()>/Parser";
-import { ParserRuleContext } from "<basePath()>/ParserRuleContext";
-import { ParserATNSimulator } from "<basePath()>/atn/ParserATNSimulator";
-import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor";
-import { RecognitionException } from "<basePath()>/RecognitionException";
-import { RuleContext } from "<basePath()>/RuleContext";
-//import { RuleVersion } from "<basePath()>/RuleVersion";
-import { TerminalNode } from "<basePath()>/tree/TerminalNode";
-import { Token } from "<basePath()>/Token";
-import { TokenStream } from "<basePath()>/TokenStream";
-import { Vocabulary } from "<basePath()>/Vocabulary";
-import { VocabularyImpl } from "<basePath()>/VocabularyImpl";
+import { ATN } from "<basePath()>";
+import { ATNDeserializer } from "<basePath()>";
+import { FailedPredicateException } from "<basePath()>";
+import { NotNull } from "<basePath()>";
+import { NoViableAltException } from "<basePath()>";
+import { Override } from "<basePath()>";
+import { Parser } from "<basePath()>";
+import { ParserRuleContext } from "<basePath()>";
+import { ParserATNSimulator } from "<basePath()>";
+import { ParseTreeListener } from "<basePath()>";
+import { ParseTreeVisitor } from "<basePath()>";
+import { RecognitionException } from "<basePath()>";
+import { RuleContext } from "<basePath()>";
+//import { RuleVersion } from "<basePath()>";
+import { TerminalNode } from "<basePath()>";
+import { Token } from "<basePath()>";
+import { TokenStream } from "<basePath()>";
+import { Vocabulary } from "<basePath()>";
+import { VocabularyImpl } from "<basePath()>";
 
-import * as Utils from "<basePath()>/misc/Utils";
+import * as Utils from "<basePath()>";
 
 <if(file.genListener)>
 import { <file.grammarName>Listener } from "./<file.grammarName>Listener";
@@ -61,7 +61,7 @@ ListenerFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener";
+import { ParseTreeListener } from "<basePath()>";
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 
@@ -103,7 +103,7 @@ VisitorFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor";
+import { ParseTreeVisitor } from "<basePath()>";
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 
@@ -868,18 +868,18 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn/ATN";
-import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
-import { CharStream } from "<basePath()>/CharStream";
-import { Lexer } from "<basePath()>/Lexer";
-import { LexerATNSimulator } from "<basePath()>/atn/LexerATNSimulator";
-import { NotNull } from "<basePath()>/Decorators";
-import { Override } from "<basePath()>/Decorators";
-import { RuleContext } from "<basePath()>/RuleContext";
-import { Vocabulary } from "<basePath()>/Vocabulary";
-import { VocabularyImpl } from "<basePath()>/VocabularyImpl";
+import { ATN } from "<basePath()>";
+import { ATNDeserializer } from "<basePath()>";
+import { CharStream } from "<basePath()>";
+import { Lexer } from "<basePath()>";
+import { LexerATNSimulator } from "<basePath()>";
+import { NotNull } from "<basePath()>";
+import { Override } from "<basePath()>";
+import { RuleContext } from "<basePath()>";
+import { Vocabulary } from "<basePath()>";
+import { VocabularyImpl } from "<basePath()>";
 
-import * as Utils from "<basePath()>/misc/Utils";
+import * as Utils from "<basePath()>";
 
 <namedActions.beforeLexer>
 

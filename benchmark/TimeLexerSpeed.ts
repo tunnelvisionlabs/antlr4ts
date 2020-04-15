@@ -7,13 +7,13 @@ import * as fs from "fs";
 import * as path from "path";
 import * as util from "util";
 
-import { ANTLRInputStream } from "../src/ANTLRInputStream";
-import { CharStream } from "../src/CharStream";
-import { CharStreams } from "../src/CharStreams";
-import { CommonTokenStream } from "../src/CommonTokenStream";
+import { ANTLRInputStream } from "antlr4ts";
+import { CharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
 import { GraphemesLexer } from "./gen/GraphemesLexer";
 import { JavaLexer } from "./gen/std/JavaLexer";
-import { Lexer } from "../src/Lexer";
+import { Lexer } from "antlr4ts";
 import { Stopwatch } from "./Stopwatch";
 import { TimeSpan } from "./TimeSpan";
 

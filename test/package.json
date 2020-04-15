@@ -1,0 +1,45 @@
+{
+  "name": "antlr4ts-test",
+  "private": true,
+  "version": "0.5.0-dev",
+  "description": "ANTLR 4 test suite for JavaScript written in Typescript",
+  "scripts": {
+    "prepare": "npm run antlr && npm run tsc",
+    "antlr": "npm run antlr4ts-test-runtime && npm run antlr4ts-test-labels && npm run antlr4ts-test-pattern && npm run antlr4ts-test-rewriter && npm run antlr4ts-test-xpath",
+    "antlr4ts-test-runtime": "cd runtime && antlr4ts TestGrammar.g4 -o gen/typescript_only",
+    "antlr4ts-test-labels": "cd runtime/TestReferenceToListLabels && antlr4ts T.g4 -no-listener -o gen",
+    "antlr4ts-test-pattern": "cd tool && antlr4ts ParseTreeMatcherX1.g4 ParseTreeMatcherX2.g4 ParseTreeMatcherX3.g4 ParseTreeMatcherX4.g4 ParseTreeMatcherX5.g4 ParseTreeMatcherX6.g4 ParseTreeMatcherX7.g4 ParseTreeMatcherX8.g4 -no-listener -o gen/matcher",
+    "antlr4ts-test-rewriter": "cd tool && antlr4ts RewriterLexer1.g4 RewriterLexer2.g4 RewriterLexer3.g4 -o gen/rewriter",
+    "antlr4ts-test-xpath": "cd tool && antlr4ts TestXPath.g4 -no-listener -o gen/xpath",
+    "tsc": "tsc -p .",
+    "test": "mocha ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tunnelvisionlabs/antlr4ts.git"
+  },
+  "keywords": [
+    "ANTLR4",
+    "typescript"
+  ],
+  "author": "Terence Parr, Sam Harwell, and Burt Harris",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/tunnelvisionlabs/antlr4ts/issues"
+  },
+  "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.1",
+    "@types/std-mocks": "^1.0.0",
+    "antlr4ts": "0.5.0-dev",
+    "antlr4ts-cli": "0.5.0-dev",
+    "mocha": "^7.1.1",
+    "mocha-typescript": "^1.1.17",
+    "std-mocks": "^1.0.1",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "source-map-support": "^0.5.16"
+  }
+}
