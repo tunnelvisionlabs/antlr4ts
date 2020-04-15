@@ -1,6 +1,6 @@
 {
   "packages": [
-    "tool",
+    "tool/typescript",
     "runtime/typescript",
     "benchmark",
     "test"
