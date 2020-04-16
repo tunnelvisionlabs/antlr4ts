@@ -3,7 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { MurmurHash } from "../src/misc/MurmurHash";
+import { MurmurHash } from "antlr4ts";
 
 import { suite, test } from "mocha-typescript";
 

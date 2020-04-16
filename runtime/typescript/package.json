@@ -4,9 +4,15 @@
   "description": "ANTLR 4 runtime for JavaScript written in Typescript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*."
+  ],
   "scripts": {
-    "build": "npm run antlr && tsc -p .",
-    "antlr": "cd ../../src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../.."
+    "prepare": "npm run build",
+    "build": "run-s antlr tsc",
+    "antlr": "cd src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../..",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
