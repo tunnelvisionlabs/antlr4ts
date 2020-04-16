@@ -14,8 +14,8 @@
     "antlr4ts": "./antlr4ts"
   },
   "scripts": {
-    "prepare": "mvn verify",
-    "xxx": "mvn verify -Dmaven.test.skip=true"
+    "prepare": "mvn verify -Dmaven.test.skip=true",
+    "xxx": "mvn verify"
   },
   "repository": {
     "type": "git",
