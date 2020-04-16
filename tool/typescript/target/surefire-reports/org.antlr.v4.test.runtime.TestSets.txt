@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.antlr.v4.test.runtime.TestSets
--------------------------------------------------------------------------------
-Tests run: 32, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.997 sec - in org.antlr.v4.test.runtime.TestSets
