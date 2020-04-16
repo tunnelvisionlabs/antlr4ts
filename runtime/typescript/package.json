@@ -30,7 +30,7 @@
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts#readme",
   "devDependencies": {
     "antlr4ts-cli": "^0.5.0-dev",
-    "typescript": "^2.8.3"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "source-map-support": "^0.5.16"

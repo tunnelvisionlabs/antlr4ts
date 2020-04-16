@@ -160,7 +160,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		let newTable: Array<T[] | undefined> = this.createBuckets(newCapacity);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
-//		System.out.println("new size="+newCapacity+", thres="+threshold);
+		//		System.out.println("new size="+newCapacity+", thres="+threshold);
 		// rehash all existing entries
 		let oldSize: number = this.size;
 		for (let bucket of old) {
@@ -307,7 +307,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				} else {
 					buf += ", ";
 				}
-				buf += o.toString();
+				buf += String(o);
 			}
 		}
 		buf += "}";
@@ -332,7 +332,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 				if (o == null) {
 					buf += "_";
 				} else {
-					buf += o.toString();
+					buf += String(o);
 				}
 			}
 			buf += "]\n";
