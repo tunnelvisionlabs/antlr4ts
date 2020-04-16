@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.antlr.v4.test.runtime.TestParserExec
--------------------------------------------------------------------------------
-Tests run: 37, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.254 sec - in org.antlr.v4.test.runtime.TestParserExec

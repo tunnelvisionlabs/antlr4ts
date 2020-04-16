@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.antlr.v4.test.runtime.TestBaseContext
--------------------------------------------------------------------------------
-Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.409 sec - in org.antlr.v4.test.runtime.TestBaseContext
