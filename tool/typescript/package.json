@@ -34,5 +34,8 @@
   "homepage": "https://github.com/tunnelvisionlabs/antlr4ts/tool#readme",
   "dependencies": {
     "source-map-support": "^0.5.16"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
   }
 }
