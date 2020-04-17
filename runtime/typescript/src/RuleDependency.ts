@@ -23,7 +23,7 @@ export function RuleDependency(dependency: DependencySpecification) {
 }
 
 export interface DependencySpecification {
-	readonly recognizer: { new (...args: any[]): Parser; };
+	readonly recognizer: new (...args: any[]) => Parser;
 
 	readonly rule: number;
 

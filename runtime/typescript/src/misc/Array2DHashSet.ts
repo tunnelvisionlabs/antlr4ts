@@ -26,7 +26,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>;
 
-	protected buckets: Array<T[] | undefined>;
+	protected buckets: (T[] | undefined)[];
 
 	/** How many elements in set */
 	protected n: number = 0;
@@ -157,7 +157,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	protected expand(): void {
 		let old = this.buckets;
 		let newCapacity: number = this.buckets.length * 2;
-		let newTable: Array<T[] | undefined> = this.createBuckets(newCapacity);
+		let newTable: (T[] | undefined)[] = this.createBuckets(newCapacity);
 		this.buckets = newTable;
 		this.threshold = Math.floor(newCapacity * LOAD_FACTOR);
 		//		System.out.println("new size="+newCapacity+", thres="+threshold);
@@ -365,7 +365,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @returns the newly constructed array
 	 */
 	@SuppressWarnings("unchecked")
-	protected createBuckets(capacity: number): Array<T[] | undefined> {
+	protected createBuckets(capacity: number): (T[] | undefined)[] {
 		return new Array<T[]>(capacity);
 	}
 }

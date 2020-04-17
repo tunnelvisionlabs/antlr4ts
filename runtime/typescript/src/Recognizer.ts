@@ -30,7 +30,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 
 	@SuppressWarnings("serial")
 	@NotNull
-	private readonly _listeners: Array<ANTLRErrorListener<TSymbol>> = [ConsoleErrorListener.INSTANCE];
+	private readonly _listeners: ANTLRErrorListener<TSymbol>[] = [ConsoleErrorListener.INSTANCE];
 
 	protected _interp: ATNInterpreter;
 
@@ -196,7 +196,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	@NotNull
-	public getErrorListeners(): Array<ANTLRErrorListener<TSymbol>> {
+	public getErrorListeners(): ANTLRErrorListener<TSymbol>[] {
 		return this._listeners.slice(0);
 	}
 

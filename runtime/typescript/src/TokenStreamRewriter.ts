@@ -400,7 +400,7 @@ export class TokenStreamRewriter {
 	 *
 	 *  Return a map from token index to operation.
 	 */
-	protected reduceToSingleOperationPerIndex(rewrites: Array<RewriteOperation | undefined>): Map<number, RewriteOperation> {
+	protected reduceToSingleOperationPerIndex(rewrites: (RewriteOperation | undefined)[]): Map<number, RewriteOperation> {
 		// console.log(`rewrites=[${Utils.join(rewrites, ", ")}]`);
 
 		// WALK REPLACES
@@ -522,7 +522,7 @@ export class TokenStreamRewriter {
 	}
 
 	/** Get all operations before an index of a particular kind */
-	protected getKindOfOps<T extends RewriteOperation>(rewrites: Array<RewriteOperation | undefined>, kind: {new(...args: any[]): T}, before: number): T[] {
+	protected getKindOfOps<T extends RewriteOperation>(rewrites: (RewriteOperation | undefined)[], kind: new(...args: any[]) => T, before: number): T[] {
 		let ops: T[] = [];
 		for (let i = 0; i < before && i < rewrites.length; i++) {
 			let op: RewriteOperation | undefined =  rewrites[i];

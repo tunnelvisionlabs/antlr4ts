@@ -208,8 +208,8 @@ export class ATNDeserializer {
 		//
 		// STATES
 		//
-		let loopBackStateNumbers: Array<[LoopEndState, number]> = [];
-		let endStateNumbers: Array<[BlockStartState, number]> = [];
+		let loopBackStateNumbers: [LoopEndState, number][] = [];
+		let endStateNumbers: [BlockStartState, number][] = [];
 		let nstates: number = ATNDeserializer.toInt(data[p++]);
 		for (let i = 0; i < nstates; i++) {
 			let stype: ATNStateType = ATNDeserializer.toInt(data[p++]);

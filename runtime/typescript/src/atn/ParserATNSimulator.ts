@@ -1540,7 +1540,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		 *
 		 * From this, it is clear that NONE||anything==NONE.
 		 */
-		let altToPred: Array<SemanticContext | undefined> | undefined = new Array<SemanticContext>(nalts + 1);
+		let altToPred: (SemanticContext | undefined)[] | undefined = new Array<SemanticContext>(nalts + 1);
 		let n: number = altToPred.length;
 		for (let c of configs) {
 			if (ambigAlts.get(c.alt)) {
