@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "prepare": "npm run build",
-    "build": "run-s antlr tsc",
+    "build": "run-s tsc",
     "antlr": "cd src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../..",
     "tsc": "tsc"
   },

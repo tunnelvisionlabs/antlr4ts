@@ -7,7 +7,7 @@
   "scripts": {
     "prepare": "lerna bootstrap && npm run build",
     "unlink": "npm uninstall -g antlr4ts antlr4ts-cli",
-    "antlr": "lerna run antlr",
+    "antlr": "lerna run antlr --parallel",
     "build": "run-s build-tool antlr tsc",
     "build-tool": "cd tool/typescript && npm run build",
     "build-runtime": "cd runtime/typescript && npm run build",

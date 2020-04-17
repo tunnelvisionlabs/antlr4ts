@@ -58,7 +58,7 @@ ListenerFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeListener } from "<basePath()>";
+import { ParseTreeListener } from "<basePath()>/dist/tree";
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 
@@ -100,7 +100,7 @@ VisitorFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from "<basePath()>";
+import { ParseTreeVisitor } from "<basePath()>/dist/tree";
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 

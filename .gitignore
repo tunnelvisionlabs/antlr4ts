@@ -64,3 +64,5 @@ bin/
 **/dist
 
 tsconfig.tsbuildinfo
+
+test/runtime/cross-target/

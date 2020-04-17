@@ -9,6 +9,7 @@
       "es6"
     ],
     "noImplicitAny": true,
+    "noEmitOnError": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "experimentalDecorators": true,
@@ -25,8 +26,7 @@
   ],
   "exclude": [
     "node_modules",
-    "dist/**",
-    "runtime"
+    "dist/**"
   ],
   "references": [
     {
