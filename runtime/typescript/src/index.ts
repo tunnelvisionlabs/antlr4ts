@@ -3,10 +3,6 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-export * from "./atn";
-export * from "./dfa";
-export * from "./misc";
-export * from "./tree";
 export * from "./ANTLRErrorListener";
 export * from "./ANTLRErrorStrategy";
 // export * from "./ANTLRFileStream";
@@ -56,3 +52,10 @@ export * from "./TokenStreamRewriter";
 export * from "./Vocabulary";
 export * from "./VocabularyImpl";
 export * from "./WritableToken";
+
+// Keep these sub-directory exports last
+
+// export * from "./atn";
+// export * from "./dfa";
+// export * from "./misc";
+// export * from "./tree";

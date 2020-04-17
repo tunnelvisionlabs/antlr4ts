@@ -146,9 +146,9 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 				this._text = undefined;
 				do {
 					this._type = Token.INVALID_TYPE;
-//				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
-//								   " in mode "+mode+
-//								   " at index "+input.index);
+					//				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
+					//								   " in mode "+mode+
+					//								   " at index "+input.index);
 					let ttype: number;
 					try {
 						ttype = this.interpreter.match(this._input, this._mode);
@@ -382,14 +382,14 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	public getErrorDisplay(s: string | number): string {
 		if (typeof s === "number") {
 			switch (s) {
-			case Token.EOF:
-				return "<EOF>";
-			case 0x0a:
-				return "\\n";
-			case 0x09:
-				return "\\t";
-			case 0x0d:
-				return "\\r";
+				case Token.EOF:
+					return "<EOF>";
+				case 0x0a:
+					return "\\n";
+				case 0x09:
+					return "\\t";
+				case 0x0d:
+					return "\\r";
 			}
 			return String.fromCharCode(s);
 		}

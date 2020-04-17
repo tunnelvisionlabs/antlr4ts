@@ -5,19 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.0984506-07:00
 
-import { CharStream } from "../../src/CharStream";
-import { CharStreams } from "../../src/CharStreams";
-import { CommonTokenStream } from "../../src/CommonTokenStream";
-import { InputMismatchException } from "../../src/InputMismatchException";
-import { Lexer } from "../../src/Lexer";
-import { NoViableAltException } from "../../src/NoViableAltException";
-import { Parser } from "../../src/Parser";
-import { ParseTree } from "../../src/tree/ParseTree";
-import { ParseTreeMatch } from "../../src/tree/pattern/ParseTreeMatch";
-import { ParseTreePattern } from "../../src/tree/pattern/ParseTreePattern";
-import { ParseTreePatternMatcher } from "../../src/tree/pattern/ParseTreePatternMatcher";
-import { Token } from "../../src/Token";
-import { TokenStream } from "../../src/TokenStream";
+import { CharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
+import { InputMismatchException } from "antlr4ts";
+import { Lexer } from "antlr4ts";
+import { NoViableAltException } from "antlr4ts";
+import { Parser } from "antlr4ts";
+import { Token } from "antlr4ts";
+import { TokenStream } from "antlr4ts";
+import { ParseTree, ParseTreeMatch, ParseTreePattern, ParseTreePatternMatcher } from "antlr4ts/dist/tree";
 
 import { ParseTreeMatcherX1Lexer } from "./gen/matcher/ParseTreeMatcherX1Lexer";
 import { ParseTreeMatcherX1Parser } from "./gen/matcher/ParseTreeMatcherX1Parser";
@@ -110,7 +107,7 @@ export class TestParseTreeMatcher {
 	@Test public testHiddenTokensNotSeenByTreePatternParser(): void {
 		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX2Lexer, ParseTreeMatcherX2Parser);
 
-		let t: ParseTreePattern =  m.compile("<ID> = <expr> ;", ParseTreeMatcherX3Parser.RULE_s);
+		let t: ParseTreePattern = m.compile("<ID> = <expr> ;", ParseTreeMatcherX3Parser.RULE_s);
 		let results: string = t.patternTree.toStringTree(m.parser);
 		let expected: string = "(s <ID> = (expr <expr>) ;)";
 		assert.strictEqual(results, expected);
@@ -234,8 +231,8 @@ export class TestParseTreeMatcher {
 	private execParser<TParser extends Parser>(
 		startRule: (parser: TParser) => ParseTree,
 		input: string,
-		lexerCtor: {new(stream: CharStream): Lexer},
-		parserCtor: {new(stream: TokenStream): TParser}): ParseTree {
+		lexerCtor: { new(stream: CharStream): Lexer },
+		parserCtor: { new(stream: TokenStream): TParser }): ParseTree {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
@@ -247,8 +244,8 @@ export class TestParseTreeMatcher {
 		startRuleIndex: number,
 		input: string,
 		pattern: string,
-		lexerCtor: {new(stream: CharStream): Lexer},
-		parserCtor: {new(stream: TokenStream): TParser},
+		lexerCtor: { new(stream: CharStream): Lexer },
+		parserCtor: { new(stream: TokenStream): TParser },
 		invertMatch: boolean = false): Promise<ParseTreeMatch> {
 
 		let result: ParseTree = this.execParser(startRule, input, lexerCtor, parserCtor);
@@ -261,13 +258,13 @@ export class TestParseTreeMatcher {
 		return match;
 	}
 
-	private async getPattern(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
+	private async getPattern(lexerCtor: { new(stream: CharStream): Lexer }, parserCtor: { new(stream: TokenStream): Parser }, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
 		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return parser.compileParseTreePattern(pattern, ruleIndex);
 	}
 
-	private getPatternMatcher(lexerCtor: {new(stream: CharStream): Lexer}, parserCtor: {new(stream: TokenStream): Parser}): ParseTreePatternMatcher {
+	private getPatternMatcher(lexerCtor: { new(stream: CharStream): Lexer }, parserCtor: { new(stream: TokenStream): Parser }): ParseTreePatternMatcher {
 		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return new ParseTreePatternMatcher(lexer, parser);

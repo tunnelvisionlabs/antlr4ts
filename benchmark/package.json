@@ -10,7 +10,7 @@
     "antlr-benchmark-std-atn": "antlr4ts -visitor -Xforce-atn Java.g4 -o gen/std-atn",
     "antlr-benchmark-lr": "antlr4ts -visitor JavaLR.g4 -o gen/lr",
     "antlr-benchmark-lr-atn": "antlr4ts -visitor -Xforce-atn JavaLR.g4 -o gen/lr-atn",
-    "tsc": "tsc -p .",
+    "tsc": "tsc --build --verbose .",
     "benchmark": "node dist/TestPerformance.js",
     "benchmark-lexer": "node dist/TimeLexerSpeed.js",
     "profile": "node --prof dist/TestPerformance.js",
@@ -34,7 +34,8 @@
     "@types/source-map-support": "^0.5.1",
     "antlr4ts-cli": "0.5.0-dev",
     "npm-run-all": "^4.1.5",
-    "typescript": "^3.8.3"
+    "tslint": "^6.1.1",
+    "typescript": "3.7.5"
   },
   "dependencies": {
     "antlr4ts": "0.5.0-dev",

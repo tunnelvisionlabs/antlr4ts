@@ -1,18 +1,17 @@
 // Generated from XPathLexer.g4 by ANTLR 4.7.3-SNAPSHOT
 
 
-import { ATN } from "../..";
-import { ATNDeserializer } from "../..";
+import { ATN } from "../../atn";
+import { ATNDeserializer } from "../../atn";
 import { CharStream } from "../..";
 import { Lexer } from "../..";
-import { LexerATNSimulator } from "../..";
+import { LexerATNSimulator } from "../../atn";
 import { NotNull } from "../..";
 import { Override } from "../..";
 import { RuleContext } from "../..";
 import { Vocabulary } from "../..";
 import { VocabularyImpl } from "../..";
-
-import * as Utils from "../..";
+import { join, toCharArray } from "../../misc";
 
 
 export class XPathLexer extends Lexer {
@@ -40,10 +39,10 @@ export class XPathLexer extends Lexer {
 		"STRING",
 	];
 
-	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
+	private static readonly _LITERAL_NAMES: (string|undefined)[] = [
 		undefined, undefined, undefined, "'//'", "'/'", "'*'", "'!'",
 	];
-	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
+	private static readonly _SYMBOLIC_NAMES: (string|undefined)[] = [
 		undefined, "TOKEN_REF", "RULE_REF", "ANYWHERE", "ROOT", "WILDCARD", "BANG", 
 		"ID", "STRING",
 	];
@@ -484,7 +483,7 @@ export class XPathLexer extends Lexer {
 		"\x02\x02\x02-.\x03\x02\x02\x02-+\x03\x02\x02\x02.0\x03\x02\x02\x02/-\x03" +
 		"\x02\x02\x0201\x07)\x02\x021\x12\x03\x02\x02\x02\x05\x02 -\x03\x03\x06" +
 		"\x02";
-	public static readonly _serializedATN: string = Utils.join(
+	public static readonly _serializedATN: string = join(
 		[
 			XPathLexer._serializedATNSegment0,
 			XPathLexer._serializedATNSegment1,
@@ -494,7 +493,7 @@ export class XPathLexer extends Lexer {
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!XPathLexer.__ATN) {
-			XPathLexer.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(XPathLexer._serializedATN));
+			XPathLexer.__ATN = new ATNDeserializer().deserialize(toCharArray(XPathLexer._serializedATN));
 		}
 
 		return XPathLexer.__ATN;

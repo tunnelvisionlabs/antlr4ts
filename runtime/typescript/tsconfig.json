@@ -10,6 +10,7 @@
     "test/runtime"
   ],
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "sourceMap": true,
     "inlineSources": true,
@@ -26,6 +27,7 @@
     "preserveConstEnums": true,
     "types": [
       "node"
-    ]
+    ],
+    "rootDir": "src"
   }
 }

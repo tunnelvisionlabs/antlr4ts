@@ -5,16 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:38.8508887-07:00
 
-import { CharStream } from "../../src/CharStream";
-import { CharStreams } from "../../src/CharStreams";
-import { CommonTokenStream } from "../../src/CommonTokenStream";
-import { Lexer } from "../../src/Lexer";
-import { Parser } from "../../src/Parser";
-import { ParseTree } from "../../src/tree/ParseTree";
-import { RuleContext } from "../../src/RuleContext";
-import { TerminalNode } from "../../src/tree";
-import { TokenStream } from "../../src/TokenStream";
-import { XPath } from "../../src/tree/xpath/XPath";
+import { CharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
+import { Lexer } from "antlr4ts";
+import { Parser } from "antlr4ts";
+import { RuleContext } from "antlr4ts";
+import { TokenStream } from "antlr4ts";
+
+import { ParseTree } from "antlr4ts/dist/tree";
+import { TerminalNode } from "antlr4ts/dist/tree";
+import { XPath } from "antlr4ts/dist/tree";
 
 import { TestXPathLexer } from "./gen/xpath/TestXPathLexer";
 import { TestXPathParser } from "./gen/xpath/TestXPathParser";
@@ -129,8 +130,8 @@ export class TestXPath {
 	protected testError<TParser extends Parser>(
 		input: string, path: string, expected: RegExp,
 		startRule: (parser: TParser) => ParseTree,
-		lexerCtor: {new(stream: CharStream): Lexer},
-		parserCtor: {new(stream: TokenStream): TParser}): void {
+		lexerCtor: { new(stream: CharStream): Lexer },
+		parserCtor: { new(stream: TokenStream): TParser }): void {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
@@ -142,15 +143,15 @@ export class TestXPath {
 	private getNodeStrings<TParser extends Parser>(
 		input: string, xpath: string,
 		startRule: (parser: TParser) => ParseTree,
-		lexerCtor: {new(stream: CharStream): Lexer},
-		parserCtor: {new(stream: TokenStream): TParser}): string[] {
+		lexerCtor: { new(stream: CharStream): Lexer },
+		parserCtor: { new(stream: TokenStream): TParser }): string[] {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
 		let tree: ParseTree = startRule(parser);
 
 		let nodes: string[] = [];
-		for (let t of XPath.findAll(tree, xpath, parser) ) {
+		for (let t of XPath.findAll(tree, xpath, parser)) {
 			if (t instanceof RuleContext) {
 				nodes.push(parser.ruleNames[t.ruleIndex]);
 			} else {

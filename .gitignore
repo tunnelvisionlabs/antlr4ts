@@ -62,3 +62,5 @@ bin/
 *.tgz
 
 **/dist
+
+tsconfig.tsbuildinfo

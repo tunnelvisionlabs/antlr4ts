@@ -5,7 +5,6 @@
 
 export * from "./XPath";
 export * from "./XPathElement";
-export * from "./XPathLexer";
 export * from "./XPathLexerErrorListener";
 export * from "./XPathRuleAnywhereElement";
 export * from "./XPathRuleElement";

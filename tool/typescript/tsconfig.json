@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "outDir": "target",
     "sourceMap": true,
     "module": "commonjs",

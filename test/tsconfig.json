@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "sourceMap": true,
     "module": "commonjs",
@@ -13,16 +14,23 @@
     "experimentalDecorators": true,
     "declaration": true,
     "preserveConstEnums": true,
+    "rootDir": ".",
     "types": [
       "node",
       "mocha"
     ]
   },
+  "include": [
+    "**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist/**",
-    "target",
-    "tool",
-    "test/runtime"
+    "runtime"
+  ],
+  "references": [
+    {
+      "path": "../runtime/typescript"
+    }
   ]
 }
