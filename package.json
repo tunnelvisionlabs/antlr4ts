@@ -7,18 +7,18 @@
   "scripts": {
     "prepare": "lerna bootstrap && npm run build",
     "unlink": "npm uninstall -g antlr4ts antlr4ts-cli",
-    "build": "run-s build-tool build-runtime build-benchmark build-test",
-    "build-tool": "echo tool/ build on install",
-    "build-runtime": "cd runtime && npm build",
-    "build-benchmark": "cd benchmark && npm build",
-    "build-test": "cd test && npm build",
+    "build": "run-s build-tool build-runtime build-test",
+    "build-tool": "cd tool/typescript && npm run build",
+    "build-runtime": "cd runtime/typescript && npm run build",
+    "build-benchmark": "cd benchmark && npm run build",
+    "build-test": "cd test && npm run build",
     "build-rts": "cd test/runtime && tsc",
     "reinstall": "npm run unlink && git clean -idx && npm install",
     "tslint": "npm run tslint-runtime && npm run tslint-tests",
     "tslint-runtime": "tslint -p ./tsconfig.json",
     "tslint-tests": "tslint -p ./test/runtime/tsconfig.json",
-    "tsc": "echo tsc",
-    "tsc-watch": "tsc -w -p .",
+    "tsc": "tsc --build --verbose",
+    "tsc-watch": "tsc --build --watch",
     "test": "mocha",
     "cover": "nyc --reporter=none mocha --timeout=10000",
     "postcover": "nyc report --reporter=html",
@@ -54,6 +54,6 @@
     "source-map-support": "^0.5.16"
   },
   "dependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "^3.1.6"
   }
 }

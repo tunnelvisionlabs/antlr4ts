@@ -3,9 +3,9 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { Token } from "../../src/Token";
-import { Vocabulary } from "../../src/Vocabulary";
-import { VocabularyImpl } from "../../src/VocabularyImpl";
+import { Token } from "antlr4ts";
+import { Vocabulary } from "antlr4ts";
+import { VocabularyImpl } from "antlr4ts";
 
 import * as assert from "assert";
 import { suite, test as Test, skip as Ignore } from "mocha-typescript";

@@ -5,10 +5,10 @@
 
 import * as assert from "assert";
 import { test, suite } from "mocha-typescript";
-import { CharStreams } from "../../src/CharStreams";
-import { CodePointCharStream } from "../../src/CodePointCharStream";
-import { Interval } from "../../src/misc/Interval";
-import { IntStream } from "../../src/IntStream";
+import { CharStreams } from "antlr4ts";
+import { CodePointCharStream } from "antlr4ts";
+import { Interval } from "antlr4ts/misc";
+import { IntStream } from "antlr4ts";
 
 @suite
 export class TestCodePointCharStream {

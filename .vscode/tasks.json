@@ -1,18 +1,27 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "typescript",
-			"tsconfig": "benchmark/tsconfig.json",
-			"option": "watch",
-			"problemMatcher": [
-				"$tsc-watch"
-			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"label": "tsc: watch - benchmark/tsconfig.json"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "tsc",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "label": "npm: tsc",
+      "detail": "tsc --build --verbose"
+    },
+    {
+      "type": "npm",
+      "script": "tsc-watch",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "label": "npm: tsc-watch",
+      "detail": "tsc --build --watch",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }

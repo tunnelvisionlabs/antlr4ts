@@ -441,7 +441,13 @@ export class TestPerformance {
 
 		let listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
 		let entryPoint: string = "compilationUnit";
-		let factory: ParserFactory = this.getParserFactory(lexerCtor, parserCtor, EmptyListener, JavaLRParser.prototype.compilationUnit.name, (parser) => parser.compilationUnit());
+		let factory: ParserFactory = this.getParserFactory(
+			lexerCtor,
+			parserCtor,
+			EmptyListener,
+			JavaLRParser.prototype.compilationUnit.name,
+			(parser: any) => parser.compilationUnit()
+		);
 
 		if (TestPerformance.TOP_PACKAGE.length > 0) {
 			jdkSourceRoot = jdkSourceRoot + "/" + TestPerformance.TOP_PACKAGE.replace(/\./g, "/");
@@ -1259,7 +1265,7 @@ export class TestPerformance {
 							parser = new parserCtor(tokens);
 						}
 
-						let atn: ATN = (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser).atn;
+						let atn: ATN = (TestPerformance.FILE_GRANULARITY || previousParser == null ? (parser as any) : (previousParser as any)).atn;
 						if (!TestPerformance.REUSE_PARSER_DFA || (!TestPerformance.FILE_GRANULARITY && previousParser == null)) {
 							atn = TestPerformance.sharedParserATNs[thread]!;
 						}

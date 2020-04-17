@@ -5,8 +5,8 @@
 
 import * as assert from "assert";
 import { test, suite } from "mocha-typescript";
-import { CharStream } from "../../src/CharStream";
-import { CharStreams } from "../../src/CharStreams";
+import { CharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
 
 @suite
 export class TestCharStreams {

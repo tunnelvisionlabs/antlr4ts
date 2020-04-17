@@ -20,27 +20,24 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>";
-import { ATNDeserializer } from "<basePath()>";
+import { ATN } from "<basePath()>/atn";
+import { ATNDeserializer } from "<basePath()>/atn";
 import { FailedPredicateException } from "<basePath()>";
 import { NotNull } from "<basePath()>";
 import { NoViableAltException } from "<basePath()>";
 import { Override } from "<basePath()>";
 import { Parser } from "<basePath()>";
 import { ParserRuleContext } from "<basePath()>";
-import { ParserATNSimulator } from "<basePath()>";
-import { ParseTreeListener } from "<basePath()>";
-import { ParseTreeVisitor } from "<basePath()>";
+import { ParserATNSimulator } from "<basePath()>/atn";
 import { RecognitionException } from "<basePath()>";
 import { RuleContext } from "<basePath()>";
 //import { RuleVersion } from "<basePath()>";
-import { TerminalNode } from "<basePath()>";
+import { TerminalNode } from "<basePath()>/dist/tree/TerminalNode";
 import { Token } from "<basePath()>";
 import { TokenStream } from "<basePath()>";
 import { Vocabulary } from "<basePath()>";
 import { VocabularyImpl } from "<basePath()>";
-
-import * as Utils from "<basePath()>";
+import { join, toCharArray } from "<basePath()>/misc";
 
 <if(file.genListener)>
 import { <file.grammarName>Listener } from "./<file.grammarName>Listener";
@@ -196,10 +193,10 @@ case <f.ruleIndex>:
 >>
 
 vocabulary(className, literalNames, symbolicNames) ::= <<
-private static readonly _LITERAL_NAMES: Array\<string | undefined> = [
+private static readonly _LITERAL_NAMES: (string|undefined)[] = [
 	<literalNames:{t | <t>,}; null="undefined,", separator=" ", wrap, anchor>
 ];
-private static readonly _SYMBOLIC_NAMES: Array\<string | undefined> = [
+private static readonly _SYMBOLIC_NAMES: (string|undefined)[] = [
 	<symbolicNames:{t | <t>,}; null="undefined,", separator=" ", wrap, anchor>
 ];
 public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._LITERAL_NAMES, <className>._SYMBOLIC_NAMES, []);
@@ -868,18 +865,17 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>";
-import { ATNDeserializer } from "<basePath()>";
+import { ATN } from "<basePath()>/atn";
+import { ATNDeserializer } from "<basePath()>/atn";
 import { CharStream } from "<basePath()>";
 import { Lexer } from "<basePath()>";
-import { LexerATNSimulator } from "<basePath()>";
+import { LexerATNSimulator } from "<basePath()>/atn";
 import { NotNull } from "<basePath()>";
 import { Override } from "<basePath()>";
 import { RuleContext } from "<basePath()>";
 import { Vocabulary } from "<basePath()>";
 import { VocabularyImpl } from "<basePath()>";
-
-import * as Utils from "<basePath()>";
+import { join, toCharArray } from "<basePath()>/misc";
 
 <namedActions.beforeLexer>
 
@@ -944,7 +940,7 @@ SerializedATN(model, className={<if(isLexer)><lexer.name><else><parser.name><end
 private static readonly _serializedATNSegments: number = <length(model.segments)>;
 <model.segments:{segment|private static readonly _serializedATNSegment<i0>: string =
 	"<segment; wrap={" +<\n><\t>"}>";}; separator="\n">
-public static readonly _serializedATN: string = Utils.join(
+public static readonly _serializedATN: string = join(
 	[
 		<model.segments:{segment | <className>._serializedATNSegment<i0>,}; separator="\n">
 	],
@@ -958,7 +954,7 @@ public static readonly _serializedATN: string =
 public static __ATN: ATN;
 public static get _ATN(): ATN {
 	if (!<className>.__ATN) {
-		<className>.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(<className>._serializedATN));
+		<className>.__ATN = new ATNDeserializer().deserialize(toCharArray(<className>._serializedATN));
 	}
 
 	return <className>.__ATN;

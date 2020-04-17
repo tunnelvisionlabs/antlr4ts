@@ -4,7 +4,7 @@
  */
 
 import * as assert from "assert";
-import { BitSet } from "antlr4ts";
+import { BitSet } from "antlr4ts/dist/misc/BitSet";
 
 describe("BitSet Tests", () => {
 	const empty = new BitSet();
