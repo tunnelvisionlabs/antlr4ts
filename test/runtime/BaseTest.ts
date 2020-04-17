@@ -14,10 +14,7 @@ import { DiagnosticErrorListener } from "antlr4ts";
 import { Lexer } from "antlr4ts";
 import { Parser } from "antlr4ts";
 import { ParserRuleContext } from "antlr4ts";
-import { ParseTree } from "antlr4ts";
-import { ParseTreeListener } from "antlr4ts";
-import { ParseTreeWalker } from "antlr4ts";
-import { RuleNode } from "antlr4ts";
+import { ParseTree, ParseTreeListener, ParseTreeWalker, RuleNode } from "antlr4ts/dist/tree";
 
 function trySetConsole(valueFactory: () => Console): boolean {
 	try {

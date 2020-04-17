@@ -15,6 +15,7 @@
   },
   "scripts": {
     "prepare": "mvn verify -Dmaven.test.skip=true",
+    "antlr": "mvn test",
     "build": "echo already built",
     "xxx": "mvn verify"
   },
