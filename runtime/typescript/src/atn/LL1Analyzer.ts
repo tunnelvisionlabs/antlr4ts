@@ -44,13 +44,13 @@ export class LL1Analyzer {
 	 * @param s the ATN state
 	 * @returns the expected symbols for each outgoing transition of `s`.
 	 */
-	public getDecisionLookahead(s: ATNState | undefined): Array<IntervalSet | undefined> | undefined {
+	public getDecisionLookahead(s: ATNState | undefined): (IntervalSet | undefined)[] | undefined {
 //		System.out.println("LOOK("+s.stateNumber+")");
 		if (s == null) {
 			return undefined;
 		}
 
-		let look: Array<IntervalSet | undefined> = new Array<IntervalSet>(s.numberOfTransitions);
+		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
 		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;

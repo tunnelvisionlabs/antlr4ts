@@ -27,11 +27,11 @@ export class VocabularyImpl implements Vocabulary {
 	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
 	@NotNull
-	private readonly literalNames: Array<string | undefined>;
+	private readonly literalNames: (string | undefined)[];
 	@NotNull
-	private readonly symbolicNames: Array<string | undefined>;
+	private readonly symbolicNames: (string | undefined)[];
 	@NotNull
-	private readonly displayNames: Array<string | undefined>;
+	private readonly displayNames: (string | undefined)[];
 
 	private _maxTokenType: number;
 
@@ -52,7 +52,7 @@ export class VocabularyImpl implements Vocabulary {
 	 * @see #getSymbolicName(int)
 	 * @see #getDisplayName(int)
 	 */
-	constructor(literalNames: Array<string | undefined>, symbolicNames: Array<string | undefined>, displayNames: Array<string | undefined>) {
+	constructor(literalNames: (string | undefined)[], symbolicNames: (string | undefined)[], displayNames: (string | undefined)[]) {
 		this.literalNames = literalNames;
 		this.symbolicNames = symbolicNames;
 		this.displayNames = displayNames;
