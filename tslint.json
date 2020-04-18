@@ -17,9 +17,11 @@
     "prefer-const": false,
     "unified-signatures": false,
     "variable-name": false,
-
     // Enabled with specific or customized configuration
-    "indent": [true, "tabs"],
+    "indent": [
+      true,
+      "tabs"
+    ],
     "prefer-while": true,
     "no-for-in-array": true,
     "return-undefined": true,
@@ -31,32 +33,29 @@
     "no-floating-promises": true,
     "no-return-await": true,
     "deprecation": true,
-
     // Can't be reasonably enabled because the imports need to be per-file within this repository
     "ordered-imports": false
   },
   "linterOptions": {
     "exclude": [
       // Disabled due to uncontrollable space indentation
-      "test/runtime/gen/TestParseTrees/testTokenAndRuleContextString/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalLexer/testIndent/L.ts",
-      "test/runtime/gen/TestSemPredEvalLexer/testLexerInputPositionSensitivePredicates/L.ts",
-      "test/runtime/gen/TestSemPredEvalLexer/testPredicatedKeywords/L.ts",
-
+      "test/runtime/cross-target/TestParseTrees/testTokenAndRuleContextString/TParser.ts",
+      "test/runtime/cross-target/TestSemPredEvalLexer/testIndent/L.ts",
+      "test/runtime/cross-target/TestSemPredEvalLexer/testLexerInputPositionSensitivePredicates/L.ts",
+      "test/runtime/cross-target/TestSemPredEvalLexer/testPredicatedKeywords/L.ts",
       // Disabled due to uncontrollable whitespace within action expressions
-      "test/runtime/gen/TestFullContextParsing/testLoopsSimulateTailRecursion/TParser.ts",
-      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_1/TParser.ts",
-      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_2/TParser.ts",
-      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_3/TParser.ts",
-      "test/runtime/gen/TestLeftRecursion/testReturnValueAndActionsAndLabels_4/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_1/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_2/TParser.ts",
-
+      "test/runtime/cross-target/TestFullContextParsing/testLoopsSimulateTailRecursion/TParser.ts",
+      "test/runtime/cross-target/TestLeftRecursion/testReturnValueAndActionsAndLabels_1/TParser.ts",
+      "test/runtime/cross-target/TestLeftRecursion/testReturnValueAndActionsAndLabels_2/TParser.ts",
+      "test/runtime/cross-target/TestLeftRecursion/testReturnValueAndActionsAndLabels_3/TParser.ts",
+      "test/runtime/cross-target/TestLeftRecursion/testReturnValueAndActionsAndLabels_4/TParser.ts",
+      "test/runtime/cross-target/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_1/TParser.ts",
+      "test/runtime/cross-target/TestSemPredEvalParser/testPredTestedEvenWhenUnAmbig_2/TParser.ts",
       // Disabled due to uncontrollable rule names with underscores producing class names with underscores
-      "test/runtime/gen/TestCompositeParsers/testDelegatorRuleOverridesLookaheadInDelegate/MParser.ts",
-      "test/runtime/gen/TestParserExec/testPredictionIssue334/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_1/TParser.ts",
-      "test/runtime/gen/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_2/TParser.ts"
+      "test/runtime/cross-target/TestCompositeParsers/testDelegatorRuleOverridesLookaheadInDelegate/MParser.ts",
+      "test/runtime/cross-target/TestParserExec/testPredictionIssue334/TParser.ts",
+      "test/runtime/cross-target/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_1/TParser.ts",
+      "test/runtime/cross-target/TestSemPredEvalParser/testPredFromAltTestedInLoopBack_2/TParser.ts"
     ]
   }
 }
