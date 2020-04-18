@@ -754,6 +754,7 @@ CaptureNextTokenType(d) ::= "<d.varName> = this._input.LA(1);"
 
 StructDecl(struct,ctorAttrs,attrs,getters,dispatchMethods,interfaces,extensionMembers)
 	::= <<
+// tslint:disable-next-line: class-name
 export class <struct.name> extends <if(contextSuperClass)><contextSuperClass><else>ParserRuleContext<endif><if(interfaces)> implements <interfaces; separator=", "><endif> {
 	<attrs:{a | public <a>;}; separator="\n">
 	<getters:{g | <g>}; separator="\n">
