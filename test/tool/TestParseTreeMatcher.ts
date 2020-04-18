@@ -231,8 +231,8 @@ export class TestParseTreeMatcher {
 	private execParser<TParser extends Parser>(
 		startRule: (parser: TParser) => ParseTree,
 		input: string,
-		lexerCtor: { new(stream: CharStream): Lexer },
-		parserCtor: { new(stream: TokenStream): TParser }): ParseTree {
+		lexerCtor: new (stream: CharStream) => Lexer,
+		parserCtor: new (stream: TokenStream) => TParser): ParseTree {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
@@ -244,8 +244,8 @@ export class TestParseTreeMatcher {
 		startRuleIndex: number,
 		input: string,
 		pattern: string,
-		lexerCtor: { new(stream: CharStream): Lexer },
-		parserCtor: { new(stream: TokenStream): TParser },
+		lexerCtor: new (stream: CharStream) => Lexer,
+		parserCtor: new (stream: TokenStream) => TParser,
 		invertMatch: boolean = false): Promise<ParseTreeMatch> {
 
 		let result: ParseTree = this.execParser(startRule, input, lexerCtor, parserCtor);
@@ -258,13 +258,13 @@ export class TestParseTreeMatcher {
 		return match;
 	}
 
-	private async getPattern(lexerCtor: { new(stream: CharStream): Lexer }, parserCtor: { new(stream: TokenStream): Parser }, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
+	private async getPattern(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
 		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return parser.compileParseTreePattern(pattern, ruleIndex);
 	}
 
-	private getPatternMatcher(lexerCtor: { new(stream: CharStream): Lexer }, parserCtor: { new(stream: TokenStream): Parser }): ParseTreePatternMatcher {
+	private getPatternMatcher(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser): ParseTreePatternMatcher {
 		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return new ParseTreePatternMatcher(lexer, parser);

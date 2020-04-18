@@ -10,53 +10,53 @@ sourceMapSupport.install();
 
 import { ANTLRErrorListener } from "antlr4ts";
 import { ANTLRInputStream } from "antlr4ts";
-import { Array2DHashSet } from "antlr4ts";
-import { ATN } from "antlr4ts";
-import { ATNConfig } from "antlr4ts";
-import { ATNConfigSet } from "antlr4ts";
-import { ATNDeserializer } from "antlr4ts";
+import { Array2DHashSet } from "antlr4ts/dist/misc";
+import { ATN } from "antlr4ts/dist/atn";
+import { ATNConfig } from "antlr4ts/dist/atn";
+import { ATNConfigSet } from "antlr4ts/dist/atn";
+import { ATNDeserializer } from "antlr4ts/dist/atn";
 import { BailErrorStrategy } from "antlr4ts";
-import { BitSet } from "antlr4ts";
+import { BitSet } from "antlr4ts/dist/misc";
 import { CharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 import { CodePointBuffer } from "antlr4ts";
 import { CodePointCharStream } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { DefaultErrorStrategy } from "antlr4ts";
-import { DFA } from "antlr4ts";
-import { DFAState } from "antlr4ts";
+import { DFA } from "antlr4ts/dist/dfa";
+import { DFAState } from "antlr4ts/dist/dfa";
 import { DiagnosticErrorListener } from "antlr4ts";
-import { ErrorNode } from "antlr4ts";
-import { Interval } from "antlr4ts";
+import { ErrorNode } from "antlr4ts/dist/tree";
+import { Interval } from "antlr4ts/dist/misc";
 import { JavaUnicodeInputStream } from "./JavaUnicodeInputStream";
 import { Lexer } from "antlr4ts";
-import { LexerATNSimulator } from "antlr4ts";
-import { MurmurHash } from "antlr4ts";
+import { LexerATNSimulator } from "antlr4ts/dist/atn";
+import { MurmurHash } from "antlr4ts/dist/misc";
 import { NotNull } from "antlr4ts";
-import { ObjectEqualityComparator } from "antlr4ts";
+import { ObjectEqualityComparator } from "antlr4ts/dist/misc";
 import { Override } from "antlr4ts";
-import { ParseCancellationException } from "antlr4ts";
+import { ParseCancellationException } from "antlr4ts/dist/misc";
 import { Parser } from "antlr4ts";
-import { ParserATNSimulator } from "antlr4ts";
+import { ParserATNSimulator } from "antlr4ts/dist/atn";
 import { ParserErrorListener } from "antlr4ts";
 import { ParserInterpreter } from "antlr4ts";
 import { ParserRuleContext } from "antlr4ts";
-import { ParseTree } from "antlr4ts";
-import { ParseTreeListener } from "antlr4ts";
+import { ParseTree } from "antlr4ts/dist/tree";
+import { ParseTreeListener } from "antlr4ts/dist/tree";
 import { ParseTreeWalker } from "antlr4ts/dist/tree";
-import { PredictionContextCache } from "antlr4ts";
-import { PredictionMode } from "antlr4ts/atn";
+import { PredictionContextCache } from "antlr4ts/dist/atn";
+import { PredictionMode } from "antlr4ts/dist/atn";
 import { RecognitionException } from "antlr4ts";
 import { Recognizer } from "antlr4ts";
-import { SimulatorState } from "antlr4ts";
+import { SimulatorState } from "antlr4ts/dist/atn";
 import { Stopwatch } from "./Stopwatch";
-import { TerminalNode } from "antlr4ts";
+import { TerminalNode } from "antlr4ts/dist/tree";
 import { TimeSpan } from "./TimeSpan";
 import { Token } from "antlr4ts";
 import { TokenSource } from "antlr4ts";
 import { TokenStream } from "antlr4ts";
 
-import * as Utils from "antlr4ts";
+import * as Utils from "antlr4ts/dist/misc/Utils";
 
 import { JavaLexer as JavaLexer } from "./gen/std/JavaLexer";
 import { JavaLexer as JavaLexerAtn } from "./gen/std-atn/JavaLexer";
@@ -72,7 +72,11 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
 
-type AnyJavaParser = JavaParser | JavaParserAtn | JavaLRParser | JavaLRParserAtn | ParserInterpreter;
+interface IJavaParser extends Parser {
+	compilationUnit(): ParserRuleContext;
+}
+
+type AnyJavaParser = IJavaParser | ParserInterpreter;
 
 function assertTrue(value: boolean, message?: string) {
 	assert.strictEqual(value, true, message);
@@ -401,13 +405,13 @@ export class TestPerformance {
 	 */
 	public static readonly NUMBER_OF_THREADS: number = 1;
 
-	private static readonly sharedLexers: Array<Lexer | undefined> = new Array<Lexer>(TestPerformance.NUMBER_OF_THREADS);
-	private static readonly sharedLexerATNs: Array<ATN | undefined> = new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedLexers: (Lexer | undefined)[] = new Array<Lexer>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedLexerATNs: (ATN | undefined)[] = new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
 
-	private static readonly sharedParsers: Array<AnyJavaParser | undefined> = new Array<AnyJavaParser>(TestPerformance.NUMBER_OF_THREADS);
-	private static readonly sharedParserATNs: Array<ATN | undefined> = new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedParsers: (AnyJavaParser | undefined)[] = new Array<AnyJavaParser>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedParserATNs: (ATN | undefined)[] = new Array<ATN>(TestPerformance.NUMBER_OF_THREADS);
 
-	private static readonly sharedListeners: Array<ParseTreeListener | undefined> = new Array<ParseTreeListener>(TestPerformance.NUMBER_OF_THREADS);
+	private static readonly sharedListeners: (ParseTreeListener | undefined)[] = new Array<ParseTreeListener>(TestPerformance.NUMBER_OF_THREADS);
 
 	private static readonly totalTransitionsPerFile: Uint32Array[] = new Array<Uint32Array>(TestPerformance.PASSES);
 	private static readonly computedTransitionsPerFile: Uint32Array[] = new Array<Uint32Array>(TestPerformance.PASSES);
@@ -429,8 +433,8 @@ export class TestPerformance {
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 		jdkSourceRoot = jdkSourceRoot as string;
 
-		let lexerCtor: { new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn } = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
-		let parserCtor: { new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn } = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
+		let lexerCtor: new (input: CharStream) => JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
+		let parserCtor: new (input: TokenStream) => IJavaParser = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
 		if (TestPerformance.FORCE_ATN) {
 			lexerCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexerAtn : JavaLexerAtn;
 			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParserAtn : JavaParserAtn;
@@ -446,7 +450,7 @@ export class TestPerformance {
 			parserCtor,
 			EmptyListener,
 			JavaLRParser.prototype.compilationUnit.name,
-			(parser: any) => parser.compilationUnit()
+			(parser: IJavaParser) => parser.compilationUnit()
 		);
 
 		if (TestPerformance.TOP_PACKAGE.length > 0) {
@@ -834,7 +838,7 @@ export class TestPerformance {
 		let inputSize: number = 0;
 		let inputCount: number = 0;
 
-		let results: Array<FileParseResult | undefined> = [];
+		let results: (FileParseResult | undefined)[] = [];
 		// let executorService: ExecutorService;
 		// if (TestPerformance.FILE_GRANULARITY) {
 		// 	executorService = Executors.newFixedThreadPool(TestPerformance.FILE_GRANULARITY ? TestPerformance.NUMBER_OF_THREADS : 1, new NumberedThreadFactory());
@@ -1165,7 +1169,7 @@ export class TestPerformance {
 		}
 	}
 
-	protected getParserFactory(lexerCtor: { new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn }, parserCtor: { new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn }, listenerCtor: { new(): ParseTreeListener }, entryPointName: string, entryPoint: (parser: JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn) => ParserRuleContext): ParserFactory {
+	protected getParserFactory(lexerCtor: new (input: CharStream) => JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn, parserCtor: new (input: TokenStream) => IJavaParser, listenerCtor: new () => ParseTreeListener, entryPointName: string, entryPoint: (parser: IJavaParser) => ParserRuleContext): ParserFactory {
 		// try {
 		//     let loader: ClassLoader =  new URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL() }, ClassLoader.getSystemClassLoader());
 		//     lexerClass: Class<? extends Lexer> =  loader.loadClass(lexerName).asSubclass(Lexer.class);
@@ -1265,7 +1269,7 @@ export class TestPerformance {
 							parser = new parserCtor(tokens);
 						}
 
-						let atn: ATN = (TestPerformance.FILE_GRANULARITY || previousParser == null ? (parser as any) : (previousParser as any)).atn;
+						let atn: ATN = (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser).atn;
 						if (!TestPerformance.REUSE_PARSER_DFA || (!TestPerformance.FILE_GRANULARITY && previousParser == null)) {
 							atn = TestPerformance.sharedParserATNs[thread]!;
 						}

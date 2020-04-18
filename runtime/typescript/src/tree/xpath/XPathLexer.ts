@@ -35,15 +35,15 @@ export class XPathLexer extends Lexer {
 	];
 
 	public static readonly ruleNames: string[] = [
-		"ANYWHERE", "ROOT", "WILDCARD", "BANG", "ID", "NameChar", "NameStartChar", 
+		"ANYWHERE", "ROOT", "WILDCARD", "BANG", "ID", "NameChar", "NameStartChar",
 		"STRING",
 	];
 
-	private static readonly _LITERAL_NAMES: (string|undefined)[] = [
+	private static readonly _LITERAL_NAMES: (string | undefined)[] = [
 		undefined, undefined, undefined, "'//'", "'/'", "'*'", "'!'",
 	];
-	private static readonly _SYMBOLIC_NAMES: (string|undefined)[] = [
-		undefined, "TOKEN_REF", "RULE_REF", "ANYWHERE", "ROOT", "WILDCARD", "BANG", 
+	private static readonly _SYMBOLIC_NAMES: (string | undefined)[] = [
+		undefined, "TOKEN_REF", "RULE_REF", "ANYWHERE", "ROOT", "WILDCARD", "BANG",
 		"ID", "STRING",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(XPathLexer._LITERAL_NAMES, XPathLexer._SYMBOLIC_NAMES, []);
@@ -79,23 +79,23 @@ export class XPathLexer extends Lexer {
 	// @Override
 	public action(_localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
 		switch (ruleIndex) {
-		case 4:
-			this.ID_action(_localctx, actionIndex);
-			break;
+			case 4:
+				this.ID_action(_localctx, actionIndex);
+				break;
 		}
 	}
 	private ID_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
-		case 0:
+			case 0:
 
-			let text = this.text;
-			if (text.charAt(0) === text.charAt(0).toUpperCase()) {
-				this.type = XPathLexer.TOKEN_REF;
-			} else {
-				this.type = XPathLexer.RULE_REF;
-			}
+				let text = this.text;
+				if (text.charAt(0) === text.charAt(0).toUpperCase()) {
+					this.type = XPathLexer.TOKEN_REF;
+				} else {
+					this.type = XPathLexer.RULE_REF;
+				}
 
-			break;
+				break;
 		}
 	}
 

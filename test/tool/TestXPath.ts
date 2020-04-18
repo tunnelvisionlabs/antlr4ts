@@ -130,7 +130,9 @@ export class TestXPath {
 	protected testError<TParser extends Parser>(
 		input: string, path: string, expected: RegExp,
 		startRule: (parser: TParser) => ParseTree,
+		// tslint:disable-next-line: callable-types
 		lexerCtor: { new(stream: CharStream): Lexer },
+		// tslint:disable-next-line: callable-types
 		parserCtor: { new(stream: TokenStream): TParser }): void {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
@@ -143,8 +145,9 @@ export class TestXPath {
 	private getNodeStrings<TParser extends Parser>(
 		input: string, xpath: string,
 		startRule: (parser: TParser) => ParseTree,
+		// tslint:disable-next-line: callable-types
 		lexerCtor: { new(stream: CharStream): Lexer },
-		parserCtor: { new(stream: TokenStream): TParser }): string[] {
+		parserCtor: new (stream: TokenStream) => TParser): string[] {
 
 		let lexer = new lexerCtor(CharStreams.fromString(input));
 		let parser = new parserCtor(new CommonTokenStream(lexer));
