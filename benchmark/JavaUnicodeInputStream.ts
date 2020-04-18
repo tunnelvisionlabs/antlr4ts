@@ -6,8 +6,8 @@
 // ConvertTo-TS run at 2016-10-04T11:27:01.9391717-07:00
 
 import { CharStream } from "antlr4ts";
-import { IntegerList } from "antlr4ts";
-import { Interval } from "antlr4ts";
+import { IntegerList } from "antlr4ts/dist/misc";
+import { Interval } from "antlr4ts/dist/misc";
 import { NotNull } from "antlr4ts";
 import { Override } from "antlr4ts";
 

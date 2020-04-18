@@ -29,6 +29,7 @@ import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 @suite
 export class TestTokenStreamRewriter {
 
+	// tslint:disable-next-line: callable-types
 	private createLexerInterpreter(input: string, lexerCtor: { new(stream: CharStream): Lexer }): LexerInterpreter {
 		let stream = CharStreams.fromString(input);
 		let lexer = new lexerCtor(stream);
