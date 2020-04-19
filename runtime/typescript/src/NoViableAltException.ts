@@ -6,14 +6,13 @@
 // ConvertTo-TS run at 2016-10-04T11:26:52.3255548-07:00
 
 import { ATNConfigSet } from "./atn/ATNConfigSet";
+import { IntStream } from "./IntStream";
 import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
-import { IntStream } from "./IntStream";
-import { NotNull } from "./Decorators";
 
 /** Indicates that the parser could not decide which of two or more paths
  *  to take based upon the remaining input. It tracks the starting token
@@ -31,7 +30,7 @@ export class NoViableAltException extends RecognitionException {
 	 *  time the error occurred, of course the stream needs to keep a
 	 *  buffer all of the tokens but later we might not have access to those.)
 	 */
-	@NotNull
+
 	private _startToken: Token;
 
 	constructor(/*@NotNull*/ recognizer: Parser);

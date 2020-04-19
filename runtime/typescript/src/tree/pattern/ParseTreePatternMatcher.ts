@@ -12,14 +12,13 @@ import { CommonTokenStream } from "../../CommonTokenStream";
 import { Lexer } from "../../Lexer";
 import { ListTokenSource } from "../../ListTokenSource";
 import { MultiMap } from "../../misc/MultiMap";
-import { NotNull } from "../../Decorators";
 import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { Parser } from "../../Parser";
-import { ParserInterpreter } from "../../ParserInterpreter";
-import { ParserRuleContext } from "../../ParserRuleContext";
 import { ParseTree } from "../ParseTree";
 import { ParseTreeMatch } from "./ParseTreeMatch";
 import { ParseTreePattern } from "./ParseTreePattern";
+import { Parser } from "../../Parser";
+import { ParserInterpreter } from "../../ParserInterpreter";
+import { ParserRuleContext } from "../../ParserRuleContext";
 import { RecognitionException } from "../../RecognitionException";
 import { RuleNode } from "../RuleNode";
 import { RuleTagToken } from "./RuleTagToken";
@@ -180,8 +179,8 @@ export class ParseTreePatternMatcher {
 	public match(tree: ParseTree, pattern: ParseTreePattern): ParseTreeMatch;
 
 	// Implementation of match
-	@NotNull
-	public match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex = 0): ParseTreeMatch {
+
+	public match(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex = 0): ParseTreeMatch {
 		if (typeof pattern === "string") {
 			const p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
@@ -213,7 +212,7 @@ export class ParseTreePatternMatcher {
 		try {
 			parserInterp.errorHandler = new BailErrorStrategy();
 			tree = parserInterp.parse(patternRuleIndex);
-//			System.out.println("pattern tree = "+tree.toStringTree(parserInterp));
+			//			System.out.println("pattern tree = "+tree.toStringTree(parserInterp));
 		} catch (e) {
 			if (e instanceof ParseCancellationException) {
 				throw e.getCause();
@@ -238,7 +237,7 @@ export class ParseTreePatternMatcher {
 	 * Used to convert the tree pattern string into a series of tokens. The
 	 * input stream is reset.
 	 */
-	@NotNull
+
 	get lexer(): Lexer {
 		return this._lexer;
 	}
@@ -247,7 +246,7 @@ export class ParseTreePatternMatcher {
 	 * Used to collect to the grammar file name, token names, rule names for
 	 * used to parse the pattern into a parse tree.
 	 */
-	@NotNull
+
 	get parser(): Parser {
 		return this._parser;
 	}
@@ -264,9 +263,9 @@ export class ParseTreePatternMatcher {
 	 * algorithm used by the implementation, and may be overridden.
 	 */
 	protected matchImpl(
-		@NotNull tree: ParseTree,
-		@NotNull patternTree: ParseTree,
-		@NotNull labels: MultiMap<string, ParseTree>): ParseTree | undefined {
+		tree: ParseTree,
+		patternTree: ParseTree,
+		labels: MultiMap<string, ParseTree>): ParseTree | undefined {
 		if (!tree) {
 			throw new TypeError("tree cannot be null");
 		}
@@ -362,7 +361,7 @@ export class ParseTreePatternMatcher {
 			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
 				const c = t.getChild(0) as TerminalNode;
 				if (c.symbol instanceof RuleTagToken) {
-//					System.out.println("rule tag subtree "+t.toStringTree(parser));
+					//					System.out.println("rule tag subtree "+t.toStringTree(parser));
 					return c.symbol;
 				}
 			}
@@ -413,7 +412,7 @@ export class ParseTreePatternMatcher {
 			}
 		}
 
-//		System.out.println("tokens="+tokens);
+		//		System.out.println("tokens="+tokens);
 		return tokens;
 	}
 
@@ -446,9 +445,9 @@ export class ParseTreePatternMatcher {
 			}
 		}
 
-//		System.out.println("");
-//		System.out.println(starts);
-//		System.out.println(stops);
+		//		System.out.println("");
+		//		System.out.println(starts);
+		//		System.out.println(stops);
 		if (starts.length > stops.length) {
 			throw new Error("unterminated tag in pattern: " + pattern);
 		}

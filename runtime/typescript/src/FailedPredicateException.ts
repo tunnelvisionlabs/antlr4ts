@@ -5,14 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.4099946-07:00
 
-import { AbstractPredicateTransition } from "./atn/AbstractPredicateTransition";
 import { ATN } from "./atn/ATN";
 import { ATNState } from "./atn/ATNState";
+import { AbstractPredicateTransition } from "./atn/AbstractPredicateTransition";
 import { Parser } from "./Parser";
+import { PredicateTransition } from "./atn/PredicateTransition";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
-import { NotNull } from "./Decorators";
-import { PredicateTransition } from "./atn/PredicateTransition";
 
 /** A semantic predicate failed during validation.  Validation of predicates
  *  occurs when normally parsing the alternative just like matching a token.
@@ -26,7 +25,7 @@ export class FailedPredicateException extends RecognitionException {
 	private _predicateIndex: number;
 	private _predicate?: string;
 
-	constructor(@NotNull recognizer: Parser, predicate?: string, message?: string) {
+	constructor(recognizer: Parser, predicate?: string, message?: string) {
 		super(
 			recognizer,
 			recognizer.inputStream,
@@ -60,7 +59,7 @@ export class FailedPredicateException extends RecognitionException {
 		return this._predicate;
 	}
 
-	@NotNull
+
 	private static formatMessage(predicate: string | undefined, message: string | undefined): string {
 		if (message) {
 			return message;

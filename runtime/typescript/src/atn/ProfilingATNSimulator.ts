@@ -5,17 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.4188352-07:00
 
-import { AmbiguityInfo } from "./AmbiguityInfo";
 import { ATN } from "./ATN";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { ATNSimulator } from "./ATNSimulator";
+import { AmbiguityInfo } from "./AmbiguityInfo";
 import { BitSet } from "../misc/BitSet";
 import { ContextSensitivityInfo } from "./ContextSensitivityInfo";
-import { DecisionInfo } from "./DecisionInfo";
 import { DFA } from "../dfa/DFA";
 import { DFAState } from "../dfa/DFAState";
+import { DecisionInfo } from "./DecisionInfo";
 import { ErrorInfo } from "./ErrorInfo";
-import { NotNull, Override } from "../Decorators";
 import { LookaheadEventInfo } from "./LookaheadEventInfo";
 import { Parser } from "../Parser";
 import { ParserATNSimulator } from "./ParserATNSimulator";
@@ -67,9 +66,9 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined): number;
 	public adaptivePredict(/*@NotNull*/ input: TokenStream, decision: number, outerContext: ParserRuleContext | undefined, useContext: boolean): number;
-	@Override
+	// @Override
 	public adaptivePredict(
-		@NotNull input: TokenStream,
+		input: TokenStream,
 		decision: number,
 		outerContext: ParserRuleContext | undefined,
 		useContext?: boolean): number {
@@ -129,21 +128,21 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		}
 	}
 
-	@Override
+	// @Override
 	protected getStartState(dfa: DFA, input: TokenStream, outerContext: ParserRuleContext, useContext: boolean): SimulatorState | undefined {
 		const state: SimulatorState | undefined = super.getStartState(dfa, input, outerContext, useContext);
 		this.currentState = state;
 		return state;
 	}
 
-	@Override
+	// @Override
 	protected computeStartState(dfa: DFA, globalContext: ParserRuleContext, useContext: boolean): SimulatorState {
 		const state: SimulatorState = super.computeStartState(dfa, globalContext, useContext);
 		this.currentState = state;
 		return state;
 	}
 
-	@Override
+	// @Override
 	protected computeReachSet(dfa: DFA, previous: SimulatorState, t: number, contextCache: PredictionContextCache): SimulatorState | undefined {
 		if (this._input === undefined) {
 			throw new Error("Invalid state");
@@ -161,7 +160,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		return reachState;
 	}
 
-	@Override
+	// @Override
 	protected getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
 		if (this.currentState === undefined || this._input === undefined) {
 			throw new Error("Invalid state");
@@ -199,7 +198,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		return existingTargetState;
 	}
 
-	@Override
+	// @Override
 	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
 		const targetState: [DFAState, ParserRuleContext | undefined] = super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 
@@ -213,7 +212,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		return targetState;
 	}
 
-	@Override
+	// @Override
 	protected evalSemanticContextImpl(pred: SemanticContext, parserCallStack: ParserRuleContext, alt: number): boolean {
 		if (this.currentState === undefined || this._input === undefined) {
 			throw new Error("Invalid state");
@@ -231,7 +230,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		return result;
 	}
 
-	@Override
+	// @Override
 	protected reportContextSensitivity(dfa: DFA, prediction: number, acceptState: SimulatorState, startIndex: number, stopIndex: number): void {
 		if (this._input === undefined) {
 			throw new Error("Invalid state");
@@ -245,7 +244,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		super.reportContextSensitivity(dfa, prediction, acceptState, startIndex, stopIndex);
 	}
 
-	@Override
+	// @Override
 	protected reportAttemptingFullContext(dfa: DFA, conflictingAlts: BitSet, conflictState: SimulatorState, startIndex: number, stopIndex: number): void {
 		if (conflictingAlts != null) {
 			this.conflictingAltResolvedBySLL = conflictingAlts.nextSetBit(0);
@@ -257,8 +256,8 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 		super.reportAttemptingFullContext(dfa, conflictingAlts, conflictState, startIndex, stopIndex);
 	}
 
-	@Override
-	protected reportAmbiguity(@NotNull dfa: DFA, D: DFAState, startIndex: number, stopIndex: number, exact: boolean, @NotNull ambigAlts: BitSet, @NotNull configs: ATNConfigSet): void {
+	// @Override
+	protected reportAmbiguity(dfa: DFA, D: DFAState, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet, configs: ATNConfigSet): void {
 		if (this.currentState === undefined || this._input === undefined) {
 			throw new Error("Invalid state");
 		}

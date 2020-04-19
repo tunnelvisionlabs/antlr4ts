@@ -111,7 +111,7 @@ export interface IntSet {
 	/**
 	 * {@inheritDoc}
 	 */
-	//@Override
+	//  @Override
 	equals(obj: object): boolean;
 
 	/**
@@ -145,6 +145,6 @@ export interface IntSet {
 	/**
 	 * {@inheritDoc}
 	 */
-	//@Override
+	//  @Override
 	toString(): string;
 }

@@ -5,16 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
-import { Array2DHashMap } from "../misc/Array2DHashMap";
 import { ATN } from "./ATN";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { ATNState } from "./ATNState";
+import { Array2DHashMap } from "../misc/Array2DHashMap";
 import { BitSet } from "../misc/BitSet";
 import { EqualityComparator } from "../misc/EqualityComparator";
 import { MurmurHash } from "../misc/MurmurHash";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { Override } from "../Decorators";
 import { RuleStopState } from "./RuleStopState";
 import { SemanticContext } from "./SemanticContext";
 
@@ -99,7 +98,7 @@ export namespace PredictionMode {
 		 * The hash code is only a function of the {@link ATNState#stateNumber}
 		 * and {@link ATNConfig#context}.
 		 */
-		@Override
+		// @Override
 		public hashCode(o: ATNConfig): number {
 			let hashCode: number = MurmurHash.initialize(7);
 			hashCode = MurmurHash.update(hashCode, o.state.stateNumber);
@@ -108,7 +107,7 @@ export namespace PredictionMode {
 			return hashCode;
 		}
 
-		@Override
+		// @Override
 		public equals(a: ATNConfig, b: ATNConfig): boolean {
 			if (a === b) {
 				return true;

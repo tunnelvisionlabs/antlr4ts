@@ -9,7 +9,6 @@
 // as much of it may be supported natively by JavaScript. Or otherwise need
 // substantial rethink
 
-import { NotNull } from "../Decorators";
 import { Equatable } from "./Stubs";
 import { IntegerList } from "./IntegerList";
 
@@ -63,7 +62,7 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // 	while ( data.contains(value) ) data.remove(value);
 // }
 
-// export function writeFile(@NotNull file: File, @NotNull content: Uint8Array): void {
+// export function writeFile(file: File, content: Uint8Array): void {
 // 	let fos: FileOutputStream = new FileOutputStream(file);
 // 	try {
 // 		fos.write(content);
@@ -72,11 +71,11 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // 	}
 // }
 
-// export function writeFile(@NotNull fileName: string, @NotNull content: string): void {
+// export function writeFile(fileName: string, content: string): void {
 // 	writeFile(fileName, content, null);
 // }
 
-// export function writeFile(@NotNull fileName: string, @NotNull content: string, @Nullable encoding: string): void {
+// export function writeFile(fileName: string, content: string, @Nullable encoding: string): void {
 // 	let f: File =  new File(fileName);
 // 	let fos: FileOutputStream =  new FileOutputStream(f);
 // 	let osw: OutputStreamWriter;
@@ -96,12 +95,12 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // }
 
 // @NotNull
-// export function readFile(@NotNull fileName: string): char[] {
+// export function readFile(fileName: string): char[] {
 // 	return readFile(fileName, null);
 // }
 
 // @NotNull
-// export function readFile(@NotNull fileName: string, @Nullable encoding: string): char[] {
+// export function readFile(fileName: string, @Nullable encoding: string): char[] {
 // 	let f: File =  new File(fileName);
 // 	let size: number =  (int)f.length();
 // 	let isr: InputStreamReader;
@@ -126,7 +125,7 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // 	return data;
 // }
 
-// export function removeAll<T>(@NotNull predicate: List<T> list,@NotNull Predicate<? super T>): void {
+// export function removeAll<T>(predicate: List<T> list,Predicate<? super T>): void {
 // 	let j: number =  0;
 // 	for (let i = 0; i < list.size; i++) {
 // 		let item: T =  list.get(i);
@@ -144,7 +143,7 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
 // 	}
 // }
 
-// export function removeAll<T>(@NotNull predicate: Iterable<T> iterable,@NotNull Predicate<? super T>): void {
+// export function removeAll<T>(predicate: Iterable<T> iterable,Predicate<? super T>): void {
 // 	if (iterable instanceof List<?>) {
 // 		removeAll((List<T>)iterable, predicate);
 // 		return;
@@ -189,7 +188,7 @@ export function toCharArray(str: string | IntegerList): Uint16Array {
 // 	* @since 4.5
 // 	*/
 // @NotNull
-// export function toSet(@NotNull bits: BitSet): IntervalSet {
+// export function toSet(bits: BitSet): IntervalSet {
 // 	let s: IntervalSet =  new IntervalSet();
 // 	let i: number =  bits.nextSetBit(0);
 // 	while ( i >= 0 ) {

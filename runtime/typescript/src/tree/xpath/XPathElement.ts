@@ -4,7 +4,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Override } from "../../Decorators";
+
 import { ParseTree } from "../ParseTree";
 
 export abstract class XPathElement {
@@ -25,7 +25,7 @@ export abstract class XPathElement {
 	 */
 	public abstract evaluate(t: ParseTree): ParseTree[];
 
-	@Override
+	// @Override
 	public toString(): string {
 		const inv: string = this.invert ? "!" : "";
 		const className: string = Object.constructor.name;

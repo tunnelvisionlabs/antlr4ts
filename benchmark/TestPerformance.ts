@@ -10,19 +10,22 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.5869363-07:00
 
+import * as Utils from "antlr4ts/dist/misc/Utils";
+import * as assert from "assert";
+import * as fs from "fs";
+import * as path from "path";
 /* eslint-disable no-inner-declarations */
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 import * as sourceMapSupport from "source-map-support";
-sourceMapSupport.install();
 
 import { ANTLRErrorListener } from "antlr4ts";
-import { Array2DHashSet } from "antlr4ts/dist/misc";
 import { ATN } from "antlr4ts/dist/atn";
 import { ATNConfig } from "antlr4ts/dist/atn";
 import { ATNConfigSet } from "antlr4ts/dist/atn";
 import { ATNDeserializer } from "antlr4ts/dist/atn";
+import { Array2DHashSet } from "antlr4ts/dist/misc";
 import { BailErrorStrategy } from "antlr4ts";
 import { BitSet } from "antlr4ts/dist/misc";
 import { CharStream } from "antlr4ts";
@@ -30,28 +33,34 @@ import { CharStreams } from "antlr4ts";
 import { CodePointBuffer } from "antlr4ts";
 import { CodePointCharStream } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
-import { DefaultErrorStrategy } from "antlr4ts";
 import { DFA } from "antlr4ts/dist/dfa";
 import { DFAState } from "antlr4ts/dist/dfa";
+import { DefaultErrorStrategy } from "antlr4ts";
 import { DiagnosticErrorListener } from "antlr4ts";
 import { ErrorNode } from "antlr4ts/dist/tree";
 import { Interval } from "antlr4ts/dist/misc";
+import { JavaLRLexer } from "./gen/lr/JavaLRLexer";
+import { JavaLRLexer as JavaLRLexerAtn } from "./gen/lr-atn/JavaLRLexer";
+import { JavaLRParser } from "./gen/lr/JavaLRParser";
+import { JavaLRParser as JavaLRParserAtn } from "./gen/lr-atn/JavaLRParser";
+import { JavaLexer } from "./gen/std/JavaLexer";
+import { JavaLexer as JavaLexerAtn } from "./gen/std-atn/JavaLexer";
+import { JavaParser } from "./gen/std/JavaParser";
+import { JavaParser as JavaParserAtn } from "./gen/std-atn/JavaParser";
 import { JavaUnicodeInputStream } from "./JavaUnicodeInputStream";
 import { Lexer } from "antlr4ts";
 import { LexerATNSimulator } from "antlr4ts/dist/atn";
 import { MurmurHash } from "antlr4ts/dist/misc";
-import { NotNull } from "antlr4ts";
 import { ObjectEqualityComparator } from "antlr4ts/dist/misc";
-import { Override } from "antlr4ts";
 import { ParseCancellationException } from "antlr4ts/dist/misc";
+import { ParseTree } from "antlr4ts/dist/tree";
+import { ParseTreeListener } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts/dist/tree";
 import { Parser } from "antlr4ts";
 import { ParserATNSimulator } from "antlr4ts/dist/atn";
 import { ParserErrorListener } from "antlr4ts";
 import { ParserInterpreter } from "antlr4ts";
 import { ParserRuleContext } from "antlr4ts";
-import { ParseTree } from "antlr4ts/dist/tree";
-import { ParseTreeListener } from "antlr4ts/dist/tree";
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
 import { PredictionContextCache } from "antlr4ts/dist/atn";
 import { PredictionMode } from "antlr4ts/dist/atn";
 import { RecognitionException } from "antlr4ts";
@@ -63,21 +72,12 @@ import { TimeSpan } from "./TimeSpan";
 import { Token } from "antlr4ts";
 import { TokenStream } from "antlr4ts";
 
-import * as Utils from "antlr4ts/dist/misc/Utils";
+sourceMapSupport.install();
 
-import { JavaLexer as JavaLexer } from "./gen/std/JavaLexer";
-import { JavaLexer as JavaLexerAtn } from "./gen/std-atn/JavaLexer";
-import { JavaLRLexer as JavaLRLexer } from "./gen/lr/JavaLRLexer";
-import { JavaLRLexer as JavaLRLexerAtn } from "./gen/lr-atn/JavaLRLexer";
 
-import { JavaParser as JavaParser } from "./gen/std/JavaParser";
-import { JavaParser as JavaParserAtn } from "./gen/std-atn/JavaParser";
-import { JavaLRParser as JavaLRParser } from "./gen/lr/JavaLRParser";
-import { JavaLRParser as JavaLRParserAtn } from "./gen/lr-atn/JavaLRParser";
 
-import * as assert from "assert";
-import * as fs from "fs";
-import * as path from "path";
+
+
 
 interface IJavaParser extends Parser {
 	compilationUnit(): ParserRuleContext;
@@ -497,7 +497,7 @@ export class TestPerformance {
 		// let executorService: ExecutorService =  Executors.newFixedThreadPool(TestPerformance.FILE_GRANULARITY ? 1 : TestPerformance.NUMBER_OF_THREADS, new NumberedThreadFactory());
 		// let passResults: Promise<any>[] = [];
 		// passResults.add(executorService.submit(new Runnable() {
-		// 	@Override
+		// 	// @Override
 		// 	run(): void {
 		try {
 			this.parse1(0, factory, sources, TestPerformance.SHUFFLE_FILES_AT_START);
@@ -510,7 +510,7 @@ export class TestPerformance {
 		for (let i = 0; i < TestPerformance.PASSES - 1; i++) {
 			const currentPass: number = i + 1;
 			// 	passResults.add(executorService.submit(new Runnable() {
-			// 		@Override
+			// 		// @Override
 			// 		run(): void {
 			if (TestPerformance.CLEAR_DFA) {
 				const index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
@@ -1535,13 +1535,13 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 		}
 	}
 
-	@Override
+	// @Override
 	protected getExistingTargetState(s: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions++;
 		return super.getExistingTargetState(s, t);
 	}
 
-	@Override
+	// @Override
 	protected computeTargetState(input: CharStream, s: DFAState, t: number): DFAState {
 		this.computedTransitions++;
 		return super.computeTargetState(input, s, t);
@@ -1571,7 +1571,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 
 	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number;
 	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext: boolean): number;
-	@Override
+	// @Override
 	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext, useContext?: boolean): number {
 		if (useContext === undefined) {
 			try {
@@ -1591,19 +1591,19 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 		}
 	}
 
-	@Override
+	// @Override
 	protected getExistingTargetState(previousD: DFAState, t: number): DFAState | undefined {
 		this.totalTransitions[this.decision]++;
 		return super.getExistingTargetState(previousD, t);
 	}
 
-	@Override
+	// @Override
 	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
 		this.computedTransitions[this.decision]++;
 		return super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 	}
 
-	@Override
+	// @Override
 	protected computeReachSet(dfa: DFA, previous: SimulatorState, t: number, contextCache: PredictionContextCache): SimulatorState | undefined {
 		if (previous.useContext) {
 			this.totalTransitions[this.decision]++;
@@ -1618,7 +1618,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 class DescriptiveErrorListener implements ParserErrorListener {
 	public static INSTANCE: DescriptiveErrorListener = new DescriptiveErrorListener();
 
-	@Override
+	// @Override
 	public syntaxError<T extends Token>(recognizer: Recognizer<T, any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
@@ -1638,7 +1638,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 	public static INSTANCE: DescriptiveLexerErrorListener = new DescriptiveLexerErrorListener();
 
-	@Override
+	// @Override
 	public syntaxError<T extends number>(recognizer: Recognizer<T, any>, offendingSymbol: T | undefined, line: number, charPositionInLine: number, msg: string, e: RecognitionException | undefined): void {
 		if (!TestPerformance.REPORT_SYNTAX_ERRORS) {
 			return;
@@ -1659,7 +1659,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	private _sllConflict: BitSet | undefined;
 	private _sllConfigs: ATNConfigSet;
 
-	@Override
+	// @Override
 	public reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
 			const sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
@@ -1682,7 +1682,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		recognizer.notifyErrorListeners(`reportAmbiguity d=${decision} (${rule}): ambigAlts=${ambigAlts}, input='${input}'`);
 	}
 
-	@Override
+	// @Override
 	public reportAttemptingFullContext(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, conflictingAlts: BitSet | undefined, conflictState: SimulatorState): void {
 		this._sllConflict = conflictingAlts;
 		this._sllConfigs = conflictState.s0.configs;
@@ -1698,7 +1698,7 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
 
-	@Override
+	// @Override
 	public reportContextSensitivity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, prediction: number, acceptState: SimulatorState): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
 			const sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
@@ -1774,7 +1774,7 @@ class FileExtensionFilenameFilter implements FilenameFilter {
 		this.caseSensitive = caseSensitive;
 	}
 
-	@Override
+	// @Override
 	public accept(dir: string, name: string): boolean {
 		if (this.caseSensitive) {
 			return name.endsWith(this.extension);
@@ -1793,7 +1793,7 @@ class FileNameFilenameFilter implements FilenameFilter {
 		this.caseSensitive = caseSensitive;
 	}
 
-	@Override
+	// @Override
 	public accept(dir: string, name: string): boolean {
 		if (this.caseSensitive) {
 			return name === this.filename;
@@ -1811,7 +1811,7 @@ class AllFilenameFilter implements FilenameFilter {
 		this.filters = filters.slice(0);
 	}
 
-	@Override
+	// @Override
 	public accept(dir: string, name: string): boolean {
 		for (const filter of this.filters) {
 			if (!filter.accept(dir, name)) {
@@ -1830,7 +1830,7 @@ class AnyFilenameFilter implements FilenameFilter {
 		this.filters = filters.slice(0);
 	}
 
-	@Override
+	// @Override
 	public accept(dir: string, name: string): boolean {
 		for (const filter of this.filters) {
 			if (filter.accept(dir, name)) {
@@ -1849,7 +1849,7 @@ class NotFilenameFilter implements FilenameFilter {
 		this.filter = filter;
 	}
 
-	@Override
+	// @Override
 	public accept(dir: string, name: string): boolean {
 		return !this.filter.accept(dir, name);
 	}
@@ -1876,7 +1876,7 @@ class NonCachingParserATNSimulator extends StatisticsParserATNSimulator {
 		super(atn, parser);
 	}
 
-	@Override
+	// @Override
 	protected setDFAEdge(p: DFAState, t: number, q: DFAState): void {
 		// Do not set the edge
 	}
@@ -1894,26 +1894,26 @@ class ChecksumParseTreeListener implements ParseTreeListener {
 		this.checksum = checksum;
 	}
 
-	@Override
+	// @Override
 	public visitTerminal(node: TerminalNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_TERMINAL);
 		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
-	@Override
+	// @Override
 	public visitErrorNode(node: ErrorNode): void {
 		this.checksum.update(ChecksumParseTreeListener.VISIT_ERROR_NODE);
 		TestPerformance.updateChecksum(this.checksum, node.symbol);
 	}
 
-	@Override
+	// @Override
 	public enterEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.ENTER_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
 		TestPerformance.updateChecksum(this.checksum, ctx.start);
 	}
 
-	@Override
+	// @Override
 	public exitEveryRule(ctx: ParserRuleContext): void {
 		this.checksum.update(ChecksumParseTreeListener.EXIT_RULE);
 		TestPerformance.updateChecksum(this.checksum, ctx.ruleIndex);
@@ -1926,14 +1926,14 @@ export class InputDescriptor {
 	private source: string;
 	private inputStream?: CodePointBuffer;
 
-	constructor(@NotNull source: string) {
+	constructor(source: string) {
 		this.source = source;
 		if (TestPerformance.PRELOAD_SOURCES) {
 			this.getInputStream();
 		}
 	}
 
-	@NotNull
+
 	public getInputStream(): CharStream {
 		if (this.inputStream === undefined) {
 			this.inputStream = this.bufferFromFileName(this.source, TestPerformance.ENCODING);

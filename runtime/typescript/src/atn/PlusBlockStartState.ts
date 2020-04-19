@@ -7,7 +7,6 @@
 
 import { ATNStateType } from "./ATNStateType";
 import { BlockStartState } from "./BlockStartState";
-import { Override } from "../Decorators";
 import { PlusLoopbackState } from "./PlusLoopbackState";
 
 /** Start of `(A|B|...)+` loop. Technically a decision state, but
@@ -18,7 +17,7 @@ import { PlusLoopbackState } from "./PlusLoopbackState";
 export class PlusBlockStartState extends BlockStartState {
 	public loopBackState: PlusLoopbackState;
 
-	@Override
+	// @Override
 	get stateType(): ATNStateType {
 		return ATNStateType.PLUS_BLOCK_START;
 	}

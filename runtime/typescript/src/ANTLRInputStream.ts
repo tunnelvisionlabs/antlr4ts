@@ -4,10 +4,10 @@
  */
 // ConvertTo-TS run at 2016-10-04T11:26:49.0828748-07:00
 
-import * as assert from "assert";
 import * as Arrays from "./misc/Arrays";
+import * as assert from "assert";
+
 import { CharStream } from "./CharStream";
-import { Override } from "./Decorators";
 import { IntStream } from "./IntStream";
 import { Interval } from "./misc/Interval";
 
@@ -50,7 +50,7 @@ export class ANTLRInputStream implements CharStream {
 		this.p = 0;
 	}
 
-	@Override
+	// @Override
 	public consume(): void {
 		if (this.p >= this.n) {
 			assert(this.LA(1) === IntStream.EOF);
@@ -64,7 +64,7 @@ export class ANTLRInputStream implements CharStream {
 		}
 	}
 
-	@Override
+	// @Override
 	public LA(i: number): number {
 		if (i === 0) {
 			return 0; // undefined
@@ -93,23 +93,23 @@ export class ANTLRInputStream implements CharStream {
 	 *  last symbol has been read.  The index is the index of char to
 	 *  be returned from LA(1).
 	 */
-	@Override
+	// @Override
 	get index(): number {
 		return this.p;
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.n;
 	}
 
 	/** mark/release do nothing; we have entire buffer */
-	@Override
+	// @Override
 	public mark(): number {
 		return -1;
 	}
 
-	@Override
+	// @Override
 	public release(marker: number): void {
 		// No default implementation since this stream buffers the entire input
 	}
@@ -117,7 +117,7 @@ export class ANTLRInputStream implements CharStream {
 	/** consume() ahead until p==index; can't just set p=index as we must
 	 *  update line and charPositionInLine. If we seek backwards, just set p
 	 */
-	@Override
+	// @Override
 	public seek(index: number): void {
 		if (index <= this.p) {
 			this.p = index; // just jump; don't update stream state (line, ...)
@@ -130,7 +130,7 @@ export class ANTLRInputStream implements CharStream {
 		}
 	}
 
-	@Override
+	// @Override
 	public getText(interval: Interval): string {
 		const start: number = interval.a;
 		let stop: number = interval.b;
@@ -147,7 +147,7 @@ export class ANTLRInputStream implements CharStream {
 		return this.data.substr(start, count);
 	}
 
-	@Override
+	// @Override
 	get sourceName(): string {
 		if (!this.name) {
 			return IntStream.UNKNOWN_SOURCE_NAME;
@@ -155,6 +155,6 @@ export class ANTLRInputStream implements CharStream {
 		return this.name;
 	}
 
-	@Override
+	// @Override
 	public toString(): string { return this.data; }
 }

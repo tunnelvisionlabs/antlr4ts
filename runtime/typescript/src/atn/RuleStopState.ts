@@ -7,7 +7,6 @@
 
 import { ATNState } from "./ATNState";
 import { ATNStateType } from "./ATNStateType";
-import { Override } from "../Decorators";
 
 /** The last node in the ATN for a rule, unless that rule is the start symbol.
  *  In that case, there is one transition to EOF. Later, we might encode
@@ -16,12 +15,12 @@ import { Override } from "../Decorators";
  */
 export class RuleStopState extends ATNState {
 
-	@Override
+	// @Override
 	get nonStopStateNumber(): number {
 		return -1;
 	}
 
-	@Override
+	// @Override
 	get stateType(): ATNStateType {
 		return ATNStateType.RULE_STOP;
 	}

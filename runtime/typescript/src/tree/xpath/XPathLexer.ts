@@ -6,8 +6,6 @@ import { ATNDeserializer } from "../../atn";
 import { CharStream } from "../..";
 import { Lexer } from "../..";
 import { LexerATNSimulator } from "../../atn";
-import { NotNull } from "../..";
-import { Override } from "../..";
 import { RuleContext } from "../..";
 import { Vocabulary } from "../..";
 import { VocabularyImpl } from "../..";
@@ -50,7 +48,6 @@ export class XPathLexer extends Lexer {
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(XPathLexer._LITERAL_NAMES, XPathLexer._SYMBOLIC_NAMES, []);
 
 	// @Override
-	// @NotNull
 	public get vocabulary(): Vocabulary {
 		return XPathLexer.VOCABULARY;
 	}

@@ -5,13 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:01.9391717-07:00
 
+import * as assert from "assert";
+
 import { CharStream } from "antlr4ts";
 import { IntegerList } from "antlr4ts/dist/misc";
 import { Interval } from "antlr4ts/dist/misc";
-import { NotNull } from "antlr4ts";
-import { Override } from "antlr4ts";
-
-import * as assert from "assert";
 
 const BACKSLASH = "\\".charCodeAt(0);
 const LOWER_U = "u".charCodeAt(0);
@@ -27,7 +25,7 @@ const DIGIT_9 = "9".charCodeAt(0);
  * @author Sam Harwell
  */
 export class JavaUnicodeInputStream implements CharStream {
-	@NotNull
+
 	private source: CharStream;
 	private escapeIndexes: IntegerList = new IntegerList();
 	private escapeCharacters: IntegerList = new IntegerList();
@@ -39,7 +37,7 @@ export class JavaUnicodeInputStream implements CharStream {
 
 	private la1: number;
 
-	constructor(@NotNull source: CharStream) {
+	constructor(source: CharStream) {
 		if (source == null) {
 			throw new Error("NullPointerException: source");
 		}
@@ -48,27 +46,27 @@ export class JavaUnicodeInputStream implements CharStream {
 		this.la1 = source.LA(1);
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.source.size;
 	}
 
-	@Override
+	// @Override
 	get index(): number {
 		return this.source.index;
 	}
 
-	@Override
+	// @Override
 	get sourceName(): string {
 		return this.source.sourceName;
 	}
 
-	@Override
+	// @Override
 	public getText(interval: Interval): string {
 		return this.source.getText(interval);
 	}
 
-	@Override
+	// @Override
 	public consume(): void {
 		if (this.la1 !== BACKSLASH) {
 			this.source.consume();
@@ -99,7 +97,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		assert(this.range >= this.index);
 	}
 
-	@Override
+	// @Override
 	public LA(i: number): number {
 		if (i === 1 && this.la1 !== BACKSLASH) {
 			return this.la1;
@@ -158,17 +156,17 @@ export class JavaUnicodeInputStream implements CharStream {
 		}
 	}
 
-	@Override
+	// @Override
 	public mark(): number {
 		return this.source.mark();
 	}
 
-	@Override
+	// @Override
 	public release(marker: number): void {
 		this.source.release(marker);
 	}
 
-	@Override
+	// @Override
 	public seek(index: number): void {
 		if (index > this.range) {
 			throw new Error("UnsupportedOperationException");

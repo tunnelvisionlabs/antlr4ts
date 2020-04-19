@@ -8,7 +8,6 @@
 import { CharStream } from "./CharStream";
 import { CommonToken } from "./CommonToken";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators";
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
 
@@ -46,7 +45,7 @@ export class CommonTokenFactory implements TokenFactory {
 		this.copyText = copyText;
 	}
 
-	@Override
+	// @Override
 	public create(
 		source: { source?: TokenSource; stream?: CharStream },
 		type: number,
@@ -67,7 +66,7 @@ export class CommonTokenFactory implements TokenFactory {
 		return t;
 	}
 
-	@Override
+	// @Override
 	public createSimple(type: number, text: string): CommonToken {
 		return new CommonToken(type, text);
 	}

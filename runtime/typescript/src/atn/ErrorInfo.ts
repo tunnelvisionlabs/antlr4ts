@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:28.7213647-07:00
 
 import { DecisionEventInfo } from "./DecisionEventInfo";
-import { NotNull } from "../Decorators";
 import { SimulatorState } from "./SimulatorState";
 import { TokenStream } from "../TokenStream";
 
@@ -35,8 +34,8 @@ export class ErrorInfo extends DecisionEventInfo {
 	 */
 	constructor(
 		decision: number,
-		@NotNull state: SimulatorState,
-		@NotNull input: TokenStream,
+		state: SimulatorState,
+		input: TokenStream,
 		startIndex: number,
 		stopIndex: number) {
 

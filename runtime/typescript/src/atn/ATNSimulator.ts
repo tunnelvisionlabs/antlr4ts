@@ -8,13 +8,12 @@
 import { ATN } from "./ATN";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { DFAState } from "../dfa/DFAState";
-import { NotNull } from "../Decorators";
 import { PredictionContext } from "./PredictionContext";
 
 export abstract class ATNSimulator {
 	/** Must distinguish between missing edge and edge we know leads nowhere */
 	private static _ERROR: DFAState;
-	@NotNull
+
 	static get ERROR(): DFAState {
 		if (!ATNSimulator._ERROR) {
 			ATNSimulator._ERROR = new DFAState(new ATNConfigSet());
@@ -24,10 +23,10 @@ export abstract class ATNSimulator {
 		return ATNSimulator._ERROR;
 	}
 
-	@NotNull
+
 	public atn: ATN;
 
-	constructor(@NotNull atn: ATN) {
+	constructor(atn: ATN) {
 		this.atn = atn;
 	}
 

@@ -9,7 +9,6 @@ import { Lexer } from "../Lexer";
 import { LexerAction } from "./LexerAction";
 import { LexerActionType } from "./LexerActionType";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
 
 /**
  * This implementation of {@link LexerAction} is used for tracking input offsets
@@ -41,7 +40,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @param action The lexer action to execute at a particular offset in the
 	 * input {@link CharStream}.
 	 */
-	constructor(offset: number, @NotNull action: LexerAction) {
+	constructor(offset: number, action: LexerAction) {
 		this._offset = offset;
 		this._action = action;
 	}
@@ -63,7 +62,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 *
 	 * @returns A {@link LexerAction} object which executes the lexer action.
 	 */
-	@NotNull
+
 	get action(): LexerAction {
 		return this._action;
 	}
@@ -74,7 +73,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * @returns This method returns the result of calling {@link #getActionType}
 	 * on the {@link LexerAction} returned by {@link #getAction}.
 	 */
-	@Override
+	// @Override
 	get actionType(): LexerActionType {
 		return this._action.actionType;
 	}
@@ -83,7 +82,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * {@inheritDoc}
 	 * @returns This method returns `true`.
 	 */
-	@Override
+	// @Override
 	get isPositionDependent(): boolean {
 		return true;
 	}
@@ -94,13 +93,13 @@ export class LexerIndexedCustomAction implements LexerAction {
 	 * This method calls {@link #execute} on the result of {@link #getAction}
 	 * using the provided `lexer`.
 	 */
-	@Override
+	// @Override
 	public execute(lexer: Lexer): void {
 		// assume the input stream position was properly set by the calling code
 		this._action.execute(lexer);
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this._offset);
@@ -108,7 +107,7 @@ export class LexerIndexedCustomAction implements LexerAction {
 		return MurmurHash.finish(hash, 2);
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;

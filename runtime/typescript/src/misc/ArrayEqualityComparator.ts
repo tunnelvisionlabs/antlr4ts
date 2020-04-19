@@ -5,7 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-03T02:09:42.2127260-07:00
 import { EqualityComparator } from "./EqualityComparator";
-import { Override } from "../Decorators";
 import { Equatable } from "./Stubs";
 import { MurmurHash } from "./MurmurHash";
 import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
@@ -25,7 +24,7 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * This implementation returns
 	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
-	@Override
+	// @Override
 	public hashCode(obj: Equatable[]): number {
 		if (obj == null) {
 			return 0;
@@ -43,7 +42,7 @@ export class ArrayEqualityComparator implements EqualityComparator<Equatable[]> 
 	 * this method returns the result of
 	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
-	@Override
+	// @Override
 	public equals(a: Equatable[], b: Equatable[]): boolean {
 		if (a == null) {
 			return b == null;

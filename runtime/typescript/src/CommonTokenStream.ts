@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:50.3953157-07:00
 
 import { BufferedTokenStream } from "./BufferedTokenStream";
-import { NotNull, Override } from "./Decorators";
 import { Token } from "./Token";
 import { TokenSource } from "./TokenSource";
 
@@ -49,17 +48,17 @@ export class CommonTokenStream extends BufferedTokenStream {
 	 * @param tokenSource The token source.
 	 * @param channel The channel to use for filtering tokens.
 	 */
-	constructor(@NotNull tokenSource: TokenSource, channel: number = Token.DEFAULT_CHANNEL) {
+	constructor(tokenSource: TokenSource, channel: number = Token.DEFAULT_CHANNEL) {
 		super(tokenSource);
 		this.channel = channel;
 	}
 
-	@Override
+	// @Override
 	protected adjustSeekIndex(i: number): number {
 		return this.nextTokenOnChannel(i, this.channel);
 	}
 
-	@Override
+	// @Override
 	protected tryLB(k: number): Token | undefined {
 		if ((this.p - k) < 0) {
 			return undefined;
@@ -81,7 +80,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		return this.tokens[i];
 	}
 
-	@Override
+	// @Override
 	public tryLT(k: number): Token | undefined {
 		//System.out.println("enter LT("+k+")");
 		this.lazyInit();

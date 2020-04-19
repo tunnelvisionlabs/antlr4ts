@@ -6,10 +6,9 @@
 // ConvertTo-TS run at 2016-10-04T11:26:49.2855056-07:00
 
 import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { Parser } from "./Parser";
 import { InputMismatchException } from "./InputMismatchException";
-import { Override } from "./Decorators";
 import { ParseCancellationException } from "./misc/ParseCancellationException";
+import { Parser } from "./Parser";
 import { ParserRuleContext } from "./ParserRuleContext";
 import { RecognitionException } from "./RecognitionException";
 import { Token } from "./Token";
@@ -46,7 +45,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	 *  rule function catches.  Use {@link Exception#getCause()} to get the
 	 *  original {@link RecognitionException}.
 	 */
-	@Override
+	// @Override
 	public recover(recognizer: Parser, e: RecognitionException): void {
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
@@ -58,7 +57,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	/** Make sure we don't attempt to recover inline; if the parser
 	 *  successfully recovers, it won't throw an exception.
 	 */
-	@Override
+	// @Override
 	public recoverInline(recognizer: Parser): Token {
 		const e = new InputMismatchException(recognizer);
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
@@ -69,7 +68,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	}
 
 	/** Make sure we don't attempt to recover from problems in subrules. */
-	@Override
+	// @Override
 	public sync(recognizer: Parser): void {
 		// intentionally empty
 	}

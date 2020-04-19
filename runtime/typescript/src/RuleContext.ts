@@ -6,15 +6,14 @@
 // ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
 import { ATN } from "./atn/ATN";
+import { Interval } from "./misc/Interval";
+import { ParseTree } from "./tree/ParseTree";
+import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
 import { Parser } from "./Parser";
+import { ParserRuleContext } from "./ParserRuleContext";
 import { Recognizer } from "./Recognizer";
 import { RuleNode } from "./tree/RuleNode";
-import { ParseTree } from "./tree/ParseTree";
-import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators";
 import { Trees } from "./tree/Trees";
-import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
-import { ParserRuleContext } from "./ParserRuleContext";
 
 /** A rule context is a record of a single rule invocation.
  *
@@ -102,24 +101,24 @@ export class RuleContext extends RuleNode {
 
 	// satisfy the ParseTree / SyntaxTree interface
 
-	@Override
+	// @Override
 	get sourceInterval(): Interval {
 		return Interval.INVALID;
 	}
 
-	@Override
+	// @Override
 	get ruleContext(): RuleContext { return this; }
 
-	@Override
+	// @Override
 	get parent(): RuleContext | undefined { return this._parent; }
 
 	/** @since 4.7. {@see ParseTree#setParent} comment */
-	@Override
+	// @Override
 	public setParent(parent: RuleContext): void {
 		this._parent = parent;
 	}
 
-	@Override
+	// @Override
 	get payload(): RuleContext { return this; }
 
 	/** Return the combined text of all child nodes. This method only considers
@@ -129,7 +128,7 @@ export class RuleContext extends RuleNode {
 	 *  added to the parse trees, they will not appear in the output of this
 	 *  method.
 	 */
-	@Override
+	// @Override
 	get text(): string {
 		if (this.childCount === 0) {
 			return "";
@@ -168,17 +167,17 @@ export class RuleContext extends RuleNode {
 		// intentionally ignored by the base implementation
 	}
 
-	@Override
+	// @Override
 	public getChild(i: number): ParseTree {
 		throw new RangeError("i must be greater than or equal to 0 and less than childCount");
 	}
 
-	@Override
+	// @Override
 	get childCount(): number {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitChildren(this);
 	}
@@ -196,7 +195,7 @@ export class RuleContext extends RuleNode {
 
 	public toStringTree(): string;
 
-	@Override
+	// @Override
 	public toStringTree(recog?: Parser | string[]): string {
 		return Trees.toStringTree(this, recog);
 	}
@@ -205,7 +204,7 @@ export class RuleContext extends RuleNode {
 	public toString(recog: Recognizer<any, any> | undefined): string;
 	public toString(ruleNames: string[] | undefined): string;
 
-	// // recog undefined unless ParserRuleContext, in which case we use subclass toString(...)
+	// recog undefined unless ParserRuleContext, in which case we use subclass toString(...)
 	public toString(recog: Recognizer<any, any> | undefined, stop: RuleContext | undefined): string;
 
 	public toString(ruleNames: string[] | undefined, stop: RuleContext | undefined): string;

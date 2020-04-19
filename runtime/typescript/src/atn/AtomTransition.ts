@@ -7,7 +7,6 @@
 
 import { ATNState } from "./ATNState";
 import { IntervalSet } from "../misc/IntervalSet";
-import { Override, NotNull } from "../Decorators";
 import { Transition } from "./Transition";
 import { TransitionType } from "./TransitionType";
 
@@ -16,29 +15,29 @@ export class AtomTransition extends Transition {
 	/** The token type or character value; or, signifies special label. */
 	public _label: number;
 
-	constructor(@NotNull target: ATNState, label: number) {
+	constructor(target: ATNState, label: number) {
 		super(target);
 		this._label = label;
 	}
 
-	@Override
+	// @Override
 	get serializationType(): TransitionType {
 		return TransitionType.ATOM;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	get label(): IntervalSet {
 		return IntervalSet.of(this._label);
 	}
 
-	@Override
+	// @Override
 	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return this._label === symbol;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	public toString(): string {
 		return String(this.label);
 	}

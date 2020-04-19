@@ -23,9 +23,7 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 import { ATN } from "<basePath()>/atn";
 import { ATNDeserializer } from "<basePath()>/atn";
 import { FailedPredicateException } from "<basePath()>";
-import { NotNull } from "<basePath()>";
 import { NoViableAltException } from "<basePath()>";
-import { Override } from "<basePath()>";
 import { Parser } from "<basePath()>";
 import { ParserRuleContext } from "<basePath()>";
 import { ParserATNSimulator } from "<basePath()>/atn";
@@ -203,7 +201,6 @@ private static readonly _SYMBOLIC_NAMES: (string|undefined)[] = [
 public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(<className>._LITERAL_NAMES, <className>._SYMBOLIC_NAMES, []);
 
 // @Override
-// @NotNull
 public get vocabulary(): Vocabulary {
 	return <className>.VOCABULARY;
 }
@@ -872,8 +869,6 @@ import { ATNDeserializer } from "<basePath()>/atn";
 import { CharStream } from "<basePath()>";
 import { Lexer } from "<basePath()>";
 import { LexerATNSimulator } from "<basePath()>/atn";
-import { NotNull } from "<basePath()>";
-import { Override } from "<basePath()>";
 import { RuleContext } from "<basePath()>";
 import { Vocabulary } from "<basePath()>";
 import { VocabularyImpl } from "<basePath()>";

@@ -11,7 +11,6 @@ import { Lexer } from "../Lexer";
 import { LexerAction } from "./LexerAction";
 import { LexerIndexedCustomAction } from "./LexerIndexedCustomAction";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
 
 /**
  * Represents an executor for a sequence of lexer actions which traversed during
@@ -25,7 +24,7 @@ import { NotNull, Override } from "../Decorators";
  * @since 4.2
  */
 export class LexerActionExecutor {
-	@NotNull
+
 	private _lexerActions: LexerAction[];
 
 	/**
@@ -38,7 +37,7 @@ export class LexerActionExecutor {
 	 * Constructs an executor for a sequence of {@link LexerAction} actions.
 	 * @param lexerActions The lexer actions to execute.
 	 */
-	constructor(@NotNull lexerActions: LexerAction[]) {
+	constructor(lexerActions: LexerAction[]) {
 		this._lexerActions = lexerActions;
 
 		let hash: number = MurmurHash.initialize();
@@ -64,8 +63,8 @@ export class LexerActionExecutor {
 	 * @returns A {@link LexerActionExecutor} for executing the combine actions
 	 * of `lexerActionExecutor` and `lexerAction`.
 	 */
-	@NotNull
-	public static append(lexerActionExecutor: LexerActionExecutor | undefined, @NotNull lexerAction: LexerAction): LexerActionExecutor {
+
+	public static append(lexerActionExecutor: LexerActionExecutor | undefined, lexerAction: LexerAction): LexerActionExecutor {
 		if (!lexerActionExecutor) {
 			return new LexerActionExecutor([lexerAction]);
 		}
@@ -127,7 +126,7 @@ export class LexerActionExecutor {
 	 * Gets the lexer actions to be executed by this executor.
 	 * @returns The lexer actions to be executed by this executor.
 	 */
-	@NotNull
+
 	get lexerActions(): LexerAction[] {
 		return this._lexerActions;
 	}
@@ -151,7 +150,7 @@ export class LexerActionExecutor {
 	 * {@link IntStream#seek} to set the `input` position to the beginning
 	 * of the token.
 	 */
-	public execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
+	public execute(lexer: Lexer, input: CharStream, startIndex: number): void {
 		let requiresSeek = false;
 		const stopIndex: number = input.index;
 		try {
@@ -175,12 +174,12 @@ export class LexerActionExecutor {
 		}
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		return this.cachedHashCode;
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;

@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:30.6852565-07:00
 
 import { DecisionEventInfo } from "./DecisionEventInfo";
-import { NotNull } from "../Decorators";
 import { SimulatorState } from "./SimulatorState";
 import { TokenStream } from "../TokenStream";
 
@@ -43,7 +42,7 @@ export class LookaheadEventInfo extends DecisionEventInfo {
 		decision: number,
 		state: SimulatorState | undefined,
 		predictedAlt: number,
-		@NotNull input: TokenStream,
+		input: TokenStream,
 		startIndex: number,
 		stopIndex: number,
 		fullCtx: boolean) {

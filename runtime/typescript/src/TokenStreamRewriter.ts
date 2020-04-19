@@ -5,12 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:58.1768850-07:00
 
+import * as Utils from "./misc/Utils";
+
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators";
 import { Token } from "./Token";
 import { TokenStream } from "./TokenStream";
-
-import * as Utils from "./misc/Utils";
 
 /**
  * Useful for rewriting out a buffered input token stream after doing some
@@ -81,9 +80,9 @@ import * as Utils from "./misc/Utils";
  * first example shows.
  */
 export class TokenStreamRewriter {
-	public static readonly DEFAULT_PROGRAM_NAME: string =  "default";
-	public static readonly PROGRAM_INIT_SIZE: number =  100;
-	public static readonly MIN_TOKEN_INDEX: number =  0;
+	public static readonly DEFAULT_PROGRAM_NAME: string = "default";
+	public static readonly PROGRAM_INIT_SIZE: number = 100;
+	public static readonly MIN_TOKEN_INDEX: number = 0;
 
 	/** Our source stream */
 	protected tokens: TokenStream;
@@ -97,7 +96,7 @@ export class TokenStreamRewriter {
 	/** Map String (program name) &rarr; Integer index */
 	protected lastRewriteTokenIndexes: Map<string, number>;
 
-	constructor(tokens: TokenStream)  {
+	constructor(tokens: TokenStream) {
 		this.tokens = tokens;
 		this.programs = new Map<string, RewriteOperation[]>();
 		this.programs.set(TokenStreamRewriter.DEFAULT_PROGRAM_NAME, []);
@@ -115,8 +114,8 @@ export class TokenStreamRewriter {
 	 */
 	public rollback(instructionIndex: number, programName: string): void;
 	public rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
-		const is: RewriteOperation[] | undefined =  this.programs.get(programName);
-		if ( is != null ) {
+		const is: RewriteOperation[] | undefined = this.programs.get(programName);
+		if (is != null) {
 			this.programs.set(programName, is.slice(TokenStreamRewriter.MIN_TOKEN_INDEX, instructionIndex));
 		}
 	}
@@ -193,11 +192,11 @@ export class TokenStreamRewriter {
 			to = to.tokenIndex;
 		}
 
-		if ( from > to || from < 0 || to < 0 || to >= this.tokens.size ) {
+		if (from > to || from < 0 || to < 0 || to >= this.tokens.size) {
 			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size})`);
 		}
 
-		const op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, text);
+		const op: RewriteOperation = new ReplaceOp(this.tokens, from, to, text);
 		const rewrites: RewriteOperation[] = this.getProgram(programName);
 		op.instructionIndex = rewrites.length;
 		rewrites.push(op);
@@ -233,7 +232,7 @@ export class TokenStreamRewriter {
 
 	protected getLastRewriteTokenIndex(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): number {
 		const I: number | undefined = this.lastRewriteTokenIndexes.get(programName);
-		if ( I == null ) {
+		if (I == null) {
 			return -1;
 		}
 
@@ -246,7 +245,7 @@ export class TokenStreamRewriter {
 
 	protected getProgram(name: string): RewriteOperation[] {
 		let is: RewriteOperation[] | undefined = this.programs.get(name);
-		if ( is == null ) {
+		if (is == null) {
 			is = this.initializeProgram(name);
 		}
 
@@ -297,18 +296,18 @@ export class TokenStreamRewriter {
 		}
 
 		const rewrites: RewriteOperation[] | undefined = this.programs.get(programName);
-		let start: number =  interval.a;
-		let stop: number =  interval.b;
+		let start: number = interval.a;
+		let stop: number = interval.b;
 
 		// ensure start/end are in range
-		if ( stop > this.tokens.size - 1 ) {
+		if (stop > this.tokens.size - 1) {
 			stop = this.tokens.size - 1;
 		}
-		if ( start < 0 ) {
+		if (start < 0) {
 			start = 0;
 		}
 
-		if ( rewrites == null || rewrites.length === 0 ) {
+		if (rewrites == null || rewrites.length === 0) {
 			return this.tokens.getText(interval); // no instructions to execute
 		}
 
@@ -318,14 +317,14 @@ export class TokenStreamRewriter {
 		const indexToOp: Map<number, RewriteOperation> = this.reduceToSingleOperationPerIndex(rewrites);
 
 		// Walk buffer, executing instructions and emitting tokens
-		let i: number =  start;
-		while ( i <= stop && i < this.tokens.size ) {
-			const op: RewriteOperation | undefined =  indexToOp.get(i);
+		let i: number = start;
+		while (i <= stop && i < this.tokens.size) {
+			const op: RewriteOperation | undefined = indexToOp.get(i);
 			indexToOp.delete(i); // remove so any left have index size-1
 			const t: Token = this.tokens.get(i);
-			if ( op == null ) {
+			if (op == null) {
 				// no operation at that index, just dump token
-				if ( t.type !== Token.EOF ) {
+				if (t.type !== Token.EOF) {
 					buf.push(String(t.text));
 				}
 				i++; // move to next token
@@ -338,11 +337,11 @@ export class TokenStreamRewriter {
 		// include stuff after end if it's last index in buffer
 		// So, if they did an insertAfter(lastValidIndex, "foo"), include
 		// foo if end==lastValidIndex.
-		if ( stop === this.tokens.size - 1 ) {
+		if (stop === this.tokens.size - 1) {
 			// Scan any remaining operations after last token
 			// should be included (they will be inserts).
 			for (const op of indexToOp.values()) {
-				if ( op.index >= this.tokens.size - 1 ) {
+				if (op.index >= this.tokens.size - 1) {
 					buf.push(op.text.toString());
 				}
 			}
@@ -406,23 +405,23 @@ export class TokenStreamRewriter {
 		// WALK REPLACES
 		for (let i = 0; i < rewrites.length; i++) {
 			const op: RewriteOperation | undefined = rewrites[i];
-			if ( op == null ) {
+			if (op == null) {
 				continue;
 			}
-			if ( !(op instanceof ReplaceOp) ) {
+			if (!(op instanceof ReplaceOp)) {
 				continue;
 			}
 			const rop: ReplaceOp = op;
 			// Wipe prior inserts within range
 			const inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (const iop of inserts) {
-				if ( iop.index === rop.index ) {
+				if (iop.index === rop.index) {
 					// E.g., insert before 2, delete 2..2; update replace
 					// text to include insert before, kill insert
 					rewrites[iop.instructionIndex] = undefined;
 					rop.text = iop.text.toString() + (rop.text != null ? rop.text.toString() : "");
 				}
-				else if ( iop.index > rop.index && iop.index <= rop.lastIndex ) {
+				else if (iop.index > rop.index && iop.index <= rop.lastIndex) {
 					// delete insert as it's a no-op.
 					rewrites[iop.instructionIndex] = undefined;
 				}
@@ -430,7 +429,7 @@ export class TokenStreamRewriter {
 			// Drop any prior replaces contained within
 			const prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
 			for (const prevRop of prevReplaces) {
-				if ( prevRop.index >= rop.index && prevRop.lastIndex <= rop.lastIndex ) {
+				if (prevRop.index >= rop.index && prevRop.lastIndex <= rop.lastIndex) {
 					// delete replace as it's a no-op.
 					rewrites[prevRop.instructionIndex] = undefined;
 					continue;
@@ -440,14 +439,14 @@ export class TokenStreamRewriter {
 					prevRop.lastIndex < rop.index || prevRop.index > rop.lastIndex;
 				// Delete special case of replace (text==null):
 				// D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
-				if ( prevRop.text == null && rop.text == null && !disjoint ) {
+				if (prevRop.text == null && rop.text == null && !disjoint) {
 					// console.log(`overlapping deletes: ${prevRop}, ${rop}`);
 					rewrites[prevRop.instructionIndex] = undefined; // kill first delete
 					rop.index = Math.min(prevRop.index, rop.index);
 					rop.lastIndex = Math.max(prevRop.lastIndex, rop.lastIndex);
 					// console.log(`new rop ${rop}`);
 				}
-				else if ( !disjoint ) {
+				else if (!disjoint) {
 					throw new Error(`replace op boundaries of ${rop} overlap with previous ${prevRop}`);
 				}
 			}
@@ -456,17 +455,17 @@ export class TokenStreamRewriter {
 		// WALK INSERTS
 		for (let i = 0; i < rewrites.length; i++) {
 			const op: RewriteOperation | undefined = rewrites[i];
-			if ( op == null ) {
+			if (op == null) {
 				continue;
 			}
-			if ( !(op instanceof InsertBeforeOp) ) {
+			if (!(op instanceof InsertBeforeOp)) {
 				continue;
 			}
-			const iop: InsertBeforeOp =  op;
+			const iop: InsertBeforeOp = op;
 			// combine current insert with prior if any at same index
 			const prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
 			for (const prevIop of prevInserts) {
-				if ( prevIop.index === iop.index ) {
+				if (prevIop.index === iop.index) {
 					if (prevIop instanceof InsertAfterOp) {
 						iop.text = this.catOpText(prevIop.text, iop.text);
 						rewrites[prevIop.instructionIndex] = undefined;
@@ -483,24 +482,24 @@ export class TokenStreamRewriter {
 			// look for replaces where iop.index is in range; error
 			const prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
 			for (const rop of prevReplaces) {
-				if ( iop.index === rop.index ) {
+				if (iop.index === rop.index) {
 					rop.text = this.catOpText(iop.text, rop.text);
 					rewrites[i] = undefined;	// delete current insert
 					continue;
 				}
-				if ( iop.index >= rop.index && iop.index <= rop.lastIndex ) {
+				if (iop.index >= rop.index && iop.index <= rop.lastIndex) {
 					throw new Error(`insert op ${iop} within boundaries of previous ${rop}`);
 				}
 			}
 		}
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
-		const m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
+		const m: Map<number, RewriteOperation> = new Map<number, RewriteOperation>();
 		for (const op of rewrites) {
-			if ( op == null ) {
+			if (op == null) {
 				// ignore deleted ops
 				continue;
 			}
-			if ( m.get(op.index) != null ) {
+			if (m.get(op.index) != null) {
 				throw new Error("should only be one op per index");
 			}
 			m.set(op.index, op);
@@ -510,27 +509,27 @@ export class TokenStreamRewriter {
 	}
 
 	protected catOpText(a: {}, b: {}): string {
-		let x =  "";
-		let y =  "";
-		if ( a != null ) {
+		let x = "";
+		let y = "";
+		if (a != null) {
 			x = a.toString();
 		}
-		if ( b != null ) {
+		if (b != null) {
 			y = b.toString();
 		}
 		return x + y;
 	}
 
 	/** Get all operations before an index of a particular kind */
-	protected getKindOfOps<T extends RewriteOperation>(rewrites: (RewriteOperation | undefined)[], kind: new(...args: any[]) => T, before: number): T[] {
+	protected getKindOfOps<T extends RewriteOperation>(rewrites: (RewriteOperation | undefined)[], kind: new (...args: any[]) => T, before: number): T[] {
 		const ops: T[] = [];
 		for (let i = 0; i < before && i < rewrites.length; i++) {
-			const op: RewriteOperation | undefined =  rewrites[i];
-			if ( op == null ) {
+			const op: RewriteOperation | undefined = rewrites[i];
+			if (op == null) {
 				// ignore deleted
 				continue;
 			}
-			if ( op instanceof kind ) {
+			if (op instanceof kind) {
 				ops.push(op);
 			}
 		}
@@ -563,13 +562,13 @@ export class RewriteOperation {
 		return this.index;
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		let opName: string = this.constructor.name;
 		const $index = opName.indexOf("$");
 		opName = opName.substring($index + 1, opName.length);
 		return "<" + opName + "@" + this.tokens.get(this.index) +
-				":\"" + this.text + "\">";
+			":\"" + this.text + "\">";
 	}
 }
 
@@ -578,10 +577,10 @@ class InsertBeforeOp extends RewriteOperation {
 		super(tokens, index, text);
 	}
 
-	@Override
+	// @Override
 	public execute(buf: string[]): number {
 		buf.push(this.text.toString());
-		if ( this.tokens.get(this.index).type !== Token.EOF ) {
+		if (this.tokens.get(this.index).type !== Token.EOF) {
 			buf.push(String(this.tokens.get(this.index).text));
 		}
 		return this.index + 1;
@@ -608,21 +607,21 @@ class ReplaceOp extends RewriteOperation {
 		this.lastIndex = to;
 	}
 
-	@Override
+	// @Override
 	public execute(buf: string[]): number {
-		if ( this.text != null ) {
+		if (this.text != null) {
 			buf.push(this.text.toString());
 		}
 		return this.lastIndex + 1;
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
-		if ( this.text == null ) {
+		if (this.text == null) {
 			return "<DeleteOp@" + this.tokens.get(this.index) +
-					".." + this.tokens.get(this.lastIndex) + ">";
+				".." + this.tokens.get(this.lastIndex) + ">";
 		}
 		return "<ReplaceOp@" + this.tokens.get(this.index) +
-				".." + this.tokens.get(this.lastIndex) + ":\"" + this.text + "\">";
+			".." + this.tokens.get(this.lastIndex) + ":\"" + this.text + "\">";
 	}
 }

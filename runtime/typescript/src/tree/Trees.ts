@@ -5,20 +5,20 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
+import * as Utils from "../misc/Utils";
+
 import { ATN } from "../atn/ATN";
 import { CommonToken } from "../CommonToken";
 import { ErrorNode } from "./ErrorNode";
 import { Interval } from "../misc/Interval";
-import { NotNull } from "../Decorators";
+import { ParseTree } from "./ParseTree";
 import { Parser } from "../Parser";
 import { ParserRuleContext } from "../ParserRuleContext";
-import { ParseTree } from "./ParseTree";
 import { RuleContext } from "../RuleContext";
 import { RuleNode } from "./RuleNode";
 import { TerminalNode } from "./TerminalNode";
 import { Token } from "../Token";
 import { Tree } from "./Tree";
-import * as Utils from "../misc/Utils";
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
 export class Trees {
@@ -40,7 +40,7 @@ export class Trees {
 	public static toStringTree(/*@NotNull*/ t: Tree, /*@Nullable*/ ruleNames: string[] | undefined): string;
 
 	public static toStringTree(/*@NotNull*/ t: Tree, arg2?: Parser | string[]): string;
-	public static toStringTree(@NotNull t: Tree, arg2?: Parser | string[]): string {
+	public static toStringTree(t: Tree, arg2?: Parser | string[]): string {
 		let ruleNames: string[] | undefined;
 		if (arg2 instanceof Parser) {
 			ruleNames = arg2.ruleNames;
@@ -122,8 +122,8 @@ export class Trees {
 	 */
 	public static getAncestors(t: ParseTree): ParseTree[];
 	public static getAncestors(t: Tree): Tree[];
-	@NotNull
-	public static getAncestors(@NotNull t: Tree): Tree[] {
+
+	public static getAncestors(t: Tree): Tree[] {
 		const ancestors: Tree[] = [];
 		let p = t.parent;
 		while (p) {
@@ -209,7 +209,7 @@ export class Trees {
 	 *  @since 4.5
 	 */
 	public static getRootOfSubtreeEnclosingRegion(
-		@NotNull t: ParseTree,
+		t: ParseTree,
 		startTokenIndex: number, // inclusive
 		stopTokenIndex: number, // inclusive
 	): ParserRuleContext | undefined {

@@ -5,22 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
-
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
 import * as Arrays from "../misc/Arrays";
+import * as assert from "assert";
+
+import { Equatable, JavaSet } from "../misc/Stubs";
+
 import { ATN } from "./ATN";
 import { ATNState } from "./ATNState";
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { EqualityComparator } from "../misc/EqualityComparator";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
-import { Equatable, JavaSet } from "../misc/Stubs";
 import { PredictionContextCache } from "./PredictionContextCache";
 import { Recognizer } from "../Recognizer";
 import { RuleContext } from "../RuleContext";
 import { RuleTransition } from "./RuleTransition";
-
-import * as assert from "assert";
 
 const INITIAL_HASH = 1;
 
@@ -119,7 +118,7 @@ export abstract class PredictionContext implements Equatable {
 		return context.removeEmptyContext();
 	}
 
-	public static join(@NotNull context0: PredictionContext, @NotNull context1: PredictionContext, @NotNull contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
+	public static join(context0: PredictionContext, context1: PredictionContext, contextCache: PredictionContextCache = PredictionContextCache.UNCACHED): PredictionContext {
 		if (context0 === context1) {
 			return context0;
 		}
@@ -216,9 +215,9 @@ export abstract class PredictionContext implements Equatable {
 	}
 
 	public static getCachedContext(
-		@NotNull context: PredictionContext,
-		@NotNull contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
-		@NotNull visited: PredictionContext.IdentityHashMap): PredictionContext {
+		context: PredictionContext,
+		contextCache: Array2DHashMap<PredictionContext, PredictionContext>,
+		visited: PredictionContext.IdentityHashMap): PredictionContext {
 		if (context.isEmpty) {
 			return context;
 		}
@@ -292,7 +291,7 @@ export abstract class PredictionContext implements Equatable {
 
 	public abstract readonly hasEmpty: boolean;
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		return this.cachedHashCode;
 	}
@@ -379,62 +378,62 @@ class EmptyPredictionContext extends PredictionContext {
 		return this.fullContext;
 	}
 
-	@Override
+	// @Override
 	protected addEmptyContext(): PredictionContext {
 		return this;
 	}
 
-	@Override
+	// @Override
 	protected removeEmptyContext(): PredictionContext {
 		throw new Error("Cannot remove the empty context from itself.");
 	}
 
-	@Override
+	// @Override
 	public getParent(index: number): PredictionContext {
 		throw new Error("index out of bounds");
 	}
 
-	@Override
+	// @Override
 	public getReturnState(index: number): number {
 		throw new Error("index out of bounds");
 	}
 
-	@Override
+	// @Override
 	public findReturnState(returnState: number): number {
 		return -1;
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public appendSingleContext(returnContext: number, contextCache: PredictionContextCache): PredictionContext {
 		return contextCache.getChild(this, returnContext);
 	}
 
-	@Override
+	// @Override
 	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return suffix;
 	}
 
-	@Override
+	// @Override
 	get isEmpty(): boolean {
 		return true;
 	}
 
-	@Override
+	// @Override
 	get hasEmpty(): boolean {
 		return true;
 	}
 
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		return this === o;
 	}
 
-	@Override
+	// @Override
 	public toStrings(recognizer: any, currentState: number, stop?: PredictionContext): string[] {
 		return ["[]"];
 	}
@@ -442,13 +441,13 @@ class EmptyPredictionContext extends PredictionContext {
 }
 
 class ArrayPredictionContext extends PredictionContext {
-	@NotNull
+
 	public parents: PredictionContext[];
 
-	@NotNull
+
 	public returnStates: number[];
 
-	constructor(@NotNull parents: PredictionContext[], returnStates: number[], hashCode?: number) {
+	constructor(parents: PredictionContext[], returnStates: number[], hashCode?: number) {
 		super(hashCode || PredictionContext.calculateHashCode(parents, returnStates));
 		assert(parents.length === returnStates.length);
 		assert(returnStates.length > 1 || returnStates[0] !== PredictionContext.EMPTY_FULL_STATE_KEY, "Should be using PredictionContext.EMPTY instead.");
@@ -457,37 +456,37 @@ class ArrayPredictionContext extends PredictionContext {
 		this.returnStates = returnStates;
 	}
 
-	@Override
+	// @Override
 	public getParent(index: number): PredictionContext {
 		return this.parents[index];
 	}
 
-	@Override
+	// @Override
 	public getReturnState(index: number): number {
 		return this.returnStates[index];
 	}
 
-	@Override
+	// @Override
 	public findReturnState(returnState: number): number {
 		return Arrays.binarySearch(this.returnStates, returnState);
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.returnStates.length;
 	}
 
-	@Override
+	// @Override
 	get isEmpty(): boolean {
 		return false;
 	}
 
-	@Override
+	// @Override
 	get hasEmpty(): boolean {
 		return this.returnStates[this.returnStates.length - 1] === PredictionContext.EMPTY_FULL_STATE_KEY;
 	}
 
-	@Override
+	// @Override
 	protected addEmptyContext(): PredictionContext {
 		if (this.hasEmpty) {
 			return this;
@@ -500,7 +499,7 @@ class ArrayPredictionContext extends PredictionContext {
 		return new ArrayPredictionContext(parents2, returnStates2);
 	}
 
-	@Override
+	// @Override
 	protected removeEmptyContext(): PredictionContext {
 		if (!this.hasEmpty) {
 			return this;
@@ -515,7 +514,7 @@ class ArrayPredictionContext extends PredictionContext {
 		}
 	}
 
-	@Override
+	// @Override
 	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return ArrayPredictionContext.appendContextImpl(this, suffix, new PredictionContext.IdentityHashMap());
 	}
@@ -575,7 +574,7 @@ class ArrayPredictionContext extends PredictionContext {
 		return result;
 	}
 
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		if (this === o) {
 			return true;
@@ -647,67 +646,67 @@ class ArrayPredictionContext extends PredictionContext {
 
 export class SingletonPredictionContext extends PredictionContext {
 
-	@NotNull
+
 	public parent: PredictionContext;
 	public returnState: number;
 
-	constructor(@NotNull parent: PredictionContext, returnState: number) {
+	constructor(parent: PredictionContext, returnState: number) {
 		super(PredictionContext.calculateSingleHashCode(parent, returnState));
 		// assert(returnState != PredictionContext.EMPTY_FULL_STATE_KEY && returnState != PredictionContext.EMPTY_LOCAL_STATE_KEY);
 		this.parent = parent;
 		this.returnState = returnState;
 	}
 
-	@Override
+	// @Override
 	public getParent(index: number): PredictionContext {
 		// assert(index == 0);
 		return this.parent;
 	}
 
-	@Override
+	// @Override
 	public getReturnState(index: number): number {
 		// assert(index == 0);
 		return this.returnState;
 	}
 
-	@Override
+	// @Override
 	public findReturnState(returnState: number): number {
 		return this.returnState === returnState ? 0 : -1;
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return 1;
 	}
 
-	@Override
+	// @Override
 	get isEmpty(): boolean {
 		return false;
 	}
 
-	@Override
+	// @Override
 	get hasEmpty(): boolean {
 		return false;
 	}
 
-	@Override
+	// @Override
 	public appendContext(suffix: PredictionContext, contextCache: PredictionContextCache): PredictionContext {
 		return contextCache.getChild(this.parent.appendContext(suffix, contextCache), this.returnState);
 	}
 
-	@Override
+	// @Override
 	protected addEmptyContext(): PredictionContext {
 		const parents: PredictionContext[] = [this.parent, PredictionContext.EMPTY_FULL];
 		const returnStates: number[] = [this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY];
 		return new ArrayPredictionContext(parents, returnStates);
 	}
 
-	@Override
+	// @Override
 	protected removeEmptyContext(): PredictionContext {
 		return this;
 	}
 
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
@@ -744,12 +743,12 @@ export namespace PredictionContext {
 			// intentionally empty
 		}
 
-		@Override
+		// @Override
 		public hashCode(obj: PredictionContext): number {
 			return obj.hashCode();
 		}
 
-		@Override
+		// @Override
 		public equals(a: PredictionContext, b: PredictionContext): boolean {
 			return a === b;
 		}

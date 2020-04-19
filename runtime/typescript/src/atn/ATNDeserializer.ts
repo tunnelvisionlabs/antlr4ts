@@ -5,21 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
 
-import { ActionTransition } from "./ActionTransition";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { ATN } from "./ATN";
 import { ATNDeserializationOptions } from "./ATNDeserializationOptions";
 import { ATNState } from "./ATNState";
 import { ATNStateType } from "./ATNStateType";
 import { ATNType } from "./ATNType";
+import { ActionTransition } from "./ActionTransition";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { AtomTransition } from "./AtomTransition";
 import { BasicBlockStartState } from "./BasicBlockStartState";
 import { BasicState } from "./BasicState";
 import { BitSet } from "../misc/BitSet";
 import { BlockEndState } from "./BlockEndState";
 import { BlockStartState } from "./BlockStartState";
-import { DecisionState } from "./DecisionState";
 import { DFA } from "../dfa/DFA";
+import { DecisionState } from "./DecisionState";
 import { EpsilonTransition } from "./EpsilonTransition";
 import { Interval } from "../misc/Interval";
 import { IntervalSet } from "../misc/IntervalSet";
@@ -35,7 +35,6 @@ import { LexerPushModeAction } from "./LexerPushModeAction";
 import { LexerSkipAction } from "./LexerSkipAction";
 import { LexerTypeAction } from "./LexerTypeAction";
 import { LoopEndState } from "./LoopEndState";
-import { NotNull } from "../Decorators";
 import { NotSetTransition } from "./NotSetTransition";
 import { ParserATNSimulator } from "./ParserATNSimulator";
 import { PlusBlockStartState } from "./PlusBlockStartState";
@@ -48,8 +47,8 @@ import { RuleStopState } from "./RuleStopState";
 import { RuleTransition } from "./RuleTransition";
 import { SetTransition } from "./SetTransition";
 import { StarBlockStartState } from "./StarBlockStartState";
-import { StarLoopbackState } from "./StarLoopbackState";
 import { StarLoopEntryState } from "./StarLoopEntryState";
+import { StarLoopbackState } from "./StarLoopbackState";
 import { Token } from "../Token";
 import { TokensStartState } from "./TokensStartState";
 import { Transition } from "./Transition";
@@ -118,7 +117,7 @@ export class ATNDeserializer {
 	 */
 	private static readonly SERIALIZED_UUID: UUID = ATNDeserializer.ADDED_UNICODE_SMP;
 
-	@NotNull
+
 	private readonly deserializationOptions: ATNDeserializationOptions;
 
 	constructor(deserializationOptions?: ATNDeserializationOptions) {
@@ -169,7 +168,7 @@ export class ATNDeserializer {
 		}
 	}
 
-	public deserialize(@NotNull data: Uint16Array): ATN {
+	public deserialize(data: Uint16Array): ATN {
 		data = data.slice(0);
 
 		// Each Uint16 value in data is shifted by +2 at the entry to this method. This is an encoding optimization
@@ -648,7 +647,7 @@ export class ATNDeserializer {
 	 *
 	 * @param atn The ATN.
 	 */
-	protected markPrecedenceDecisions(@NotNull atn: ATN): void {
+	protected markPrecedenceDecisions(atn: ATN): void {
 		// Map rule index -> precedence decision for that rule
 		const rulePrecedenceDecisions = new Map<number, StarLoopEntryState>();
 
@@ -1137,9 +1136,9 @@ export class ATNDeserializer {
 		return new UUID(mostSigBits, moreSigBits, lessSigBits, leastSigBits);
 	}
 
-	@NotNull
+
 	protected edgeFactory(
-		@NotNull atn: ATN,
+		atn: ATN,
 		type: TransitionType, src: number, trg: number,
 		arg1: number, arg2: number, arg3: number,
 		sets: IntervalSet[]): Transition {

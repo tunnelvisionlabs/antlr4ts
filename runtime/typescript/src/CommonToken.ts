@@ -8,7 +8,6 @@
 import { ATNSimulator } from "./atn/ATNSimulator";
 import { CharStream } from "./CharStream";
 import { Interval } from "./misc/Interval";
-import { NotNull, Override } from "./Decorators";
 import { Recognizer } from "./Recognizer";
 import { Token } from "./Token";
 import { TokenSource } from "./TokenSource";
@@ -49,7 +48,7 @@ export class CommonToken implements WritableToken {
 	 * the same source and input stream share a reference to the same
 	 * {@link Tuple2} containing these values.
 	 */
-	@NotNull
+
 	protected source: { source?: TokenSource; stream?: CharStream };
 
 	/**
@@ -75,7 +74,7 @@ export class CommonToken implements WritableToken {
 	 */
 	private stop: number;
 
-	constructor(type: number, text?: string, @NotNull source: { source?: TokenSource; stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start = 0, stop = 0) {
+	constructor(type: number, text?: string, source: { source?: TokenSource; stream?: CharStream } = CommonToken.EMPTY_SOURCE, channel: number = Token.DEFAULT_CHANNEL, start = 0, stop = 0) {
 		this._text = text;
 		this._type = type;
 		this.source = source;
@@ -100,7 +99,7 @@ export class CommonToken implements WritableToken {
 	 *
 	 * @param oldToken The token to copy.
 	 */
-	public static fromToken(@NotNull oldToken: Token): CommonToken {
+	public static fromToken(oldToken: Token): CommonToken {
 		const result: CommonToken = new CommonToken(oldToken.type, undefined, CommonToken.EMPTY_SOURCE, oldToken.channel, oldToken.startIndex, oldToken.stopIndex);
 		result._line = oldToken.line;
 		result.index = oldToken.tokenIndex;
@@ -117,7 +116,7 @@ export class CommonToken implements WritableToken {
 		return result;
 	}
 
-	@Override
+	// @Override
 	get type(): number {
 		return this._type;
 	}
@@ -127,7 +126,7 @@ export class CommonToken implements WritableToken {
 		this._type = type;
 	}
 
-	@Override
+	// @Override
 	get line(): number {
 		return this._line;
 	}
@@ -137,7 +136,7 @@ export class CommonToken implements WritableToken {
 		this._line = line;
 	}
 
-	@Override
+	// @Override
 	get text(): string | undefined {
 		if (this._text != null) {
 			return this._text;
@@ -170,7 +169,7 @@ export class CommonToken implements WritableToken {
 		this._text = text;
 	}
 
-	@Override
+	// @Override
 	get charPositionInLine(): number {
 		return this._charPositionInLine;
 	}
@@ -180,7 +179,7 @@ export class CommonToken implements WritableToken {
 		this._charPositionInLine = charPositionInLine;
 	}
 
-	@Override
+	// @Override
 	get channel(): number {
 		return this._channel;
 	}
@@ -190,7 +189,7 @@ export class CommonToken implements WritableToken {
 		this._channel = channel;
 	}
 
-	@Override
+	// @Override
 	get startIndex(): number {
 		return this.start;
 	}
@@ -199,7 +198,7 @@ export class CommonToken implements WritableToken {
 		this.start = start;
 	}
 
-	@Override
+	// @Override
 	get stopIndex(): number {
 		return this.stop;
 	}
@@ -208,7 +207,7 @@ export class CommonToken implements WritableToken {
 		this.stop = stop;
 	}
 
-	@Override
+	// @Override
 	get tokenIndex(): number {
 		return this.index;
 	}
@@ -218,12 +217,12 @@ export class CommonToken implements WritableToken {
 		this.index = index;
 	}
 
-	@Override
+	// @Override
 	get tokenSource(): TokenSource | undefined {
 		return this.source.source;
 	}
 
-	@Override
+	// @Override
 	get inputStream(): CharStream | undefined {
 		return this.source.stream;
 	}
@@ -231,7 +230,7 @@ export class CommonToken implements WritableToken {
 	public toString(): string;
 	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer: Recognizer<TSymbol, ATNInterpreter> | undefined): string;
 
-	@Override
+	// @Override
 	public toString<TSymbol, ATNInterpreter extends ATNSimulator>(recognizer?: Recognizer<TSymbol, ATNInterpreter>): string {
 		let channelStr = "";
 		if (this._channel > 0) {

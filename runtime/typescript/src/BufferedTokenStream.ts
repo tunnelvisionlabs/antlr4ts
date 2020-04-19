@@ -6,10 +6,10 @@
 // ConvertTo-TS run at 2016-10-04T11:26:49.6074365-07:00
 
 import * as assert from "assert";
+
 import { CommonToken } from "./CommonToken";
 import { Interval } from "./misc/Interval";
 import { Lexer } from "./Lexer";
-import { NotNull, Override } from "./Decorators";
 import { RuleContext } from "./RuleContext";
 import { Token } from "./Token";
 import { TokenSource } from "./TokenSource";
@@ -31,7 +31,7 @@ export class BufferedTokenStream implements TokenStream {
 	/**
 	 * The {@link TokenSource} from which tokens for this stream are fetched.
 	 */
-	@NotNull
+
 	private _tokenSource: TokenSource;
 
 	/**
@@ -67,7 +67,7 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected fetchedEOF = false;
 
-	constructor(@NotNull tokenSource: TokenSource) {
+	constructor(tokenSource: TokenSource) {
 		if (tokenSource == null) {
 			throw new Error("tokenSource cannot be null");
 		}
@@ -75,7 +75,7 @@ export class BufferedTokenStream implements TokenStream {
 		this._tokenSource = tokenSource;
 	}
 
-	@Override
+	// @Override
 	get tokenSource(): TokenSource {
 		return this._tokenSource;
 	}
@@ -88,33 +88,33 @@ export class BufferedTokenStream implements TokenStream {
 		this.fetchedEOF = false;
 	}
 
-	@Override
+	// @Override
 	get index(): number {
 		return this.p;
 	}
 
-	@Override
+	// @Override
 	public mark(): number {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public release(marker: number): void {
 		// no resources to release
 	}
 
-	@Override
+	// @Override
 	public seek(index: number): void {
 		this.lazyInit();
 		this.p = this.adjustSeekIndex(index);
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.tokens.length;
 	}
 
-	@Override
+	// @Override
 	public consume(): void {
 		let skipEofCheck: boolean;
 		if (this.p >= 0) {
@@ -183,7 +183,7 @@ export class BufferedTokenStream implements TokenStream {
 		return n;
 	}
 
-	@Override
+	// @Override
 	public get(i: number): Token {
 		if (i < 0 || i >= this.tokens.length) {
 			throw new RangeError("token index " + i + " out of range 0.." + (this.tokens.length - 1));
@@ -216,7 +216,7 @@ export class BufferedTokenStream implements TokenStream {
 		return subset;
 	}
 
-	@Override
+	// @Override
 	public LA(i: number): number {
 		const token = this.LT(i);
 		if (!token) {
@@ -234,8 +234,8 @@ export class BufferedTokenStream implements TokenStream {
 		return this.tokens[this.p - k];
 	}
 
-	@NotNull
-	@Override
+
+	// @Override
 	public LT(k: number): Token {
 		const result = this.tryLT(k);
 		if (result === undefined) {
@@ -462,7 +462,7 @@ export class BufferedTokenStream implements TokenStream {
 		return hidden;
 	}
 
-	@Override
+	// @Override
 	get sourceName(): string {
 		return this.tokenSource.sourceName;
 	}
@@ -471,8 +471,8 @@ export class BufferedTokenStream implements TokenStream {
 	public getText(): string;
 	public getText(interval: Interval): string;
 	public getText(context: RuleContext): string;
-	@NotNull
-	@Override
+
+	// @Override
 	public getText(interval?: Interval | RuleContext): string {
 		if (interval === undefined) {
 			interval = Interval.of(0, this.size - 1);
@@ -505,8 +505,8 @@ export class BufferedTokenStream implements TokenStream {
 		return buf.toString();
 	}
 
-	@NotNull
-	@Override
+
+	// @Override
 	public getTextFromRange(start: Token, stop?: Token): string {
 		if (this.isToken(start) && this.isToken(stop)) {
 			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));

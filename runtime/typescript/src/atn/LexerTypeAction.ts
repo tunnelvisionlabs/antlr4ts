@@ -9,7 +9,6 @@ import { Lexer } from "../Lexer";
 import { LexerAction } from "./LexerAction";
 import { LexerActionType } from "./LexerActionType";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
 
 /**
  * Implements the `type` lexer action by setting `Lexer.type`
@@ -41,7 +40,7 @@ export class LexerTypeAction implements LexerAction {
 	 * {@inheritDoc}
 	 * @returns This method returns {@link LexerActionType#TYPE}.
 	 */
-	@Override
+	// @Override
 	get actionType(): LexerActionType {
 		return LexerActionType.TYPE;
 	}
@@ -50,7 +49,7 @@ export class LexerTypeAction implements LexerAction {
 	 * {@inheritDoc}
 	 * @returns This method returns `false`.
 	 */
-	@Override
+	// @Override
 	get isPositionDependent(): boolean {
 		return false;
 	}
@@ -61,12 +60,12 @@ export class LexerTypeAction implements LexerAction {
 	 * This action is implemented by setting `Lexer.type` with the
 	 * value provided by `type`.
 	 */
-	@Override
-	public execute(@NotNull lexer: Lexer): void {
+	// @Override
+	public execute(lexer: Lexer): void {
 		lexer.type = this._type;
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
@@ -74,7 +73,7 @@ export class LexerTypeAction implements LexerAction {
 		return MurmurHash.finish(hash, 2);
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;
@@ -85,7 +84,7 @@ export class LexerTypeAction implements LexerAction {
 		return this._type === obj._type;
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		return `type(${this._type})`;
 	}

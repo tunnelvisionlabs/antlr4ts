@@ -5,9 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.2826960-07:00
 
-import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
 import { ATNState } from "./ATNState";
-import { NotNull, Override } from "../Decorators";
+import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
 import { SemanticContext } from "./SemanticContext";
 import { TransitionType } from "./TransitionType";
 
@@ -22,22 +21,22 @@ export class PredicateTransition extends AbstractPredicateTransition {
 	public predIndex: number;
 	public isCtxDependent: boolean;   // e.g., $i ref in pred
 
-	constructor(@NotNull target: ATNState, ruleIndex: number, predIndex: number, isCtxDependent: boolean) {
+	constructor(target: ATNState, ruleIndex: number, predIndex: number, isCtxDependent: boolean) {
 		super(target);
 		this.ruleIndex = ruleIndex;
 		this.predIndex = predIndex;
 		this.isCtxDependent = isCtxDependent;
 	}
 
-	@Override
+	// @Override
 	get serializationType(): TransitionType {
 		return TransitionType.PREDICATE;
 	}
 
-	@Override
+	// @Override
 	get isEpsilon(): boolean { return true; }
 
-	@Override
+	// @Override
 	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}
@@ -46,8 +45,8 @@ export class PredicateTransition extends AbstractPredicateTransition {
 		return new SemanticContext.Predicate(this.ruleIndex, this.predIndex, this.isCtxDependent);
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	public toString(): string {
 		return "pred_" + this.ruleIndex + ":" + this.predIndex;
 	}

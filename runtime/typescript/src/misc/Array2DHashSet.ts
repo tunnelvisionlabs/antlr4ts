@@ -6,10 +6,11 @@
 // ConvertTo-TS run at 2016-10-03T02:09:41.7434086-07:00
 
 import * as assert from "assert";
+
+import { JavaCollection, JavaSet } from "./Stubs";
+
 import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
 import { EqualityComparator } from "./EqualityComparator";
-import { NotNull, Nullable, Override, SuppressWarnings } from "../Decorators";
-import { JavaCollection, JavaSet } from "./Stubs";
 import { MurmurHash } from "./MurmurHash";
 
 /** {@link Set} implementation with closed hashing (open addressing). */
@@ -22,7 +23,7 @@ const INITAL_CAPACITY = 16; // must be power of 2
 const LOAD_FACTOR = 0.75;
 
 export class Array2DHashSet<T> implements JavaSet<T> {
-	@NotNull
+
 	protected comparator: EqualityComparator<T>;
 
 	protected buckets: (T[] | undefined)[];
@@ -119,7 +120,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return b;
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		for (const bucket of this.buckets) {
@@ -138,7 +139,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return hash;
 	}
 
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
@@ -182,28 +183,28 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		assert(this.n === oldSize);
 	}
 
-	@Override
+	// @Override
 	public add(t: T): boolean {
 		const existing: T = this.getOrAdd(t);
 		return existing === t;
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.n;
 	}
 
-	@Override
+	// @Override
 	get isEmpty(): boolean {
 		return this.n === 0;
 	}
 
-	@Override
+	// @Override
 	public contains(o: any): boolean {
 		return this.containsFast(this.asElementType(o));
 	}
 
-	public containsFast(@Nullable obj: T): boolean {
+	public containsFast(obj?: T): boolean {
 		if (obj == null) {
 			return false;
 		}
@@ -211,12 +212,12 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return this.get(obj) != null;
 	}
 
-	@Override
+	// @Override
 	public *[Symbol.iterator](): IterableIterator<T> {
 		yield* this.toArray();
 	}
 
-	@Override
+	// @Override
 	public toArray(): T[] {
 		const a = new Array<T>(this.size);
 
@@ -237,7 +238,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return a;
 	}
 
-	@Override
+	// @Override
 	public containsAll(collection: JavaCollection<T>): boolean {
 		if (collection instanceof Array2DHashSet) {
 			const s = collection as any as Array2DHashSet<T>;
@@ -265,7 +266,7 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return true;
 	}
 
-	@Override
+	// @Override
 	public addAll(c: Iterable<T>): boolean {
 		let changed = false;
 
@@ -278,14 +279,14 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 		return changed;
 	}
 
-	@Override
+	// @Override
 	public clear(): void {
 		this.buckets = this.createBuckets(INITAL_CAPACITY);
 		this.n = 0;
 		this.threshold = Math.floor(INITAL_CAPACITY * LOAD_FACTOR);
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		if (this.size === 0) {
 			return "{}";
@@ -352,7 +353,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @returns `o` if it could be an instance of `T`, otherwise
 	 * `undefined`.
 	 */
-	@SuppressWarnings("unchecked")
 	protected asElementType(o: any): T {
 		return o as T;
 	}
@@ -363,7 +363,6 @@ export class Array2DHashSet<T> implements JavaSet<T> {
 	 * @param capacity the length of the array to return
 	 * @returns the newly constructed array
 	 */
-	@SuppressWarnings("unchecked")
 	protected createBuckets(capacity: number): (T[] | undefined)[] {
 		return new Array<T[]>(capacity);
 	}
