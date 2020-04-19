@@ -62,7 +62,6 @@ bin/
 *.tgz
 
 **/dist
-
 tsconfig.tsbuildinfo
-
 test/runtime/cross-target/
+.antlr/

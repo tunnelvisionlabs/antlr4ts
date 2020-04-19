@@ -12,13 +12,13 @@ import { VocabularyImpl } from "../VocabularyImpl";
 import { ATNDeserializer } from "../atn/ATNDeserializer";
 
 function splitToLines(buffer: Buffer): string[] {
-	let lines: string[] = [];
+	const lines: string[] = [];
 
 	let index = 0;
 	while (index < buffer.length) {
-		let lineStart = index;
-		let lineEndLF = buffer.indexOf("\n".charCodeAt(0), index);
-		let lineEndCR = buffer.indexOf("\r".charCodeAt(0), index);
+		const lineStart = index;
+		const lineEndLF = buffer.indexOf("\n".charCodeAt(0), index);
+		const lineEndCR = buffer.indexOf("\r".charCodeAt(0), index);
 		let lineEnd: number;
 		if (lineEndCR >= 0 && (lineEndCR < lineEndLF || lineEndLF === -1)) {
 			lineEnd = lineEndCR;
@@ -65,17 +65,17 @@ export namespace InterpreterDataReader {
 	 * Data for a parser does not contain channel and mode names.
 	 */
 	export async function parseFile(fileName: string): Promise<InterpreterDataReader.InterpreterData> {
-		let result: InterpreterDataReader.InterpreterData = new InterpreterDataReader.InterpreterData();
+		const result: InterpreterDataReader.InterpreterData = new InterpreterDataReader.InterpreterData();
 		result.ruleNames = [];
 
-		let input: Buffer = await util.promisify(fs.readFile)(fileName);
-		let lines = splitToLines(input);
+		const input: Buffer = await util.promisify(fs.readFile)(fileName);
+		const lines = splitToLines(input);
 
 		try {
 			let line: string;
-			let lineIndex: number = 0;
-			let literalNames: string[] = [];
-			let symbolicNames: string[] = [];
+			let lineIndex = 0;
+			const literalNames: string[] = [];
+			const symbolicNames: string[] = [];
 
 			line = lines[lineIndex++];
 			if (line !== "token literal names:") {
@@ -103,7 +103,7 @@ export namespace InterpreterDataReader {
 				symbolicNames.push(line === "null" ? "" : line);
 			}
 
-			let displayNames: string[] = [];
+			const displayNames: string[] = [];
 			result.vocabulary = new VocabularyImpl(literalNames, symbolicNames, displayNames);
 
 			line = lines[lineIndex++];
@@ -151,12 +151,12 @@ export namespace InterpreterDataReader {
 			}
 
 			line = lines[lineIndex++];
-			let elements: string[] = line.split(",");
-			let serializedATN: Uint16Array = new Uint16Array(elements.length);
+			const elements: string[] = line.split(",");
+			const serializedATN: Uint16Array = new Uint16Array(elements.length);
 
-			for (let i: number = 0; i < elements.length; ++i) {
+			for (let i = 0; i < elements.length; ++i) {
 				let value: number;
-				let element: string = elements[i];
+				const element: string = elements[i];
 				if (element.startsWith("[")) {
 					value = parseInt(element.substring(1).trim(), 10);
 				}
@@ -170,7 +170,7 @@ export namespace InterpreterDataReader {
 				serializedATN[i] = value;
 			}
 
-			let deserializer: ATNDeserializer = new ATNDeserializer();
+			const deserializer: ATNDeserializer = new ATNDeserializer();
 			result.atn = deserializer.deserialize(serializedATN);
 		}
 		catch (e) {

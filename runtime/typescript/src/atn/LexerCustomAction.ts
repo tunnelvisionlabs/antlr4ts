@@ -107,7 +107,7 @@ export class LexerCustomAction implements LexerAction {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerCustomAction)) {

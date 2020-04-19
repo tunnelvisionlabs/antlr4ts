@@ -5,13 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.5099429-07:00
 
-import { Arrays } from "./Arrays";
+import * as Arrays from "./Arrays";
 import { NotNull, Override } from "../Decorators";
 import { JavaCollection } from "./Stubs";
 
 const EMPTY_DATA: Int32Array = new Int32Array(0);
 
-const INITIAL_SIZE: number = 4;
+const INITIAL_SIZE = 4;
 const MAX_ARRAY_SIZE: number = (((1 << 31) >>> 0) - 1) - 8;
 
 /**
@@ -43,7 +43,7 @@ export class IntegerList {
 			// arg is Iterable<number>
 			this._data = EMPTY_DATA;
 			this._size = 0;
-			for (let value of arg) {
+			for (const value of arg) {
 				this.add(value);
 			}
 		}
@@ -70,8 +70,8 @@ export class IntegerList {
 		} else {
 			// list is JavaCollection<number>
 			this.ensureCapacity(this._size + list.size);
-			let current: number = 0;
-			for (let xi of list) {
+			let current = 0;
+			for (const xi of list) {
 				this._data[this._size + current] = xi;
 				current++;
 			}
@@ -103,13 +103,13 @@ export class IntegerList {
 			throw RangeError();
 		}
 
-		let previous: number = this._data[index];
+		const previous: number = this._data[index];
 		this._data[index] = value;
 		return previous;
 	}
 
 	public removeAt(index: number): number {
-		let value: number = this.get(index);
+		const value: number = this.get(index);
 		this._data.copyWithin(index, index + 1, this._size);
 		this._data[this._size - 1] = 0;
 		this._size--;
@@ -215,7 +215,7 @@ export class IntegerList {
 	 */
 	@Override
 	public hashCode(): number {
-		let hashCode: number = 1;
+		let hashCode = 1;
 		for (let i = 0; i < this._size; i++) {
 			hashCode = 31 * hashCode + this._data[i];
 		}
@@ -270,7 +270,7 @@ export class IntegerList {
 			}
 		}
 
-		let tmp = new Int32Array(newLength);
+		const tmp = new Int32Array(newLength);
 		tmp.set(this._data);
 		this._data = tmp;
 	}
@@ -286,7 +286,7 @@ export class IntegerList {
 		let resultIdx = 0;
 		let calculatedPreciseResultSize = false;
 		for (let i = 0; i < this._size; i++) {
-			let codePoint = this._data[i];
+			const codePoint = this._data[i];
 			if (codePoint >= 0 && codePoint < 0x10000) {
 				resultArray[resultIdx] = codePoint;
 				resultIdx++;
@@ -295,14 +295,14 @@ export class IntegerList {
 
 			// Calculate the precise result size if we encounter a code point > 0xFFFF
 			if (!calculatedPreciseResultSize) {
-				let newResultArray = new Uint16Array(this.charArraySize());
+				const newResultArray = new Uint16Array(this.charArraySize());
 				newResultArray.set(resultArray, 0);
 				resultArray = newResultArray;
 				calculatedPreciseResultSize = true;
 			}
 
 			// This will throw RangeError if the code point is not a valid Unicode code point
-			let pair = String.fromCodePoint(codePoint);
+			const pair = String.fromCodePoint(codePoint);
 			resultArray[resultIdx] = pair.charCodeAt(0);
 			resultArray[resultIdx + 1] = pair.charCodeAt(1);
 			resultIdx += 2;

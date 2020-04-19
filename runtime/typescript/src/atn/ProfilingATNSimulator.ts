@@ -34,11 +34,11 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	protected numDecisions: number;
 
 	protected _input: TokenStream | undefined;
-	protected _startIndex: number = 0;
-	protected _sllStopIndex: number = 0;
-	protected _llStopIndex: number = 0;
+	protected _startIndex = 0;
+	protected _sllStopIndex = 0;
+	protected _llStopIndex = 0;
 
-	protected currentDecision: number = 0;
+	protected currentDecision = 0;
 	protected currentState: SimulatorState | undefined;
 
 	/** At the point of LL failover, we record how SLL would resolve the conflict so that
@@ -52,7 +52,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 	 *  It may in fact still be a context sensitivity but we don't know by looking at the
 	 *  minimum alternatives for the current input.
 	 */
-	protected conflictingAltResolvedBySLL: number = 0;
+	protected conflictingAltResolvedBySLL = 0;
 
 	constructor(parser: Parser) {
 		super(parser.interpreter.atn, parser);
@@ -86,9 +86,9 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			this.currentDecision = decision;
 			this.currentState = undefined;
 			this.conflictingAltResolvedBySLL = ATN.INVALID_ALT_NUMBER;
-			let start: number[] = process.hrtime();
-			let alt: number = super.adaptivePredict(input, decision, outerContext);
-			let stop: number[] = process.hrtime();
+			const start: number[] = process.hrtime();
+			const alt: number = super.adaptivePredict(input, decision, outerContext);
+			const stop: number[] = process.hrtime();
 
 			let nanoseconds: number = (stop[0] - start[0]) * 1000000000;
 			if (nanoseconds === 0) {
@@ -101,7 +101,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			this.decisions[decision].timeInPrediction += nanoseconds;
 			this.decisions[decision].invocations++;
 
-			let SLL_k: number = this._sllStopIndex - this._startIndex + 1;
+			const SLL_k: number = this._sllStopIndex - this._startIndex + 1;
 			this.decisions[decision].SLL_TotalLook += SLL_k;
 			this.decisions[decision].SLL_MinLook = this.decisions[decision].SLL_MinLook === 0 ? SLL_k : Math.min(this.decisions[decision].SLL_MinLook, SLL_k);
 			if (SLL_k > this.decisions[decision].SLL_MaxLook) {
@@ -111,7 +111,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			}
 
 			if (this._llStopIndex >= 0) {
-				let LL_k: number = this._llStopIndex - this._startIndex + 1;
+				const LL_k: number = this._llStopIndex - this._startIndex + 1;
 				this.decisions[decision].LL_TotalLook += LL_k;
 				this.decisions[decision].LL_MinLook = this.decisions[decision].LL_MinLook === 0 ? LL_k : Math.min(this.decisions[decision].LL_MinLook, LL_k);
 				if (LL_k > this.decisions[decision].LL_MaxLook) {
@@ -131,14 +131,14 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 	@Override
 	protected getStartState(dfa: DFA, input: TokenStream, outerContext: ParserRuleContext, useContext: boolean): SimulatorState | undefined {
-		let state: SimulatorState | undefined = super.getStartState(dfa, input, outerContext, useContext);
+		const state: SimulatorState | undefined = super.getStartState(dfa, input, outerContext, useContext);
 		this.currentState = state;
 		return state;
 	}
 
 	@Override
 	protected computeStartState(dfa: DFA, globalContext: ParserRuleContext, useContext: boolean): SimulatorState {
-		let state: SimulatorState = super.computeStartState(dfa, globalContext, useContext);
+		const state: SimulatorState = super.computeStartState(dfa, globalContext, useContext);
 		this.currentState = state;
 		return state;
 	}
@@ -149,7 +149,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			throw new Error("Invalid state");
 		}
 
-		let reachState: SimulatorState | undefined = super.computeReachSet(dfa, previous, t, contextCache);
+		const reachState: SimulatorState | undefined = super.computeReachSet(dfa, previous, t, contextCache);
 		if (reachState == null) {
 			// no reach on current lookahead symbol. ERROR.
 			this.decisions[this.currentDecision].errors.push(
@@ -175,7 +175,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			this._sllStopIndex = this._input.index;
 		}
 
-		let existingTargetState: DFAState | undefined = super.getExistingTargetState(previousD, t);
+		const existingTargetState: DFAState | undefined = super.getExistingTargetState(previousD, t);
 		if (existingTargetState != null) {
 			// this method is directly called by execDFA; must construct a SimulatorState
 			// to represent the current state for this case
@@ -189,7 +189,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			}
 
 			if (existingTargetState === ATNSimulator.ERROR) {
-				let state: SimulatorState = new SimulatorState(this.currentState.outerContext, previousD, this.currentState.useContext, this.currentState.remainingOuterContext);
+				const state: SimulatorState = new SimulatorState(this.currentState.outerContext, previousD, this.currentState.useContext, this.currentState.remainingOuterContext);
 				this.decisions[this.currentDecision].errors.push(
 					new ErrorInfo(this.currentDecision, state, this._input, this._startIndex, this._input.index),
 				);
@@ -201,7 +201,7 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 
 	@Override
 	protected computeTargetState(dfa: DFA, s: DFAState, remainingGlobalContext: ParserRuleContext, t: number, useContext: boolean, contextCache: PredictionContextCache): [DFAState, ParserRuleContext | undefined] {
-		let targetState: [DFAState, ParserRuleContext | undefined] = super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
+		const targetState: [DFAState, ParserRuleContext | undefined] = super.computeTargetState(dfa, s, remainingGlobalContext, t, useContext, contextCache);
 
 		if (useContext) {
 			this.decisions[this.currentDecision].LL_ATNTransitions++;
@@ -219,10 +219,10 @@ export class ProfilingATNSimulator extends ParserATNSimulator {
 			throw new Error("Invalid state");
 		}
 
-		let result: boolean = super.evalSemanticContextImpl(pred, parserCallStack, alt);
+		const result: boolean = super.evalSemanticContextImpl(pred, parserCallStack, alt);
 		if (!(pred instanceof SemanticContext.PrecedencePredicate)) {
-			let fullContext: boolean = this._llStopIndex >= 0;
-			let stopIndex: number = fullContext ? this._llStopIndex : this._sllStopIndex;
+			const fullContext: boolean = this._llStopIndex >= 0;
+			const stopIndex: number = fullContext ? this._llStopIndex : this._sllStopIndex;
 			this.decisions[this.currentDecision].predicateEvals.push(
 				new PredicateEvalInfo(this.currentState, this.currentDecision, this._input, this._startIndex, stopIndex, pred, result, alt),
 			);

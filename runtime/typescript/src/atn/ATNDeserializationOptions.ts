@@ -14,7 +14,7 @@ import { NotNull } from "../Decorators";
 export class ATNDeserializationOptions {
 	private static _defaultOptions?: ATNDeserializationOptions;
 
-	private readOnly: boolean = false;
+	private readOnly = false;
 	private verifyATN: boolean;
 	private generateRuleBypassTransitions: boolean;
 	private optimize: boolean;

@@ -115,7 +115,7 @@ export class TokenStreamRewriter {
 	 */
 	public rollback(instructionIndex: number, programName: string): void;
 	public rollback(instructionIndex: number, programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): void {
-		let is: RewriteOperation[] | undefined =  this.programs.get(programName);
+		const is: RewriteOperation[] | undefined =  this.programs.get(programName);
 		if ( is != null ) {
 			this.programs.set(programName, is.slice(TokenStreamRewriter.MIN_TOKEN_INDEX, instructionIndex));
 		}
@@ -142,8 +142,8 @@ export class TokenStreamRewriter {
 		}
 
 		// to insert after, just insert before next index (even if past end)
-		let op = new InsertAfterOp(this.tokens, index, text);
-		let rewrites: RewriteOperation[] = this.getProgram(programName);
+		const op = new InsertAfterOp(this.tokens, index, text);
+		const rewrites: RewriteOperation[] = this.getProgram(programName);
 		op.instructionIndex = rewrites.length;
 		rewrites.push(op);
 	}
@@ -160,8 +160,8 @@ export class TokenStreamRewriter {
 			index = tokenOrIndex.tokenIndex;
 		}
 
-		let op: RewriteOperation = new InsertBeforeOp(this.tokens, index, text);
-		let rewrites: RewriteOperation[] = this.getProgram(programName);
+		const op: RewriteOperation = new InsertBeforeOp(this.tokens, index, text);
+		const rewrites: RewriteOperation[] = this.getProgram(programName);
 		op.instructionIndex = rewrites.length;
 		rewrites.push(op);
 	}
@@ -197,8 +197,8 @@ export class TokenStreamRewriter {
 			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size})`);
 		}
 
-		let op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, text);
-		let rewrites: RewriteOperation[] = this.getProgram(programName);
+		const op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, text);
+		const rewrites: RewriteOperation[] = this.getProgram(programName);
 		op.instructionIndex = rewrites.length;
 		rewrites.push(op);
 	}
@@ -232,7 +232,7 @@ export class TokenStreamRewriter {
 	protected getLastRewriteTokenIndex(programName: string): number;
 
 	protected getLastRewriteTokenIndex(programName: string = TokenStreamRewriter.DEFAULT_PROGRAM_NAME): number {
-		let I: number | undefined = this.lastRewriteTokenIndexes.get(programName);
+		const I: number | undefined = this.lastRewriteTokenIndexes.get(programName);
 		if ( I == null ) {
 			return -1;
 		}
@@ -254,7 +254,7 @@ export class TokenStreamRewriter {
 	}
 
 	private initializeProgram(name: string): RewriteOperation[] {
-		let is: RewriteOperation[] = [];
+		const is: RewriteOperation[] = [];
 		this.programs.set(name, is);
 		return is;
 	}
@@ -296,7 +296,7 @@ export class TokenStreamRewriter {
 			programName = intervalOrProgram;
 		}
 
-		let rewrites: RewriteOperation[] | undefined = this.programs.get(programName);
+		const rewrites: RewriteOperation[] | undefined = this.programs.get(programName);
 		let start: number =  interval.a;
 		let stop: number =  interval.b;
 
@@ -312,17 +312,17 @@ export class TokenStreamRewriter {
 			return this.tokens.getText(interval); // no instructions to execute
 		}
 
-		let buf: string[] = [];
+		const buf: string[] = [];
 
 		// First, optimize instruction stream
-		let indexToOp: Map<number, RewriteOperation> = this.reduceToSingleOperationPerIndex(rewrites);
+		const indexToOp: Map<number, RewriteOperation> = this.reduceToSingleOperationPerIndex(rewrites);
 
 		// Walk buffer, executing instructions and emitting tokens
 		let i: number =  start;
 		while ( i <= stop && i < this.tokens.size ) {
-			let op: RewriteOperation | undefined =  indexToOp.get(i);
+			const op: RewriteOperation | undefined =  indexToOp.get(i);
 			indexToOp.delete(i); // remove so any left have index size-1
-			let t: Token = this.tokens.get(i);
+			const t: Token = this.tokens.get(i);
 			if ( op == null ) {
 				// no operation at that index, just dump token
 				if ( t.type !== Token.EOF ) {
@@ -341,7 +341,7 @@ export class TokenStreamRewriter {
 		if ( stop === this.tokens.size - 1 ) {
 			// Scan any remaining operations after last token
 			// should be included (they will be inserts).
-			for (let op of indexToOp.values()) {
+			for (const op of indexToOp.values()) {
 				if ( op.index >= this.tokens.size - 1 ) {
 					buf.push(op.text.toString());
 				}
@@ -405,17 +405,17 @@ export class TokenStreamRewriter {
 
 		// WALK REPLACES
 		for (let i = 0; i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined = rewrites[i];
+			const op: RewriteOperation | undefined = rewrites[i];
 			if ( op == null ) {
 				continue;
 			}
 			if ( !(op instanceof ReplaceOp) ) {
 				continue;
 			}
-			let rop: ReplaceOp = op;
+			const rop: ReplaceOp = op;
 			// Wipe prior inserts within range
-			let inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
-			for (let iop of inserts) {
+			const inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
+			for (const iop of inserts) {
 				if ( iop.index === rop.index ) {
 					// E.g., insert before 2, delete 2..2; update replace
 					// text to include insert before, kill insert
@@ -428,15 +428,15 @@ export class TokenStreamRewriter {
 				}
 			}
 			// Drop any prior replaces contained within
-			let prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
-			for (let prevRop of prevReplaces) {
+			const prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
+			for (const prevRop of prevReplaces) {
 				if ( prevRop.index >= rop.index && prevRop.lastIndex <= rop.lastIndex ) {
 					// delete replace as it's a no-op.
 					rewrites[prevRop.instructionIndex] = undefined;
 					continue;
 				}
 				// throw exception unless disjoint or identical
-				let disjoint: boolean =
+				const disjoint: boolean =
 					prevRop.lastIndex < rop.index || prevRop.index > rop.lastIndex;
 				// Delete special case of replace (text==null):
 				// D.i-j.u D.x-y.v	| boundaries overlap	combine to max(min)..max(right)
@@ -455,17 +455,17 @@ export class TokenStreamRewriter {
 
 		// WALK INSERTS
 		for (let i = 0; i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined = rewrites[i];
+			const op: RewriteOperation | undefined = rewrites[i];
 			if ( op == null ) {
 				continue;
 			}
 			if ( !(op instanceof InsertBeforeOp) ) {
 				continue;
 			}
-			let iop: InsertBeforeOp =  op;
+			const iop: InsertBeforeOp =  op;
 			// combine current insert with prior if any at same index
-			let prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
-			for (let prevIop of prevInserts) {
+			const prevInserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
+			for (const prevIop of prevInserts) {
 				if ( prevIop.index === iop.index ) {
 					if (prevIop instanceof InsertAfterOp) {
 						iop.text = this.catOpText(prevIop.text, iop.text);
@@ -481,8 +481,8 @@ export class TokenStreamRewriter {
 				}
 			}
 			// look for replaces where iop.index is in range; error
-			let prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
-			for (let rop of prevReplaces) {
+			const prevReplaces: ReplaceOp[] = this.getKindOfOps(rewrites, ReplaceOp, i);
+			for (const rop of prevReplaces) {
 				if ( iop.index === rop.index ) {
 					rop.text = this.catOpText(iop.text, rop.text);
 					rewrites[i] = undefined;	// delete current insert
@@ -494,8 +494,8 @@ export class TokenStreamRewriter {
 			}
 		}
 		// console.log(`rewrites after=[${Utils.join(rewrites, ", ")}]`);
-		let m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
-		for (let op of rewrites) {
+		const m: Map<number, RewriteOperation> =  new Map<number, RewriteOperation>();
+		for (const op of rewrites) {
 			if ( op == null ) {
 				// ignore deleted ops
 				continue;
@@ -510,8 +510,8 @@ export class TokenStreamRewriter {
 	}
 
 	protected catOpText(a: {}, b: {}): string {
-		let x: string =  "";
-		let y: string =  "";
+		let x =  "";
+		let y =  "";
 		if ( a != null ) {
 			x = a.toString();
 		}
@@ -523,9 +523,9 @@ export class TokenStreamRewriter {
 
 	/** Get all operations before an index of a particular kind */
 	protected getKindOfOps<T extends RewriteOperation>(rewrites: (RewriteOperation | undefined)[], kind: new(...args: any[]) => T, before: number): T[] {
-		let ops: T[] = [];
+		const ops: T[] = [];
 		for (let i = 0; i < before && i < rewrites.length; i++) {
-			let op: RewriteOperation | undefined =  rewrites[i];
+			const op: RewriteOperation | undefined =  rewrites[i];
 			if ( op == null ) {
 				// ignore deleted
 				continue;
@@ -566,7 +566,7 @@ export class RewriteOperation {
 	@Override
 	public toString(): string {
 		let opName: string = this.constructor.name;
-		let $index = opName.indexOf("$");
+		const $index = opName.indexOf("$");
 		opName = opName.substring($index + 1, opName.length);
 		return "<" + opName + "@" + this.tokens.get(this.index) +
 				":\"" + this.text + "\">";

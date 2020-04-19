@@ -93,18 +93,18 @@ export class VocabularyImpl implements Vocabulary {
 	@NotNull
 	public getDisplayName(tokenType: number): string {
 		if (tokenType >= 0 && tokenType < this.displayNames.length) {
-			let displayName = this.displayNames[tokenType];
+			const displayName = this.displayNames[tokenType];
 			if (displayName) {
 				return displayName;
 			}
 		}
 
-		let literalName = this.getLiteralName(tokenType);
+		const literalName = this.getLiteralName(tokenType);
 		if (literalName) {
 			return literalName;
 		}
 
-		let symbolicName = this.getSymbolicName(tokenType);
+		const symbolicName = this.getSymbolicName(tokenType);
 		if (symbolicName) {
 			return symbolicName;
 		}

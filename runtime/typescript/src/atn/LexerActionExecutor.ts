@@ -42,7 +42,7 @@ export class LexerActionExecutor {
 		this._lexerActions = lexerActions;
 
 		let hash: number = MurmurHash.initialize();
-		for (let lexerAction of lexerActions) {
+		for (const lexerAction of lexerActions) {
 			hash = MurmurHash.update(hash, lexerAction);
 		}
 
@@ -70,7 +70,7 @@ export class LexerActionExecutor {
 			return new LexerActionExecutor([lexerAction]);
 		}
 
-		let lexerActions = lexerActionExecutor._lexerActions.slice(0);
+		const lexerActions = lexerActionExecutor._lexerActions.slice(0);
 		lexerActions.push(lexerAction);
 		return new LexerActionExecutor(lexerActions);
 	}
@@ -152,12 +152,12 @@ export class LexerActionExecutor {
 	 * of the token.
 	 */
 	public execute(@NotNull lexer: Lexer, input: CharStream, startIndex: number): void {
-		let requiresSeek: boolean = false;
-		let stopIndex: number = input.index;
+		let requiresSeek = false;
+		const stopIndex: number = input.index;
 		try {
 			for (let lexerAction of this._lexerActions) {
 				if (lexerAction instanceof LexerIndexedCustomAction) {
-					let offset: number = lexerAction.offset;
+					const offset: number = lexerAction.offset;
 					input.seek(startIndex + offset);
 					lexerAction = lexerAction.action;
 					requiresSeek = (startIndex + offset) !== stopIndex;
@@ -181,7 +181,7 @@ export class LexerActionExecutor {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof LexerActionExecutor)) {

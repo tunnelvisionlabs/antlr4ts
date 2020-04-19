@@ -30,8 +30,8 @@ function trySetConsole(valueFactory: () => Console): boolean {
 	}
 }
 
-function expectConsole(expectedOutput: string, expectedErrors: string, testFunction: () => void) {
-	let priorConsole = console;
+function expectConsole(expectedOutput: string, expectedErrors: string, testFunction: () => void): void {
+	const priorConsole = console;
 	try {
 		trySetConsole(() => new Console({ stdout: process.stdout, stderr: process.stderr, colorMode: false }));
 		stdMocks.use();
@@ -40,9 +40,9 @@ function expectConsole(expectedOutput: string, expectedErrors: string, testFunct
 		stdMocks.restore();
 		trySetConsole(() => priorConsole);
 	}
-	let streams = stdMocks.flush();
+	const streams = stdMocks.flush();
 	let output = streams.stdout.join("");
-	let errors = streams.stderr.join("");
+	const errors = streams.stderr.join("");
 
 	// Fixup for small behavioral difference at EOF...
 	if (output.length === expectedOutput.length - 1 && output[output.length - 1] !== "\n") {
@@ -71,7 +71,7 @@ export interface ParserTestOptions<TParser extends Parser> extends LexerTestOpti
 class TreeShapeListener implements ParseTreeListener {
 	public enterEveryRule(ctx: ParserRuleContext): void {
 		for (let i = 0; i < ctx.childCount; i++) {
-			let parent = ctx.getChild(i).parent;
+			const parent = ctx.getChild(i).parent;
 			if (!(parent instanceof RuleNode) || parent.ruleContext !== ctx) {
 				throw new Error("Invalid parse tree shape detected.");
 			}
@@ -79,7 +79,7 @@ class TreeShapeListener implements ParseTreeListener {
 	}
 }
 
-export function lexerTest(options: LexerTestOptions) {
+export function lexerTest(options: LexerTestOptions): void {
 	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);
@@ -92,7 +92,7 @@ export function lexerTest(options: LexerTestOptions) {
 	});
 }
 
-export function parserTest<TParser extends Parser>(options: ParserTestOptions<TParser>) {
+export function parserTest<TParser extends Parser>(options: ParserTestOptions<TParser>): void {
 	const inputStream: CharStream = CharStreams.fromString(options.input);
 	const lex = new options.lexer(inputStream);
 	const tokens = new CommonTokenStream(lex);

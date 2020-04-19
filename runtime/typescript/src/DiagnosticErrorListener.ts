@@ -77,10 +77,10 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 			return;
 		}
 
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let conflictingAlts: BitSet = this.getConflictingAlts(ambigAlts, configs);
-		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
-		let message: string = `reportAmbiguity d=${decision}: ambigAlts=${conflictingAlts}, input='${text}'`;
+		const decision: string = this.getDecisionDescription(recognizer, dfa);
+		const conflictingAlts: BitSet = this.getConflictingAlts(ambigAlts, configs);
+		const text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const message = `reportAmbiguity d=${decision}: ambigAlts=${conflictingAlts}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
@@ -92,10 +92,10 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		stopIndex: number,
 		conflictingAlts: BitSet | undefined,
 		@NotNull conflictState: SimulatorState): void {
-		let format: string = "reportAttemptingFullContext d=%s, input='%s'";
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
-		let message: string = `reportAttemptingFullContext d=${decision}, input='${text}'`;
+		const format = "reportAttemptingFullContext d=%s, input='%s'";
+		const decision: string = this.getDecisionDescription(recognizer, dfa);
+		const text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const message = `reportAttemptingFullContext d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
@@ -107,25 +107,25 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		stopIndex: number,
 		prediction: number,
 		@NotNull acceptState: SimulatorState): void {
-		let format: string = "reportContextSensitivity d=%s, input='%s'";
-		let decision: string = this.getDecisionDescription(recognizer, dfa);
-		let text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
-		let message: string = `reportContextSensitivity d=${decision}, input='${text}'`;
+		const format = "reportContextSensitivity d=%s, input='%s'";
+		const decision: string = this.getDecisionDescription(recognizer, dfa);
+		const text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const message = `reportContextSensitivity d=${decision}, input='${text}'`;
 		recognizer.notifyErrorListeners(message);
 	}
 
 	protected getDecisionDescription(
 		@NotNull recognizer: Parser,
 		@NotNull dfa: DFA): string {
-		let decision: number = dfa.decision;
-		let ruleIndex: number = dfa.atnStartState.ruleIndex;
+		const decision: number = dfa.decision;
+		const ruleIndex: number = dfa.atnStartState.ruleIndex;
 
-		let ruleNames: string[] = recognizer.ruleNames;
+		const ruleNames: string[] = recognizer.ruleNames;
 		if (ruleIndex < 0 || ruleIndex >= ruleNames.length) {
 			return decision.toString();
 		}
 
-		let ruleName: string = ruleNames[ruleIndex];
+		const ruleName: string = ruleNames[ruleIndex];
 		if (!ruleName) {
 			return decision.toString();
 		}
@@ -150,8 +150,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 			return reportedAlts;
 		}
 
-		let result: BitSet = new BitSet();
-		for (let config of configs) {
+		const result: BitSet = new BitSet();
+		for (const config of configs) {
 			result.set(config.alt);
 		}
 

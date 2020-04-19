@@ -32,9 +32,9 @@ export class FailedPredicateException extends RecognitionException {
 			recognizer.inputStream,
 			recognizer.context,
 			FailedPredicateException.formatMessage(predicate, message));
-		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
+		const s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 
-		let trans = s.transition(0) as AbstractPredicateTransition;
+		const trans = s.transition(0) as AbstractPredicateTransition;
 		if (trans instanceof PredicateTransition) {
 			this._ruleIndex = trans.ruleIndex;
 			this._predicateIndex = trans.predIndex;

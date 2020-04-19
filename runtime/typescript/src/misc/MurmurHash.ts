@@ -12,7 +12,7 @@ import { Equatable } from "./Stubs";
  */
 export namespace MurmurHash {
 
-	const DEFAULT_SEED: number = 0;
+	const DEFAULT_SEED = 0;
 
 	/**
 	 * Initialize the hash using the specified `seed`.
@@ -32,12 +32,12 @@ export namespace MurmurHash {
 	 * @returns the updated intermediate hash value
 	 */
 	export function update(hash: number, value: number | string | Equatable | null | undefined): number {
-		const c1: number = 0xCC9E2D51;
-		const c2: number = 0x1B873593;
-		const r1: number = 15;
-		const r2: number = 13;
-		const m: number = 5;
-		const n: number = 0xE6546B64;
+		const c1 = 0xCC9E2D51;
+		const c2 = 0x1B873593;
+		const r1 = 15;
+		const r2 = 13;
+		const m = 5;
+		const n = 0xE6546B64;
 
 		if (value == null) {
 			value = 0;
@@ -90,7 +90,7 @@ export namespace MurmurHash {
 	export function hashCode<T extends number | string | Equatable>(data: Iterable<T>, seed: number = DEFAULT_SEED): number {
 		let hash: number = initialize(seed);
 		let length = 0;
-		for (let value of data) {
+		for (const value of data) {
 			hash = update(hash, value);
 			length++;
 		}
@@ -104,14 +104,14 @@ export namespace MurmurHash {
 	 * http://stackoverflow.com/a/7616484
 	 */
 	function hashString(str: string): number {
-		let len = str.length;
+		const len = str.length;
 		if (len === 0) {
 			return 0;
 		}
 
 		let hash = 0;
 		for (let i = 0; i < len; i++) {
-			let c = str.charCodeAt(i);
+			const c = str.charCodeAt(i);
 			hash = (((hash << 5) >>> 0) - hash) + c;
 			hash |= 0;
 		}

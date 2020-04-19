@@ -17,6 +17,7 @@ import { Parser } from "./Parser";
  * @author Sam Harwell
  */
 export function RuleDependency(dependency: DependencySpecification) {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	return (target: object, propertyKey: PropertyKey, propertyDescriptor: PropertyDescriptor) => {
 		// intentionally empty
 	};

@@ -20,7 +20,7 @@ export class MultiMap<K, V> extends Map<K, V[]> {
 	}
 
 	public getPairs(): [K, V][] {
-		let pairs: [K, V][] = [];
+		const pairs: [K, V][] = [];
 		this.forEach((values: V[], key: K) => {
 			values.forEach((v) => {
 				pairs.push([key, v]);

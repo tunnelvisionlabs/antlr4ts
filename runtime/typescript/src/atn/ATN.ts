@@ -143,8 +143,8 @@ export class ATN {
 	@NotNull
 	public nextTokens(s: ATNState, ctx?: PredictionContext): IntervalSet {
 		if (ctx) {
-			let anal: LL1Analyzer = new LL1Analyzer(this);
-			let next: IntervalSet = anal.LOOK(s, ctx);
+			const anal: LL1Analyzer = new LL1Analyzer(this);
+			const next: IntervalSet = anal.LOOK(s, ctx);
 			return next;
 		} else {
 			if (s.nextTokenWithinRule) {
@@ -165,7 +165,7 @@ export class ATN {
 
 	public removeState(@NotNull state: ATNState): void {
 		// just replace the state, don't shift states in list
-		let invalidState = new InvalidState();
+		const invalidState = new InvalidState();
 		invalidState.atn = this;
 		invalidState.stateNumber = state.stateNumber;
 		this.states[state.stateNumber] = invalidState;
@@ -239,18 +239,18 @@ export class ATN {
 		}
 
 		let ctx: RuleContext | undefined = context;
-		let s: ATNState = this.states[stateNumber];
+		const s: ATNState = this.states[stateNumber];
 		let following: IntervalSet = this.nextTokens(s);
 		if (!following.contains(Token.EPSILON)) {
 			return following;
 		}
 
-		let expected: IntervalSet = new IntervalSet();
+		const expected: IntervalSet = new IntervalSet();
 		expected.addAll(following);
 		expected.remove(Token.EPSILON);
 		while (ctx != null && ctx.invokingState >= 0 && following.contains(Token.EPSILON)) {
-			let invokingState: ATNState = this.states[ctx.invokingState];
-			let rt: RuleTransition = invokingState.transition(0) as RuleTransition;
+			const invokingState: ATNState = this.states[ctx.invokingState];
+			const rt: RuleTransition = invokingState.transition(0) as RuleTransition;
 			following = this.nextTokens(rt.followState);
 			expected.addAll(following);
 			expected.remove(Token.EPSILON);
@@ -266,5 +266,5 @@ export class ATN {
 }
 
 export namespace ATN {
-	export const INVALID_ALT_NUMBER: number = 0;
+	export const INVALID_ALT_NUMBER = 0;
 }

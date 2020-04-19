@@ -8,7 +8,7 @@
 
 import { Array2DHashMap } from "../misc/Array2DHashMap";
 import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { Arrays } from "../misc/Arrays";
+import * as Arrays from "../misc/Arrays";
 import { ATN } from "./ATN";
 import { ATNState } from "./ATNState";
 import { EqualityComparator } from "../misc/EqualityComparator";
@@ -22,7 +22,7 @@ import { RuleTransition } from "./RuleTransition";
 
 import * as assert from "assert";
 
-const INITIAL_HASH: number = 1;
+const INITIAL_HASH = 1;
 
 export abstract class PredictionContext implements Equatable {
 	/**
@@ -69,11 +69,11 @@ export abstract class PredictionContext implements Equatable {
 	protected static calculateHashCode(parents: PredictionContext[], returnStates: number[]): number {
 		let hash: number = MurmurHash.initialize(INITIAL_HASH);
 
-		for (let parent of parents) {
+		for (const parent of parents) {
 			hash = MurmurHash.update(hash, parent);
 		}
 
-		for (let returnState of returnStates) {
+		for (const returnState of returnStates) {
 			hash = MurmurHash.update(hash, returnState);
 		}
 
@@ -94,7 +94,7 @@ export abstract class PredictionContext implements Equatable {
 
 	protected abstract removeEmptyContext(): PredictionContext;
 
-	public static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext: boolean = true): PredictionContext {
+	public static fromRuleContext(atn: ATN, outerContext: RuleContext, fullContext = true): PredictionContext {
 		if (outerContext.isEmpty) {
 			return fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
@@ -106,8 +106,8 @@ export abstract class PredictionContext implements Equatable {
 			parent = fullContext ? PredictionContext.EMPTY_FULL : PredictionContext.EMPTY_LOCAL;
 		}
 
-		let state: ATNState = atn.states[outerContext.invokingState];
-		let transition: RuleTransition = state.transition(0) as RuleTransition;
+		const state: ATNState = atn.states[outerContext.invokingState];
+		const transition: RuleTransition = state.transition(0) as RuleTransition;
 		return parent.getChild(transition.followState.stateNumber);
 	}
 
@@ -130,10 +130,10 @@ export abstract class PredictionContext implements Equatable {
 			return PredictionContext.isEmptyLocal(context1) ? context1 : PredictionContext.addEmptyContext(context0);
 		}
 
-		let context0size: number = context0.size;
-		let context1size: number = context1.size;
+		const context0size: number = context0.size;
+		const context1size: number = context1.size;
 		if (context0size === 1 && context1size === 1 && context0.getReturnState(0) === context1.getReturnState(0)) {
-			let merged: PredictionContext = contextCache.join(context0.getParent(0), context1.getParent(0));
+			const merged: PredictionContext = contextCache.join(context0.getParent(0), context1.getParent(0));
 			if (merged === context0.getParent(0)) {
 				return context0;
 			} else if (merged === context1.getParent(0)) {
@@ -143,13 +143,13 @@ export abstract class PredictionContext implements Equatable {
 			}
 		}
 
-		let count: number = 0;
+		let count = 0;
 		let parentsList: PredictionContext[] = new Array<PredictionContext>(context0size + context1size);
 		let returnStatesList: number[] = new Array<number>(parentsList.length);
-		let leftIndex: number = 0;
-		let rightIndex: number = 0;
-		let canReturnLeft: boolean = true;
-		let canReturnRight: boolean = true;
+		let leftIndex = 0;
+		let rightIndex = 0;
+		let canReturnLeft = true;
+		let canReturnRight = true;
 		while (leftIndex < context0size && rightIndex < context1size) {
 			if (context0.getReturnState(leftIndex) === context1.getReturnState(rightIndex)) {
 				parentsList[count] = contextCache.join(context0.getParent(leftIndex), context1.getParent(rightIndex));
@@ -234,10 +234,10 @@ export abstract class PredictionContext implements Equatable {
 			return existing;
 		}
 
-		let changed: boolean = false;
+		let changed = false;
 		let parents: PredictionContext[] = new Array<PredictionContext>(context.size);
 		for (let i = 0; i < parents.length; i++) {
-			let parent: PredictionContext = PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
+			const parent: PredictionContext = PredictionContext.getCachedContext(context.getParent(i), contextCache, visited);
 			if (changed || parent !== context.getParent(i)) {
 				if (!changed) {
 					parents = new Array<PredictionContext>(context.size);
@@ -263,7 +263,7 @@ export abstract class PredictionContext implements Equatable {
 		if (parents.length === 1) {
 			updated = new SingletonPredictionContext(parents[0], context.getReturnState(0));
 		} else {
-			let returnStates: number[] = new Array<number>(context.size);
+			const returnStates: number[] = new Array<number>(context.size);
 			for (let i = 0; i < context.size; i++) {
 				returnStates[i] = context.getReturnState(i);
 			}
@@ -301,25 +301,26 @@ export abstract class PredictionContext implements Equatable {
 	public abstract equals(o: any): boolean;
 
 	public toStrings(recognizer: Recognizer<any, any> | undefined, currentState: number, stop: PredictionContext = PredictionContext.EMPTY_FULL): string[] {
-		let result: string[] = [];
+		const result: string[] = [];
 
 		outer:
 		for (let perm = 0; ; perm++) {
-			let offset: number = 0;
-			let last: boolean = true;
+			let offset = 0;
+			let last = true;
+			// eslint-disable-next-line @typescript-eslint/no-this-alias
 			let p: PredictionContext = this;
 			let stateNumber: number = currentState;
-			let localBuffer: string = "";
+			let localBuffer = "";
 			localBuffer += "[";
 			while (!p.isEmpty && p !== stop) {
-				let index: number = 0;
+				let index = 0;
 				if (p.size > 0) {
-					let bits: number = 1;
+					let bits = 1;
 					while (((1 << bits) >>> 0) < p.size) {
 						bits++;
 					}
 
-					let mask: number = ((1 << bits) >>> 0) - 1;
+					const mask: number = ((1 << bits) >>> 0) - 1;
 					index = (perm >> offset) & mask;
 					last = last && index >= p.size - 1;
 					if (index >= p.size) {
@@ -335,9 +336,9 @@ export abstract class PredictionContext implements Equatable {
 						localBuffer += " ";
 					}
 
-					let atn: ATN = recognizer.atn;
-					let s: ATNState = atn.states[stateNumber];
-					let ruleName: string = recognizer.ruleNames[s.ruleIndex];
+					const atn: ATN = recognizer.atn;
+					const s: ATNState = atn.states[stateNumber];
+					const ruleName: string = recognizer.ruleNames[s.ruleIndex];
 					localBuffer += ruleName;
 				} else if (p.getReturnState(index) !== PredictionContext.EMPTY_FULL_STATE_KEY) {
 					if (!p.isEmpty) {
@@ -447,7 +448,7 @@ class ArrayPredictionContext extends PredictionContext {
 	@NotNull
 	public returnStates: number[];
 
-	constructor( @NotNull parents: PredictionContext[], returnStates: number[], hashCode?: number) {
+	constructor(@NotNull parents: PredictionContext[], returnStates: number[], hashCode?: number) {
 		super(hashCode || PredictionContext.calculateHashCode(parents, returnStates));
 		assert(parents.length === returnStates.length);
 		assert(returnStates.length > 1 || returnStates[0] !== PredictionContext.EMPTY_FULL_STATE_KEY, "Should be using PredictionContext.EMPTY instead.");
@@ -492,8 +493,8 @@ class ArrayPredictionContext extends PredictionContext {
 			return this;
 		}
 
-		let parents2: PredictionContext[] = this.parents.slice(0);
-		let returnStates2: number[] = this.returnStates.slice(0);
+		const parents2: PredictionContext[] = this.parents.slice(0);
+		const returnStates2: number[] = this.returnStates.slice(0);
 		parents2.push(PredictionContext.EMPTY_FULL);
 		returnStates2.push(PredictionContext.EMPTY_FULL_STATE_KEY);
 		return new ArrayPredictionContext(parents2, returnStates2);
@@ -508,8 +509,8 @@ class ArrayPredictionContext extends PredictionContext {
 		if (this.returnStates.length === 2) {
 			return new SingletonPredictionContext(this.parents[0], this.returnStates[0]);
 		} else {
-			let parents2: PredictionContext[] = this.parents.slice(0, this.parents.length - 1);
-			let returnStates2: number[] = this.returnStates.slice(0, this.returnStates.length - 1);
+			const parents2: PredictionContext[] = this.parents.slice(0, this.parents.length - 1);
+			const returnStates2: number[] = this.returnStates.slice(0, this.returnStates.length - 1);
 			return new ArrayPredictionContext(parents2, returnStates2);
 		}
 	}
@@ -546,8 +547,8 @@ class ArrayPredictionContext extends PredictionContext {
 					parentCount--;
 				}
 
-				let updatedParents: PredictionContext[] = new Array<PredictionContext>(parentCount);
-				let updatedReturnStates: number[] = new Array<number>(parentCount);
+				const updatedParents: PredictionContext[] = new Array<PredictionContext>(parentCount);
+				const updatedReturnStates: number[] = new Array<number>(parentCount);
 				for (let i = 0; i < parentCount; i++) {
 					updatedReturnStates[i] = context.getReturnState(i);
 				}
@@ -587,28 +588,28 @@ class ArrayPredictionContext extends PredictionContext {
 			return false;
 		}
 
-		let other: ArrayPredictionContext = o;
+		const other: ArrayPredictionContext = o;
 		return this.equalsImpl(other, new Array2DHashSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>());
 	}
 
 	private equalsImpl(other: ArrayPredictionContext, visited: JavaSet<PredictionContextCache.IdentityCommutativePredictionContextOperands>): boolean {
-		let selfWorkList: PredictionContext[] = [];
-		let otherWorkList: PredictionContext[] = [];
+		const selfWorkList: PredictionContext[] = [];
+		const otherWorkList: PredictionContext[] = [];
 		selfWorkList.push(this);
 		otherWorkList.push(other);
 		while (true) {
-			let currentSelf = selfWorkList.pop();
-			let currentOther = otherWorkList.pop();
+			const currentSelf = selfWorkList.pop();
+			const currentOther = otherWorkList.pop();
 			if (!currentSelf || !currentOther) {
 				break;
 			}
 
-			let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(currentSelf, currentOther);
+			const operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(currentSelf, currentOther);
 			if (!visited.add(operands)) {
 				continue;
 			}
 
-			let selfSize: number = operands.x.size;
+			const selfSize: number = operands.x.size;
 			if (selfSize === 0) {
 				if (!operands.x.equals(operands.y)) {
 					return false;
@@ -617,7 +618,7 @@ class ArrayPredictionContext extends PredictionContext {
 				continue;
 			}
 
-			let otherSize: number = operands.y.size;
+			const otherSize: number = operands.y.size;
 			if (selfSize !== otherSize) {
 				return false;
 			}
@@ -627,8 +628,8 @@ class ArrayPredictionContext extends PredictionContext {
 					return false;
 				}
 
-				let selfParent: PredictionContext = operands.x.getParent(i);
-				let otherParent: PredictionContext = operands.y.getParent(i);
+				const selfParent: PredictionContext = operands.x.getParent(i);
+				const otherParent: PredictionContext = operands.y.getParent(i);
 				if (selfParent.hashCode() !== otherParent.hashCode()) {
 					return false;
 				}
@@ -696,8 +697,8 @@ export class SingletonPredictionContext extends PredictionContext {
 
 	@Override
 	protected addEmptyContext(): PredictionContext {
-		let parents: PredictionContext[] = [this.parent, PredictionContext.EMPTY_FULL];
-		let returnStates: number[] = [this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY];
+		const parents: PredictionContext[] = [this.parent, PredictionContext.EMPTY_FULL];
+		const returnStates: number[] = [this.returnState, PredictionContext.EMPTY_FULL_STATE_KEY];
 		return new ArrayPredictionContext(parents, returnStates);
 	}
 
@@ -714,7 +715,7 @@ export class SingletonPredictionContext extends PredictionContext {
 			return false;
 		}
 
-		let other: SingletonPredictionContext = o;
+		const other: SingletonPredictionContext = o;
 		if (this.hashCode() !== other.hashCode()) {
 			return false;
 		}
@@ -739,7 +740,7 @@ export namespace PredictionContext {
 	export class IdentityEqualityComparator implements EqualityComparator<PredictionContext> {
 		public static readonly INSTANCE: IdentityEqualityComparator = new IdentityEqualityComparator();
 
-		private IdentityEqualityComparator() {
+		private IdentityEqualityComparator(): void {
 			// intentionally empty
 		}
 

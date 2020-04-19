@@ -14,6 +14,7 @@ import { VocabularyImpl } from "../..";
 import { join, toCharArray } from "../../misc";
 
 
+/* eslint-disable no-useless-escape */
 export class XPathLexer extends Lexer {
 	public static readonly TOKEN_REF = 1;
 	public static readonly RULE_REF = 2;
@@ -88,7 +89,7 @@ export class XPathLexer extends Lexer {
 		switch (actionIndex) {
 		case 0:
 
-			let text = this.text;
+			const text = this.text;
 			if (text.charAt(0) === text.charAt(0).toUpperCase()) {
 				this.type = XPathLexer.TOKEN_REF;
 			} else {

@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "composite": true,
-    "allowJs": true,
-    "outDir": "target",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es2015",
@@ -13,14 +10,10 @@
     "strictNullChecks": true,
     "experimentalDecorators": true,
     "declaration": true,
-    "preserveConstEnums": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "types": [
-      "node"
-    ]
   },
+  "include": [
+    "index.js"
+  ],
   "exclude": [
     "node_modules",
     "target"

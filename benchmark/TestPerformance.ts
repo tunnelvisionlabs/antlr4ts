@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 /*!
  * Copyright 2016 The ANTLR Project. All rights reserved.
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
@@ -5,11 +10,14 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.5869363-07:00
 
+/* eslint-disable no-inner-declarations */
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 import * as sourceMapSupport from "source-map-support";
 sourceMapSupport.install();
 
 import { ANTLRErrorListener } from "antlr4ts";
-import { ANTLRInputStream } from "antlr4ts";
 import { Array2DHashSet } from "antlr4ts/dist/misc";
 import { ATN } from "antlr4ts/dist/atn";
 import { ATNConfig } from "antlr4ts/dist/atn";
@@ -53,7 +61,6 @@ import { Stopwatch } from "./Stopwatch";
 import { TerminalNode } from "antlr4ts/dist/tree";
 import { TimeSpan } from "./TimeSpan";
 import { Token } from "antlr4ts";
-import { TokenSource } from "antlr4ts";
 import { TokenStream } from "antlr4ts";
 
 import * as Utils from "antlr4ts/dist/misc/Utils";
@@ -88,8 +95,8 @@ function assertTrue(value: boolean, message?: string) {
  */
 function shuffleArray<T>(array: T[]) {
 	for (let i = array.length - 1; i > 0; i--) {
-		let j = (Math.random() * (i + 1)) | 0;
-		let temp = array[i];
+		const j = (Math.random() * (i + 1)) | 0;
+		const temp = array[i];
 		array[i] = array[j];
 		array[j] = temp;
 	}
@@ -443,9 +450,9 @@ export class TestPerformance {
 			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
 		}
 
-		let listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
-		let entryPoint: string = "compilationUnit";
-		let factory: ParserFactory = this.getParserFactory(
+		const listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
+		const entryPoint = "compilationUnit";
+		const factory: ParserFactory = this.getParserFactory(
 			lexerCtor,
 			parserCtor,
 			EmptyListener,
@@ -457,12 +464,12 @@ export class TestPerformance {
 			jdkSourceRoot = jdkSourceRoot + "/" + TestPerformance.TOP_PACKAGE.replace(/\./g, "/");
 		}
 
-		let directory: string = jdkSourceRoot;
+		const directory: string = jdkSourceRoot;
 		assertTrue(fs.lstatSync(directory).isDirectory());
 
-		let filesFilter: FilenameFilter = FilenameFilters.extension(".java", false);
-		let directoriesFilter: FilenameFilter = FilenameFilters.ALL_FILES;
-		let sources: InputDescriptor[] = this.loadSources(directory, filesFilter, directoriesFilter, TestPerformance.RECURSIVE);
+		const filesFilter: FilenameFilter = FilenameFilters.extension(".java", false);
+		const directoriesFilter: FilenameFilter = FilenameFilters.ALL_FILES;
+		const sources: InputDescriptor[] = this.loadSources(directory, filesFilter, directoriesFilter, TestPerformance.RECURSIVE);
 
 		for (let i = 0; i < TestPerformance.PASSES; i++) {
 			if (TestPerformance.COMPUTE_TRANSITION_STATS) {
@@ -501,19 +508,19 @@ export class TestPerformance {
 		// 	}
 		// }));
 		for (let i = 0; i < TestPerformance.PASSES - 1; i++) {
-			let currentPass: number = i + 1;
+			const currentPass: number = i + 1;
 			// 	passResults.add(executorService.submit(new Runnable() {
 			// 		@Override
 			// 		run(): void {
 			if (TestPerformance.CLEAR_DFA) {
-				let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
+				const index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
 				if (TestPerformance.sharedLexers.length > 0 && TestPerformance.sharedLexers[index] != null) {
-					let atn: ATN = TestPerformance.sharedLexers[index]!.atn;
+					const atn: ATN = TestPerformance.sharedLexers[index]!.atn;
 					atn.clearDFA();
 				}
 
 				if (TestPerformance.sharedParsers.length > 0 && TestPerformance.sharedParsers[index] != null) {
-					let atn: ATN = TestPerformance.sharedParsers[index]!.atn;
+					const atn: ATN = TestPerformance.sharedParsers[index]!.atn;
 					atn.clearDFA();
 				}
 
@@ -578,12 +585,12 @@ export class TestPerformance {
 			}
 		}
 
-		let sumNum: Uint32Array = new Uint32Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let sumDen: Uint32Array = new Uint32Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let sumNormalized: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const sumNum: Uint32Array = new Uint32Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const sumDen: Uint32Array = new Uint32Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const sumNormalized: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
 		for (let i = 0; i < TestPerformance.PASSES; i++) {
-			let num: Uint32Array = TestPerformance.computedTransitionsPerFile[i];
-			let den: Uint32Array = TestPerformance.totalTransitionsPerFile[i];
+			const num: Uint32Array = TestPerformance.computedTransitionsPerFile[i];
+			const den: Uint32Array = TestPerformance.totalTransitionsPerFile[i];
 			for (let j = 0; j < den.length; j++) {
 				sumNum[j] += num[j];
 				sumDen[j] += den[j];
@@ -593,8 +600,8 @@ export class TestPerformance {
 			}
 		}
 
-		let weightedAverage: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let average: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const weightedAverage: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const average: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
 		for (let i = 0; i < average.length; i++) {
 			if (sumDen[i] > 0) {
 				weightedAverage[i] = sumNum[i] / sumDen[i];
@@ -606,15 +613,15 @@ export class TestPerformance {
 			average[i] = sumNormalized[i] / TestPerformance.PASSES;
 		}
 
-		let low95: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let high95: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let low67: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let high67: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
-		let stddev: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const low95: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const high95: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const low67: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const high67: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
+		const stddev: Float64Array = new Float64Array(TestPerformance.totalTransitionsPerFile[0].length);
 		for (let i = 0; i < stddev.length; i++) {
-			let points: Float64Array = new Float64Array(TestPerformance.PASSES);
+			const points: Float64Array = new Float64Array(TestPerformance.PASSES);
 			for (let j = 0; j < TestPerformance.PASSES; j++) {
-				let totalTransitions: number = TestPerformance.totalTransitionsPerFile[j][i];
+				const totalTransitions: number = TestPerformance.totalTransitionsPerFile[j][i];
 				if (totalTransitions > 0) {
 					points[j] = TestPerformance.computedTransitionsPerFile[j][i] / TestPerformance.totalTransitionsPerFile[j][i];
 				}
@@ -625,15 +632,15 @@ export class TestPerformance {
 
 			points.sort();
 
-			let averageValue: number = TestPerformance.TRANSITION_WEIGHTED_AVERAGE ? weightedAverage[i] : average[i];
-			let value: number = 0;
+			const averageValue: number = TestPerformance.TRANSITION_WEIGHTED_AVERAGE ? weightedAverage[i] : average[i];
+			let value = 0;
 			for (let j = 0; j < TestPerformance.PASSES; j++) {
-				let diff: number = points[j] - averageValue;
+				const diff: number = points[j] - averageValue;
 				value += diff * diff;
 			}
 
-			let ignoreCount95: number = Math.round(TestPerformance.PASSES * (1 - 0.95) / 2.0) | 0;
-			let ignoreCount67: number = Math.round(TestPerformance.PASSES * (1 - 0.667) / 2.0) | 0;
+			const ignoreCount95: number = Math.round(TestPerformance.PASSES * (1 - 0.95) / 2.0) | 0;
+			const ignoreCount67: number = Math.round(TestPerformance.PASSES * (1 - 0.667) / 2.0) | 0;
 			low95[i] = points[ignoreCount95];
 			high95[i] = points[points.length - 1 - ignoreCount95];
 			low67[i] = points[ignoreCount67];
@@ -643,7 +650,7 @@ export class TestPerformance {
 
 		console.log("File\tAverage\tStd. Dev.\t95%% Low\t95%% High\t66.7%% Low\t66.7%% High");
 		for (let i = 0; i < stddev.length; i++) {
-			let averageValue: number = TestPerformance.TRANSITION_WEIGHTED_AVERAGE ? weightedAverage[i] : average[i];
+			const averageValue: number = TestPerformance.TRANSITION_WEIGHTED_AVERAGE ? weightedAverage[i] : average[i];
 			console.log(`${i + 1}\t${averageValue}\t${stddev[i]}\t${averageValue - low95[i]}\t${high95[i] - averageValue}\t${averageValue - low67[i]}\t${high67[i] - averageValue}`);
 		}
 	}
@@ -654,55 +661,55 @@ export class TestPerformance {
 	private computeTimingStatistics(): void {
 		if (TestPerformance.TIMING_CUMULATIVE) {
 			for (let i = 0; i < TestPerformance.PASSES; i++) {
-				let data: Float64Array = TestPerformance.timePerFile[i];
+				const data: Float64Array = TestPerformance.timePerFile[i];
 				for (let j = 0; j < data.length - 1; j++) {
 					data[j + 1] += data[j];
 				}
 
-				let data2: Int32Array = TestPerformance.tokensPerFile[i];
+				const data2: Int32Array = TestPerformance.tokensPerFile[i];
 				for (let j = 0; j < data2.length - 1; j++) {
 					data2[j + 1] += data2[j];
 				}
 			}
 		}
 
-		let fileCount: number = TestPerformance.timePerFile[0].length;
-		let sum: Float64Array = new Float64Array(fileCount);
+		const fileCount: number = TestPerformance.timePerFile[0].length;
+		const sum: Float64Array = new Float64Array(fileCount);
 		for (let i = 0; i < TestPerformance.PASSES; i++) {
-			let data: Float64Array = TestPerformance.timePerFile[i];
-			let tokenData: Int32Array = TestPerformance.tokensPerFile[i];
+			const data: Float64Array = TestPerformance.timePerFile[i];
+			const tokenData: Int32Array = TestPerformance.tokensPerFile[i];
 			for (let j = 0; j < data.length; j++) {
 				sum[j] += data[j] / tokenData[j];
 			}
 		}
 
-		let average: Float64Array = new Float64Array(fileCount);
+		const average: Float64Array = new Float64Array(fileCount);
 		for (let i = 0; i < average.length; i++) {
 			average[i] = sum[i] / TestPerformance.PASSES;
 		}
 
-		let low95: Float64Array = new Float64Array(fileCount);
-		let high95: Float64Array = new Float64Array(fileCount);
-		let low67: Float64Array = new Float64Array(fileCount);
-		let high67: Float64Array = new Float64Array(fileCount);
-		let stddev: Float64Array = new Float64Array(fileCount);
+		const low95: Float64Array = new Float64Array(fileCount);
+		const high95: Float64Array = new Float64Array(fileCount);
+		const low67: Float64Array = new Float64Array(fileCount);
+		const high67: Float64Array = new Float64Array(fileCount);
+		const stddev: Float64Array = new Float64Array(fileCount);
 		for (let i = 0; i < stddev.length; i++) {
-			let points: Float64Array = new Float64Array(TestPerformance.PASSES);
+			const points: Float64Array = new Float64Array(TestPerformance.PASSES);
 			for (let j = 0; j < TestPerformance.PASSES; j++) {
 				points[j] = TestPerformance.timePerFile[j][i] / TestPerformance.tokensPerFile[j][i];
 			}
 
 			points.sort();
 
-			let averageValue: number = average[i];
-			let value: number = 0;
+			const averageValue: number = average[i];
+			let value = 0;
 			for (let j = 0; j < TestPerformance.PASSES; j++) {
-				let diff: number = points[j] - averageValue;
+				const diff: number = points[j] - averageValue;
 				value += diff * diff;
 			}
 
-			let ignoreCount95: number = Math.round(TestPerformance.PASSES * (1 - 0.95) / 2.0) | 0;
-			let ignoreCount67: number = Math.round(TestPerformance.PASSES * (1 - 0.667) / 2.0) | 0;
+			const ignoreCount95: number = Math.round(TestPerformance.PASSES * (1 - 0.95) / 2.0) | 0;
+			const ignoreCount67: number = Math.round(TestPerformance.PASSES * (1 - 0.667) / 2.0) | 0;
 			low95[i] = points[ignoreCount95];
 			high95[i] = points[points.length - 1 - ignoreCount95];
 			low67[i] = points[ignoreCount67];
@@ -712,13 +719,13 @@ export class TestPerformance {
 
 		console.log("File\tAverage\tStd. Dev.\t95% Low\t95% High\t66.7% Low\t66.7% High");
 		for (let i = 0; i < stddev.length; i++) {
-			let averageValue: number = average[i];
+			const averageValue: number = average[i];
 			console.log(`${i + 1}\t${averageValue}\t${stddev[i]}\t${averageValue - low95[i]}\t${high95[i] - averageValue}\t${averageValue - low67[i]}\t${high67[i] - averageValue}`);
 		}
 	}
 
 	private getSourceRoot(prefix: string): string | undefined {
-		let sourceRoot = process.env[prefix + "_SOURCE_ROOT"];
+		const sourceRoot = process.env[prefix + "_SOURCE_ROOT"];
 		// if (sourceRoot == null) {
 		// 	sourceRoot = System.getProperty(prefix+"_SOURCE_ROOT");
 		// }
@@ -734,7 +741,7 @@ export class TestPerformance {
 	// }
 
 	public static getOptionsDescription(topPackage: string): string {
-		let builder: string = "";
+		let builder = "";
 		builder += ("Input=");
 		if (topPackage.length === 0) {
 			builder += ("*");
@@ -805,8 +812,8 @@ export class TestPerformance {
 
 		assert(fs.lstatSync(directory).isDirectory());
 
-		let sources: string[] = listFilesSync(directory, filesFilter);
-		for (let file of sources) {
+		const sources: string[] = listFilesSync(directory, filesFilter);
+		for (const file of sources) {
 			if (!fs.lstatSync(file).isFile()) {
 				continue;
 			}
@@ -815,8 +822,8 @@ export class TestPerformance {
 		}
 
 		if (recursive) {
-			let children: string[] = listFilesSync(directory, directoriesFilter);
-			for (let child of children) {
+			const children: string[] = listFilesSync(directory, directoriesFilter);
+			for (const child of children) {
 				if (fs.lstatSync(child).isDirectory()) {
 					this.loadSources(child, filesFilter, directoriesFilter, true, result);
 				}
@@ -824,21 +831,21 @@ export class TestPerformance {
 		}
 	}
 
-	public configOutputSize: number = 0;
+	public configOutputSize = 0;
 
 	protected parseSources(currentPass: number, factory: ParserFactory, sources: InputDescriptor[], shuffleSources: boolean): void {
 		if (shuffleSources) {
-			let sourcesList: InputDescriptor[] = sources.slice(0);
+			const sourcesList: InputDescriptor[] = sources.slice(0);
 			shuffleArray(sourcesList);
 			sources = sourcesList;
 		}
 
-		let startTime: Stopwatch = Stopwatch.startNew();
+		const startTime: Stopwatch = Stopwatch.startNew();
 		TestPerformance.tokenCount[currentPass] = 0;
-		let inputSize: number = 0;
-		let inputCount: number = 0;
+		let inputSize = 0;
+		let inputCount = 0;
 
-		let results: (FileParseResult | undefined)[] = [];
+		const results: (FileParseResult | undefined)[] = [];
 		// let executorService: ExecutorService;
 		// if (TestPerformance.FILE_GRANULARITY) {
 		// 	executorService = Executors.newFixedThreadPool(TestPerformance.FILE_GRANULARITY ? TestPerformance.NUMBER_OF_THREADS : 1, new NumberedThreadFactory());
@@ -846,16 +853,16 @@ export class TestPerformance {
 		// 	executorService = Executors.newSingleThreadExecutor(new FixedThreadNumberFactory((<NumberedThread>Thread.currentThread()).getThreadNumber()));
 		// }
 
-		for (let inputDescriptor of sources) {
+		for (const inputDescriptor of sources) {
 			if (inputCount >= TestPerformance.MAX_FILES_PER_PARSE_ITERATION) {
 				break;
 			}
 
-			let input: CharStream = inputDescriptor.getInputStream();
+			const input: CharStream = inputDescriptor.getInputStream();
 			input.seek(0);
 			inputSize += input.size;
 			inputCount++;
-			let futureChecksum: () => FileParseResult | undefined = () => {
+			const futureChecksum: () => FileParseResult | undefined = () => {
 				// @Override
 				// call(): FileParseResult {
 				// this incurred a great deal of overhead and was causing significant variations in performance results.
@@ -873,13 +880,13 @@ export class TestPerformance {
 			results.push(futureChecksum());
 		}
 
-		let checksum = new MurmurHashChecksum();
-		let currentIndex: number = -1;
-		for (let future of results) {
+		const checksum = new MurmurHashChecksum();
+		let currentIndex = -1;
+		for (const future of results) {
 			currentIndex++;
-			let fileChecksum: number = 0;
+			let fileChecksum = 0;
 			// try {
-			let fileResult: FileParseResult | undefined = future;
+			const fileResult: FileParseResult | undefined = future;
 			if (fileResult == null) {
 				continue;
 			}
@@ -919,22 +926,22 @@ export class TestPerformance {
 		console.log(`${currentPass + 1}. Total parse time for ${inputCount} files (${Math.round(inputSize / 1024)} KiB, ${TestPerformance.tokenCount[currentPass]} tokens${TestPerformance.COMPUTE_CHECKSUM ? `, checksum 0x${(checksum.getValue() >>> 0).toString(16)}` : ""}): ${Math.round(startTime.elapsedMillis())}ms`);
 
 		if (TestPerformance.sharedLexers.length > 0) {
-			let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
-			let lexer: Lexer = TestPerformance.sharedLexers[index]!;
-			let lexerInterpreter: LexerATNSimulator = lexer.interpreter;
-			let modeToDFA: DFA[] = lexerInterpreter.atn.modeToDFA;
+			const index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
+			const lexer: Lexer = TestPerformance.sharedLexers[index]!;
+			const lexerInterpreter: LexerATNSimulator = lexer.interpreter;
+			const modeToDFA: DFA[] = lexerInterpreter.atn.modeToDFA;
 			if (TestPerformance.SHOW_DFA_STATE_STATS) {
-				let states: number = 0;
-				let configs: number = 0;
-				let uniqueConfigs: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
+				let states = 0;
+				let configs = 0;
+				const uniqueConfigs: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 
-				for (let dfa of modeToDFA) {
+				for (const dfa of modeToDFA) {
 					if (dfa == null) {
 						continue;
 					}
 
 					states += dfa.states.size;
-					for (let state of dfa.states) {
+					for (const state of dfa.states) {
 						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -945,17 +952,17 @@ export class TestPerformance {
 				if (TestPerformance.DETAILED_DFA_STATE_STATS) {
 					console.log("\tMode\tStates\tConfigs\tMode");
 					for (let i = 0; i < modeToDFA.length; i++) {
-						let dfa: DFA = modeToDFA[i];
+						const dfa: DFA = modeToDFA[i];
 						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 
-						let modeConfigs: number = 0;
-						for (let state of dfa.states) {
+						let modeConfigs = 0;
+						for (const state of dfa.states) {
 							modeConfigs += state.configs.size;
 						}
 
-						let modeName: string = lexer.modeNames[i];
+						const modeName: string = lexer.modeNames[i];
 						console.log(`\t${dfa.decision}\t${dfa.states.size}\t${modeConfigs}\t${modeName}`);
 					}
 				}
@@ -963,24 +970,24 @@ export class TestPerformance {
 		}
 
 		if (TestPerformance.RUN_PARSER && TestPerformance.sharedParsers.length > 0) {
-			let index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
-			let parser: Parser = TestPerformance.sharedParsers[index]!;
+			const index: number = TestPerformance.FILE_GRANULARITY ? 0 : 0;
+			const parser: Parser = TestPerformance.sharedParsers[index]!;
 			// make sure the individual DFAState objects actually have unique ATNConfig arrays
-			let interpreter: ParserATNSimulator = parser.interpreter;
-			let decisionToDFA: DFA[] = interpreter.atn.decisionToDFA;
+			const interpreter: ParserATNSimulator = parser.interpreter;
+			const decisionToDFA: DFA[] = interpreter.atn.decisionToDFA;
 
 			if (TestPerformance.SHOW_DFA_STATE_STATS) {
-				let states: number = 0;
-				let configs: number = 0;
-				let uniqueConfigs: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
+				let states = 0;
+				let configs = 0;
+				const uniqueConfigs: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
 
-				for (let dfa of decisionToDFA) {
+				for (const dfa of decisionToDFA) {
 					if (dfa == null) {
 						continue;
 					}
 
 					states += dfa.states.size;
-					for (let state of dfa.states) {
+					for (const state of dfa.states) {
 						configs += state.configs.size;
 						uniqueConfigs.addAll(state.configs);
 					}
@@ -997,49 +1004,49 @@ export class TestPerformance {
 					}
 
 					for (let i = 0; i < decisionToDFA.length; i++) {
-						let dfa: DFA = decisionToDFA[i];
+						const dfa: DFA = decisionToDFA[i];
 						if (dfa == null || dfa.states.isEmpty) {
 							continue;
 						}
 
-						let decisionConfigs: number = 0;
-						for (let state of dfa.states) {
+						let decisionConfigs = 0;
+						for (const state of dfa.states) {
 							decisionConfigs += state.configs.size;
 						}
 
-						let ruleName: string = parser.ruleNames[parser.atn.decisionToState[dfa.decision].ruleIndex];
+						const ruleName: string = parser.ruleNames[parser.atn.decisionToState[dfa.decision].ruleIndex];
 
-						let calls: number = 0;
-						let fullContextCalls: number = 0;
-						let nonSllCalls: number = 0;
-						let transitions: number = 0;
-						let computedTransitions: number = 0;
-						let fullContextTransitions: number = 0;
-						let lookahead: number = 0;
-						let fullContextLookahead: number = 0;
+						let calls = 0;
+						let fullContextCalls = 0;
+						let nonSllCalls = 0;
+						let transitions = 0;
+						let computedTransitions = 0;
+						let fullContextTransitions = 0;
+						let lookahead = 0;
+						let fullContextLookahead = 0;
 						let formatString: string;
 						if (TestPerformance.COMPUTE_TRANSITION_STATS) {
-							for (let data of TestPerformance.decisionInvocationsPerFile[currentPass]) {
+							for (const data of TestPerformance.decisionInvocationsPerFile[currentPass]) {
 								calls += data[i];
 							}
 
-							for (let data of TestPerformance.fullContextFallbackPerFile[currentPass]) {
+							for (const data of TestPerformance.fullContextFallbackPerFile[currentPass]) {
 								fullContextCalls += data[i];
 							}
 
-							for (let data of TestPerformance.nonSllPerFile[currentPass]) {
+							for (const data of TestPerformance.nonSllPerFile[currentPass]) {
 								nonSllCalls += data[i];
 							}
 
-							for (let data of TestPerformance.totalTransitionsPerDecisionPerFile[currentPass]) {
+							for (const data of TestPerformance.totalTransitionsPerDecisionPerFile[currentPass]) {
 								transitions += data[i];
 							}
 
-							for (let data of TestPerformance.computedTransitionsPerDecisionPerFile[currentPass]) {
+							for (const data of TestPerformance.computedTransitionsPerDecisionPerFile[currentPass]) {
 								computedTransitions += data[i];
 							}
 
-							for (let data of TestPerformance.fullContextTransitionsPerDecisionPerFile[currentPass]) {
+							for (const data of TestPerformance.fullContextTransitionsPerDecisionPerFile[currentPass]) {
 								fullContextTransitions += data[i];
 							}
 
@@ -1063,28 +1070,28 @@ export class TestPerformance {
 				}
 			}
 
-			let localDfaCount: number = 0;
-			let globalDfaCount: number = 0;
-			let localConfigCount: number = 0;
-			let globalConfigCount: number = 0;
+			let localDfaCount = 0;
+			let globalDfaCount = 0;
+			let localConfigCount = 0;
+			let globalConfigCount = 0;
 			let contextsInDFAState: Int32Array = new Int32Array(0);
 
-			for (let dfa of decisionToDFA) {
+			for (const dfa of decisionToDFA) {
 				if (dfa == null) {
 					continue;
 				}
 
 				if (TestPerformance.SHOW_CONFIG_STATS) {
-					for (let state of dfa.states) {
+					for (const state of dfa.states) {
 						if (state.configs.size >= contextsInDFAState.length) {
-							let contextsInDFAState2 = new Int32Array(state.configs.size + 1);
+							const contextsInDFAState2 = new Int32Array(state.configs.size + 1);
 							contextsInDFAState2.set(contextsInDFAState);
 							contextsInDFAState = contextsInDFAState2;
 						}
 
 						if (state.isAcceptState) {
-							let hasGlobal: boolean = false;
-							for (let config of state.configs) {
+							let hasGlobal = false;
+							for (const config of state.configs) {
 								if (config.reachesIntoOuterContext) {
 									globalConfigCount++;
 									hasGlobal = true;
@@ -1105,9 +1112,9 @@ export class TestPerformance {
 				}
 
 				if (TestPerformance.EXPORT_LARGEST_CONFIG_CONTEXTS) {
-					for (let state of dfa.states) {
-						for (let config of state.configs) {
-							let configOutput: string = config.toDotString();
+					for (const state of dfa.states) {
+						for (const config of state.configs) {
+							const configOutput: string = config.toDotString();
 							if (configOutput.length <= this.configOutputSize) {
 								continue;
 							}
@@ -1142,8 +1149,8 @@ export class TestPerformance {
 	}
 
 	private static sum(array: Uint32Array): number {
-		let result: number = 0;
-		for (let value of array) {
+		let result = 0;
+		for (const value of array) {
 			result += value;
 		}
 
@@ -1154,7 +1161,7 @@ export class TestPerformance {
 		if (typeof value === "number") {
 			checksum.update(value);
 		} else {
-			let token: Token | undefined = value;
+			const token: Token | undefined = value;
 			if (token == null) {
 				checksum.update(0);
 				return;
@@ -1180,18 +1187,18 @@ export class TestPerformance {
 		//     parserCtor: Constructor<? extends Parser> =  parserClass.getConstructor(TokenStream.class);
 
 		// construct initial instances of the lexer and parser to deserialize their ATNs
-		let lexerInstance = new lexerCtor(CharStreams.fromString(""));
-		let parserInstance = new parserCtor(new CommonTokenStream(lexerInstance));
+		const lexerInstance = new lexerCtor(CharStreams.fromString(""));
+		const parserInstance = new parserCtor(new CommonTokenStream(lexerInstance));
 
 		if (!TestPerformance.REUSE_LEXER_DFA) {
-			let lexerSerializedATN: string = lexerInstance.serializedATN;
+			const lexerSerializedATN: string = lexerInstance.serializedATN;
 			for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 				TestPerformance.sharedLexerATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(lexerSerializedATN));
 			}
 		}
 
 		if (TestPerformance.RUN_PARSER && !TestPerformance.REUSE_PARSER_DFA) {
-			let parserSerializedATN: string = parserInstance.serializedATN;
+			const parserSerializedATN: string = parserInstance.serializedATN;
 			for (let i = 0; i < TestPerformance.NUMBER_OF_THREADS; i++) {
 				TestPerformance.sharedParserATNs[i] = new ATNDeserializer().deserialize(Utils.toCharArray(parserSerializedATN));
 			}
@@ -1201,9 +1208,9 @@ export class TestPerformance {
 			// @SuppressWarnings("unused")
 			// @Override
 			parseFile(input: CharStream, currentPass: number, thread: number): FileParseResult {
-				let checksum = new MurmurHashChecksum();
+				const checksum = new MurmurHashChecksum();
 
-				let startTime: Stopwatch = Stopwatch.startNew();
+				const startTime: Stopwatch = Stopwatch.startNew();
 				assert(thread >= 0 && thread < TestPerformance.NUMBER_OF_THREADS);
 
 				try {
@@ -1217,7 +1224,7 @@ export class TestPerformance {
 					if (TestPerformance.REUSE_LEXER && lexer != null) {
 						lexer.inputStream = input;
 					} else {
-						let previousLexer: Lexer | undefined = lexer;
+						const previousLexer: Lexer | undefined = lexer;
 						lexer = new lexerCtor(input);
 						TestPerformance.sharedLexers[thread] = lexer;
 						let atn: ATN = (TestPerformance.FILE_GRANULARITY || previousLexer == null ? lexer : previousLexer).atn;
@@ -1240,12 +1247,12 @@ export class TestPerformance {
 						lexer.interpreter.atn.clearDFA();
 					}
 
-					let tokens: CommonTokenStream = new CommonTokenStream(lexer);
+					const tokens: CommonTokenStream = new CommonTokenStream(lexer);
 					tokens.fill();
 					TestPerformance.tokenCount[currentPass] += tokens.size;
 
 					if (TestPerformance.COMPUTE_CHECKSUM) {
-						for (let token of tokens.getTokens()) {
+						for (const token of tokens.getTokens()) {
 							TestPerformance.updateChecksum(checksum, token);
 						}
 					}
@@ -1254,15 +1261,15 @@ export class TestPerformance {
 						return new FileParseResult(input.sourceName, checksum.getValue(), undefined, tokens.size, startTime, lexer, undefined);
 					}
 
-					let parseStartTime: Stopwatch = Stopwatch.startNew();
+					const parseStartTime: Stopwatch = Stopwatch.startNew();
 					let parser: AnyJavaParser | undefined = TestPerformance.sharedParsers[thread];
 					if (TestPerformance.REUSE_PARSER && parser != null) {
 						parser.inputStream = tokens;
 					} else {
-						let previousParser: Parser | undefined = parser;
+						const previousParser: Parser | undefined = parser;
 
 						if (TestPerformance.USE_PARSER_INTERPRETER) {
-							let referenceParser: Parser = new parserCtor(tokens);
+							const referenceParser: Parser = new parserCtor(tokens);
 							parser = new ParserInterpreter(referenceParser.grammarFileName, referenceParser.vocabulary, referenceParser.ruleNames, referenceParser.atn, tokens);
 						}
 						else {
@@ -1345,7 +1352,7 @@ export class TestPerformance {
 							parser.inputStream = tokens;
 						} else {
 							if (TestPerformance.USE_PARSER_INTERPRETER) {
-								let referenceParser: Parser = new parserCtor(tokens);
+								const referenceParser: Parser = new parserCtor(tokens);
 								parser = new ParserInterpreter(referenceParser.grammarFileName, referenceParser.vocabulary, referenceParser.ruleNames, referenceParser.atn, tokens);
 							}
 							else {
@@ -1453,7 +1460,7 @@ export class FileParseResult {
 		this.elapsedTime = this.startTime.elapsed();
 
 		if (lexer != null) {
-			let interpreter: LexerATNSimulator = lexer.interpreter;
+			const interpreter: LexerATNSimulator = lexer.interpreter;
 			if (interpreter instanceof StatisticsLexerATNSimulator) {
 				this.lexerTotalTransitions = interpreter.totalTransitions;
 				this.lexerComputedTransitions = interpreter.computedTransitions;
@@ -1462,8 +1469,8 @@ export class FileParseResult {
 				this.lexerComputedTransitions = 0;
 			}
 
-			let dfaSize: number = 0;
-			for (let dfa of interpreter.atn.decisionToDFA) {
+			let dfaSize = 0;
+			for (const dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
 					dfaSize += dfa.states.size;
 				}
@@ -1477,7 +1484,7 @@ export class FileParseResult {
 		}
 
 		if (parser != null) {
-			let interpreter: ParserATNSimulator = parser.interpreter;
+			const interpreter: ParserATNSimulator = parser.interpreter;
 			if (interpreter instanceof StatisticsParserATNSimulator) {
 				this.decisionInvocations = interpreter.decisionInvocations;
 				this.fullContextFallback = interpreter.fullContextFallback;
@@ -1494,8 +1501,8 @@ export class FileParseResult {
 				this.parserFullContextTransitions = new Uint32Array(0);
 			}
 
-			let dfaSize: number = 0;
-			for (let dfa of interpreter.atn.decisionToDFA) {
+			let dfaSize = 0;
+			for (const dfa of interpreter.atn.decisionToDFA) {
 				if (dfa != null) {
 					dfaSize += dfa.states.size;
 				}
@@ -1617,7 +1624,7 @@ class DescriptiveErrorListener implements ParserErrorListener {
 			return;
 		}
 
-		let inputStream = recognizer.inputStream;
+		const inputStream = recognizer.inputStream;
 		let sourceName: string = inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
@@ -1637,7 +1644,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 			return;
 		}
 
-		let inputStream = recognizer.inputStream;
+		const inputStream = recognizer.inputStream;
 		let sourceName: string = inputStream != null ? inputStream.sourceName : "";
 		if (sourceName.length > 0) {
 			sourceName = `${sourceName}:${line}:${charPositionInLine}: `;
@@ -1655,10 +1662,10 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	@Override
 	public reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
-			let sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
-			let sllPrediction: number = sllPredictions.nextSetBit(0);
-			let llPredictions: BitSet = this.getConflictingAlts(ambigAlts, configs);
-			let llPrediction: number = llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
+			const sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
+			const sllPrediction: number = sllPredictions.nextSetBit(0);
+			const llPredictions: BitSet = this.getConflictingAlts(ambigAlts, configs);
+			const llPrediction: number = llPredictions.cardinality() === 0 ? ATN.INVALID_ALT_NUMBER : llPredictions.nextSetBit(0);
 			if (sllPrediction !== llPrediction) {
 				(recognizer.interpreter as StatisticsParserATNSimulator).nonSll[dfa.decision]++;
 			}
@@ -1669,9 +1676,9 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		}
 
 		// show the rule name along with the decision
-		let decision: number = dfa.decision;
-		let rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
-		let input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const decision: number = dfa.decision;
+		const rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		const input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportAmbiguity d=${decision} (${rule}): ambigAlts=${ambigAlts}, input='${input}'`);
 	}
 
@@ -1684,18 +1691,18 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		}
 
 		// show the rule name and viable configs along with the base info
-		let decision: number = dfa.decision;
-		let rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
-		let input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
-		let representedAlts: BitSet = this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
+		const decision: number = dfa.decision;
+		const rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		const input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const representedAlts: BitSet = this.getConflictingAlts(conflictingAlts, conflictState.s0.configs);
 		recognizer.notifyErrorListeners(`reportAttemptingFullContext d=${decision} (${rule}), input='${input}', viable=${representedAlts}`);
 	}
 
 	@Override
 	public reportContextSensitivity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, prediction: number, acceptState: SimulatorState): void {
 		if (TestPerformance.COMPUTE_TRANSITION_STATS && TestPerformance.DETAILED_DFA_STATE_STATS) {
-			let sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
-			let sllPrediction: number = sllPredictions.nextSetBit(0);
+			const sllPredictions: BitSet = this.getConflictingAlts(this._sllConflict, this._sllConfigs);
+			const sllPrediction: number = sllPredictions.nextSetBit(0);
 			if (sllPrediction !== prediction) {
 				(recognizer.interpreter as StatisticsParserATNSimulator).nonSll[dfa.decision]++;
 			}
@@ -1706,9 +1713,9 @@ class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 		}
 
 		// show the rule name and viable configs along with the base info
-		let decision: number = dfa.decision;
-		let rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
-		let input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
+		const decision: number = dfa.decision;
+		const rule: string = recognizer.ruleNames[dfa.atnStartState.ruleIndex];
+		const input: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
 		recognizer.notifyErrorListeners(`reportContextSensitivity d=${decision} (${rule}), input='${input}', viable={${prediction}}`);
 	}
 }
@@ -1727,13 +1734,13 @@ namespace FilenameFilters {
 
 	export function extension(extension: string): FilenameFilter;
 	export function extension(extension: string, caseSensitive: boolean): FilenameFilter;
-	export function extension(extension: string, caseSensitive: boolean = true): FilenameFilter {
+	export function extension(extension: string, caseSensitive = true): FilenameFilter {
 		return new FileExtensionFilenameFilter(extension, caseSensitive);
 	}
 
 	export function name(filename: string): FilenameFilter;
 	export function name(filename: string, caseSensitive: boolean): FilenameFilter;
-	export function name(filename: string, caseSensitive: boolean = true): FilenameFilter {
+	export function name(filename: string, caseSensitive = true): FilenameFilter {
 		return new FileNameFilenameFilter(filename, caseSensitive);
 	}
 
@@ -1806,7 +1813,7 @@ class AllFilenameFilter implements FilenameFilter {
 
 	@Override
 	public accept(dir: string, name: string): boolean {
-		for (let filter of this.filters) {
+		for (const filter of this.filters) {
 			if (!filter.accept(dir, name)) {
 				return false;
 			}
@@ -1825,7 +1832,7 @@ class AnyFilenameFilter implements FilenameFilter {
 
 	@Override
 	public accept(dir: string, name: string): boolean {
-		for (let filter of this.filters) {
+		for (const filter of this.filters) {
 			if (filter.accept(dir, name)) {
 				return true;
 			}
@@ -1876,10 +1883,10 @@ class NonCachingParserATNSimulator extends StatisticsParserATNSimulator {
 }
 
 class ChecksumParseTreeListener implements ParseTreeListener {
-	private static VISIT_TERMINAL: number = 1;
-	private static VISIT_ERROR_NODE: number = 2;
-	private static ENTER_RULE: number = 3;
-	private static EXIT_RULE: number = 4;
+	private static VISIT_TERMINAL = 1;
+	private static VISIT_ERROR_NODE = 2;
+	private static ENTER_RULE = 3;
+	private static EXIT_RULE = 4;
 
 	private checksum: MurmurHashChecksum;
 
@@ -1936,18 +1943,18 @@ export class InputDescriptor {
 	}
 
 	private bufferFromFileName(source: string, encoding: string): CodePointBuffer {
-		let input = fs.readFileSync(this.source, encoding);
-		let array = new Uint16Array(input.length);
+		const input = fs.readFileSync(this.source, encoding);
+		const array = new Uint16Array(input.length);
 		for (let i = 0; i < input.length; i++) {
 			array[i] = input.charCodeAt(i);
 		}
 
-		let builder = CodePointBuffer.builder(input.length);
+		const builder = CodePointBuffer.builder(input.length);
 		builder.append(array);
 		return builder.build();
 	}
 }
 
 // Create an instance of the benchmark class and run it
-let benchmark = new TestPerformance();
+const benchmark = new TestPerformance();
 benchmark.compileJdk();

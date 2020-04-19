@@ -66,7 +66,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		let i: number = this.p;
-		let n: number = 1;
+		let n = 1;
 		// find k good tokens looking backwards
 		while (n <= k && i > 0) {
 			// skip off-channel tokens
@@ -94,7 +94,7 @@ export class CommonTokenStream extends BufferedTokenStream {
 		}
 
 		let i: number = this.p;
-		let n: number = 1; // we know tokens[p] is a good one
+		let n = 1; // we know tokens[p] is a good one
 		// find k good tokens
 		while (n < k) {
 			// skip off-channel tokens, but make sure to not look past EOF
@@ -110,9 +110,9 @@ export class CommonTokenStream extends BufferedTokenStream {
 
 	/** Count EOF just once. */
 	public getNumberOfOnChannelTokens(): number {
-		let n: number = 0;
+		let n = 0;
 		this.fill();
-		for (let t of this.tokens) {
+		for (const t of this.tokens) {
 			if (t.channel === this.channel) {
 				n++;
 			}

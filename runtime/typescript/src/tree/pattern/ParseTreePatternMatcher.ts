@@ -153,13 +153,13 @@ export class ParseTreePatternMatcher {
 	 */
 	public matches(tree: ParseTree, pattern: ParseTreePattern): boolean;
 
-	public matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex: number = 0): boolean {
+	public matches(tree: ParseTree, pattern: string | ParseTreePattern, patternRuleIndex = 0): boolean {
 		if (typeof pattern === "string") {
-			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
+			const p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.matches(tree, p);
 		} else {
-			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
+			const labels = new MultiMap<string, ParseTree>();
+			const mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
 			return !mismatchedNode;
 		}
 	}
@@ -181,13 +181,13 @@ export class ParseTreePatternMatcher {
 
 	// Implementation of match
 	@NotNull
-	public match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex: number = 0): ParseTreeMatch {
+	public match(tree: ParseTree, @NotNull pattern: string | ParseTreePattern, patternRuleIndex = 0): ParseTreeMatch {
 		if (typeof pattern === "string") {
-			let p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
+			const p: ParseTreePattern = this.compile(pattern, patternRuleIndex);
 			return this.match(tree, p);
 		} else {
-			let labels = new MultiMap<string, ParseTree>();
-			let mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
+			const labels = new MultiMap<string, ParseTree>();
+			const mismatchedNode = this.matchImpl(tree, pattern.patternTree, labels);
 			return new ParseTreeMatch(tree, pattern, labels, mismatchedNode);
 		}
 	}
@@ -197,12 +197,12 @@ export class ParseTreePatternMatcher {
 	 * {@link ParseTreePattern} using this method.
 	 */
 	public compile(pattern: string, patternRuleIndex: number): ParseTreePattern {
-		let tokenList = this.tokenize(pattern);
-		let tokenSrc = new ListTokenSource(tokenList);
-		let tokens = new CommonTokenStream(tokenSrc);
+		const tokenList = this.tokenize(pattern);
+		const tokenSrc = new ListTokenSource(tokenList);
+		const tokens = new CommonTokenStream(tokenSrc);
 		const parser = this._parser;
 
-		let parserInterp = new ParserInterpreter(
+		const parserInterp = new ParserInterpreter(
 			parser.grammarFileName,
 			parser.vocabulary,
 			parser.ruleNames,
@@ -281,7 +281,7 @@ export class ParseTreePatternMatcher {
 			// both are tokens and they have same type
 			if (tree.symbol.type === patternTree.symbol.type) {
 				if (patternTree.symbol instanceof TokenTagToken) { // x and <ID>
-					let tokenTagToken = patternTree.symbol;
+					const tokenTagToken = patternTree.symbol;
 					// track label->list-of-nodes for both token name and label (if any)
 					labels.map(tokenTagToken.tokenName, tree);
 					const l = tokenTagToken.label;
@@ -312,7 +312,7 @@ export class ParseTreePatternMatcher {
 			&& patternTree instanceof ParserRuleContext) {
 			let mismatchedNode: ParseTree | undefined;
 			// (expr ...) and <expr>
-			let ruleTagToken = this.getRuleTagToken(patternTree);
+			const ruleTagToken = this.getRuleTagToken(patternTree);
 			if (ruleTagToken) {
 				let m: ParseTreeMatch;
 				if (tree.ruleContext.ruleIndex === patternTree.ruleContext.ruleIndex) {
@@ -341,9 +341,9 @@ export class ParseTreePatternMatcher {
 				return mismatchedNode;
 			}
 
-			let n: number = tree.childCount;
+			const n: number = tree.childCount;
 			for (let i = 0; i < n; i++) {
-				let childMatch = this.matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
+				const childMatch = this.matchImpl(tree.getChild(i), patternTree.getChild(i), labels);
 				if (childMatch) {
 					return childMatch;
 				}
@@ -360,7 +360,7 @@ export class ParseTreePatternMatcher {
 	protected getRuleTagToken(t: ParseTree): RuleTagToken | undefined {
 		if (t instanceof RuleNode) {
 			if (t.childCount === 1 && t.getChild(0) instanceof TerminalNode) {
-				let c = t.getChild(0) as TerminalNode;
+				const c = t.getChild(0) as TerminalNode;
 				if (c.symbol instanceof RuleTagToken) {
 //					System.out.println("rule tag subtree "+t.toStringTree(parser));
 					return c.symbol;
@@ -372,30 +372,30 @@ export class ParseTreePatternMatcher {
 
 	public tokenize(pattern: string): Token[] {
 		// split pattern into chunks: sea (raw input) and islands (<ID>, <expr>)
-		let chunks = this.split(pattern);
+		const chunks = this.split(pattern);
 
 		// create token stream from text and tags
-		let tokens: Token[] = [];
+		const tokens: Token[] = [];
 
-		for (let chunk of chunks) {
+		for (const chunk of chunks) {
 			if (chunk instanceof TagChunk) {
-				let tagChunk = chunk;
+				const tagChunk = chunk;
 				const firstChar = tagChunk.tag.substr(0, 1);
 				// add special rule token or conjure up new token from name
 				if (firstChar === firstChar.toUpperCase()) {
-					let ttype: number = this._parser.getTokenType(tagChunk.tag);
+					const ttype: number = this._parser.getTokenType(tagChunk.tag);
 					if (ttype === Token.INVALID_TYPE) {
 						throw new Error("Unknown token " + tagChunk.tag + " in pattern: " + pattern);
 					}
-					let t: TokenTagToken = new TokenTagToken(tagChunk.tag, ttype, tagChunk.label);
+					const t: TokenTagToken = new TokenTagToken(tagChunk.tag, ttype, tagChunk.label);
 					tokens.push(t);
 				}
 				else if (firstChar === firstChar.toLowerCase()) {
-					let ruleIndex: number = this._parser.getRuleIndex(tagChunk.tag);
+					const ruleIndex: number = this._parser.getRuleIndex(tagChunk.tag);
 					if (ruleIndex === -1) {
 						throw new Error("Unknown rule " + tagChunk.tag + " in pattern: " + pattern);
 					}
-					let ruleImaginaryTokenType: number = this._parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
+					const ruleImaginaryTokenType: number = this._parser.getATNWithBypassAlts().ruleToTokenType[ruleIndex];
 					tokens.push(new RuleTagToken(tagChunk.tag, ruleImaginaryTokenType, tagChunk.label));
 				}
 				else {
@@ -403,7 +403,7 @@ export class ParseTreePatternMatcher {
 				}
 			}
 			else {
-				let textChunk = chunk as TextChunk;
+				const textChunk = chunk as TextChunk;
 				this._lexer.inputStream = CharStreams.fromString(textChunk.text);
 				let t: Token = this._lexer.nextToken();
 				while (t.type !== Token.EOF) {
@@ -419,13 +419,13 @@ export class ParseTreePatternMatcher {
 
 	/** Split `<ID> = <e:expr> ;` into 4 chunks for tokenizing by {@link #tokenize}. */
 	public split(pattern: string): Chunk[] {
-		let p: number = 0;
-		let n: number = pattern.length;
-		let chunks: Chunk[] = [];
+		let p = 0;
+		const n: number = pattern.length;
+		const chunks: Chunk[] = [];
 		let buf: "";
 		// find all start and stop indexes first, then collect
-		let starts: number[] = [];
-		let stops: number[] = [];
+		const starts: number[] = [];
+		const stops: number[] = [];
 		while (p < n) {
 			if (p === pattern.indexOf(this.escape + this.start, p)) {
 				p += this.escape.length + this.start.length;
@@ -457,7 +457,7 @@ export class ParseTreePatternMatcher {
 			throw new Error("missing start tag in pattern: " + pattern);
 		}
 
-		let ntags: number = starts.length;
+		const ntags: number = starts.length;
 		for (let i = 0; i < ntags; i++) {
 			if (starts[i] >= stops[i]) {
 				throw new Error("tag delimiters out of order in pattern: " + pattern);
@@ -466,20 +466,20 @@ export class ParseTreePatternMatcher {
 
 		// collect into chunks now
 		if (ntags === 0) {
-			let text: string = pattern.substring(0, n);
+			const text: string = pattern.substring(0, n);
 			chunks.push(new TextChunk(text));
 		}
 
 		if (ntags > 0 && starts[0] > 0) { // copy text up to first tag into chunks
-			let text: string = pattern.substring(0, starts[0]);
+			const text: string = pattern.substring(0, starts[0]);
 			chunks.push(new TextChunk(text));
 		}
 		for (let i = 0; i < ntags; i++) {
 			// copy inside of <tag>
-			let tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
+			const tag: string = pattern.substring(starts[i] + this.start.length, stops[i]);
 			let ruleOrToken: string = tag;
 			let label: string | undefined;
-			let colon: number = tag.indexOf(":");
+			const colon: number = tag.indexOf(":");
 			if (colon >= 0) {
 				label = tag.substring(0, colon);
 				ruleOrToken = tag.substring(colon + 1, tag.length);
@@ -487,23 +487,23 @@ export class ParseTreePatternMatcher {
 			chunks.push(new TagChunk(ruleOrToken, label));
 			if (i + 1 < ntags) {
 				// copy from end of <tag> to start of next
-				let text: string = pattern.substring(stops[i] + this.stop.length, starts[i + 1]);
+				const text: string = pattern.substring(stops[i] + this.stop.length, starts[i + 1]);
 				chunks.push(new TextChunk(text));
 			}
 		}
 		if (ntags > 0) {
-			let afterLastTag: number = stops[ntags - 1] + this.stop.length;
+			const afterLastTag: number = stops[ntags - 1] + this.stop.length;
 			if (afterLastTag < n) { // copy text from end of last tag to end
-				let text: string = pattern.substring(afterLastTag, n);
+				const text: string = pattern.substring(afterLastTag, n);
 				chunks.push(new TextChunk(text));
 			}
 		}
 
 		// strip out the escape sequences from text chunks but not tags
 		for (let i = 0; i < chunks.length; i++) {
-			let c: Chunk = chunks[i];
+			const c: Chunk = chunks[i];
 			if (c instanceof TextChunk) {
-				let unescaped: string = c.text.replace(this.escapeRE, "");
+				const unescaped: string = c.text.replace(this.escapeRE, "");
 				if (unescaped.length < c.text.length) {
 					chunks[i] = new TextChunk(unescaped);
 				}

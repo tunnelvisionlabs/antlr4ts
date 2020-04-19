@@ -13,11 +13,11 @@ import { ParserRuleContext } from "../ParserRuleContext";
 
 export class ParseTreeWalker {
 	public walk<T extends ParseTreeListener>(listener: T, t: ParseTree): void {
-		let nodeStack: ParseTree[] = [];
-		let indexStack: number[] = [];
+		const nodeStack: ParseTree[] = [];
+		const indexStack: number[] = [];
 
 		let currentNode: ParseTree | undefined = t;
-		let currentIndex: number = 0;
+		let currentIndex = 0;
 
 		while (currentNode) {
 			// pre-order visit
@@ -57,7 +57,7 @@ export class ParseTreeWalker {
 				}
 
 				// Move to next sibling if possible
-				let last = nodeStack[nodeStack.length - 1];
+				const last = nodeStack[nodeStack.length - 1];
 				currentIndex++;
 				currentNode = currentIndex < last.childCount ? last.getChild(currentIndex) : undefined;
 				if (currentNode) {
@@ -78,7 +78,7 @@ export class ParseTreeWalker {
 	 * the rule specific. We to them in reverse order upon finishing the node.
 	 */
 	protected enterRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.ruleContext as ParserRuleContext;
+		const ctx = r.ruleContext as ParserRuleContext;
 		if (listener.enterEveryRule) {
 			listener.enterEveryRule(ctx);
 		}
@@ -87,7 +87,7 @@ export class ParseTreeWalker {
 	}
 
 	protected exitRule(listener: ParseTreeListener, r: RuleNode): void {
-		let ctx = r.ruleContext as ParserRuleContext;
+		const ctx = r.ruleContext as ParserRuleContext;
 		ctx.exitRule(listener);
 		if (listener.exitEveryRule) {
 			listener.exitEveryRule(ctx);

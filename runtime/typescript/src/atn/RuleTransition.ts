@@ -22,8 +22,8 @@ export class RuleTransition extends Transition {
 	@NotNull
 	public followState: ATNState;
 
-	public tailCall: boolean = false;
-	public optimizedTailCall: boolean = false;
+	public tailCall = false;
+	public optimizedTailCall = false;
 
 	constructor(@NotNull ruleStart: RuleStartState, ruleIndex: number, precedence: number, @NotNull followState: ATNState) {
 		super(ruleStart);

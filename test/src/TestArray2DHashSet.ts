@@ -12,7 +12,7 @@ class EquatableTest {
 
 	constructor(public a: string, public b: string) { }
 
-	public equals(o: any) {
+	public equals(o: object): boolean {
 		if (this === o) {
 			return true;
 		}
@@ -22,7 +22,7 @@ class EquatableTest {
 		return false;
 	}
 
-	public hashCode() {
+	public hashCode(): number {
 		// this currently generates a Typescript error because strings aren't Equatable
 		return MurmurHash.hashCode([this.a, this.b], 5280);
 	}
@@ -81,14 +81,3 @@ describe("Array2DHashSet", () => {
 		assert(!set.contains(beta), "value difference ignored");
 	});
 });
-
-//
-// This exercises the mocha-typescript package's ability to
-// use more object-oriented test structure using decorators.
-//
-@suite class DecoratorDriven {
-	@test
-	public "Comparison by value"() {
-		assert(alpha.equals(alpha_again));
-	}
-}

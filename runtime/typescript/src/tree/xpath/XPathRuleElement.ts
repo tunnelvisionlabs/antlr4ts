@@ -20,8 +20,8 @@ export class XPathRuleElement extends XPathElement {
 	@Override
 	public evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
-		let nodes: ParseTree[] = [];
-		for (let c of Trees.getChildren(t)) {
+		const nodes: ParseTree[] = [];
+		for (const c of Trees.getChildren(t)) {
 			if (c instanceof ParserRuleContext) {
 				if ((c.ruleIndex === this.ruleIndex && !this.invert) ||
 					(c.ruleIndex !== this.ruleIndex && this.invert)) {

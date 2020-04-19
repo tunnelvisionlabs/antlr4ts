@@ -78,7 +78,7 @@ export namespace CodePointBuffer {
 		}
 
 		private static roundUpToNextPowerOfTwo(i: number): number {
-			let nextPowerOfTwo: number = 32 - Math.clz32(i - 1);
+			const nextPowerOfTwo: number = 32 - Math.clz32(i - 1);
 			return Math.pow(2, nextPowerOfTwo);
 		}
 
@@ -86,24 +86,24 @@ export namespace CodePointBuffer {
 			switch (this.type) {
 				case Type.BYTE:
 					if (this.buffer.length - this.position < remainingNeeded) {
-						let newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
-						let newBuffer: Uint8Array = new Uint8Array(newCapacity);
+						const newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
+						const newBuffer: Uint8Array = new Uint8Array(newCapacity);
 						newBuffer.set(this.buffer.subarray(0, this.position), 0);
 						this.buffer = newBuffer;
 					}
 					break;
 				case Type.CHAR:
 					if (this.buffer.length - this.position < remainingNeeded) {
-						let newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
-						let newBuffer: Uint16Array = new Uint16Array(newCapacity);
+						const newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
+						const newBuffer: Uint16Array = new Uint16Array(newCapacity);
 						newBuffer.set(this.buffer.subarray(0, this.position), 0);
 						this.buffer = newBuffer;
 					}
 					break;
 				case Type.INT:
 					if (this.buffer.length - this.position < remainingNeeded) {
-						let newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
-						let newBuffer: Int32Array = new Int32Array(newCapacity);
+						const newCapacity: number = Builder.roundUpToNextPowerOfTwo(this.buffer.length + remainingNeeded);
+						const newBuffer: Int32Array = new Int32Array(newCapacity);
 						newBuffer.set(this.buffer.subarray(0, this.position), 0);
 						this.buffer = newBuffer;
 					}
@@ -133,15 +133,15 @@ export namespace CodePointBuffer {
 		private appendArrayByte(utf16In: Uint16Array): void {
 			assert(this.prevHighSurrogate === -1);
 
-			let input: Uint16Array = utf16In;
-			let inOffset: number = 0;
-			let inLimit: number = utf16In.length;
+			const input: Uint16Array = utf16In;
+			let inOffset = 0;
+			const inLimit: number = utf16In.length;
 
-			let outByte = this.buffer;
+			const outByte = this.buffer;
 			let outOffset: number = this.position;
 
 			while (inOffset < inLimit) {
-				let c: number = input[inOffset];
+				const c: number = input[inOffset];
 				if (c <= 0xFF) {
 					outByte[outOffset] = c;
 				} else {
@@ -168,15 +168,15 @@ export namespace CodePointBuffer {
 		private appendArrayChar(utf16In: Uint16Array): void {
 			assert(this.prevHighSurrogate === -1);
 
-			let input: Uint16Array = utf16In;
-			let inOffset: number = 0;
-			let inLimit: number = utf16In.length;
+			const input: Uint16Array = utf16In;
+			let inOffset = 0;
+			const inLimit: number = utf16In.length;
 
-			let outChar = this.buffer;
+			const outChar = this.buffer;
 			let outOffset: number = this.position;
 
 			while (inOffset < inLimit) {
-				let c: number = input[inOffset];
+				const c: number = input[inOffset];
 				if (!Character.isHighSurrogate(c)) {
 					outChar[outOffset] = c;
 				} else {
@@ -195,15 +195,15 @@ export namespace CodePointBuffer {
 		}
 
 		private appendArrayInt(utf16In: Uint16Array): void {
-			let input: Uint16Array = utf16In;
-			let inOffset: number = 0;
-			let inLimit: number = utf16In.length;
+			const input: Uint16Array = utf16In;
+			let inOffset = 0;
+			const inLimit: number = utf16In.length;
 
-			let outInt = this.buffer;
+			const outInt = this.buffer;
 			let outOffset = this.position;
 
 			while (inOffset < inLimit) {
-				let c: number = input[inOffset];
+				const c: number = input[inOffset];
 				inOffset++;
 				if (this.prevHighSurrogate !== -1) {
 					if (Character.isLowSurrogate(c)) {
@@ -241,7 +241,7 @@ export namespace CodePointBuffer {
 
 		private byteToCharBuffer(toAppend: number): void {
 			// CharBuffers hold twice as much per unit as ByteBuffers, so start with half the capacity.
-			let newBuffer: Uint16Array = new Uint16Array(Math.max(this.position + toAppend, this.buffer.length >> 1));
+			const newBuffer: Uint16Array = new Uint16Array(Math.max(this.position + toAppend, this.buffer.length >> 1));
 			newBuffer.set(this.buffer.subarray(0, this.position), 0);
 
 			this.type = Type.CHAR;
@@ -250,7 +250,7 @@ export namespace CodePointBuffer {
 
 		private byteToIntBuffer(toAppend: number): void {
 			// IntBuffers hold four times as much per unit as ByteBuffers, so start with one quarter the capacity.
-			let newBuffer: Int32Array = new Int32Array(Math.max(this.position + toAppend, this.buffer.length >> 2));
+			const newBuffer: Int32Array = new Int32Array(Math.max(this.position + toAppend, this.buffer.length >> 2));
 			newBuffer.set(this.buffer.subarray(0, this.position), 0);
 
 			this.type = Type.INT;
@@ -259,7 +259,7 @@ export namespace CodePointBuffer {
 
 		private charToIntBuffer(toAppend: number): void {
 			// IntBuffers hold two times as much per unit as ByteBuffers, so start with one half the capacity.
-			let newBuffer: Int32Array = new Int32Array(Math.max(this.position + toAppend, this.buffer.length >> 1));
+			const newBuffer: Int32Array = new Int32Array(Math.max(this.position + toAppend, this.buffer.length >> 1));
 			newBuffer.set(this.buffer.subarray(0, this.position), 0);
 
 			this.type = Type.INT;

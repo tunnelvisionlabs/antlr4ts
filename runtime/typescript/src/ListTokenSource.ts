@@ -39,7 +39,7 @@ export class ListTokenSource implements TokenSource {
 	 * {@link #nextToken}. The end of the input is indicated by this value
 	 * being greater than or equal to the number of items in {@link #tokens}.
 	 */
-	protected i: number = 0;
+	protected i = 0;
 
 	/**
 	 * This field caches the EOF token for the token source.
@@ -86,10 +86,10 @@ export class ListTokenSource implements TokenSource {
 		} else if (this.tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
-			let lastToken: Token = this.tokens[this.tokens.length - 1];
-			let tokenText: string | undefined = lastToken.text;
+			const lastToken: Token = this.tokens[this.tokens.length - 1];
+			const tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
-				let lastNewLine: number = tokenText.lastIndexOf("\n");
+				const lastNewLine: number = tokenText.lastIndexOf("\n");
 				if (lastNewLine >= 0) {
 					return tokenText.length - lastNewLine - 1;
 				}
@@ -110,22 +110,22 @@ export class ListTokenSource implements TokenSource {
 	public nextToken(): Token {
 		if (this.i >= this.tokens.length) {
 			if (this.eofToken == null) {
-				let start: number = -1;
+				let start = -1;
 				if (this.tokens.length > 0) {
-					let previousStop: number = this.tokens[this.tokens.length - 1].stopIndex;
+					const previousStop: number = this.tokens[this.tokens.length - 1].stopIndex;
 					if (previousStop !== -1) {
 						start = previousStop + 1;
 					}
 				}
 
-				let stop: number = Math.max(-1, start - 1);
+				const stop: number = Math.max(-1, start - 1);
 				this.eofToken = this._factory.create({ source: this, stream: this.inputStream }, Token.EOF, "EOF", Token.DEFAULT_CHANNEL, start, stop, this.line, this.charPositionInLine);
 			}
 
 			return this.eofToken;
 		}
 
-		let t: Token = this.tokens[this.i];
+		const t: Token = this.tokens[this.i];
 		if (this.i === this.tokens.length - 1 && t.type === Token.EOF) {
 			this.eofToken = t;
 		}
@@ -146,10 +146,10 @@ export class ListTokenSource implements TokenSource {
 		} else if (this.tokens.length > 0) {
 			// have to calculate the result from the line/column of the previous
 			// token, along with the text of the token.
-			let lastToken: Token = this.tokens[this.tokens.length - 1];
+			const lastToken: Token = this.tokens[this.tokens.length - 1];
 			let line: number = lastToken.line;
 
-			let tokenText: string | undefined = lastToken.text;
+			const tokenText: string | undefined = lastToken.text;
 			if (tokenText != null) {
 				for (let i = 0; i < tokenText.length; i++) {
 					if (tokenText.charAt(i) === "\n") {
@@ -193,7 +193,7 @@ export class ListTokenSource implements TokenSource {
 			return this._sourceName;
 		}
 
-		let inputStream: CharStream | undefined = this.inputStream;
+		const inputStream: CharStream | undefined = this.inputStream;
 		if (inputStream != null) {
 			return inputStream.sourceName;
 		}

@@ -18,13 +18,13 @@ import * as Utils from "../misc/Utils";
 
 function max<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 	let result: T | undefined;
-	for (let current of items) {
+	for (const current of items) {
 		if (result === undefined) {
 			result = current;
 			continue;
 		}
 
-		let comparison = result.compareTo(current);
+		const comparison = result.compareTo(current);
 		if (comparison < 0) {
 			result = current;
 		}
@@ -35,13 +35,13 @@ function max<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 
 function min<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 	let result: T | undefined;
-	for (let current of items) {
+	for (const current of items) {
 		if (result === undefined) {
 			result = current;
 			continue;
 		}
 
-		let comparison = result.compareTo(current);
+		const comparison = result.compareTo(current);
 		if (comparison > 0) {
 			result = current;
 		}
@@ -110,7 +110,7 @@ export abstract class SemanticContext implements Equatable {
 
 	public abstract hashCode(): number;
 
-	public abstract equals(obj: any): boolean;
+	public abstract equals(obj: object): boolean;
 
 	public static and(a: SemanticContext | undefined, b: SemanticContext): SemanticContext {
 		if (!a || a === SemanticContext.NONE) {
@@ -119,7 +119,7 @@ export abstract class SemanticContext implements Equatable {
 		if (b === SemanticContext.NONE) {
 			return a;
 		}
-		let result: SemanticContext.AND = new SemanticContext.AND(a, b);
+		const result: SemanticContext.AND = new SemanticContext.AND(a, b);
 		if (result.opnds.length === 1) {
 			return result.opnds[0];
 		}
@@ -139,7 +139,7 @@ export abstract class SemanticContext implements Equatable {
 		if (a === SemanticContext.NONE || b === SemanticContext.NONE) {
 			return SemanticContext.NONE;
 		}
-		let result: SemanticContext.OR = new SemanticContext.OR(a, b);
+		const result: SemanticContext.OR = new SemanticContext.OR(a, b);
 		if (result.opnds.length === 1) {
 			return result.opnds[0];
 		}
@@ -159,9 +159,9 @@ export namespace SemanticContext {
 	const OR_HASHCODE = 486279973;
 
 	function filterPrecedencePredicates(collection: SemanticContext[]): SemanticContext.PrecedencePredicate[] {
-		let result: SemanticContext.PrecedencePredicate[] = [];
+		const result: SemanticContext.PrecedencePredicate[] = [];
 		for (let i = 0; i < collection.length; i++) {
-			let context: SemanticContext = collection[i];
+			const context: SemanticContext = collection[i];
 			if (context instanceof SemanticContext.PrecedencePredicate) {
 				result.push(context);
 
@@ -182,7 +182,7 @@ export namespace SemanticContext {
 		constructor();
 		constructor(ruleIndex: number, predIndex: number, isCtxDependent: boolean);
 
-		constructor(ruleIndex: number = -1, predIndex: number = -1, isCtxDependent: boolean = false) {
+		constructor(ruleIndex = -1, predIndex = -1, isCtxDependent = false) {
 			super();
 			this.ruleIndex = ruleIndex;
 			this.predIndex = predIndex;
@@ -191,7 +191,7 @@ export namespace SemanticContext {
 
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
-			let localctx: RuleContext | undefined = this.isCtxDependent ? parserCallStack : undefined;
+			const localctx: RuleContext | undefined = this.isCtxDependent ? parserCallStack : undefined;
 			return parser.sempred(localctx, this.ruleIndex, this.predIndex);
 		}
 
@@ -206,7 +206,7 @@ export namespace SemanticContext {
 		}
 
 		@Override
-		public equals(obj: any): boolean {
+		public equals(obj: object): boolean {
 			if (!(obj instanceof Predicate)) {
 				return false;
 			}
@@ -254,13 +254,13 @@ export namespace SemanticContext {
 
 		@Override
 		public hashCode(): number {
-			let hashCode: number = 1;
+			let hashCode = 1;
 			hashCode = 31 * hashCode + this.precedence;
 			return hashCode;
 		}
 
 		@Override
-		public equals(obj: any): boolean {
+		public equals(obj: object): boolean {
 			if (!(obj instanceof PrecedencePredicate)) {
 				return false;
 			}
@@ -308,7 +308,7 @@ export namespace SemanticContext {
 		constructor(@NotNull a: SemanticContext, @NotNull b: SemanticContext) {
 			super();
 
-			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
+			const operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
 			if (a instanceof AND) {
 				operands.addAll(a.opnds);
 			} else {
@@ -322,10 +322,10 @@ export namespace SemanticContext {
 			}
 
 			this.opnds = operands.toArray();
-			let precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
+			const precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
 
 			// interested in the transition with the lowest precedence
-			let reduced = min(precedencePredicates);
+			const reduced = min(precedencePredicates);
 			if (reduced) {
 				this.opnds.push(reduced);
 			}
@@ -337,7 +337,7 @@ export namespace SemanticContext {
 		}
 
 		@Override
-		public equals(obj: any): boolean {
+		public equals(obj: object): boolean {
 			if (this === obj) {
 				return true;
 			}
@@ -360,7 +360,7 @@ export namespace SemanticContext {
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
-			for (let opnd of this.opnds) {
+			for (const opnd of this.opnds) {
 				if (!opnd.eval(parser, parserCallStack)) {
 					return false;
 				}
@@ -371,10 +371,10 @@ export namespace SemanticContext {
 
 		@Override
 		public evalPrecedence(parser: Recognizer<any, any>, parserCallStack: RuleContext): SemanticContext | undefined {
-			let differs: boolean = false;
-			let operands: SemanticContext[] = [];
-			for (let context of this.opnds) {
-				let evaluated: SemanticContext | undefined = context.evalPrecedence(parser, parserCallStack);
+			let differs = false;
+			const operands: SemanticContext[] = [];
+			for (const context of this.opnds) {
+				const evaluated: SemanticContext | undefined = context.evalPrecedence(parser, parserCallStack);
 				differs = differs || (evaluated !== context);
 				if (evaluated == null) {
 					// The AND context is false if any element is false
@@ -419,7 +419,7 @@ export namespace SemanticContext {
 		constructor(@NotNull a: SemanticContext, @NotNull b: SemanticContext) {
 			super();
 
-			let operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
+			const operands: Array2DHashSet<SemanticContext> = new Array2DHashSet<SemanticContext>(ObjectEqualityComparator.INSTANCE);
 			if (a instanceof OR) {
 				operands.addAll(a.opnds);
 			} else {
@@ -433,10 +433,10 @@ export namespace SemanticContext {
 			}
 
 			this.opnds = operands.toArray();
-			let precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
+			const precedencePredicates: PrecedencePredicate[] = filterPrecedencePredicates(this.opnds);
 
 			// interested in the transition with the highest precedence
-			let reduced = max(precedencePredicates);
+			const reduced = max(precedencePredicates);
 			if (reduced) {
 				this.opnds.push(reduced);
 			}
@@ -448,7 +448,7 @@ export namespace SemanticContext {
 		}
 
 		@Override
-		public equals(obj: any): boolean {
+		public equals(obj: object): boolean {
 			if (this === obj) {
 				return true;
 			}
@@ -471,7 +471,7 @@ export namespace SemanticContext {
 		 */
 		@Override
 		public eval<T>(parser: Recognizer<T, any>, parserCallStack: RuleContext): boolean {
-			for (let opnd of this.opnds) {
+			for (const opnd of this.opnds) {
 				if (opnd.eval(parser, parserCallStack)) {
 					return true;
 				}
@@ -482,10 +482,10 @@ export namespace SemanticContext {
 
 		@Override
 		public evalPrecedence(parser: Recognizer<any, any>, parserCallStack: RuleContext): SemanticContext | undefined {
-			let differs: boolean = false;
-			let operands: SemanticContext[] = [];
-			for (let context of this.opnds) {
-				let evaluated: SemanticContext | undefined = context.evalPrecedence(parser, parserCallStack);
+			let differs = false;
+			const operands: SemanticContext[] = [];
+			for (const context of this.opnds) {
+				const evaluated: SemanticContext | undefined = context.evalPrecedence(parser, parserCallStack);
 				differs = differs || (evaluated !== context);
 				if (evaluated === SemanticContext.NONE) {
 					// The OR context is true if any element is true

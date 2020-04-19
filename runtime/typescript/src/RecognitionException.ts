@@ -38,7 +38,7 @@ export class RecognitionException extends Error {
 	 */
 	private offendingToken?: Token;
 
-	private _offendingState: number = -1;
+	private _offendingState = -1;
 
 	constructor(
 		lexer: Lexer | undefined,
