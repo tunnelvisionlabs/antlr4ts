@@ -158,5 +158,5 @@ export interface TokenStream extends IntStream {
 	 * this method for the specified tokens
 	 */
 	//@NotNull
-	getTextFromRange(start: any, stop: any): string;
+	getTextFromRange(start: Token, stop?: Token): string;
 }

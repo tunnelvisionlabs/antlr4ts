@@ -24,7 +24,7 @@ export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 export function join(collection: Iterable<any>, separator: string): string {
 	let buf = "";
 	let first = true;
-	for (let current of collection) {
+	for (const current of collection) {
 		if (first) {
 			first = false;
 		} else {
@@ -162,7 +162,7 @@ export function equals(x: Equatable | undefined, y: Equatable | undefined): bool
  *  converting rulenames to name&rarr;ruleindex map.
  */
 export function toMap(keys: string[]): Map<string, number> {
-	let m: Map<string, number> = new Map<string, number>();
+	const m: Map<string, number> = new Map<string, number>();
 	for (let i = 0; i < keys.length; i++) {
 		m.set(keys[i], i);
 	}
@@ -174,7 +174,7 @@ export function toCharArray(str: string): Uint16Array;
 export function toCharArray(data: IntegerList): Uint16Array;
 export function toCharArray(str: string | IntegerList): Uint16Array {
 	if (typeof str === "string") {
-		let result = new Uint16Array(str.length);
+		const result = new Uint16Array(str.length);
 		for (let i = 0; i < str.length; i++) {
 			result[i] = str.charCodeAt(i);
 		}

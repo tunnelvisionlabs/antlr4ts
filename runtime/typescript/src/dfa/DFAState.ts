@@ -42,7 +42,7 @@ import * as assert from "assert";
  *  meaning that state was reached via a different set of rule invocations.
  */
 export class DFAState {
-	public stateNumber: number = -1;
+	public stateNumber = -1;
 
 	@NotNull
 	public configs: ATNConfigSet;
@@ -166,11 +166,11 @@ export class DFAState {
 	}
 
 	public getContextEdgeMap(): Map<number, DFAState> {
-		let map = new Map<number, DFAState>(this.contextEdges);
-		let existing = map.get(-1);
+		const map = new Map<number, DFAState>(this.contextEdges);
+		const existing = map.get(-1);
 		if (existing !== undefined) {
 			if (map.size === 1) {
-				let result = new Map<number, DFAState>();
+				const result = new Map<number, DFAState>();
 				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, existing);
 				return result;
 			}
@@ -215,8 +215,8 @@ export class DFAState {
 			return false;
 		}
 
-		let other: DFAState = o;
-		let sameSet: boolean = this.configs.equals(other.configs);
+		const other: DFAState = o;
+		const sameSet: boolean = this.configs.equals(other.configs);
 //		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
 	}

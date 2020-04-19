@@ -52,7 +52,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * see the documentation of {@link IntStream} for a description of
 	 * Initializing Methods.
 	 */
-	protected p: number = -1;
+	protected p = -1;
 
 	/**
 	 * Indicates whether the {@link Token#EOF} token has been fetched from
@@ -65,7 +65,7 @@ export class BufferedTokenStream implements TokenStream {
 	 * * {@link #fetch}: The check to prevent adding multiple EOF symbols into
 	 *   {@link #tokens} is trivial with this field.
 	 */
-	protected fetchedEOF: boolean = false;
+	protected fetchedEOF = false;
 
 	constructor(@NotNull tokenSource: TokenSource) {
 		if (tokenSource == null) {
@@ -148,10 +148,10 @@ export class BufferedTokenStream implements TokenStream {
 	 */
 	protected sync(i: number): boolean {
 		assert(i >= 0);
-		let n: number = i - this.tokens.length + 1; // how many more elements we need?
+		const n: number = i - this.tokens.length + 1; // how many more elements we need?
 		//System.out.println("sync("+i+") needs "+n);
 		if (n > 0) {
-			let fetched: number = this.fetch(n);
+			const fetched: number = this.fetch(n);
 			return fetched >= n;
 		}
 
@@ -168,7 +168,7 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		for (let i = 0; i < n; i++) {
-			let t: Token = this.tokenSource.nextToken();
+			const t: Token = this.tokenSource.nextToken();
 			if (this.isWritableToken(t)) {
 				t.tokenIndex = this.tokens.length;
 			}
@@ -199,13 +199,13 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		this.lazyInit();
-		let subset: Token[] = new Array<Token>();
+		const subset: Token[] = new Array<Token>();
 		if (stop >= this.tokens.length) {
 			stop = this.tokens.length - 1;
 		}
 
 		for (let i = start; i <= stop; i++) {
-			let t: Token = this.tokens[i];
+			const t: Token = this.tokens[i];
 			if (t.type === Token.EOF) {
 				break;
 			}
@@ -218,7 +218,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	@Override
 	public LA(i: number): number {
-		let token = this.LT(i);
+		const token = this.LT(i);
 		if (!token) {
 			return Token.INVALID_TYPE;
 		}
@@ -237,7 +237,7 @@ export class BufferedTokenStream implements TokenStream {
 	@NotNull
 	@Override
 	public LT(k: number): Token {
-		let result = this.tryLT(k);
+		const result = this.tryLT(k);
 		if (result === undefined) {
 			throw new RangeError("requested lookback index out of range");
 		}
@@ -255,7 +255,7 @@ export class BufferedTokenStream implements TokenStream {
 			return this.tryLB(-k);
 		}
 
-		let i: number = this.p + k - 1;
+		const i: number = this.p + k - 1;
 		this.sync(i);
 		if (i >= this.tokens.length) {
 			// return EOF token
@@ -331,7 +331,7 @@ export class BufferedTokenStream implements TokenStream {
 			types = new Set<number>().add(types);
 		}
 
-		let typesSet = types;
+		const typesSet = types;
 
 		// list = tokens[start:stop]:{T t, t.type in types}
 		let filteredTokens: Token[] = this.tokens.slice(start, stop + 1);
@@ -383,7 +383,7 @@ export class BufferedTokenStream implements TokenStream {
 		}
 
 		while (i >= 0) {
-			let token: Token = this.tokens[i];
+			const token: Token = this.tokens[i];
 			if (token.type === Token.EOF || token.channel === channel) {
 				return i;
 			}
@@ -398,15 +398,15 @@ export class BufferedTokenStream implements TokenStream {
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL} or
 	 *  EOF. If `channel` is `-1`, find any non default channel token.
 	 */
-	public getHiddenTokensToRight(tokenIndex: number, channel: number = -1): Token[] {
+	public getHiddenTokensToRight(tokenIndex: number, channel = -1): Token[] {
 		this.lazyInit();
 		if (tokenIndex < 0 || tokenIndex >= this.tokens.length) {
 			throw new RangeError(tokenIndex + " not in 0.." + (this.tokens.length - 1));
 		}
 
-		let nextOnChannel: number = this.nextTokenOnChannel(tokenIndex + 1, Lexer.DEFAULT_TOKEN_CHANNEL);
+		const nextOnChannel: number = this.nextTokenOnChannel(tokenIndex + 1, Lexer.DEFAULT_TOKEN_CHANNEL);
 		let to: number;
-		let from: number = tokenIndex + 1;
+		const from: number = tokenIndex + 1;
 		// if none onchannel to right, nextOnChannel=-1 so set to = last token
 		if (nextOnChannel === -1) {
 			to = this.size - 1;
@@ -421,7 +421,7 @@ export class BufferedTokenStream implements TokenStream {
 	 *  the current token up until we see a token on {@link Lexer#DEFAULT_TOKEN_CHANNEL}.
 	 *  If `channel` is `-1`, find any non default channel token.
 	 */
-	public getHiddenTokensToLeft(tokenIndex: number, channel: number = -1): Token[] {
+	public getHiddenTokensToLeft(tokenIndex: number, channel = -1): Token[] {
 		this.lazyInit();
 		if (tokenIndex < 0 || tokenIndex >= this.tokens.length) {
 			throw new RangeError(tokenIndex + " not in 0.." + (this.tokens.length - 1));
@@ -432,22 +432,22 @@ export class BufferedTokenStream implements TokenStream {
 			return [];
 		}
 
-		let prevOnChannel: number = this.previousTokenOnChannel(tokenIndex - 1, Lexer.DEFAULT_TOKEN_CHANNEL);
+		const prevOnChannel: number = this.previousTokenOnChannel(tokenIndex - 1, Lexer.DEFAULT_TOKEN_CHANNEL);
 		if (prevOnChannel === tokenIndex - 1) {
 			return [];
 		}
 
 		// if none onchannel to left, prevOnChannel=-1 then from=0
-		let from: number = prevOnChannel + 1;
-		let to: number = tokenIndex - 1;
+		const from: number = prevOnChannel + 1;
+		const to: number = tokenIndex - 1;
 
 		return this.filterForChannel(from, to, channel);
 	}
 
 	protected filterForChannel(from: number, to: number, channel: number): Token[] {
-		let hidden: Token[] = new Array<Token>();
+		const hidden: Token[] = new Array<Token>();
 		for (let i = from; i <= to; i++) {
-			let t: Token = this.tokens[i];
+			const t: Token = this.tokens[i];
 			if (channel === -1) {
 				if (t.channel !== Lexer.DEFAULT_TOKEN_CHANNEL) {
 					hidden.push(t);
@@ -481,7 +481,7 @@ export class BufferedTokenStream implements TokenStream {
 			interval = interval.sourceInterval;
 		}
 
-		let start: number = interval.a;
+		const start: number = interval.a;
 		let stop: number = interval.b;
 		if (start < 0 || stop < 0) {
 			return "";
@@ -492,9 +492,9 @@ export class BufferedTokenStream implements TokenStream {
 			stop = this.tokens.length - 1;
 		}
 
-		let buf: string = "";
+		let buf = "";
 		for (let i = start; i <= stop; i++) {
-			let t: Token = this.tokens[i];
+			const t: Token = this.tokens[i];
 			if (t.type === Token.EOF) {
 				break;
 			}
@@ -507,7 +507,7 @@ export class BufferedTokenStream implements TokenStream {
 
 	@NotNull
 	@Override
-	public getTextFromRange(start: any, stop: any): string {
+	public getTextFromRange(start: Token, stop?: Token): string {
 		if (this.isToken(start) && this.isToken(stop)) {
 			return this.getText(Interval.of(start.tokenIndex, stop.tokenIndex));
 		}
@@ -518,9 +518,9 @@ export class BufferedTokenStream implements TokenStream {
 	/** Get all tokens from lexer until EOF. */
 	public fill(): void {
 		this.lazyInit();
-		const blockSize: number = 1000;
+		const blockSize = 1000;
 		while (true) {
-			let fetched: number = this.fetch(blockSize);
+			const fetched: number = this.fetch(blockSize);
 			if (fetched < blockSize) {
 				return;
 			}

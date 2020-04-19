@@ -145,7 +145,7 @@ describe("BitSet Tests", () => {
 
 		it("JavaScript style iteration works", () => {
 			let count = 0;
-			for (let n of evens) {
+			for (const n of evens) {
 				assert.strictEqual(n % 2, 0);
 				count++;
 			}
@@ -185,7 +185,7 @@ describe("BitSet Tests", () => {
 		});
 
 		it("lengthy bit scans", () => {
-			let a = new BitSet([50, 70, 90]);
+			const a = new BitSet([50, 70, 90]);
 			a.clear(90);
 			assert.strictEqual(a.nextSetBit(0), 50);
 			assert.strictEqual(a.nextSetBit(51), 70);
@@ -196,7 +196,7 @@ describe("BitSet Tests", () => {
 
 
 		it("lengthy bit scans", () => {
-			let a = new BitSet([50, 70, 90]);
+			const a = new BitSet([50, 70, 90]);
 			a.clear(90);
 			a.flip(0, 100);
 			assert.strictEqual(a.nextClearBit(0), 50);
@@ -274,7 +274,7 @@ describe("BitSet Tests", () => {
 		});
 
 		it("primes and composites isEmpty", () => {
-			let a = primes.clone();
+			const a = primes.clone();
 			a.and(composites);
 			assert(a.isEmpty);
 		});
@@ -351,7 +351,7 @@ describe("BitSet Tests", () => {
 	describe("error cases", () => {
 		const dummy = evens.clone();
 		it("constructor throws", () => {
-			assert.throws(() => { let a = new BitSet(-1); });
+			assert.throws(() => { const a = new BitSet(-1); });
 		});
 
 		it("other throws", () => {

@@ -12,7 +12,7 @@ import { CharStreams } from "antlr4ts";
 export class TestCharStreams {
 	@test
 	public fromBMPStringHasExpectedSize(): void {
-		let s: CharStream = CharStreams.fromString("hello");
+		const s: CharStream = CharStreams.fromString("hello");
 		assert.strictEqual(5, s.size);
 		assert.strictEqual(0, s.index);
 		assert.strictEqual("hello", s.toString());
@@ -20,7 +20,7 @@ export class TestCharStreams {
 
 	@test
 	public fromSMPStringHasExpectedSize(): void {
-		let s: CharStream = CharStreams.fromString("hello 🌎");
+		const s: CharStream = CharStreams.fromString("hello 🌎");
 		assert.strictEqual(7, s.size);
 		assert.strictEqual(0, s.index);
 		assert.strictEqual("hello 🌎", s.toString());

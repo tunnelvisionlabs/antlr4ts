@@ -22,6 +22,16 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "label": "eslint: lint whole folder",
+      "group": "build",
+      "detail": "eslint . --ext .ts"
     }
   ]
 }

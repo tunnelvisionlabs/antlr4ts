@@ -60,7 +60,7 @@ export class BailErrorStrategy extends DefaultErrorStrategy {
 	 */
 	@Override
 	public recoverInline(recognizer: Parser): Token {
-		let e = new InputMismatchException(recognizer);
+		const e = new InputMismatchException(recognizer);
 		for (let context: ParserRuleContext | undefined = recognizer.context; context; context = context.parent) {
 			context.exception = e;
 		}

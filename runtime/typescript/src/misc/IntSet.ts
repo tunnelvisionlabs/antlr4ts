@@ -112,7 +112,7 @@ export interface IntSet {
 	 * {@inheritDoc}
 	 */
 	//@Override
-	equals(obj: any): boolean;
+	equals(obj: object): boolean;
 
 	/**
 	 * Returns `true` if the set contains the specified element.

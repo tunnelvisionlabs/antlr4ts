@@ -42,14 +42,14 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	@Override
 	public visitChildren(@NotNull node: RuleNode): Result {
 		let result: Result = this.defaultResult();
-		let n: number = node.childCount;
+		const n: number = node.childCount;
 		for (let i = 0; i < n; i++) {
 			if (!this.shouldVisitNextChild(node, result)) {
 				break;
 			}
 
-			let c: ParseTree = node.getChild(i);
-			let childResult: Result = c.accept(this);
+			const c: ParseTree = node.getChild(i);
+			const childResult: Result = c.accept(this);
 			result = this.aggregateResult(result, childResult);
 		}
 
@@ -63,7 +63,7 @@ export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisit
 	 * {@link #defaultResult defaultResult}.
 	 */
 	@Override
-	public visitTerminal(@NotNull node: TerminalNode): Result {
+	public visitTerminal(@NotNull _node: TerminalNode): Result {
 		return this.defaultResult();
 	}
 

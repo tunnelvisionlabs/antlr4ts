@@ -172,7 +172,7 @@ export class TimeLexerSpeed {
 	public static readonly RuleContext_java_file: string = path.resolve(__dirname, "../../reference/antlr4/runtime/Java/src/org/antlr/v4/runtime/RuleContext.java");
 	public static readonly PerfDir: string = path.resolve(__dirname, "../../benchmark");
 
-	public output: boolean = true;
+	public output = true;
 
 	public streamFootprints: string[] = [];
 
@@ -192,11 +192,11 @@ export class TimeLexerSpeed {
 		console.log();
 		// console.log(VM.current().details());
 
-		let tests: TimeLexerSpeed = new TimeLexerSpeed();
+		const tests: TimeLexerSpeed = new TimeLexerSpeed();
 
 		await tests.compilerWarmUp(100);
 
-		let n: number = 3500;
+		let n = 3500;
 		// await tests.load_legacy_java_ascii_file(TimeLexerSpeed.Parser_java_file, n);
 		// await tests.load_legacy_java_ascii_file(TimeLexerSpeed.RuleContext_java_file, n);
 		// await tests.load_legacy_java_ascii(TimeLexerSpeed.Parser_java_file, n);
@@ -229,7 +229,7 @@ export class TimeLexerSpeed {
 		await tests.lex_new_grapheme_utf8("emoji.txt", n, false);
 		await tests.lex_new_grapheme_utf8("emoji.txt", n, true);
 
-		for (let streamFootprint of tests.streamFootprints) {
+		for (const streamFootprint of tests.streamFootprints) {
 			console.log(streamFootprint);
 		}
 	}
@@ -403,49 +403,49 @@ export class TimeLexerSpeed {
 	// }
 
 	public lex_legacy_java_utf8(n: number, clearLexerDFACache: boolean): void {
-		let content = fs.readFileSync(TimeLexerSpeed.Parser_java_file, { encoding: "utf-8" });
+		const content = fs.readFileSync(TimeLexerSpeed.Parser_java_file, { encoding: "utf-8" });
 		// tslint:disable-next-line:deprecation
-		let input: CharStream = new ANTLRInputStream(content);
-		let lexer: JavaLexer = new JavaLexer(input);
-		let avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
-		let currentMethodName: string = "lex_legacy_java_utf8";
+		const input: CharStream = new ANTLRInputStream(content);
+		const lexer: JavaLexer = new JavaLexer(input);
+		const avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
+		const currentMethodName = "lex_legacy_java_utf8";
 		if (this.output) {
 			console.log(`${padStart(currentMethodName, 27)} average time ${Math.round(avg.totalMicroseconds)}us over ${n} runs of ${input.size} symbols${clearLexerDFACache ? " DFA cleared" : ""}`);
 		}
 	}
 
 	public async lex_new_java_utf8(n: number, clearLexerDFACache: boolean): Promise<void> {
-		let content = fs.readFileSync(TimeLexerSpeed.Parser_java_file, { encoding: "utf-8" });
-		let size: number = await TimeLexerSpeed.getResourceSize(TimeLexerSpeed.Parser_java_file);
-		let input: CharStream = CharStreams.fromString(content);
-		let lexer: JavaLexer = new JavaLexer(input);
-		let avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
-		let currentMethodName: string = "lex_new_java_utf8";
+		const content = fs.readFileSync(TimeLexerSpeed.Parser_java_file, { encoding: "utf-8" });
+		const size: number = await TimeLexerSpeed.getResourceSize(TimeLexerSpeed.Parser_java_file);
+		const input: CharStream = CharStreams.fromString(content);
+		const lexer: JavaLexer = new JavaLexer(input);
+		const avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
+		const currentMethodName = "lex_new_java_utf8";
 		if (this.output) {
 			console.log(`${padStart(currentMethodName, 27)} average time ${Math.round(avg.totalMicroseconds)}us over ${n} runs of ${input.size} symbols${clearLexerDFACache ? " DFA cleared" : ""}`);
 		}
 	}
 
 	public lex_legacy_grapheme_utf8(fileName: string, n: number, clearLexerDFACache: boolean): void {
-		let content = fs.readFileSync(path.join(TimeLexerSpeed.PerfDir, fileName), { encoding: "utf-8" });
+		const content = fs.readFileSync(path.join(TimeLexerSpeed.PerfDir, fileName), { encoding: "utf-8" });
 		// tslint:disable-next-line:deprecation
-		let input: CharStream = new ANTLRInputStream(content);
-		let lexer: GraphemesLexer = new GraphemesLexer(input);
-		let avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
-		let currentMethodName: string = "lex_legacy_grapheme_utf8";
+		const input: CharStream = new ANTLRInputStream(content);
+		const lexer: GraphemesLexer = new GraphemesLexer(input);
+		const avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
+		const currentMethodName = "lex_legacy_grapheme_utf8";
 		if (this.output) {
 			console.log(`${padStart(currentMethodName, 27)} average time ${Math.round(avg.totalMicroseconds)}us over ${n} runs of ${input.size} symbols from ${fileName}${clearLexerDFACache ? " DFA cleared" : ""}`);
 		}
 	}
 
 	public async lex_new_grapheme_utf8(fileName: string, n: number, clearLexerDFACache: boolean): Promise<void> {
-		let resourceName: string = path.join(TimeLexerSpeed.PerfDir, fileName);
-		let content = fs.readFileSync(resourceName, { encoding: "utf-8" });
-		let size: number = await TimeLexerSpeed.getResourceSize(resourceName);
-		let input: CharStream = CharStreams.fromString(content);
-		let lexer: GraphemesLexer = new GraphemesLexer(input);
-		let avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
-		let currentMethodName: string = "lex_new_grapheme_utf8";
+		const resourceName: string = path.join(TimeLexerSpeed.PerfDir, fileName);
+		const content = fs.readFileSync(resourceName, { encoding: "utf-8" });
+		const size: number = await TimeLexerSpeed.getResourceSize(resourceName);
+		const input: CharStream = CharStreams.fromString(content);
+		const lexer: GraphemesLexer = new GraphemesLexer(input);
+		const avg: TimeSpan = this.tokenize(lexer, n, clearLexerDFACache);
+		const currentMethodName = "lex_new_grapheme_utf8";
 		if (this.output) {
 			console.log(`${padStart(currentMethodName, 27)} average time ${Math.round(avg.totalMicroseconds)}us over ${n} runs of ${input.size} symbols from ${fileName}${clearLexerDFACache ? " DFA cleared" : ""}`);
 		}
@@ -455,17 +455,17 @@ export class TimeLexerSpeed {
 		// always wipe the DFA before we begin tests so previous tests don't affect this run!
 		lexer.interpreter.clearDFA();
 		let times: TimeSpan[] = [];
-		for (let i: number = 0; i < n; i++) {
+		for (let i = 0; i < n; i++) {
 			lexer.reset();
 			if (clearLexerDFACache) {
 				lexer.interpreter.clearDFA();
 			}
 
-			let start: Stopwatch = Stopwatch.startNew();
-			let tokens: CommonTokenStream = new CommonTokenStream(lexer);
+			const start: Stopwatch = Stopwatch.startNew();
+			const tokens: CommonTokenStream = new CommonTokenStream(lexer);
 			tokens.fill(); // lex whole file.
 			// let size: number = lexer.inputStream.size;
-			let stop: TimeSpan = start.elapsed();
+			const stop: TimeSpan = start.elapsed();
 			times.push(stop);
 			// if (this.output) {
 			// 	console.log(`Tokenized ${size} char in ${times[i].totalMilliseconds}ms`);
@@ -478,8 +478,8 @@ export class TimeLexerSpeed {
 	}
 
 	public avg(values: TimeSpan[]): TimeSpan {
-		let sum: number = 0.0;
-		for (let v of values) {
+		let sum = 0.0;
+		for (const v of values) {
 			sum += v.totalMilliseconds;
 		}
 
@@ -487,8 +487,8 @@ export class TimeLexerSpeed {
 	}
 
 	public std(mean: number, values: number[]): number { // unbiased std dev
-		let sum: number = 0.0;
-		for (let v of values) {
+		let sum = 0.0;
+		for (const v of values) {
 			sum += (v - mean) * (v - mean);
 		}
 
@@ -500,9 +500,9 @@ export class TimeLexerSpeed {
 	}
 
 	public static async getResourceSize(resourceName: string): Promise<number> {
-		let stats = await util.promisify(fs.stat)(resourceName);
+		const stats = await util.promisify(fs.stat)(resourceName);
 		return stats.size;
 	}
 }
 
-let _ = TimeLexerSpeed.main();
+const _ = TimeLexerSpeed.main();

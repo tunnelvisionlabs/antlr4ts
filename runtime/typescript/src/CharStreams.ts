@@ -249,11 +249,11 @@ export namespace CharStreams {
 
 		// Initial guess assumes no code points > U+FFFF: one code
 		// point for each code unit in the string
-		let codePointBufferBuilder: CodePointBuffer.Builder = CodePointBuffer.builder(s.length);
+		const codePointBufferBuilder: CodePointBuffer.Builder = CodePointBuffer.builder(s.length);
 
 		// TODO: CharBuffer.wrap(String) rightfully returns a read-only buffer
 		// which doesn't expose its array, so we make a copy.
-		let cb: Uint16Array = new Uint16Array(s.length);
+		const cb: Uint16Array = new Uint16Array(s.length);
 		for (let i = 0; i < s.length; i++) {
 			cb[i] = s.charCodeAt(i);
 		}

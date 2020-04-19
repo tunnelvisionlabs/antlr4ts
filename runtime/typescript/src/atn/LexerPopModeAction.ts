@@ -21,6 +21,8 @@ import { NotNull, Override } from "../Decorators";
  * @since 4.2
  */
 export class LexerPopModeAction implements LexerAction {
+	public static readonly INSTANCE: LexerPopModeAction = new LexerPopModeAction();
+
 	/**
 	 * Constructs the singleton instance of the lexer `popMode` command.
 	 */
@@ -64,7 +66,7 @@ export class LexerPopModeAction implements LexerAction {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		return obj === this;
 	}
 
@@ -74,9 +76,4 @@ export class LexerPopModeAction implements LexerAction {
 	}
 }
 
-export namespace LexerPopModeAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerPopModeAction = new LexerPopModeAction();
-}
+

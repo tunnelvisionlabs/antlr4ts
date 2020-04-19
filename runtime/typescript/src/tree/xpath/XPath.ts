@@ -77,49 +77,51 @@ export class XPath {
 	// TODO: check for invalid token/rule names, bad syntax
 
 	public split(path: string): XPathElement[] {
-		let lexer = new XPathLexer(CharStreams.fromString(path));
+		const lexer = new XPathLexer(CharStreams.fromString(path));
+		// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 		lexer.recover = (e: LexerNoViableAltException) => { throw e; };
 
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(new XPathLexerErrorListener());
-		let tokenStream = new CommonTokenStream(lexer);
+		const tokenStream = new CommonTokenStream(lexer);
 		try {
 			tokenStream.fill();
 		}
 		catch (e) {
 			if (e instanceof LexerNoViableAltException) {
-				let pos: number = lexer.charPositionInLine;
-				let msg: string = "Invalid tokens or characters at index " + pos + " in path '" + path + "' -- " + e.message;
+				const pos: number = lexer.charPositionInLine;
+				const msg: string = "Invalid tokens or characters at index " + pos + " in path '" + path + "' -- " + e.message;
 				throw new RangeError(msg);
 			}
 			throw e;
 		}
 
-		let tokens: Token[] = tokenStream.getTokens();
+		const tokens: Token[] = tokenStream.getTokens();
 		// console.log("path=" + path + "=>" + tokens);
-		let elements: XPathElement[] = [];
-		let n: number = tokens.length;
-		let i: number = 0;
+		const elements: XPathElement[] = [];
+		const n: number = tokens.length;
+		let i = 0;
 		loop:
 		while (i < n) {
-			let el: Token = tokens[i];
+			const el: Token = tokens[i];
 			let next: Token | undefined;
 			switch (el.type) {
 				case XPathLexer.ROOT:
-				case XPathLexer.ANYWHERE:
-					let anywhere: boolean = el.type === XPathLexer.ANYWHERE;
+				case XPathLexer.ANYWHERE: {
+					const anywhere: boolean = el.type === XPathLexer.ANYWHERE;
 					i++;
 					next = tokens[i];
-					let invert: boolean = next.type === XPathLexer.BANG;
+					const invert: boolean = next.type === XPathLexer.BANG;
 					if (invert) {
 						i++;
 						next = tokens[i];
 					}
-					let pathElement: XPathElement = this.getXPathElement(next, anywhere);
+					const pathElement: XPathElement = this.getXPathElement(next, anywhere);
 					pathElement.invert = invert;
 					elements.push(pathElement);
 					i++;
 					break;
+				}
 
 				case XPathLexer.TOKEN_REF:
 				case XPathLexer.RULE_REF:
@@ -148,13 +150,13 @@ export class XPath {
 			throw new Error("Missing path element at end of path");
 		}
 
-		let word = wordToken.text;
+		const word = wordToken.text;
 		if (word == null) {
 			throw new Error("Expected wordToken to have text content.");
 		}
 
-		let ttype: number = this.parser.getTokenType(word);
-		let ruleIndex: number = this.parser.getRuleIndex(word);
+		const ttype: number = this.parser.getTokenType(word);
+		const ruleIndex: number = this.parser.getRuleIndex(word);
 		switch (wordToken.type) {
 			case XPathLexer.WILDCARD:
 				return anywhere ?
@@ -183,7 +185,7 @@ export class XPath {
 	}
 
 	public static findAll(tree: ParseTree, xpath: string, parser: Parser): Set<ParseTree> {
-		let p: XPath = new XPath(parser, xpath);
+		const p: XPath = new XPath(parser, xpath);
 		return p.evaluate(tree);
 	}
 
@@ -192,20 +194,20 @@ export class XPath {
 	 * path. The root `/` is relative to the node passed to {@link evaluate}.
 	 */
 	public evaluate(t: ParseTree): Set<ParseTree> {
-		let dummyRoot = new ParserRuleContext();
+		const dummyRoot = new ParserRuleContext();
 		dummyRoot.addChild(t as ParserRuleContext);
 
 		let work = new Set<ParseTree>([dummyRoot]);
 
-		let i: number = 0;
+		let i = 0;
 		while (i < this.elements.length) {
-			let next = new Set<ParseTree>();
-			for (let node of work) {
+			const next = new Set<ParseTree>();
+			for (const node of work) {
 				if (node.childCount > 0) {
 					// only try to match next element if it has children
 					// e.g., //func/*/stat might have a token node for which
 					// we can't go looking for stat nodes.
-					let matching = this.elements[i].evaluate(node);
+					const matching = this.elements[i].evaluate(node);
 					matching.forEach(next.add, next);
 				}
 			}

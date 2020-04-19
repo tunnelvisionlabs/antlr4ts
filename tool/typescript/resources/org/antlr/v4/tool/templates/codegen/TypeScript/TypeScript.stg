@@ -140,6 +140,7 @@ Parser(parser, funcs, atn, sempredFuncs, superClass, isLexer=false) ::= <<
 >>
 
 Parser_(parser, funcs, atn, sempredFuncs, ctor, superClass) ::= <<
+/* eslint-disable no-useless-escape */
 export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extends <superClass; null="Parser"> {
 	<if(parser.tokens)>
 	<parser.tokens:{k | public static readonly <k> = <parser.tokens.(k)>;}; separator="\n", wrap, anchor>
@@ -886,6 +887,7 @@ import { join, toCharArray } from "<basePath()>/misc";
 >>
 
 Lexer(lexer, atn, actionFuncs, sempredFuncs, superClass, isLexer=true) ::= <<
+/* eslint-disable no-useless-escape */
 export <if(lexer.abstractRecognizer)>abstract <endif>class <lexer.name> extends <superClass; null="Lexer"> {
 	<lexer.tokens:{k | public static readonly <k> = <lexer.tokens.(k)>;}; separator="\n">
 	<lexer.channels:{c | public static readonly <c> = <lexer.channels.(c)>;}; separator="\n">

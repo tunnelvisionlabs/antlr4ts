@@ -88,7 +88,7 @@ export class ParseTreeMatch {
 	 * label, or `undefined` if no parse tree matched a tag with the label.
 	 */
 	public get(label: string): ParseTree | undefined {
-		let parseTrees = this._labels.get(label);
+		const parseTrees = this._labels.get(label);
 		if (!parseTrees || parseTrees.length === 0) {
 			return undefined;
 		}

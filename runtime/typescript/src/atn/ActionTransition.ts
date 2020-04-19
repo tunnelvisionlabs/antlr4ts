@@ -15,7 +15,7 @@ export class ActionTransition extends Transition {
 	public actionIndex: number;
 	public isCtxDependent: boolean;  // e.g., $i ref in action
 
-	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex: number = -1, isCtxDependent: boolean = false) {
+	constructor(@NotNull target: ATNState, ruleIndex: number, actionIndex = -1, isCtxDependent = false) {
 		super(target);
 		this.ruleIndex = ruleIndex;
 		this.actionIndex = actionIndex;

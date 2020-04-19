@@ -10,7 +10,7 @@ export class Stopwatch {
 	private _start?: number[];
 
 	public static startNew(): Stopwatch {
-		let result = new Stopwatch();
+		const result = new Stopwatch();
 		result.start();
 		return result;
 	}
@@ -24,9 +24,9 @@ export class Stopwatch {
 	}
 
 	public elapsed(): TimeSpan {
-		let result = { seconds: this._elapsed[0], nanos: this._elapsed[1] };
+		const result = { seconds: this._elapsed[0], nanos: this._elapsed[1] };
 		if (this._start !== undefined) {
-			let stop = process.hrtime();
+			const stop = process.hrtime();
 			result.seconds += stop[0] - this._start[0];
 			if (stop[0] === this._start[0]) {
 				result.nanos += stop[1] - this._start[1];

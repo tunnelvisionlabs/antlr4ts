@@ -22,11 +22,11 @@ export class UUID implements Equatable {
 			throw new Error("Incorrectly formatted UUID");
 		}
 
-		let segments = data.split("-");
-		let mostSigBits = parseInt(segments[0], 16);
-		let moreSigBits = ((parseInt(segments[1], 16) << 16) >>> 0) + parseInt(segments[2], 16);
-		let lessSigBits = ((parseInt(segments[3], 16) << 16) >>> 0) + parseInt(segments[4].substr(0, 4), 16);
-		let leastSigBits = parseInt(segments[4].substr(-8), 16);
+		const segments = data.split("-");
+		const mostSigBits = parseInt(segments[0], 16);
+		const moreSigBits = ((parseInt(segments[1], 16) << 16) >>> 0) + parseInt(segments[2], 16);
+		const lessSigBits = ((parseInt(segments[3], 16) << 16) >>> 0) + parseInt(segments[4].substr(0, 4), 16);
+		const leastSigBits = parseInt(segments[4].substr(-8), 16);
 		return new UUID(mostSigBits, moreSigBits, lessSigBits, leastSigBits);
 	}
 
@@ -34,7 +34,7 @@ export class UUID implements Equatable {
 		return MurmurHash.hashCode([this.data[0], this.data[1], this.data[2], this.data[3]]);
 	}
 
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;
 		} else if (!(obj instanceof UUID)) {

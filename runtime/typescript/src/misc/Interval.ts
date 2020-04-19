@@ -8,7 +8,7 @@
 import { Override } from "../Decorators";
 import { Equatable } from "./Stubs";
 
-const INTERVAL_POOL_MAX_VALUE: number = 1000;
+const INTERVAL_POOL_MAX_VALUE = 1000;
 
 /** An immutable inclusive interval a..b */
 export class Interval implements Equatable {
@@ -70,7 +70,7 @@ export class Interval implements Equatable {
 
 	@Override
 	public hashCode(): number {
-		let hash: number = 23;
+		let hash = 23;
 		hash = hash * 31 + this.a;
 		hash = hash * 31 + this.b;
 		return hash;

@@ -91,7 +91,7 @@ export namespace PredictionMode {
 	class AltAndContextConfigEqualityComparator implements EqualityComparator<ATNConfig> {
 		public static readonly INSTANCE: AltAndContextConfigEqualityComparator = new AltAndContextConfigEqualityComparator();
 
-		private AltAndContextConfigEqualityComparator() {
+		private AltAndContextConfigEqualityComparator(): void {
 			// intentionally empty
 		}
 
@@ -132,7 +132,7 @@ export namespace PredictionMode {
 	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function hasConfigInRuleStopState(configs: ATNConfigSet): boolean {
-		for (let c of configs) {
+		for (const c of configs) {
 			if (c.state instanceof RuleStopState) {
 				return true;
 			}
@@ -152,7 +152,7 @@ export namespace PredictionMode {
 	 * {@link RuleStopState}, otherwise `false`
 	 */
 	export function allConfigsInRuleStopStates(/*@NotNull*/ configs: ATNConfigSet): boolean {
-		for (let config of configs) {
+		for (const config of configs) {
 			if (!(config.state instanceof RuleStopState)) {
 				return false;
 			}

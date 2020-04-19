@@ -23,14 +23,14 @@ export class TestTokenStream {
 	 */
 	@test
 	public testBufferedTokenStreamReuseAfterFill(): void {
-		let firstInput = CharStreams.fromString("A");
-		let tokenStream = new BufferedTokenStream(new XPathLexer(firstInput));
+		const firstInput = CharStreams.fromString("A");
+		const tokenStream = new BufferedTokenStream(new XPathLexer(firstInput));
 		tokenStream.fill();
 		assert.strictEqual(tokenStream.size, 2);
 		assert.strictEqual(tokenStream.get(0).type, XPathLexer.TOKEN_REF);
 		assert.strictEqual(tokenStream.get(1).type, Token.EOF);
 
-		let secondInput = CharStreams.fromString("A/");
+		const secondInput = CharStreams.fromString("A/");
 		tokenStream.tokenSource = new XPathLexer(secondInput);
 		tokenStream.fill();
 		assert.strictEqual(tokenStream.size, 3);

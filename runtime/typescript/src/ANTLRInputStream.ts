@@ -5,14 +5,14 @@
 // ConvertTo-TS run at 2016-10-04T11:26:49.0828748-07:00
 
 import * as assert from "assert";
+import * as Arrays from "./misc/Arrays";
 import { CharStream } from "./CharStream";
-import { Arrays } from "./misc/Arrays";
 import { Override } from "./Decorators";
 import { IntStream } from "./IntStream";
 import { Interval } from "./misc/Interval";
 
-const READ_BUFFER_SIZE: number = 1024;
-const INITIAL_BUFFER_SIZE: number = 1024;
+const READ_BUFFER_SIZE = 1024;
+const INITIAL_BUFFER_SIZE = 1024;
 
 /**
  * Vacuum all input from a {@link Reader}/{@link InputStream} and then treat it
@@ -31,7 +31,7 @@ export class ANTLRInputStream implements CharStream {
 	protected n: number;
 
 	/** 0..n-1 index into string of next char */
-	protected p: number = 0;
+	protected p = 0;
 
 	/** What is name or source of this char stream? */
 	public name?: string;
@@ -132,12 +132,12 @@ export class ANTLRInputStream implements CharStream {
 
 	@Override
 	public getText(interval: Interval): string {
-		let start: number = interval.a;
+		const start: number = interval.a;
 		let stop: number = interval.b;
 		if (stop >= this.n) {
 			stop = this.n - 1;
 		}
-		let count: number = stop - start + 1;
+		const count: number = stop - start + 1;
 		if (start >= this.n) {
 			return "";
 		}
@@ -156,5 +156,5 @@ export class ANTLRInputStream implements CharStream {
 	}
 
 	@Override
-	public toString() { return this.data; }
+	public toString(): string { return this.data; }
 }

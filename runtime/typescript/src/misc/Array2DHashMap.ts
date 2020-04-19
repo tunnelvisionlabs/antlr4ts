@@ -10,7 +10,7 @@ import { Equatable, JavaCollection, JavaMap, JavaSet } from "./Stubs";
 
 // Since `Array2DHashMap` is implemented on top of `Array2DHashSet`, we defined a bucket type which can store a
 // key-value pair. The value is optional since looking up values in the map by a key only needs to include the key.
-interface Bucket<K, V> { key: K; value?: V; }
+interface Bucket<K, V> { key: K; value?: V }
 
 class MapKeyEqualityComparator<K, V> implements EqualityComparator<Bucket<K, V>> {
 	private readonly keyComparator: EqualityComparator<K>;
@@ -50,7 +50,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	public get(key: K): V | undefined {
-		let bucket = this.backingStore.get({ key });
+		const bucket = this.backingStore.get({ key });
 		if (!bucket) {
 			return undefined;
 		}
@@ -63,7 +63,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	public put(key: K, value: V): V | undefined {
-		let element = this.backingStore.get({ key, value });
+		const element = this.backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
 			this.backingStore.add({ key, value });
@@ -76,7 +76,7 @@ export class Array2DHashMap<K, V> implements JavaMap<K, V> {
 	}
 
 	public putIfAbsent(key: K, value: V): V | undefined {
-		let element = this.backingStore.get({ key, value });
+		const element = this.backingStore.get({ key, value });
 		let result: V | undefined;
 		if (!element) {
 			this.backingStore.add({ key, value });

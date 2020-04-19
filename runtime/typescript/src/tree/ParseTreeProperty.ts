@@ -26,7 +26,7 @@ import { ParseTree } from "./ParseTree";
 export class ParseTreeProperty<V> {
 	private _symbol: symbol;
 
-	constructor(name: string = "ParseTreeProperty") {
+	constructor(name = "ParseTreeProperty") {
 		this._symbol = Symbol(name);
 	}
 
@@ -39,7 +39,7 @@ export class ParseTreeProperty<V> {
 	}
 
 	public removeFrom(node: ParseTree): V {
-		let result = (node as any)[this._symbol] as V;
+		const result = (node as any)[this._symbol] as V;
 		delete (node as any)[this._symbol];
 		return result;
 	}

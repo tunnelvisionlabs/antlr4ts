@@ -14,6 +14,7 @@ import { ParserRuleContext } from "./ParserRuleContext";
  */
 export function RuleVersion(version: number) {
 
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	return <T extends ParserRuleContext>(target: Parser, propertyKey: PropertyKey, propertyDescriptor: TypedPropertyDescriptor<(...args: any[]) => T>) => {
 		// intentionally empty
 	};

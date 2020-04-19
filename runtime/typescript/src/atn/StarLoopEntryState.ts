@@ -24,7 +24,7 @@ export class StarLoopEntryState extends DecisionState {
 	 *
 	 * @see `DFA.isPrecedenceDfa`
 	 */
-	public precedenceRuleDecision: boolean = false;
+	public precedenceRuleDecision = false;
 
 	/**
 	 * For precedence decisions, this set marks states *S* which have all

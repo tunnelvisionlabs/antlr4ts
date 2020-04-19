@@ -30,7 +30,7 @@ export class PredictionContextCache {
 
 	private enableCache: boolean;
 
-	constructor(enableCache: boolean = true) {
+	constructor(enableCache = true) {
 		this.enableCache = enableCache;
 	}
 
@@ -53,7 +53,7 @@ export class PredictionContextCache {
 			return context.getChild(invokingState);
 		}
 
-		let operands: PredictionContextCache.PredictionContextAndInt = new PredictionContextCache.PredictionContextAndInt(context, invokingState);
+		const operands: PredictionContextCache.PredictionContextAndInt = new PredictionContextCache.PredictionContextAndInt(context, invokingState);
 		let result = this.childContexts.get(operands);
 		if (!result) {
 			result = context.getChild(invokingState);
@@ -69,7 +69,7 @@ export class PredictionContextCache {
 			return PredictionContext.join(x, y, this);
 		}
 
-		let operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(x, y);
+		const operands: PredictionContextCache.IdentityCommutativePredictionContextOperands = new PredictionContextCache.IdentityCommutativePredictionContextOperands(x, y);
 		let result = this.joinContexts.get(operands);
 		if (result) {
 			return result;
@@ -93,21 +93,21 @@ export namespace PredictionContextCache {
 		}
 
 		@Override
-		public equals(obj: any): boolean {
+		public equals(obj: object): boolean {
 			if (!(obj instanceof PredictionContextAndInt)) {
 				return false;
 			} else if (obj === this) {
 				return true;
 			}
 
-			let other: PredictionContextAndInt = obj;
+			const other: PredictionContextAndInt = obj;
 			return this.value === other.value
 				&& (this.obj === other.obj || (this.obj != null && this.obj.equals(other.obj)));
 		}
 
 		@Override
 		public hashCode(): number {
-			let hashCode: number = 5;
+			let hashCode = 5;
 			hashCode = 7 * hashCode + (this.obj != null ? this.obj.hashCode() : 0);
 			hashCode = 7 * hashCode + this.value;
 			return hashCode;
@@ -134,14 +134,14 @@ export namespace PredictionContextCache {
 		}
 
 		@Override
-		public equals(o: any): boolean {
+		public equals(o: object): boolean {
 			if (!(o instanceof IdentityCommutativePredictionContextOperands)) {
 				return false;
 			} else if (this === o) {
 				return true;
 			}
 
-			let other: IdentityCommutativePredictionContextOperands = o;
+			const other: IdentityCommutativePredictionContextOperands = o;
 			return (this._x === other._x && this._y === other._y) || (this._x === other._y && this._y === other._x);
 		}
 

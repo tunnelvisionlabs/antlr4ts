@@ -25,7 +25,7 @@ import * as assert from "assert";
  * {@link #isPrecedenceFilterSuppressed} property as a bit within the
  * existing {@link #altAndOuterContextDepth} field.
  */
-const SUPPRESS_PRECEDENCE_FILTER: number = 0x80000000;
+const SUPPRESS_PRECEDENCE_FILTER = 0x80000000;
 
 /**
  * Represents a location with context in an ATN. The location is identified by the following values:
@@ -197,7 +197,7 @@ export class ATNConfig implements Equatable {
 	}
 
 	private transformImpl(@NotNull state: ATNState, context: PredictionContext, @NotNull semanticContext: SemanticContext, checkNonGreedy: boolean, lexerActionExecutor: LexerActionExecutor | undefined): ATNConfig {
-		let passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig.checkNonGreedyDecision(this, state);
+		const passedThroughNonGreedy: boolean = checkNonGreedy && ATNConfig.checkNonGreedyDecision(this, state);
 		if (semanticContext !== SemanticContext.NONE) {
 			if (lexerActionExecutor != null || passedThroughNonGreedy) {
 				return new ActionSemanticContextATNConfig(lexerActionExecutor, semanticContext, state, this, context, passedThroughNonGreedy);
@@ -223,12 +223,12 @@ export class ATNConfig implements Equatable {
 	public appendContext(context: PredictionContext, contextCache: PredictionContextCache): ATNConfig;
 	public appendContext(context: number | PredictionContext, contextCache: PredictionContextCache): ATNConfig {
 		if (typeof context === "number") {
-			let appendedContext: PredictionContext = this.context.appendSingleContext(context, contextCache);
-			let result: ATNConfig = this.transform(this.state, false, appendedContext);
+			const appendedContext: PredictionContext = this.context.appendSingleContext(context, contextCache);
+			const result: ATNConfig = this.transform(this.state, false, appendedContext);
 			return result;
 		} else {
-			let appendedContext: PredictionContext = this.context.appendContext(context, contextCache);
-			let result: ATNConfig = this.transform(this.state, false, appendedContext);
+			const appendedContext: PredictionContext = this.context.appendContext(context, contextCache);
+			const result: ATNConfig = this.transform(this.state, false, appendedContext);
 			return result;
 		}
 	}
@@ -265,13 +265,13 @@ export class ATNConfig implements Equatable {
 			return false;
 		}
 
-		let leftWorkList: PredictionContext[] = [];
-		let rightWorkList: PredictionContext[] = [];
+		const leftWorkList: PredictionContext[] = [];
+		const rightWorkList: PredictionContext[] = [];
 		leftWorkList.push(this.context);
 		rightWorkList.push(subconfig.context);
 		while (true) {
-			let left = leftWorkList.pop();
-			let right = rightWorkList.pop();
+			const left = leftWorkList.pop();
+			const right = rightWorkList.pop();
 			if (!left || !right) {
 				break;
 			}
@@ -288,7 +288,7 @@ export class ATNConfig implements Equatable {
 				return left.hasEmpty;
 			} else {
 				for (let i = 0; i < right.size; i++) {
-					let index: number = left.findReturnState(right.getReturnState(i));
+					const index: number = left.findReturnState(right.getReturnState(i));
 					if (index < 0) {
 						// assumes invokingStates has no duplicate entries
 						return false;
@@ -365,11 +365,11 @@ export class ATNConfig implements Equatable {
 		builder += ("digraph G {\n");
 		builder += ("rankdir=LR;\n");
 
-		let visited = new Array2DHashMap<PredictionContext, number>(PredictionContext.IdentityEqualityComparator.INSTANCE);
-		let workList: PredictionContext[] = [];
+		const visited = new Array2DHashMap<PredictionContext, number>(PredictionContext.IdentityEqualityComparator.INSTANCE);
+		const workList: PredictionContext[] = [];
 		function getOrAddContext(context: PredictionContext): number {
-			let newNumber = visited.size;
-			let result = visited.putIfAbsent(context, newNumber);
+			const newNumber = visited.size;
+			const result = visited.putIfAbsent(context, newNumber);
 			if (result != null) {
 				// Already saw this context
 				return result;
@@ -382,7 +382,7 @@ export class ATNConfig implements Equatable {
 		workList.push(this.context);
 		visited.put(this.context, 0);
 		while (true) {
-			let current = workList.pop();
+			const current = workList.pop();
 			if (!current) {
 				break;
 			}
@@ -428,8 +428,8 @@ export class ATNConfig implements Equatable {
 			contexts = ["?"];
 		}
 
-		let first: boolean = true;
-		for (let contextDesc of contexts) {
+		let first = true;
+		for (const contextDesc of contexts) {
 			if (first) {
 				first = false;
 			}

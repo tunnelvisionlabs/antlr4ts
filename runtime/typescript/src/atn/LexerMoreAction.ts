@@ -22,6 +22,11 @@ import { NotNull, Override } from "../Decorators";
  */
 export class LexerMoreAction implements LexerAction {
 	/**
+ * Provides a singleton instance of this parameterless lexer action.
+ */
+	public static readonly INSTANCE: LexerMoreAction = new LexerMoreAction();
+
+	/**
 	 * Constructs the singleton instance of the lexer `more` command.
 	 */
 	constructor() {
@@ -64,7 +69,7 @@ export class LexerMoreAction implements LexerAction {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		return obj === this;
 	}
 
@@ -72,11 +77,4 @@ export class LexerMoreAction implements LexerAction {
 	public toString(): string {
 		return "more";
 	}
-}
-
-export namespace LexerMoreAction {
-	/**
-	 * Provides a singleton instance of this parameterless lexer action.
-	 */
-	export const INSTANCE: LexerMoreAction = new LexerMoreAction();
 }

@@ -50,7 +50,7 @@ export class IntervalSet implements IntSet {
 	/** The list of sorted, disjoint intervals. */
 	private _intervals: Interval[];
 
-	private readonly: boolean = false;
+	private readonly = false;
 
 	constructor(intervals?: Interval[]) {
 		if (intervals != null) {
@@ -66,7 +66,7 @@ export class IntervalSet implements IntSet {
 	 */
 	@NotNull
 	public static of(a: number, b: number = a): IntervalSet {
-		let s: IntervalSet = new IntervalSet();
+		const s: IntervalSet = new IntervalSet();
 		s.add(a, b);
 		return s;
 	}
@@ -103,21 +103,21 @@ export class IntervalSet implements IntSet {
 
 		// find position in list
 		// Use iterators as we modify list in place
-		for (let i: number = 0; i < this._intervals.length; i++) {
-			let r: Interval = this._intervals[i];
+		for (let i = 0; i < this._intervals.length; i++) {
+			const r: Interval = this._intervals[i];
 			if (addition.equals(r)) {
 				return;
 			}
 
 			if (addition.adjacent(r) || !addition.disjoint(r)) {
 				// next to each other, make a single larger interval
-				let bigger: Interval = addition.union(r);
+				const bigger: Interval = addition.union(r);
 				this._intervals[i] = bigger;
 				// make sure we didn't just create an interval that
 				// should be merged with next interval in list
 				while (i < this._intervals.length - 1) {
 					i++;
-					let next: Interval = this._intervals[i];
+					const next: Interval = this._intervals[i];
 					if (!bigger.adjacent(next) && bigger.disjoint(next)) {
 						break;
 					}
@@ -151,8 +151,8 @@ export class IntervalSet implements IntSet {
 
 	/** combine all sets in the array returned the or'd value */
 	public static or(sets: IntervalSet[]): IntervalSet {
-		let r: IntervalSet = new IntervalSet();
-		for (let s of sets) {
+		const r: IntervalSet = new IntervalSet();
+		for (const s of sets) {
 			r.addAll(s);
 		}
 
@@ -166,16 +166,16 @@ export class IntervalSet implements IntSet {
 		}
 
 		if (set instanceof IntervalSet) {
-			let other: IntervalSet = set;
+			const other: IntervalSet = set;
 			// walk set and add each interval
-			let n: number = other._intervals.length;
+			const n: number = other._intervals.length;
 			for (let i = 0; i < n; i++) {
-				let I: Interval = other._intervals[i];
+				const I: Interval = other._intervals[i];
 				this.add(I.a, I.b);
 			}
 		}
 		else {
-			for (let value of set.toArray()) {
+			for (const value of set.toArray()) {
 				this.add(value);
 			}
 		}
@@ -216,7 +216,7 @@ export class IntervalSet implements IntSet {
 			return IntervalSet.subtract(this, a);
 		}
 
-		let other: IntervalSet = new IntervalSet();
+		const other: IntervalSet = new IntervalSet();
 		other.addAll(a);
 		return IntervalSet.subtract(this, other);
 	}
@@ -231,17 +231,17 @@ export class IntervalSet implements IntSet {
 			return new IntervalSet();
 		}
 
-		let result: IntervalSet = new IntervalSet(left._intervals);
+		const result: IntervalSet = new IntervalSet(left._intervals);
 		if (right.isNil) {
 			// right set has no elements; just return the copy of the current set
 			return result;
 		}
 
-		let resultI: number = 0;
-		let rightI: number = 0;
+		let resultI = 0;
+		let rightI = 0;
 		while (resultI < result._intervals.length && rightI < right._intervals.length) {
-			let resultInterval: Interval = result._intervals[resultI];
-			let rightInterval: Interval = right._intervals[rightI];
+			const resultInterval: Interval = result._intervals[resultI];
+			const rightInterval: Interval = right._intervals[rightI];
 
 			// operation: (resultInterval - rightInterval) and update indexes
 
@@ -304,7 +304,7 @@ export class IntervalSet implements IntSet {
 
 	@Override
 	public or(a: IntSet): IntervalSet {
-		let o: IntervalSet = new IntervalSet();
+		const o: IntervalSet = new IntervalSet();
 		o.addAll(this);
 		o.addAll(a);
 		return o;
@@ -318,17 +318,17 @@ export class IntervalSet implements IntSet {
 			return new IntervalSet();
 		}
 
-		let myIntervals: Interval[] = this._intervals;
-		let theirIntervals: Interval[] = (other as IntervalSet)._intervals;
+		const myIntervals: Interval[] = this._intervals;
+		const theirIntervals: Interval[] = (other as IntervalSet)._intervals;
 		let intersection: IntervalSet | undefined;
-		let mySize: number = myIntervals.length;
-		let theirSize: number = theirIntervals.length;
-		let i: number = 0;
-		let j: number = 0;
+		const mySize: number = myIntervals.length;
+		const theirSize: number = theirIntervals.length;
+		let i = 0;
+		let j = 0;
 		// iterate down both interval lists looking for nondisjoint intervals
 		while (i < mySize && j < theirSize) {
-			let mine: Interval = myIntervals[i];
-			let theirs: Interval = theirIntervals[j];
+			const mine: Interval = myIntervals[i];
+			const theirs: Interval = theirIntervals[j];
 			//System.out.println("mine="+mine+" and theirs="+theirs);
 			if (mine.startsBeforeDisjoint(theirs)) {
 				// move this iterator looking for interval that might overlap
@@ -389,15 +389,15 @@ export class IntervalSet implements IntSet {
 	/** {@inheritDoc} */
 	@Override
 	public contains(el: number): boolean {
-		let n: number = this._intervals.length;
-		let l: number = 0;
+		const n: number = this._intervals.length;
+		let l = 0;
 		let r: number = n - 1;
 		// Binary search for the element in the (sorted, disjoint) array of intervals.
 		while (l <= r) {
-			let m: number = (l + r) >> 1;
-			let I: Interval = this._intervals[m];
-			let a: number = I.a;
-			let b: number = I.b;
+			const m: number = (l + r) >> 1;
+			const I: Interval = this._intervals[m];
+			const a: number = I.a;
+			const b: number = I.b;
 			if (b < el) {
 				l = m + 1;
 			} else if (a > el) {
@@ -428,7 +428,7 @@ export class IntervalSet implements IntSet {
 			throw new RangeError("set is empty");
 		}
 
-		let last: Interval = this._intervals[this._intervals.length - 1];
+		const last: Interval = this._intervals[this._intervals.length - 1];
 		return last.b;
 	}
 
@@ -454,7 +454,7 @@ export class IntervalSet implements IntSet {
 	@Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
-		for (let I of this._intervals) {
+		for (const I of this._intervals) {
 			hash = MurmurHash.update(hash, I.a);
 			hash = MurmurHash.update(hash, I.b);
 		}
@@ -477,8 +477,8 @@ export class IntervalSet implements IntSet {
 		return ArrayEqualityComparator.INSTANCE.equals(this._intervals, o._intervals);
 	}
 
-	public toString(elemAreChar: boolean = false): string {
-		let buf: string = "";
+	public toString(elemAreChar = false): string {
+		let buf = "";
 		if (this._intervals == null || this._intervals.length === 0) {
 			return "{}";
 		}
@@ -487,16 +487,16 @@ export class IntervalSet implements IntSet {
 			buf += "{";
 		}
 
-		let first: boolean = true;
-		for (let I of this._intervals) {
+		let first = true;
+		for (const I of this._intervals) {
 			if (first) {
 				first = false;
 			} else {
 				buf += ", ";
 			}
 
-			let a: number = I.a;
-			let b: number = I.b;
+			const a: number = I.a;
+			const b: number = I.b;
 			if (a === b) {
 				if (a === Token.EOF) {
 					buf += "<EOF>";
@@ -526,21 +526,21 @@ export class IntervalSet implements IntSet {
 			return "{}";
 		}
 
-		let buf: string = "";
+		let buf = "";
 		if (this.size > 1) {
 			buf += "{";
 		}
 
-		let first: boolean = true;
-		for (let I of this._intervals) {
+		let first = true;
+		for (const I of this._intervals) {
 			if (first) {
 				first = false;
 			} else {
 				buf += ", ";
 			}
 
-			let a: number = I.a;
-			let b: number = I.b;
+			const a: number = I.a;
+			const b: number = I.b;
 			if (a === b) {
 				buf += this.elementName(vocabulary, a);
 			} else {
@@ -574,15 +574,15 @@ export class IntervalSet implements IntSet {
 
 	@Override
 	get size(): number {
-		let n: number = 0;
-		let numIntervals: number = this._intervals.length;
+		let n = 0;
+		const numIntervals: number = this._intervals.length;
 		if (numIntervals === 1) {
-			let firstInterval: Interval = this._intervals[0];
+			const firstInterval: Interval = this._intervals[0];
 			return firstInterval.b - firstInterval.a + 1;
 		}
 
 		for (let i = 0; i < numIntervals; i++) {
-			let I: Interval = this._intervals[i];
+			const I: Interval = this._intervals[i];
 			n += (I.b - I.a + 1);
 		}
 
@@ -590,12 +590,12 @@ export class IntervalSet implements IntSet {
 	}
 
 	public toIntegerList(): IntegerList {
-		let values: IntegerList = new IntegerList(this.size);
-		let n: number = this._intervals.length;
+		const values: IntegerList = new IntegerList(this.size);
+		const n: number = this._intervals.length;
 		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
-			let a: number = I.a;
-			let b: number = I.b;
+			const I: Interval = this._intervals[i];
+			const a: number = I.a;
+			const b: number = I.b;
 			for (let v = a; v <= b; v++) {
 				values.add(v);
 			}
@@ -605,10 +605,10 @@ export class IntervalSet implements IntSet {
 	}
 
 	public toSet(): Set<number> {
-		let s: Set<number> = new Set<number>();
-		for (let I of this._intervals) {
-			let a: number = I.a;
-			let b: number = I.b;
+		const s: Set<number> = new Set<number>();
+		for (const I of this._intervals) {
+			const a: number = I.a;
+			const b: number = I.b;
 			for (let v = a; v <= b; v++) {
 				s.add(v);
 			}
@@ -618,12 +618,12 @@ export class IntervalSet implements IntSet {
 	}
 
 	public toArray(): number[] {
-		let values: number[] = new Array<number>();
-		let n: number = this._intervals.length;
+		const values: number[] = new Array<number>();
+		const n: number = this._intervals.length;
 		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
-			let a: number = I.a;
-			let b: number = I.b;
+			const I: Interval = this._intervals[i];
+			const a: number = I.a;
+			const b: number = I.b;
 			for (let v = a; v <= b; v++) {
 				values.push(v);
 			}
@@ -638,11 +638,11 @@ export class IntervalSet implements IntSet {
 			throw new Error("can't alter readonly IntervalSet");
 		}
 
-		let n: number = this._intervals.length;
+		const n: number = this._intervals.length;
 		for (let i = 0; i < n; i++) {
-			let I: Interval = this._intervals[i];
-			let a: number = I.a;
-			let b: number = I.b;
+			const I: Interval = this._intervals[i];
+			const a: number = I.a;
+			const b: number = I.b;
 			if (el < a) {
 				break; // list is sorted and el is before this interval; not here
 			}
@@ -663,7 +663,7 @@ export class IntervalSet implements IntSet {
 			}
 			// if in middle a..x..b, split interval
 			if (el > a && el < b) { // found in this interval
-				let oldb: number = I.b;
+				const oldb: number = I.b;
 				this._intervals[i] = Interval.of(I.a, el - 1); // [a..x-1]
 				this.add(el + 1, oldb); // add [x+1..b]
 			}

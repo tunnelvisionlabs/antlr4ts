@@ -25,21 +25,21 @@ import { SemanticContext } from "./SemanticContext";
 import * as assert from "assert";
 import * as Utils from "../misc/Utils";
 
-interface KeyType { state: number; alt: number; }
+interface KeyType { state: number; alt: number }
 
 class KeyTypeEqualityComparer implements EqualityComparator<KeyType> {
-	public hashCode(key: KeyType) {
+	public hashCode(key: KeyType): number {
 		return key.state ^ key.alt;
 	}
 
-	public equals(a: KeyType, b: KeyType) {
+	public equals(a: KeyType, b: KeyType): boolean {
 		return a.state === b.state && a.alt === b.alt;
 	}
 
 	public static readonly INSTANCE = new KeyTypeEqualityComparer();
 }
 
-function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>) {
+function NewKeyedConfigMap(map?: Array2DHashMap<KeyType, ATNConfig>): Array2DHashMap<KeyType, ATNConfig> {
 	if (map) {
 		return new Array2DHashMap<KeyType, ATNConfig>(map);
 	} else {
@@ -87,12 +87,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 */
 	private configs: ATNConfig[];
 
-	private _uniqueAlt: number = 0;
+	private _uniqueAlt = 0;
 	private _conflictInfo?: ConflictInfo;
 	// Used in parser and lexer. In lexer, it indicates we hit a pred
 	// while computing a closure operation.  Don't make a DFA state from this.
-	private _hasSemanticContext: boolean = false;
-	private _dipsIntoOuterContext: boolean = false;
+	private _hasSemanticContext = false;
+	private _dipsIntoOuterContext = false;
 	/**
 	 * When `true`, this config set represents configurations where the entire
 	 * outer context has been consumed by the ATN interpreter. This prevents the
@@ -102,9 +102,9 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * Note: `outermostConfigSet` and {@link #dipsIntoOuterContext} should never
 	 * be true at the same time.
 	 */
-	private outermostConfigSet: boolean = false;
+	private outermostConfigSet = false;
 
-	private cachedHashCode: number = -1;
+	private cachedHashCode = -1;
 
 	constructor();
 	constructor(set: ATNConfigSet, readonly: boolean);
@@ -153,8 +153,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return this._conflictInfo.conflictedAlts.clone();
 		}
 
-		let alts: BitSet = new BitSet();
-		for (let config of this) {
+		const alts: BitSet = new BitSet();
+		for (const config of this) {
 			alts.set(config.alt);
 		}
 
@@ -179,8 +179,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	public getStates(): Array2DHashSet<ATNState> {
-		let states = new Array2DHashSet<ATNState>(ObjectEqualityComparator.INSTANCE);
-		for (let c of this.configs) {
+		const states = new Array2DHashSet<ATNState>(ObjectEqualityComparator.INSTANCE);
+		for (const c of this.configs) {
 			states.add(c.state);
 		}
 
@@ -192,13 +192,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return;
 		}
 
-		for (let config of this.configs) {
+		for (const config of this.configs) {
 			config.context = interpreter.atn.getCachedContext(config.context);
 		}
 	}
 
 	public clone(readonly: boolean): ATNConfigSet {
-		let copy: ATNConfigSet = new ATNConfigSet(this, readonly);
+		const copy: ATNConfigSet = new ATNConfigSet(this, readonly);
 		if (!readonly && this.isReadOnly) {
 			copy.addAll(this.configs);
 		}
@@ -217,26 +217,26 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	public contains(o: any): boolean {
+	public contains(o: object): boolean {
 		if (!(o instanceof ATNConfig)) {
 			return false;
 		}
 
 		if (this.mergedConfigs && this.unmerged) {
-			let config: ATNConfig = o;
-			let configKey = this.getKey(config);
-			let mergedConfig = this.mergedConfigs.get(configKey);
+			const config: ATNConfig = o;
+			const configKey = this.getKey(config);
+			const mergedConfig = this.mergedConfigs.get(configKey);
 			if (mergedConfig != null && this.canMerge(config, configKey, mergedConfig)) {
 				return mergedConfig.contains(config);
 			}
 
-			for (let c of this.unmerged) {
+			for (const c of this.unmerged) {
 				if (c.contains(o)) {
 					return true;
 				}
 			}
 		} else {
-			for (let c of this.configs) {
+			for (const c of this.configs) {
 				if (c.contains(o)) {
 					return true;
 				}
@@ -270,17 +270,16 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			contextCache = PredictionContextCache.UNCACHED;
 		}
 
-		let addKey: boolean;
-		let key = this.getKey(e);
-		let mergedConfig = this.mergedConfigs.get(key);
-		addKey = (mergedConfig == null);
+		const key = this.getKey(e);
+		const mergedConfig = this.mergedConfigs.get(key);
+		const addKey = (mergedConfig == null);
 		if (mergedConfig != null && this.canMerge(e, key, mergedConfig)) {
 			mergedConfig.outerContextDepth = Math.max(mergedConfig.outerContextDepth, e.outerContextDepth);
 			if (e.isPrecedenceFilterSuppressed) {
 				mergedConfig.isPrecedenceFilterSuppressed = true;
 			}
 
-			let joined: PredictionContext = PredictionContext.join(mergedConfig.context, e.context, contextCache);
+			const joined: PredictionContext = PredictionContext.join(mergedConfig.context, e.context, contextCache);
 			this.updatePropertiesForMergedConfig(e);
 			if (mergedConfig.context === joined) {
 				return false;
@@ -291,14 +290,14 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		for (let i = 0; i < this.unmerged.length; i++) {
-			let unmergedConfig: ATNConfig = this.unmerged[i];
+			const unmergedConfig: ATNConfig = this.unmerged[i];
 			if (this.canMerge(e, key, unmergedConfig)) {
 				unmergedConfig.outerContextDepth = Math.max(unmergedConfig.outerContextDepth, e.outerContextDepth);
 				if (e.isPrecedenceFilterSuppressed) {
 					unmergedConfig.isPrecedenceFilterSuppressed = true;
 				}
 
-				let joined: PredictionContext = PredictionContext.join(unmergedConfig.context, e.context, contextCache);
+				const joined: PredictionContext = PredictionContext.join(unmergedConfig.context, e.context, contextCache);
 				this.updatePropertiesForMergedConfig(e);
 				if (unmergedConfig.context === joined) {
 					return false;
@@ -344,7 +343,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		assert(!this.outermostConfigSet || !this._dipsIntoOuterContext);
 	}
 
-	protected canMerge(left: ATNConfig, leftKey: { state: number, alt: number }, right: ATNConfig): boolean {
+	protected canMerge(left: ATNConfig, leftKey: { state: number; alt: number }, right: ATNConfig): boolean {
 		if (left.state.stateNumber !== right.state.stateNumber) {
 			return false;
 		}
@@ -356,13 +355,13 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return left.semanticContext.equals(right.semanticContext);
 	}
 
-	protected getKey(e: ATNConfig): { state: number, alt: number } {
+	protected getKey(e: ATNConfig): { state: number; alt: number } {
 		return { state: e.state.stateNumber, alt: e.alt };
 	}
 
 	@Override
-	public containsAll(c: Iterable<any>): boolean {
-		for (let o of c) {
+	public containsAll(c: Iterable<object>): boolean {
+		for (const o of c) {
 			if (!(o instanceof ATNConfig)) {
 				return false;
 			}
@@ -380,8 +379,8 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	public addAll(c: Iterable<ATNConfig>, contextCache?: PredictionContextCache): boolean {
 		this.ensureWritable();
 
-		let changed: boolean = false;
-		for (let group of c) {
+		let changed = false;
+		for (const group of c) {
 			if (this.add(group, contextCache)) {
 				changed = true;
 			}
@@ -408,7 +407,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		if (this === obj) {
 			return true;
 		}
@@ -428,7 +427,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			return this.cachedHashCode;
 		}
 
-		let hashCode: number = 1;
+		let hashCode = 1;
 		hashCode = 5 * hashCode ^ (this.outermostConfigSet ? 1 : 0);
 		hashCode = 5 * hashCode ^ ArrayEqualityComparator.INSTANCE.hashCode(this.configs);
 
@@ -447,7 +446,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		}
 
 		let buf = "";
-		let sortedConfigs = this.configs.slice(0);
+		const sortedConfigs = this.configs.slice(0);
 		sortedConfigs.sort((o1, o2) => {
 			if (o1.alt !== o2.alt) {
 				return o1.alt - o2.alt;

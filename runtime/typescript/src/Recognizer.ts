@@ -53,17 +53,17 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	public getTokenTypeMap(): ReadonlyMap<string, number> {
-		let vocabulary: Vocabulary = this.vocabulary;
+		const vocabulary: Vocabulary = this.vocabulary;
 		let result = Recognizer.tokenTypeMapCache.get(vocabulary);
 		if (result == null) {
-			let intermediateResult = new Map<string, number>();
+			const intermediateResult = new Map<string, number>();
 			for (let i = 0; i <= this.atn.maxTokenType; i++) {
-				let literalName = vocabulary.getLiteralName(i);
+				const literalName = vocabulary.getLiteralName(i);
 				if (literalName != null) {
 					intermediateResult.set(literalName, i);
 				}
 
-				let symbolicName = vocabulary.getSymbolicName(i);
+				const symbolicName = vocabulary.getSymbolicName(i);
 				if (symbolicName != null) {
 					intermediateResult.set(symbolicName, i);
 				}
@@ -84,7 +84,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	 */
 	@NotNull
 	public getRuleIndexMap(): ReadonlyMap<string, number> {
-		let ruleNames: string[] = this.ruleNames;
+		const ruleNames: string[] = this.ruleNames;
 		if (ruleNames == null) {
 			throw new Error("The current recognizer does not provide a list of rule names.");
 		}
@@ -99,7 +99,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	public getTokenType(tokenName: string): number {
-		let ttype = this.getTokenTypeMap().get(tokenName);
+		const ttype = this.getTokenTypeMap().get(tokenName);
 		if (ttype != null) {
 			return ttype;
 		}
@@ -165,12 +165,12 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	/** What is the error header, normally line/character position information? */
 	@NotNull
 	public getErrorHeader(@NotNull e: RecognitionException): string {
-		let token = e.getOffendingToken();
+		const token = e.getOffendingToken();
 		if (!token) {
 			return "";
 		}
-		let line = token.line;
-		let charPositionInLine: number = token.charPositionInLine;
+		const line = token.line;
+		const charPositionInLine: number = token.charPositionInLine;
 		return "line " + line + ":" + charPositionInLine;
 	}
 
@@ -185,7 +185,7 @@ export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	}
 
 	public removeErrorListener(@NotNull listener: ANTLRErrorListener<TSymbol>): void {
-		let position = this._listeners.indexOf(listener);
+		const position = this._listeners.indexOf(listener);
 		if (position !== -1) {
 			this._listeners.splice(position, 1);
 		}

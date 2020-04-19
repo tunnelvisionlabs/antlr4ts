@@ -34,7 +34,7 @@ export class DecisionInfo {
 	 * The total number of times {@link ParserATNSimulator#adaptivePredict} was
 	 * invoked for this decision.
 	 */
-	public invocations: number = 0;
+	public invocations = 0;
 
 	/**
 	 * The total time spent in {@link ParserATNSimulator#adaptivePredict} for
@@ -49,7 +49,7 @@ export class DecisionInfo {
 	 * call {@link ATNSimulator#clearDFA} to reset the DFA cache to its initial
 	 * state before starting the profiling measurement pass.
 	 */
-	public timeInPrediction: number = 0;
+	public timeInPrediction = 0;
 
 	/**
 	 * The sum of the lookahead required for SLL prediction for this decision.
@@ -57,21 +57,21 @@ export class DecisionInfo {
 	 * reasons even when {@link PredictionMode#LL} or
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION} is used.
 	 */
-	public SLL_TotalLook: number = 0;
+	public SLL_TotalLook = 0;
 
 	/**
 	 * Gets the minimum lookahead required for any single SLL prediction to
 	 * complete for this decision, by reaching a unique prediction, reaching an
 	 * SLL conflict state, or encountering a syntax error.
 	 */
-	public SLL_MinLook: number = 0;
+	public SLL_MinLook = 0;
 
 	/**
 	 * Gets the maximum lookahead required for any single SLL prediction to
 	 * complete for this decision, by reaching a unique prediction, reaching an
 	 * SLL conflict state, or encountering a syntax error.
 	 */
-	public SLL_MaxLook: number = 0;
+	public SLL_MaxLook = 0;
 
 	/**
 	 * Gets the {@link LookaheadEventInfo} associated with the event where the
@@ -84,7 +84,7 @@ export class DecisionInfo {
 	 * Note that LL prediction is only used when SLL prediction reaches a
 	 * conflict state.
 	 */
-	public LL_TotalLook: number = 0;
+	public LL_TotalLook = 0;
 
 	/**
 	 * Gets the minimum lookahead required for any single LL prediction to
@@ -93,7 +93,7 @@ export class DecisionInfo {
 	 * {@link PredictionMode#LL}, an ambiguity state (for
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
 	 */
-	public LL_MinLook: number = 0;
+	public LL_MinLook = 0;
 
 	/**
 	 * Gets the maximum lookahead required for any single LL prediction to
@@ -102,7 +102,7 @@ export class DecisionInfo {
 	 * {@link PredictionMode#LL}, an ambiguity state (for
 	 * {@link PredictionMode#LL_EXACT_AMBIG_DETECTION}, or a syntax error.
 	 */
-	public LL_MaxLook: number = 0;
+	public LL_MaxLook = 0;
 
 	/**
 	 * Gets the {@link LookaheadEventInfo} associated with the event where the
@@ -159,7 +159,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#computeTargetState
 	 * @see LexerATNSimulator#computeTargetState
 	 */
-	public SLL_ATNTransitions: number = 0;
+	public SLL_ATNTransitions = 0;
 
 	/**
 	 * The total number of DFA transitions required during SLL prediction for
@@ -171,7 +171,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState
 	 */
-	public SLL_DFATransitions: number = 0;
+	public SLL_DFATransitions = 0;
 
 	/**
 	 * Gets the total number of times SLL prediction completed in a conflict
@@ -184,7 +184,7 @@ export class DecisionInfo {
 	 * this decision, {@link PredictionMode#SLL} would produce the same overall
 	 * parsing result as {@link PredictionMode#LL}.
 	 */
-	public LL_Fallback: number = 0;
+	public LL_Fallback = 0;
 
 	/**
 	 * The total number of ATN transitions required during LL prediction for
@@ -201,7 +201,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#computeTargetState
 	 * @see LexerATNSimulator#computeTargetState
 	 */
-	public LL_ATNTransitions: number = 0;
+	public LL_ATNTransitions = 0;
 
 	/**
 	 * The total number of DFA transitions required during LL prediction for
@@ -213,7 +213,7 @@ export class DecisionInfo {
 	 * @see ParserATNSimulator#getExistingTargetState
 	 * @see LexerATNSimulator#getExistingTargetState
 	 */
-	public LL_DFATransitions: number = 0;
+	public LL_DFATransitions = 0;
 
 	/**
 	 * Constructs a new instance of the {@link DecisionInfo} class to contain

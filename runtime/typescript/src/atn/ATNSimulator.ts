@@ -50,7 +50,7 @@ export abstract class ATNSimulator {
 }
 
 export namespace ATNSimulator {
-	const RULE_VARIANT_DELIMITER: string = "$";
-	const RULE_LF_VARIANT_MARKER: string = "$lf$";
-	const RULE_NOLF_VARIANT_MARKER: string = "$nolf$";
+	const RULE_VARIANT_DELIMITER = "$";
+	const RULE_LF_VARIANT_MARKER = "$lf$";
+	const RULE_NOLF_VARIANT_MARKER = "$nolf$";
 }

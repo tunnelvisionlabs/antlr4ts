@@ -66,7 +66,7 @@ export class ParserRuleContext extends RuleContext {
 	 *
 	 *  This does not trace states visited during prediction.
 	 */
-//	public Array<number> states;
+	//	public Array<number> states;
 
 	public _start: Token;
 	public _stop: Token | undefined;
@@ -115,7 +115,7 @@ export class ParserRuleContext extends RuleContext {
 		if (ctx.children) {
 			this.children = [];
 			// reset parent pointer for any error nodes
-			for (let child of ctx.children) {
+			for (const child of ctx.children) {
 				if (child instanceof ErrorNode) {
 					this.addChild(child);
 				}
@@ -207,17 +207,17 @@ export class ParserRuleContext extends RuleContext {
 		} else {
 			// deprecated path
 			const badToken: Token = node;
-			let t = new ErrorNode(badToken);
+			const t = new ErrorNode(badToken);
 			this.addAnyChild(t);
 			t.setParent(this);
 			return t;
 		}
 	}
 
-//	public void trace(int s) {
-//		if ( states==null ) states = new ArrayList<Integer>();
-//		states.add(s);
-//	}
+	//	public void trace(int s) {
+	//		if ( states==null ) states = new ArrayList<Integer>();
+	//		states.add(s);
+	//	}
 
 	/** Used by enterOuterAlt to toss out a RuleContext previously added as
 	 *  we entered a rule. If we have # label, we will need to remove
@@ -232,7 +232,7 @@ export class ParserRuleContext extends RuleContext {
 	@Override
 	/** Override to make type more specific */
 	get parent(): ParserRuleContext | undefined {
-		let parent = super.parent;
+		const parent = super.parent;
 		if (parent === undefined || parent instanceof ParserRuleContext) {
 			return parent;
 		}
@@ -252,7 +252,7 @@ export class ParserRuleContext extends RuleContext {
 			return this.children[i];
 		}
 
-		let result = this.tryGetChild(i, ctxType);
+		const result = this.tryGetChild(i, ctxType);
 		if (result === undefined) {
 			throw new Error("The specified node does not exist");
 		}
@@ -265,8 +265,8 @@ export class ParserRuleContext extends RuleContext {
 			return undefined;
 		}
 
-		let j: number = -1; // what node with ctxType have we found?
-		for (let o of this.children) {
+		let j = -1; // what node with ctxType have we found?
+		for (const o of this.children) {
 			if (o instanceof ctxType) {
 				j++;
 				if (j === i) {
@@ -279,7 +279,7 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	public getToken(ttype: number, i: number): TerminalNode {
-		let result = this.tryGetToken(ttype, i);
+		const result = this.tryGetToken(ttype, i);
 		if (result === undefined) {
 			throw new Error("The specified token does not exist");
 		}
@@ -292,10 +292,10 @@ export class ParserRuleContext extends RuleContext {
 			return undefined;
 		}
 
-		let j: number = -1; // what token with ttype have we found?
-		for (let o of this.children) {
+		let j = -1; // what token with ttype have we found?
+		for (const o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol: Token = o.symbol;
+				const symbol: Token = o.symbol;
 				if (symbol.type === ttype) {
 					j++;
 					if (j === i) {
@@ -309,15 +309,15 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	public getTokens(ttype: number): TerminalNode[] {
-		let tokens: TerminalNode[] = [];
+		const tokens: TerminalNode[] = [];
 
 		if (!this.children) {
 			return tokens;
 		}
 
-		for (let o of this.children) {
+		for (const o of this.children) {
 			if (o instanceof TerminalNode) {
-				let symbol = o.symbol;
+				const symbol = o.symbol;
 				if (symbol.type === ttype) {
 					tokens.push(o);
 				}
@@ -341,12 +341,12 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	public getRuleContexts<T extends ParserRuleContext>(ctxType: new (...args: any[]) => T): T[] {
-		let contexts: T[] = [];
+		const contexts: T[] = [];
 		if (!this.children) {
 			return contexts;
 		}
 
-		for (let o of this.children) {
+		for (const o of this.children) {
 			if (o instanceof ctxType) {
 				contexts.push(o);
 			}
@@ -356,7 +356,7 @@ export class ParserRuleContext extends RuleContext {
 	}
 
 	@Override
-	get childCount() {
+	get childCount(): number {
 		return this.children ? this.children.length : 0;
 	}
 
@@ -386,7 +386,7 @@ export class ParserRuleContext extends RuleContext {
 
 	/** Used for rule context info debugging during parse-time, not so much for ATN debugging */
 	public toInfoString(recognizer: Parser): string {
-		let rules: string[] =
+		const rules: string[] =
 			recognizer.getRuleInvocationStack(this).reverse();
 		return "ParserRuleContext" + rules + "{" +
 			"start=" + this._start +

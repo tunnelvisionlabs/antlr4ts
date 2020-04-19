@@ -42,13 +42,13 @@ export class CommonTokenFactory implements TokenFactory {
 	 *
 	 * @param copyText The value for {@link #copyText}.
 	 */
-	constructor(copyText: boolean = false) {
+	constructor(copyText = false) {
 		this.copyText = copyText;
 	}
 
 	@Override
 	public create(
-		source: { source?: TokenSource, stream?: CharStream },
+		source: { source?: TokenSource; stream?: CharStream },
 		type: number,
 		text: string | undefined,
 		channel: number,
@@ -57,7 +57,7 @@ export class CommonTokenFactory implements TokenFactory {
 		line: number,
 		charPositionInLine: number): CommonToken {
 
-		let t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
+		const t: CommonToken = new CommonToken(type, text, source, channel, start, stop);
 		t.line = line;
 		t.charPositionInLine = charPositionInLine;
 		if (text == null && this.copyText && source.stream != null) {

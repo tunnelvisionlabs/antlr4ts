@@ -50,12 +50,12 @@ export class LL1Analyzer {
 			return undefined;
 		}
 
-		let look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
+		const look: (IntervalSet | undefined)[] = new Array<IntervalSet>(s.numberOfTransitions);
 		for (let alt = 0; alt < s.numberOfTransitions; alt++) {
 			let current: IntervalSet | undefined = new IntervalSet();
 			look[alt] = current;
-			let lookBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
-			let seeThruPreds: boolean = false; // fail to get lookahead upon pred
+			const lookBusy: Array2DHashSet<ATNConfig> = new Array2DHashSet<ATNConfig>(ObjectEqualityComparator.INSTANCE);
+			const seeThruPreds = false; // fail to get lookahead upon pred
 			this._LOOK(s.transition(alt).target, undefined, PredictionContext.EMPTY_LOCAL,
 				current, lookBusy, new BitSet(), seeThruPreds, false);
 			// Wipe out lookahead for this alternative if we found nothing
@@ -122,9 +122,9 @@ export class LL1Analyzer {
 			stopState = undefined;
 		}
 
-		let r: IntervalSet = new IntervalSet();
-		let seeThruPreds: boolean = true; // ignore preds; get all lookahead
-		let addEOF: boolean = true;
+		const r: IntervalSet = new IntervalSet();
+		const seeThruPreds = true; // ignore preds; get all lookahead
+		const addEOF = true;
 		this._LOOK(s, stopState, ctx, r, new Array2DHashSet<ATNConfig>(), new BitSet(), seeThruPreds, addEOF);
 		return r;
 	}
@@ -170,7 +170,7 @@ export class LL1Analyzer {
 		seeThruPreds: boolean,
 		addEOF: boolean): void {
 //		System.out.println("_LOOK("+s.stateNumber+", ctx="+ctx);
-		let c: ATNConfig = ATNConfig.create(s, 0, ctx);
+		const c: ATNConfig = ATNConfig.create(s, 0, ctx);
 		if (!lookBusy.add(c)) {
 			return;
 		}
@@ -197,7 +197,7 @@ export class LL1Analyzer {
 				return;
 			}
 
-			let removed: boolean = calledRuleStack.get(s.ruleIndex);
+			const removed: boolean = calledRuleStack.get(s.ruleIndex);
 			try {
 				calledRuleStack.clear(s.ruleIndex);
 				for (let i = 0; i < ctx.size; i++) {
@@ -205,7 +205,7 @@ export class LL1Analyzer {
 						continue;
 					}
 
-					let returnState: ATNState = this.atn.states[ctx.getReturnState(i)];
+					const returnState: ATNState = this.atn.states[ctx.getReturnState(i)];
 //					System.out.println("popping back to "+retState);
 					this._LOOK(returnState, stopState, ctx.getParent(i), look, lookBusy, calledRuleStack, seeThruPreds, addEOF);
 				}
@@ -217,15 +217,15 @@ export class LL1Analyzer {
 			}
 		}
 
-		let n: number = s.numberOfTransitions;
+		const n: number = s.numberOfTransitions;
 		for (let i = 0; i < n; i++) {
-			let t: Transition = s.transition(i);
+			const t: Transition = s.transition(i);
 			if (t instanceof RuleTransition) {
 				if (calledRuleStack.get(t.ruleIndex)) {
 					continue;
 				}
 
-				let newContext: PredictionContext = ctx.getChild(t.followState.stateNumber);
+				const newContext: PredictionContext = ctx.getChild(t.followState.stateNumber);
 
 				try {
 					calledRuleStack.set(t.ruleIndex);

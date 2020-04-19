@@ -10,13 +10,13 @@ export namespace IntStream {
 	 * The value returned by {@link #LA LA()} when the end of the stream is
 	 * reached.
 	 */
-	export const EOF: number = -1;
+	export const EOF = -1;
 
 	/**
 	 * The value returned by {@link #getSourceName} when the actual name of the
 	 * underlying source is not known.
 	 */
-	export const UNKNOWN_SOURCE_NAME: string = "<unknown>";
+	export const UNKNOWN_SOURCE_NAME = "<unknown>";
 }
 
 /**

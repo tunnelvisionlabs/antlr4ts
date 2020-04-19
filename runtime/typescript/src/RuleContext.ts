@@ -84,6 +84,7 @@ export class RuleContext extends RuleNode {
 
 	public depth(): number {
 		let n = 0;
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let p: RuleContext | undefined = this;
 		while (p) {
 			p = p._parent;
@@ -211,12 +212,12 @@ export class RuleContext extends RuleNode {
 
 	public toString(
 		arg1?: Recognizer<any, any> | string[],
-		stop?: RuleContext)
-		: string {
+		stop?: RuleContext): string {
 		const ruleNames = (arg1 instanceof Recognizer) ? arg1.ruleNames : arg1;
 		stop = stop || ParserRuleContext.emptyContext();
 
 		let buf = "";
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let p: RuleContext | undefined = this;
 		buf += ("[");
 		while (p && p !== stop) {
@@ -225,8 +226,8 @@ export class RuleContext extends RuleNode {
 					buf += (p.invokingState);
 				}
 			} else {
-				let ruleIndex: number = p.ruleIndex;
-				let ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
+				const ruleIndex: number = p.ruleIndex;
+				const ruleName: string = (ruleIndex >= 0 && ruleIndex < ruleNames.length)
 					? ruleNames[ruleIndex] : ruleIndex.toString();
 				buf += (ruleName);
 			}

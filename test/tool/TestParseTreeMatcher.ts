@@ -40,7 +40,7 @@ import { suite, test as Test, skip as Ignore } from "mocha-typescript";
 export class TestParseTreeMatcher {
 
 	@Test public testChunking(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.strictEqual(m.split("<ID> = <expr> ;").toString(), "ID,' = ',expr,' ;'");
 		assert.strictEqual(m.split(" <ID> = <expr>").toString(), "' ',ID,' = ',expr");
 		assert.strictEqual(m.split("<ID> = <expr>").toString(), "ID,' = ',expr");
@@ -50,88 +50,88 @@ export class TestParseTreeMatcher {
 	}
 
 	@Test public testDelimiters(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		m.setDelimiters("<<", ">>", "$");
-		let result: string = m.split("<<ID>> = <<expr>> ;$<< ick $>>").toString();
+		const result: string = m.split("<<ID>> = <<expr>> ;$<< ick $>>").toString();
 		assert.strictEqual(result, "ID,' = ',expr,' ;<< ick >>'");
 	}
 
 	@Test public testInvertedTags(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.throws(() => m.split(">expr<"), /^Error: tag delimiters out of order in pattern: >expr<$/);
 	}
 
 	@Test public testUnclosedTag(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.throws(() => m.split("<expr hi mom"), /^Error: unterminated tag in pattern: <expr hi mom$/);
 	}
 
 	@Test public testExtraClose(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.throws(() => m.split("<expr> >"), /^Error: missing start tag in pattern: <expr> >$/);
 	}
 
 	@Test public testTokenizingPattern(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 
-		let tokens: Token[] = m.tokenize("<ID> = <expr> ;");
-		let results: string = tokens.toString();
-		let expected: string = "ID:3,[@-1,1:1='=',<1>,1:1],expr:7,[@-1,1:1=';',<2>,1:1]";
+		const tokens: Token[] = m.tokenize("<ID> = <expr> ;");
+		const results: string = tokens.toString();
+		const expected = "ID:3,[@-1,1:1='=',<1>,1:1],expr:7,[@-1,1:1=';',<2>,1:1]";
 		assert.strictEqual(results, expected);
 	}
 
 	@Test public testCompilingPattern(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 
-		let t: ParseTreePattern = m.compile("<ID> = <expr> ;", ParseTreeMatcherX1Parser.RULE_s);
-		let results: string = t.patternTree.toStringTree(m.parser);
-		let expected: string = "(s <ID> = (expr <expr>) ;)";
+		const t: ParseTreePattern = m.compile("<ID> = <expr> ;", ParseTreeMatcherX1Parser.RULE_s);
+		const results: string = t.patternTree.toStringTree(m.parser);
+		const expected = "(s <ID> = (expr <expr>) ;)";
 		assert.strictEqual(results, expected);
 	}
 
 	@Test public testCompilingPatternConsumesAllTokens(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.throws(() => m.compile("<ID> = <expr> ; extra", ParseTreeMatcherX1Parser.RULE_s), ParseTreePatternMatcher.StartRuleDoesNotConsumeFullPattern);
 	}
 
 	@Test public testPatternMatchesStartRule(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 		assert.throws(() => m.compile("<ID> ;", ParseTreeMatcherX1Parser.RULE_s), InputMismatchException);
 	}
 
 	@Test public testPatternMatchesStartRule2(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX3Lexer, ParseTreeMatcherX3Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX3Lexer, ParseTreeMatcherX3Parser);
 		assert.throws(() => m.compile("<ID> <ID> ;", ParseTreeMatcherX3Parser.RULE_s), NoViableAltException);
 	}
 
 	@Test public testHiddenTokensNotSeenByTreePatternParser(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX2Lexer, ParseTreeMatcherX2Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX2Lexer, ParseTreeMatcherX2Parser);
 
-		let t: ParseTreePattern = m.compile("<ID> = <expr> ;", ParseTreeMatcherX3Parser.RULE_s);
-		let results: string = t.patternTree.toStringTree(m.parser);
-		let expected: string = "(s <ID> = (expr <expr>) ;)";
+		const t: ParseTreePattern = m.compile("<ID> = <expr> ;", ParseTreeMatcherX3Parser.RULE_s);
+		const results: string = t.patternTree.toStringTree(m.parser);
+		const expected = "(s <ID> = (expr <expr>) ;)";
 		assert.strictEqual(results, expected);
 	}
 
 	@Test public testCompilingMultipleTokens(): void {
-		let m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX4Lexer, ParseTreeMatcherX4Parser);
+		const m: ParseTreePatternMatcher = this.getPatternMatcher(ParseTreeMatcherX4Lexer, ParseTreeMatcherX4Parser);
 
-		let t: ParseTreePattern = m.compile("<ID> = <ID> ;", ParseTreeMatcherX4Parser.RULE_s);
-		let results: string = t.patternTree.toStringTree(m.parser);
-		let expected: string = "(s <ID> = <ID> ;)";
+		const t: ParseTreePattern = m.compile("<ID> = <ID> ;", ParseTreeMatcherX4Parser.RULE_s);
+		const results: string = t.patternTree.toStringTree(m.parser);
+		const expected = "(s <ID> = <ID> ;)";
 		assert.strictEqual(results, expected);
 	}
 
 	@Test public async testIDNodeMatches(): Promise<void> {
-		let input: string = "x ;";
-		let pattern: string = "<ID>;";
+		const input = "x ;";
+		const pattern = "<ID>;";
 		await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX5Parser.RULE_s, input, pattern, ParseTreeMatcherX5Lexer, ParseTreeMatcherX5Parser);
 	}
 
 	@Test public async testIDNodeWithLabelMatches(): Promise<void> {
-		let input: string = "x ;";
-		let pattern: string = "<id:ID>;";
-		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX5Parser.RULE_s, input, pattern, ParseTreeMatcherX5Lexer, ParseTreeMatcherX5Parser);
+		const input = "x ;";
+		const pattern = "<id:ID>;";
+		const m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX5Parser.RULE_s, input, pattern, ParseTreeMatcherX5Lexer, ParseTreeMatcherX5Parser);
 		assert.strictEqual([...m.labels.keys()].toString(), "ID,id");
 		assert.strictEqual(m.labels.get("ID")!.toString(), "x");
 		assert.strictEqual(m.labels.get("id")!.toString(), "x");
@@ -147,9 +147,9 @@ export class TestParseTreeMatcher {
 	}
 
 	@Test public async testLabelGetsLastIDNode(): Promise<void> {
-		let input: string = "x y;";
-		let pattern: string = "<id:ID> <id:ID>;";
-		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX6Parser.RULE_s, input, pattern, ParseTreeMatcherX6Lexer, ParseTreeMatcherX6Parser);
+		const input = "x y;";
+		const pattern = "<id:ID> <id:ID>;";
+		const m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX6Parser.RULE_s, input, pattern, ParseTreeMatcherX6Lexer, ParseTreeMatcherX6Parser);
 		assert.strictEqual([...m.labels.keys()].toString(), "ID,id");
 		assert.strictEqual(m.labels.get("ID")!.toString(), "x,y");
 		assert.strictEqual(m.labels.get("id")!.toString(), "x,y");
@@ -165,9 +165,9 @@ export class TestParseTreeMatcher {
 	}
 
 	@Test public async testIDNodeWithMultipleLabelMatches(): Promise<void> {
-		let input: string = "x y z;";
-		let pattern: string = "<a:ID> <b:ID> <a:ID>;";
-		let m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX7Parser.RULE_s, input, pattern, ParseTreeMatcherX7Lexer, ParseTreeMatcherX7Parser);
+		const input = "x y z;";
+		const pattern = "<a:ID> <b:ID> <a:ID>;";
+		const m: ParseTreeMatch = await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX7Parser.RULE_s, input, pattern, ParseTreeMatcherX7Lexer, ParseTreeMatcherX7Parser);
 		assert.strictEqual([...m.labels.keys()].toString(), "ID,a,b");
 		assert.strictEqual(m.labels.get("ID")!.toString(), "x,y,z");
 		assert.strictEqual(m.labels.get("a")!.toString(), "x,z");
@@ -189,15 +189,15 @@ export class TestParseTreeMatcher {
 	}
 
 	@Test public async testTokenAndRuleMatch(): Promise<void> {
-		let input: string = "x = 99;";
-		let pattern: string = "<ID> = <expr> ;";
+		const input = "x = 99;";
+		const pattern = "<ID> = <expr> ;";
 		await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX1Parser.RULE_s, input, pattern, ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser);
 	}
 
 	@Test public async testTokenTextMatch(): Promise<void> {
-		let input: string = "x = 0;";
-		let pattern: string = "<ID> = 1;";
-		let invertMatch: boolean = true; // 0!=1
+		let input = "x = 0;";
+		let pattern = "<ID> = 1;";
+		let invertMatch = true; // 0!=1
 		await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX1Parser.RULE_s, input, pattern, ParseTreeMatcherX1Lexer, ParseTreeMatcherX1Parser, invertMatch);
 
 		input = "x = 0;";
@@ -217,14 +217,14 @@ export class TestParseTreeMatcher {
 	}
 
 	@Test public async testAssign(): Promise<void> {
-		let input: string = "x = 99;";
-		let pattern: string = "<ID> = <expr>;";
+		const input = "x = 99;";
+		const pattern = "<ID> = <expr>;";
 		await this.checkPatternMatch((parser) => parser.s(), ParseTreeMatcherX8Parser.RULE_s, input, pattern, ParseTreeMatcherX8Lexer, ParseTreeMatcherX8Parser);
 	}
 
 	@Test public async testLRecursiveExpr(): Promise<void> {
-		let input: string = "3*4*5";
-		let pattern: string = "<expr> * <expr> * <expr>";
+		const input = "3*4*5";
+		const pattern = "<expr> * <expr> * <expr>";
 		await this.checkPatternMatch((parser) => parser.expr(), ParseTreeMatcherX8Parser.RULE_expr, input, pattern, ParseTreeMatcherX8Lexer, ParseTreeMatcherX8Parser);
 	}
 
@@ -234,8 +234,8 @@ export class TestParseTreeMatcher {
 		lexerCtor: new (stream: CharStream) => Lexer,
 		parserCtor: new (stream: TokenStream) => TParser): ParseTree {
 
-		let lexer = new lexerCtor(CharStreams.fromString(input));
-		let parser = new parserCtor(new CommonTokenStream(lexer));
+		const lexer = new lexerCtor(CharStreams.fromString(input));
+		const parser = new parserCtor(new CommonTokenStream(lexer));
 		return startRule(parser);
 	}
 
@@ -246,27 +246,27 @@ export class TestParseTreeMatcher {
 		pattern: string,
 		lexerCtor: new (stream: CharStream) => Lexer,
 		parserCtor: new (stream: TokenStream) => TParser,
-		invertMatch: boolean = false): Promise<ParseTreeMatch> {
+		invertMatch = false): Promise<ParseTreeMatch> {
 
-		let result: ParseTree = this.execParser(startRule, input, lexerCtor, parserCtor);
+		const result: ParseTree = this.execParser(startRule, input, lexerCtor, parserCtor);
 
-		let p: ParseTreePattern = await this.getPattern(lexerCtor, parserCtor, pattern, startRuleIndex);
-		let match: ParseTreeMatch = p.match(result);
-		let matched: boolean = match.succeeded;
+		const p: ParseTreePattern = await this.getPattern(lexerCtor, parserCtor, pattern, startRuleIndex);
+		const match: ParseTreeMatch = p.match(result);
+		const matched: boolean = match.succeeded;
 		assert.strictEqual(matched, !invertMatch);
 
 		return match;
 	}
 
 	private async getPattern(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
-		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
-		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
+		const lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
+		const parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return parser.compileParseTreePattern(pattern, ruleIndex);
 	}
 
 	private getPatternMatcher(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser): ParseTreePatternMatcher {
-		let lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
-		let parser: Parser = new parserCtor(new CommonTokenStream(lexer));
+		const lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
+		const parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return new ParseTreePatternMatcher(lexer, parser);
 	}
 }

@@ -14,7 +14,7 @@ export class EpsilonTransition extends Transition {
 
 	private _outermostPrecedenceReturn: number;
 
-	constructor(@NotNull target: ATNState, outermostPrecedenceReturn: number = -1) {
+	constructor(@NotNull target: ATNState, outermostPrecedenceReturn = -1) {
 		super(target);
 		this._outermostPrecedenceReturn = outermostPrecedenceReturn;
 	}

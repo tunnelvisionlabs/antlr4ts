@@ -11,7 +11,7 @@ import { IntervalSet } from "../misc/IntervalSet";
 import { Override } from "../Decorators";
 import { Transition } from "./Transition";
 
-const INITIAL_NUM_TRANSITIONS: number = 4;
+const INITIAL_NUM_TRANSITIONS = 4;
 
 /**
  * The following images show the relation of states and
@@ -76,9 +76,9 @@ export abstract class ATNState {
 
 	public stateNumber: number = ATNState.INVALID_STATE_NUMBER;
 
-	public ruleIndex: number = 0;  // at runtime, we don't have Rule objects
+	public ruleIndex = 0;  // at runtime, we don't have Rule objects
 
-	public epsilonOnlyTransitions: boolean = false;
+	public epsilonOnlyTransitions = false;
 
 	/** Track the transitions emanating from this ATN state. */
 	protected transitions: Transition[] = [];
@@ -211,5 +211,5 @@ export abstract class ATNState {
 }
 
 export namespace ATNState {
-	export const INVALID_STATE_NUMBER: number = -1;
+	export const INVALID_STATE_NUMBER = -1;
 }

@@ -64,7 +64,7 @@ export class LexerSkipAction implements LexerAction {
 	}
 
 	@Override
-	public equals(obj: any): boolean {
+	public equals(obj: object): boolean {
 		return obj === this;
 	}
 

@@ -54,28 +54,28 @@ export class DFASerializer {
 		let buf = "";
 
 		if (this.dfa.states) {
-			let states: DFAState[] = new Array<DFAState>(...this.dfa.states.toArray());
+			const states: DFAState[] = new Array<DFAState>(...this.dfa.states.toArray());
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
-			for (let s of states) {
-				let edges: Map<number, DFAState> = s.getEdgeMap();
-				let edgeKeys = [...edges.keys()].sort((a, b) => a - b);
-				let contextEdges: Map<number, DFAState> = s.getContextEdgeMap();
-				let contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
-				for (let entry of edgeKeys) {
-					let value = edges.get(entry);
+			for (const s of states) {
+				const edges: Map<number, DFAState> = s.getEdgeMap();
+				const edgeKeys = [...edges.keys()].sort((a, b) => a - b);
+				const contextEdges: Map<number, DFAState> = s.getContextEdgeMap();
+				const contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
+				for (const entry of edgeKeys) {
+					const value = edges.get(entry);
 					if ((value == null || value === ATNSimulator.ERROR) && !s.isContextSymbol(entry)) {
 						continue;
 					}
 
-					let contextSymbol: boolean = false;
+					let contextSymbol = false;
 					buf += (this.getStateString(s)) + ("-") + (this.getEdgeLabel(entry)) + ("->");
 					if (s.isContextSymbol(entry)) {
 						buf += ("!");
 						contextSymbol = true;
 					}
 
-					let t: DFAState | undefined = value;
+					const t: DFAState | undefined = value;
 					if (t && t.stateNumber !== ATNSimulator.ERROR.stateNumber) {
 						buf += (this.getStateString(t)) + ("\n");
 					}
@@ -85,7 +85,7 @@ export class DFASerializer {
 				}
 
 				if (s.isContextSensitive) {
-					for (let entry of contextEdgeKeys) {
+					for (const entry of contextEdgeKeys) {
 						buf += (this.getStateString(s))
 							+ ("-")
 							+ (this.getContextLabel(entry))
@@ -96,7 +96,7 @@ export class DFASerializer {
 				}
 			}
 		}
-		let output: string = buf;
+		const output: string = buf;
 		if (output.length === 0) {
 			return "";
 		}
@@ -113,8 +113,8 @@ export class DFASerializer {
 		}
 
 		if (this.atn && i > 0 && i <= this.atn.states.length) {
-			let state: ATNState = this.atn.states[i];
-			let ruleIndex: number = state.ruleIndex;
+			const state: ATNState = this.atn.states[i];
+			const ruleIndex: number = state.ruleIndex;
 			if (this.ruleNames && ruleIndex >= 0 && ruleIndex < this.ruleNames.length) {
 				return "ctx:" + String(i) + "(" + this.ruleNames[ruleIndex] + ")";
 			}
@@ -132,7 +132,7 @@ export class DFASerializer {
 			return "ERROR";
 		}
 
-		let n: number = s.stateNumber;
+		const n: number = s.stateNumber;
 		let stateStr: string = "s" + n;
 		if (s.isAcceptState) {
 			if (s.predicates) {
@@ -145,7 +145,7 @@ export class DFASerializer {
 
 		if (s.isContextSensitive) {
 			stateStr += "*";
-			for (let config of s.configs) {
+			for (const config of s.configs) {
 				if (config.reachesIntoOuterContext) {
 					stateStr += "*";
 					break;

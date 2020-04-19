@@ -49,7 +49,7 @@ export class DFA {
 	@NotNull
 	public atn: ATN;
 
-	private nextStateNumber: number = 0;
+	private nextStateNumber = 0;
 
 	/**
 	 * `true` if this DFA is for a precedence decision; otherwise,
@@ -74,7 +74,7 @@ export class DFA {
 	 * @param decision The decision number.
 	 */
 	constructor(atnStartState: DecisionState, decision: number);
-	constructor(@NotNull atnStartState: ATNState, decision: number = 0) {
+	constructor(@NotNull atnStartState: ATNState, decision = 0) {
 		if (!atnStartState.atn) {
 			throw new Error("The ATNState must be associated with an ATN");
 		}
@@ -87,7 +87,7 @@ export class DFA {
 		// evaluate their alternatives using a precedence hierarchy. When such a decision is encountered, we mark this
 		// DFA instance as a precedence DFA and initialize the initial states s0 and s0full to special DFAState
 		// instances which use outgoing edges to link to the actual start state used for each precedence level.
-		let isPrecedenceDfa: boolean = false;
+		let isPrecedenceDfa = false;
 		if (atnStartState instanceof StarLoopEntryState) {
 			if (atnStartState.precedenceRuleDecision) {
 				isPrecedenceDfa = true;
@@ -217,7 +217,7 @@ export class DFA {
 			return "";
 		}
 
-		let serializer: DFASerializer = new LexerDFASerializer(this);
+		const serializer: DFASerializer = new LexerDFASerializer(this);
 		return serializer.toString();
 	}
 }

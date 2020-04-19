@@ -44,7 +44,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 	public _input: CharStream;
 
-	protected _tokenFactorySourcePair: { source: TokenSource, stream: CharStream };
+	protected _tokenFactorySourcePair: { source: TokenSource; stream: CharStream };
 
 	/** How to create token objects */
 	protected _factory: TokenFactory = CommonTokenFactory.DEFAULT;
@@ -63,24 +63,24 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  Needed, for example, to get the text for current token.  Set at
 	 *  the start of nextToken.
 	 */
-	public _tokenStartCharIndex: number = -1;
+	public _tokenStartCharIndex = -1;
 
 	/** The line on which the first character of the token resides */
-	public _tokenStartLine: number = 0;
+	public _tokenStartLine = 0;
 
 	/** The character position of first character within the line */
-	public _tokenStartCharPositionInLine: number = 0;
+	public _tokenStartCharPositionInLine = 0;
 
 	/** Once we see EOF on char stream, next token will be EOF.
 	 *  If you have DONE : EOF ; then you see DONE EOF.
 	 */
-	public _hitEOF: boolean = false;
+	public _hitEOF = false;
 
 	/** The channel number for the current token */
-	public _channel: number = 0;
+	public _channel = 0;
 
 	/** The token type for the current token */
-	public _type: number = 0;
+	public _type = 0;
 
 	public readonly _modeStack: IntegerStack = new IntegerStack();
 	public _mode: number = Lexer.DEFAULT_MODE;
@@ -130,7 +130,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 
 		// Mark start location in char stream so unbuffered streams are
 		// guaranteed at least have text of current token
-		let tokenStartMarker: number = this._input.mark();
+		const tokenStartMarker: number = this._input.mark();
 		try {
 			outer:
 			while (true) {
@@ -277,9 +277,9 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	public emitEOF(): Token {
-		let cpos: number = this.charPositionInLine;
-		let line: number = this.line;
-		let eof: Token = this._factory.create(
+		const cpos: number = this.charPositionInLine;
+		const line: number = this.line;
+		const eof: Token = this._factory.create(
 			this._tokenFactorySourcePair, Token.EOF, undefined,
 			Token.DEFAULT_CHANNEL, this._input.index, this._input.index - 1,
 			line, cpos);
@@ -358,7 +358,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	 *  Forces load of all tokens. Does not include EOF token.
 	 */
 	public getAllTokens(): Token[] {
-		let tokens: Token[] = [];
+		const tokens: Token[] = [];
 		let t: Token = this.nextToken();
 		while (t.type !== Token.EOF) {
 			tokens.push(t);
@@ -368,12 +368,12 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	public notifyListeners(e: LexerNoViableAltException): void {
-		let text: string = this._input.getText(
+		const text: string = this._input.getText(
 			Interval.of(this._tokenStartCharIndex, this._input.index));
-		let msg: string = "token recognition error at: '" +
+		const msg: string = "token recognition error at: '" +
 			this.getErrorDisplay(text) + "'";
 
-		let listener: ANTLRErrorListener<number> = this.getErrorListenerDispatch();
+		const listener: ANTLRErrorListener<number> = this.getErrorListenerDispatch();
 		if (listener.syntaxError) {
 			listener.syntaxError(this, undefined, this._tokenStartLine, this._tokenStartCharPositionInLine, msg, e);
 		}
@@ -399,7 +399,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	}
 
 	public getCharErrorDisplay(c: number): string {
-		let s: string = this.getErrorDisplay(c);
+		const s: string = this.getErrorDisplay(c);
 		return "'" + s + "'";
 	}
 
