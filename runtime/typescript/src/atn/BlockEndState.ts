@@ -8,13 +8,12 @@
 import { ATNState } from "./ATNState";
 import { ATNStateType } from "./ATNStateType";
 import { BlockStartState } from "./BlockStartState";
-import { Override } from "../Decorators";
 
 /** Terminal node of a simple `(a|b|c)` block. */
 export class BlockEndState extends ATNState {
 	public startState: BlockStartState;
 
-	@Override
+	// @Override
 	get stateType(): ATNStateType {
 		return ATNStateType.BLOCK_END;
 	}

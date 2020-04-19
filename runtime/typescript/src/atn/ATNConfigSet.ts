@@ -5,25 +5,24 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.5488013-07:00
 
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
+import * as Utils from "../misc/Utils";
+import * as assert from "assert";
+
 import { ATN } from "./ATN";
 import { ATNConfig } from "./ATNConfig";
 import { ATNSimulator } from "./ATNSimulator";
 import { ATNState } from "./ATNState";
+import { Array2DHashMap } from "../misc/Array2DHashMap";
+import { Array2DHashSet } from "../misc/Array2DHashSet";
+import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
 import { BitSet } from "../misc/BitSet";
 import { ConflictInfo } from "./ConflictInfo";
 import { EqualityComparator } from "../misc/EqualityComparator";
 import { JavaSet } from "../misc/Stubs";
-import { NotNull, Override } from "../Decorators";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
 import { PredictionContext } from "./PredictionContext";
 import { PredictionContextCache } from "./PredictionContextCache";
 import { SemanticContext } from "./SemanticContext";
-
-import * as assert from "assert";
-import * as Utils from "../misc/Utils";
 
 interface KeyType { state: number; alt: number }
 
@@ -147,7 +146,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 	 * Get the set of all alternatives represented by configurations in this
 	 * set.
 	 */
-	@NotNull
+
 	public getRepresentedAlternatives(): BitSet {
 		if (this._conflictInfo != null) {
 			return this._conflictInfo.conflictedAlts.clone();
@@ -206,17 +205,17 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return copy;
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.configs.length;
 	}
 
-	@Override
+	// @Override
 	get isEmpty(): boolean {
 		return this.configs.length === 0;
 	}
 
-	@Override
+	// @Override
 	public contains(o: object): boolean {
 		if (!(o instanceof ATNConfig)) {
 			return false;
@@ -246,12 +245,12 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return false;
 	}
 
-	@Override
+	// @Override
 	public *[Symbol.iterator](): IterableIterator<ATNConfig> {
 		yield* this.configs;
 	}
 
-	@Override
+	// @Override
 	public toArray(): ATNConfig[] {
 		return this.configs;
 	}
@@ -359,7 +358,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return { state: e.state.stateNumber, alt: e.alt };
 	}
 
-	@Override
+	// @Override
 	public containsAll(c: Iterable<object>): boolean {
 		for (const o of c) {
 			if (!(o instanceof ATNConfig)) {
@@ -389,7 +388,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		return changed;
 	}
 
-	@Override
+	// @Override
 	public clear(): void {
 		this.ensureWritable();
 		if (!this.mergedConfigs || !this.unmerged) {
@@ -406,7 +405,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		this._conflictInfo = undefined;
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		if (this === obj) {
 			return true;
@@ -421,7 +420,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			&& ArrayEqualityComparator.INSTANCE.equals(this.configs, obj.configs);
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		if (this.isReadOnly && this.cachedHashCode !== -1) {
 			return this.cachedHashCode;

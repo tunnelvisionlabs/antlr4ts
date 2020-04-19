@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.3281988-07:00
 
 import { CommonToken } from "../../CommonToken";
-import { NotNull, Override } from "../../Decorators";
 
 /**
  * A {@link Token} object representing a token of a particular type; e.g.,
@@ -17,7 +16,7 @@ export class TokenTagToken extends CommonToken {
 	/**
 	 * This is the backing field for `tokenName`.
 	 */
-	@NotNull
+
 	private _tokenName: string;
 	/**
 	 * This is the backing field for `label`.
@@ -33,7 +32,7 @@ export class TokenTagToken extends CommonToken {
 	 * @param label The label associated with the token tag, or `undefined` if
 	 * the token tag is unlabeled.
 	 */
-	constructor(@NotNull tokenName: string, type: number, label?: string) {
+	constructor(tokenName: string, type: number, label?: string) {
 		super(type);
 		this._tokenName = tokenName;
 		this._label = label;
@@ -43,7 +42,7 @@ export class TokenTagToken extends CommonToken {
 	 * Gets the token name.
 	 * @returns The token name.
 	 */
-	@NotNull
+
 	get tokenName(): string {
 		return this._tokenName;
 	}
@@ -64,7 +63,7 @@ export class TokenTagToken extends CommonToken {
 	 * The implementation for {@link TokenTagToken} returns the token tag
 	 * formatted with `<` and `>` delimiters.
 	 */
-	@Override
+	// @Override
 	get text(): string {
 		if (this._label != null) {
 			return "<" + this._label + ":" + this._tokenName + ">";
@@ -79,7 +78,7 @@ export class TokenTagToken extends CommonToken {
 	 * The implementation for {@link TokenTagToken} returns a string of the form
 	 * `tokenName:type`.
 	 */
-	@Override
+	// @Override
 	public toString(): string {
 		return this._tokenName + ":" + this.type;
 	}

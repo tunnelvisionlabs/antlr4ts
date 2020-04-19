@@ -5,7 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.2401032-07:00
 
-import { NotNull } from "../Decorators";
 import { SimulatorState } from "./SimulatorState";
 import { TokenStream } from "../TokenStream";
 
@@ -42,7 +41,7 @@ export class DecisionEventInfo {
 	/**
 	 * The input token stream which is being parsed.
 	 */
-	@NotNull
+
 	public input: TokenStream;
 
 	/**
@@ -65,7 +64,7 @@ export class DecisionEventInfo {
 	constructor(
 		decision: number,
 		state: SimulatorState | undefined,
-		@NotNull input: TokenStream,
+		input: TokenStream,
 		startIndex: number,
 		stopIndex: number,
 		fullCtx: boolean) {

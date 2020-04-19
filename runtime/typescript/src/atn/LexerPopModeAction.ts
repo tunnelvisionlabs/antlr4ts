@@ -9,7 +9,6 @@ import { Lexer } from "../Lexer";
 import { LexerAction } from "./LexerAction";
 import { LexerActionType } from "./LexerActionType";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
 
 /**
  * Implements the `popMode` lexer action by calling {@link Lexer#popMode}.
@@ -34,7 +33,7 @@ export class LexerPopModeAction implements LexerAction {
 	 * {@inheritDoc}
 	 * @returns This method returns {@link LexerActionType#POP_MODE}.
 	 */
-	@Override
+	// @Override
 	get actionType(): LexerActionType {
 		return LexerActionType.POP_MODE;
 	}
@@ -43,7 +42,7 @@ export class LexerPopModeAction implements LexerAction {
 	 * {@inheritDoc}
 	 * @returns This method returns `false`.
 	 */
-	@Override
+	// @Override
 	get isPositionDependent(): boolean {
 		return false;
 	}
@@ -53,24 +52,24 @@ export class LexerPopModeAction implements LexerAction {
 	 *
 	 * This action is implemented by calling {@link Lexer#popMode}.
 	 */
-	@Override
-	public execute(@NotNull lexer: Lexer): void {
+	// @Override
+	public execute(lexer: Lexer): void {
 		lexer.popMode();
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
 		return MurmurHash.finish(hash, 1);
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		return obj === this;
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		return "popMode";
 	}

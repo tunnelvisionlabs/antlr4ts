@@ -8,12 +8,11 @@
 import { ANTLRErrorListener } from "./ANTLRErrorListener";
 import { CharStream } from "./CharStream";
 import { CommonTokenFactory } from "./CommonTokenFactory";
+import { IntStream } from "./IntStream";
 import { IntegerStack } from "./misc/IntegerStack";
 import { Interval } from "./misc/Interval";
-import { IntStream } from "./IntStream";
 import { LexerATNSimulator } from "./atn/LexerATNSimulator";
 import { LexerNoViableAltException } from "./LexerNoViableAltException";
-import { Override } from "./Decorators";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
 import { Token } from "./Token";
@@ -122,7 +121,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 	/** Return a token from this source; i.e., match a token on the char
 	 *  stream.
 	 */
-	@Override
+	// @Override
 	public nextToken(): Token {
 		if (this._input == null) {
 			throw new Error("nextToken requires a non-null input stream.");
@@ -222,7 +221,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return this._mode;
 	}
 
-	@Override
+	// @Override
 	get tokenFactory(): TokenFactory {
 		return this._factory;
 	}
@@ -232,7 +231,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._factory = factory;
 	}
 
-	@Override
+	// @Override
 	get inputStream(): CharStream {
 		return this._input;
 	}
@@ -244,7 +243,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this._tokenFactorySourcePair = { source: this, stream: this._input };
 	}
 
-	@Override
+	// @Override
 	get sourceName(): string {
 		return this._input.sourceName;
 	}
@@ -287,7 +286,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		return eof;
 	}
 
-	@Override
+	// @Override
 	get line(): number {
 		return this.interpreter.line;
 	}
@@ -296,7 +295,7 @@ export abstract class Lexer extends Recognizer<number, LexerATNSimulator>
 		this.interpreter.line = line;
 	}
 
-	@Override
+	// @Override
 	get charPositionInLine(): number {
 		return this.interpreter.charPositionInLine;
 	}

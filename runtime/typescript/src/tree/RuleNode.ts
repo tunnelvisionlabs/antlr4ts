@@ -5,16 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.9232756-07:00
 
-import { RuleContext } from "../RuleContext";
+import { Interval } from "../misc/Interval";
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
 import { Parser } from "../Parser";
-import { Interval } from "../misc/Interval";
+import { RuleContext } from "../RuleContext";
 
 export abstract class RuleNode implements ParseTree {
 	public abstract readonly ruleContext: RuleContext;
 
-	//@Override
+	//  @Override
 	public abstract readonly parent: RuleNode | undefined;
 
 	public abstract setParent(parent: RuleContext): void;

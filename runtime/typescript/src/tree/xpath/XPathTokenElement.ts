@@ -4,7 +4,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Override } from "../../Decorators";
+
 import { ParseTree } from "../ParseTree";
 import { TerminalNode } from "../TerminalNode";
 import { Trees } from "../Trees";
@@ -17,7 +17,7 @@ export class XPathTokenElement extends XPathElement {
 		this.tokenType = tokenType;
 	}
 
-	@Override
+	// @Override
 	public evaluate(t: ParseTree): ParseTree[] {
 		// return all children of t that match nodeName
 		const nodes: ParseTree[] = [];

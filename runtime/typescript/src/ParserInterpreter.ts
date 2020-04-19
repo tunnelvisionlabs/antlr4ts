@@ -5,10 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:53.1043451-07:00
 
-import { ActionTransition } from "./atn/ActionTransition";
 import { ATN } from "./atn/ATN";
 import { ATNState } from "./atn/ATNState";
 import { ATNStateType } from "./atn/ATNStateType";
+import { ActionTransition } from "./atn/ActionTransition";
 import { AtomTransition } from "./atn/AtomTransition";
 import { BitSet } from "./misc/BitSet";
 import { DecisionState } from "./atn/DecisionState";
@@ -16,8 +16,6 @@ import { FailedPredicateException } from "./FailedPredicateException";
 import { InputMismatchException } from "./InputMismatchException";
 import { InterpreterRuleContext } from "./InterpreterRuleContext";
 import { LoopEndState } from "./atn/LoopEndState";
-import { NotNull } from "./Decorators";
-import { Override } from "./Decorators";
 import { Parser } from "./Parser";
 import { ParserATNSimulator } from "./atn/ParserATNSimulator";
 import { ParserRuleContext } from "./ParserRuleContext";
@@ -55,7 +53,7 @@ export class ParserInterpreter extends Parser {
 	protected pushRecursionContextStates: BitSet;
 
 	protected _ruleNames: string[];
-	@NotNull
+
 	private _vocabulary: Vocabulary;
 
 	/** This stack corresponds to the _parentctx, _parentState pair of locals
@@ -101,7 +99,7 @@ export class ParserInterpreter extends Parser {
 		grammarFileName: string, /*@NotNull*/ vocabulary: Vocabulary,
 		ruleNames: string[], atn: ATN, input: TokenStream);
 	constructor(
-		grammarFileName: ParserInterpreter | string, @NotNull vocabulary?: Vocabulary,
+		grammarFileName: ParserInterpreter | string, vocabulary?: Vocabulary,
 		ruleNames?: string[], atn?: ATN, input?: TokenStream) {
 		super(grammarFileName instanceof ParserInterpreter ? grammarFileName.inputStream : input!);
 		if (grammarFileName instanceof ParserInterpreter) {
@@ -140,7 +138,7 @@ export class ParserInterpreter extends Parser {
 		}
 	}
 
-	@Override
+	// @Override
 	public reset(resetInput?: boolean): void {
 		if (resetInput === undefined) {
 			super.reset();
@@ -152,22 +150,22 @@ export class ParserInterpreter extends Parser {
 		this._overrideDecisionRoot = undefined;
 	}
 
-	@Override
+	// @Override
 	get atn(): ATN {
 		return this._atn;
 	}
 
-	@Override
+	// @Override
 	get vocabulary(): Vocabulary {
 		return this._vocabulary;
 	}
 
-	@Override
+	// @Override
 	get ruleNames(): string[] {
 		return this._ruleNames;
 	}
 
-	@Override
+	// @Override
 	get grammarFileName(): string {
 		return this._grammarFileName;
 	}
@@ -225,7 +223,7 @@ export class ParserInterpreter extends Parser {
 		}
 	}
 
-	@Override
+	// @Override
 	public enterRecursionRule(localctx: ParserRuleContext, state: number, ruleIndex: number, precedence: number): void {
 		this._parentContextStack.push([this._ctx, localctx.invokingState]);
 		super.enterRecursionRule(localctx, state, ruleIndex, precedence);

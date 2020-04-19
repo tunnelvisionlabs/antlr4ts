@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:36.8294453-07:00
 
 import { ATNState } from "./ATNState";
-import { Override, NotNull } from "../Decorators";
 import { RuleStartState } from "./RuleStartState";
 import { Transition } from "./Transition";
 import { TransitionType } from "./TransitionType";
@@ -19,30 +18,30 @@ export class RuleTransition extends Transition {
 	public precedence: number;
 
 	/** What node to begin computations following ref to rule */
-	@NotNull
+
 	public followState: ATNState;
 
 	public tailCall = false;
 	public optimizedTailCall = false;
 
-	constructor(@NotNull ruleStart: RuleStartState, ruleIndex: number, precedence: number, @NotNull followState: ATNState) {
+	constructor(ruleStart: RuleStartState, ruleIndex: number, precedence: number, followState: ATNState) {
 		super(ruleStart);
 		this.ruleIndex = ruleIndex;
 		this.precedence = precedence;
 		this.followState = followState;
 	}
 
-	@Override
+	// @Override
 	get serializationType(): TransitionType {
 		return TransitionType.RULE;
 	}
 
-	@Override
+	// @Override
 	get isEpsilon(): boolean {
 		return true;
 	}
 
-	@Override
+	// @Override
 	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return false;
 	}

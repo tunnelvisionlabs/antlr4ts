@@ -9,14 +9,13 @@ import { ATNConfig } from "./atn/ATNConfig";
 import { ATNConfigSet } from "./atn/ATNConfigSet";
 import { BitSet } from "./misc/BitSet";
 import { DFA } from "./dfa/DFA";
+import { Interval } from "./misc/Interval";
 import { Parser } from "./Parser";
 import { ParserErrorListener } from "./ParserErrorListener";
 import { RecognitionException } from "./RecognitionException";
 import { Recognizer } from "./Recognizer";
 import { SimulatorState } from "./atn/SimulatorState";
 import { Token } from "./Token";
-import { Override, NotNull } from "./Decorators";
-import { Interval } from "./misc/Interval";
 
 /**
  * This implementation of {@link ANTLRErrorListener} can be used to identify
@@ -50,7 +49,7 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		this.exactOnly = exactOnly;
 	}
 
-	@Override
+	// @Override
 	public syntaxError<T extends Token>(
 		/*@NotNull*/
 		recognizer: Recognizer<T, any>,
@@ -59,20 +58,19 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		charPositionInLine: number,
 		/*@NotNull*/
 		msg: string,
-		e: RecognitionException | undefined): void
-	{
+		e: RecognitionException | undefined): void {
 		// intentionally empty
 	}
 
-	@Override
+	// @Override
 	public reportAmbiguity(
-		@NotNull recognizer: Parser,
-		@NotNull dfa: DFA,
+		recognizer: Parser,
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		exact: boolean,
 		ambigAlts: BitSet | undefined,
-		@NotNull configs: ATNConfigSet): void {
+		configs: ATNConfigSet): void {
 		if (this.exactOnly && !exact) {
 			return;
 		}
@@ -84,14 +82,14 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		recognizer.notifyErrorListeners(message);
 	}
 
-	@Override
+	// @Override
 	public reportAttemptingFullContext(
-		@NotNull recognizer: Parser,
-		@NotNull dfa: DFA,
+		recognizer: Parser,
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		conflictingAlts: BitSet | undefined,
-		@NotNull conflictState: SimulatorState): void {
+		conflictState: SimulatorState): void {
 		const format = "reportAttemptingFullContext d=%s, input='%s'";
 		const decision: string = this.getDecisionDescription(recognizer, dfa);
 		const text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
@@ -99,14 +97,14 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 		recognizer.notifyErrorListeners(message);
 	}
 
-	@Override
+	// @Override
 	public reportContextSensitivity(
-		@NotNull recognizer: Parser,
-		@NotNull dfa: DFA,
+		recognizer: Parser,
+		dfa: DFA,
 		startIndex: number,
 		stopIndex: number,
 		prediction: number,
-		@NotNull acceptState: SimulatorState): void {
+		acceptState: SimulatorState): void {
 		const format = "reportContextSensitivity d=%s, input='%s'";
 		const decision: string = this.getDecisionDescription(recognizer, dfa);
 		const text: string = recognizer.inputStream.getText(Interval.of(startIndex, stopIndex));
@@ -115,8 +113,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	}
 
 	protected getDecisionDescription(
-		@NotNull recognizer: Parser,
-		@NotNull dfa: DFA): string {
+		recognizer: Parser,
+		dfa: DFA): string {
 		const decision: number = dfa.decision;
 		const ruleIndex: number = dfa.atnStartState.ruleIndex;
 
@@ -144,8 +142,8 @@ export class DiagnosticErrorListener implements ParserErrorListener {
 	 * @returns Returns `reportedAlts` if it is not `undefined`, otherwise
 	 * returns the set of alternatives represented in `configs`.
 	 */
-	@NotNull
-	protected getConflictingAlts(reportedAlts: BitSet | undefined, @NotNull configs: ATNConfigSet): BitSet {
+
+	protected getConflictingAlts(reportedAlts: BitSet | undefined, configs: ATNConfigSet): BitSet {
 		if (reportedAlts != null) {
 			return reportedAlts;
 		}

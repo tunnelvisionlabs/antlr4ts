@@ -6,10 +6,9 @@
 // ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
 
 import { Interval } from "../misc/Interval";
-import { Override } from "../Decorators";
-import { Parser } from "../Parser";
 import { ParseTree } from "./ParseTree";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { Parser } from "../Parser";
 import { RuleContext } from "../RuleContext";
 import { RuleNode } from "./RuleNode";
 import { Token } from "../Token";
@@ -22,7 +21,7 @@ export class TerminalNode implements ParseTree {
 		this._symbol = symbol;
 	}
 
-	@Override
+	// @Override
 	public getChild(i: number): never {
 		throw new RangeError("Terminal Node has no children.");
 	}
@@ -31,48 +30,48 @@ export class TerminalNode implements ParseTree {
 		return this._symbol;
 	}
 
-	@Override
+	// @Override
 	get parent(): RuleNode | undefined {
 		return this._parent;
 	}
 
-	@Override
+	// @Override
 	public setParent(parent: RuleContext): void {
 		this._parent = parent;
 	}
 
-	@Override
+	// @Override
 	get payload(): Token {
 		return this._symbol;
 	}
 
-	@Override
+	// @Override
 	get sourceInterval(): Interval {
 		const tokenIndex: number = this._symbol.tokenIndex;
 		return new Interval(tokenIndex, tokenIndex);
 	}
 
-	@Override
+	// @Override
 	get childCount(): number {
 		return 0;
 	}
 
-	@Override
+	// @Override
 	public accept<T>(visitor: ParseTreeVisitor<T>): T {
 		return visitor.visitTerminal(this);
 	}
 
-	@Override
+	// @Override
 	get text(): string {
 		return this._symbol.text || "";
 	}
 
-	@Override
+	// @Override
 	public toStringTree(parser?: Parser): string {
 		return this.toString();
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		if (this._symbol.type === Token.EOF) {
 			return "<EOF>";

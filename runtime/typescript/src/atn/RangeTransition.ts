@@ -7,7 +7,6 @@
 
 import { ATNState } from "./ATNState";
 import { IntervalSet } from "../misc/IntervalSet";
-import { Override, NotNull } from "../Decorators";
 import { Transition } from "./Transition";
 import { TransitionType } from "./TransitionType";
 
@@ -15,30 +14,30 @@ export class RangeTransition extends Transition {
 	public from: number;
 	public to: number;
 
-	constructor(@NotNull target: ATNState, from: number, to: number) {
+	constructor(target: ATNState, from: number, to: number) {
 		super(target);
 		this.from = from;
 		this.to = to;
 	}
 
-	@Override
+	// @Override
 	get serializationType(): TransitionType {
 		return TransitionType.RANGE;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	get label(): IntervalSet {
 		return IntervalSet.of(this.from, this.to);
 	}
 
-	@Override
+	// @Override
 	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return symbol >= this.from && symbol <= this.to;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	public toString(): string {
 		return "'" + String.fromCodePoint(this.from) + "'..'" + String.fromCodePoint(this.to) + "'";
 	}

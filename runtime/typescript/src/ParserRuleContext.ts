@@ -6,10 +6,9 @@
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
 import { ErrorNode } from "./tree/ErrorNode";
 import { Interval } from "./misc/Interval";
-import { Override } from "./Decorators";
-import { Parser } from "./Parser";
 import { ParseTree } from "./tree/ParseTree";
 import { ParseTreeListener } from "./tree/ParseTreeListener";
+import { Parser } from "./Parser";
 import { RecognitionException } from "./RecognitionException";
 import { RuleContext } from "./RuleContext";
 import { TerminalNode } from "./tree/TerminalNode";
@@ -229,7 +228,7 @@ export class ParserRuleContext extends RuleContext {
 		}
 	}
 
-	@Override
+	// @Override
 	/** Override to make type more specific */
 	get parent(): ParserRuleContext | undefined {
 		const parent = super.parent;
@@ -355,12 +354,12 @@ export class ParserRuleContext extends RuleContext {
 		return contexts;
 	}
 
-	@Override
+	// @Override
 	get childCount(): number {
 		return this.children ? this.children.length : 0;
 	}
 
-	@Override
+	// @Override
 	get sourceInterval(): Interval {
 		if (!this._start) {
 			return Interval.INVALID;

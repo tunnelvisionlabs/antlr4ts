@@ -5,7 +5,6 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:59.5829654-07:00
 
-import { NotNull, Override } from "./Decorators";
 import { Token } from "./Token";
 import { Vocabulary } from "./Vocabulary";
 
@@ -23,14 +22,14 @@ export class VocabularyImpl implements Vocabulary {
 	 * {@link #getDisplayName(int)} returns the numeric value for all tokens
 	 * except {@link Token#EOF}.
 	 */
-	@NotNull
+
 	public static readonly EMPTY_VOCABULARY: VocabularyImpl = new VocabularyImpl([], [], []);
 
-	@NotNull
+
 	private readonly literalNames: (string | undefined)[];
-	@NotNull
+
 	private readonly symbolicNames: (string | undefined)[];
-	@NotNull
+
 	private readonly displayNames: (string | undefined)[];
 
 	private _maxTokenType: number;
@@ -62,12 +61,12 @@ export class VocabularyImpl implements Vocabulary {
 				Math.max(this.literalNames.length, this.symbolicNames.length)) - 1;
 	}
 
-	@Override
+	// @Override
 	get maxTokenType(): number {
 		return this._maxTokenType;
 	}
 
-	@Override
+	// @Override
 	public getLiteralName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.literalNames.length) {
 			return this.literalNames[tokenType];
@@ -76,7 +75,7 @@ export class VocabularyImpl implements Vocabulary {
 		return undefined;
 	}
 
-	@Override
+	// @Override
 	public getSymbolicName(tokenType: number): string | undefined {
 		if (tokenType >= 0 && tokenType < this.symbolicNames.length) {
 			return this.symbolicNames[tokenType];
@@ -89,8 +88,8 @@ export class VocabularyImpl implements Vocabulary {
 		return undefined;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	public getDisplayName(tokenType: number): string {
 		if (tokenType >= 0 && tokenType < this.displayNames.length) {
 			const displayName = this.displayNames[tokenType];

@@ -8,7 +8,6 @@
 import { ATN } from "./ATN";
 import { ATNStateType } from "./ATNStateType";
 import { IntervalSet } from "../misc/IntervalSet";
-import { Override } from "../Decorators";
 import { Transition } from "./Transition";
 
 const INITIAL_NUM_TRANSITIONS = 4;
@@ -107,12 +106,12 @@ export abstract class ATNState {
 		return this.getStateNumber();
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		return this.stateNumber;
 	}
 
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		// are these states same object?
 		if (o instanceof ATNState) {
@@ -126,7 +125,7 @@ export abstract class ATNState {
 		return false;
 	}
 
-	@Override
+	// @Override
 	public toString(): string {
 		return String(this.stateNumber);
 	}

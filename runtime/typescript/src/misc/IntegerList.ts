@@ -6,7 +6,7 @@
 // ConvertTo-TS run at 2016-10-04T11:26:40.5099429-07:00
 
 import * as Arrays from "./Arrays";
-import { NotNull, Override } from "../Decorators";
+
 import { JavaCollection } from "./Stubs";
 
 const EMPTY_DATA: Int32Array = new Int32Array(0);
@@ -19,7 +19,7 @@ const MAX_ARRAY_SIZE: number = (((1 << 31) >>> 0) - 1) - 8;
  * @author Sam Harwell
  */
 export class IntegerList {
-	@NotNull
+
 	private _data: Int32Array;
 
 	private _size: number;
@@ -181,7 +181,7 @@ export class IntegerList {
 	 * @param o the object to be compared for equality with this list
 	 * @returns `true` if the specified object is equal to this list
 	 */
-	@Override
+	// @Override
 	public equals(o: any): boolean {
 		if (o === this) {
 			return true;
@@ -213,7 +213,7 @@ export class IntegerList {
 	 *
 	 * @returns the hash code value for this list
 	 */
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hashCode = 1;
 		for (let i = 0; i < this._size; i++) {
@@ -226,7 +226,7 @@ export class IntegerList {
 	/**
 	 * Returns a string representation of this list.
 	 */
-	@Override
+	// @Override
 	public toString(): string {
 		return this._data.toString();
 	}

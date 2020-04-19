@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:35.1914305-07:00
 
 import { DecisionEventInfo } from "./DecisionEventInfo";
-import { NotNull } from "../Decorators";
 import { SemanticContext } from "./SemanticContext";
 import { SimulatorState } from "./SimulatorState";
 import { TokenStream } from "../TokenStream";
@@ -57,12 +56,12 @@ export class PredicateEvalInfo extends DecisionEventInfo {
 	 * @see SemanticContext#eval(Recognizer, RuleContext)
 	 */
 	constructor(
-		@NotNull state: SimulatorState,
+		state: SimulatorState,
 		decision: number,
-		@NotNull input: TokenStream,
+		input: TokenStream,
 		startIndex: number,
 		stopIndex: number,
-		@NotNull semctx: SemanticContext,
+		semctx: SemanticContext,
 		evalResult: boolean,
 		predictedAlt: number) {
 

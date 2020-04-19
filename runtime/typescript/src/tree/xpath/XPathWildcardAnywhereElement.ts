@@ -4,7 +4,7 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { Override } from "../../Decorators";
+
 import { ParseTree } from "../ParseTree";
 import { TerminalNode } from "../TerminalNode";
 import { Trees } from "../Trees";
@@ -16,7 +16,7 @@ export class XPathWildcardAnywhereElement extends XPathElement {
 		super(XPath.WILDCARD);
 	}
 
-	@Override
+	// @Override
 	public evaluate(t: ParseTree): ParseTree[] {
 		if (this.invert) {
 			// !* is weird but valid (empty)

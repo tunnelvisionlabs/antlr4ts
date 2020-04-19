@@ -6,7 +6,6 @@
 // ConvertTo-TS run at 2016-10-04T11:26:46.2521448-07:00
 
 import { Chunk } from "./Chunk";
-import { NotNull, Override } from "../../Decorators";
 
 /**
  * Represents a span of raw text (concrete syntax) between tags in a tree
@@ -16,7 +15,7 @@ export class TextChunk extends Chunk {
 	/**
 	 * This is the backing field for {@link #getText}.
 	 */
-	@NotNull
+
 	private _text: string;
 
 	/**
@@ -25,7 +24,7 @@ export class TextChunk extends Chunk {
 	 * @param text The text of this chunk.
 	 * @exception IllegalArgumentException if `text` is not defined.
 	 */
-	constructor(@NotNull text: string) {
+	constructor(text: string) {
 		super();
 
 		if (text == null) {
@@ -40,7 +39,7 @@ export class TextChunk extends Chunk {
 	 *
 	 * @returns The text of the chunk.
 	 */
-	@NotNull
+
 	get text(): string {
 		return this._text;
 	}
@@ -51,7 +50,7 @@ export class TextChunk extends Chunk {
 	 * The implementation for {@link TextChunk} returns the result of
 	 * `text` in single quotes.
 	 */
-	@Override
+	// @Override
 	public toString(): string {
 		return "'" + this._text + "'";
 	}

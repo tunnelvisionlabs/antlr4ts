@@ -7,7 +7,6 @@
 
 import { ATNState } from "./ATNState";
 import { ATNStateType } from "./ATNStateType";
-import { Override } from "../Decorators";
 import { RuleStopState } from "./RuleStopState";
 
 export class RuleStartState extends ATNState {
@@ -15,7 +14,7 @@ export class RuleStartState extends ATNState {
 	public isPrecedenceRule = false;
 	public leftFactored = false;
 
-	@Override
+	// @Override
 	get stateType(): ATNStateType {
 		return ATNStateType.RULE_START;
 	}

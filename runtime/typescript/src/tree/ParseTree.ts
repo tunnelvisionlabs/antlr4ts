@@ -5,8 +5,8 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.5349010-07:00
 
-import { Parser } from "../Parser";
 import { ParseTreeVisitor } from "./ParseTreeVisitor";
+import { Parser } from "../Parser";
 import { RuleContext } from "../RuleContext";
 import { SyntaxTree } from "./SyntaxTree";
 
@@ -19,7 +19,7 @@ import { SyntaxTree } from "./SyntaxTree";
  */
 export interface ParseTree extends SyntaxTree {
 	// the following methods narrow the return type; they are not additional methods
-	//@Override
+	//  @Override
 	readonly parent: ParseTree | undefined;
 
 	/**
@@ -29,7 +29,7 @@ export interface ParseTree extends SyntaxTree {
 	 */
 	setParent(parent: RuleContext): void;
 
-	//@Override
+	//  @Override
 	getChild(i: number): ParseTree;
 
 	/** The {@link ParseTreeVisitor} needs a double dispatch method. */

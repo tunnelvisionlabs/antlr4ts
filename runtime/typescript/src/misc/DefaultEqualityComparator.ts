@@ -4,7 +4,6 @@
  */
 
 import { EqualityComparator } from "./EqualityComparator";
-import { Override } from "../Decorators";
 import { Equatable } from "./Stubs";
 import { MurmurHash } from "./MurmurHash";
 import { ObjectEqualityComparator } from "./ObjectEqualityComparator";
@@ -24,7 +23,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	 * This implementation returns
 	 * `obj.`{@link Object#hashCode hashCode()}.
 	 */
-	@Override
+	// @Override
 	public hashCode(obj: any): number {
 		if (obj == null) {
 			return 0;
@@ -44,7 +43,7 @@ export class DefaultEqualityComparator implements EqualityComparator<any> {
 	 * this method returns the result of
 	 * `a.`{@link Object#equals equals}`(b)`.
 	 */
-	@Override
+	// @Override
 	public equals(a: any, b: any): boolean {
 		if (a == null) {
 			return b == null;

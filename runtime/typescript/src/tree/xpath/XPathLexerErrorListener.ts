@@ -6,12 +6,11 @@
 // CONVERSTION complete, Burt Harris 10/14/2016
 
 import { ANTLRErrorListener } from "../../ANTLRErrorListener";
-import { Override } from "../../Decorators";
-import { Recognizer } from "../../Recognizer";
 import { RecognitionException } from "../../RecognitionException";
+import { Recognizer } from "../../Recognizer";
 
 export class XPathLexerErrorListener implements ANTLRErrorListener<number> {
-	@Override
+	// @Override
 	public syntaxError<T extends number>(
 		recognizer: Recognizer<T, any>, offendingSymbol: T | undefined,
 		line: number, charPositionInLine: number, msg: string,

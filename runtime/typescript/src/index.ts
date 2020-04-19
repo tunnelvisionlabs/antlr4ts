@@ -17,7 +17,6 @@ export * from "./CommonToken";
 export * from "./CommonTokenFactory";
 export * from "./CommonTokenStream";
 export * from "./ConsoleErrorListener";
-export * from "./Decorators";
 export * from "./DefaultErrorStrategy";
 export * from "./Dependents";
 export * from "./DiagnosticErrorListener";

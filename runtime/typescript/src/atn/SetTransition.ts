@@ -7,18 +7,17 @@
 
 import { ATNState } from "./ATNState";
 import { IntervalSet } from "../misc/IntervalSet";
-import { Override, NotNull, Nullable } from "../Decorators";
 import { Token } from "../Token";
 import { Transition } from "./Transition";
 import { TransitionType } from "./TransitionType";
 
 /** A transition containing a set of values. */
 export class SetTransition extends Transition {
-	@NotNull
+
 	public set: IntervalSet;
 
 	// TODO (sam): should we really allow undefined here?
-	constructor(@NotNull target: ATNState, @Nullable set: IntervalSet) {
+	constructor(target: ATNState, set?: IntervalSet) {
 		super(target);
 		if (set == null) {
 			set = IntervalSet.of(Token.INVALID_TYPE);
@@ -27,24 +26,24 @@ export class SetTransition extends Transition {
 		this.set = set;
 	}
 
-	@Override
+	// @Override
 	get serializationType(): TransitionType {
 		return TransitionType.SET;
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	get label(): IntervalSet {
 		return this.set;
 	}
 
-	@Override
+	// @Override
 	public matches(symbol: number, minVocabSymbol: number, maxVocabSymbol: number): boolean {
 		return this.set.contains(symbol);
 	}
 
-	@Override
-	@NotNull
+	// @Override
+
 	public toString(): string {
 		return this.set.toString();
 	}

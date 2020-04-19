@@ -9,7 +9,6 @@ import { Lexer } from "../Lexer";
 import { LexerAction } from "./LexerAction";
 import { LexerActionType } from "./LexerActionType";
 import { MurmurHash } from "../misc/MurmurHash";
-import { NotNull, Override } from "../Decorators";
 
 /**
  * Executes a custom lexer action by calling {@link Recognizer#action} with the
@@ -65,7 +64,7 @@ export class LexerCustomAction implements LexerAction {
 	 *
 	 * @returns This method returns {@link LexerActionType#CUSTOM}.
 	 */
-	@Override
+	// @Override
 	get actionType(): LexerActionType {
 		return LexerActionType.CUSTOM;
 	}
@@ -81,7 +80,7 @@ export class LexerCustomAction implements LexerAction {
 	 *
 	 * @returns This method returns `true`.
 	 */
-	@Override
+	// @Override
 	get isPositionDependent(): boolean {
 		return true;
 	}
@@ -92,12 +91,12 @@ export class LexerCustomAction implements LexerAction {
 	 * Custom actions are implemented by calling {@link Lexer#action} with the
 	 * appropriate rule and action indexes.
 	 */
-	@Override
-	public execute(@NotNull lexer: Lexer): void {
+	// @Override
+	public execute(lexer: Lexer): void {
 		lexer.action(undefined, this._ruleIndex, this._actionIndex);
 	}
 
-	@Override
+	// @Override
 	public hashCode(): number {
 		let hash: number = MurmurHash.initialize();
 		hash = MurmurHash.update(hash, this.actionType);
@@ -106,7 +105,7 @@ export class LexerCustomAction implements LexerAction {
 		return MurmurHash.finish(hash, 3);
 	}
 
-	@Override
+	// @Override
 	public equals(obj: object): boolean {
 		if (obj === this) {
 			return true;

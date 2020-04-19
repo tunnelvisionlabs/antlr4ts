@@ -5,12 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.6390614-07:00
 
+import * as assert from "assert";
+
 import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { Override } from "../Decorators";
 import { JavaMap } from "../misc/Stubs";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
 import { PredictionContext } from "./PredictionContext";
-import * as assert from "assert";
 
 /** Used to cache {@link PredictionContext} objects. Its used for the shared
  *  context cash associated with contexts in DFA states. This cache
@@ -92,7 +92,7 @@ export namespace PredictionContextCache {
 			this.value = value;
 		}
 
-		@Override
+		// @Override
 		public equals(obj: object): boolean {
 			if (!(obj instanceof PredictionContextAndInt)) {
 				return false;
@@ -105,7 +105,7 @@ export namespace PredictionContextCache {
 				&& (this.obj === other.obj || (this.obj != null && this.obj.equals(other.obj)));
 		}
 
-		@Override
+		// @Override
 		public hashCode(): number {
 			let hashCode = 5;
 			hashCode = 7 * hashCode + (this.obj != null ? this.obj.hashCode() : 0);
@@ -133,7 +133,7 @@ export namespace PredictionContextCache {
 			return this._y;
 		}
 
-		@Override
+		// @Override
 		public equals(o: object): boolean {
 			if (!(o instanceof IdentityCommutativePredictionContextOperands)) {
 				return false;
@@ -145,7 +145,7 @@ export namespace PredictionContextCache {
 			return (this._x === other._x && this._y === other._y) || (this._x === other._y && this._y === other._x);
 		}
 
-		@Override
+		// @Override
 		public hashCode(): number {
 			return this._x.hashCode() ^ this._y.hashCode();
 		}
