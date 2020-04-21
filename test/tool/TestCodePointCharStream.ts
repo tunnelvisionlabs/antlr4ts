@@ -4,11 +4,13 @@
  */
 
 import * as assert from "assert";
-import { test, suite } from "mocha-typescript";
+
+import { suite, test } from "mocha-typescript";
+
 import { CharStreams } from "antlr4ts";
 import { CodePointCharStream } from "antlr4ts";
-import { Interval } from "antlr4ts/misc";
 import { IntStream } from "antlr4ts";
+import { Interval } from "antlr4ts/dist/misc";
 
 @suite
 export class TestCodePointCharStream {

@@ -11,20 +11,20 @@
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertNotNull;
 
+import * as assert from "assert";
+
+import { skip as Ignore, test as Test, suite } from "mocha-typescript";
+
 import { CharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
-import { Interval } from "antlr4ts/misc";
+import { Interval } from "antlr4ts/dist/misc";
 import { Lexer } from "antlr4ts";
 import { LexerInterpreter } from "antlr4ts";
-import { TokenStreamRewriter } from "antlr4ts";
-
 import { RewriterLexer1 } from "./gen/rewriter/RewriterLexer1";
 import { RewriterLexer2 } from "./gen/rewriter/RewriterLexer2";
 import { RewriterLexer3 } from "./gen/rewriter/RewriterLexer3";
-
-import * as assert from "assert";
-import { suite, test as Test, skip as Ignore } from "mocha-typescript";
+import { TokenStreamRewriter } from "antlr4ts";
 
 @suite
 export class TestTokenStreamRewriter {

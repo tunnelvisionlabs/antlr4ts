@@ -9,10 +9,9 @@
     "src/**/*."
   ],
   "scripts": {
-    "prepare": "npm run build",
-    "build": "tsc",
+    "prepare": "run-s antlr build",
+    "build": "tsc --build --verbose",
     "antlr": "cd src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../..",
-    "tsc": "tsc",
     "lint": "eslint --ext .ts src"
   },
   "repository": {
