@@ -58,8 +58,6 @@ export class LexerATNSimulator extends ATNSimulator {
 
 	public static match_calls = 0;
 
-	constructor(/*@NotNull*/ atn: ATN);
-	constructor(/*@NotNull*/ atn: ATN, recog: Lexer | undefined);
 	constructor(atn: ATN, recog?: Lexer) {
 		super(atn);
 		this.recog = recog;
