@@ -20,22 +20,11 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn";
-import { ATNDeserializer } from "<basePath()>/atn";
-import { FailedPredicateException } from "<basePath()>";
-import { NoViableAltException } from "<basePath()>";
-import { Parser } from "<basePath()>";
-import { ParserRuleContext } from "<basePath()>";
-import { ParserATNSimulator } from "<basePath()>/atn";
-import { RecognitionException } from "<basePath()>";
-import { RuleContext } from "<basePath()>";
-//import { RuleVersion } from "<basePath()>";
-import { TerminalNode } from "<basePath()>/dist/tree/TerminalNode";
-import { Token } from "<basePath()>";
-import { TokenStream } from "<basePath()>";
-import { Vocabulary } from "<basePath()>";
-import { VocabularyImpl } from "<basePath()>";
-import { join, toCharArray } from "<basePath()>/misc";
+import { 
+	ATN, ATNDeserializer, FailedPredicateException, NoViableAltException, Parser, ParserRuleContext,
+	ParserATNSimulator, RecognitionException, RuleContext, RuleVersion, TerminalNode, Token, TokenStream, 
+	Vocabulary, VocabularyImpl, join, toCharArray 
+	} from "<basePath()>";
 
 <if(file.genListener)>
 import { <file.grammarName>Listener } from "./<file.grammarName>Listener";
@@ -56,7 +45,7 @@ ListenerFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeListener } from "<basePath()>/dist/tree";
+import { ParseTreeListener } from "<basePath()>";
 
 <file.listenerNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 
@@ -98,7 +87,7 @@ VisitorFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from "<basePath()>/dist/tree";
+import { ParseTreeVisitor } from "<basePath()>";
 
 <file.visitorNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
 
@@ -864,15 +853,18 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn";
-import { ATNDeserializer } from "<basePath()>/atn";
-import { CharStream } from "<basePath()>";
-import { Lexer } from "<basePath()>";
-import { LexerATNSimulator } from "<basePath()>/atn";
-import { RuleContext } from "<basePath()>";
-import { Vocabulary } from "<basePath()>";
-import { VocabularyImpl } from "<basePath()>";
-import { join, toCharArray } from "<basePath()>/misc";
+import {
+	ATN,
+	ATNDeserializer,
+	CharStream,
+	Lexer,
+	LexerATNSimulator,
+	RuleContext,
+	Vocabulary,
+	VocabularyImpl,
+	join,
+	toCharArray,
+	} from "<basePath()>";
 
 <namedActions.beforeLexer>
 

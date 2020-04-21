@@ -3,6 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+
 export * from "./ANTLRErrorListener";
 export * from "./ANTLRErrorStrategy";
 // export * from "./ANTLRFileStream";
@@ -52,9 +53,12 @@ export * from "./Vocabulary";
 export * from "./VocabularyImpl";
 export * from "./WritableToken";
 
-// Keep these sub-directory exports last
+export { ATNDeserializer } from "./atn/ATNDeserializer";
+export { ATN } from "./atn/ATN";
+export { ParserATNSimulator } from "./atn/ParserATNSimulator";
+export { TerminalNode } from "./tree/TerminalNode";
+export { join, toCharArray } from "./misc/Utils";
+export { ParseTreeListener } from "./tree/ParseTreeListener";
+export { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
+export { LexerATNSimulator } from "./atn/LexerATNSimulator";
 
-// export * from "./atn";
-// export * from "./dfa";
-// export * from "./misc";
-// export * from "./tree";

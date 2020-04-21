@@ -5,12 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:11.6934341-07:00
 
-import { IntervalSet } from "antlr4ts/misc";
+import * as assert from "assert";
+
+import { test as Test, suite } from "mocha-typescript";
+
+import { IntervalSet } from "antlr4ts/dist/misc";
 import { Lexer } from "antlr4ts";
 import { Token } from "antlr4ts";
-
-import { suite, test as Test } from "mocha-typescript";
-import * as assert from "assert";
 
 function assertEquals<T>(expected: T, actual: T): void {
 	assert.strictEqual(actual, expected);

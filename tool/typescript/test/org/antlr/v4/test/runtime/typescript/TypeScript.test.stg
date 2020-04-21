@@ -229,7 +229,7 @@ import { AbstractParseTreeVisitor, ErrorNode, RuleNode } from "antlr4ts/dist/tre
 
 ImportPredictionMode() ::= <<
 @beforeParser {
-import { PredictionMode } from "antlr4ts/atn";
+import { PredictionMode } from "antlr4ts/dist/atn";
 }
 >>
 

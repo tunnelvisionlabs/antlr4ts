@@ -1,15 +1,18 @@
 // Generated from XPathLexer.g4 by ANTLR 4.7.3-SNAPSHOT
 
 
-import { ATN } from "../../atn";
-import { ATNDeserializer } from "../../atn";
-import { CharStream } from "../..";
-import { Lexer } from "../..";
-import { LexerATNSimulator } from "../../atn";
-import { RuleContext } from "../..";
-import { Vocabulary } from "../..";
-import { VocabularyImpl } from "../..";
-import { join, toCharArray } from "../../misc";
+import {
+	ATN,
+	ATNDeserializer,
+	CharStream,
+	Lexer,
+	LexerATNSimulator,
+	RuleContext,
+	Vocabulary,
+	VocabularyImpl,
+	join,
+	toCharArray,
+	} from "../..";
 
 
 /* eslint-disable no-useless-escape */

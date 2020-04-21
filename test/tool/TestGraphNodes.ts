@@ -6,11 +6,14 @@
 // ConvertTo-TS run at 2016-10-04T11:27:11.1463816-07:00
 
 import * as assert from "assert";
-import assertEquals = assert.strictEqual;
+
 import { test as Test, suite } from "mocha-typescript";
 
-import { PredictionContext } from "antlr4ts/atn";
-import { PredictionContextCache } from "antlr4ts/atn";
+import { PredictionContext } from "antlr4ts/dist/atn";
+import { PredictionContextCache } from "antlr4ts/dist/atn";
+
+import assertEquals = assert.strictEqual;
+
 
 /// Assuming that IdentityHashMap<K, V> == Map<K, V>;
 
