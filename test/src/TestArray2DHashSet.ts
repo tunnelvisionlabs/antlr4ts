@@ -3,10 +3,10 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+import * as assert from "assert";
+
 import { Array2DHashSet } from "antlr4ts/dist/misc";
 import { MurmurHash } from "antlr4ts/dist/misc";
-import { suite, test } from "mocha-typescript";
-import * as assert from "assert";
 
 class EquatableTest {
 

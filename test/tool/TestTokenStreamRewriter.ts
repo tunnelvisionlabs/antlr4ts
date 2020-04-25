@@ -13,8 +13,6 @@
 
 import * as assert from "assert";
 
-import { skip as Ignore, test as Test, suite } from "mocha-typescript";
-
 import { CharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
@@ -26,18 +24,17 @@ import { RewriterLexer2 } from "./gen/rewriter/RewriterLexer2";
 import { RewriterLexer3 } from "./gen/rewriter/RewriterLexer3";
 import { TokenStreamRewriter } from "antlr4ts";
 
-@suite
-export class TestTokenStreamRewriter {
+describe("TestTokenStreamRewriter", function () {
 
 	// tslint:disable-next-line: callable-types
-	private createLexerInterpreter(input: string, lexerCtor: { new(stream: CharStream): Lexer }): LexerInterpreter {
+	function createLexerInterpreter(input: string, lexerCtor: { new(stream: CharStream): Lexer }): LexerInterpreter {
 		const stream = CharStreams.fromString(input);
 		const lexer = new lexerCtor(stream);
 		return new LexerInterpreter(lexer.grammarFileName, lexer.vocabulary, lexer.ruleNames, lexer.channelNames, lexer.modeNames, lexer.atn, stream);
 	}
 
-	@Test public testInsertBeforeIndex0(): void {
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter("abc", RewriterLexer1);
+	it("testInsertBeforeIndex0", function () {
+		const lexEngine: LexerInterpreter = createLexerInterpreter("abc", RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -45,11 +42,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "0abc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testInsertAfterLastIndex(): void {
+	it("testInsertAfterLastIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -57,11 +54,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abcx";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public test2InsertBeforeAfterMiddleIndex(): void {
+	it("test2InsertBeforeAfterMiddleIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -70,11 +67,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "axbxc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceIndex0(): void {
+	it("testReplaceIndex0", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -82,11 +79,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "xbc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceLastIndex(): void {
+	it("testReplaceLastIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -94,11 +91,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abx";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceMiddleIndex(): void {
+	it("testReplaceMiddleIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -106,13 +103,13 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "axc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testToStringStartStop(): void {
+	it("testToStringStartStop", function () {
 		// Tokens: 0123456789
 		// Input:  x = 3 * 0;
 		const input = "x = 3 * 0;";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer2);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer2);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -135,13 +132,13 @@ export class TestTokenStreamRewriter {
 		result = tokens.getText(Interval.of(4, 8));
 		expecting = "0";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testToStringStartStop2(): void {
+	it("testToStringStartStop2", function () {
 		// Tokens: 012345678901234567
 		// Input:  x = 3 * 0 + 2 * 0;
 		const input = "x = 3 * 0 + 2 * 0;";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer3);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer3);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -183,11 +180,11 @@ export class TestTokenStreamRewriter {
 		// try again after insert at end
 		expecting = "x = 0";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public test2ReplaceMiddleIndex(): void {
+	it("test2ReplaceMiddleIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -196,11 +193,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "ayc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public test2ReplaceMiddleIndex1InsertBefore(): void {
+	it("test2ReplaceMiddleIndex1InsertBefore", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -210,11 +207,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "_ayc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceThenDeleteMiddleIndex(): void {
+	it("testReplaceThenDeleteMiddleIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -223,11 +220,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "ac";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testInsertInPriorReplace(): void {
+	it("testInsertInPriorReplace", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -249,11 +246,11 @@ export class TestTokenStreamRewriter {
 		assert.notStrictEqual(exc, null);
 		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
-	}
+	})
 
-	@Test public testInsertThenReplaceSameIndex(): void {
+	it("testInsertThenReplaceSameIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -264,11 +261,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "0xbc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public test2InsertMiddleIndex(): void {
+	it("test2InsertMiddleIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -277,11 +274,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "ayxbc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public test2InsertThenReplaceIndex0(): void {
+	it("test2InsertThenReplaceIndex0", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -291,11 +288,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "yxzbc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceThenInsertBeforeLastIndex(): void {
+	it("testReplaceThenInsertBeforeLastIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -304,11 +301,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abyx";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testInsertThenReplaceLastIndex(): void {
+	it("testInsertThenReplaceLastIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -317,11 +314,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abyx";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceThenInsertAfterLastIndex(): void {
+	it("testReplaceThenInsertAfterLastIndex", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -330,11 +327,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abxy";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceRangeThenInsertAtLeftEdge(): void {
+	it("testReplaceRangeThenInsertAtLeftEdge", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -343,11 +340,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abyxba";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceRangeThenInsertAtRightEdge(): void {
+	it("testReplaceRangeThenInsertAtRightEdge", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -370,11 +367,11 @@ export class TestTokenStreamRewriter {
 		assert.notStrictEqual(exc, null);
 		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
-	}
+	})
 
-	@Test public testReplaceRangeThenInsertAfterRightEdge(): void {
+	it("testReplaceRangeThenInsertAfterRightEdge", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -383,11 +380,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abxyba";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceAll(): void {
+	it("testReplaceAll", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -395,11 +392,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "x";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceSubsetThenFetch(): void {
+	it("testReplaceSubsetThenFetch", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -407,11 +404,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText(Interval.of(0, 6));
 		const expecting = "abxyzba";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testReplaceThenReplaceSuperset(): void {
+	it("testReplaceThenReplaceSuperset", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -435,11 +432,11 @@ export class TestTokenStreamRewriter {
 		assert.notStrictEqual(exc, null);
 		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
-	}
+	})
 
-	@Test public testReplaceThenReplaceLowerIndexedSuperset(): void {
+	it("testReplaceThenReplaceLowerIndexedSuperset", function () {
 		const input = "abcccba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -463,11 +460,11 @@ export class TestTokenStreamRewriter {
 		assert.notStrictEqual(exc, null);
 		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
-	}
+	})
 
-	@Test public testReplaceSingleMiddleThenOverlappingSuperset(): void {
+	it("testReplaceSingleMiddleThenOverlappingSuperset", function () {
 		const input = "abcba";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -476,11 +473,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "fooa";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testCombineInserts(): void {
+	it("testCombineInserts", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -489,11 +486,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "yxabc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testCombine3Inserts(): void {
+	it("testCombine3Inserts", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -503,11 +500,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "yazxbc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testCombineInsertOnLeftWithReplace(): void {
+	it("testCombineInsertOnLeftWithReplace", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -518,11 +515,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "zfoo";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testCombineInsertOnLeftWithDelete(): void {
+	it("testCombineInsertOnLeftWithDelete", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -535,11 +532,11 @@ export class TestTokenStreamRewriter {
 		stream.fill();
 		// make sure combo is not znull
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testDisjointInserts(): void {
+	it("testDisjointInserts", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -549,11 +546,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "zaxbyc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testOverlappingReplace(): void {
+	it("testOverlappingReplace", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -564,11 +561,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "bar";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testOverlappingReplace2(): void {
+	it("testOverlappingReplace2", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -592,11 +589,11 @@ export class TestTokenStreamRewriter {
 		assert.notStrictEqual(exc, null);
 		assert.notStrictEqual(exc, undefined);
 		assert.strictEqual(exc!.message, expecting);
-	}
+	})
 
-	@Test public testOverlappingReplace3(): void {
+	it("testOverlappingReplace3", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -607,11 +604,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "barc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testOverlappingReplace4(): void {
+	it("testOverlappingReplace4", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -622,11 +619,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "abar";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testDropIdenticalReplace(): void {
+	it("testDropIdenticalReplace", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -637,11 +634,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "afooc";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testDropPrevCoveredInsert(): void {
+	it("testDropPrevCoveredInsert", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -652,11 +649,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "afoofoo";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testLeaveAloneDisjointInsert(): void {
+	it("testLeaveAloneDisjointInsert", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -665,11 +662,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "axbfoo";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testLeaveAloneDisjointInsert2(): void {
+	it("testLeaveAloneDisjointInsert2", function () {
 		const input = "abcc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -678,11 +675,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "axbfoo";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testInsertBeforeTokenThenDeleteThatToken(): void {
+	it("testInsertBeforeTokenThenDeleteThatToken", function () {
 		const input = "abc";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -691,13 +688,12 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "aby";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
 	// Test for https://github.com/antlr/antlr4/issues/550
-	@Test
-	public testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder(): void {
+	it("testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder", function () {
 		const input = "aa";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -708,12 +704,11 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "<b>a</b><b>a</b>"; // fails with <b>a<b></b>a</b>"
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test
-	public testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2(): void {
+	it("testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrder2", function () {
 		const input = "aa";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -726,13 +721,12 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "<b><p>a</p></b><b>a</b>";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
 	// Test for https://github.com/antlr/antlr4/issues/550
-	@Test
-	public testPreservesOrderOfContiguousInserts(): void {
+	it("testPreservesOrderOfContiguousInserts", function () {
 		const input = "ab";
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		const lexEngine: LexerInterpreter = createLexerInterpreter(input, RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -746,10 +740,10 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "<div><b><p>a</p></b></div>!b";
 		assert.strictEqual(result, expecting);
-	}
+	})
 
-	@Test public testInsertLiterals(): void {
-		const lexEngine: LexerInterpreter = this.createLexerInterpreter("abc", RewriterLexer1);
+	it("testInsertLiterals", function () {
+		const lexEngine: LexerInterpreter = createLexerInterpreter("abc", RewriterLexer1);
 		const stream: CommonTokenStream = new CommonTokenStream(lexEngine);
 		stream.fill();
 		const tokens: TokenStreamRewriter = new TokenStreamRewriter(stream);
@@ -761,5 +755,5 @@ export class TestTokenStreamRewriter {
 		const result: string = tokens.getText();
 		const expecting = "[object Object]0falseabc";
 		assert.strictEqual(result, expecting);
-	}
-}
+	})
+})

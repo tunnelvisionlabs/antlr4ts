@@ -7,8 +7,6 @@
 
 import * as assert from "assert";
 
-import { test as Test, suite } from "mocha-typescript";
-
 import { IntervalSet } from "antlr4ts/dist/misc";
 import { Lexer } from "antlr4ts";
 import { Token } from "antlr4ts";
@@ -25,80 +23,79 @@ function assertTrue(value: boolean): void {
 	assert.strictEqual(value, true);
 }
 
-@suite
-export class TestIntervalSet {
-	@Test public testSingleElement(): void {
+describe("TestIntervalSet", function () {
+	it("testSingleElement", function () {
 		const s: IntervalSet = IntervalSet.of(99);
 		const expecting = "99";
 		assertEquals(s.toString(), expecting);
-	}
+	})
 
-	@Test public testMin(): void {
+	it("testMin", function () {
 		assertEquals(0, IntervalSet.COMPLETE_CHAR_SET.minElement);
 		assertEquals(Token.EPSILON, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EPSILON)).minElement);
 		assertEquals(Token.EOF, IntervalSet.COMPLETE_CHAR_SET.or(IntervalSet.of(Token.EOF)).minElement);
-	}
+	})
 
-	@Test public testIsolatedElements(): void {
+	it("testIsolatedElements", function () {
 		const s: IntervalSet = new IntervalSet();
 		s.add(1);
 		s.add("z".charCodeAt(0));
 		s.add("\uFFF0".charCodeAt(0));
 		const expecting = "{1, 122, 65520}";
 		assertEquals(s.toString(), expecting);
-	}
+	})
 
-	@Test public testMixedRangesAndElements(): void {
+	it("testMixedRangesAndElements", function () {
 		const s: IntervalSet = new IntervalSet();
 		s.add(1);
 		s.add("a".charCodeAt(0), "z".charCodeAt(0));
 		s.add("0".charCodeAt(0), "9".charCodeAt(0));
 		const expecting = "{1, 48..57, 97..122}";
 		assertEquals(s.toString(), expecting);
-	}
+	})
 
-	@Test public testSimpleAnd(): void {
+	it("testSimpleAnd", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(13, 15);
 		const expecting = "{13..15}";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testRangeAndIsolatedElement(): void {
+	it("testRangeAndIsolatedElement", function () {
 		const s: IntervalSet = IntervalSet.of("a".charCodeAt(0), "z".charCodeAt(0));
 		const s2: IntervalSet = IntervalSet.of("d".charCodeAt(0));
 		const expecting = "100";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testEmptyIntersection(): void {
+	it("testEmptyIntersection", function () {
 		const s: IntervalSet = IntervalSet.of("a".charCodeAt(0), "z".charCodeAt(0));
 		const s2: IntervalSet = IntervalSet.of("0".charCodeAt(0), "9".charCodeAt(0));
 		const expecting = "{}";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testEmptyIntersectionSingleElements(): void {
+	it("testEmptyIntersectionSingleElements", function () {
 		const s: IntervalSet = IntervalSet.of("a".charCodeAt(0));
 		const s2: IntervalSet = IntervalSet.of("d".charCodeAt(0));
 		const expecting = "{}";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testNotSingleElement(): void {
+	it("testNotSingleElement", function () {
 		const vocabulary: IntervalSet = IntervalSet.of(1, 1000);
 		vocabulary.add(2000, 3000);
 		const s: IntervalSet = IntervalSet.of(50, 50);
 		const expecting = "{1..49, 51..1000, 2000..3000}";
 		const result: string = (s.complement(vocabulary)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testNotSet(): void {
+	it("testNotSet", function () {
 		const vocabulary: IntervalSet = IntervalSet.of(1, 1000);
 		const s: IntervalSet = IntervalSet.of(50, 60);
 		s.add(5);
@@ -106,25 +103,25 @@ export class TestIntervalSet {
 		const expecting = "{1..4, 6..49, 61..249, 301..1000}";
 		const result: string = (s.complement(vocabulary)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testNotEqualSet(): void {
+	it("testNotEqualSet", function () {
 		const vocabulary: IntervalSet = IntervalSet.of(1, 1000);
 		const s: IntervalSet = IntervalSet.of(1, 1000);
 		const expecting = "{}";
 		const result: string = (s.complement(vocabulary)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testNotSetEdgeElement(): void {
+	it("testNotSetEdgeElement", function () {
 		const vocabulary: IntervalSet = IntervalSet.of(1, 2);
 		const s: IntervalSet = IntervalSet.of(1);
 		const expecting = "2";
 		const result: string = (s.complement(vocabulary)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testNotSetFragmentedVocabulary(): void {
+	it("testNotSetFragmentedVocabulary", function () {
 		const vocabulary: IntervalSet = IntervalSet.of(1, 255);
 		vocabulary.add(1000, 2000);
 		vocabulary.add(9999);
@@ -135,26 +132,26 @@ export class TestIntervalSet {
 		const expecting = "{1..2, 4..49, 61..249, 1000..2000, 9999}";
 		const result: string = (s.complement(vocabulary)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractOfCompletelyContainedRange(): void {
+	it("testSubtractOfCompletelyContainedRange", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(12, 15);
 		const expecting = "{10..11, 16..20}";
 		const result: string = (s.subtract(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractFromSetWithEOF(): void {
+	it("testSubtractFromSetWithEOF", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		s.add(Token.EOF);
 		const s2: IntervalSet = IntervalSet.of(12, 15);
 		const expecting = "{<EOF>, 10..11, 16..20}";
 		const result: string = (s.subtract(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractOfOverlappingRangeFromLeft(): void {
+	it("testSubtractOfOverlappingRangeFromLeft", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(5, 11);
 		let expecting = "{12..20}";
@@ -165,9 +162,9 @@ export class TestIntervalSet {
 		expecting = "{11..20}";
 		result = (s.subtract(s3)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractOfOverlappingRangeFromRight(): void {
+	it("testSubtractOfOverlappingRangeFromRight", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(15, 25);
 		let expecting = "{10..14}";
@@ -178,17 +175,17 @@ export class TestIntervalSet {
 		expecting = "{10..19}";
 		result = (s.subtract(s3)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractOfCompletelyCoveredRange(): void {
+	it("testSubtractOfCompletelyCoveredRange", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(1, 25);
 		const expecting = "{}";
 		const result: string = (s.subtract(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSubtractOfRangeSpanningMultipleRanges(): void {
+	it("testSubtractOfRangeSpanningMultipleRanges", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		s.add(30, 40);
 		s.add(50, 60); // s has 3 ranges now: 10..20, 30..40, 50..60
@@ -201,12 +198,12 @@ export class TestIntervalSet {
 		expecting = "{10..14, 56..60}";
 		result = (s.subtract(s3)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
 	/** The following was broken:
 	 * 	{0..113, 115..65534}-{0..115, 117..65534}=116..65534
 	 */
-	@Test public testSubtractOfWackyRange(): void {
+	it("testSubtractOfWackyRange", function () {
 		const s: IntervalSet = IntervalSet.of(0, 113);
 		s.add(115, 200);
 		const s2: IntervalSet = IntervalSet.of(0, 115);
@@ -214,18 +211,18 @@ export class TestIntervalSet {
 		const expecting = "116";
 		const result: string = (s.subtract(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSimpleEquals(): void {
+	it("testSimpleEquals", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(10, 20);
 		assertTrue(s.equals(s2));
 
 		const s3: IntervalSet = IntervalSet.of(15, 55);
 		assertFalse(s.equals(s3));
-	}
+	})
 
-	@Test public testEquals(): void {
+	it("testEquals", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		s.add(2);
 		s.add(499, 501);
@@ -237,18 +234,18 @@ export class TestIntervalSet {
 		const s3: IntervalSet = IntervalSet.of(10, 20);
 		s3.add(2);
 		assertFalse(s.equals(s3));
-	}
+	})
 
-	@Test public testSingleElementMinusDisjointSet(): void {
+	it("testSingleElementMinusDisjointSet", function () {
 		const s: IntervalSet = IntervalSet.of(15, 15);
 		const s2: IntervalSet = IntervalSet.of(1, 5);
 		s2.add(10, 20);
-		const expecting = "{}"; // 15 - {1..5, 10..20} = {}
+		const expecting = "{}"; // 15 - {1..5, 10..20} = {})
 		const result: string = s.subtract(s2).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testMembership(): void {
+	it("testMembership", function () {
 		const s: IntervalSet = IntervalSet.of(15, 15);
 		s.add(50, 60);
 		assertTrue(!s.contains(0));
@@ -258,10 +255,10 @@ export class TestIntervalSet {
 		assertTrue(s.contains(55));
 		assertTrue(s.contains(50));
 		assertTrue(s.contains(60));
-	}
+	})
 
 	// {2,15,18} & 10..20
-	@Test public testIntersectionWithTwoContainedElements(): void {
+	it("testIntersectionWithTwoContainedElements", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(2, 2);
 		s2.add(15);
@@ -269,9 +266,9 @@ export class TestIntervalSet {
 		const expecting = "{15, 18}";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testIntersectionWithTwoContainedElementsReversed(): void {
+	it("testIntersectionWithTwoContainedElementsReversed", function () {
 		const s: IntervalSet = IntervalSet.of(10, 20);
 		const s2: IntervalSet = IntervalSet.of(2, 2);
 		s2.add(15);
@@ -279,54 +276,54 @@ export class TestIntervalSet {
 		const expecting = "{15, 18}";
 		const result: string = (s2.and(s)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testComplement(): void {
+	it("testComplement", function () {
 		const s: IntervalSet = IntervalSet.of(100, 100);
 		s.add(101, 101);
 		const s2: IntervalSet = IntervalSet.of(100, 102);
 		const expecting = "102";
 		const result: string = (s.complement(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testComplement2(): void {
+	it("testComplement2", function () {
 		const s: IntervalSet = IntervalSet.of(100, 101);
 		const s2: IntervalSet = IntervalSet.of(100, 102);
 		const expecting = "102";
 		const result: string = (s.complement(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testComplement3(): void {
+	it("testComplement3", function () {
 		const s: IntervalSet = IntervalSet.of(1, 96);
 		s.add(99, Lexer.MAX_CHAR_VALUE);
 		const expecting = "{97..98}";
 		const result: string = (s.complementRange(1, Lexer.MAX_CHAR_VALUE)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testMergeOfRangesAndSingleValues(): void {
-		// {0..41, 42, 43..65534}
+	it("testMergeOfRangesAndSingleValues", function () {
+		// {0..41, 42, 43..65534})
 		const s: IntervalSet = IntervalSet.of(0, 41);
 		s.add(42);
 		s.add(43, 65534);
 		const expecting = "{0..65534}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testMergeOfRangesAndSingleValuesReverse(): void {
+	it("testMergeOfRangesAndSingleValuesReverse", function () {
 		const s: IntervalSet = IntervalSet.of(43, 65534);
 		s.add(42);
 		s.add(0, 41);
 		const expecting = "{0..65534}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testMergeWhereAdditionMergesTwoExistingIntervals(): void {
-		// 42, 10, {0..9, 11..41, 43..65534}
+	it("testMergeWhereAdditionMergesTwoExistingIntervals", function () {
+		// 42, 10, {0..9, 11..41, 43..65534})
 		const s: IntervalSet = IntervalSet.of(42);
 		s.add(10);
 		s.add(0, 9);
@@ -335,13 +332,13 @@ export class TestIntervalSet {
 		const expecting = "{0..65534}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
 	/**
 	 * This case is responsible for antlr/antlr4#153.
 	 * https://github.com/antlr/antlr4/issues/153
 	 */
-	@Test public testMergeWhereAdditionMergesThreeExistingIntervals(): void {
+	it("testMergeWhereAdditionMergesThreeExistingIntervals", function () {
 		const s: IntervalSet = new IntervalSet();
 		s.add(0);
 		s.add(3);
@@ -350,34 +347,34 @@ export class TestIntervalSet {
 		const expecting = "{0..7}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testMergeWithDoubleOverlap(): void {
+	it("testMergeWithDoubleOverlap", function () {
 		const s: IntervalSet = IntervalSet.of(1, 10);
 		s.add(20, 30);
 		s.add(5, 25); // overlaps two!
 		const expecting = "{1..30}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testSize(): void {
+	it("testSize", function () {
 		const s: IntervalSet = IntervalSet.of(20, 30);
 		s.add(50, 55);
 		s.add(5, 19);
 		const expecting = "32";
 		const result = String(s.size);
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testToArray(): void {
+	it("testToArray", function () {
 		const s: IntervalSet = IntervalSet.of(20, 25);
 		s.add(50, 55);
 		s.add(5, 5);
 		const expecting = "5,20,21,22,23,24,25,50,51,52,53,54,55";
 		const result = String(s.toArray());
 		assertEquals(expecting, result);
-	}
+	})
 
 	/** The following was broken:
 	 *   {'\u0000'..'s', 'u'..'\uFFFE'} & {'\u0000'..'q', 's'..'\uFFFE'}=
@@ -385,7 +382,7 @@ export class TestIntervalSet {
 	 *   'q' is 113 ascii
 	 *   'u' is 117
 	 */
-	@Test public testNotRIntersectionNotT(): void {
+	it("testNotRIntersectionNotT", function () {
 		const s: IntervalSet = IntervalSet.of(0, "s".charCodeAt(0));
 		s.add("u".charCodeAt(0), 200);
 		const s2: IntervalSet = IntervalSet.of(0, "q".charCodeAt(0));
@@ -393,49 +390,49 @@ export class TestIntervalSet {
 		const expecting = "{0..113, 115, 117..200}";
 		const result: string = (s.and(s2)).toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testRmSingleElement(): void {
+	it("testRmSingleElement", function () {
 		const s: IntervalSet = IntervalSet.of(1, 10);
 		s.add(-3, -3);
 		s.remove(-3);
 		const expecting = "{1..10}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testRmLeftSide(): void {
+	it("testRmLeftSide", function () {
 		const s: IntervalSet = IntervalSet.of(1, 10);
 		s.add(-3, -3);
 		s.remove(1);
 		const expecting = "{-3, 2..10}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testRmRightSide(): void {
+	it("testRmRightSide", function () {
 		const s: IntervalSet = IntervalSet.of(1, 10);
 		s.add(-3, -3);
 		s.remove(10);
 		const expecting = "{-3, 1..9}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testRmMiddleRange(): void {
+	it("testRmMiddleRange", function () {
 		const s: IntervalSet = IntervalSet.of(1, 10);
 		s.add(-3, -3);
 		s.remove(5);
 		const expecting = "{-3, 1..4, 6..10}";
 		const result: string = s.toString();
 		assertEquals(expecting, result);
-	}
+	})
 
-	@Test public testEmptyIsNil(): void {
+	it("testEmptyIsNil", function () {
 		assertTrue(new IntervalSet().isNil);
-	}
+	})
 
-	@Test public testNotEmptyIsNotNil(): void {
+	it("testNotEmptyIsNotNil", function () {
 		assertFalse(IntervalSet.of(1).isNil);
-	}
-}
+	})
+})

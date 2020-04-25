@@ -4,6 +4,7 @@
  */
 
 import * as assert from "assert";
+
 import { BitSet } from "antlr4ts/dist/misc/BitSet";
 
 describe("BitSet Tests", () => {
@@ -53,7 +54,7 @@ describe("BitSet Tests", () => {
 			assert(!empty.equals([1, 3]));
 		});
 
-		it("equals itself", () => {
+		it("empty equals itself", () => {
 			assert(empty.equals(empty));
 		});
 

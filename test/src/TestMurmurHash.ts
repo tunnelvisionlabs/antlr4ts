@@ -3,38 +3,28 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { MurmurHash } from "antlr4ts/dist/misc";
-
-import { suite, test } from "mocha-typescript";
-
 import * as assert from "assert";
 
-@suite
-export class TestMurmurHash {
+import { MurmurHash } from "antlr4ts/dist/misc";
 
-	@test
-	public testMurmurHash_Empty(): void {
+describe("MurmurHash", function () {
+	it("Empty", function () {
 		assert.strictEqual(0, MurmurHash.hashCode([], 0));
-	}
+	})
 
-	@test
-	public testMurmurHash_EmptyWithSeed(): void {
+	it("EmptyWithSeed", function () {
 		assert.strictEqual(1364076727, MurmurHash.hashCode([], 1));
-	}
+	})
 
-	@test
-	public testMurmurHash_Single(): void {
+	it("Single", function () {
 		assert.strictEqual(593689054, MurmurHash.hashCode([0], 0));
-	}
+	})
 
-	@test
-	public testMurmurHash_SingleWithSeed(): void {
+	it("SingleWithSeed", function () {
 		assert.strictEqual(2028806445, MurmurHash.hashCode([0], 1));
-	}
+	})
 
-	@test
-	public testMurmurHash_Multiple(): void {
+	it("Multiple", function () {
 		assert.strictEqual(987256456, MurmurHash.hashCode([0, 1], 0));
-	}
-
-}
+	})
+})

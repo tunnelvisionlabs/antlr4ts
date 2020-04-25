@@ -5,32 +5,71 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:38.8508887-07:00
 
+import * as assert from "assert";
+
 import { CharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { Lexer } from "antlr4ts";
+import { ParseTree } from "antlr4ts/dist/tree";
 import { Parser } from "antlr4ts";
 import { RuleContext } from "antlr4ts";
-import { TokenStream } from "antlr4ts";
-
-import { ParseTree } from "antlr4ts/dist/tree";
 import { TerminalNode } from "antlr4ts/dist/tree";
-import { XPath } from "antlr4ts/dist/tree";
-
 import { TestXPathLexer } from "./gen/xpath/TestXPathLexer";
 import { TestXPathParser } from "./gen/xpath/TestXPathParser";
-
-import * as assert from "assert";
-import { suite, test as Test, skip as Ignore } from "mocha-typescript";
+import { TokenStream } from "antlr4ts";
+import { XPath } from "antlr4ts/dist/tree";
 
 const SAMPLE_PROGRAM: string =
 	"def f(x,y) { x = 3+4; y; ; }\n" +
 	"def g(x) { return 1+2*x; }\n";
 
-@suite
-export class TestXPath {
+describe("TestXPath", function () {
 
-	@Test public testValidPaths(): void {
+
+	function testError<TParser extends Parser>(
+		input: string,
+		path: string,
+		expected: RegExp,
+		startRule: (parser: TParser) => ParseTree,
+		// tslint:disable-next-line: callable-types
+		lexerCtor: { new(stream: CharStream): Lexer },
+		// tslint:disable-next-line: callable-types
+		parserCtor: { new(stream: TokenStream): TParser }): void {
+
+		const lexer = new lexerCtor(CharStreams.fromString(input));
+		const parser = new parserCtor(new CommonTokenStream(lexer));
+		const tree: ParseTree = startRule(parser);
+
+		assert.throws(() => XPath.findAll(tree, path, parser), expected);
+	}
+
+	function getNodeStrings<TParser extends Parser>(
+		input: string,
+		xpath: string,
+		startRule: (parser: TParser) => ParseTree,
+		// tslint:disable-next-line: callable-types
+		lexerCtor: { new(stream: CharStream): Lexer },
+		parserCtor: new (stream: TokenStream) => TParser): string[] {
+
+		const lexer = new lexerCtor(CharStreams.fromString(input));
+		const parser = new parserCtor(new CommonTokenStream(lexer));
+		const tree: ParseTree = startRule(parser);
+
+		const nodes: string[] = [];
+		for (const t of XPath.findAll(tree, xpath, parser)) {
+			if (t instanceof RuleContext) {
+				nodes.push(parser.ruleNames[t.ruleIndex]);
+			} else {
+				const token: TerminalNode = t as TerminalNode;
+				nodes.push(token.text);
+			}
+		}
+
+		return nodes;
+	}
+
+	it("testValidPaths", function () {
 		const xpath: string[] = [
 			"/prog/func",		// all funcs under prog at root
 			"/prog/*",			// all children of prog at root
@@ -79,90 +118,51 @@ export class TestXPath {
 		];
 
 		for (let i = 0; i < xpath.length; i++) {
-			const nodes: string[] = this.getNodeStrings(SAMPLE_PROGRAM, xpath[i], (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+			const nodes: string[] = getNodeStrings(SAMPLE_PROGRAM, xpath[i], (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
 			const result: string = nodes.toString();
 			assert.strictEqual(result, expected[i], "path " + xpath[i] + " failed");
 		}
-	}
+	})
 
-	@Test public testWeirdChar(): void {
+	it("testWeirdChar", function () {
 		const path = "&";
 		const expected = /^RangeError: Invalid tokens or characters at index 0 in path '&' -- $/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
 
-	@Test public testWeirdChar2(): void {
+	it("testWeirdChar2", function () {
 		const path = "//w&e/";
 		const expected = /^RangeError: Invalid tokens or characters at index 3 in path '\/\/w&e\/' -- $/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
 
-	@Test public testBadSyntax(): void {
+	it("testBadSyntax", function () {
 		const path = "///";
 		const expected = /^Error: \/ at index 2 isn't a valid rule name$/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
 
-	@Test public testMissingWordAtEnd(): void {
+	it("testMissingWordAtEnd", function () {
 		const path = "//";
 		const expected = /^Error: Missing path element at end of path$/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
 
-	@Test public testBadTokenName(): void {
+	it("testBadTokenName", function () {
 		const path = "//Ick";
 		const expected = /^Error: Ick at index 2 isn't a valid token name$/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
 
-	@Test public testBadRuleName(): void {
+	it("testBadRuleName", function () {
 		const path = "/prog/ick";
 		const expected = /^Error: ick at index 6 isn't a valid rule name$/;
 
-		this.testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
-	}
-
-	protected testError<TParser extends Parser>(
-		input: string, path: string, expected: RegExp,
-		startRule: (parser: TParser) => ParseTree,
-		// tslint:disable-next-line: callable-types
-		lexerCtor: { new(stream: CharStream): Lexer },
-		// tslint:disable-next-line: callable-types
-		parserCtor: { new(stream: TokenStream): TParser }): void {
-
-		const lexer = new lexerCtor(CharStreams.fromString(input));
-		const parser = new parserCtor(new CommonTokenStream(lexer));
-		const tree: ParseTree = startRule(parser);
-
-		assert.throws(() => XPath.findAll(tree, path, parser), expected);
-	}
-
-	private getNodeStrings<TParser extends Parser>(
-		input: string, xpath: string,
-		startRule: (parser: TParser) => ParseTree,
-		// tslint:disable-next-line: callable-types
-		lexerCtor: { new(stream: CharStream): Lexer },
-		parserCtor: new (stream: TokenStream) => TParser): string[] {
-
-		const lexer = new lexerCtor(CharStreams.fromString(input));
-		const parser = new parserCtor(new CommonTokenStream(lexer));
-		const tree: ParseTree = startRule(parser);
-
-		const nodes: string[] = [];
-		for (const t of XPath.findAll(tree, xpath, parser)) {
-			if (t instanceof RuleContext) {
-				nodes.push(parser.ruleNames[t.ruleIndex]);
-			} else {
-				const token: TerminalNode = t as TerminalNode;
-				nodes.push(token.text);
-			}
-		}
-
-		return nodes;
-	}
-}
+		testError(SAMPLE_PROGRAM, path, expected, (parser) => parser.prog(), TestXPathLexer, TestXPathParser);
+	})
+})
