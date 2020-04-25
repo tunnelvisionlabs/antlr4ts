@@ -4,27 +4,25 @@
  */
 
 import * as assert from "assert";
-import { test, suite } from "mocha-typescript";
+
 import { CharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 
-@suite
-export class TestCharStreams {
-	@test
-	public fromBMPStringHasExpectedSize(): void {
+describe("CharStreams", function () {
+
+	it("fromBMPStringHasExpectedSize", function () {
 		const s: CharStream = CharStreams.fromString("hello");
 		assert.strictEqual(5, s.size);
 		assert.strictEqual(0, s.index);
 		assert.strictEqual("hello", s.toString());
-	}
+	});
 
-	@test
-	public fromSMPStringHasExpectedSize(): void {
+	it("fromSMPStringHasExpectedSize", function () {
 		const s: CharStream = CharStreams.fromString("hello 🌎");
 		assert.strictEqual(7, s.size);
 		assert.strictEqual(0, s.index);
 		assert.strictEqual("hello 🌎", s.toString());
-	}
+	});
 
 	// @test
 	// public fromBMPUTF8PathHasExpectedSize(): void {
@@ -226,4 +224,4 @@ export class TestCharStreams {
 	// 	assert.strictEqual("hello 🌎", s.toString());
 	// 	assert.strictEqual(p.toString(), s.sourceName);
 	// }
-}
+});
