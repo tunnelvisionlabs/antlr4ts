@@ -1,0 +1,8 @@
+# mocha.opts:
+#
+# --require source-map-support/register
+# --recursive
+# test/dist
+
+spec: test/dist/**/*.js
+require: source-map-support/register
