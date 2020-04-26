@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.7613038-07:00
 
-import { Lexer } from "../Lexer";
-import { LexerAction } from "./LexerAction";
-import { LexerActionType } from "./LexerActionType";
-import { MurmurHash } from "../misc/MurmurHash";
+import {
+	Lexer,
+	LexerAction,
+	LexerActionType,
+	MurmurHash
+} from "../internal";
 
 /**
  * This implementation of {@link LexerAction} is used for tracking input offsets

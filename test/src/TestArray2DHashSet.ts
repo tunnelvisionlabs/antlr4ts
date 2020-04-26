@@ -5,8 +5,7 @@
 
 import * as assert from "assert";
 
-import { Array2DHashSet } from "antlr4ts/dist/misc";
-import { MurmurHash } from "antlr4ts/dist/misc";
+import { Array2DHashSet, MurmurHash } from "antlr4ts";
 
 class EquatableTest {
 

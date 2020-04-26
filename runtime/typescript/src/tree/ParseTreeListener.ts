@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6109431-07:00
 
-import { ErrorNode } from "./ErrorNode";
-import { ParserRuleContext } from "../ParserRuleContext";
-import { TerminalNode } from "./TerminalNode";
+import {
+	ErrorNode,
+	ParserRuleContext,
+	TerminalNode
+} from "../internal";
 
 /** This interface describes the minimal core of methods triggered
  *  by {@link ParseTreeWalker}. E.g.,

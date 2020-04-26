@@ -5,25 +5,27 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.8290527-07:00
 
-import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
-import { ATN } from "./atn/ATN";
-import { ATNState } from "./atn/ATNState";
-import { ATNStateType } from "./atn/ATNStateType";
-import { FailedPredicateException } from "./FailedPredicateException";
-import { InputMismatchException } from "./InputMismatchException";
-import { IntervalSet } from "./misc/IntervalSet";
-import { NoViableAltException } from "./NoViableAltException";
-import { Parser } from "./Parser";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { PredictionContext } from "./atn/PredictionContext";
-import { RecognitionException } from "./RecognitionException";
-import { RuleContext } from "./RuleContext";
-import { RuleTransition } from "./atn/RuleTransition";
-import { Token } from "./Token";
-import { TokenFactory } from "./TokenFactory";
-import { TokenSource } from "./TokenSource";
-import { TokenStream } from "./TokenStream";
-import { Vocabulary } from "./Vocabulary";
+import {
+	ANTLRErrorStrategy,
+	ATN,
+	ATNState,
+	ATNStateType,
+	FailedPredicateException,
+	InputMismatchException,
+	IntervalSet,
+	NoViableAltException,
+	Parser,
+	ParserRuleContext,
+	PredictionContext,
+	RecognitionException,
+	RuleContext,
+	RuleTransition,
+	Token,
+	TokenFactory,
+	TokenSource,
+	TokenStream,
+	Vocabulary
+} from "./internal";
 
 /**
  * This is the default implementation of {@link ANTLRErrorStrategy} used for

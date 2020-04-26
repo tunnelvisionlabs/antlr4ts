@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.2521448-07:00
 
-import { Chunk } from "./Chunk";
+import { Chunk } from "../../internal";
 
 /**
  * Represents a span of raw text (concrete syntax) between tags in a tree

@@ -7,14 +7,16 @@
 
 import * as assert from "assert";
 
-import { CommonToken } from "./CommonToken";
-import { Interval } from "./misc/Interval";
-import { Lexer } from "./Lexer";
-import { RuleContext } from "./RuleContext";
-import { Token } from "./Token";
-import { TokenSource } from "./TokenSource";
-import { TokenStream } from "./TokenStream";
-import { WritableToken } from "./WritableToken";
+import {
+	CommonToken,
+	Interval,
+	Lexer,
+	RuleContext,
+	Token,
+	TokenSource,
+	TokenStream,
+	WritableToken
+} from "./internal";
 
 /**
  * This implementation of {@link TokenStream} loads tokens from a

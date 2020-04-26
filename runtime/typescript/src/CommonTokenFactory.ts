@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3010112-07:00
 
-import { CharStream } from "./CharStream";
-import { CommonToken } from "./CommonToken";
-import { Interval } from "./misc/Interval";
-import { TokenFactory } from "./TokenFactory";
-import { TokenSource } from "./TokenSource";
+import {
+	CharStream,
+	CommonToken,
+	Interval,
+	TokenFactory,
+	TokenSource
+} from "./internal";
 
 /**
  * This default implementation of {@link TokenFactory} creates

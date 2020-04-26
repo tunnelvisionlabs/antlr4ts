@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:34.9572142-07:00
 
-import { ATNStateType } from "./ATNStateType";
-import { BlockStartState } from "./BlockStartState";
-import { PlusLoopbackState } from "./PlusLoopbackState";
+import {
+	ATNStateType,
+	BlockStartState,
+	PlusLoopbackState
+} from "../internal";
 
 /** Start of `(A|B|...)+` loop. Technically a decision state, but
  *  we don't use for code generation; somebody might need it, so I'm defining

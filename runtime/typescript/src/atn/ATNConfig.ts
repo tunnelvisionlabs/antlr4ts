@@ -7,17 +7,19 @@
 
 import * as assert from "assert";
 
-import { ATNState } from "./ATNState";
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { DecisionState } from "./DecisionState";
-import { Equatable } from "../misc/Stubs";
-import { LexerActionExecutor } from "./LexerActionExecutor";
-import { MurmurHash } from "../misc/MurmurHash";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
-import { Recognizer } from "../Recognizer";
-import { SemanticContext } from "./SemanticContext";
+import {
+	ATNState,
+	Array2DHashMap,
+	DecisionState,
+	Equatable,
+	LexerActionExecutor,
+	MurmurHash,
+	ObjectEqualityComparator,
+	PredictionContext,
+	PredictionContextCache,
+	Recognizer,
+	SemanticContext
+} from "../internal";
 
 /**
  * This field stores the bit mask for implementing the

@@ -5,7 +5,7 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ParseTree } from "../ParseTree";
+import { ParseTree } from "../../internal";
 
 export abstract class XPathElement {
 	protected nodeName: string;

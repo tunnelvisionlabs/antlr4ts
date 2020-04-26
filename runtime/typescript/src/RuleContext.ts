@@ -5,15 +5,17 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
-import { ATN } from "./atn/ATN";
-import { Interval } from "./misc/Interval";
-import { ParseTree } from "./tree/ParseTree";
-import { ParseTreeVisitor } from "./tree/ParseTreeVisitor";
-import { Parser } from "./Parser";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { Recognizer } from "./Recognizer";
-import { RuleNode } from "./tree/RuleNode";
-import { Trees } from "./tree/Trees";
+import {
+	ATN,
+	Interval,
+	ParseTree,
+	ParseTreeVisitor,
+	Parser,
+	ParserRuleContext,
+	Recognizer,
+	RuleNode,
+	Trees
+} from "./internal";
 
 /** A rule context is a record of a single rule invocation.
  *

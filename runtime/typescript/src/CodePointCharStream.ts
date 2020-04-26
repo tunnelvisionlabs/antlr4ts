@@ -5,10 +5,12 @@
 
 import * as assert from "assert";
 
-import { CharStream } from "./CharStream";
-import { CodePointBuffer } from "./CodePointBuffer";
-import { IntStream } from "./IntStream";
-import { Interval } from "./misc/Interval";
+import {
+	CharStream,
+	CodePointBuffer,
+	IntStream,
+	Interval
+} from "./internal";
 
 /**
  * Alternative to {@link ANTLRInputStream} which treats the input

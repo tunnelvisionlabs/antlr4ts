@@ -5,8 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.0257730-07:00
 
-import { ATNStateType } from "./ATNStateType";
-import { DecisionState } from "./DecisionState";
+import {
+	ATNStateType,
+	DecisionState
+} from "../internal";
 
 /** Decision state for `A+` and `(A|B)+`.  It has two transitions:
  *  one to the loop back to start of the block and one to exit.

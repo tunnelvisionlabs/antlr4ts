@@ -223,13 +223,13 @@ ImportListener(X) ::= ""
 
 ImportVisitor(grammarName) ::= <<
 @parser::header {
-import { AbstractParseTreeVisitor, ErrorNode, RuleNode } from "antlr4ts/dist/tree";
+import { AbstractParseTreeVisitor, ErrorNode, RuleNode } from "antlr4ts";
 }
 >>
 
 ImportPredictionMode() ::= <<
 @beforeParser {
-import { PredictionMode } from "antlr4ts/dist/atn";
+import { PredictionMode } from "antlr4ts";
 }
 >>
 
@@ -350,7 +350,7 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 
 BasicListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts";
 }
 
 @parser::afterParser {
@@ -384,7 +384,7 @@ export class MyRuleNode extends PRC {
 
 TokenGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts";
 }
 
 @parser::afterParser {
@@ -403,7 +403,7 @@ export class LeafListener implements TListener {
 
 RuleGetterListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts";
 }
 
 @parser::afterParser {
@@ -422,7 +422,7 @@ export class LeafListener implements TListener {
 
 LRListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts";
 }
 
 @parser::afterParser {
@@ -441,7 +441,7 @@ export class LeafListener implements TListener {
 
 LRWithLabelsListener(X) ::= <<
 @parser::beforeParser {
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
+import { ParseTreeWalker } from "antlr4ts";
 }
 
 @parser::afterParser {

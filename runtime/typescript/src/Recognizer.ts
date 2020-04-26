@@ -3,20 +3,22 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import * as Utils from "./misc/Utils";
+import * as Utils from "./internal";
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.1954441-07:00
-import { ANTLRErrorListener } from "./ANTLRErrorListener";
-import { ATN } from "./atn/ATN";
-import { ATNSimulator } from "./atn/ATNSimulator";
-import { ConsoleErrorListener } from "./ConsoleErrorListener";
-import { IntStream } from "./IntStream";
-import { ParseInfo } from "./atn/ParseInfo";
-import { ProxyErrorListener } from "./ProxyErrorListener";
-import { RecognitionException } from "./RecognitionException";
-import { RuleContext } from "./RuleContext";
-import { Token } from "./Token";
-import { Vocabulary } from "./Vocabulary";
+import {
+	ANTLRErrorListener,
+	ATN,
+	ATNSimulator,
+	ConsoleErrorListener,
+	IntStream,
+	ParseInfo,
+	ProxyErrorListener,
+	RecognitionException,
+	RuleContext,
+	Token,
+	Vocabulary
+} from "./internal";
 
 export abstract class Recognizer<TSymbol, ATNInterpreter extends ATNSimulator> {
 	public static readonly EOF: number = -1;

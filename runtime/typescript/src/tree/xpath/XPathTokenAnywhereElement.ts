@@ -5,9 +5,11 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ParseTree } from "../ParseTree";
-import { Trees } from "../Trees";
-import { XPathElement } from "./XPathElement";
+import {
+	ParseTree,
+	Trees,
+	XPathElement
+} from "../../internal";
 
 export class XPathTokenAnywhereElement extends XPathElement {
 	protected tokenType: number;

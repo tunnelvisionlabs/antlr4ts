@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.9125304-07:00
 
-import { ATNState } from "./ATNState";
-import { ATNStateType } from "./ATNStateType";
-import { BlockStartState } from "./BlockStartState";
+import {
+	ATNState,
+	ATNStateType,
+	BlockStartState
+} from "../internal";
 
 /** Terminal node of a simple `(a|b|c)` block. */
 export class BlockEndState extends ATNState {

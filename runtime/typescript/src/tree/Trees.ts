@@ -5,20 +5,22 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.3187865-07:00
 
-import * as Utils from "../misc/Utils";
+import * as Utils from "../internal";
 
-import { ATN } from "../atn/ATN";
-import { CommonToken } from "../CommonToken";
-import { ErrorNode } from "./ErrorNode";
-import { Interval } from "../misc/Interval";
-import { ParseTree } from "./ParseTree";
-import { Parser } from "../Parser";
-import { ParserRuleContext } from "../ParserRuleContext";
-import { RuleContext } from "../RuleContext";
-import { RuleNode } from "./RuleNode";
-import { TerminalNode } from "./TerminalNode";
-import { Token } from "../Token";
-import { Tree } from "./Tree";
+import {
+	ATN,
+	CommonToken,
+	ErrorNode,
+	Interval,
+	ParseTree,
+	Parser,
+	ParserRuleContext,
+	RuleContext,
+	RuleNode,
+	TerminalNode,
+	Token,
+	Tree
+} from "../internal";
 
 /** A set of utility routines useful for all kinds of ANTLR trees. */
 export class Trees {

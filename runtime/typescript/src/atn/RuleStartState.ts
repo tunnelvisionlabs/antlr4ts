@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.6806851-07:00
 
-import { ATNState } from "./ATNState";
-import { ATNStateType } from "./ATNStateType";
-import { RuleStopState } from "./RuleStopState";
+import {
+	ATNState,
+	ATNStateType,
+	RuleStopState
+} from "../internal";
 
 export class RuleStartState extends ATNState {
 	public stopState: RuleStopState;

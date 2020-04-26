@@ -5,9 +5,11 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ANTLRErrorListener } from "../../ANTLRErrorListener";
-import { RecognitionException } from "../../RecognitionException";
-import { Recognizer } from "../../Recognizer";
+import {
+	ANTLRErrorListener,
+	RecognitionException,
+	Recognizer
+} from "../../internal";
 
 export class XPathLexerErrorListener implements ANTLRErrorListener<number> {
 	// @Override

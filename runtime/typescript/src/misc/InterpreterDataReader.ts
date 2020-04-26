@@ -6,10 +6,12 @@
 import * as fs from "fs";
 import * as util from "util";
 
-import { ATN } from "../atn/ATN";
-import { Vocabulary } from "../Vocabulary";
-import { VocabularyImpl } from "../VocabularyImpl";
-import { ATNDeserializer } from "../atn/ATNDeserializer";
+import {
+	ATN,
+	ATNDeserializer,
+	Vocabulary,
+	VocabularyImpl
+} from "../internal";
 
 function splitToLines(buffer: Buffer): string[] {
 	const lines: string[] = [];

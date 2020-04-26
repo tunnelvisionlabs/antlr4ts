@@ -5,22 +5,24 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.4445360-07:00
 
-import { ATN } from "./ATN";
-import { ATNConfig } from "./ATNConfig";
-import { ATNState } from "./ATNState";
-import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { BitSet } from "../misc/BitSet";
-import { IntervalSet } from "../misc/IntervalSet";
-import { NotSetTransition } from "./NotSetTransition";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { PredictionContext } from "./PredictionContext";
-import { RuleStopState } from "./RuleStopState";
-import { RuleTransition } from "./RuleTransition";
-import { SetTransition } from "./SetTransition";
-import { Token } from "../Token";
-import { Transition } from "./Transition";
-import { WildcardTransition } from "./WildcardTransition";
+import {
+	ATN,
+	ATNConfig,
+	ATNState,
+	AbstractPredicateTransition,
+	Array2DHashSet,
+	BitSet,
+	IntervalSet,
+	NotSetTransition,
+	ObjectEqualityComparator,
+	PredictionContext,
+	RuleStopState,
+	RuleTransition,
+	SetTransition,
+	Token,
+	Transition,
+	WildcardTransition
+} from "../internal";
 
 export class LL1Analyzer {
 	/** Special value added to the lookahead sets to indicate that we hit

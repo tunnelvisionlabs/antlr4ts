@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.9456839-07:00
 
-import { ATNState } from "./ATNState";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
+import {
+	ATNState,
+	Transition,
+	TransitionType
+} from "../internal";
 
 export class WildcardTransition extends Transition {
 	constructor(target: ATNState) {

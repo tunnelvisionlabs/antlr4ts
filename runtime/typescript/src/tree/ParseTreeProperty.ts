@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.6782223-07:00
 
-import { ParseTree } from "./ParseTree";
+import { ParseTree } from "../internal";
 
 /**
  * Associate a property with a parse tree node. Useful with parse tree listeners

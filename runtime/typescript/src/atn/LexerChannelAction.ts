@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:29.5634388-07:00
 
-import { Lexer } from "../Lexer";
-import { LexerAction } from "./LexerAction";
-import { LexerActionType } from "./LexerActionType";
-import { MurmurHash } from "../misc/MurmurHash";
+import {
+	Lexer,
+	LexerAction,
+	LexerActionType,
+	MurmurHash
+} from "../internal";
 
 /**
  * Implements the `channel` lexer action by calling

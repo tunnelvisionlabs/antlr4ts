@@ -4,17 +4,19 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:56.9812284-07:00
-import { ANTLRErrorListener } from "./ANTLRErrorListener";
-import { ATNConfigSet } from "./atn/ATNConfigSet";
-import { BitSet } from "./misc/BitSet";
-import { DFA } from "./dfa/DFA";
-import { Parser } from "./Parser";
-import { ParserErrorListener } from "./ParserErrorListener";
-import { ProxyErrorListener } from "./ProxyErrorListener";
-import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from "./Recognizer";
-import { SimulatorState } from "./atn/SimulatorState";
-import { Token } from "./Token";
+import {
+	ANTLRErrorListener,
+	ATNConfigSet,
+	BitSet,
+	DFA,
+	Parser,
+	ParserErrorListener,
+	ProxyErrorListener,
+	RecognitionException,
+	Recognizer,
+	SimulatorState,
+	Token
+} from "./internal";
 
 /**
  * @author Sam Harwell

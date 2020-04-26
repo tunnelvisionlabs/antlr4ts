@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:31.0349605-07:00
 
-import { DFA } from "../dfa/DFA";
-import { DecisionInfo } from "./DecisionInfo";
-import { ProfilingATNSimulator } from "./ProfilingATNSimulator";
+import {
+	DFA,
+	DecisionInfo,
+	ProfilingATNSimulator
+} from "../internal";
 
 /**
  * This class provides access to specific and aggregate statistics gathered

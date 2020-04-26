@@ -5,13 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.1433686-07:00
 
-import { Interval } from "../misc/Interval";
-import { ParseTree } from "./ParseTree";
-import { ParseTreeVisitor } from "./ParseTreeVisitor";
-import { Parser } from "../Parser";
-import { RuleContext } from "../RuleContext";
-import { RuleNode } from "./RuleNode";
-import { Token } from "../Token";
+import {
+	Interval,
+	ParseTree,
+	ParseTreeVisitor,
+	Parser,
+	RuleContext,
+	RuleNode,
+	Token
+} from "../internal";
 
 export class TerminalNode implements ParseTree {
 	public _symbol: Token;

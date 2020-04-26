@@ -5,16 +5,22 @@
 
 import * as assert from "assert";
 import * as stdMocks from "std-mocks";
-import { Console } from "console";
 
-import { CharStream } from "antlr4ts";
-import { CharStreams } from "antlr4ts";
-import { CommonTokenStream } from "antlr4ts";
-import { DiagnosticErrorListener } from "antlr4ts";
-import { Lexer } from "antlr4ts";
-import { Parser } from "antlr4ts";
-import { ParserRuleContext } from "antlr4ts";
-import { ParseTree, ParseTreeListener, ParseTreeWalker, RuleNode } from "antlr4ts/dist/tree";
+import {
+	CharStream,
+	CharStreams,
+	CommonTokenStream,
+	DiagnosticErrorListener,
+	Lexer,
+	ParseTree,
+	ParseTreeListener,
+	ParseTreeWalker,
+	Parser,
+	ParserRuleContext,
+	RuleNode
+} from "antlr4ts";
+
+import { Console } from "console";
 
 function trySetConsole(valueFactory: () => Console): boolean {
 	try {

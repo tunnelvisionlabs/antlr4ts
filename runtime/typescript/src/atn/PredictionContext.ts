@@ -5,21 +5,22 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.3812636-07:00
 
-import * as Arrays from "../misc/Arrays";
+import * as Arrays from "../internal";
 import * as assert from "assert";
 
-import { Equatable, JavaSet } from "../misc/Stubs";
-
-import { ATN } from "./ATN";
-import { ATNState } from "./ATNState";
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { EqualityComparator } from "../misc/EqualityComparator";
-import { MurmurHash } from "../misc/MurmurHash";
-import { PredictionContextCache } from "./PredictionContextCache";
-import { Recognizer } from "../Recognizer";
-import { RuleContext } from "../RuleContext";
-import { RuleTransition } from "./RuleTransition";
+import {
+	ATN,
+	ATNState,
+	Array2DHashMap,
+	Array2DHashSet,
+	EqualityComparator,
+	MurmurHash,
+	PredictionContextCache,
+	Recognizer,
+	RuleContext,
+	RuleTransition
+} from "../internal";
+import { Equatable, JavaSet } from "../internal";
 
 const INITIAL_HASH = 1;
 

@@ -4,15 +4,17 @@
  */
 
 // ConvertTo-TS run at 2016-10-04T11:26:56.6285494-07:00
-import { ErrorNode } from "./tree/ErrorNode";
-import { Interval } from "./misc/Interval";
-import { ParseTree } from "./tree/ParseTree";
-import { ParseTreeListener } from "./tree/ParseTreeListener";
-import { Parser } from "./Parser";
-import { RecognitionException } from "./RecognitionException";
-import { RuleContext } from "./RuleContext";
-import { TerminalNode } from "./tree/TerminalNode";
-import { Token } from "./Token";
+import {
+	ErrorNode,
+	Interval,
+	ParseTree,
+	ParseTreeListener,
+	Parser,
+	RecognitionException,
+	RuleContext,
+	TerminalNode,
+	Token
+} from "./internal";
 
 /** A rule invocation record for parsing.
  *

@@ -4,12 +4,14 @@
  */
 // ConvertTo-TS run at 2016-10-04T11:26:49.0828748-07:00
 
-import * as Arrays from "./misc/Arrays";
+import * as Arrays from "./internal";
 import * as assert from "assert";
 
-import { CharStream } from "./CharStream";
-import { IntStream } from "./IntStream";
-import { Interval } from "./misc/Interval";
+import {
+	CharStream,
+	IntStream,
+	Interval
+} from "./internal";
 
 const READ_BUFFER_SIZE = 1024;
 const INITIAL_BUFFER_SIZE = 1024;

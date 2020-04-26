@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.7099201-07:00
 
-import { ATNStateType } from "./ATNStateType";
-import { BitSet } from "../misc/BitSet";
-import { DecisionState } from "./DecisionState";
-import { StarLoopbackState } from "./StarLoopbackState";
+import {
+	ATNStateType,
+	BitSet,
+	DecisionState,
+	StarLoopbackState
+} from "../internal";
 
 export class StarLoopEntryState extends DecisionState {
 	public loopBackState: StarLoopbackState;

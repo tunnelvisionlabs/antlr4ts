@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:35.2826960-07:00
 
-import { ATNState } from "./ATNState";
-import { AbstractPredicateTransition } from "./AbstractPredicateTransition";
-import { SemanticContext } from "./SemanticContext";
-import { TransitionType } from "./TransitionType";
+import {
+	ATNState,
+	AbstractPredicateTransition,
+	SemanticContext,
+	TransitionType
+} from "../internal";
 
 /** TODO: this is old comment:
  *  A tree of semantic predicates from the grammar AST if label==SEMPRED.

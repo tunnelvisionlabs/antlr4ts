@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.7402214-07:00
 
-import { Equatable } from "./Stubs";
+import { Equatable } from "../internal";
 
 const INTERVAL_POOL_MAX_VALUE = 1000;
 

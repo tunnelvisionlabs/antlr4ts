@@ -5,7 +5,7 @@
 
 import * as assert from "assert";
 
-import { IntegerList } from "antlr4ts/dist/misc";
+import { IntegerList } from "antlr4ts";
 
 describe("TestIntegerList", function () {
 

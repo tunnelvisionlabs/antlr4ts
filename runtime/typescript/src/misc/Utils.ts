@@ -9,8 +9,10 @@
 // as much of it may be supported natively by JavaScript. Or otherwise need
 // substantial rethink
 
-import { Equatable } from "./Stubs";
-import { IntegerList } from "./IntegerList";
+import {
+	Equatable,
+	IntegerList
+} from "../internal";
 
 export function escapeWhitespace(s: string, escapeSpaces: boolean): string {
 	return escapeSpaces ? s.replace(/ /, "\u00B7") : s

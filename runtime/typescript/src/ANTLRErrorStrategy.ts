@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.9102174-07:00
 
-import { Parser } from "./Parser";
-import { Token } from "./Token";
-import { RecognitionException } from "./RecognitionException";
+import {
+	Parser,
+	RecognitionException,
+	Token
+} from "./internal";
 
 /**
  * The interface for defining strategies to deal with syntax errors encountered

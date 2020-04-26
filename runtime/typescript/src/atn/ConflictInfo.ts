@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.0710131-07:00
 
-import * as Utils from "../misc/Utils";
+import * as Utils from "../internal";
 
-import { BitSet } from "../misc/BitSet";
+import { BitSet } from "../internal";
 
 /**
  * This class stores information about a configuration conflict.

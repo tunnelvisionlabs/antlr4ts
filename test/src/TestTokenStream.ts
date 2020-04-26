@@ -5,10 +5,7 @@
 
 import * as assert from "assert";
 
-import { BufferedTokenStream } from "antlr4ts";
-import { CharStreams } from "antlr4ts";
-import { Token } from "antlr4ts";
-import { XPathLexer } from "antlr4ts/dist/tree/xpath/XPathLexer";
+import { BufferedTokenStream, CharStreams, Token, XPathLexer } from "antlr4ts";
 
 /**
  * This class contains tests for specific API functionality in `TokenStream` and derived types.

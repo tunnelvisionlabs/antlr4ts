@@ -5,25 +5,27 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.4188352-07:00
 
-import { ATN } from "./ATN";
-import { ATNConfigSet } from "./ATNConfigSet";
-import { ATNSimulator } from "./ATNSimulator";
-import { AmbiguityInfo } from "./AmbiguityInfo";
-import { BitSet } from "../misc/BitSet";
-import { ContextSensitivityInfo } from "./ContextSensitivityInfo";
-import { DFA } from "../dfa/DFA";
-import { DFAState } from "../dfa/DFAState";
-import { DecisionInfo } from "./DecisionInfo";
-import { ErrorInfo } from "./ErrorInfo";
-import { LookaheadEventInfo } from "./LookaheadEventInfo";
-import { Parser } from "../Parser";
-import { ParserATNSimulator } from "./ParserATNSimulator";
-import { ParserRuleContext } from "../ParserRuleContext";
-import { PredicateEvalInfo } from "./PredicateEvalInfo";
-import { PredictionContextCache } from "./PredictionContextCache";
-import { SemanticContext } from "./SemanticContext";
-import { SimulatorState } from "./SimulatorState";
-import { TokenStream } from "../TokenStream";
+import {
+	ATN,
+	ATNConfigSet,
+	ATNSimulator,
+	AmbiguityInfo,
+	BitSet,
+	ContextSensitivityInfo,
+	DFA,
+	DFAState,
+	DecisionInfo,
+	ErrorInfo,
+	LookaheadEventInfo,
+	Parser,
+	ParserATNSimulator,
+	ParserRuleContext,
+	PredicateEvalInfo,
+	PredictionContextCache,
+	SemanticContext,
+	SimulatorState,
+	TokenStream
+} from "../internal";
 
 /**
  * @since 4.3

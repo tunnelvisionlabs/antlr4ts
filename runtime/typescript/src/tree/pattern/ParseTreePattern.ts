@@ -5,10 +5,12 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ParseTree } from "../ParseTree";
-import { ParseTreeMatch } from "./ParseTreeMatch";
-import { ParseTreePatternMatcher } from "./ParseTreePatternMatcher";
-import { XPath } from "../xpath/XPath";
+import {
+	ParseTree,
+	ParseTreeMatch,
+	ParseTreePatternMatcher,
+	XPath
+} from "../../internal";
 
 /**
  * A pattern like `<ID> = <expr>;` converted to a {@link ParseTree} by

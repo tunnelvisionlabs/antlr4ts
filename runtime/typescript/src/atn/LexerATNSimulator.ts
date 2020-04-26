@@ -7,29 +7,31 @@
 
 import * as assert from "assert";
 
-import { ATN } from "./ATN";
-import { ATNConfig } from "./ATNConfig";
-import { ATNConfigSet } from "./ATNConfigSet";
-import { ATNSimulator } from "./ATNSimulator";
-import { ATNState } from "./ATNState";
-import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
-import { ActionTransition } from "./ActionTransition";
-import { CharStream } from "../CharStream";
-import { DFA } from "../dfa/DFA";
-import { DFAState } from "../dfa/DFAState";
-import { IntStream } from "../IntStream";
-import { Interval } from "../misc/Interval";
-import { Lexer } from "../Lexer";
-import { LexerActionExecutor } from "./LexerActionExecutor";
-import { LexerNoViableAltException } from "../LexerNoViableAltException";
-import { OrderedATNConfigSet } from "./OrderedATNConfigSet";
-import { PredicateTransition } from "./PredicateTransition";
-import { PredictionContext } from "./PredictionContext";
-import { RuleStopState } from "./RuleStopState";
-import { RuleTransition } from "./RuleTransition";
-import { Token } from "../Token";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
+import {
+	ATN,
+	ATNConfig,
+	ATNConfigSet,
+	ATNSimulator,
+	ATNState,
+	AcceptStateInfo,
+	ActionTransition,
+	CharStream,
+	DFA,
+	DFAState,
+	IntStream,
+	Interval,
+	Lexer,
+	LexerActionExecutor,
+	LexerNoViableAltException,
+	OrderedATNConfigSet,
+	PredicateTransition,
+	PredictionContext,
+	RuleStopState,
+	RuleTransition,
+	Token,
+	Transition,
+	TransitionType
+} from "../internal";
 
 /** "dup" of ParserInterpreter */
 export class LexerATNSimulator extends ATNSimulator {

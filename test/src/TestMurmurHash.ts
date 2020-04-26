@@ -5,7 +5,7 @@
 
 import * as assert from "assert";
 
-import { MurmurHash } from "antlr4ts/dist/misc";
+import { MurmurHash } from "antlr4ts";
 
 describe("MurmurHash", function () {
 	it("Empty", function () {

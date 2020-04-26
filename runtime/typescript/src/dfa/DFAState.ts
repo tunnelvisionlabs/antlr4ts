@@ -7,14 +7,16 @@
 
 import * as assert from "assert";
 
-import { ATN } from "../atn/ATN";
-import { ATNConfigSet } from "../atn/ATNConfigSet";
-import { AcceptStateInfo } from "./AcceptStateInfo";
-import { BitSet } from "../misc/BitSet";
-import { LexerActionExecutor } from "../atn/LexerActionExecutor";
-import { MurmurHash } from "../misc/MurmurHash";
-import { PredictionContext } from "../atn/PredictionContext";
-import { SemanticContext } from "../atn/SemanticContext";
+import {
+	ATN,
+	ATNConfigSet,
+	AcceptStateInfo,
+	BitSet,
+	LexerActionExecutor,
+	MurmurHash,
+	PredictionContext,
+	SemanticContext
+} from "../internal";
 
 /** A DFA state represents a set of possible ATN configurations.
  *  As Aho, Sethi, Ullman p. 117 says "The DFA uses its state

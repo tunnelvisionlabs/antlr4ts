@@ -5,56 +5,58 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.9683447-07:00
 
-import { ATN } from "./ATN";
-import { ATNDeserializationOptions } from "./ATNDeserializationOptions";
-import { ATNState } from "./ATNState";
-import { ATNStateType } from "./ATNStateType";
-import { ATNType } from "./ATNType";
-import { ActionTransition } from "./ActionTransition";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { AtomTransition } from "./AtomTransition";
-import { BasicBlockStartState } from "./BasicBlockStartState";
-import { BasicState } from "./BasicState";
-import { BitSet } from "../misc/BitSet";
-import { BlockEndState } from "./BlockEndState";
-import { BlockStartState } from "./BlockStartState";
-import { DFA } from "../dfa/DFA";
-import { DecisionState } from "./DecisionState";
-import { EpsilonTransition } from "./EpsilonTransition";
-import { Interval } from "../misc/Interval";
-import { IntervalSet } from "../misc/IntervalSet";
-import { InvalidState } from "./InvalidState";
-import { LexerAction } from "./LexerAction";
-import { LexerActionType } from "./LexerActionType";
-import { LexerChannelAction } from "./LexerChannelAction";
-import { LexerCustomAction } from "./LexerCustomAction";
-import { LexerModeAction } from "./LexerModeAction";
-import { LexerMoreAction } from "./LexerMoreAction";
-import { LexerPopModeAction } from "./LexerPopModeAction";
-import { LexerPushModeAction } from "./LexerPushModeAction";
-import { LexerSkipAction } from "./LexerSkipAction";
-import { LexerTypeAction } from "./LexerTypeAction";
-import { LoopEndState } from "./LoopEndState";
-import { NotSetTransition } from "./NotSetTransition";
-import { ParserATNSimulator } from "./ParserATNSimulator";
-import { PlusBlockStartState } from "./PlusBlockStartState";
-import { PlusLoopbackState } from "./PlusLoopbackState";
-import { PrecedencePredicateTransition } from "./PrecedencePredicateTransition";
-import { PredicateTransition } from "./PredicateTransition";
-import { RangeTransition } from "./RangeTransition";
-import { RuleStartState } from "./RuleStartState";
-import { RuleStopState } from "./RuleStopState";
-import { RuleTransition } from "./RuleTransition";
-import { SetTransition } from "./SetTransition";
-import { StarBlockStartState } from "./StarBlockStartState";
-import { StarLoopEntryState } from "./StarLoopEntryState";
-import { StarLoopbackState } from "./StarLoopbackState";
-import { Token } from "../Token";
-import { TokensStartState } from "./TokensStartState";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
-import { UUID } from "../misc/UUID";
-import { WildcardTransition } from "./WildcardTransition";
+import {
+	ATN,
+	ATNDeserializationOptions,
+	ATNState,
+	ATNStateType,
+	ATNType,
+	ActionTransition,
+	Array2DHashSet,
+	AtomTransition,
+	BasicBlockStartState,
+	BasicState,
+	BitSet,
+	BlockEndState,
+	BlockStartState,
+	DFA,
+	DecisionState,
+	EpsilonTransition,
+	Interval,
+	IntervalSet,
+	InvalidState,
+	LexerAction,
+	LexerActionType,
+	LexerChannelAction,
+	LexerCustomAction,
+	LexerModeAction,
+	LexerMoreAction,
+	LexerPopModeAction,
+	LexerPushModeAction,
+	LexerSkipAction,
+	LexerTypeAction,
+	LoopEndState,
+	NotSetTransition,
+	ParserATNSimulator,
+	PlusBlockStartState,
+	PlusLoopbackState,
+	PrecedencePredicateTransition,
+	PredicateTransition,
+	RangeTransition,
+	RuleStartState,
+	RuleStopState,
+	RuleTransition,
+	SetTransition,
+	StarBlockStartState,
+	StarLoopEntryState,
+	StarLoopbackState,
+	Token,
+	TokensStartState,
+	Transition,
+	TransitionType,
+	UUID,
+	WildcardTransition
+} from "../internal";
 
 interface UnicodeDeserializer {
 	// Wrapper for readInt() or readInt32()

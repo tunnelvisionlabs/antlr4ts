@@ -4,9 +4,11 @@
  */
 
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { MultiMap } from "../../misc/MultiMap";
-import { ParseTree } from "../ParseTree";
-import { ParseTreePattern } from "./ParseTreePattern";
+import {
+	MultiMap,
+	ParseTree,
+	ParseTreePattern
+} from "../../internal";
 
 /**
  * Represents the result of matching a {@link ParseTree} against a tree pattern.

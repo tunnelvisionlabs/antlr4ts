@@ -5,8 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.4741196-07:00
 
-import { ATN } from "./atn/ATN";
-import { ParserRuleContext } from "./ParserRuleContext";
+import {
+	ATN,
+	ParserRuleContext
+} from "./internal";
 
 /** A handy class for use with
  *

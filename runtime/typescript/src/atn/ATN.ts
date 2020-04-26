@@ -7,23 +7,25 @@
 
 import * as assert from "assert";
 
-import { ATNState } from "./ATNState";
-import { ATNType } from "./ATNType";
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { DFA } from "../dfa/DFA";
-import { DecisionState } from "./DecisionState";
-import { IntervalSet } from "../misc/IntervalSet";
-import { InvalidState } from "./InvalidState";
-import { LL1Analyzer } from "./LL1Analyzer";
-import { LexerAction } from "./LexerAction";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { PredictionContext } from "./PredictionContext";
-import { RuleContext } from "../RuleContext";
-import { RuleStartState } from "./RuleStartState";
-import { RuleStopState } from "./RuleStopState";
-import { RuleTransition } from "./RuleTransition";
-import { Token } from "../Token";
-import { TokensStartState } from "./TokensStartState";
+import {
+	ATNState,
+	ATNType,
+	Array2DHashMap,
+	DFA,
+	DecisionState,
+	IntervalSet,
+	InvalidState,
+	LL1Analyzer,
+	LexerAction,
+	ObjectEqualityComparator,
+	PredictionContext,
+	RuleContext,
+	RuleStartState,
+	RuleStopState,
+	RuleTransition,
+	Token,
+	TokensStartState
+} from "../internal";
 
 /** */
 export class ATN {

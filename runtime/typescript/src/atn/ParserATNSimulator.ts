@@ -5,51 +5,53 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:31.1989835-07:00
 
-import * as Arrays from "../misc/Arrays";
+import * as Arrays from "../internal";
 import * as assert from "assert";
 
-import { ATN } from "./ATN";
-import { ATNConfig } from "./ATNConfig";
-import { ATNConfigSet } from "./ATNConfigSet";
-import { ATNSimulator } from "./ATNSimulator";
-import { ATNState } from "./ATNState";
-import { ATNStateType } from "./ATNStateType";
-import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
-import { ActionTransition } from "./ActionTransition";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { AtomTransition } from "./AtomTransition";
-import { BitSet } from "../misc/BitSet";
-import { ConflictInfo } from "./ConflictInfo";
-import { DFA } from "../dfa/DFA";
-import { DFAState } from "../dfa/DFAState";
-import { DecisionState } from "./DecisionState";
-import { EpsilonTransition } from "./EpsilonTransition";
-import { IntStream } from "../IntStream";
-import { IntegerList } from "../misc/IntegerList";
-import { Interval } from "../misc/Interval";
-import { NoViableAltException } from "../NoViableAltException";
-import { NotSetTransition } from "./NotSetTransition";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { Parser } from "../Parser";
-import { ParserRuleContext } from "../ParserRuleContext";
-import { PrecedencePredicateTransition } from "./PrecedencePredicateTransition";
-import { PredicateTransition } from "./PredicateTransition";
-import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
-import { PredictionMode } from "./PredictionMode";
-import { RuleContext } from "../RuleContext";
-import { RuleStopState } from "./RuleStopState";
-import { RuleTransition } from "./RuleTransition";
-import { SemanticContext } from "./SemanticContext";
-import { SetTransition } from "./SetTransition";
-import { SimulatorState } from "./SimulatorState";
-import { StarLoopEntryState } from "./StarLoopEntryState";
-import { Token } from "../Token";
-import { TokenStream } from "../TokenStream";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
-import { Vocabulary } from "../Vocabulary";
-import { VocabularyImpl } from "../VocabularyImpl";
+import {
+	ATN,
+	ATNConfig,
+	ATNConfigSet,
+	ATNSimulator,
+	ATNState,
+	ATNStateType,
+	AcceptStateInfo,
+	ActionTransition,
+	Array2DHashSet,
+	AtomTransition,
+	BitSet,
+	ConflictInfo,
+	DFA,
+	DFAState,
+	DecisionState,
+	EpsilonTransition,
+	IntStream,
+	IntegerList,
+	Interval,
+	NoViableAltException,
+	NotSetTransition,
+	ObjectEqualityComparator,
+	Parser,
+	ParserRuleContext,
+	PrecedencePredicateTransition,
+	PredicateTransition,
+	PredictionContext,
+	PredictionContextCache,
+	PredictionMode,
+	RuleContext,
+	RuleStopState,
+	RuleTransition,
+	SemanticContext,
+	SetTransition,
+	SimulatorState,
+	StarLoopEntryState,
+	Token,
+	TokenStream,
+	Transition,
+	TransitionType,
+	Vocabulary,
+	VocabularyImpl
+} from "../internal";
 
 const MAX_SHORT_VALUE = 0xFFFF;
 const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);

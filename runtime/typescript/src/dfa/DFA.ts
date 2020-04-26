@@ -5,22 +5,24 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.3567094-07:00
 
-import { ATN } from "../atn/ATN";
-import { ATNConfigSet } from "../atn/ATNConfigSet";
-import { ATNState } from "../atn/ATNState";
-import { ATNType } from "../atn/ATNType";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { DFASerializer } from "./DFASerializer";
-import { DFAState } from "./DFAState";
-import { DecisionState } from "../atn/DecisionState";
-import { LexerATNSimulator } from "../atn/LexerATNSimulator";
-import { LexerDFASerializer } from "./LexerDFASerializer";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { StarLoopEntryState } from "../atn/StarLoopEntryState";
-import { Token } from "../Token";
-import { TokensStartState } from "../atn/TokensStartState";
-import { Vocabulary } from "../Vocabulary";
-import { VocabularyImpl } from "../VocabularyImpl";
+import {
+	ATN,
+	ATNConfigSet,
+	ATNState,
+	ATNType,
+	Array2DHashSet,
+	DFASerializer,
+	DFAState,
+	DecisionState,
+	LexerATNSimulator,
+	LexerDFASerializer,
+	ObjectEqualityComparator,
+	StarLoopEntryState,
+	Token,
+	TokensStartState,
+	Vocabulary,
+	VocabularyImpl
+} from "../internal";
 
 export class DFA {
 	/**
