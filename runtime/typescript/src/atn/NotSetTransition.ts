@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.8483617-07:00
 
-import { ATNState } from "./ATNState";
-import { IntervalSet } from "../misc/IntervalSet";
-import { SetTransition } from "./SetTransition";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
+import {
+	ATNState,
+	IntervalSet,
+	SetTransition,
+	Transition,
+	TransitionType
+} from "../internal";
 
 export class NotSetTransition extends SetTransition {
 	constructor(target: ATNState, set: IntervalSet | undefined) {

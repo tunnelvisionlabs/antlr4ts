@@ -5,8 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:59.5829654-07:00
 
-import { Token } from "./Token";
-import { Vocabulary } from "./Vocabulary";
+import {
+	Token,
+	Vocabulary
+} from "./internal";
 
 /**
  * This class provides a default implementation of the {@link Vocabulary}

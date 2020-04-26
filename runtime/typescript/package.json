@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "run-s antlr build",
     "build": "tsc --build --verbose",
-    "antlr": "cd src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../..",
+    "antlr": "cd src/tree/xpath && antlr4ts XPathLexer.g4 -DbaseImportPath=../../internal",
     "lint": "eslint --ext .ts src"
   },
   "repository": {

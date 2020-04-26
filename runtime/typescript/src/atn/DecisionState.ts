@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:28.4381103-07:00
 
-import { ATNState } from "./ATNState";
+import { ATNState } from "../internal";
 
 export abstract class DecisionState extends ATNState {
 	public decision = -1;

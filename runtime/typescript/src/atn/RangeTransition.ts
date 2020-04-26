@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.5959980-07:00
 
-import { ATNState } from "./ATNState";
-import { IntervalSet } from "../misc/IntervalSet";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
+import {
+	ATNState,
+	IntervalSet,
+	Transition,
+	TransitionType
+} from "../internal";
 
 export class RangeTransition extends Transition {
 	public from: number;

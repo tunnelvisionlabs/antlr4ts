@@ -5,17 +5,19 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.2673893-07:00
 
-import { ATN } from "./ATN";
-import { ATNConfig } from "./ATNConfig";
-import { ATNConfigSet } from "./ATNConfigSet";
-import { ATNState } from "./ATNState";
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { BitSet } from "../misc/BitSet";
-import { EqualityComparator } from "../misc/EqualityComparator";
-import { MurmurHash } from "../misc/MurmurHash";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { RuleStopState } from "./RuleStopState";
-import { SemanticContext } from "./SemanticContext";
+import {
+	ATN,
+	ATNConfig,
+	ATNConfigSet,
+	ATNState,
+	Array2DHashMap,
+	BitSet,
+	EqualityComparator,
+	MurmurHash,
+	ObjectEqualityComparator,
+	RuleStopState,
+	SemanticContext
+} from "../internal";
 
 /**
  * This enumeration defines the prediction modes available in ANTLR 4 along with

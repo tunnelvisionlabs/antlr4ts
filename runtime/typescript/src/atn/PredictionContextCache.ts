@@ -7,10 +7,12 @@
 
 import * as assert from "assert";
 
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { JavaMap } from "../misc/Stubs";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { PredictionContext } from "./PredictionContext";
+import {
+	Array2DHashMap,
+	JavaMap,
+	ObjectEqualityComparator,
+	PredictionContext
+} from "../internal";
 
 /** Used to cache {@link PredictionContext} objects. Its used for the shared
  *  context cash associated with contexts in DFA states. This cache

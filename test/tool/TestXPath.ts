@@ -7,18 +7,21 @@
 
 import * as assert from "assert";
 
-import { CharStream } from "antlr4ts";
-import { CharStreams } from "antlr4ts";
-import { CommonTokenStream } from "antlr4ts";
-import { Lexer } from "antlr4ts";
-import { ParseTree } from "antlr4ts/dist/tree";
-import { Parser } from "antlr4ts";
-import { RuleContext } from "antlr4ts";
-import { TerminalNode } from "antlr4ts/dist/tree";
+import {
+	CharStream,
+	CharStreams,
+	CommonTokenStream,
+	Lexer,
+	ParseTree,
+	Parser,
+	RuleContext,
+	TerminalNode,
+	TokenStream,
+	XPath
+} from "antlr4ts";
+
 import { TestXPathLexer } from "./gen/xpath/TestXPathLexer";
 import { TestXPathParser } from "./gen/xpath/TestXPathParser";
-import { TokenStream } from "antlr4ts";
-import { XPath } from "antlr4ts/dist/tree";
 
 const SAMPLE_PROGRAM: string =
 	"def f(x,y) { x = 3+4; y; ; }\n" +

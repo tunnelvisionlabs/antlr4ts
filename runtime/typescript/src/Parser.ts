@@ -5,39 +5,41 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.4399193-07:00
 
-import * as Utils from "./misc/Utils";
+import * as Utils from "./internal";
 import * as assert from "assert";
 
-import { ANTLRErrorListener } from "./ANTLRErrorListener";
-import { ANTLRErrorStrategy } from "./ANTLRErrorStrategy";
-import { ATN } from "./atn/ATN";
-import { ATNDeserializationOptions } from "./atn/ATNDeserializationOptions";
-import { ATNDeserializer } from "./atn/ATNDeserializer";
-import { ATNSimulator } from "./atn/ATNSimulator";
-import { ATNState } from "./atn/ATNState";
-import { DFA } from "./dfa/DFA";
-import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { ErrorNode } from "./tree/ErrorNode";
-import { IntStream } from "./IntStream";
-import { IntegerStack } from "./misc/IntegerStack";
-import { IntervalSet } from "./misc/IntervalSet";
-import { Lexer } from "./Lexer";
-import { ParseInfo } from "./atn/ParseInfo";
-import { ParseTreeListener } from "./tree/ParseTreeListener";
-import { ParseTreePattern } from "./tree/pattern/ParseTreePattern";
-import { ParserATNSimulator } from "./atn/ParserATNSimulator";
-import { ParserErrorListener } from "./ParserErrorListener";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { ProxyParserErrorListener } from "./ProxyParserErrorListener";
-import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from "./Recognizer";
-import { RuleContext } from "./RuleContext";
-import { RuleTransition } from "./atn/RuleTransition";
-import { TerminalNode } from "./tree/TerminalNode";
-import { Token } from "./Token";
-import { TokenFactory } from "./TokenFactory";
-import { TokenSource } from "./TokenSource";
-import { TokenStream } from "./TokenStream";
+import {
+	ANTLRErrorListener,
+	ANTLRErrorStrategy,
+	ATN,
+	ATNDeserializationOptions,
+	ATNDeserializer,
+	ATNSimulator,
+	ATNState,
+	DFA,
+	DefaultErrorStrategy,
+	ErrorNode,
+	IntStream,
+	IntegerStack,
+	IntervalSet,
+	Lexer,
+	ParseInfo,
+	ParseTreeListener,
+	ParseTreePattern,
+	ParserATNSimulator,
+	ParserErrorListener,
+	ParserRuleContext,
+	ProxyParserErrorListener,
+	RecognitionException,
+	Recognizer,
+	RuleContext,
+	RuleTransition,
+	TerminalNode,
+	Token,
+	TokenFactory,
+	TokenSource,
+	TokenStream
+} from "./internal";
 
 class TraceListener implements ParseTreeListener {
 	constructor(private ruleNames: string[], private tokenStream: TokenStream) {

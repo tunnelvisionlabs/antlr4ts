@@ -7,14 +7,11 @@
 
 import * as assert from "assert";
 
-import { PredictionContext } from "antlr4ts/dist/atn";
-import { PredictionContextCache } from "antlr4ts/dist/atn";
+import { PredictionContext, PredictionContextCache } from "antlr4ts";
 
 import assertEquals = assert.strictEqual;
 
-
 /// Assuming that IdentityHashMap<K, V> == Map<K, V>;
-
 
 function toDOTString(context: PredictionContext): string {
 	let nodes = "";
@@ -89,7 +86,6 @@ function toDOTString(context: PredictionContext): string {
 	builder += ("}\n");
 	return builder;
 }
-
 
 describe("TestGraphNodes", function () {
 	const contextCache: PredictionContextCache = new PredictionContextCache();

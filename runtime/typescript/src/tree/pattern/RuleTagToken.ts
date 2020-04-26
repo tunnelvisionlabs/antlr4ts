@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:46.0343500-07:00
 
-import { CharStream } from "../../CharStream";
-import { Token } from "../../Token";
-import { TokenSource } from "../../TokenSource";
+import {
+	CharStream,
+	Token,
+	TokenSource
+} from "../../internal";
 
 /**
  * A {@link Token} object representing an entire subtree matched by a parser

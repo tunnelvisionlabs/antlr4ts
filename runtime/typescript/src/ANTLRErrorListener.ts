@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:48.7499997-07:00
 
+import { RecognitionException } from "./internal";
 /** How to emit recognition errors. */
-import { Recognizer } from "./Recognizer";
-import { RecognitionException } from "./RecognitionException";
+import { Recognizer } from "./internal";
 
 export interface ANTLRErrorListener<TSymbol> {
 	/**

@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.4646355-07:00
 
-import { ParseTreeVisitor } from "./ParseTreeVisitor";
-import { TerminalNode } from "./TerminalNode";
-import { Token } from "../Token";
+import {
+	ParseTreeVisitor,
+	TerminalNode,
+	Token
+} from "../internal";
 
 /** Represents a token that was consumed during resynchronization
  *  rather than during a valid match operation. For example,

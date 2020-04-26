@@ -21,10 +21,24 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 <namedActions.header>
 
 import { 
-	ATN, ATNDeserializer, FailedPredicateException, NoViableAltException, Parser, ParserRuleContext,
-	ParserATNSimulator, RecognitionException, RuleContext, RuleVersion, TerminalNode, Token, TokenStream, 
-	Vocabulary, VocabularyImpl, join, toCharArray 
-	} from "<basePath()>";
+	ATN, 
+	ATNDeserializer, 
+	FailedPredicateException, 
+	NoViableAltException, 
+	Parser, 
+	ParserRuleContext,
+	ParserATNSimulator,
+	RecognitionException,
+	RuleContext,
+	RuleVersion, 
+	TerminalNode, 
+	Token, 
+	TokenStream, 
+	Vocabulary, 
+	VocabularyImpl, 
+	join, 
+	toCharArray 
+} from "<basePath()>";
 
 <if(file.genListener)>
 import { <file.grammarName>Listener } from "./<file.grammarName>Listener";
@@ -864,7 +878,7 @@ import {
 	VocabularyImpl,
 	join,
 	toCharArray,
-	} from "<basePath()>";
+} from "<basePath()>";
 
 <namedActions.beforeLexer>
 

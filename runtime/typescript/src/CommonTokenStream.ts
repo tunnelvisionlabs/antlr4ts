@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:50.3953157-07:00
 
-import { BufferedTokenStream } from "./BufferedTokenStream";
-import { Token } from "./Token";
-import { TokenSource } from "./TokenSource";
+import {
+	BufferedTokenStream,
+	Token,
+	TokenSource
+} from "./internal";
 
 /**
  * This class extends {@link BufferedTokenStream} with functionality to filter

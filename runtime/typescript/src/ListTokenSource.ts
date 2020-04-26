@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.1916955-07:00
 
-import { CharStream } from "./CharStream";
-import { CommonTokenFactory } from "./CommonTokenFactory";
-import { Token } from "./Token";
-import { TokenFactory } from "./TokenFactory";
-import { TokenSource } from "./TokenSource";
+import {
+	CharStream,
+	CommonTokenFactory,
+	Token,
+	TokenFactory,
+	TokenSource
+} from "./internal";
 
 /**
  * Provides an implementation of {@link TokenSource} as a wrapper around a list

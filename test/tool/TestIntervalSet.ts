@@ -7,9 +7,7 @@
 
 import * as assert from "assert";
 
-import { IntervalSet } from "antlr4ts/dist/misc";
-import { Lexer } from "antlr4ts";
-import { Token } from "antlr4ts";
+import { IntervalSet, Lexer, Token } from "antlr4ts";
 
 function assertEquals<T>(expected: T, actual: T): void {
 	assert.strictEqual(actual, expected);

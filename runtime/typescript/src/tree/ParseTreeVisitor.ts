@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.7512217-07:00
 
-import { ErrorNode } from "./ErrorNode";
-import { ParseTree } from "./ParseTree";
-import { RuleNode } from "./RuleNode";
-import { TerminalNode } from "./TerminalNode";
+import {
+	ErrorNode,
+	ParseTree,
+	RuleNode,
+	TerminalNode
+} from "../internal";
 
 /**
  * This interface defines the basic notion of a parse tree visitor. Generated

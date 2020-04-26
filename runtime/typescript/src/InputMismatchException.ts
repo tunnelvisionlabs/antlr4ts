@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.5187682-07:00
 
-import { Parser } from "./Parser";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { RecognitionException } from "./RecognitionException";
+import {
+	Parser,
+	ParserRuleContext,
+	RecognitionException
+} from "./internal";
 
 /** This signifies any kind of mismatched input exceptions such as
  *  when the current input does not match the expected token.

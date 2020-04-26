@@ -8,7 +8,7 @@ import * as assert from "assert";
 import { CharStreams } from "antlr4ts";
 import { CodePointCharStream } from "antlr4ts";
 import { IntStream } from "antlr4ts";
-import { Interval } from "antlr4ts/dist/misc";
+import { Interval } from "antlr4ts";
 
 describe("TestCodePointCharStream", function () {
 

@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:58.1768850-07:00
 
-import * as Utils from "./misc/Utils";
+import * as Utils from "./internal";
 
-import { Interval } from "./misc/Interval";
-import { Token } from "./Token";
-import { TokenStream } from "./TokenStream";
+import {
+	Interval,
+	Token,
+	TokenStream
+} from "./internal";
 
 /**
  * Useful for rewriting out a buffered input token stream after doing some

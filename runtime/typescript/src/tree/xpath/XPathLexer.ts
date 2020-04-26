@@ -12,7 +12,7 @@ import {
 	VocabularyImpl,
 	join,
 	toCharArray,
-	} from "../..";
+} from "../../internal";
 
 
 /* eslint-disable no-useless-escape */

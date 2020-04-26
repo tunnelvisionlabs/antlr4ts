@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:27.4734328-07:00
 
-import { ATN } from "./ATN";
-import { ATNStateType } from "./ATNStateType";
-import { IntervalSet } from "../misc/IntervalSet";
-import { Transition } from "./Transition";
+import {
+	ATN,
+	ATNStateType,
+	IntervalSet,
+	Transition
+} from "../internal";
 
 const INITIAL_NUM_TRANSITIONS = 4;
 

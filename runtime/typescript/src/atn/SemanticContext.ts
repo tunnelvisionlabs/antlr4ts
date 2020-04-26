@@ -5,16 +5,18 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.9521478-07:00
 
-import * as Utils from "../misc/Utils";
+import * as Utils from "../internal";
 
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
-import { Comparable } from "../misc/Stubs";
-import { Equatable } from "../misc/Stubs";
-import { MurmurHash } from "../misc/MurmurHash";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { Recognizer } from "../Recognizer";
-import { RuleContext } from "../RuleContext";
+import {
+	Array2DHashSet,
+	ArrayEqualityComparator,
+	Comparable,
+	Equatable,
+	MurmurHash,
+	ObjectEqualityComparator,
+	Recognizer,
+	RuleContext
+} from "../internal";
 
 function max<T extends Comparable<T>>(items: Iterable<T>): T | undefined {
 	let result: T | undefined;

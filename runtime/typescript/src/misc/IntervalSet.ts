@@ -5,14 +5,16 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.8683480-07:00
 
-import { ArrayEqualityComparator } from "./ArrayEqualityComparator";
-import { IntSet } from "./IntSet";
-import { IntegerList } from "./IntegerList";
-import { Interval } from "./Interval";
-import { Lexer } from "../Lexer";
-import { MurmurHash } from "./MurmurHash";
-import { Token } from "../Token";
-import { Vocabulary } from "../Vocabulary";
+import {
+	ArrayEqualityComparator,
+	IntSet,
+	IntegerList,
+	Interval,
+	Lexer,
+	MurmurHash,
+	Token,
+	Vocabulary
+} from "../internal";
 
 /**
  * This class implements the {@link IntSet} backed by a sorted array of

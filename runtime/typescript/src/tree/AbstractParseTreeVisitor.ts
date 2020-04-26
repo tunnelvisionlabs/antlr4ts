@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:47.3092279-07:00
 
-import { ErrorNode } from "./ErrorNode";
-import { ParseTree } from "./ParseTree";
-import { ParseTreeVisitor } from "./ParseTreeVisitor";
-import { RuleNode } from "./RuleNode";
-import { TerminalNode } from "./TerminalNode";
+import {
+	ErrorNode,
+	ParseTree,
+	ParseTreeVisitor,
+	RuleNode,
+	TerminalNode
+} from "../internal";
 
 export abstract class AbstractParseTreeVisitor<Result> implements ParseTreeVisitor<Result> {
 	/**

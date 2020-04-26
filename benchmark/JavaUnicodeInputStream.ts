@@ -7,9 +7,7 @@
 
 import * as assert from "assert";
 
-import { CharStream } from "antlr4ts";
-import { IntegerList } from "antlr4ts/dist/misc";
-import { Interval } from "antlr4ts/dist/misc";
+import { CharStream, IntegerList, Interval } from "antlr4ts";
 
 const BACKSLASH = "\\".charCodeAt(0);
 const LOWER_U = "u".charCodeAt(0);

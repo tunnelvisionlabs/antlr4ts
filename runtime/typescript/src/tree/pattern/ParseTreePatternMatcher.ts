@@ -5,28 +5,30 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { BailErrorStrategy } from "../../BailErrorStrategy";
-import { CharStreams } from "../../CharStreams";
-import { Chunk } from "./Chunk";
-import { CommonTokenStream } from "../../CommonTokenStream";
-import { Lexer } from "../../Lexer";
-import { ListTokenSource } from "../../ListTokenSource";
-import { MultiMap } from "../../misc/MultiMap";
-import { ParseCancellationException } from "../../misc/ParseCancellationException";
-import { ParseTree } from "../ParseTree";
-import { ParseTreeMatch } from "./ParseTreeMatch";
-import { ParseTreePattern } from "./ParseTreePattern";
-import { Parser } from "../../Parser";
-import { ParserInterpreter } from "../../ParserInterpreter";
-import { ParserRuleContext } from "../../ParserRuleContext";
-import { RecognitionException } from "../../RecognitionException";
-import { RuleNode } from "../RuleNode";
-import { RuleTagToken } from "./RuleTagToken";
-import { TagChunk } from "./TagChunk";
-import { TerminalNode } from "../TerminalNode";
-import { TextChunk } from "./TextChunk";
-import { Token } from "../../Token";
-import { TokenTagToken } from "./TokenTagToken";
+import {
+	BailErrorStrategy,
+	CharStreams,
+	Chunk,
+	CommonTokenStream,
+	Lexer,
+	ListTokenSource,
+	MultiMap,
+	ParseCancellationException,
+	ParseTree,
+	ParseTreeMatch,
+	ParseTreePattern,
+	Parser,
+	ParserInterpreter,
+	ParserRuleContext,
+	RecognitionException,
+	RuleNode,
+	RuleTagToken,
+	TagChunk,
+	TerminalNode,
+	TextChunk,
+	Token,
+	TokenTagToken
+} from "../../internal";
 
 /**
  * A tree pattern matching mechanism for ANTLR {@link ParseTree}s.

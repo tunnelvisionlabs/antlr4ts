@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:38.1172076-07:00
 
-import { LexerActionExecutor } from "../atn/LexerActionExecutor";
+import { LexerActionExecutor } from "../internal";
 
 /**
  * Stores information about a {@link DFAState} which is an accept state under

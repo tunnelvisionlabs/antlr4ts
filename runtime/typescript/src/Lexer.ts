@@ -5,19 +5,21 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.7913318-07:00
 
-import { ANTLRErrorListener } from "./ANTLRErrorListener";
-import { CharStream } from "./CharStream";
-import { CommonTokenFactory } from "./CommonTokenFactory";
-import { IntStream } from "./IntStream";
-import { IntegerStack } from "./misc/IntegerStack";
-import { Interval } from "./misc/Interval";
-import { LexerATNSimulator } from "./atn/LexerATNSimulator";
-import { LexerNoViableAltException } from "./LexerNoViableAltException";
-import { RecognitionException } from "./RecognitionException";
-import { Recognizer } from "./Recognizer";
-import { Token } from "./Token";
-import { TokenFactory } from "./TokenFactory";
-import { TokenSource } from "./TokenSource";
+import {
+	ANTLRErrorListener,
+	CharStream,
+	CommonTokenFactory,
+	IntStream,
+	IntegerStack,
+	Interval,
+	LexerATNSimulator,
+	LexerNoViableAltException,
+	RecognitionException,
+	Recognizer,
+	Token,
+	TokenFactory,
+	TokenSource
+} from "./internal";
 
 /** A lexer is recognizer that draws input symbols from a character stream.
  *  lexer grammars result in a subclass of this object. A Lexer object

@@ -5,8 +5,10 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:30.9444556-07:00
 
-import { ATNConfig } from "./ATNConfig";
-import { ATNConfigSet } from "./ATNConfigSet";
+import {
+	ATNConfig,
+	ATNConfigSet
+} from "../internal";
 
 /**
  *

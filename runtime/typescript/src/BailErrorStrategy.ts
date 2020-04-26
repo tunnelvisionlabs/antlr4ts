@@ -5,13 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:49.2855056-07:00
 
-import { DefaultErrorStrategy } from "./DefaultErrorStrategy";
-import { InputMismatchException } from "./InputMismatchException";
-import { ParseCancellationException } from "./misc/ParseCancellationException";
-import { Parser } from "./Parser";
-import { ParserRuleContext } from "./ParserRuleContext";
-import { RecognitionException } from "./RecognitionException";
-import { Token } from "./Token";
+import {
+	DefaultErrorStrategy,
+	InputMismatchException,
+	ParseCancellationException,
+	Parser,
+	ParserRuleContext,
+	RecognitionException,
+	Token
+} from "./internal";
 
 /**
  * This implementation of {@link ANTLRErrorStrategy} responds to syntax errors

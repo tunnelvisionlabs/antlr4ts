@@ -5,10 +5,12 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ParseTree } from "../ParseTree";
-import { TerminalNode } from "../TerminalNode";
-import { Trees } from "../Trees";
-import { XPathElement } from "./XPathElement";
+import {
+	ParseTree,
+	TerminalNode,
+	Trees,
+	XPathElement
+} from "../../internal";
 
 export class XPathTokenElement extends XPathElement {
 	protected tokenType: number;

@@ -5,11 +5,13 @@
 
 // CONVERSTION complete, Burt Harris 10/14/2016
 
-import { ParseTree } from "../ParseTree";
-import { TerminalNode } from "../TerminalNode";
-import { Trees } from "../Trees";
-import { XPath } from "./XPath";
-import { XPathElement } from "./XPathElement";
+import {
+	ParseTree,
+	TerminalNode,
+	Trees,
+	XPath,
+	XPathElement
+} from "../../internal";
 
 export class XPathWildcardAnywhereElement extends XPathElement {
 	constructor() {

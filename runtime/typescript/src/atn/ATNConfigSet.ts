@@ -5,24 +5,26 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:25.5488013-07:00
 
-import * as Utils from "../misc/Utils";
+import * as Utils from "../internal";
 import * as assert from "assert";
 
-import { ATN } from "./ATN";
-import { ATNConfig } from "./ATNConfig";
-import { ATNSimulator } from "./ATNSimulator";
-import { ATNState } from "./ATNState";
-import { Array2DHashMap } from "../misc/Array2DHashMap";
-import { Array2DHashSet } from "../misc/Array2DHashSet";
-import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
-import { BitSet } from "../misc/BitSet";
-import { ConflictInfo } from "./ConflictInfo";
-import { EqualityComparator } from "../misc/EqualityComparator";
-import { JavaSet } from "../misc/Stubs";
-import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
-import { SemanticContext } from "./SemanticContext";
+import {
+	ATN,
+	ATNConfig,
+	ATNSimulator,
+	ATNState,
+	Array2DHashMap,
+	Array2DHashSet,
+	ArrayEqualityComparator,
+	BitSet,
+	ConflictInfo,
+	EqualityComparator,
+	JavaSet,
+	ObjectEqualityComparator,
+	PredictionContext,
+	PredictionContextCache,
+	SemanticContext
+} from "../internal";
 
 interface KeyType { state: number; alt: number }
 

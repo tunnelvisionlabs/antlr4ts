@@ -3,8 +3,10 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { Equatable } from "./Stubs";
-import { MurmurHash } from "./MurmurHash";
+import {
+	Equatable,
+	MurmurHash
+} from "../internal";
 
 export class UUID implements Equatable {
 	private readonly data: Uint32Array;

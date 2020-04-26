@@ -5,13 +5,15 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:52.0961136-07:00
 
-import * as Utils from "./misc/Utils";
+import * as Utils from "./internal";
 
-import { ATNConfigSet } from "./atn/ATNConfigSet";
-import { CharStream } from "./CharStream";
-import { Interval } from "./misc/Interval";
-import { Lexer } from "./Lexer";
-import { RecognitionException } from "./RecognitionException";
+import {
+	ATNConfigSet,
+	CharStream,
+	Interval,
+	Lexer,
+	RecognitionException
+} from "./internal";
 
 export class LexerNoViableAltException extends RecognitionException {
 	//private static serialVersionUID: number =  -730999203913001726L;

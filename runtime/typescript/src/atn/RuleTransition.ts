@@ -5,10 +5,12 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:36.8294453-07:00
 
-import { ATNState } from "./ATNState";
-import { RuleStartState } from "./RuleStartState";
-import { Transition } from "./Transition";
-import { TransitionType } from "./TransitionType";
+import {
+	ATNState,
+	RuleStartState,
+	Transition,
+	TransitionType
+} from "../internal";
 
 /** */
 export class RuleTransition extends Transition {

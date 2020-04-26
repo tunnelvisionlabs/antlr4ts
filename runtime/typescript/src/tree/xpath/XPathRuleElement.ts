@@ -3,11 +3,14 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { ParseTree } from "../ParseTree";
 // CONVERSTION complete, Burt Harris 10/14/2016
-import { ParserRuleContext } from "../../ParserRuleContext";
-import { Trees } from "../Trees";
-import { XPathElement } from "./XPathElement";
+import {
+	ParserRuleContext,
+	Trees,
+	XPathElement
+} from "../../internal";
+
+import { ParseTree } from "../../internal";
 
 export class XPathRuleElement extends XPathElement {
 	protected ruleIndex: number;

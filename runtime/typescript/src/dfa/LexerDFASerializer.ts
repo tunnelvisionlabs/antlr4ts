@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:39.2167238-07:00
 
-import { DFA } from "./DFA";
-import { DFASerializer } from "./DFASerializer";
-import { VocabularyImpl } from "../VocabularyImpl";
+import {
+	DFA,
+	DFASerializer,
+	VocabularyImpl
+} from "../internal";
 
 export class LexerDFASerializer extends DFASerializer {
 	constructor(dfa: DFA) {

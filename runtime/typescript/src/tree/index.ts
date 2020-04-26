@@ -4,22 +4,22 @@
  */
 
 
-export * from "./ParseTreeListener";
-export * from "./ParseTreeVisitor";
+export * from "../internal";
+export * from "../internal";
 
-export * from "./AbstractParseTreeVisitor";
-export * from "./ErrorNode";
-export * from "./ParseTree";
-export * from "./ParseTreeProperty";
-export * from "./ParseTreeWalker";
-export * from "./RuleNode";
-export * from "./SyntaxTree";
-export * from "./Tree";
-export * from "./Trees";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
+export * from "../internal";
 
-export * from "./TerminalNode";
+export * from "../internal";
 
 // Keep these last
-export * from "./pattern";
-export * from "./xpath";
-export * from "./xpath/XPathLexer"
+export * from "../internal";
+export * from "../internal";
+export * from "../internal"

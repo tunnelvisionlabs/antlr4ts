@@ -10,7 +10,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.5869363-07:00
 
-import * as Utils from "antlr4ts/dist/misc/Utils";
+import * as Utils from "antlr4ts";
 import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
@@ -20,25 +20,49 @@ import * as path from "path";
 /* eslint-disable @typescript-eslint/interface-name-prefix */
 import * as sourceMapSupport from "source-map-support";
 
-import { ANTLRErrorListener } from "antlr4ts";
-import { ATN } from "antlr4ts/dist/atn";
-import { ATNConfig } from "antlr4ts/dist/atn";
-import { ATNConfigSet } from "antlr4ts/dist/atn";
-import { ATNDeserializer } from "antlr4ts/dist/atn";
-import { Array2DHashSet } from "antlr4ts/dist/misc";
-import { BailErrorStrategy } from "antlr4ts";
-import { BitSet } from "antlr4ts/dist/misc";
-import { CharStream } from "antlr4ts";
-import { CharStreams } from "antlr4ts";
-import { CodePointBuffer } from "antlr4ts";
-import { CodePointCharStream } from "antlr4ts";
-import { CommonTokenStream } from "antlr4ts";
-import { DFA } from "antlr4ts/dist/dfa";
-import { DFAState } from "antlr4ts/dist/dfa";
-import { DefaultErrorStrategy } from "antlr4ts";
-import { DiagnosticErrorListener } from "antlr4ts";
-import { ErrorNode } from "antlr4ts/dist/tree";
-import { Interval } from "antlr4ts/dist/misc";
+import {
+	ANTLRErrorListener,
+	ATN,
+	ATNConfig,
+	ATNConfigSet,
+	ATNDeserializer,
+	Array2DHashSet,
+	BailErrorStrategy,
+	BitSet,
+	CharStream,
+	CharStreams,
+	CodePointBuffer,
+	CodePointCharStream,
+	CommonTokenStream,
+	DFA,
+	DFAState,
+	DefaultErrorStrategy,
+	DiagnosticErrorListener,
+	ErrorNode,
+	Interval,
+	Lexer,
+	LexerATNSimulator,
+	MurmurHash,
+	ObjectEqualityComparator,
+	ParseCancellationException,
+	ParseTree,
+	ParseTreeListener,
+	ParseTreeWalker,
+	Parser,
+	ParserATNSimulator,
+	ParserErrorListener,
+	ParserInterpreter,
+	ParserRuleContext,
+	PredictionContextCache,
+	PredictionMode,
+	RecognitionException,
+	Recognizer,
+	SimulatorState,
+	TerminalNode,
+	Token,
+	TokenStream
+} from "antlr4ts";
+
 import { JavaLRLexer } from "./gen/lr/JavaLRLexer";
 import { JavaLRLexer as JavaLRLexerAtn } from "./gen/lr-atn/JavaLRLexer";
 import { JavaLRParser } from "./gen/lr/JavaLRParser";
@@ -48,36 +72,10 @@ import { JavaLexer as JavaLexerAtn } from "./gen/std-atn/JavaLexer";
 import { JavaParser } from "./gen/std/JavaParser";
 import { JavaParser as JavaParserAtn } from "./gen/std-atn/JavaParser";
 import { JavaUnicodeInputStream } from "./JavaUnicodeInputStream";
-import { Lexer } from "antlr4ts";
-import { LexerATNSimulator } from "antlr4ts/dist/atn";
-import { MurmurHash } from "antlr4ts/dist/misc";
-import { ObjectEqualityComparator } from "antlr4ts/dist/misc";
-import { ParseCancellationException } from "antlr4ts/dist/misc";
-import { ParseTree } from "antlr4ts/dist/tree";
-import { ParseTreeListener } from "antlr4ts/dist/tree";
-import { ParseTreeWalker } from "antlr4ts/dist/tree";
-import { Parser } from "antlr4ts";
-import { ParserATNSimulator } from "antlr4ts/dist/atn";
-import { ParserErrorListener } from "antlr4ts";
-import { ParserInterpreter } from "antlr4ts";
-import { ParserRuleContext } from "antlr4ts";
-import { PredictionContextCache } from "antlr4ts/dist/atn";
-import { PredictionMode } from "antlr4ts/dist/atn";
-import { RecognitionException } from "antlr4ts";
-import { Recognizer } from "antlr4ts";
-import { SimulatorState } from "antlr4ts/dist/atn";
 import { Stopwatch } from "./Stopwatch";
-import { TerminalNode } from "antlr4ts/dist/tree";
 import { TimeSpan } from "./TimeSpan";
-import { Token } from "antlr4ts";
-import { TokenStream } from "antlr4ts";
 
 sourceMapSupport.install();
-
-
-
-
-
 
 interface IJavaParser extends Parser {
 	compilationUnit(): ParserRuleContext;

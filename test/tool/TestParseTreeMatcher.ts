@@ -5,16 +5,26 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:15.0984506-07:00
 
+import { } from "antlr4ts";
+
 import * as assert from "assert";
 
-import { ParseTree, ParseTreeMatch, ParseTreePattern, ParseTreePatternMatcher } from "antlr4ts/dist/tree";
+import {
+	CharStream,
+	CharStreams,
+	CommonTokenStream,
+	InputMismatchException,
+	Lexer,
+	NoViableAltException,
+	ParseTree,
+	ParseTreeMatch,
+	ParseTreePattern,
+	ParseTreePatternMatcher,
+	Parser,
+	Token,
+	TokenStream
+} from "antlr4ts";
 
-import { CharStream } from "antlr4ts";
-import { CharStreams } from "antlr4ts";
-import { CommonTokenStream } from "antlr4ts";
-import { InputMismatchException } from "antlr4ts";
-import { Lexer } from "antlr4ts";
-import { NoViableAltException } from "antlr4ts";
 import { ParseTreeMatcherX1Lexer } from "./gen/matcher/ParseTreeMatcherX1Lexer";
 import { ParseTreeMatcherX1Parser } from "./gen/matcher/ParseTreeMatcherX1Parser";
 import { ParseTreeMatcherX2Lexer } from "./gen/matcher/ParseTreeMatcherX2Lexer";
@@ -31,9 +41,6 @@ import { ParseTreeMatcherX7Lexer } from "./gen/matcher/ParseTreeMatcherX7Lexer";
 import { ParseTreeMatcherX7Parser } from "./gen/matcher/ParseTreeMatcherX7Parser";
 import { ParseTreeMatcherX8Lexer } from "./gen/matcher/ParseTreeMatcherX8Lexer";
 import { ParseTreeMatcherX8Parser } from "./gen/matcher/ParseTreeMatcherX8Parser";
-import { Parser } from "antlr4ts";
-import { Token } from "antlr4ts";
-import { TokenStream } from "antlr4ts";
 
 describe("TestParseTreeMatcher", function () {
 

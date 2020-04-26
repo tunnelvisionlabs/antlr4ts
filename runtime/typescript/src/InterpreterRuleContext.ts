@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:51.5898546-07:00
 
-import { ParserRuleContext } from "./ParserRuleContext";
+import { ParserRuleContext } from "./internal";
 
 /**
  * This class extends {@link ParserRuleContext} by allowing the value of

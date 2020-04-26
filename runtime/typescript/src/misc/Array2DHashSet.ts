@@ -7,11 +7,12 @@
 
 import * as assert from "assert";
 
-import { JavaCollection, JavaSet } from "./Stubs";
-
-import { DefaultEqualityComparator } from "./DefaultEqualityComparator";
-import { EqualityComparator } from "./EqualityComparator";
-import { MurmurHash } from "./MurmurHash";
+import {
+	DefaultEqualityComparator,
+	EqualityComparator,
+	MurmurHash
+} from "../internal";
+import { JavaCollection, JavaSet } from "../internal";
 
 /** {@link Set} implementation with closed hashing (open addressing). */
 

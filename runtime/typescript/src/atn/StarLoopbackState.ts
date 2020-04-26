@@ -5,9 +5,11 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:37.6368726-07:00
 
-import { ATNState } from "./ATNState";
-import { ATNStateType } from "./ATNStateType";
-import { StarLoopEntryState } from "./StarLoopEntryState";
+import {
+	ATNState,
+	ATNStateType,
+	StarLoopEntryState
+} from "../internal";
 
 export class StarLoopbackState extends ATNState {
 	get loopEntryState(): StarLoopEntryState {

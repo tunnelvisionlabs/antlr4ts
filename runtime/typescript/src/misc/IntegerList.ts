@@ -5,9 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:40.5099429-07:00
 
-import * as Arrays from "./Arrays";
+import * as Arrays from "../internal";
 
-import { JavaCollection } from "./Stubs";
+import { JavaCollection } from "../internal";
 
 const EMPTY_DATA: Int32Array = new Int32Array(0);
 

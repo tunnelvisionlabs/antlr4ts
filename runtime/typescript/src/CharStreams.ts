@@ -3,9 +3,11 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import { CodePointBuffer } from "./CodePointBuffer";
-import { CodePointCharStream } from "./CodePointCharStream";
-import { IntStream } from "./IntStream";
+import {
+	CodePointBuffer,
+	CodePointCharStream,
+	IntStream
+} from "./internal";
 
 // const DEFAULT_BUFFER_SIZE: number = 4096;
 
