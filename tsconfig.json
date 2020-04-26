@@ -1,31 +1,13 @@
 {
-  "compilerOptions": {
-    "outDir": "target",
-    "sourceMap": true,
-    "inlineSources": true,
-    "module": "commonjs",
-    "target": "es2015",
-    "lib": [
-      "es6"
-    ],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "experimentalDecorators": true,
-    "declaration": true,
-    "preserveConstEnums": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "types": [
-      "node",
-      "mocha"
-    ]
-  },
+  "references": [
+    {
+      "path": "benchmark/"
+    },
+    {
+      "path": "test"
+    }
+  ],
   "exclude": [
-    "node_modules",
-    "target",
-    "tool",
-    "test/runtime"
+    "**/*"
   ]
 }

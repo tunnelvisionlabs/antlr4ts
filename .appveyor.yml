@@ -1,24 +1,22 @@
 version: 1.0.{build}
 image: Visual Studio 2015
 init:
-- git config --global core.autocrlf true
+  - git config --global core.autocrlf true
 install:
-- ps: Install-Product node 10
-- npm install -g npm@6
+  - ps: Install-Product node 10
+  - npm install -g npm@6
 branches:
   only:
-  - master
+    - master
 environment:
   JAVA6_HOME: C:/Program Files/Java/jdk1.6.0/jre
 build_script:
-- npm install
-- npm run tslint
-- npm run pack-tool
-- npm run pack-runtime
+  - npm install
+  - npm run lint
 test_script:
-- npm test
+  - npm test
 artifacts:
-- path: 'antlr4ts-*.tgz'
+  - path: "antlr4ts-*.tgz"
 cache:
-- node_modules -> **\package.json
-- C:\Users\appveyor\.m2 -> **\pom.xml
+  - node_modules -> **\package.json
+  - C:\Users\appveyor\.m2 -> **\pom.xml

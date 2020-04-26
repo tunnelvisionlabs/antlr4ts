@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "references": [
+    {
+      "path": "../runtime/typescript"
+    }
+  ],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}

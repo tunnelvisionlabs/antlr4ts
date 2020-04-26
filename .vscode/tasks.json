@@ -1,27 +1,37 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
-  "command": "npm",
   "tasks": [
     {
       "type": "npm",
-      "script": "install",
-      "problemMatcher": [],
-      "label": "npm: install",
-      "detail": "install dependencies from package",
-      "group": "build"
+      "script": "tsc",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "label": "npm: tsc",
+      "detail": "tsc --build --verbose"
     },
     {
       "type": "npm",
       "script": "tsc-watch",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "label": "npm: tsc-watch",
+      "detail": "tsc --build --watch",
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "problemMatcher": [],
-      "label": "npm: tsc-watch",
-      "detail": "tsc -w -p ."
+      }
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "label": "eslint: lint whole folder",
+      "group": "build",
+      "detail": "eslint . --ext .ts"
     }
   ]
 }
