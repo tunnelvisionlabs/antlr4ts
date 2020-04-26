@@ -1,33 +1,12 @@
 {
+  "extends": "../tsconfig.base.json",
+  // "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "composite": true,
     "outDir": "dist",
-    "sourceMap": true,
-    "module": "commonjs",
-    "target": "es2015",
-    "lib": [
-      "es6"
-    ],
-    "noImplicitAny": true,
-    "noEmitOnError": false,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "experimentalDecorators": true,
-    "declaration": true,
-    "preserveConstEnums": true,
     "rootDir": ".",
-    "types": [
-      "node",
-      "mocha"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist/**"
-  ],
   "references": [
     {
       "path": "../runtime/typescript"

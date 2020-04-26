@@ -1,20 +1,9 @@
 {
+  "extends": "../../tsconfig.base.json",
   "include": ["src/**/*.ts"],
-  "exclude": ["dist", "node_modules", "target", "tool", "test/runtime"],
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",
-    "sourceMap": true,
-    "inlineSources": true,
-    "module": "commonjs",
-    "target": "es2015",
-    "lib": ["es6"],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "declaration": true,
-    "preserveConstEnums": true,
-    "types": ["node"],
     "rootDir": "src"
   }
 }
