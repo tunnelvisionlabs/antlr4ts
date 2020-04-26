@@ -1,24 +1,12 @@
 {
+  "extends": "../tsconfig.base.json",
   "references": [
     {
       "path": "../runtime/typescript"
     }
   ],
-  "include": ["**/*.ts", "gen/**/*.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
-    "composite": true,
-    "outDir": "dist",
-    "sourceMap": true,
-    "inlineSources": true,
-    "module": "commonjs",
-    "target": "es2015",
-    "lib": ["es6"],
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "declaration": true,
-    "preserveConstEnums": true,
-    "types": ["node"]
+    "outDir": "dist"
   }
 }
