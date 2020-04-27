@@ -244,18 +244,18 @@ describe("TestParseTreeMatcher", function () {
 		return startRule(parser);
 	}
 
-	async function checkPatternMatch<TParser extends Parser>(
+	function checkPatternMatch<TParser extends Parser>(
 		startRule: (parser: TParser) => ParseTree,
 		startRuleIndex: number,
 		input: string,
 		pattern: string,
 		lexerCtor: new (stream: CharStream) => Lexer,
 		parserCtor: new (stream: TokenStream) => TParser,
-		invertMatch = false): Promise<ParseTreeMatch> {
+		invertMatch = false): ParseTreeMatch {
 
 		const result: ParseTree = execParser(startRule, input, lexerCtor, parserCtor);
 
-		const p: ParseTreePattern = await getPattern(lexerCtor, parserCtor, pattern, startRuleIndex);
+		const p: ParseTreePattern = getPattern(lexerCtor, parserCtor, pattern, startRuleIndex);
 		const match: ParseTreeMatch = p.match(result);
 		const matched: boolean = match.succeeded;
 		assert.strictEqual(matched, !invertMatch);
@@ -263,7 +263,7 @@ describe("TestParseTreeMatcher", function () {
 		return match;
 	}
 
-	async function getPattern(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser, pattern: string, ruleIndex: number): Promise<ParseTreePattern> {
+	function getPattern(lexerCtor: new (stream: CharStream) => Lexer, parserCtor: new (stream: TokenStream) => Parser, pattern: string, ruleIndex: number): ParseTreePattern {
 		const lexer: Lexer = new lexerCtor(CharStreams.fromString(""));
 		const parser: Parser = new parserCtor(new CommonTokenStream(lexer));
 		return parser.compileParseTreePattern(pattern, ruleIndex);
