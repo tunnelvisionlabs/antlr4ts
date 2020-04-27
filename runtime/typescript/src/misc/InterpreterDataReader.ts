@@ -66,11 +66,11 @@ export namespace InterpreterDataReader {
 	 *
 	 * Data for a parser does not contain channel and mode names.
 	 */
-	export async function parseFile(fileName: string): Promise<InterpreterDataReader.InterpreterData> {
+	export function parseFile(fileName: string): InterpreterData {
 		const result: InterpreterDataReader.InterpreterData = new InterpreterDataReader.InterpreterData();
 		result.ruleNames = [];
 
-		const input: Buffer = await util.promisify(fs.readFile)(fileName);
+		const input: Buffer = fs.readFileSync(fileName);
 		const lines = splitToLines(input);
 
 		try {

@@ -26,9 +26,11 @@ import {
 	ParseInfo,
 	ParseTreeListener,
 	ParseTreePattern,
+	ParseTreePatternMatcher,
 	ParserATNSimulator,
 	ParserErrorListener,
 	ParserRuleContext,
+	ProfilingATNSimulator,
 	ProxyParserErrorListener,
 	RecognitionException,
 	Recognizer,
@@ -333,7 +335,6 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 	}
 
-
 	/**
 	 * Remove all parse listeners.
 	 *
@@ -424,15 +425,15 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * let id: string = m.get("ID");
 	 * ```
 	 */
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number): Promise<ParseTreePattern>;
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number): ParseTreePattern;
 
 	/**
 	 * The same as {@link #compileParseTreePattern(String, int)} but specify a
 	 * {@link Lexer} rather than trying to deduce it from this parser.
 	 */
-	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern>;
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern;
 
-	public async compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): Promise<ParseTreePattern> {
+	public compileParseTreePattern(pattern: string, patternRuleIndex: number, lexer?: Lexer): ParseTreePattern {
 		if (!lexer) {
 			if (this.inputStream) {
 				const tokenSource = this.inputStream.tokenSource;
@@ -447,8 +448,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		const currentLexer = lexer;
-		const m = await import("./tree/pattern/ParseTreePatternMatcher");
-		const matcher = new m.ParseTreePatternMatcher(currentLexer, this);
+		const matcher = new ParseTreePatternMatcher(currentLexer, this);
 		return matcher.compile(pattern, patternRuleIndex);
 	}
 
@@ -875,28 +875,25 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	}
 
 	// @Override
-	get parseInfo(): Promise<ParseInfo | undefined> {
-		return import("./atn/ProfilingATNSimulator").then((m) => {
-			const interp: ParserATNSimulator = this.interpreter;
-			if (interp instanceof m.ProfilingATNSimulator) {
-				return new ParseInfo(interp);
-			}
+	get parseInfo(): ParseInfo | undefined {
+		const interp: ParserATNSimulator = this.interpreter;
+		if (interp instanceof ProfilingATNSimulator) {
+			return new ParseInfo(interp);
+		}
 
-			return undefined;
-		});
+		return undefined;
 	}
 
 	/**
 	 * @since 4.3
 	 */
-	public async setProfile(profile: boolean): Promise<void> {
-		const m = await import("./atn/ProfilingATNSimulator");
+	public setProfile(profile: boolean): void {
 		const interp: ParserATNSimulator = this.interpreter;
 		if (profile) {
-			if (!(interp instanceof m.ProfilingATNSimulator)) {
-				this.interpreter = new m.ProfilingATNSimulator(this);
+			if (!(interp instanceof ProfilingATNSimulator)) {
+				this.interpreter = new ProfilingATNSimulator(this);
 			}
-		} else if (interp instanceof m.ProfilingATNSimulator) {
+		} else if (interp instanceof ProfilingATNSimulator) {
 			this.interpreter = new ParserATNSimulator(this.atn, this);
 		}
 
