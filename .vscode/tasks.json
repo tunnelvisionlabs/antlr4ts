@@ -4,20 +4,17 @@
     {
       "type": "npm",
       "script": "tsc",
-      "problemMatcher": [
-        "$tsc"
-      ],
+      "problemMatcher": ["$tsc"],
       "label": "npm: tsc",
-      "detail": "tsc --build --verbose"
+      "detail": "tsc --build"
     },
     {
       "type": "npm",
       "script": "tsc-watch",
-      "problemMatcher": [
-        "$tsc-watch"
-      ],
+      "problemMatcher": ["$tsc-watch"],
       "label": "npm: tsc-watch",
       "detail": "tsc --build --watch",
+      "isBackground": true,
       "group": {
         "kind": "build",
         "isDefault": true
@@ -26,9 +23,7 @@
     {
       "type": "npm",
       "script": "lint",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ],
+      "problemMatcher": ["$eslint-stylish"],
       "label": "eslint: lint whole folder",
       "group": "build",
       "detail": "eslint . --ext .ts"
