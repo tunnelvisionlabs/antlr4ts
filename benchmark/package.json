@@ -14,8 +14,8 @@
     "tsc": "tsc --build --verbose .",
     "benchmark": "node dist/TestPerformance.js",
     "benchmark-lexer": "node dist/TimeLexerSpeed.js",
-    "profile": "node --prof dist/TestPerformance.js",
-    "profile-lexer": "node --prof dist/TimeLexerSpeed.js",
+    "profile": "node --cpu-prof dist/TestPerformance.js",
+    "profile-lexer": "node --cpu-prof dist/TimeLexerSpeed.js",
     "tslint": "tslint -p .",
     "tslint-fix": "tslint -p . --fix"
   },
