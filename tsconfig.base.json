@@ -1,0 +1,16 @@
+{
+  "exclude": ["dist", "lib", "node_modules", "target"],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "lib": ["es6"],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "target": "es2015",
+    "types": ["node"]
+  }
+}

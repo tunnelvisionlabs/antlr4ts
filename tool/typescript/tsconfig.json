@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "types": ["node"]
+  },
+  "exclude": ["node_modules", "target"]
+}

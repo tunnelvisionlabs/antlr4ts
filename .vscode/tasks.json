@@ -1,18 +1,32 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "2.0.0",
-    "command": "npm",
-    "type": "shell",
-    "args": ["run", "tsc-watch"],
-    "presentation": {
-        "echo": true,
-        "reveal": "silent",
-        "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "tsc",
+      "problemMatcher": ["$tsc"],
+      "label": "npm: tsc",
+      "detail": "tsc --build"
     },
-    "isBackground": true,
-    "problemMatcher": "$tsc"
+    {
+      "type": "npm",
+      "script": "tsc-watch",
+      "problemMatcher": ["$tsc-watch"],
+      "label": "npm: tsc-watch",
+      "detail": "tsc --build --watch",
+      "isBackground": true,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "label": "eslint: lint whole folder",
+      "group": "build",
+      "detail": "eslint . --ext .ts"
+    }
+  ]
 }

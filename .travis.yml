@@ -11,6 +11,4 @@ script:
   - nyc --reporter=none mocha --timeout=10000
   - nyc report --reporter=text-lcov > coverage.lcov
   - codecov
-  - npm run tslint
-  - npm run pack-tool
-  - npm run pack-runtime
+  - npm run lint

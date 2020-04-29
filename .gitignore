@@ -42,7 +42,7 @@ jspm_packages/
 /src/tree/xpath/XPathLexer.ts
 gen/
 /target/
-/tool/target/
+tool/typescript/target
 doc/
 
 # Visual Studio build output and per-user files
@@ -60,3 +60,8 @@ bin/
 
 # NPM pack output
 *.tgz
+
+**/dist
+tsconfig.tsbuildinfo
+test/runtime/cross-target/
+.antlr/

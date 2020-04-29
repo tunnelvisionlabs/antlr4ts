@@ -5,13 +5,9 @@
 
 // ConvertTo-TS run at 2016-10-04T11:27:01.9391717-07:00
 
-import { CharStream } from "../src/CharStream";
-import { IntegerList } from "../src/misc/IntegerList";
-import { Interval } from "../src/misc/Interval";
-import { NotNull } from "../src/Decorators";
-import { Override } from "../src/Decorators";
-
 import * as assert from "assert";
+
+import { CharStream, IntegerList, Interval } from "antlr4ts";
 
 const BACKSLASH = "\\".charCodeAt(0);
 const LOWER_U = "u".charCodeAt(0);
@@ -27,19 +23,19 @@ const DIGIT_9 = "9".charCodeAt(0);
  * @author Sam Harwell
  */
 export class JavaUnicodeInputStream implements CharStream {
-	@NotNull
-	private source: CharStream;
-	private escapeIndexes: IntegerList =  new IntegerList();
-	private escapeCharacters: IntegerList =  new IntegerList();
-	private escapeIndirectionLevels: IntegerList =  new IntegerList();
 
-	private escapeListIndex: number = 0;
-	private range: number = 0;
-	private slashCount: number = 0;
+	private source: CharStream;
+	private escapeIndexes: IntegerList = new IntegerList();
+	private escapeCharacters: IntegerList = new IntegerList();
+	private escapeIndirectionLevels: IntegerList = new IntegerList();
+
+	private escapeListIndex = 0;
+	private range = 0;
+	private slashCount = 0;
 
 	private la1: number;
 
-	constructor(@NotNull source: CharStream)  {
+	constructor(source: CharStream) {
 		if (source == null) {
 			throw new Error("NullPointerException: source");
 		}
@@ -48,27 +44,27 @@ export class JavaUnicodeInputStream implements CharStream {
 		this.la1 = source.LA(1);
 	}
 
-	@Override
+	// @Override
 	get size(): number {
 		return this.source.size;
 	}
 
-	@Override
+	// @Override
 	get index(): number {
 		return this.source.index;
 	}
 
-	@Override
+	// @Override
 	get sourceName(): string {
 		return this.source.sourceName;
 	}
 
-	@Override
+	// @Override
 	public getText(interval: Interval): string {
 		return this.source.getText(interval);
 	}
 
-	@Override
+	// @Override
 	public consume(): void {
 		if (this.la1 !== BACKSLASH) {
 			this.source.consume();
@@ -86,7 +82,7 @@ export class JavaUnicodeInputStream implements CharStream {
 			this.slashCount++;
 		}
 		else {
-			let indirectionLevel: number =  this.escapeIndirectionLevels.get(this.escapeListIndex);
+			const indirectionLevel: number = this.escapeIndirectionLevels.get(this.escapeListIndex);
 			for (let i = 0; i < 6 + indirectionLevel; i++) {
 				this.source.consume();
 			}
@@ -99,7 +95,7 @@ export class JavaUnicodeInputStream implements CharStream {
 		assert(this.range >= this.index);
 	}
 
-	@Override
+	// @Override
 	public LA(i: number): number {
 		if (i === 1 && this.la1 !== BACKSLASH) {
 			return this.la1;
@@ -120,7 +116,7 @@ export class JavaUnicodeInputStream implements CharStream {
 			return this.source.LA(desiredIndex - this.index);
 		}
 		else {
-			let desiredIndex: number =  this.index + i - 1;
+			let desiredIndex: number = this.index + i - 1;
 			for (let j = this.escapeListIndex; j < this.escapeIndexes.size; j++) {
 				if (this.escapeIndexes.get(j) === desiredIndex) {
 					return this.escapeCharacters.get(j);
@@ -133,12 +129,12 @@ export class JavaUnicodeInputStream implements CharStream {
 				}
 			}
 
-			let currentIndex: number[] =  [this.index];
-			let slashCountPtr: number[] =  [this.slashCount];
-			let indirectionLevelPtr: number[] =  [0];
+			const currentIndex: number[] = [this.index];
+			const slashCountPtr: number[] = [this.slashCount];
+			const indirectionLevelPtr: number[] = [0];
 			for (let j = 0; j < i; j++) {
-				let previousIndex: number =  currentIndex[0];
-				let c: number = this.readCharAt(currentIndex, slashCountPtr, indirectionLevelPtr);
+				const previousIndex: number = currentIndex[0];
+				const c: number = this.readCharAt(currentIndex, slashCountPtr, indirectionLevelPtr);
 				if (currentIndex[0] > this.range) {
 					if (currentIndex[0] - previousIndex > 1) {
 						this.escapeIndexes.add(previousIndex);
@@ -158,17 +154,17 @@ export class JavaUnicodeInputStream implements CharStream {
 		}
 	}
 
-	@Override
+	// @Override
 	public mark(): number {
 		return this.source.mark();
 	}
 
-	@Override
+	// @Override
 	public release(marker: number): void {
 		this.source.release(marker);
 	}
 
-	@Override
+	// @Override
 	public seek(index: number): void {
 		if (index > this.range) {
 			throw new Error("UnsupportedOperationException");
@@ -215,27 +211,27 @@ export class JavaUnicodeInputStream implements CharStream {
 		assert(slashCountPtr != null && slashCountPtr.length === 1);
 		assert(indirectionLevelPtr != null && indirectionLevelPtr.length === 1);
 
-		let blockUnicodeEscape: boolean =  (slashCountPtr[0] % 2) !== 0;
+		const blockUnicodeEscape: boolean = (slashCountPtr[0] % 2) !== 0;
 
-		let c0: number = this.source.LA(nextIndexPtr[0] - this.index + 1);
+		const c0: number = this.source.LA(nextIndexPtr[0] - this.index + 1);
 		if (c0 === BACKSLASH) {
 			slashCountPtr[0]++;
 
 			if (!blockUnicodeEscape) {
-				let c1: number =  this.source.LA(nextIndexPtr[0] - this.index + 2);
+				const c1: number = this.source.LA(nextIndexPtr[0] - this.index + 2);
 				if (c1 === LOWER_U) {
-					let c2: number =  this.source.LA(nextIndexPtr[0] - this.index + 3);
+					let c2: number = this.source.LA(nextIndexPtr[0] - this.index + 3);
 					indirectionLevelPtr[0] = 0;
 					while (c2 === LOWER_U) {
 						indirectionLevelPtr[0]++;
 						c2 = this.source.LA(nextIndexPtr[0] - this.index + 3 + indirectionLevelPtr[0]);
 					}
 
-					let c3: number =  this.source.LA(nextIndexPtr[0] - this.index + 4 + indirectionLevelPtr[0]);
-					let c4: number =  this.source.LA(nextIndexPtr[0] - this.index + 5 + indirectionLevelPtr[0]);
-					let c5: number =  this.source.LA(nextIndexPtr[0] - this.index + 6 + indirectionLevelPtr[0]);
+					const c3: number = this.source.LA(nextIndexPtr[0] - this.index + 4 + indirectionLevelPtr[0]);
+					const c4: number = this.source.LA(nextIndexPtr[0] - this.index + 5 + indirectionLevelPtr[0]);
+					const c5: number = this.source.LA(nextIndexPtr[0] - this.index + 6 + indirectionLevelPtr[0]);
 					if (JavaUnicodeInputStream.isHexDigit(c2) && JavaUnicodeInputStream.isHexDigit(c3) && JavaUnicodeInputStream.isHexDigit(c4) && JavaUnicodeInputStream.isHexDigit(c5)) {
-						let value: number =  JavaUnicodeInputStream.hexValue(c2);
+						let value: number = JavaUnicodeInputStream.hexValue(c2);
 						value = (value << 4) + JavaUnicodeInputStream.hexValue(c3);
 						value = (value << 4) + JavaUnicodeInputStream.hexValue(c4);
 						value = (value << 4) + JavaUnicodeInputStream.hexValue(c5);
