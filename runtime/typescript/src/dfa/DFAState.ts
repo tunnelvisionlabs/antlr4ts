@@ -48,16 +48,16 @@ export class DFAState {
 
 	public configs: ATNConfigSet;
 
-	/** `edges.get(symbol)` points to target of symbol.
+	/** `edges[symbol]` points to target of symbol.
 	 */
 
-	private readonly edges: Map<number, DFAState>;
+	private readonly edges: Array<DFAState>;
 
 	private _acceptStateInfo: AcceptStateInfo | undefined;
 
 	/** These keys for these edges are the top level element of the global context. */
 
-	private readonly contextEdges: Map<number, DFAState>;
+	private readonly contextEdges: Array<DFAState>;
 
 	/** Symbols in this set require a global context transition before matching an input symbol. */
 	private contextSymbols: BitSet | undefined;
@@ -74,8 +74,8 @@ export class DFAState {
 	 */
 	constructor(configs: ATNConfigSet) {
 		this.configs = configs;
-		this.edges = new Map<number, DFAState>();
-		this.contextEdges = new Map<number, DFAState>();
+		this.edges = new Array<DFAState>();
+		this.contextEdges = new Array<DFAState>();
 	}
 
 	get isContextSensitive(): boolean {
@@ -135,14 +135,14 @@ export class DFAState {
 	}
 
 	public getTarget(symbol: number): DFAState | undefined {
-		return this.edges.get(symbol);
+		return this.edges[symbol];
 	}
 
 	public setTarget(symbol: number, target: DFAState): void {
-		this.edges.set(symbol, target);
+		this.edges[symbol] = target;
 	}
 
-	public getEdgeMap(): Map<number, DFAState> {
+	public getEdgeMap(): Array<DFAState> {
 		return this.edges;
 	}
 
@@ -151,7 +151,7 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		return this.contextEdges.get(invokingState);
+		return this.contextEdges[invokingState];
 	}
 
 	public setContextTarget(invokingState: number, target: DFAState): void {
@@ -163,21 +163,25 @@ export class DFAState {
 			invokingState = -1;
 		}
 
-		this.contextEdges.set(invokingState, target);
+		this.contextEdges[invokingState] = target;
 	}
 
-	public getContextEdgeMap(): Map<number, DFAState> {
-		const map = new Map<number, DFAState>(this.contextEdges);
-		const existing = map.get(-1);
+	public getContextEdgeMap(): Array<DFAState> {
+		const map = new Array<DFAState>();
+		this.contextEdges.forEach((element, index) => {
+			if (element != undefined)
+				map[index] = element;
+		})
+		const existing = map[-1];
 		if (existing !== undefined) {
-			if (map.size === 1) {
-				const result = new Map<number, DFAState>();
-				result.set(PredictionContext.EMPTY_FULL_STATE_KEY, existing);
+			if (map.length === 1) {
+				const result = new Array<DFAState>();
+				result[PredictionContext.EMPTY_FULL_STATE_KEY] = existing;
 				return result;
 			}
 			else {
-				map.delete(-1);
-				map.set(PredictionContext.EMPTY_FULL_STATE_KEY, existing);
+				delete map[-1];
+				map[PredictionContext.EMPTY_FULL_STATE_KEY] = existing;
 			}
 		}
 

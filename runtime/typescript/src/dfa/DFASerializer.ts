@@ -59,12 +59,17 @@ export class DFASerializer {
 			states.sort((o1, o2) => o1.stateNumber - o2.stateNumber);
 
 			for (const s of states) {
-				const edges: Map<number, DFAState> = s.getEdgeMap();
+				const edges: Array<DFAState> = s.getEdgeMap();
 				const edgeKeys = [...edges.keys()].sort((a, b) => a - b);
-				const contextEdges: Map<number, DFAState> = s.getContextEdgeMap();
-				const contextEdgeKeys = [...contextEdges.keys()].sort((a, b) => a - b);
+				const contextEdges: Array<DFAState> = s.getContextEdgeMap();
+				let contextEdgeKeys = new Array<number>();
+				contextEdges.forEach((value, index) => {
+					if (value != undefined)
+						contextEdgeKeys.push(index);
+				});
+				contextEdgeKeys = contextEdgeKeys.sort((a, b) => a - b);
 				for (const entry of edgeKeys) {
-					const value = edges.get(entry);
+					const value = edges[entry];
 					if ((value == null || value === ATNSimulator.ERROR) && !s.isContextSymbol(entry)) {
 						continue;
 					}
@@ -91,7 +96,7 @@ export class DFASerializer {
 							+ ("-")
 							+ (this.getContextLabel(entry))
 							+ ("->")
-							+ (this.getStateString(contextEdges.get(entry)!))
+							+ (this.getStateString(contextEdges[entry]))
 							+ ("\n");
 					}
 				}

@@ -171,7 +171,7 @@ export class DFA {
 	get isEmpty(): boolean {
 		if (this.isPrecedenceDfa) {
 			// s0 and s0full are never null for a precedence DFA
-			return this.s0!.getEdgeMap().size === 0 && this.s0full!.getEdgeMap().size === 0;
+			return this.s0!.getEdgeMap().length === 0 && this.s0full!.getEdgeMap().length === 0;
 		}
 
 		return this.s0 == null && this.s0full == null;
@@ -180,7 +180,7 @@ export class DFA {
 	get isContextSensitive(): boolean {
 		if (this.isPrecedenceDfa) {
 			// s0full is never null for a precedence DFA
-			return (this.s0full as DFAState).getEdgeMap().size > 0;
+			return (this.s0full as DFAState).getEdgeMap().length > 0;
 		}
 
 		return this.s0full != null;
