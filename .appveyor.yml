@@ -18,5 +18,5 @@ test_script:
 artifacts:
   - path: "antlr4ts-*.tgz"
 cache:
-  - node_modules -> **\package.json
+  - node_modules -> **\package.json # do we need child node_modules?
   - C:\Users\appveyor\.m2 -> **\pom.xml
