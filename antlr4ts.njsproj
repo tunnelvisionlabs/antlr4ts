@@ -27,7 +27,7 @@
     <TypeScriptOutFile />
     <TypeScriptOutDir>$(MSBuildProjectDirectory)\target</TypeScriptOutDir>
     <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
-    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
     <TypeScriptMapRoot>$(MSBuildProjectDirectory)\target</TypeScriptMapRoot>
     <TypeScriptSourceRoot />
   </PropertyGroup>

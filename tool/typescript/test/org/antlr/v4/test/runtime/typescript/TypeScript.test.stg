@@ -1,0 +1,637 @@
+// Copyright 2016 The ANTLR Project. All rights reserved.
+// Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
+
+TestFile(file) ::= <<
+package org.antlr.v4.test.runtime;
+
+import org.antlr.v4.test.runtime.typescript.BaseTest;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+<if(file.Options.("ImportErrorQueue"))>
+import org.antlr.v4.test.runtime.typescript.ErrorQueue;
+<endif>
+<if(file.Options.("ImportGrammar"))>
+import org.antlr.v4.tool.Grammar;
+<endif>
+
+public class Test<file.name> extends BaseTest {
+
+	<file.tests:{test | <test>}; separator="\n", wrap, anchor>
+
+}<\n>
+>>
+
+LexerTestMethod(test) ::= <<
+<testAnnotations(test)>
+public void test<test.name>() throws Exception {
+	mkdir(tmpdir);
+
+<test.SlaveGrammars:{grammar |
+	String slave_<grammar> =<writeStringLiteral(test.SlaveGrammars.(grammar))>;
+	writeFile(tmpdir, "<grammar>.g4", slave_<grammar>);
+	}; separator="\n">
+<test.Grammar:{grammar |
+	<buildStringLiteral(test.Grammar.(grammar), "grammar")>
+
+<if(test.AfterGrammar)>
+	<test.AfterGrammar>
+<endif>
+	this.input =<writeStringLiteral(test.Input)>;
+	this.expectedOutput = <writeStringLiteral(test.Output)>;
+	this.expectedErrors = <writeStringLiteral(test.Errors)>;
+	generateLexerTest("<grammar>.g4", grammar, "<grammar><if(test.Options.("CombinedGrammar"))>Lexer<endif>", <writeBoolean(test.Options.("ShowDFA"))>);
+	}>
+}
+
+>>
+
+CompositeLexerTestMethod(test) ::= <<
+<LexerTestMethod(test)>
+>>
+
+ParserTestMethod(test) ::= <<
+<testAnnotations(test)>
+public void test<test.name>() throws Exception {
+	mkdir(tmpdir);
+
+<test.SlaveGrammars:{grammar |
+	String slave_<grammar> =<writeStringLiteral(test.SlaveGrammars.(grammar))>;
+<if(test.Options.("SlaveIsLexer"))>
+	rawGenerateAndBuildRecognizer("<grammar>.g4", slave_<grammar>, null, "<grammar>");
+<else>
+	writeFile(tmpdir, "<grammar>.g4", slave_<grammar>);
+<endif>
+	}; separator="\n">
+<test.Grammar:{grammar |
+	<buildStringLiteral(test.Grammar.(grammar), "grammar")>
+
+	<test.AfterGrammar>
+
+	this.input =<writeStringLiteral(test.Input)>;
+	this.expectedOutput = <writeStringLiteral(test.Output)>;
+	this.expectedErrors = <writeStringLiteral(test.Errors)>;
+	generateParserTest("<grammar>.g4", grammar, "<grammar>Parser", "<grammar>Lexer", "<test.Rule>", <writeBoolean(test.Options.("Debug"))>);
+	}>
+}
+
+>>
+
+CompositeParserTestMethod(test) ::= <<
+<ParserTestMethod(test)>
+>>
+
+AbstractParserTestMethod(test) ::= <<
+String test<test.name>(String input) throws Exception {
+	String grammar = <test.grammar.lines:{ line | "<line>};separator="\\n\" +\n", wrap, anchor>";
+	return generateParserTest("<test.grammar.grammarName>.g4", grammar, "<test.grammar.grammarName>Parser", "<test.grammar.grammarName>Lexer", "<test.startRule>", <test.debug>);
+}
+
+>>
+
+ConcreteParserTestMethod(test) ::= <<
+<testAnnotations(test)>
+public void test<test.name>() throws Exception {
+	String found = test<test.baseName>("<test.input>");
+	assertEquals("<test.expectedOutput>", found);
+	<if(test.expectedErrors)>
+	assertEquals("<test.expectedErrors>", this.stderrDuringParse);
+	<else>
+	assertNull(this.stderrDuringParse);
+	<endif>
+}
+
+>>
+
+testAnnotations(test) ::= <%
+@Test
+<if(test.Options.("Timeout"))>
+(timeout = <test.Options.("Timeout")>)
+<endif>
+<if(test.Options.("Ignore"))>
+<\n>@Ignore(<writeStringLiteral(test.Options.("Ignore"))>)
+<elseif(IgnoredTests.(({<file.name>.<test.name>})))>
+<\n>@Ignore(<writeStringLiteral(IgnoredTests.(({<file.name>.<test.name>})))>)
+<endif>
+%>
+
+buildStringLiteral(text, variable) ::= <<
+StringBuilder <variable>Builder = new StringBuilder(<strlen.(text)>);
+<lines.(text):{line|<variable>Builder.append("<escape.(line)>");}; separator="\n">
+String <variable> = <variable>Builder.toString();
+>>
+
+writeStringLiteral(text) ::= <%
+<if(isEmpty.(text))>
+""
+<else>
+<writeLines(lines.(text))>
+<endif>
+%>
+
+writeLines(textLines) ::= <%
+<if(rest(textLines))>
+<textLines:{line|
+<\n>		"<escape.(line)>}; separator="\" +">"
+<else>
+"<escape.(first(textLines))>"
+<endif>
+%>
+
+string(text) ::= <<
+"<escape.(text)>"
+>>
+
+writeBoolean(o) ::= "<if(o && !isEmpty.(o))>true<else>false<endif>"
+
+writeln(s) ::= <<console.log(<s>);>>
+write(s) ::= <<process.stdout.write(String(<s>));>>
+writeList(s) ::= <<console.log(<s; separator=" + ">);>>
+
+False() ::= "false"
+
+True() ::= "true"
+
+Not(v) ::= "!<v>"
+
+Assert(s) ::= <<if (!(<s>)) { throw new Error("InvalidOperationException: Assertion failed"); }>>
+
+Cast(t,v) ::= "(<v> as <t>)"
+
+Append(a,b) ::= "<a> + <b>"
+
+Concat(a,b) ::= "<a><b>"
+
+DeclareLocal(s,v) ::= "let <s> = <v>;"
+
+AssertIsList(v) ::= "let __ttt__: any[] = <v>;" // just use static type system
+
+AssignLocal(s,v) ::= "<s> = <v>;"
+
+InitIntMember(n,v) ::= <%public <n>: number = <v>;%>
+InitLocalIntMember(n, v) ::= <%let <n>: number = <v>;%>
+
+InitBooleanMember(n,v) ::= <%public <n>: boolean = <v>;%>
+
+GetMember(n) ::= <%this.<n>%>
+
+SetMember(n,v) ::= <%this.<n> = <v>;%>
+
+AddMember(n,v) ::= <%this.<n> += <v>;%>
+
+PlusMember(v,n) ::= <%<v> + this.<n>%>
+
+MemberEquals(n,v) ::= <%this.<n> === <v>%>
+
+ModMemberEquals(n,m,v) ::= <%this.<n> % <m> === <v>%>
+
+ModMemberNotEquals(n,m,v) ::= <%this.<n> % <m> !== <v>%>
+
+DumpDFA() ::= "this.dumpDFA();"
+
+Pass() ::= ""
+
+StringList() ::= "string[]"
+
+BuildParseTrees() ::= "this.buildParseTree = true;"
+
+BailErrorStrategy() ::= <%this.errorHandler = new BailErrorStrategy();%>
+
+ToStringTree(s) ::= <%<s>.toStringTree(this)%>
+
+Column() ::= "this.charPositionInLine"
+
+Text() ::= "this.text"
+
+ValEquals(a,b) ::= <%<a> === <b>%>
+
+TextEquals(a) ::= <%this.text === "<a>"%>
+
+PlusText(a) ::= <%"<a>" + this.text%>
+
+InputText() ::= "this._input.getText()"
+
+LTEquals(i, v) ::= <%this._input.LT(<i>).text === <v>%>
+
+LANotEquals(i, v) ::= <%this._input.LA(<i>) !== <v>%>
+
+TokenStartColumnEquals(i) ::= <%this._tokenStartCharPositionInLine==<i>%>
+
+ImportListener(X) ::= ""
+
+ImportVisitor(grammarName) ::= <<
+@parser::header {
+import { AbstractParseTreeVisitor, ErrorNode, RuleNode } from "antlr4ts";
+}
+>>
+
+ImportPredictionMode() ::= <<
+@beforeParser {
+import { PredictionMode } from "antlr4ts";
+}
+>>
+
+ImportBailErrorStrategy() ::= <<
+@beforeParser {
+import { BailErrorStrategy } from "antlr4ts";
+}
+>>
+
+GetExpectedTokenNames() ::= "this.getExpectedTokens().toStringVocabulary(this.vocabulary)"
+
+RuleInvocationStack() ::= <%
+"[" + this.getRuleInvocationStack().join(", ") + "]"
+%>
+
+FULL_CONTEXT_DFA() ::= "this.interpreter.enable_global_context_dfa = true;"
+LL_EXACT_AMBIG_DETECTION() ::= <<this.interpreter.setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);>>
+
+ParserToken(parser, token) ::= <%<parser>.<token>%>
+
+Production(p) ::= <%<p>%>
+
+Result(r) ::= <%<r>%>
+
+ParserPropertyMember() ::= <<
+@members {
+public Property(): boolean {
+	return true;
+}
+}
+>>
+
+ParserPropertyCall(p, call) ::= "<p>.<call>"
+
+PositionAdjustingLexer() ::= <<
+@members {
+public nextToken(): Token {
+	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
+		this._interp = new PositionAdjustingLexerATNSimulator(PositionAdjustingLexer._ATN, this);
+	}
+
+	return super.nextToken();
+}
+
+public emit(): Token {
+	switch (this._type) {
+	case PositionAdjustingLexer.TOKENS:
+		this.handleAcceptPositionForKeyword("tokens");
+		break;
+
+	case PositionAdjustingLexer.LABEL:
+		this.handleAcceptPositionForIdentifier();
+		break;
+
+	default:
+		break;
+	}
+
+	return super.emit();
+}
+
+private handleAcceptPositionForIdentifier(): boolean {
+	let tokenText = this.text;
+	let identifierLength = 0;
+	while (identifierLength \< tokenText.length && PositionAdjustingLexer.isIdentifierChar(tokenText[identifierLength])) {
+		identifierLength++;
+	}
+
+	if (this.inputStream.index > this._tokenStartCharIndex + identifierLength) {
+		let offset = identifierLength - 1;
+		this.interpreter.resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
+		return true;
+	}
+
+	return false;
+}
+
+private handleAcceptPositionForKeyword(keyword: string): boolean {
+	if (this.inputStream.index > this._tokenStartCharIndex + keyword.length) {
+		let offset = keyword.length - 1;
+		this.interpreter.resetAcceptPosition(this._input, this._tokenStartCharIndex + offset, this._tokenStartLine, this._tokenStartCharPositionInLine + offset);
+		return true;
+	}
+
+	return false;
+}
+
+get interpreter(): PositionAdjustingLexerATNSimulator {
+	return super.interpreter as PositionAdjustingLexerATNSimulator;
+}
+
+private static isIdentifierChar(c: string): boolean {
+	return /^[a-zA-Z0-9_]$/.test(c);
+}
+}
+
+@beforeLexer {
+import { Token } from "antlr4ts";
+}
+
+@afterLexer {
+export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
+
+	constructor(atn: ATN, recog: Lexer) {
+		super(atn, recog);
+	}
+
+	public resetAcceptPosition(input: CharStream, index: number, line: number, charPositionInLine: number): void {
+		input.seek(index);
+		this.line = line;
+		this.charPositionInLine = charPositionInLine;
+		this.consume(input);
+	}
+
+}
+}
+>>
+
+BasicListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from "antlr4ts";
+}
+
+@parser::afterParser {
+export class LeafListener implements TListener {
+	public visitTerminal(node: TerminalNode): void {
+		console.log(node.symbol.text);
+	}
+}
+}
+>>
+
+WalkListener(s) ::= <<
+ParseTreeWalker.DEFAULT.walk\<TListener>(new LeafListener(), <s>);
+>>
+
+TreeNodeWithAltNumField(X) ::= <<
+@parser::beforeParser {
+import { ParserRuleContext as PRC } from "antlr4ts";
+
+export class MyRuleNode extends PRC {
+	private altNum: number;
+	constructor(parent: PRC | undefined, invokingStateNumber: number) {
+		super(parent, invokingStateNumber);
+	}
+
+	get altNumber(): number { return this.altNum; }
+	set altNumber(value: number) { this.altNum = value; }
+}
+}
+>>
+
+TokenGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from "antlr4ts";
+}
+
+@parser::afterParser {
+export class LeafListener implements TListener {
+	public exitA(ctx: AContext): void {
+		if (ctx.childCount === 2 && ctx.INT().length === 2) {
+			console.log(ctx.INT(0).symbol.text + " " +
+				ctx.INT(1).symbol.text + " [" + ctx.INT()[0] + ", " + ctx.INT()[1] + "]");
+		} else {
+			console.log(ctx.ID()!.symbol.toString());
+		}
+	}
+}
+}
+>>
+
+RuleGetterListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from "antlr4ts";
+}
+
+@parser::afterParser {
+export class LeafListener implements TListener {
+	public exitA(ctx: AContext): void {
+		if (ctx.childCount === 2) {
+			console.log(ctx.b(0).start.text + " " +
+				ctx.b(1).start.text + " " + ctx.b()[0].start.text);
+		} else {
+			console.log(ctx.b(0).start.text);
+		}
+	}
+}
+}
+>>
+
+LRListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from "antlr4ts";
+}
+
+@parser::afterParser {
+export class LeafListener implements TListener {
+	public exitE(ctx: EContext): void {
+		if (ctx.childCount === 3) {
+			console.log(ctx.e(0).start.text + " " +
+				ctx.e(1).start.text + " " + ctx.e()[0].start.text);
+		} else {
+			console.log(ctx.INT()!.symbol.text);
+		}
+	}
+}
+}
+>>
+
+LRWithLabelsListener(X) ::= <<
+@parser::beforeParser {
+import { ParseTreeWalker } from "antlr4ts";
+}
+
+@parser::afterParser {
+export class LeafListener implements TListener {
+	public exitCall(ctx: CallContext): void {
+		console.log(ctx.e().start.text + " " + ctx.eList());
+	}
+	public exitInt(ctx: IntContext): void {
+		console.log(ctx.INT().symbol.text);
+	}
+}
+}
+>>
+
+WalkVisitor(s) ::= <<
+console.log(new LeafVisitor().visit(<s>));
+>>
+
+TerminalVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	// @Override
+	public visitTerminal(node: TerminalNode): string {
+		return node.symbol.toString() + "\n";
+	}
+
+	// @Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	// @Override
+	protected aggregateResult(aggregate: string, nextResult: string): string {
+		return aggregate + nextResult;
+	}
+}
+}
+>>
+
+ErrorVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	// @Override
+	public visitErrorNode(node: ErrorNode): string {
+		return "Error encountered: " + node.symbol.toString();
+	}
+
+	// @Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	// @Override
+	protected aggregateResult(aggregate: string, nextResult: string): string {
+		return aggregate + nextResult;
+	}
+}
+}
+>>
+
+ShouldNotVisitEOFVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	// @Override
+	public visitTerminal(node: TerminalNode): string {
+		return node.symbol.toString() + "\n";
+	}
+
+	// @Override
+	protected defaultResult(): string {
+		return "";
+	}
+
+	// @Override
+	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+		return currentResult.length === 0;
+	}
+}
+}
+>>
+
+ShouldNotVisitTerminalVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<string> implements <grammarName>Visitor\<string> {
+	// @Override
+	public visitTerminal(node: TerminalNode): never {
+		throw new Error("Should not be reachable");
+	}
+
+	// @Override
+	protected defaultResult(): string {
+		return "default result";
+	}
+
+	// @Override
+	protected shouldVisitNextChild(node: RuleNode, currentResult: string): boolean {
+		return false;
+	}
+}
+}
+>>
+
+CalculatorVisitor(grammarName) ::= <<
+@parser::afterParser {
+export class LeafVisitor extends AbstractParseTreeVisitor\<number> implements <grammarName>Visitor\<number> {
+	// @Override
+	public visitS(context: SContext): number {
+		return this.visit(context.expr());
+	}
+
+	// @Override
+	public visitNumber(context: NumberContext): number {
+		return Number(context.INT().text);
+	}
+
+	// @Override
+	public visitMultiply(context: MultiplyContext): number {
+		let left: number = this.visit(context.expr(0));
+		let right: number = this.visit(context.expr(1));
+		if (context.MUL() !== undefined) {
+			return left * right;
+		}
+		else {
+			return left / right;
+		}
+	}
+
+	// @Override
+	public visitAdd(context: AddContext): number {
+		let left: number = this.visit(context.expr(0));
+		let right: number = this.visit(context.expr(1));
+		if (context.ADD() !== undefined) {
+			return left + right;
+		}
+		else {
+			return left - right;
+		}
+	}
+
+	// @Override
+	protected defaultResult(): never {
+		throw new Error("Should not be reachable");
+	}
+
+	// @Override
+	protected aggregateResult(aggregate: number, nextResult: number): never {
+		throw new Error("Should not be reachable");
+	}
+}
+}
+>>
+
+DeclareContextListGettersFunction() ::= <<
+public foo(s: SContext): void {
+	let a: AContext[] = s.a();
+	let b: BContext[] = s.b();
+}
+>>
+
+Declare_foo() ::= <<
+	public foo(): void { console.log("foo"); }
+>>
+
+Invoke_foo() ::= "this.foo();"
+
+Declare_pred() ::= <<public pred(v: boolean): boolean {
+	console.log("eval=" + v.toString().toLowerCase());
+	return v;
+}
+>>
+
+Invoke_pred(v) ::= <<this.pred(<v>)>>
+
+ParserTokenType(t) ::= "Parser.<t>"
+ContextRuleFunction(ctx, rule) ::= "<ctx>.<rule>"
+ContextLabel(ctx, label) ::= "<ctx>._<label>"
+StringType() ::= "string | undefined"
+IntType() ::= "number"
+ContextMember(ctx, subctx, member) ::= "<ctx>.<subctx>.<member>"
+
+IgnoredTests ::= [
+	// Skipped due to limitations in the testing framework
+
+	// Skipped due to limitations in the TypeScript target
+	"Performance.DropLoopEntryBranchInLRRule_4": "Need a timeout of 15000ms for this to pass.",
+
+	default: false
+]
+
+isEmpty ::= [
+	"": true,
+	default: false
+]
