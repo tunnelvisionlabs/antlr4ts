@@ -70,7 +70,7 @@
   "devDependencies": {
     "@deboxsoft/cpx": "^1.5.0",
     "@types/mocha": "^5.2.0",
-    "@types/node": "^10.12.10",
+    "@types/node": "^10.17.28",
     "@types/source-map-support": "^0.4.0",
     "@types/std-mocks": "^1.0.0",
     "codecov": "^3.6.5",
@@ -81,7 +81,7 @@
     "std-mocks": "^1.0.1",
     "tslint": "^5.11.0",
     "typedoc": "^0.15.2",
-    "typescript": "^2.8.3"
+    "typescript": "^4.0.2"
   },
   "dependencies": {}
 }

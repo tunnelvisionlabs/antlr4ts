@@ -72,7 +72,9 @@ import * as assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
 
-type AnyJavaParser = JavaParser | JavaParserAtn | JavaLRParser | JavaLRParserAtn | ParserInterpreter;
+type AnyJavaParser = Parser & {
+	compilationUnit?: () => ParserRuleContext;
+};
 
 function assertTrue(value: boolean, message?: string) {
 	assert.strictEqual(value, true, message);
@@ -429,19 +431,31 @@ export class TestPerformance {
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 		jdkSourceRoot = jdkSourceRoot as string;
 
-		let lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
-		let parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
-		if (TestPerformance.FORCE_ATN) {
-			lexerCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexerAtn : JavaLexerAtn;
-			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParserAtn : JavaParserAtn;
-		} else {
-			lexerCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
-			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
-		}
-
 		let listenerName: string = TestPerformance.USE_LR_GRAMMAR ? "JavaLRBaseListener" : "JavaBaseListener";
 		let entryPoint: string =  "compilationUnit";
-		let factory: ParserFactory = this.getParserFactory(lexerCtor, parserCtor, EmptyListener, JavaLRParser.prototype.compilationUnit.name, (parser) => parser.compilationUnit());
+		let factory: ParserFactory;
+
+		const entryPointFn = (parser: AnyJavaParser): ParserRuleContext => {
+			if (parser.compilationUnit) {
+				return parser.compilationUnit();
+			}
+
+			throw new Error("Parser doesn't have the compilationUnit function");
+		};
+
+		if (TestPerformance.FORCE_ATN) {
+			if (TestPerformance.USE_LR_GRAMMAR) {
+				factory = this.getParserFactory(JavaLRLexerAtn, JavaLRParserAtn, EmptyListener, JavaLRParser.prototype.compilationUnit.name, entryPointFn);
+			} else {
+				factory = this.getParserFactory(JavaLexerAtn, JavaParserAtn, EmptyListener, JavaLRParser.prototype.compilationUnit.name, entryPointFn);
+			}
+		} else {
+			if (TestPerformance.USE_LR_GRAMMAR) {
+				factory = this.getParserFactory(JavaLRLexer, JavaLRParser, EmptyListener, JavaLRParser.prototype.compilationUnit.name, entryPointFn);
+			} else {
+				factory = this.getParserFactory(JavaLexer, JavaParser, EmptyListener, JavaLRParser.prototype.compilationUnit.name, entryPointFn);
+			}
+		}
 
 		if (TestPerformance.TOP_PACKAGE.length > 0) {
 			jdkSourceRoot = jdkSourceRoot + "/" + TestPerformance.TOP_PACKAGE.replace(/\./g, "/");
@@ -1159,7 +1173,7 @@ export class TestPerformance {
 		}
 	}
 
-	protected getParserFactory(lexerCtor: {new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn}, parserCtor: {new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn}, listenerCtor: {new(): ParseTreeListener}, entryPointName: string, entryPoint: (parser: JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn) => ParserRuleContext): ParserFactory {
+	protected getParserFactory<LexerT extends Lexer, ParserT extends AnyJavaParser>(lexerCtor: {new(input: CharStream): LexerT}, parserCtor: {new(input: TokenStream): ParserT}, listenerCtor: {new(): ParseTreeListener}, entryPointName: string, entryPoint: (parser: AnyJavaParser) => ParserRuleContext): ParserFactory {
 		// try {
 		//     let loader: ClassLoader =  new URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL() }, ClassLoader.getSystemClassLoader());
 		//     lexerClass: Class<? extends Lexer> =  loader.loadClass(lexerName).asSubclass(Lexer.class);
@@ -1246,10 +1260,10 @@ export class TestPerformance {
 
 						let parseStartTime: Stopwatch = Stopwatch.startNew();
 						let parser: AnyJavaParser | undefined = TestPerformance.sharedParsers[thread];
-						if (TestPerformance.REUSE_PARSER && parser != null) {
+						if (TestPerformance.REUSE_PARSER && parser) {
 							parser.inputStream = tokens;
 						} else {
-							let previousParser: Parser | undefined =  parser;
+							let previousParser: AnyJavaParser | undefined =  parser;
 
 							if (TestPerformance.USE_PARSER_INTERPRETER) {
 								let referenceParser: Parser = new parserCtor(tokens);
@@ -1259,7 +1273,7 @@ export class TestPerformance {
 								parser = new parserCtor(tokens);
 							}
 
-							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser).atn;
+							let atn: ATN =  (TestPerformance.FILE_GRANULARITY || previousParser == null ? parser : previousParser)?.atn;
 							if (!TestPerformance.REUSE_PARSER_DFA || (!TestPerformance.FILE_GRANULARITY && previousParser == null)) {
 								atn = TestPerformance.sharedParserATNs[thread]!;
 							}
@@ -1271,6 +1285,10 @@ export class TestPerformance {
 							}
 
 							TestPerformance.sharedParsers[thread] = parser;
+						}
+
+						if (parser === undefined) {
+							throw new Error("Parser is undefined. It should be not undefined at this point");
 						}
 
 						parser.removeParseListeners();
