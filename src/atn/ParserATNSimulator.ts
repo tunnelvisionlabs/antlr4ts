@@ -493,6 +493,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					assert(remainingOuterContext != null);
+					// tslint:disable-next-line:no-unnecessary-type-assertion
 					remainingOuterContext = (remainingOuterContext as ParserRuleContext).parent;
 					s = next;
 				}
@@ -995,6 +996,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				assert(remainingGlobalContext != null);
+				// tslint:disable-next-line:no-unnecessary-type-assertion
 				remainingGlobalContext = (remainingGlobalContext as ParserRuleContext).parent;
 				s = next;
 			}
