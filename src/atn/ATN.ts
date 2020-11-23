@@ -24,7 +24,7 @@ import { RuleTransition } from "./RuleTransition";
 import { Token } from "../Token";
 import { TokensStartState } from "./TokensStartState";
 
-import * as assert from "assert";
+import assert from "assert";
 
 /** */
 export class ATN {
@@ -263,8 +263,4 @@ export class ATN {
 
 		return expected;
 	}
-}
-
-export namespace ATN {
-	export const INVALID_ALT_NUMBER: number = 0;
 }

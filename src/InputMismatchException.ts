@@ -24,6 +24,7 @@ export class InputMismatchException extends RecognitionException {
 		}
 
 		super(recognizer, recognizer.inputStream, context);
+		Object.setPrototypeOf(this, InputMismatchException.prototype);
 
 		if (state !== undefined) {
 			this.setOffendingState(state);

@@ -8,12 +8,12 @@ import { Override } from "../../Decorators";
 import { ParseTree } from "../ParseTree";
 import { TerminalNode } from "../TerminalNode";
 import { Trees } from "../Trees";
-import { XPath } from "./XPath";
+import { XPATH_WILDCARD } from "./Constant";
 import { XPathElement } from "./XPathElement";
 
 export class XPathWildcardAnywhereElement extends XPathElement {
 	constructor() {
-		super(XPath.WILDCARD);
+		super(XPATH_WILDCARD);
 	}
 
 	@Override

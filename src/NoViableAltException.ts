@@ -74,6 +74,8 @@ export class NoViableAltException extends RecognitionException {
 		}
 
 		super(recognizer, input, ctx);
+		Object.setPrototypeOf(this, NoViableAltException.prototype);
+
 		this._deadEndConfigs = deadEndConfigs;
 		this._startToken = startToken as Token;
 		this.setOffendingToken(recognizer, offendingToken);

@@ -3,7 +3,7 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
-import * as assert from "assert";
+import assert from "assert";
 import * as Character from "./misc/Character";
 
 /**

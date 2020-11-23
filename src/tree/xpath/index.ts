@@ -13,3 +13,4 @@ export * from "./XPathTokenAnywhereElement";
 export * from "./XPathTokenElement";
 export * from "./XPathWildcardAnywhereElement";
 export * from "./XPathWildcardElement";
+export * from "./Constant";

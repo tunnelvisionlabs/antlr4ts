@@ -7,6 +7,7 @@
 
 import { AcceptStateInfo } from "./AcceptStateInfo";
 import { ATN } from "../atn/ATN";
+import { INVALID_ALT_NUMBER } from "../atn/Constant";
 import { ATNConfigSet } from "../atn/ATNConfigSet";
 import { BitSet } from "../misc/BitSet";
 import { LexerActionExecutor } from "../atn/LexerActionExecutor";
@@ -15,7 +16,7 @@ import { NotNull, Override } from "../Decorators";
 import { PredictionContext } from "../atn/PredictionContext";
 import { SemanticContext } from "../atn/SemanticContext";
 
-import * as assert from "assert";
+import assert from "assert";
 
 /** A DFA state represents a set of possible ATN configurations.
  *  As Aho, Sethi, Ullman p. 117 says "The DFA uses its state
@@ -119,7 +120,7 @@ export class DFAState {
 
 	get prediction(): number {
 		if (!this._acceptStateInfo) {
-			return ATN.INVALID_ALT_NUMBER;
+			return INVALID_ALT_NUMBER;
 		}
 
 		return this._acceptStateInfo.prediction;
@@ -217,7 +218,7 @@ export class DFAState {
 
 		let other: DFAState = o;
 		let sameSet: boolean = this.configs.equals(other.configs);
-//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
+		//		System.out.println("DFAState.equals: "+configs+(sameSet?"==":"!=")+other.configs);
 		return sameSet;
 	}
 

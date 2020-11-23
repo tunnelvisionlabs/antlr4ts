@@ -3,9 +3,11 @@
  * Licensed under the BSD-3-Clause license. See LICENSE file in the project root for license information.
  */
 
+export * from "./ParserInterpreter";
+export * from "./Parser";
+
 export * from "./ANTLRErrorListener";
 export * from "./ANTLRErrorStrategy";
-// export * from "./ANTLRFileStream";
 export * from "./ANTLRInputStream";
 export * from "./BailErrorStrategy";
 export * from "./BufferedTokenStream";
@@ -17,6 +19,7 @@ export * from "./CommonToken";
 export * from "./CommonTokenFactory";
 export * from "./CommonTokenStream";
 export * from "./ConsoleErrorListener";
+export * from "./Decorators";
 export * from "./DefaultErrorStrategy";
 export * from "./Dependents";
 export * from "./DiagnosticErrorListener";
@@ -29,9 +32,7 @@ export * from "./LexerInterpreter";
 export * from "./LexerNoViableAltException";
 export * from "./ListTokenSource";
 export * from "./NoViableAltException";
-export * from "./Parser";
 export * from "./ParserErrorListener";
-export * from "./ParserInterpreter";
 export * from "./ParserRuleContext";
 export * from "./ProxyErrorListener";
 export * from "./ProxyParserErrorListener";
@@ -46,8 +47,11 @@ export * from "./TokenFactory";
 export * from "./TokenSource";
 export * from "./TokenStream";
 export * from "./TokenStreamRewriter";
-// export * from "./UnbufferedCharStream";
-// export * from "./UnbufferedTokenStream";
 export * from "./Vocabulary";
 export * from "./VocabularyImpl";
 export * from "./WritableToken";
+
+export * from "./atn";
+export * from "./dfa";
+export * from "./misc";
+export * from "./tree";

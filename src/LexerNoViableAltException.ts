@@ -28,6 +28,8 @@ export class LexerNoViableAltException extends RecognitionException {
 		startIndex: number,
 		deadEndConfigs: ATNConfigSet | undefined) {
 		super(lexer, input);
+		Object.setPrototypeOf(this, LexerNoViableAltException.prototype);
+
 		this._startIndex = startIndex;
 		this._deadEndConfigs = deadEndConfigs;
 	}
@@ -42,7 +44,7 @@ export class LexerNoViableAltException extends RecognitionException {
 
 	@Override
 	get inputStream(): CharStream {
-		return super.inputStream as CharStream;
+		return this.input as CharStream;
 	}
 
 	@Override

@@ -8,7 +8,7 @@
 import { Array2DHashMap } from "../misc/Array2DHashMap";
 import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { ArrayEqualityComparator } from "../misc/ArrayEqualityComparator";
-import { ATN } from "./ATN";
+import { INVALID_ALT_NUMBER } from "./Constant";
 import { ATNConfig } from "./ATNConfig";
 import { ATNSimulator } from "./ATNSimulator";
 import { ATNState } from "./ATNState";
@@ -19,10 +19,10 @@ import { JavaSet } from "../misc/Stubs";
 import { NotNull, Override } from "../Decorators";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
 import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
+import { PredictionContextCache } from "./PredictionContext";
 import { SemanticContext } from "./SemanticContext";
 
-import * as assert from "assert";
+import assert from "assert";
 import * as Utils from "../misc/Utils";
 
 interface KeyType { state: number; alt: number; }
@@ -114,7 +114,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 			this.unmerged = [];
 			this.configs = [];
 
-			this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
+			this._uniqueAlt = INVALID_ALT_NUMBER;
 		} else {
 
 			if (readonly) {
@@ -336,7 +336,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		if (this.configs.length === 1) {
 			this._uniqueAlt = config.alt;
 		} else if (this._uniqueAlt !== config.alt) {
-			this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
+			this._uniqueAlt = INVALID_ALT_NUMBER;
 		}
 
 		this._hasSemanticContext = this._hasSemanticContext || !SemanticContext.NONE.equals(config.semanticContext);
@@ -403,7 +403,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 
 		this._dipsIntoOuterContext = false;
 		this._hasSemanticContext = false;
-		this._uniqueAlt = ATN.INVALID_ALT_NUMBER;
+		this._uniqueAlt = INVALID_ALT_NUMBER;
 		this._conflictInfo = undefined;
 	}
 
@@ -472,7 +472,7 @@ export class ATNConfigSet implements JavaSet<ATNConfig> {
 		if (this._hasSemanticContext) {
 			buf += (",hasSemanticContext=") + (this._hasSemanticContext);
 		}
-		if (this._uniqueAlt !== ATN.INVALID_ALT_NUMBER) {
+		if (this._uniqueAlt !== INVALID_ALT_NUMBER) {
 			buf += (",uniqueAlt=") + (this._uniqueAlt);
 		}
 		if (this._conflictInfo != null) {

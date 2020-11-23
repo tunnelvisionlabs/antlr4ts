@@ -4,7 +4,7 @@
  */
 // ConvertTo-TS run at 2016-10-04T11:26:49.0828748-07:00
 
-import * as assert from "assert";
+import assert from "assert";
 import { CharStream } from "./CharStream";
 import { Arrays } from "./misc/Arrays";
 import { Override } from "./Decorators";

@@ -8,6 +8,7 @@
 import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
 import { ActionTransition } from "./ActionTransition";
 import { ATN } from "./ATN";
+import { INVALID_ALT_NUMBER } from "./Constant";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { ATNSimulator } from "./ATNSimulator";
@@ -29,7 +30,7 @@ import { RuleTransition } from "./RuleTransition";
 import { Token } from "../Token";
 import { Transition } from "./Transition";
 import { TransitionType } from "./TransitionType";
-import * as assert from "assert";
+import assert from "assert";
 
 /** "dup" of ParserInterpreter */
 export class LexerATNSimulator extends ATNSimulator {
@@ -285,7 +286,7 @@ export class LexerATNSimulator extends ATNSimulator {
 	protected getReachableConfigSet(@NotNull input: CharStream, @NotNull closure: ATNConfigSet, @NotNull reach: ATNConfigSet, t: number): void {
 		// this is used to skip processing for configs which have a lower priority
 		// than a config that already reached an accept state for the same rule
-		let skipAlt: number = ATN.INVALID_ALT_NUMBER;
+		let skipAlt: number = INVALID_ALT_NUMBER;
 		for (let c of closure) {
 			let currentAltReachedAcceptState: boolean = c.alt === skipAlt;
 			if (currentAltReachedAcceptState && c.hasPassedThroughNonGreedyDecision) {

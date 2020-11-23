@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:57.3490837-07:00
 
-import { ATN } from "./atn/ATN";
+import { INVALID_ALT_NUMBER } from "./atn/Constant";
 import { Parser } from "./Parser";
 import { Recognizer } from "./Recognizer";
 import { RuleNode } from "./tree/RuleNode";
@@ -153,7 +153,7 @@ export class RuleContext extends RuleNode {
 	 *
 	 *  @since 4.5.3
 	 */
-	get altNumber(): number { return ATN.INVALID_ALT_NUMBER; }
+	get altNumber(): number { return INVALID_ALT_NUMBER; }
 
 	/** Set the outer alternative number for this context node. Default
 	 *  implementation does nothing to avoid backing field overhead for

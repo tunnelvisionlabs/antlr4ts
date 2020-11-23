@@ -32,6 +32,8 @@ export class FailedPredicateException extends RecognitionException {
 			recognizer.inputStream,
 			recognizer.context,
 			FailedPredicateException.formatMessage(predicate, message));
+		Object.setPrototypeOf(this, FailedPredicateException.prototype);
+
 		let s: ATNState = recognizer.interpreter.atn.states[recognizer.state];
 
 		let trans = s.transition(0) as AbstractPredicateTransition;

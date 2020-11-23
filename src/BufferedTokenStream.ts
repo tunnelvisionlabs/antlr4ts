@@ -5,7 +5,7 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:49.6074365-07:00
 
-import * as assert from "assert";
+import assert from "assert";
 import { CommonToken } from "./CommonToken";
 import { Interval } from "./misc/Interval";
 import { Lexer } from "./Lexer";

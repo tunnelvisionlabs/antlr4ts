@@ -5,11 +5,13 @@
 
 // ConvertTo-TS run at 2016-10-04T11:26:31.1989835-07:00
 
+import { Parser } from "../Parser";
 import { AcceptStateInfo } from "../dfa/AcceptStateInfo";
 import { ActionTransition } from "./ActionTransition";
 import { Array2DHashSet } from "../misc/Array2DHashSet";
 import { Arrays } from "../misc/Arrays";
 import { ATN } from "./ATN";
+import { INVALID_ALT_NUMBER } from "./Constant";
 import { ATNConfig } from "./ATNConfig";
 import { ATNConfigSet } from "./ATNConfigSet";
 import { ATNSimulator } from "./ATNSimulator";
@@ -29,12 +31,11 @@ import { NotNull, Nullable, Override } from "../Decorators";
 import { NotSetTransition } from "./NotSetTransition";
 import { NoViableAltException } from "../NoViableAltException";
 import { ObjectEqualityComparator } from "../misc/ObjectEqualityComparator";
-import { Parser } from "../Parser";
 import { ParserRuleContext } from "../ParserRuleContext";
 import { PrecedencePredicateTransition } from "./PrecedencePredicateTransition";
 import { PredicateTransition } from "./PredicateTransition";
 import { PredictionContext } from "./PredictionContext";
-import { PredictionContextCache } from "./PredictionContextCache";
+import { PredictionContextCache } from "./PredictionContext";
 import { PredictionMode } from "./PredictionMode";
 import { RuleContext } from "../RuleContext";
 import { RuleStopState } from "./RuleStopState";
@@ -50,7 +51,7 @@ import { TransitionType } from "./TransitionType";
 import { Vocabulary } from "../Vocabulary";
 import { VocabularyImpl } from "../VocabularyImpl";
 
-import * as assert from "assert";
+import assert from "assert";
 
 const MAX_SHORT_VALUE = 0xFFFF;
 const MIN_INTEGER_VALUE = -((1 << 31) >>> 0);
@@ -557,10 +558,10 @@ export class ParserATNSimulator extends ATNSimulator {
 				t = input.LA(1);
 			}
 		}
-//		if ( acceptState==null ) {
-//			if ( debug ) System.out.println("!!! no viable alt in dfa");
-//			return -1;
-//		}
+		//		if ( acceptState==null ) {
+		//			if ( debug ) System.out.println("!!! no viable alt in dfa");
+		//			return -1;
+		//		}
 
 		if (!state.useContext && s.configs.conflictInfo != null) {
 			if (dfa.atnStartState instanceof DecisionState) {
@@ -620,21 +621,21 @@ export class ParserATNSimulator extends ATNSimulator {
 
 			let alts: BitSet = this.evalSemanticContext(predicates, outerContext, this.reportAmbiguities && this.predictionMode === PredictionMode.LL_EXACT_AMBIG_DETECTION);
 			switch (alts.cardinality()) {
-			case 0:
-				throw this.noViableAlt(input, outerContext, s.configs, startIndex);
+				case 0:
+					throw this.noViableAlt(input, outerContext, s.configs, startIndex);
 
-			case 1:
-				return alts.nextSetBit(0);
+				case 1:
+					return alts.nextSetBit(0);
 
-			default:
-				// report ambiguity after predicate evaluation to make sure the correct
-				// set of ambig alts is reported.
-				if (startIndex !== stopIndex) {
-					input.seek(stopIndex);
-				}
+				default:
+					// report ambiguity after predicate evaluation to make sure the correct
+					// set of ambig alts is reported.
+					if (startIndex !== stopIndex) {
+						input.seek(stopIndex);
+					}
 
-				this.reportAmbiguity(dfa, s, startIndex, stopIndex, s.configs.isExactConflict, alts, s.configs);
-				return alts.nextSetBit(0);
+					this.reportAmbiguity(dfa, s, startIndex, stopIndex, s.configs.isExactConflict, alts, s.configs);
+					return alts.nextSetBit(0);
 			}
 		}
 
@@ -754,14 +755,14 @@ export class ParserATNSimulator extends ATNSimulator {
 			let D: DFAState = nextState.s0;
 
 			// predicted alt => accept state
-			assert(D.isAcceptState || D.prediction === ATN.INVALID_ALT_NUMBER);
+			assert(D.isAcceptState || D.prediction === INVALID_ALT_NUMBER);
 			// conflicted => accept state
 			assert(D.isAcceptState || D.configs.conflictInfo == null);
 
 			if (this.isAcceptState(D, useContext)) {
 				let conflictingAlts: BitSet | undefined = D.configs.conflictingAlts;
-				let predictedAlt: number = conflictingAlts == null ? D.prediction : ATN.INVALID_ALT_NUMBER;
-				if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
+				let predictedAlt: number = conflictingAlts == null ? D.prediction : INVALID_ALT_NUMBER;
+				if (predictedAlt !== INVALID_ALT_NUMBER) {
 					if (this.optimize_ll1
 						&& input.index === startIndex
 						&& !dfa.isPrecedenceDfa
@@ -780,8 +781,8 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				predictedAlt = D.prediction;
-//				int k = input.index - startIndex + 1; // how much input we used
-//				System.out.println("used k="+k);
+				//				int k = input.index - startIndex + 1; // how much input we used
+				//				System.out.println("used k="+k);
 				let attemptFullContext: boolean = conflictingAlts != null && this.userWantsCtxSensitive;
 				if (attemptFullContext) {
 					// Only exact conflicts are known to be ambiguous when local
@@ -802,14 +803,14 @@ export class ParserATNSimulator extends ATNSimulator {
 						// use complete evaluation here if we'll want to retry with full context if still ambiguous
 						conflictingAlts = this.evalSemanticContext(predPredictions, outerContext, attemptFullContext || this.reportAmbiguities);
 						switch (conflictingAlts.cardinality()) {
-						case 0:
-							throw this.noViableAlt(input, outerContext, D.configs, startIndex);
+							case 0:
+								throw this.noViableAlt(input, outerContext, D.configs, startIndex);
 
-						case 1:
-							return conflictingAlts.nextSetBit(0);
+							case 1:
+								return conflictingAlts.nextSetBit(0);
 
-						default:
-							break;
+							default:
+								break;
 						}
 
 						if (conflictIndex !== startIndex) {
@@ -920,57 +921,57 @@ export class ParserATNSimulator extends ATNSimulator {
 			}
 
 			switch (alts.cardinality()) {
-			case 0:
-				break;
+				case 0:
+					break;
 
-			case 1:
-				return alts.nextSetBit(0);
-
-			default:
-				if (!previous.s0.configs.hasSemanticContext) {
-					// configs doesn't contain any predicates, so the predicate
-					// filtering code below would be pointless
+				case 1:
 					return alts.nextSetBit(0);
-				}
 
-				/*
-				 * Try to find a configuration set that not only dipped into the outer
-				 * context, but also isn't eliminated by a predicate.
-				 */
-				let filteredConfigs: ATNConfigSet = new ATNConfigSet();
-				for (let config of previous.s0.configs) {
-					if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
-						filteredConfigs.add(config);
+				default:
+					if (!previous.s0.configs.hasSemanticContext) {
+						// configs doesn't contain any predicates, so the predicate
+						// filtering code below would be pointless
+						return alts.nextSetBit(0);
 					}
-				}
 
-				/* The following code blocks are adapted from predicateDFAState with
-				 * the following key changes.
-				 *
-				 *  1. The code operates on an ATNConfigSet rather than a DFAState.
-				 *  2. Predicates are collected for all alternatives represented in
-				 *     filteredConfigs, rather than restricting the evaluation to
-				 *     conflicting and/or unique configurations.
-				 */
-				let altToPred: SemanticContext[] | undefined = this.getPredsForAmbigAlts(alts, filteredConfigs, maxAlt);
-				if (altToPred != null) {
-					let predicates: DFAState.PredPrediction[] | undefined = this.getPredicatePredictions(alts, altToPred);
-					if (predicates != null) {
-						let stopIndex: number = input.index;
-						try {
-							input.seek(startIndex);
-							let filteredAlts: BitSet = this.evalSemanticContext(predicates, previous.outerContext, false);
-							if (!filteredAlts.isEmpty) {
-								return filteredAlts.nextSetBit(0);
+					/*
+					 * Try to find a configuration set that not only dipped into the outer
+					 * context, but also isn't eliminated by a predicate.
+					 */
+					let filteredConfigs: ATNConfigSet = new ATNConfigSet();
+					for (let config of previous.s0.configs) {
+						if (config.reachesIntoOuterContext || config.state instanceof RuleStopState) {
+							filteredConfigs.add(config);
+						}
+					}
+
+					/* The following code blocks are adapted from predicateDFAState with
+					 * the following key changes.
+					 *
+					 *  1. The code operates on an ATNConfigSet rather than a DFAState.
+					 *  2. Predicates are collected for all alternatives represented in
+					 *     filteredConfigs, rather than restricting the evaluation to
+					 *     conflicting and/or unique configurations.
+					 */
+					let altToPred: SemanticContext[] | undefined = this.getPredsForAmbigAlts(alts, filteredConfigs, maxAlt);
+					if (altToPred != null) {
+						let predicates: DFAState.PredPrediction[] | undefined = this.getPredicatePredictions(alts, altToPred);
+						if (predicates != null) {
+							let stopIndex: number = input.index;
+							try {
+								input.seek(startIndex);
+								let filteredAlts: BitSet = this.evalSemanticContext(predicates, previous.outerContext, false);
+								if (!filteredAlts.isEmpty) {
+									return filteredAlts.nextSetBit(0);
+								}
+							}
+							finally {
+								input.seek(stopIndex);
 							}
 						}
-						finally {
-							input.seek(stopIndex);
-						}
 					}
-				}
 
-				return alts.nextSetBit(0);
+					return alts.nextSetBit(0);
 			}
 		}
 
@@ -1115,7 +1116,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			 * condition is not true when one or more configurations have been
 			 * withheld in skippedStopStates, or when the current symbol is EOF.
 			 */
-			if (this.optimize_unique_closure && skippedStopStates == null && t !== Token.EOF && reachIntermediate.uniqueAlt !== ATN.INVALID_ALT_NUMBER) {
+			if (this.optimize_unique_closure && skippedStopStates == null && t !== Token.EOF && reachIntermediate.uniqueAlt !== INVALID_ALT_NUMBER) {
 				reachIntermediate.isOutermostConfigSet = reach.isOutermostConfigSet;
 				reach = reachIntermediate;
 				break;
@@ -1598,7 +1599,7 @@ export class ParserATNSimulator extends ATNSimulator {
 			return undefined;
 		}
 
-//		System.out.println(Arrays.toString(altToPred)+"->"+pairs);
+		//		System.out.println(Arrays.toString(altToPred)+"->"+pairs);
 		return pairs;
 	}
 
@@ -1879,36 +1880,36 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	protected getEpsilonTarget(@NotNull config: ATNConfig, @NotNull t: Transition, collectPredicates: boolean, inContext: boolean, contextCache: PredictionContextCache, treatEofAsEpsilon: boolean): ATNConfig | undefined {
 		switch (t.serializationType) {
-		case TransitionType.RULE:
-			return this.ruleTransition(config, t as RuleTransition, contextCache);
+			case TransitionType.RULE:
+				return this.ruleTransition(config, t as RuleTransition, contextCache);
 
-		case TransitionType.PRECEDENCE:
-			return this.precedenceTransition(config, t as PrecedencePredicateTransition, collectPredicates, inContext);
+			case TransitionType.PRECEDENCE:
+				return this.precedenceTransition(config, t as PrecedencePredicateTransition, collectPredicates, inContext);
 
-		case TransitionType.PREDICATE:
-			return this.predTransition(config, t as PredicateTransition, collectPredicates, inContext);
+			case TransitionType.PREDICATE:
+				return this.predTransition(config, t as PredicateTransition, collectPredicates, inContext);
 
-		case TransitionType.ACTION:
-			return this.actionTransition(config, t as ActionTransition);
+			case TransitionType.ACTION:
+				return this.actionTransition(config, t as ActionTransition);
 
-		case TransitionType.EPSILON:
-			return config.transform(t.target, false);
+			case TransitionType.EPSILON:
+				return config.transform(t.target, false);
 
-		case TransitionType.ATOM:
-		case TransitionType.RANGE:
-		case TransitionType.SET:
-			// EOF transitions act like epsilon transitions after the first EOF
-			// transition is traversed
-			if (treatEofAsEpsilon) {
-				if (t.matches(Token.EOF, 0, 1)) {
-					return config.transform(t.target, false);
+			case TransitionType.ATOM:
+			case TransitionType.RANGE:
+			case TransitionType.SET:
+				// EOF transitions act like epsilon transitions after the first EOF
+				// transition is traversed
+				if (treatEofAsEpsilon) {
+					if (t.matches(Token.EOF, 0, 1)) {
+						return config.transform(t.target, false);
+					}
 				}
-			}
 
-			return undefined;
+				return undefined;
 
-		default:
-			return undefined;
+			default:
+				return undefined;
 		}
 	}
 
@@ -2022,7 +2023,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		}
 
 	private isConflicted(@NotNull configset: ATNConfigSet, contextCache: PredictionContextCache): ConflictInfo | undefined {
-		if (configset.uniqueAlt !== ATN.INVALID_ALT_NUMBER || configset.size <= 1) {
+		if (configset.uniqueAlt !== INVALID_ALT_NUMBER || configset.size <= 1) {
 			return undefined;
 		}
 
@@ -2179,7 +2180,7 @@ export class ParserATNSimulator extends ATNSimulator {
 
 	protected getConflictingAltsFromConfigSet(configs: ATNConfigSet): BitSet | undefined {
 		let conflictingAlts: BitSet | undefined = configs.conflictingAlts;
-		if (conflictingAlts == null && configs.uniqueAlt !== ATN.INVALID_ALT_NUMBER) {
+		if (conflictingAlts == null && configs.uniqueAlt !== INVALID_ALT_NUMBER) {
 			conflictingAlts = new BitSet();
 			conflictingAlts.set(configs.uniqueAlt);
 		}
@@ -2242,13 +2243,13 @@ export class ParserATNSimulator extends ATNSimulator {
 	}
 
 	protected getUniqueAlt(@NotNull configs: Iterable<ATNConfig>): number {
-		let alt: number = ATN.INVALID_ALT_NUMBER;
+		let alt: number = INVALID_ALT_NUMBER;
 		for (let c of configs) {
-			if (alt === ATN.INVALID_ALT_NUMBER) {
+			if (alt === INVALID_ALT_NUMBER) {
 				alt = c.alt; // found first alt
 			}
 			else if (c.alt !== alt) {
-				return ATN.INVALID_ALT_NUMBER;
+				return INVALID_ALT_NUMBER;
 			}
 		}
 		return alt;
@@ -2362,7 +2363,7 @@ export class ParserATNSimulator extends ATNSimulator {
 		// getDecisionState won't return undefined when we request a known valid decision
 		let decisionState: DecisionState = this.atn.getDecisionState(dfa.decision) as DecisionState;
 		let predictedAlt: number = this.getUniqueAlt(configs);
-		if (predictedAlt !== ATN.INVALID_ALT_NUMBER) {
+		if (predictedAlt !== INVALID_ALT_NUMBER) {
 			newState.acceptStateInfo = new AcceptStateInfo(predictedAlt);
 		} else if (configs.conflictingAlts != null) {
 			let conflictingAlts = configs.conflictingAlts;

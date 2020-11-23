@@ -24,6 +24,7 @@ import { IntStream } from "./IntStream";
 import { Lexer } from "./Lexer";
 import { Override, NotNull, Nullable } from "./Decorators";
 import { ParseInfo } from "./atn/ParseInfo";
+import { ProfilingATNSimulator } from "./atn/ProfilingATNSimulator";
 import { ParserATNSimulator } from "./atn/ParserATNSimulator";
 import { ParserErrorListener } from "./ParserErrorListener";
 import { ParserRuleContext } from "./ParserRuleContext";
@@ -39,6 +40,7 @@ import { Token } from "./Token";
 import { TokenFactory } from "./TokenFactory";
 import { TokenSource } from "./TokenSource";
 import { TokenStream } from "./TokenStream";
+import { ParseTreePatternMatcher } from "./tree/pattern/ParseTreePatternMatcher";
 
 class TraceListener implements ParseTreeListener {
 	constructor(private ruleNames: string[], private tokenStream: TokenStream) {
@@ -446,8 +448,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		}
 
 		let currentLexer = lexer;
-		let m = await import("./tree/pattern/ParseTreePatternMatcher");
-		let matcher = new m.ParseTreePatternMatcher(currentLexer, this);
+		let matcher = new ParseTreePatternMatcher(currentLexer, this);
 		return matcher.compile(pattern, patternRuleIndex);
 	}
 
@@ -755,7 +756,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * the ATN, otherwise `false`.
 	 */
 	public isExpectedToken(symbol: number): boolean {
-//   		return interpreter.atn.nextTokens(_ctx);
+		//   		return interpreter.atn.nextTokens(_ctx);
 		let atn: ATN = this.interpreter.atn;
 		let ctx: ParserRuleContext = this._ctx;
 		let s: ATNState = atn.states[this.state];
@@ -763,7 +764,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 		if (following.contains(symbol)) {
 			return true;
 		}
-//        System.out.println("following "+s+"="+following);
+		//        System.out.println("following "+s+"="+following);
 		if (!following.contains(Token.EPSILON)) {
 			return false;
 		}
@@ -875,13 +876,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 
 	@Override
 	get parseInfo(): Promise<ParseInfo | undefined> {
-		return import("./atn/ProfilingATNSimulator").then((m) => {
+		return new Promise((resolve, reject) => {
 			let interp: ParserATNSimulator = this.interpreter;
-			if (interp instanceof m.ProfilingATNSimulator) {
-				return new ParseInfo(interp);
+			if (interp instanceof ProfilingATNSimulator) {
+				resolve(new ParseInfo(interp));
 			}
-
-			return undefined;
+			resolve();
 		});
 	}
 
@@ -889,13 +889,12 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * @since 4.3
 	 */
 	public async setProfile(profile: boolean): Promise<void> {
-		let m = await import("./atn/ProfilingATNSimulator");
 		let interp: ParserATNSimulator = this.interpreter;
 		if (profile) {
-			if (!(interp instanceof m.ProfilingATNSimulator)) {
-				this.interpreter = new m.ProfilingATNSimulator(this);
+			if (!(interp instanceof ProfilingATNSimulator)) {
+				this.interpreter = new ProfilingATNSimulator(this);
 			}
-		} else if (interp instanceof m.ProfilingATNSimulator) {
+		} else if (interp instanceof ProfilingATNSimulator) {
 			this.interpreter = new ParserATNSimulator(this.atn, this);
 		}
 

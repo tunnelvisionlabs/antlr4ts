@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "declaration": false,
     "preserveConstEnums": true,
+    "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
