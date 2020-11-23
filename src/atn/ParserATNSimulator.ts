@@ -494,7 +494,7 @@ export class ParserATNSimulator extends ATNSimulator {
 					}
 
 					assert(remainingOuterContext != null);
-					remainingOuterContext = (remainingOuterContext as ParserRuleContext).parent;
+					remainingOuterContext = remainingOuterContext.parent;
 					s = next;
 				}
 			}
@@ -996,7 +996,7 @@ export class ParserATNSimulator extends ATNSimulator {
 				}
 
 				assert(remainingGlobalContext != null);
-				remainingGlobalContext = (remainingGlobalContext as ParserRuleContext).parent;
+				remainingGlobalContext = remainingGlobalContext.parent;
 				s = next;
 			}
 		}

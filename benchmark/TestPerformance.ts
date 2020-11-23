@@ -73,7 +73,18 @@ import assert from "assert";
 import * as fs from "fs";
 import * as path from "path";
 
-type AnyJavaParser = JavaParser | JavaParserAtn | JavaLRParser | JavaLRParserAtn | ParserInterpreter;
+type GeneratedJavaLexer = Lexer &
+{
+};
+
+type GeneratedJavaParser = Parser &
+{
+	atn: ATN;
+
+	compilationUnit(): ParserRuleContext;
+};
+
+type AnyJavaParser = GeneratedJavaParser | ParserInterpreter;
 
 function assertTrue(value: boolean, message?: string) {
 	assert.strictEqual(value, true, message);
@@ -430,8 +441,8 @@ export class TestPerformance {
 		assertTrue(jdkSourceRoot != null && jdkSourceRoot.length > 0, "The JDK_SOURCE_ROOT environment variable must be set for performance testing.");
 		jdkSourceRoot = jdkSourceRoot as string;
 
-		let lexerCtor: { new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn } = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
-		let parserCtor: { new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn } = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
+		let lexerCtor: {new(input: CharStream): GeneratedJavaLexer} = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexer : JavaLexer;
+		let parserCtor: {new(input: TokenStream): GeneratedJavaParser} = TestPerformance.USE_LR_GRAMMAR ? JavaLRParser : JavaParser;
 		if (TestPerformance.FORCE_ATN) {
 			lexerCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRLexerAtn : JavaLexerAtn;
 			parserCtor = TestPerformance.USE_LR_GRAMMAR ? JavaLRParserAtn : JavaParserAtn;
@@ -1160,7 +1171,7 @@ export class TestPerformance {
 		}
 	}
 
-	protected getParserFactory(lexerCtor: { new(input: CharStream): JavaLRLexer | JavaLRLexerAtn | JavaLexer | JavaLexerAtn }, parserCtor: { new(input: TokenStream): JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn }, listenerCtor: { new(): ParseTreeListener }, entryPointName: string, entryPoint: (parser: JavaLRParser | JavaLRParserAtn | JavaParser | JavaParserAtn) => ParserRuleContext): ParserFactory {
+	protected getParserFactory(lexerCtor: {new(input: CharStream): GeneratedJavaLexer}, parserCtor: {new(input: TokenStream): GeneratedJavaParser}, listenerCtor: {new(): ParseTreeListener}, entryPointName: string, entryPoint: (parser: GeneratedJavaParser) => ParserRuleContext): ParserFactory {
 		// try {
 		//     let loader: ClassLoader =  new URLClassLoader(new URL[] { new File(tmpdir).toURI().toURL() }, ClassLoader.getSystemClassLoader());
 		//     lexerClass: Class<? extends Lexer> =  loader.loadClass(lexerName).asSubclass(Lexer.class);

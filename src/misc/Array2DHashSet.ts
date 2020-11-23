@@ -22,7 +22,7 @@ import { MurmurHash } from "./MurmurHash";
 const INITAL_CAPACITY: number = 16; // must be power of 2
 const LOAD_FACTOR: number = 0.75;
 
-export class Array2DHashSet<T> implements JavaSet<T> {
+export class Array2DHashSet<T extends { toString(): string; }> implements JavaSet<T> {
 	@NotNull
 	protected comparator: EqualityComparator<T>;
 
