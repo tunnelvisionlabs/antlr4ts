@@ -165,6 +165,10 @@ export <if(parser.abstractRecognizer)>abstract <endif>class <parser.name> extend
 	// @Override
 	public get serializedATN(): string { return <parser.name>._serializedATN; }
 
+	protected createFailedPredicateException(predicate?: string, message?: string): FailedPredicateException {
+		return new FailedPredicateException(this, predicate, message);
+	}
+
 	<namedActions.members>
 	<parser:(ctor)()>
 	<funcs; separator="\n">
@@ -639,7 +643,7 @@ ArgAction(a, chunks) ::= "<chunks>"
 SemPred(p, chunks, failChunks) ::= <<
 this.state = <p.stateNumber>;
 if (!(<chunks>)) {
-	throw new FailedPredicateException(this, <p.predicate><if(failChunks)>, <failChunks><elseif(p.msg)>, <p.msg><endif>);
+	throw this.createFailedPredicateException(<p.predicate><if(failChunks)>, <failChunks><elseif(p.msg)>, <p.msg><endif>);
 }
 >>
 
