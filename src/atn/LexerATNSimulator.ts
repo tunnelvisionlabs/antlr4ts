@@ -56,8 +56,6 @@ export class LexerATNSimulator extends ATNSimulator {
 	@NotNull
 	protected prevAccept: LexerATNSimulator.SimState = new LexerATNSimulator.SimState();
 
-	public static match_calls: number = 0;
-
 	constructor(/*@NotNull*/ atn: ATN);
 	constructor(/*@NotNull*/ atn: ATN, recog: Lexer | undefined);
 	constructor(@NotNull atn: ATN, recog?: Lexer) {
@@ -73,7 +71,6 @@ export class LexerATNSimulator extends ATNSimulator {
 	}
 
 	public match(@NotNull input: CharStream, mode: number): number {
-		LexerATNSimulator.match_calls++;
 		this.mode = mode;
 		let mark: number = input.mark();
 		try {

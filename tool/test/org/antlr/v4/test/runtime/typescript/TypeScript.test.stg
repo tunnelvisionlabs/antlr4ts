@@ -162,9 +162,9 @@ Cast(t,v) ::= "(<v> as <t>)"
 
 Append(a,b) ::= "<a> + <b>"
 
-Concat(a,b) ::= "<a><b>"
+AppendStr(a,b) ::= <%<Append(a,b)>%>
 
-DeclareLocal(s,v) ::= "let <s> = <v>;"
+Concat(a,b) ::= "<a><b>"
 
 AssertIsList(v) ::= "let __ttt__: any[] = <v>;" // just use static type system
 
@@ -175,13 +175,17 @@ InitLocalIntMember(n, v) ::= <%let <n>: number = <v>;%>
 
 InitBooleanMember(n,v) ::= <%public <n>: boolean = <v>;%>
 
+InitLocalIntVar(n,v) ::= <%<InitLocalIntMember(n,v)>%>
+
+IntArg(n) ::= "number <n>"
+
+VarRef(n) ::= "<n>"
+
 GetMember(n) ::= <%this.<n>%>
 
 SetMember(n,v) ::= <%this.<n> = <v>;%>
 
 AddMember(n,v) ::= <%this.<n> += <v>;%>
-
-PlusMember(v,n) ::= <%<v> + this.<n>%>
 
 MemberEquals(n,v) ::= <%this.<n> === <v>%>
 
@@ -266,8 +270,9 @@ public Property(): boolean {
 
 ParserPropertyCall(p, call) ::= "<p>.<call>"
 
+PositionAdjustingLexerDef() ::= ""
+
 PositionAdjustingLexer() ::= <<
-@members {
 public nextToken(): Token {
 	if (!(this._interp instanceof PositionAdjustingLexerATNSimulator)) {
 		this._interp = new PositionAdjustingLexerATNSimulator(PositionAdjustingLexer._ATN, this);
@@ -326,6 +331,8 @@ get interpreter(): PositionAdjustingLexerATNSimulator {
 private static isIdentifierChar(c: string): boolean {
 	return /^[a-zA-Z0-9_]$/.test(c);
 }
+
+<! Close out the @members element before opening other elements !>
 }
 
 @beforeLexer {
@@ -346,7 +353,6 @@ export class PositionAdjustingLexerATNSimulator extends LexerATNSimulator {
 		this.consume(input);
 	}
 
-}
 }
 >>
 

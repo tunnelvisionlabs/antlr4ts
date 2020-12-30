@@ -8,7 +8,7 @@ var path = require('path');
 var process = require('process');
 
 var cmd = 'java';
-var value = ['-jar', path.join(__dirname, 'target/antlr4-typescript-4.7.3-SNAPSHOT-complete.jar')]
+var value = ['-jar', path.join(__dirname, 'target/antlr4-typescript-4.9.0-SNAPSHOT-complete.jar')]
     .concat(process.argv.slice(2));
 var opt = {stdio: "inherit"};
 
