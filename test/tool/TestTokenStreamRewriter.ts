@@ -24,7 +24,7 @@ import { RewriterLexer2 } from "./gen/rewriter/RewriterLexer2";
 import { RewriterLexer3 } from "./gen/rewriter/RewriterLexer3";
 
 import * as assert from "assert";
-import { suite, test as Test, skip as Ignore } from "mocha-typescript";
+import { suite, test as Test, skip as Ignore } from "@testdeck/mocha";
 
 @suite
 export class TestTokenStreamRewriter {

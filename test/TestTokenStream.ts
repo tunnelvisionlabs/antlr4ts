@@ -8,7 +8,7 @@ import { CharStreams } from "../src/CharStreams";
 import { Token } from "../src/Token";
 import { XPathLexer } from "../src/tree/xpath/XPathLexer";
 
-import { suite, test } from "mocha-typescript";
+import { suite, test } from "@testdeck/mocha";
 
 import * as assert from "assert";
 

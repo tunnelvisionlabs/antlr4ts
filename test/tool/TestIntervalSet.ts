@@ -9,7 +9,7 @@ import { IntervalSet } from "../../src/misc/IntervalSet";
 import { Lexer } from "../../src/Lexer";
 import { Token } from "../../src/Token";
 
-import { suite, test as Test } from "mocha-typescript";
+import { suite, test as Test } from "@testdeck/mocha";
 import * as assert from "assert";
 
 function assertEquals<T>(expected: T, actual: T): void {
