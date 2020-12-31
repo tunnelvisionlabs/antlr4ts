@@ -5,7 +5,7 @@
 
 import { MurmurHash } from "../src/misc/MurmurHash";
 
-import { suite, test } from "mocha-typescript";
+import { suite, test } from "@testdeck/mocha";
 
 import * as assert from "assert";
 

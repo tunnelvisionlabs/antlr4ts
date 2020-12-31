@@ -4,7 +4,7 @@
  */
 
 import * as assert from "assert";
-import { test, suite } from "mocha-typescript";
+import { test, suite } from "@testdeck/mocha";
 import { CharStreams } from "../../src/CharStreams";
 import { CodePointCharStream } from "../../src/CodePointCharStream";
 import { Interval } from "../../src/misc/Interval";

@@ -4,7 +4,7 @@
  */
 
 import * as assert from "assert";
-import { test, suite } from "mocha-typescript";
+import { test, suite } from "@testdeck/mocha";
 import { CharStream } from "../../src/CharStream";
 import { CharStreams } from "../../src/CharStreams";
 

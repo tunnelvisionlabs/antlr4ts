@@ -7,7 +7,7 @@
 
 import * as assert from "assert";
 import assertEquals = assert.strictEqual;
-import { test as Test, suite } from "mocha-typescript";
+import { test as Test, suite } from "@testdeck/mocha";
 
 import { PredictionContext } from "../../src/atn/PredictionContext";
 import { PredictionContextCache } from "../../src/atn/PredictionContextCache";

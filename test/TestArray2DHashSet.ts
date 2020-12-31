@@ -6,7 +6,7 @@
 import {Equatable} from "../src/misc/Stubs";
 import {Array2DHashSet} from "../src/misc/Array2DHashSet";
 import {MurmurHash} from "../src/misc/MurmurHash";
-import { suite, test } from "mocha-typescript";
+import { suite, test } from "@testdeck/mocha";
 import * as assert from "assert";
 
 class EquatableTest implements Equatable {
@@ -84,7 +84,7 @@ describe("Array2DHashSet", () => {
 });
 
 //
-// This exercises the mocha-typescript package's ability to
+// This exercises the @testdesk/mocha package's ability to
 // use more object-oriented test structure using decorators.
 //
 @suite class DecoratorDriven {
