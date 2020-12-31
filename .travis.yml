@@ -6,6 +6,8 @@ jdk: openjdk6
 before_install:
   - npm install -g npm@6
   - npm install -g codecov
+before_script:
+  - export NODE_OPTIONS=--max_old_space_size=4096
 script:
   # npm install is run automatically by Travis before 'script'
   - nyc --reporter=none mocha --timeout=10000 --require 'source-map-support/register' './target/test/**/*.js'
