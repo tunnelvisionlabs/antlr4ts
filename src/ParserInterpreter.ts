@@ -87,7 +87,7 @@ export class ParserInterpreter extends Parser {
 	 */
 	protected _overrideDecisionRoot?: InterpreterRuleContext = undefined;
 
-	protected _rootContext: InterpreterRuleContext;
+	protected _rootContext!: InterpreterRuleContext;
 
 	/** A copy constructor that creates a new parser interpreter by reusing
 	 *  the fields of a previous interpreter.

@@ -122,7 +122,7 @@ export class ATNDeserializer {
 	private readonly deserializationOptions: ATNDeserializationOptions;
 
 	constructor(deserializationOptions?: ATNDeserializationOptions) {
-		if (deserializationOptions == null) {
+		if (deserializationOptions === undefined) {
 			deserializationOptions = ATNDeserializationOptions.defaultOptions;
 		}
 
@@ -401,12 +401,12 @@ export class ATNDeserializer {
 		for (let state of atn.states) {
 			if (state instanceof BlockStartState) {
 				// we need to know the end state to set its start state
-				if (state.endState == null) {
+				if (state.endState === undefined) {
 					throw new Error("IllegalStateException");
 				}
 
 				// block end states can only be associated to a single block start state
-				if (state.endState.startState != null) {
+				if (state.endState.startState !== undefined) {
 					throw new Error("IllegalStateException");
 				}
 
@@ -694,7 +694,7 @@ export class ATNDeserializer {
 	protected verifyATN(atn: ATN): void {
 		// verify assumptions
 		for (let state of atn.states) {
-			this.checkCondition(state != null, "ATN states should not be null.");
+			this.checkCondition(state !== undefined, "ATN states should not be undefined.");
 			if (state.stateType === ATNStateType.INVALID_TYPE) {
 				continue;
 			}
@@ -702,12 +702,12 @@ export class ATNDeserializer {
 			this.checkCondition(state.onlyHasEpsilonTransitions || state.numberOfTransitions <= 1);
 
 			if (state instanceof PlusBlockStartState) {
-				this.checkCondition(state.loopBackState != null);
+				this.checkCondition(state.loopBackState !== undefined);
 			}
 
 			if (state instanceof StarLoopEntryState) {
 				let starLoopEntryState: StarLoopEntryState = state;
-				this.checkCondition(starLoopEntryState.loopBackState != null);
+				this.checkCondition(starLoopEntryState.loopBackState !== undefined);
 				this.checkCondition(starLoopEntryState.numberOfTransitions === 2);
 
 				if (starLoopEntryState.transition(0).target instanceof StarBlockStartState) {
@@ -729,19 +729,19 @@ export class ATNDeserializer {
 			}
 
 			if (state instanceof LoopEndState) {
-				this.checkCondition(state.loopBackState != null);
+				this.checkCondition(state.loopBackState !== undefined);
 			}
 
 			if (state instanceof RuleStartState) {
-				this.checkCondition(state.stopState != null);
+				this.checkCondition(state.stopState !== undefined);
 			}
 
 			if (state instanceof BlockStartState) {
-				this.checkCondition(state.endState != null);
+				this.checkCondition(state.endState !== undefined);
 			}
 
 			if (state instanceof BlockEndState) {
-				this.checkCondition(state.startState != null);
+				this.checkCondition(state.startState !== undefined);
 			}
 
 			if (state instanceof DecisionState) {
@@ -763,7 +763,7 @@ export class ATNDeserializer {
 	private static inlineSetRules(atn: ATN): number {
 		let inlinedCalls: number = 0;
 
-		let ruleToInlineTransition: Transition[] = new Array<Transition>(atn.ruleToStartState.length);
+		let ruleToInlineTransition = new Array<Transition | undefined>(atn.ruleToStartState.length);
 		for (let i = 0; i < atn.ruleToStartState.length; i++) {
 			let startState: RuleStartState = atn.ruleToStartState[i];
 			let middleState: ATNState = startState;
@@ -812,7 +812,7 @@ export class ATNDeserializer {
 			for (let i = 0; i < state.numberOfOptimizedTransitions; i++) {
 				let transition: Transition = state.getOptimizedTransition(i);
 				if (!(transition instanceof RuleTransition)) {
-					if (optimizedTransitions != null) {
+					if (optimizedTransitions !== undefined) {
 						optimizedTransitions.push(transition);
 					}
 
@@ -820,16 +820,16 @@ export class ATNDeserializer {
 				}
 
 				let ruleTransition: RuleTransition = transition;
-				let effective: Transition = ruleToInlineTransition[ruleTransition.target.ruleIndex];
-				if (effective == null) {
-					if (optimizedTransitions != null) {
+				let effective: Transition | undefined = ruleToInlineTransition[ruleTransition.target.ruleIndex];
+				if (effective === undefined) {
+					if (optimizedTransitions !== undefined) {
 						optimizedTransitions.push(transition);
 					}
 
 					continue;
 				}
 
-				if (optimizedTransitions == null) {
+				if (optimizedTransitions === undefined) {
 					optimizedTransitions = [];
 					for (let j = 0; j < i; j++) {
 						optimizedTransitions.push(state.getOptimizedTransition(i));
@@ -861,7 +861,7 @@ export class ATNDeserializer {
 				}
 			}
 
-			if (optimizedTransitions != null) {
+			if (optimizedTransitions !== undefined) {
 				if (state.isOptimized) {
 					while (state.numberOfOptimizedTransitions > 0) {
 						state.removeOptimizedTransition(state.numberOfOptimizedTransitions - 1);
@@ -898,7 +898,7 @@ export class ATNDeserializer {
 					|| (transition as EpsilonTransition).outermostPrecedenceReturn !== -1
 					|| intermediate.stateType !== ATNStateType.BASIC
 					|| !intermediate.onlyHasEpsilonTransitions) {
-					if (optimizedTransitions != null) {
+					if (optimizedTransitions !== undefined) {
 						optimizedTransitions.push(transition);
 					}
 
@@ -908,7 +908,7 @@ export class ATNDeserializer {
 				for (let j = 0; j < intermediate.numberOfOptimizedTransitions; j++) {
 					if (intermediate.getOptimizedTransition(j).serializationType !== TransitionType.EPSILON
 						|| (intermediate.getOptimizedTransition(j) as EpsilonTransition).outermostPrecedenceReturn !== -1) {
-						if (optimizedTransitions != null) {
+						if (optimizedTransitions !== undefined) {
 							optimizedTransitions.push(transition);
 						}
 
@@ -917,7 +917,7 @@ export class ATNDeserializer {
 				}
 
 				removedEdges++;
-				if (optimizedTransitions == null) {
+				if (optimizedTransitions === undefined) {
 					optimizedTransitions = [];
 					for (let j = 0; j < i; j++) {
 						optimizedTransitions.push(state.getOptimizedTransition(j));
@@ -930,7 +930,7 @@ export class ATNDeserializer {
 				}
 			}
 
-			if (optimizedTransitions != null) {
+			if (optimizedTransitions !== undefined) {
 				if (state.isOptimized) {
 					while (state.numberOfOptimizedTransitions > 0) {
 						state.removeOptimizedTransition(state.numberOfOptimizedTransitions - 1);

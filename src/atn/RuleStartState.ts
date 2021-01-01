@@ -11,7 +11,8 @@ import { Override } from "../Decorators";
 import { RuleStopState } from "./RuleStopState";
 
 export class RuleStartState extends ATNState {
-	public stopState: RuleStopState;
+	// This is always set during ATN deserialization
+	public stopState!: RuleStopState;
 	public isPrecedenceRule: boolean = false;
 	public leftFactored: boolean = false;
 

@@ -1527,6 +1527,9 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 		} else {
 			super(atn, recog);
 		}
+
+		this.totalTransitions = 0;
+		this.computedTransitions = 0;
 	}
 
 	@Override
@@ -1561,6 +1564,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 		this.totalTransitions = new Uint32Array(atn.decisionToState.length);
 		this.computedTransitions = new Uint32Array(atn.decisionToState.length);
 		this.fullContextTransitions = new Uint32Array(atn.decisionToState.length);
+		this.decision = -1;
 	}
 
 	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number;
@@ -1651,7 +1655,7 @@ class DescriptiveLexerErrorListener implements ANTLRErrorListener<number> {
 
 class SummarizingDiagnosticErrorListener extends DiagnosticErrorListener {
 	private _sllConflict: BitSet | undefined;
-	private _sllConfigs: ATNConfigSet;
+	private _sllConfigs!: ATNConfigSet;
 
 	@Override
 	public reportAmbiguity(recognizer: Parser, dfa: DFA, startIndex: number, stopIndex: number, exact: boolean, ambigAlts: BitSet | undefined, configs: ATNConfigSet): void {

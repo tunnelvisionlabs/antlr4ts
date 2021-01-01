@@ -68,7 +68,7 @@ export class ParserRuleContext extends RuleContext {
 	 */
 //	public Array<number> states;
 
-	public _start: Token;
+	public _start!: Token;
 	public _stop: Token | undefined;
 
 	/**

@@ -66,8 +66,6 @@ export namespace InterpreterDataReader {
 	 */
 	export async function parseFile(fileName: string): Promise<InterpreterDataReader.InterpreterData> {
 		let result: InterpreterDataReader.InterpreterData = new InterpreterDataReader.InterpreterData();
-		result.ruleNames = [];
-
 		let input: Buffer = await util.promisify(fs.readFile)(fileName);
 		let lines = splitToLines(input);
 
@@ -181,10 +179,10 @@ export namespace InterpreterDataReader {
 	}
 
 	export class InterpreterData {
-		public atn: ATN;
-		public vocabulary: Vocabulary;
-		public ruleNames: string[];
-		public channels: string[]; // Only valid for lexer grammars.
-		public modes: string[]; // ditto
+		public atn?: ATN;
+		public vocabulary: Vocabulary = VocabularyImpl.EMPTY_VOCABULARY;
+		public ruleNames: string[] = [];
+		public channels?: string[]; // Only valid for lexer grammars.
+		public modes?: string[]; // ditto
 	}
 }

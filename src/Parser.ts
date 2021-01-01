@@ -95,7 +95,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 * @see #getInputStream
 	 * @see #setInputStream
 	 */
-	protected _input: TokenStream;
+	protected _input!: TokenStream;
 
 	protected readonly _precedenceStack: IntegerStack = new IntegerStack();
 
@@ -104,7 +104,7 @@ export abstract class Parser extends Recognizer<Token, ParserATNSimulator> {
 	 *
 	 * This is always non-undefined during the parsing process.
 	 */
-	protected _ctx: ParserRuleContext;
+	protected _ctx!: ParserRuleContext;
 
 	/**
 	 * Specifies whether or not the parser should construct a parse tree during

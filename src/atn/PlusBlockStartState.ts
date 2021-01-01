@@ -16,7 +16,8 @@ import { PlusLoopbackState } from "./PlusLoopbackState";
  *  real decision-making note for `A+`.
  */
 export class PlusBlockStartState extends BlockStartState {
-	public loopBackState: PlusLoopbackState;
+	// This is always set during ATN deserialization
+	public loopBackState!: PlusLoopbackState;
 
 	@Override
 	get stateType(): ATNStateType {

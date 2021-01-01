@@ -12,7 +12,8 @@ import { Override } from "../Decorators";
 import { StarLoopbackState } from "./StarLoopbackState";
 
 export class StarLoopEntryState extends DecisionState {
-	public loopBackState: StarLoopbackState;
+	// This is always set during ATN deserialization
+	public loopBackState!: StarLoopbackState;
 
 	/**
 	 * Indicates whether this state can benefit from a precedence DFA during SLL
