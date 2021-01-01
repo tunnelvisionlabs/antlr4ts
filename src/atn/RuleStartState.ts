@@ -11,7 +11,7 @@ import { Override } from "../Decorators";
 import { RuleStopState } from "./RuleStopState";
 
 export class RuleStartState extends ATNState {
-	public stopState: RuleStopState;
+	public stopState!: RuleStopState;
 	public isPrecedenceRule: boolean = false;
 	public leftFactored: boolean = false;
 

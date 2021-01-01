@@ -12,7 +12,7 @@ import { Override } from "../Decorators";
 import { StarLoopbackState } from "./StarLoopbackState";
 
 export class StarLoopEntryState extends DecisionState {
-	public loopBackState: StarLoopbackState;
+	public loopBackState!: StarLoopbackState;
 
 	/**
 	 * Indicates whether this state can benefit from a precedence DFA during SLL

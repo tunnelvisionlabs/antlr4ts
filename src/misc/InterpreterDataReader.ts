@@ -181,10 +181,10 @@ export namespace InterpreterDataReader {
 	}
 
 	export class InterpreterData {
-		public atn: ATN;
-		public vocabulary: Vocabulary;
-		public ruleNames: string[];
-		public channels: string[]; // Only valid for lexer grammars.
-		public modes: string[]; // ditto
+		public atn!: ATN;
+		public vocabulary!: Vocabulary;
+		public ruleNames!: string[];
+		public channels!: string[]; // Only valid for lexer grammars.
+		public modes!: string[]; // ditto
 	}
 }

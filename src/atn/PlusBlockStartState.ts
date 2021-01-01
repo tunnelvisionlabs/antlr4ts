@@ -16,7 +16,7 @@ import { PlusLoopbackState } from "./PlusLoopbackState";
  *  real decision-making note for `A+`.
  */
 export class PlusBlockStartState extends BlockStartState {
-	public loopBackState: PlusLoopbackState;
+	public loopBackState!: PlusLoopbackState;
 
 	@Override
 	get stateType(): ATNStateType {

@@ -543,7 +543,7 @@ export class TokenStreamRewriter {
 export class RewriteOperation {
 	protected tokens: TokenStream;
 	/** What index into rewrites List are we? */
-	public instructionIndex: number;
+	public instructionIndex!: number;
 	/** Token buffer index. */
 	public index: number;
 	public text: {};

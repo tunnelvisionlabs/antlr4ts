@@ -9,8 +9,7 @@
       "es6"
     ],
     "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
+    "strict": true,
     "experimentalDecorators": true,
     "declaration": true,
     "preserveConstEnums": true,

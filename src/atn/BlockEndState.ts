@@ -12,7 +12,7 @@ import { Override } from "../Decorators";
 
 /** Terminal node of a simple `(a|b|c)` block. */
 export class BlockEndState extends ATNState {
-	public startState: BlockStartState;
+	public startState!: BlockStartState;
 
 	@Override
 	get stateType(): ATNStateType {
