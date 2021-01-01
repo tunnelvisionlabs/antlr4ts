@@ -11,5 +11,6 @@ import { Override } from "../Decorators";
 
 /**  The start of a regular `(...)` block. */
 export abstract class BlockStartState extends DecisionState {
+	// This is always set during ATN deserialization
 	public endState!: BlockEndState;
 }

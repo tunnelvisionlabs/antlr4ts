@@ -12,6 +12,7 @@ import { Override } from "../Decorators";
 import { StarLoopbackState } from "./StarLoopbackState";
 
 export class StarLoopEntryState extends DecisionState {
+	// This is always set during ATN deserialization
 	public loopBackState!: StarLoopbackState;
 
 	/**

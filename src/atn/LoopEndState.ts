@@ -11,6 +11,7 @@ import { Override } from "../Decorators";
 
 /** Mark the end of a * or + loop. */
 export class LoopEndState extends ATNState {
+	// This is always set during ATN deserialization
 	public loopBackState!: ATNState;
 
 	@Override
