@@ -142,9 +142,8 @@ export class TokenStreamRewriter {
 		}
 
 		// to insert after, just insert before next index (even if past end)
-		let op = new InsertAfterOp(this.tokens, index, text);
 		let rewrites: RewriteOperation[] = this.getProgram(programName);
-		op.instructionIndex = rewrites.length;
+		let op = new InsertAfterOp(this.tokens, index, rewrites.length, text);
 		rewrites.push(op);
 	}
 
@@ -160,9 +159,8 @@ export class TokenStreamRewriter {
 			index = tokenOrIndex.tokenIndex;
 		}
 
-		let op: RewriteOperation = new InsertBeforeOp(this.tokens, index, text);
 		let rewrites: RewriteOperation[] = this.getProgram(programName);
-		op.instructionIndex = rewrites.length;
+		let op: RewriteOperation = new InsertBeforeOp(this.tokens, index, rewrites.length, text);
 		rewrites.push(op);
 	}
 
@@ -197,9 +195,8 @@ export class TokenStreamRewriter {
 			throw new RangeError(`replace: range invalid: ${from}..${to}(size=${this.tokens.size})`);
 		}
 
-		let op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, text);
 		let rewrites: RewriteOperation[] = this.getProgram(programName);
-		op.instructionIndex = rewrites.length;
+		let op: RewriteOperation =  new ReplaceOp(this.tokens, from, to, rewrites.length, text);
 		rewrites.push(op);
 	}
 
@@ -541,17 +538,18 @@ export class TokenStreamRewriter {
 // Define the rewrite operation hierarchy
 
 export class RewriteOperation {
-	protected tokens: TokenStream;
+	protected readonly tokens: TokenStream;
 	/** What index into rewrites List are we? */
-	public instructionIndex!: number;
+	public readonly instructionIndex: number;
 	/** Token buffer index. */
 	public index: number;
 	public text: {};
 
-	constructor(tokens: TokenStream, index: number);
-	constructor(tokens: TokenStream, index: number, text: {});
-	constructor(tokens: TokenStream, index: number, text?: {}) {
+	constructor(tokens: TokenStream, index: number, instructionIndex: number);
+	constructor(tokens: TokenStream, index: number, instructionIndex: number, text: {});
+	constructor(tokens: TokenStream, index: number, instructionIndex: number, text?: {}) {
 		this.tokens = tokens;
+		this.instructionIndex = instructionIndex;
 		this.index = index;
 		this.text = text === undefined ? "" : text;
 	}
@@ -574,8 +572,8 @@ export class RewriteOperation {
 }
 
 class InsertBeforeOp extends RewriteOperation {
-	constructor(tokens: TokenStream, index: number, text: {}) {
-		super(tokens, index, text);
+	constructor(tokens: TokenStream, index: number, instructionIndex: number, text: {}) {
+		super(tokens, index, instructionIndex, text);
 	}
 
 	@Override
@@ -593,8 +591,8 @@ class InsertBeforeOp extends RewriteOperation {
  *  of "insert after" is "insert before index+1".
  */
 class InsertAfterOp extends InsertBeforeOp {
-	constructor(tokens: TokenStream, index: number, text: {}) {
-		super(tokens, index + 1, text); // insert after is insert before index+1
+	constructor(tokens: TokenStream, index: number, instructionIndex: number, text: {}) {
+		super(tokens, index + 1, instructionIndex, text); // insert after is insert before index+1
 	}
 }
 
@@ -603,8 +601,8 @@ class InsertAfterOp extends InsertBeforeOp {
  */
 class ReplaceOp extends RewriteOperation {
 	public lastIndex: number;
-	constructor(tokens: TokenStream, from: number, to: number, text: {}) {
-		super(tokens, from, text);
+	constructor(tokens: TokenStream, from: number, to: number, instructionIndex: number, text: {}) {
+		super(tokens, from, instructionIndex, text);
 		this.lastIndex = to;
 	}
 
