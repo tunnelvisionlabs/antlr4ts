@@ -1516,8 +1516,8 @@ export class FileParseResult {
 }
 
 class StatisticsLexerATNSimulator extends LexerATNSimulator {
-	public totalTransitions!: number;
-	public computedTransitions!: number;
+	public totalTransitions: number;
+	public computedTransitions: number;
 
 	constructor(atn: ATN);
 	constructor(atn: ATN, recog: Lexer);
@@ -1527,6 +1527,9 @@ class StatisticsLexerATNSimulator extends LexerATNSimulator {
 		} else {
 			super(atn, recog);
 		}
+
+		this.totalTransitions = 0;
+		this.computedTransitions = 0;
 	}
 
 	@Override
@@ -1551,7 +1554,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 	public computedTransitions: Uint32Array;
 	public fullContextTransitions: Uint32Array;
 
-	private decision!: number;
+	private decision: number;
 
 	constructor(atn: ATN, parser: Parser) {
 		super(atn, parser);
@@ -1561,6 +1564,7 @@ class StatisticsParserATNSimulator extends ParserATNSimulator {
 		this.totalTransitions = new Uint32Array(atn.decisionToState.length);
 		this.computedTransitions = new Uint32Array(atn.decisionToState.length);
 		this.fullContextTransitions = new Uint32Array(atn.decisionToState.length);
+		this.decision = -1;
 	}
 
 	public adaptivePredict(input: TokenStream, decision: number, outerContext: ParserRuleContext): number;
