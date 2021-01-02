@@ -233,23 +233,22 @@ export namespace CharStreams {
 	// }
 
 	/**
-	 * Creates a {@link CharStream} given a {@link String}.
-	 */
-	export function fromString(s: string): CodePointCharStream;
-
-	/**
-	 * Creates a {@link CharStream} given a {@link String} and the {@code sourceName}
+	 * Creates a {@link CharStream} given a {@link String} and the optional {@code sourceName}
 	 * from which it came.
 	 */
-	export function fromString(s: string, sourceName: string): CodePointCharStream;
-	export function fromString(s: string, sourceName?: string): CodePointCharStream {
+	export function fromString(
+		s: string,
+		sourceName?: string,
+	): CodePointCharStream {
 		if (sourceName === undefined || sourceName.length === 0) {
 			sourceName = IntStream.UNKNOWN_SOURCE_NAME;
 		}
 
 		// Initial guess assumes no code points > U+FFFF: one code
 		// point for each code unit in the string
-		let codePointBufferBuilder: CodePointBuffer.Builder = CodePointBuffer.builder(s.length);
+		let codePointBufferBuilder: CodePointBuffer.Builder = CodePointBuffer.builder(
+			s.length,
+		);
 
 		// TODO: CharBuffer.wrap(String) rightfully returns a read-only buffer
 		// which doesn't expose its array, so we make a copy.
@@ -259,7 +258,10 @@ export namespace CharStreams {
 		}
 
 		codePointBufferBuilder.append(cb);
-		return CodePointCharStream.fromBuffer(codePointBufferBuilder.build(), sourceName);
+		return CodePointCharStream.fromBuffer(
+			codePointBufferBuilder.build(),
+			sourceName,
+		);
 	}
 
 	// export function bufferFromChannel(

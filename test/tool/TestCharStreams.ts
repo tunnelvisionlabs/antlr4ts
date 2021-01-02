@@ -19,6 +19,15 @@ export class TestCharStreams {
 	}
 
 	@test
+	public fromStringSupportsOptionalName(): void {
+		let s: CharStream = CharStreams.fromString("hello", "embeddedString");
+		assert.strictEqual(5, s.size);
+		assert.strictEqual(0, s.index);
+		assert.strictEqual("hello", s.toString());
+		assert.strictEqual("embeddedString", s.sourceName);
+	}
+
+	@test
 	public fromSMPStringHasExpectedSize(): void {
 		let s: CharStream = CharStreams.fromString("hello 🌎");
 		assert.strictEqual(7, s.size);
