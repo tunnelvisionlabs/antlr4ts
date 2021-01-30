@@ -860,7 +860,7 @@ _prevctx = _localctx;
 >>
 
 recRuleSetPrevCtx() ::= <<
-if (this._parseListeners != null) {
+if (this._parseListeners !== null) {
 	this.triggerExitRuleEvent();
 }
 _prevctx = _localctx;
