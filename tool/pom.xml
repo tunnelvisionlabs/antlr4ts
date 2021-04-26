@@ -115,7 +115,7 @@ Licensed under the BSD-3-Clause license. See LICENSE file in the project root fo
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <version>2.7</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
