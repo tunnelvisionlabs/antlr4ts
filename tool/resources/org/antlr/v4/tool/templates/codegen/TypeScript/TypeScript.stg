@@ -20,33 +20,33 @@ ParserFile(file, parser, namedActions, contextSuperClass) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn/ATN";
-import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
-import { FailedPredicateException } from "<basePath()>/FailedPredicateException";
-import { NotNull } from "<basePath()>/Decorators";
-import { NoViableAltException } from "<basePath()>/NoViableAltException";
-import { Override } from "<basePath()>/Decorators";
-import { Parser } from "<basePath()>/Parser";
-import { ParserRuleContext } from "<basePath()>/ParserRuleContext";
-import { ParserATNSimulator } from "<basePath()>/atn/ParserATNSimulator";
-import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor";
-import { RecognitionException } from "<basePath()>/RecognitionException";
-import { RuleContext } from "<basePath()>/RuleContext";
-//import { RuleVersion } from "<basePath()>/RuleVersion";
-import { TerminalNode } from "<basePath()>/tree/TerminalNode";
-import { Token } from "<basePath()>/Token";
-import { TokenStream } from "<basePath()>/TokenStream";
-import { Vocabulary } from "<basePath()>/Vocabulary";
-import { VocabularyImpl } from "<basePath()>/VocabularyImpl";
+import { ATN } from "<basePath()>/atn/ATN.js";
+import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer.js";
+import { FailedPredicateException } from "<basePath()>/FailedPredicateException.js";
+import { NotNull } from "<basePath()>/Decorators.js";
+import { NoViableAltException } from "<basePath()>/NoViableAltException.js";
+import { Override } from "<basePath()>/Decorators.js";
+import { Parser } from "<basePath()>/Parser.js";
+import { ParserRuleContext } from "<basePath()>/ParserRuleContext.js";
+import { ParserATNSimulator } from "<basePath()>/atn/ParserATNSimulator.js";
+import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener.js";
+import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor.js";
+import { RecognitionException } from "<basePath()>/RecognitionException.js";
+import { RuleContext } from "<basePath()>/RuleContext.js";
+//import { RuleVersion } from "<basePath()>/RuleVersion.js";
+import { TerminalNode } from "<basePath()>/tree/TerminalNode.js";
+import { Token } from "<basePath()>/Token.js";
+import { TokenStream } from "<basePath()>/TokenStream.js";
+import { Vocabulary } from "<basePath()>/Vocabulary.js";
+import { VocabularyImpl } from "<basePath()>/VocabularyImpl.js";
 
-import * as Utils from "<basePath()>/misc/Utils";
+import * as Utils from "<basePath()>/misc/Utils.js";
 
 <if(file.genListener)>
-import { <file.grammarName>Listener } from "./<file.grammarName>Listener";
+import { <file.grammarName>Listener } from "./<file.grammarName>Listener.js";
 <endif>
 <if(file.genVisitor)>
-import { <file.grammarName>Visitor } from "./<file.grammarName>Visitor";
+import { <file.grammarName>Visitor } from "./<file.grammarName>Visitor.js";
 <endif>
 
 <namedActions.beforeParser>
@@ -61,9 +61,9 @@ ListenerFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener";
+import { ParseTreeListener } from "<basePath()>/tree/ParseTreeListener.js";
 
-<file.listenerNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
+<file.listenerNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>.js";}; separator="\n">
 
 <namedActions.beforeListener>
 
@@ -103,9 +103,9 @@ VisitorFile(file, header, namedActions) ::= <<
 
 <header>
 
-import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor";
+import { ParseTreeVisitor } from "<basePath()>/tree/ParseTreeVisitor.js";
 
-<file.visitorNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>";}; separator="\n">
+<file.visitorNames:{lname | import { <lname; format="cap">Context \} from "./<file.parserName>.js";}; separator="\n">
 
 <namedActions.beforeVisitor>
 
@@ -872,18 +872,18 @@ LexerFile(file, lexer, namedActions) ::= <<
 
 <namedActions.header>
 
-import { ATN } from "<basePath()>/atn/ATN";
-import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer";
-import { CharStream } from "<basePath()>/CharStream";
-import { Lexer } from "<basePath()>/Lexer";
-import { LexerATNSimulator } from "<basePath()>/atn/LexerATNSimulator";
-import { NotNull } from "<basePath()>/Decorators";
-import { Override } from "<basePath()>/Decorators";
-import { RuleContext } from "<basePath()>/RuleContext";
-import { Vocabulary } from "<basePath()>/Vocabulary";
-import { VocabularyImpl } from "<basePath()>/VocabularyImpl";
+import { ATN } from "<basePath()>/atn/ATN.js";
+import { ATNDeserializer } from "<basePath()>/atn/ATNDeserializer.js";
+import { CharStream } from "<basePath()>/CharStream.js";
+import { Lexer } from "<basePath()>/Lexer.js";
+import { LexerATNSimulator } from "<basePath()>/atn/LexerATNSimulator.js";
+import { NotNull } from "<basePath()>/Decorators.js";
+import { Override } from "<basePath()>/Decorators.js";
+import { RuleContext } from "<basePath()>/RuleContext.js";
+import { Vocabulary } from "<basePath()>/Vocabulary.js";
+import { VocabularyImpl } from "<basePath()>/VocabularyImpl.js";
 
-import * as Utils from "<basePath()>/misc/Utils";
+import * as Utils from "<basePath()>/misc/Utils.js";
 
 <namedActions.beforeLexer>
 
