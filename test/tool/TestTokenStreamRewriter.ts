@@ -761,4 +761,22 @@ export class TestTokenStreamRewriter {
 		let expecting: string =  "[object Object]0falseabc";
 		assert.strictEqual(result, expecting);
 	}
+
+	@Test
+	public testDistinguishBetweenInsertAfterAndInsertBeforeToPreserverOrderWhenReplacing(): void {
+		let input: string =  "aa";
+		let lexEngine: LexerInterpreter = this.createLexerInterpreter(input, RewriterLexer1);
+		let stream: CommonTokenStream =  new CommonTokenStream(lexEngine);
+		stream.fill();
+		let tokens: TokenStreamRewriter =  new TokenStreamRewriter(stream);
+		tokens.insertBefore(0, "<b>");
+		tokens.insertAfter(0, "</b>");
+		tokens.insertBefore(1, "<b>");
+		tokens.insertAfter(1, "</b>");
+		tokens.replaceSingle(0, "1");
+		tokens.replaceSingle(1, "2");
+		let result: string =  tokens.getText();
+		let expecting: string =  "<b>1</b><b>2</b>";
+		assert.strictEqual(result, expecting);
+	}
 }

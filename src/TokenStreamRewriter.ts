@@ -412,7 +412,19 @@ export class TokenStreamRewriter {
 			let rop: ReplaceOp = op;
 			// Wipe prior inserts within range
 			let inserts: InsertBeforeOp[] = this.getKindOfOps(rewrites, InsertBeforeOp, i);
-			for (let iop of inserts) {
+			for (let iop of inserts.filter(i => !(i instanceof InsertAfterOp))) {
+				if ( iop.index === rop.index ) {
+					// E.g., insert before 2, delete 2..2; update replace
+					// text to include insert before, kill insert
+					rewrites[iop.instructionIndex] = undefined;
+					rop.text = iop.text.toString() + (rop.text != null ? rop.text.toString() : "");
+				}
+				else if ( iop.index > rop.index && iop.index <= rop.lastIndex ) {
+					// delete insert as it's a no-op.
+					rewrites[iop.instructionIndex] = undefined;
+				}
+			}
+			for (let iop of inserts.filter(i => i instanceof InsertAfterOp)) {
 				if ( iop.index === rop.index ) {
 					// E.g., insert before 2, delete 2..2; update replace
 					// text to include insert before, kill insert
