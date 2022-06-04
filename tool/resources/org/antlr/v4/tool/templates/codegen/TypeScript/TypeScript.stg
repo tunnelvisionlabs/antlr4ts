@@ -82,7 +82,7 @@ export interface <file.grammarName>Listener extends ParseTreeListener {
 <endif>
  * @param ctx the parse tree
  */
-enter<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;
+enter<lname; format="cap">?(ctx: <lname; format="cap">Context): void;
 /**
 <if(file.listenerLabelRuleNames.(lname))>
  * Exit a parse tree produced by the `<lname>`
@@ -92,7 +92,7 @@ enter<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;
 <endif>
  * @param ctx the parse tree
  */
-exit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => void;}; separator="\n">
+exit<lname; format="cap">?(ctx: <lname; format="cap">Context): void;}; separator="\n">
 }
 
 <namedActions.afterListener>
@@ -128,7 +128,7 @@ export interface <file.grammarName>Visitor\<Result> extends ParseTreeVisitor\<Re
  * @param ctx the parse tree
  * @return the visitor result
  */
-visit<lname; format="cap">?: (ctx: <lname; format="cap">Context) => Result;}; separator="\n">
+visit<lname; format="cap">?(ctx: <lname; format="cap">Context): Result;}; separator="\n">
 }
 
 <namedActions.afterVisitor>
