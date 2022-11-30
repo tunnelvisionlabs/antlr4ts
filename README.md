@@ -75,8 +75,7 @@ TypeScript 2.0.
     import { CodePointCharStream, CodePointBuffer, CommonTokenStream } from 'antlr4ts';
 
     // Create the lexer and parser
-    let buffer = Buffer.from("text");
-    let inputStream = CodePointCharStream.fromBuffer(new CodePointBuffer(buffer, buffer.length));
+    let inputStream = CharStreams.fromString("text")
     let lexer = new MyGrammarLexer(inputStream);
     let tokenStream = new CommonTokenStream(lexer);
     let parser = new MyGrammarParser(tokenStream);
