@@ -72,10 +72,10 @@ TypeScript 2.0.
 5. Use your grammar in TypeScript
 
     ```typescript
-    import { ANTLRInputStream, CommonTokenStream } from 'antlr4ts';
+    import { CodePointCharStream, CodePointBuffer, CommonTokenStream } from 'antlr4ts';
 
     // Create the lexer and parser
-    let inputStream = new ANTLRInputStream("text");
+    let inputStream = CharStreams.fromString("text")
     let lexer = new MyGrammarLexer(inputStream);
     let tokenStream = new CommonTokenStream(lexer);
     let parser = new MyGrammarParser(tokenStream);
